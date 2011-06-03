@@ -12,12 +12,12 @@ any improvements to the paper(s).
 What to contribute
 ------------------
 
-Leave the essential content
-of the papers to be unchanged.
-More is not better.
 I would love to see changes that
 clarify the content, and make
 the papers easier to read.
+I ask that the essential content
+of the papers is preserved (in
+other words, more is not better).
 
 How to contribute
 -----------------
