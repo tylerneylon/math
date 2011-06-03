@@ -12,7 +12,7 @@ any improvements to the paper(s).
 What to contribute
 ------------------
 
-I would like the essential content
+Leave the essential content
 of the papers to be unchanged.
 More is not better.
 I would love to see changes that

@@ -1,0 +1,358 @@
+\documentclass[11pt]{amsart}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+%\geometry{landscape}                % Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage{fullpage}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+\newtheorem{Def}{Definition} %[section]
+\newtheorem{Example}[Def]{Example}
+\newtheorem{Prop}[Def]{Property}
+\newtheorem{Lemma}[Def]{Lemma}
+\newtheorem{Thm}[Def]{Theorem}
+\newtheorem{Conj}[Def]{Conjecture}
+\newtheorem{Cor}[Def]{Corollary}
+
+\newcommand\bpf[1][]{\smallskip\noindent{\bf Proof#1.}\quad}
+\newcommand\epf{\qed\medskip}
+
+\newcommand{\slim}{\mathrm{slim}\,}
+
+
+\title{Surreal Canonical Linear Orders}
+\author{Tyler~Neylon}
+%\date{}                                           % Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+%\section{}
+%\subsection{}
+
+\section{Summary}
+
+In this note, we'll define a linearly ordered set $S_d$ for any ordinal $d$ so that
+any linearly ordered set $X$ of cardinality $\aleph_d$ can be embedded in $S_d$
+in an order-preserving manner.  If one accepts the generalized continuum hypothesis, which
+states that any cardinals $\kappa, \lambda$ cannot have $\lambda < \kappa < 2^\lambda$, then
+$||S_d|| = \aleph_d$, and clearly the $S_d$ are of optimal size to act as a universal receiver of
+other same-sized linear orders.  The universal embedding result (theorem \ref{canonical_orders_result})
+uses the axiom of choice.
+
+\section{Definitions}
+
+We choose the von Neumann definition of {\em ordinal numbers}; informally, an ordinal $d$
+is the set of all previous ordinals.  More formally, a set $A$ is {\bf transitive} iff $x\in A \;\&\; y\in x
+\implies y\in A$ (we'll use {\bf bold} to indicate when a term is being defined).
+A set $d$ is an {\bf ordinal number} (or just an ``ordinal''), written $d\in\mathcal O$
+ iff it is transitive and all its elements are ordinal numbers.  It is
+a result that any set of ordinal numbers is well ordered by inclusion; this is what we
+mean when we write $x < y$ for $x,y\in\mathcal O$.
+It can be shown that every ordinal
+is of the form $\{d\in\mathcal O: d < e\}$ for some $e\in\mathcal O$, and that every well order
+is isomorphic to some $d\in\mathcal O$.
+
+A {\bf surreal} $s$ is a function $s:d\to \{+,-\}$ for some $d\in\mathcal O$.  For such a surreal, we call $d$
+the {\bf domain} of it, and denote this as $D(s)=d$.  It's clear that $s(e)=+$ or $-$ for $e\in d$; we will
+add the formal notation that $s(e)=\emptyset$ when $e\not\in D(s)$.
+
+Let {\boldmath $S_d$} denote the set of surreals $\{s : ||D(s)|| < \aleph_d\}$.
+
+We'll use the notation $\{<d\}$ to indicate the set of ordinals less than $d$.  Technically, this is
+equal to $d$ itself, but we will need to refer to $s(\{<d\}) = \{s(e) : e < d\}$ as a sequence of signs,
+as opposed to $s(d)$, indicating a single sign.
+
+Consider surreals $s$ and $t$.  If they have $D(s)=D(t)$ and $s(d)=t(d)\; \forall\, d\in D(s)$, then we write
+$s=t$.  Otherwise, let $d$ be the first value in $D(s)\cup D(t)$ where $s(d)\ne t(d)$; we call $d$
+the {\bf first difference coordinate}.
+We use the convention that $- < \emptyset < +$, for these definitions: $s<t$ iff $s(d) < t(d)$
+ and $s>t$ iff $s(d)>t(d)$. 
+This can be considered a lexicographical order, and hence is a linear order on the surreals.
+
+Given two orders $X$ and $Y$, we say that $X$ can be {\bf order-embedded} in $Y$ iff
+$\exists f:X\to Y$ with $x < y \implies f(x) < f(y)$; we call such $f$ an {\bf order-embedding}.
+
+%In any linear order $X$, an {\bf open interval} is a set of the form $\{x\in X: a<x<b\}$, where
+%$a,b\in X\cup\{-\infty,\infty\}$, and $-\infty$ is considered less than anything in $X$, and
+%$\infty$ is greater than anything in $X$.
+
+\section{Main Results}
+
+%%  Theorem 1
+
+\newcommand{\densitytheorem}{
+Suppose $\aleph_d$ is either a successor cardinal, or is $\aleph_0$.
+Suppose $e,f$ are ordinals of cardinality less than $\aleph_d$, and that
+$(s_i)_{i\in e}\subset S_d$ is increasing, $(t_j)_{j\in f}\subset S_d$ is decreasing, and
+$s_i < t_j \;\forall\, i,j$.
+Then there exists an
+element $r\in S_d$ such that $s_i < r < t_j \;\forall\, i,j$.
+}
+
+\begin{Thm}\label{nested_intervals_result}
+\densitytheorem
+\end{Thm}
+
+%% Theorem 2
+
+\newcommand{\universaltheorem}{
+If $X$ is a linear order with $||X|| \le \aleph_d$, then $X$ can be order-embedded in $S_d$.
+}
+
+\begin{Thm}[Universal Embedding]\label{canonical_orders_result}
+\universaltheorem
+\end{Thm}
+
+\section{Proofs}
+
+We will define a very useful limit idea on surreals that will eventually give us the proof of theorem \ref{nested_intervals_result}.  From there, it is easy to get to theorem \ref{canonical_orders_result}.
+
+\subsection{The Surreal Limit}
+
+Suppose we have an increasing sequence of surreals $(s_i)_{i\in e}$ indexed by some ordinal $e$.
+Then we define the {\bf surreal limit} $s$ of $(s_i)$, written as $s = \slim_{i\in e} s_i$, like this:
+\[
+    s(d) =
+    \begin{cases}
+      \lim_{i\in e} s_i(d) & \text{if\;} \exists\, k\in e : i,j\ge k \implies s_i(\{<d\}) = s_j(\{<d\}) \\
+      \emptyset  & \text{otherwise.}
+    \end{cases}
+\]
+We must check that this definition makes sense.
+There are two things to check.
+
+First, we need to see that $\lim s_i(d)$ exists, as used in the
+definition.
+This clause of the definition is only relevant when $s_i(\{<d\})$ ``settles'' on to
+a specific sign sequence.
+From that point onward, the sign at $s_i(d)$ can only change in the
+order $(-,\emptyset, +)$ as $i$ increases, since the sequence is increasing.
+Thus there must be some tail $t$ of the
+index set $e$ such that $s_i(d)$ is constant for $i\in t$.
+(For any ordinal $d$, a {\bf tail} of $d$ is a subset $t\subset d$ which is upward-closed in $d$; in other words,
+$a\in t, b\in d, a < b \implies b\in t$.)
+
+Second, we must check that if $s(d)=\emptyset$, then $s(f)=\emptyset$ for any $f>d$.  Since
+$s(d)=\emptyset$, we know that $\forall\, k\in e \; \exists\, i,j\ge k : s_i(\{<d\}) \ne s_j(\{<d\})$.
+It follows immediately that this condition must also hold when $\{<d\}$ is replaced by any
+superset, including $\{<f\}$ for $f>d$.  This completes the check that a surreal limit is well defined.
+
+It is interesting to note that this limit exists for {\em any} increasing ordinal-indexed sequence, regardless
+of cardinality or boundedness.
+
+Let's note some basic properties of the surreal limit.  Let $s=\slim s_i$ and $d$ be any ordinal in $D(s)$.
+Then each of the following is true:
+\begin{equation}\label{eqn1}
+\exists\, k\in e: \;\forall\, i\ge k,\; s_i(\{<d\}) = s(\{<d\}),
+\end{equation}
+\begin{equation}\label{eqn2}
+s_i(\{<d\}) = s(\{<d\}) \implies s(d)\ge s_i(d),
+\end{equation}
+and
+\begin{equation}\label{eqn3}
+\lim_{i\in e} s_i(d) = s(d).
+\end{equation}
+It is easy to verify each of these using the definition of $s$ and the fact that $s_i$ is increasing.
+
+The surreal limit has some interesting properties which will lead us to the proof of theorem
+\ref{nested_intervals_result}.  In each of these properties, $(s_i)_{i\in e}$ is an increasing sequence
+of surreals, indexed by an ordinal $e$.
+
+For surreals $s,t$, say that $s$ is a {\bf prefix} of $t$ iff $D(s) = \{<d\} \subset D(t)$ and
+$t(\{<d\}) = s$; intuitively, this means $t$ ``starts with'' $s$, as a sign sequence. 
+
+\begin{Prop}\label{ub_prop}
+Any surreal $t$ with prefix $s = \slim s_i$ (including $s=t$)
+has $t \ge s_i\;\forall\, i\in e$.
+\end{Prop}
+
+\bpf
+Suppose $t$ has $s$ as a prefix, and $t < s_i$ for some $i\in e$.
+
+Let $d$ be the first difference coordinate between $t$ and $s_i$.
+If $d\in D(s)$, then $t(d) = s(d) \ge s_i(d)$ using property (\ref{eqn2}) above,
+contradicting that $t < s_i$.
+
+So it must be the case that $d\not\in D(s)$.  This means that
+$s_i(D(s)) = s$, and in fact $s_j(D(s)) = s$ for any $j > i$;
+otherwise let $e\in D(s)$ be the first difference coordinate
+between $s_i < s_j$, and we would have a contradiction to
+property (\ref{eqn2}), setting $d=e$.
+
+Let ordinal $f = D(s)$.  By the definition of $s$, $s(f)$ must be defined
+(and $\ne\emptyset$) since $s_j(\{<f\}) = s_k(\{<f\})\;\forall\, j,k > i$.
+This is another contradiction since we chose $f$ such that $s(f)=\emptyset$.
+The conclusion is that it is impossible for $t < s_i$.
+\epf
+
+Note that if $e$ is a limit ordinal and the $s_i$ are strictly increasing,
+then this result also implies that $t > s_i$ for all $i\in e$,
+since if $t = s_i$ for any $i$, then we would get $t < s_{i+1}$, which is impossible.
+
+\begin{Prop}\label{crossing_condition}
+Suppose $t < s = \slim s_i$, and $s$ is not a prefix of $t$.
+Then $t < s_i$ for some $i\in e$.
+\end{Prop}
+
+\bpf
+Let $d$ be the first difference coordinate between $s$ and $t$.
+We know $d\in D(s)$; otherwise $s$ would be a prefix of $t$.
+By property (\ref{eqn1}) there is a $k$ such that
+$i \ge k \implies s_i(\{<d\}) = s(\{<d\}) = t(\{<d\})$.
+By property (\ref{eqn3}), there is an $i \ge k$ such that
+$s_i(d) = s(d) > t(d)$, which means $s_i > t$.
+\epf
+
+The next property is the essense of theorem \ref{nested_intervals_result}.
+Now is a good time to note that the definition of a surreal limit works equally
+well for decreasing sequences, and that the relevant properties apply
+in those cases with their inequalities reversed.  We'll also say that surreals
+$s,t$ are {\bf relatives} if either $s$ is a prefix of $t$, or vice versa.
+
+\begin{Prop}\label{sandwich_prop}
+Suppose $(s_i)_{i\in e}$ is an increasing sequence of surreals,
+$(t_i)_{i\in f}$ is decreasing, with $s_i < t_j \; \forall\, i\in e, j \in f$.
+Let $s=\slim s_i$ and $t = \slim t_j$.
+Then either $s < t$ or $s,t$ are relatives.
+\end{Prop}
+
+\bpf
+If $s < t$ or $s=t$, we are done, so suppose $t < s$, and that
+they are not relatives.
+Then the first difference coordinate $d$ has $t(d) < s(d)$.
+We know that $s(d)\ne\emptyset$ and $t(d)\ne\emptyset$;
+otherwise, they would be relatives.  Thus $t(d) = -$ and
+$s(d) = +$.
+Define the surreal $r$ to have domain $\{< d\}$,
+with $r(\{<d\}) = s(\{<d\}) = t(\{<d\})$, so that $t < r < s$,
+and neither $s$ nor $t$ is a prefix of $r$.
+
+Then property \ref{crossing_condition} provides some
+$s_i > r$ and some $t_j < r$.  But this would mean
+$t_j < s_i$, a contradiction.  Therefore, it's impossible
+to have $t < s$ while $s,t$ are not relatives.
+\epf
+
+The next property is not as elegant, but will be useful in proving
+theorem \ref{nested_intervals_result}.
+
+\begin{Prop}\label{slim_card}
+If infinite cardinal $C$ is a successor cardinal or $\aleph_0$, ordinal $e$ has $||e|| < C$, and
+$||D(s_i)|| < C\; \forall \, i\in e$, then $||D(s)|| < C$ for $s = \slim s_i$.
+\end{Prop}
+
+\bpf
+We have
+$$ D(s) \subset \max_{i\in e} D(s_i) \subset \sum D(s_i),$$
+so $||D(s)|| \le \sum_{i\in e} ||D(s_i)||$.
+If $C = \aleph_0$, then this is a finite sum of finite numbers, which is
+also clearly finite (i.e. $||D(s)|| < C$), and we would be done.
+
+Otherwise, suppose $C^-$ is the immediate successor of $C$.
+Then $||D(s_i)|| \le C^-$ for all $i$, and $\sum ||D(s_i)|| \le (C^-)^2 = C^-$,
+which completes the proof.
+\epf
+
+\subsection{Proofs of the main results}
+
+The theorems are restated here for convenience.
+
+% Restate theorem 1
+{
+\renewcommand{\theDef}{\ref{nested_intervals_result}}
+\begin{Thm}
+\densitytheorem
+\end{Thm}
+\addtocounter{Def}{-1}
+}
+
+\smallskip
+\bpf
+Let $s = \slim s_i$ and $t = \slim t_i$.  By property \ref{slim_card}, both
+$s$ and $t$ are in $S_d$.
+By property \ref{sandwich_prop}, either $s < t$ or one is the prefix of the other.
+
+If they are not relatives, then $s < t$,
+and by property \ref{ub_prop}, any surreal $r$ in $[s,t]$ has $s_i < r < t_j \;\forall\, i,j$.
+We will construct a specific surreal $r\in S_d$ with $s < r < t$.
+In particular, let $d = D(s)$ and choose $r$ with $r(\{<d\}) = s$ and $r(d) = +$, so that
+$s < r$.  The first difference coordinate between $s$ and $t$ must be within $D(s)$
+(otherwise they would be relatives), so we also have $r < t$.  By property \ref{slim_card},
+$||D(r)|| < \aleph_d$, so $r\in S_d$.  Thus $r$ satisfies the theorem when $s < t$.
+
+Now suppose that $s$ is a prefix of $t$, and let $r=t$.
+By property \ref{ub_prop},
+$s_i < r$ and $r < t_j$ for all $i\in e, j\in f$.
+By property \ref{slim_card},
+$||D(r)|| < \aleph_d$, so again $r$ satisfies the conditions of the theorem.  If $t$ is a prefix
+of $s$, we can similarly set $r=s$.  This shows
+that the required surreal $r$ exists in all cases.
+\epf
+
+% Restate theorem 2
+{
+\renewcommand{\theDef}{\ref{canonical_orders_result}}
+\begin{Thm}
+\universaltheorem
+\end{Thm}
+\addtocounter{Def}{-1}
+}
+
+\bpf
+The axiom of choice (AoC) is used in this proof.
+
+Suppose $X$, of size $\aleph_d$, is linearly ordered by $<_t$, and we give it a well order $<_w$
+such that $||\{<_w x\}|| < \aleph_d \;\forall\, x\in X$.
+We will recursively define an order embedding $f:X\to S_d$, using transfinite induction on $<_w$.
+
+Suppose $f$ has been defined on $\{<_w x'\}$.
+Using $x'$, we will define sequences $s_i,t_j\in S_d$ such that the condition
+$s_i < f(x') < t_j$ is necessary and sufficient for $f$ to remain an order embedding.
+
+Recursively define $s_i\in S_d$ as an element (using AoC) of $\{f(x) : x<_w x', x<_t x', s_j < f(x) \,\forall\, j < i\}$,
+unless this set is empty, in which case the sequence $s_i$ terminates.
+Similarly define $t_j\in S_d$ as an element of $\{f(x) : x <_w x', x' <_t x, f(x) < t_k \,\forall\, k < j\}$, until
+that set is empty.
+It's possible that either or both of these sequences may be empty, which does not cause any difficulty.
+Note that $s_i$ is increasing, and $t_j$ is decreasing, and $f^{-1}(s_i) <_t x' <_t f^{-1}(t_j)\;\forall\, i,j$,
+so that $s_i < t_j$.
+
+If $\aleph_d$ is a successor or $\aleph_0$, we can apply theorem \ref{nested_intervals_result}
+to find an element $r\in S_d$ with $s_i < r < t_j$, and we set $f(x') = r$.
+By transfinite induction, this results in an order embedding $f$ which satisfies the theorem in this case.
+
+If $\aleph_d = \cup_{e<d}\aleph_e$, then we note that the above construction is capable of
+extending {\em any} order embedding $f:\{< x'\}\to S_d$ by adding $f(x')$.
+For ordinal $e$, let $x_e$ denote the $<_w$-first element of $X$ with
+$||\{<_w x_e\}|| = \aleph_e$.  Start by using the above method to find
+$f_0:\{<_w x_0\}\to S_0$.
+Then at each step extend this from $\cup_{i<e}f_i$ to
+$f_e:\{<_w x_e\}\to S_e$ using
+the above technique.
+(This can be done since $i<j \implies S_i \subset S_j$.)
+Let $f$ be the union of all these functions; this is an order
+embedding satisfying the theorem.
+\epf
+
+To conclude, we note that the size of $S_d$ is
+$$ ||S_d|| = \sum_{e<d} 2^{\aleph_e}.$$
+(This notation is assuming the cardinals can be well-ordered,
+which is a consequence of the axiom of choice.)
+Under the generalized continuum hypothesis,
+$2^{\aleph_e} = \aleph_{e+1}$, and it follows that
+$||S_d|| = \aleph_d$.
+
+\section{Edit this paper}
+
+The \LaTeX\ source for this paper is hosted at
+{\sf http://github.com/tylerneylon/math/},
+and may be modified and redistributed freely,
+as long as the original source is credited.
+The author will happily accept, with gratitude,
+git pull requests that improve the paper.
+
+\end{document}  
+
