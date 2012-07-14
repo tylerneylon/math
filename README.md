@@ -2,7 +2,6 @@ Math Notes
 ==========
 
 This is a collection
-(ok, just one to start with)
 of math notes I would like
 to be open source.
 I would be very happy if
@@ -17,7 +16,7 @@ clarify the content, and make
 the papers easier to read.
 I ask that the essential content
 of the papers is preserved (in
-other words, more is not better).
+other words, more is not the same as better).
 
 How to contribute
 -----------------
