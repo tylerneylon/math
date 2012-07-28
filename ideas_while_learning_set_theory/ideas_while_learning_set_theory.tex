@@ -82,6 +82,61 @@ then the $k^\text{th}$ child of a tree numbered by $m$ will be
 numbered by $g_k(m)$, where $g_k(m)$ is the  $k^\text{th}$ coordinate
 of $g(m)$.
 
+Keep in mind that this scheme allows for any number of children
+between 0 and $n$, inclusively, as 0 values indicate the lack of a child
+in a given position.
+
+\subsection{Numbers $\leftrightarrow$ unordered $n$-ary trees}
+
+This is the same as the ordered case, except that the $k$\up{th} child
+of a tree numbered by $m$ is given by $\sum_{\ell \le m} g_\ell(m)$,
+where again $g_\ell(m)$ is the $\ell$\up{th} coordinate of $g(m)$.
+
+By using the cumulative sum of the coordinates, we eliminate duplicate
+trees that have the same $g_\ell(m)$ vector except for order of coordinates.
+I think of this equivalence more directly by going in the reverse direction.
+Given a set of subtrees, take the index of all of them, and treat that as a list
+of nonnegative integers. Sort these, and take their differences. The result
+is a unique vector of nonnegative integers that forms the $g_\ell(m)$ vector.
+
+\subsection{Numbers $\leftrightarrow$ unordered, duplicate-free, any-arity trees $\leftrightarrow$ sets}
+
+This is conceptually similar to the last case, except that we
+disallow any equal children, and a node may have any finite number of children.
+
+Choose an onto function
+$$ g : \N_{\ge 1} \to \bigcup_{k \ge 0} \N_{\ge 1}^k,$$
+where we treat $\N_{\ge 1}^0$ as a singleton containing a zero-length vector.
+I find it helpful to think of $f(1)$ as mapping to the zero-length vector.
+
+In this enumeration, we skip over the empty tree completely, and
+the tree numbered by $m$ has children given by $g(m)$, where
+the $k$\up{th} child is numbered by $\sum_{\ell \le k} g_\ell(m)$.
+Because each coordinate is positive, no two numbers in the cumulative
+sum may be equal, so that duplicates are avoided. As in the last
+case, there is also only one ordering (sorted by number) for each list
+of children. That completes the equivalence between numbers and
+unordered, duplicate-free, any-arity trees.
+
+Now let's take such a tree, and turn it into a set, in a way that works as
+a bijection. The tree with a single node maps to the empty set.
+Any tree with $n$ children maps to a set with $n$ elements, each element
+corresponding to a child of the tree. That completely describes the
+mapping.
+
+Below are some tree $\leftrightarrow$ set examples, where I use the von Neumann numbering
+system with $n = \{0, 1, \ldots, n-1\}$ to help describe the sets.
+
+\centerline{
+\includegraphics[width=6.0cm]{set_theory_ideas2.pdf}
+}
+
+\subsection{Multisets $\leftrightarrow$ unordered $n$-ary trees}
+
+\subsection{Binary trees $\leftrightarrow$ lists}
+
+\subsection{Binary trees $\leftrightarrow$ pairs}
+
 \section{Total Orders}
 
 \subsection{A fixed-point theorem for total orders}
@@ -378,11 +433,12 @@ get $\delta\in D$ directly by the definition of $D$.
 
 % todo queue
 %
-% * Copy down a list of all the recent equivalences I know of (relevant to these notes)
 % * Write up those equivalences here
 % * Figure out / write up the equality cases from the middle of p. 73.
 % * Clarify proof on bottom of p. 79.
 % * Clean up my proof of the matching well orders theorem
+% * Notation thoughts - maybe there's a better notation than the aleph's, since
+%    they don't capture finite cardinals; motivated by the equations on p. 83
 %
 
 
