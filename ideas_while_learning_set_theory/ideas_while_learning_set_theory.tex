@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage{amssymb}
 \usepackage{epstopdf}
+\usepackage{fullpage}
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 
 \newtheorem{Def}{Definition} %[section]
@@ -28,7 +29,9 @@
 
 \begin{document}
 
-{\bf Ideas While Learning Set Theory}
+{\bf Ideas While Learning Set Theory} \hfill Tyler Neylon
+
+\medskip
 
 These notes are not meant to be considered an academic paper,
 or anything close to that. They are a collection of my personal
@@ -131,11 +134,80 @@ system with $n = \{0, 1, \ldots, n-1\}$ to help describe the sets.
 \includegraphics[width=6.0cm]{set_theory_ideas2.pdf}
 }
 
-\subsection{Multisets $\leftrightarrow$ unordered $n$-ary trees}
+\subsection{Multisets $\leftrightarrow$ unordered, any-ary trees}
+
+This one is easy. Each child of a node is a member of the multiset.
+That's all that is needed. So the empty set $\{\}=0$ is a single node, and
+a tree with one root and one child total is the set $\{0\}$.
+This is basically the same as the last case except that we both allow
+duplicates in the tree and in the ``sets'' which then become multisets.
+
+I like this equivalence because such trees are essentially the same
+(single-component) trees that are already studied in graph theory,
+having a special designated root node. I'm particularly curious about
+the similarity relation given by saying that multisets $m_1$ and $m_2$
+are similar iff they share the same tree (with different roots, possibly).
+For example, $\{0, 0, 0\} \sim \{\{0, 0\}\}$ since they are both multisets
+given by the tree with one central node adjacent to three other nodes,
+each of which is otherwise isolated (like the letter Y).
+
+I've noticed that in this equivalence,
+$$ \#(\text{tree edges}) = \#(\text{sibling relationships}) + \#(\text{child relationships}), $$
+where the number of sibling relationships is the number of commas in writing out
+the multiset, and the number of child relationships is the number of open braces $\{$ in
+writing it out, assuming that all empty sets are written as $0$.
+This characteristic of a multiset (\# siblings + \# children) cannot change within
+a similarity set.
+
+\subsection{Binary trees $\leftrightarrow$ pairs}
+
+Binary trees are usually considered as rooted connected finite trees where each
+node has 0, 1, or 2 ordered children. Such a tree is a fundamental structure in
+computer science.
+
+For this one equivalence, I will restrict attention to binary trees where each
+node has either 0 or 2 children --- having exactly 1 child is not allowed.
+
+By a {\em pair}, I mean an ordered pair of two elements, in the sense that
+these could replace sets as the fundamental unit of an axiomitization of math,
+much as multisets, or lists could.
+
+This equivalence is very intuitive. The left child is the left element of the pair,
+and the right child is the right element.
+
+Can we do something similar with binary trees that also allow for exactly one child,
+either left or right? This would exactly match a very common interpretation of
+``binary tree'' in other studies, and that's what we do in the next equivalence.
 
 \subsection{Binary trees $\leftrightarrow$ lists}
 
-\subsection{Binary trees $\leftrightarrow$ pairs}
+A {\em list} is a finite ordered multiset of elements. (I can imagine lists which
+do not need to be finite, such as being indexed by ordinals, but for now I'll
+just talk about finite lists.)
+I'll write the list with elements $a_1, a_2, \ldots, a_k$ as
+$$(a_1, a_2, \ldots, a_k).$$
+Not a big surprise there, but I will use this notation below to help clarify
+this equivalence.
+
+The idea for this equivalence is to treat each left-child relationship in the tree as an
+element-of relationship in the list, and each right-child in the tree as a sibling in the list.
+The empty list $() = 0$ is represented by the empty tree, with zero nodes.
+
+Some examples might help to clarify the idea.
+
+\centerline{
+\includegraphics[width=4.0cm]{set_theory_ideas3.pdf}
+}
+
+Here is another perspective of this equivalence: we will turn a tree
+into a list by doing a depth-first, left-first traversal of a tree, and turn
+that into a list. If the tree is empty, write \fbox{$0$} and you're done.
+Otherwise, write an open parenthesis \fbox{$($}, and begin.
+Each time you go to a left child, write \fbox{$($}. When you're at a node without a left child,
+write \fbox{$0$}. When you backtrack up from a left child, write a \fbox{$)$}.
+When you go to a right child, write a comma \fbox{$,\phantom|$} .
+Finally add a single \fbox{$)$} at the end once you're done with
+the whole tree.
 
 \section{Total Orders}
 
@@ -433,12 +505,20 @@ get $\delta\in D$ directly by the definition of $D$.
 
 % todo queue
 %
-% * Write up those equivalences here
 % * Figure out / write up the equality cases from the middle of p. 73.
 % * Clarify proof on bottom of p. 79.
 % * Clean up my proof of the matching well orders theorem
 % * Notation thoughts - maybe there's a better notation than the aleph's, since
 %    they don't capture finite cardinals; motivated by the equations on p. 83
+% * Clarification from p 84 (use of Kšnig's lemma)
+% * Note that one of my lemmas is basically the same as theorems III and IV on p 84
+% * Collect interesting quotes about things Hausdorff doesn't know; first noted
+%    quote is from top of p 85; there are at least two others before that
+%    (independence of the continuum hypothesis; how to handle antinomies)
+% * typo on p 85 - he means union but writes disjoint union
+% * interesting decamp of any total order into well-ordered subset + mutually exclusive
+%    no-first-element subset --- is H's decomp unique in some sense?
+% * show cleaned-up version of S 16
 %
 
 
