@@ -16,12 +16,15 @@
 \newtheorem{Thm}[Def]{Theorem}
 \newtheorem{Conj}[Def]{Conjecture}
 \newtheorem{Cor}[Def]{Corollary}
+\newtheorem{Question}[Def]{Question}
+\newtheorem{Answer}[Def]{Answer}
 
 \newcommand\bpf[1][]{\smallskip\noindent{\bf Proof#1.}\quad}
 \newcommand\epf{\qed\medskip}
 \newcommand{\up}[1]{\ensuremath{^{\textrm{#1}}}}
 
 \newcommand\N{\mathbb N}
+\newcommand\fin{\mathrm{fin}}
 
 \title{Brief Article}
 \author{The Author}
@@ -453,6 +456,273 @@ at which point the theorem is proven.
 
 After just finishing up that proof, I realize it is not nearly as concise as it could be.
 Basically everything we need is included in case 2. I could try to clean it up later.
+
+\section{Ordinal Numbers}
+
+\subsection{Left addition and multiplication}
+
+In \S 14 of Hausdorff, he points out that
+$$ \alpha < \beta \implies \alpha + \mu \le \beta + \mu,$$
+$$ \alpha < \beta \implies \alpha \mu \le \beta \mu.$$
+
+Which led me to ask
+
+\begin{Question}
+When is true that $\alpha < \beta$, but either
+$\alpha + \mu = \beta + \mu$, or $\alpha\mu = \beta\mu$ ?
+\label{q1}
+\end{Question}
+
+This is interesting because it can be used for right cancellation.
+If some conditions on $\alpha, \beta, \mu$ indicate that
+\begin{equation}
+\alpha\mu = \beta\mu \implies \alpha = \beta,
+\label{eqn1}
+\end{equation}
+ then we can effectively
+perform something like division by $\mu$ on the right; similar
+reasoning in the additive version can be used for something like subtraction on the right.
+Because (\ref{eqn1}) is not always true, we do not always have this
+division-on-the-right.
+
+In retrospect, this question is also interesting because exploring it lead me to
+better understand ordinal structures, such as having a stronger sense of
+what kind of distribution we can do on the left --- that is, addressing 
+
+\begin{Question}
+We know that $\gamma(\alpha + \beta) = \gamma\alpha + \gamma\beta$,
+which is distribution on the right.
+How can we similarly expand the expression $(\alpha + \beta)\gamma$,
+which is distribution on the left?
+\label{q2}
+\end{Question}
+
+The first result is that, when $\alpha < \beta$, $\gamma > 0$:
+\begin{equation}
+\begin{cases}
+\gamma + \mu = \mu  & \text{ iff } \quad \mu \ge \gamma\omega \\
+\alpha + \mu = \beta + \mu & \text{ iff } \quad \mu \ge (-\alpha + \beta)\omega 
+\end{cases}
+\label{eqn2}
+\end{equation}
+
+Let's verify that. Write $\mu = \gamma\eta + \xi$ (as per (3) on p. 74 in Hausdorff,
+division among ordinals). Then
+$\gamma + \mu = \gamma + \gamma\eta + \xi = \gamma (1 + \eta) + \xi$.
+Since $\xi$ is finite, we have $\alpha + \xi = \beta + \xi \implies \alpha = \beta$,
+in other words, right-cancellation for finite addition
+(this could be proven using induction on $\xi$ along with
+$\alpha + 1 = \beta + 1 \implies \alpha = \beta$).
+This means $\gamma (1 + \eta) + \xi = \mu = \gamma\eta + \xi$ iff
+$\gamma(1 + \eta) = \gamma\eta$. Hausdorff provides multiplicative
+ left-cancellation
+since $\alpha = \beta \implies \gamma\alpha = \gamma\beta$ and
+$\alpha \ne \beta \implies \gamma\alpha \ne \gamma\beta$ by Hausdorff's
+(1) on p. 73.
+This takes us from $\gamma(1 + \eta) = \gamma\eta$ to
+$1 + \eta = \eta$, which happens exactly when
+$\eta \ge \omega$. This confirms the top equation of (\ref{eqn2}).
+
+The bottom equation in (\ref{eqn2}) is simply another form of the top equation,
+where we think of $\alpha = \beta + \gamma$.
+
+In order to further explore question \ref{q1}, it's very helpful to
+understand left distribution (question \ref{q2}). I'll state the answer and
+explain how to arrive at it. It will be easier to state with some new notation.
+
+\begin{Def}
+Any ordinal $\alpha$ can be written base $\omega$, as in
+$$
+  \alpha = \omega^{\delta_n}\zeta_n + \ldots + \omega^{\delta_0}\zeta_0,
+$$
+where $n$ is finite, $\delta_{i+1} > \delta_i$, and $\zeta_i$ is also finite.
+For this decomposition, define
+$$
+  \deg(\alpha) := \delta_n,
+$$
+$$
+  \fin(\alpha) := \begin{cases}
+    0 & \text{ if } \delta_0 > 0 \\
+    \zeta_0 & \text{otherwise}. \\
+  \end{cases}
+$$
+\end{Def}
+Intuitively, $\deg(\alpha)$ is the degree of $\alpha$ as a polynomial
+in $\omega$, and $\fin(\alpha)$ is the finite part of $\alpha$ -- the finite bit
+at the end in the division equation $\alpha = \omega\eta + \zeta$.
+
+In the next answer, and throughout these notes, the notation $1(\text{condition})$ indicates
+the value 1 if the condition is true, and 0 otherwise.
+
+\begin{Answer}[to Question \ref{q2}, Left Distribution]
+$$
+(\alpha + \beta)\gamma =
+\begin{cases}
+\alpha \gamma + \beta \cdot 1(\fin(\gamma) > 0) & \text{when } \deg(\alpha) > \deg(\beta) \\
+\alpha \gamma + \beta \cdot \fin(\gamma) & \text{when } \deg(\alpha) = \deg(\beta) \\
+\beta \gamma & \text{when } \deg(\alpha) < \deg(\beta). \\
+\end{cases}
+$$
+\label{ans1}
+\end{Answer}
+
+Let's verify that.
+
+{\bf Case 1. } $\deg(\alpha) < \deg(\beta)$
+
+This case is the simplest.
+If $\delta < \varepsilon$, then
+$\omega^\delta + \omega^\varepsilon = \omega^\delta(1 + \omega^{(-\delta + \varepsilon)})
+= \omega^\delta\omega^{(-\delta + \varepsilon)} = \omega^\varepsilon$.
+So when $\deg(\alpha) < \deg(\beta)$, by considering the sum written in base-$\omega$ notation,
+it's clear that $\alpha + \beta = \beta$.
+This verifies that $(\alpha + \beta)\gamma = \beta\gamma$.
+
+We can also say something interesting in the special case that
+$\deg(\gamma) < (-\deg(\alpha) + \deg(\beta))\omega$.
+Using (\ref{eqn2}), this means that
+$\deg(\alpha\gamma) = \deg(\alpha) + \deg(\gamma) <
+\deg(\beta) + \deg(\gamma) = \deg(\beta\gamma)$
+so that
+$\alpha\gamma + \beta\gamma = \beta\gamma$. To summarize,
+$$\deg(\alpha) < \deg(\beta) \implies \bigg(\deg(\gamma) < (-\deg(\alpha) + \deg(\beta))\omega
+\iff (\alpha + \beta)\gamma = \alpha\gamma + \beta\gamma\bigg).
+$$
+(I did not spell out the $\Leftarrow$ direction of the $\iff$, but I believe it follows
+by using (\ref{eqn2}) and looking at the base-$\omega$ sums for $\alpha\gamma + \beta\gamma$
+versus $\beta\gamma$ alone.)
+
+{\bf Case 2. } $\deg(\alpha) > \deg(\beta)$
+
+We'll split $\gamma = \omega\eta + \nu$ where $\nu < \omega$ and deal with these pieces
+separately.
+
+So first consider $(\alpha + \beta)\omega$, which we can write as
+$$(\alpha + \beta)\omega = \alpha + \beta + \alpha + \beta + \alpha + \ldots
+= \alpha + (\beta + \alpha) + (\beta + \alpha) + \ldots
+= \alpha + \alpha + \alpha + \ldots = \alpha\omega.$$
+Then $(\alpha + \beta)\omega\eta = \alpha\omega\eta$.
+
+Next use induction on $\nu$ for $0 < \nu < \omega$ to see that
+$$ (\alpha + \beta)\nu = \alpha\nu + \beta.$$
+The base case is trivially $(\alpha + \beta)1 = \alpha + \beta$, and
+the inductive step is
+$(\alpha + \beta)(\nu + 1) = (\alpha\nu + \beta) + \alpha + \beta
+= \alpha(\nu + 1) + \beta$.
+
+We can compose the above to see that, when $\gamma = \omega\eta + \nu$,
+$$ (\alpha + \beta)(\omega\eta + \nu) = (\alpha + \beta)\omega\eta + (\alpha + \beta)\nu
+= \alpha\omega\eta + \alpha\nu + \beta\cdot 1(\nu > 0)
+= \alpha\gamma + \beta\cdot 1(\fin(\gamma) > 0),$$
+which completes this case.
+
+{\bf Case 3. } $\deg(\alpha) = \deg(\beta)$
+
+As in the last case, we'll split $\gamma = \omega\eta + \nu$.
+We'll also split up $\alpha$ and $\beta$ as
+$$ \alpha = \omega^\delta \zeta_\alpha + \xi_\alpha, $$
+$$ \beta = \omega^\delta \zeta_\beta + \xi_\beta, $$
+where $\delta = \deg(\alpha) = \deg(\beta)$; $\zeta_\alpha, \zeta_\beta < \omega$; and
+$\xi_\alpha, \xi_\beta$ both have degree $< \delta$.
+
+{\bf Case 3a.} $\nu < \omega$
+
+In this case,
+$$ (\alpha + \beta)\nu = (\omega^\delta \zeta_\alpha + \xi_\alpha + \omega^\delta \zeta_\beta + \xi_\beta + \ldots )$$
+$$
+= (\omega^\delta \zeta_\alpha + \omega^\delta\zeta_\beta + \ldots + \omega^\delta\zeta_\beta) + \xi_\beta
+= \omega^\delta(\zeta_\alpha + \zeta_\beta)\nu + \xi_\beta.$$
+Notice that
+$$
+\alpha\nu + \beta\nu
+= \omega^\delta\zeta_\alpha\nu + \xi_\alpha + \omega^\delta\zeta_\beta\nu + \xi_\beta
+= \omega^\delta(\zeta_\alpha + \zeta_\beta)\nu + \xi_\beta.$$
+To summarize,
+$$ (\alpha + \beta)\nu = \alpha\nu + \beta\nu.$$
+
+{\bf Case 3b. } $\omega$
+
+In this case,
+$$ (\alpha + \beta)\omega
+= \alpha + \beta + \alpha + \beta + \ldots
+= \omega^\delta(\zeta_\alpha + \zeta_\beta + \ldots ) = \omega^{\delta + 1}.$$
+
+We can combine these two cases via 
+$$(\alpha + \beta)\gamma = (\alpha + \beta)(\omega\eta + \nu)
+= \omega^{\delta + 1}\eta + \alpha\nu + \beta\nu.$$
+Next,
+$$ \alpha\gamma + \beta\nu = \alpha(\omega\eta + \nu) + \beta\nu
+= \omega^{\delta + 1}\eta + \alpha\nu + \beta\nu.$$
+These last two chain of equalities have proven equal. To summarize,
+$$
+  (\alpha + \beta)\gamma = \alpha\gamma + \beta\nu,
+$$
+which completes this case and the verification of answer \ref{ans1}.
+
+The analysis we just did allows us to know exactly when left distribution
+is allowed:
+
+\begin{Prop}
+It's true that $$ (\alpha + \beta) \gamma = \alpha\gamma + \beta\gamma $$
+iff one of the following are true:
+\begin{itemize}
+\item Any of $\alpha, \beta, \gamma = 0$;
+\item $\deg(\alpha) < \deg(\beta)$ and
+  $\deg(\gamma) < (-\deg(\alpha) + \deg(\beta))\omega$;
+\item $\deg(\alpha) = \deg(\beta)$ and $\gamma < \omega$; or
+\item $\gamma = 1$.
+\end{itemize}
+\end{Prop}
+
+The last item, $\gamma = 1$, is the only case with $\alpha,\beta,\gamma > 0$
+which works when $\deg(\alpha) > \deg(\beta)$. This proposition includes
+the fact that left distributivity always works when $\gamma$ is finite and
+$\deg(\alpha) \le \deg(\beta)$.
+
+We're now ready to return to the multiplicative part of question \ref{q1},
+and try to determine when $\alpha < \beta$ but $\alpha\mu = \beta\mu$.
+
+Toward this end, let's decompose:
+$$ \alpha = \omega^{\rho_\alpha} \tau_\alpha + \eta_\alpha, \quad
+\tau_\alpha < \omega, \eta_\alpha < \omega^{\rho_\alpha}; $$
+$$ \beta = \omega^{\rho_\beta} \tau_\beta + \eta_\beta, \quad
+\tau_\beta < \omega, \eta_\beta < \omega^{\rho_\beta}; $$
+$$ \mu = \omega \sigma + \nu, \quad \nu < \omega.$$
+
+Then
+$$ \alpha \mu
+= (\omega^\rho \tau + \eta) (\omega \sigma + \nu)
+= (\omega^\rho \tau + \eta) \omega \sigma + (\omega^\rho \tau + \eta) \nu $$
+$$
+= \omega^{\rho + 1}\sigma + \omega^\rho \tau \nu + \eta \cdot 1(\nu > 0),
+$$
+using both left and right distributivity.  Maybe I should say left semi-distributivity,
+since it's not technically distribution, but I will just say left distributivity in
+reference to answer \ref{ans1}.
+
+The only way that $\alpha\mu = \beta\mu$ is if $\rho_\alpha = \rho_\beta$,
+$\tau_\alpha = \tau_\beta$, and either $\eta_\alpha = \eta_\beta$ or $\nu = 0$.
+To summarize:
+
+\begin{Answer}[to Question \ref{q1}]
+If $\alpha < \beta$, then $\alpha\mu = \beta\mu$ iff
+\begin{itemize}
+\item $\deg(\alpha) = \deg(\beta)$;
+\item $\deg(-\alpha + \beta) < \deg(\alpha)$
+[which is equivalent to $\tau_\alpha = \tau_\beta$ when $\rho_\alpha = \rho_\beta$]; and
+\item $\fin(\mu) = 0$.
+\end{itemize}
+\end{Answer}
+
+In other words, $\alpha, \beta$ must have identical leading terms in their
+base-$\omega$ sum, and $\mu$ must be a multiple of $\omega$.
+
+I also think the decomposition from above,
+$$ \alpha \mu
+= \omega^{\rho + 1}\sigma + \omega^\rho \tau \nu + \eta \cdot 1(\nu > 0),
+$$
+is a generally useful way to view the product of any two ordinals
+in terms of their base-$\omega$ sums.
 
 
 \section{Notes on the text of {\it Set Theory} by Felix Hausdorff}
