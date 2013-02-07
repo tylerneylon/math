@@ -1,5 +1,4 @@
 *.aux
 *.log
-*.pdf
 *.gz
 !set_theory_ideas*.pdf
