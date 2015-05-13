@@ -1,0 +1,8 @@
+#!/bin/bash
+if [ -z "$1" ]; then
+  echo 'Usage: tohtml <md_filename>'
+  exit
+fi
+cat html_start.html
+pandoc --bibliography=raneys_lemmas.bib --mathjax $1
+cat html_end.html

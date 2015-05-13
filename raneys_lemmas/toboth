@@ -1,0 +1,13 @@
+#!/bin/bash
+
+NAME=raneys_lemmas
+
+# Make and open the html file.
+cat html_start.html > ${NAME}.html
+pandoc --bibliography=${NAME}.bib --mathjax ${NAME}.md >> ${NAME}.html
+cat html_end.html >> ${NAME}.html
+open ${NAME}.html
+
+# Make and open the pdf file.
+pandoc --bibliography=${NAME}.bib -t latex -o ${NAME}.pdf -s ${NAME}.md
+open ${NAME}.pdf
