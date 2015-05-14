@@ -31,5 +31,14 @@ $\langle x_5, x_6=x_1, \ldots, x_9=x_4\rangle = \langle 1, 3, -2, 4, -5\rangle$
 with partial sums
 $\langle 1, 4, 2, 6, 1\rangle$ that are all positive.
 
+---
+
+Given a sequence $\langle x_1, \ldots, x_n\rangle$, it's useful to say that
+an index $i \in \{1,\ldots, n\}$ is a *positive-sum shift* if and only if
+the partial sums of $\langle x_i, \ldots, x_n, x_1, \ldots, x_{i-1}\rangle$
+are all positive. Since this note focuses on finite sequences, we'll also
+implicitly use arbitrary indexes $x_j, j\in\mathbb{Z}$, to refer to
+$x_k$ with $k\in \{1, \ldots, n\}, k\equiv j \pmod n$.
+
 ## References
 

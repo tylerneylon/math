@@ -16,6 +16,8 @@
 <hr />
 <p>Intuitively, we can think of such an index <span class="math">\(j\)</span> as a cyclic shift of the sequence that has partial sums that are all positive.</p>
 <p>For example, the finite sequence <span class="math">\(\langle x_1, \ldots, x_5\rangle = \langle 3, -2, 4, -1, 1 \rangle\)</span> offers <span class="math">\(j=5\)</span> as the unique shift providing <span class="math">\(\langle x_5, x_6=x_1, \ldots, x_9=x_4\rangle = \langle 1, 3, -2, 4, -5\rangle\)</span> with partial sums <span class="math">\(\langle 1, 4, 2, 6, 1\rangle\)</span> that are all positive.</p>
+<hr />
+<p>Given a sequence <span class="math">\(\langle x_1, \ldots, x_n\rangle\)</span>, it's useful to say that an index <span class="math">\(i \in \{1,\ldots, n\}\)</span> is a <em>positive-sum shift</em> if and only if the partial sums of <span class="math">\(\langle x_i, \ldots, x_n, x_1, \ldots, x_{i-1}\rangle\)</span> are all positive. Since this note focuses on finite sequences, we'll also implicitly use arbitrary indexes <span class="math">\(x_j, j\in\mathbb{Z}\)</span>, to refer to <span class="math">\(x_k\)</span> with <span class="math">\(k\in \{1, \ldots, n\}, k\equiv j \pmod n\)</span>.</p>
 <div class="references">
 <h2 id="references" class="unnumbered">References</h2>
 <p>Knuth, Donald E., Oren Patashnik, and Ronald L. Graham. 1998. <em>Concrete Mathematics: A Foundation for Computer Science</em>. addison-wesley.</p>
