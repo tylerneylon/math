@@ -9,7 +9,7 @@ I personally learned of these lemmas in chapter 7 of
 the book Concrete Mathematics [@concrete],
 which explores their applications to generating functions.
 
-## Exact rules for finite integer sequences
+## Exact values for finite integer sequences
 
 ### Lemma 1
 
