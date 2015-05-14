@@ -58,5 +58,10 @@ For example, let $\langle x_1, \ldots, x_8\rangle =
 $\sum x_i = 2$, and $x_2, x_6$ are the only
 positive-sum shifts:
 
+ shift | partial sums
+-------|----------------
+$\langle x_2, \ldots\rangle = \langle 1, 1, 0, -1, 1, 1, 1, -2\rangle\quad$ | $\langle 1, 2, 2, 1, 2, 3, 4, 2\rangle$
+$\langle x_6, \ldots\rangle = \langle 1, 1, 1, -2, 1, 1, 0, -1\rangle\quad$ | $\langle 1, 2, 3, 1, 2, 3, 3, 2\rangle$
+
 ## References
 

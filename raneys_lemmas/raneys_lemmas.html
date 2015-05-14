@@ -3,6 +3,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <style>
+      table { margin: auto; }
+    </style>
   </head>
   <body style="font-size:120%">
     <div style="width:760px;margin:auto">
@@ -24,6 +27,24 @@
 <p>Suppose <span class="math">\(\sum_{i=1}^nx_i=\ell\)</span>, where <span class="math">\(x_i\in\mathbb{Z}\)</span> and <span class="math">\(x_i \le 1\)</span> for all <span class="math">\(i\)</span>. Then exactly <span class="math">\(\ell\)</span> indexes in <span class="math">\(\{1, \ldots, n\}\)</span> are positive-sum shifts.</p>
 <hr />
 <p>For example, let <span class="math">\(\langle x_1, \ldots, x_8\rangle = \langle -2, 1, 1, 0, -1, 1, 1, 1\rangle\)</span>. Then <span class="math">\(\sum x_i = 2\)</span>, and <span class="math">\(x_2, x_6\)</span> are the only positive-sum shifts:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">shift</th>
+<th align="left">partial sums</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math">\(\langle x_2, \ldots\rangle = \langle 1, 1, 0, -1, 1, 1, 1, -2\rangle\quad\)</span></td>
+<td align="left"><span class="math">\(\langle 1, 2, 2, 1, 2, 3, 4, 2\rangle\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math">\(\langle x_6, \ldots\rangle = \langle 1, 1, 1, -2, 1, 1, 0, -1\rangle\quad\)</span></td>
+<td align="left"><span class="math">\(\langle 1, 2, 3, 1, 2, 3, 3, 2\rangle\)</span></td>
+</tr>
+</tbody>
+</table>
 <div class="references">
 <h2 id="references" class="unnumbered">References</h2>
 <p>Knuth, Donald E., Oren Patashnik, and Ronald L. Graham. 1998. <em>Concrete Mathematics: A Foundation for Computer Science</em>. addison-wesley.</p>
