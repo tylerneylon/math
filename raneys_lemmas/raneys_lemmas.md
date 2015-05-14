@@ -40,5 +40,23 @@ are all positive. Since this note focuses on finite sequences, we'll also
 implicitly use arbitrary indexes $x_j, j\in\mathbb{Z}$, to refer to
 $x_k$ with $k\in \{1, \ldots, n\}, k\equiv j \pmod n$.
 
+---
+
+Raney also proved (TODO CHECK) the related result:
+
+### Lemma 2
+
+Suppose $\sum_{i=1}^nx_i=\ell$, where $x_i\in\mathbb{Z}$ and
+$x_i \le 1$ for all $i$.
+Then exactly $\ell$ indexes in $\{1, \ldots, n\}$ are
+positive-sum shifts.
+
+---
+
+For example, let $\langle x_1, \ldots, x_8\rangle =
+\langle -2, 1, 1, 0, -1, 1, 1, 1\rangle$. Then
+$\sum x_i = 2$, and $x_2, x_6$ are the only
+positive-sum shifts:
+
 ## References
 
