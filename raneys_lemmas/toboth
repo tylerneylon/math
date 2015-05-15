@@ -1,13 +1,13 @@
 #!/bin/bash
+# Add a -x to the end of the above line to help debug this script.
 
 NAME=raneys_lemmas
+FLAGS="-s --number-sections --bibliography=${NAME}.bib ${NAME}.md"
 
 # Make and open the html file.
-cat html_start.html > ${NAME}.html
-pandoc --bibliography=${NAME}.bib --mathjax ${NAME}.md >> ${NAME}.html
-cat html_end.html >> ${NAME}.html
+pandoc --mathjax --template=template.html ${FLAGS} > ${NAME}.html
 open ${NAME}.html
 
 # Make and open the pdf file.
-pandoc --bibliography=${NAME}.bib -t latex -o ${NAME}.pdf -s ${NAME}.md
+pandoc -t latex -o ${NAME}.pdf -s ${FLAGS}
 open ${NAME}.pdf

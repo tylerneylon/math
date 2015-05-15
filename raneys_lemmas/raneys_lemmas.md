@@ -1,4 +1,6 @@
-# Notes on Raney's Lemmas
+% Notes on Ramey's Lemmas
+% Tyler Neylon
+% 251.2015
 
 In a 1960 paper, George Raney proved
 the first two lemmas below; the lemmas suppose we have a
@@ -15,9 +17,9 @@ I personally learned of these lemmas in chapter 7 of
 the book Concrete Mathematics [@concrete],
 which explores their applications to generating functions.
 
-## Exact values for finite integer sequences
+# Exact values for finite integer sequences
 
-### Lemma 1
+## Lemma 1 {-}
 
 Suppose $\sum_{i=1}^n x_i = 1$, where all $x_i\in\mathbb{Z}$.
 Extend the sequence by letting $x_{n+p}=x_p$ for $1\le p\le n$.
@@ -50,7 +52,7 @@ $x_k$ with $k\in \{1, \ldots, n\}, k\equiv j \pmod n$.
 
 Raney also proved the related result:
 
-### Lemma 2
+## Lemma 2 {-}
 
 Suppose $\sum_{i=1}^nx_i=\ell$, where $x_i\in\mathbb{Z}$ and
 $x_i \le 1$ for all $i$.
@@ -69,5 +71,13 @@ positive-sum shifts:
 $\langle x_2, \ldots\rangle = \langle 1, 1, 0, -1, 1, 1, 1, -2\rangle\quad$ | $\langle 1, 2, 2, 1, 2, 3, 4, 2\rangle$
 $\langle x_6, \ldots\rangle = \langle 1, 1, 1, -2, 1, 1, 0, -1\rangle\quad$ | $\langle 1, 2, 3, 1, 2, 3, 3, 2\rangle$
 
-## References
+# Bounds for real finite sequences
+
+Add content here.
+
+# Finite sequences with uniformly random values
+
+Add more content here.
+
+# References
 
