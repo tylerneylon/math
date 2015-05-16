@@ -89,30 +89,31 @@ We start with a general guarantee that
 $\sum x_i > 0 \Rightarrow \sigma(x) \ge 1$.
 In the context of a sequence $x$,
 it will be useful to write $s_i$ to denote the
-$i^\mathrm{th}$ partial sum of $x$; that is,
-$$ s_i = \sum_{j=1}^i x_j. $$
+$i^\mathrm{th}$ partial sum of $x$; that is, $s_0 = 0$, and
+$$ s_i = \sum_{j=1}^i x_j, \quad \text{for } i \ge 1. $$
+We can define $s_i$ for $i > n$ using the implicitly
+periodic sequence characterized by $x_{n + i} = x_i$.
 
 **Property 3**\ 
 *Suppose $\sum_{i=1}^nx_i > 0$, where $x_i\in\mathbb{R}$.
 Let $s_i$ denote the $i^\mathrm{th}$ partial sum of $x$, and
-let $j$ be the largest index in $\{1, \ldots, n\}$ with $s_j = \min_i s_i$.
+let $j$ be the largest index in $\{1, \ldots, n\}$ with $s_{j-1} = \min_{0\le i < n} s_i$.
 Then $j$ is a positive-sum shift.*
 
 ---
 
 **Proof**\ 
-Let $y=\sum x_i > 0$, and
-let
+Let
 $$s'_i = \sum_{k=j}^{j+i-1}x_k$$
 denote the $i^\mathrm{th}$ partial sum of the shifted sequence
-$\langle x_j, x_{j+1}, \ldots \rangle$.
+$\langle x_j, \ldots, x_{j+n-1}\rangle$.
 Then, for $1 \le i \le n$,
 $$s'_i = s_{j+i-1} - s_{j-1}
 \begin{cases}
-> 0 \text{ (by definition of $j$)} & \text{when } j+i-1 \le n \\
-= s_{j+i-1-n}-s_{j-1}+y \ge 0 + y > 0 & \text{when } j+i-1 > n. \\
+> 0 \text{ (by definition of $j$)} & \text{when } j+i-1 < n \\
+= s_n + s_{j+i-1-n}-s_{j-1} \ge s_n > 0 & \text{when } j+i-1 \ge n. \\
 \end{cases}$$
-
+$\Box$
 
 # Finite sequences with uniformly random values
 
