@@ -1,4 +1,4 @@
-% Notes on Ramey's Lemmas
+% Notes on Raney's Lemmas
 % Tyler Neylon
 % 251.2015
 
@@ -100,7 +100,19 @@ Then $j$ is a positive-sum shift.*
 
 ---
 
-Add content here.
+**Proof**\ 
+Let $y=\sum x_i > 0$, and
+let
+$$s'_i = \sum_{k=j}^{j+i-1}x_k$$
+denote the $i^\mathrm{th}$ partial sum of the shifted sequence
+$\langle x_j, x_{j+1}, \ldots \rangle$.
+Then, for $1 \le i \le n$,
+$$s'_i = s_{j+i-1} - s_{j-1}
+\begin{cases}
+> 0 \text{ (by definition of $j$)} & \text{when } j+i-1 \le n \\
+= s_{j+i-1-n}-s_{j-1}+y \ge 0 + y > 0 & \text{when } j+i-1 > n. \\
+\end{cases}$$
+
 
 # Finite sequences with uniformly random values
 

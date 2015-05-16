@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Notes on Ramey's Lemmas</title>
+    <title>Notes on Raney's Lemmas</title>
     <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
     <style>
       body    { font-size: 120%; }
@@ -18,7 +18,7 @@
   </head>
   <body>
     <div style="width:760px;margin:auto">
-      <div class="title">Notes on Ramey's Lemmas</div>
+      <div class="title">Notes on Raney's Lemmas</div>
       <div class="author">Tyler Neylon</div>
       <div class="date">251.2015</div>
       <p>In a 1960 paper, George Raney proved the first two lemmas below; the lemmas suppose we have a finite sequence of numbers meeting certain constraints, and provide the number of cycle shifts that contain all-positive partial sums <span class="citation">(Raney 1960)</span>.</p>
@@ -60,7 +60,11 @@
       <p>We start with a general guarantee that <span class="math">\(\sum x_i &gt; 0 \Rightarrow \sigma(x) \ge 1\)</span>. In the context of a sequence <span class="math">\(x\)</span>, it will be useful to write <span class="math">\(s_i\)</span> to denote the <span class="math">\(i^\mathrm{th}\)</span> partial sum of <span class="math">\(x\)</span>; that is, <span class="math">\[ s_i = \sum_{j=1}^i x_j. \]</span></p>
       <p><strong>Property 3</strong>  <em>Suppose <span class="math">\(\sum_{i=1}^nx_i &gt; 0\)</span>, where <span class="math">\(x_i\in\mathbb{R}\)</span>. Let <span class="math">\(s_i\)</span> denote the <span class="math">\(i^\mathrm{th}\)</span> partial sum of <span class="math">\(x\)</span>, and let <span class="math">\(j\)</span> be the largest index in <span class="math">\(\{1, \ldots, n\}\)</span> with <span class="math">\(s_j = \min_i s_i\)</span>. Then <span class="math">\(j\)</span> is a positive-sum shift.</em></p>
       <hr />
-      <p>Add content here.</p>
+      <p><strong>Proof</strong>  Let <span class="math">\(y=\sum x_i &gt; 0\)</span>, and let <span class="math">\[s&#39;_i = \sum_{k=j}^{j+i-1}x_k\]</span> denote the <span class="math">\(i^\mathrm{th}\)</span> partial sum of the shifted sequence <span class="math">\(\langle x_j, x_{j+1}, \ldots \rangle\)</span>. Then, for <span class="math">\(1 \le i \le n\)</span>, <span class="math">\[s&#39;_i = s_{j+i-1} - s_{j-1}
+      \begin{cases}
+      &gt; 0 \text{ (by definition of $j$)} &amp; \text{when } j+i-1 \le n \\
+      = s_{j+i-1-n}-s_{j-1}+y \ge 0 + y &gt; 0 &amp; \text{when } j+i-1 &gt; n. \\
+      \end{cases}\]</span></p>
       <h1 id="finite-sequences-with-uniformly-random-values"><span class="header-section-number">3</span> Finite sequences with uniformly random values</h1>
       <p>Add more content here.</p>
       <div class="references">
