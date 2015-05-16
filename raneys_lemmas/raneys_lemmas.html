@@ -23,10 +23,9 @@
       <div class="date">251.2015</div>
       <p>In a 1960 paper, George Raney proved the first two lemmas below; the lemmas suppose we have a finite sequence of numbers meeting certain constraints, and provide the number of cycle shifts that contain all-positive partial sums <span class="citation">(Raney 1960)</span>.</p>
       <p>These notes expand on the ideas behind these lemmas. The final section of these notes discusses cyclic shifts for finite sequences of independent, uniformly random values; as far as I know, the work in that section is new.</p>
-      <p>I personally learned of these lemmas in chapter 7 of the book Concrete Mathematics <span class="citation">(Knuth, Patashnik, and Graham 1998)</span>, which explores their applications to generating functions.</p>
+      <p>I personally learned of these lemmas in chapter 7 of the book <em>Concrete Mathematics</em> <span class="citation">(Knuth, Patashnik, and Graham 1998)</span>, which explores their applications to generating functions. The presentation of the lemmas here is based on the presentation in <em>Concrete Mathematics</em> rather than on Raney's original paper.</p>
       <h1 id="exact-values-for-finite-integer-sequences"><span class="header-section-number">1</span> Exact values for finite integer sequences</h1>
-      <h2 id="lemma-1" class="unnumbered">Lemma 1</h2>
-      <p>Suppose <span class="math">\(\sum_{i=1}^n x_i = 1\)</span>, where all <span class="math">\(x_i\in\mathbb{Z}\)</span>. Extend the sequence by letting <span class="math">\(x_{n+p}=x_p\)</span> for <span class="math">\(1\le p\le n\)</span>. Then there is a unique <span class="math">\(j\)</span>, <span class="math">\(1 \le j \le n\)</span>, such that</p>
+      <p><strong>Lemma 1</strong> <em>Suppose <span class="math">\(\sum_{i=1}^n x_i = 1\)</span>, where all <span class="math">\(x_i\in\mathbb{Z}\)</span>. Extend the sequence by letting <span class="math">\(x_{n+p}=x_p\)</span> for <span class="math">\(1\le p\le n\)</span>. Then there is a unique <span class="math">\(j\)</span>, <span class="math">\(1 \le j \le n\)</span>, such that</em></p>
       <p><span class="math">\[\sum_{i=j}^{j+k-1} x_i &gt; 0; \quad 1 \le k \le n.\]</span></p>
       <hr />
       <p>Intuitively, we can think of such an index <span class="math">\(j\)</span> as a cyclic shift of the sequence that has partial sums that are all positive.</p>
@@ -35,8 +34,7 @@
       <p>Given a sequence <span class="math">\(\langle x_1, \ldots, x_n\rangle\)</span>, it's useful to say that an index <span class="math">\(i \in \{1,\ldots, n\}\)</span> is a <em>positive-sum shift</em> if and only if the partial sums of <span class="math">\(\langle x_i, \ldots, x_n, x_1, \ldots, x_{i-1}\rangle\)</span> are all positive. Since these notes focus on finite sequences, we'll also implicitly use arbitrary indexes <span class="math">\(x_j, j\in\mathbb{Z}\)</span>, to refer to <span class="math">\(x_k\)</span> with <span class="math">\(k\in \{1, \ldots, n\}, k\equiv j \pmod n\)</span>.</p>
       <hr />
       <p>Raney also proved the related result:</p>
-      <h2 id="lemma-2" class="unnumbered">Lemma 2</h2>
-      <p>Suppose <span class="math">\(\sum_{i=1}^nx_i=\ell\)</span>, where <span class="math">\(x_i\in\mathbb{Z}\)</span> and <span class="math">\(x_i \le 1\)</span> for all <span class="math">\(i\)</span>. Then exactly <span class="math">\(\ell\)</span> indexes in <span class="math">\(\{1, \ldots, n\}\)</span> are positive-sum shifts.</p>
+      <p><strong>Lemma 2</strong> <em>Suppose <span class="math">\(\sum_{i=1}^nx_i=\ell\)</span>, where <span class="math">\(x_i\in\mathbb{Z}\)</span> and <span class="math">\(x_i \le 1\)</span> for all <span class="math">\(i\)</span>. Then exactly <span class="math">\(\ell\)</span> indexes in <span class="math">\(\{1, \ldots, n\}\)</span> are positive-sum shifts.</em></p>
       <hr />
       <p>For example, let <span class="math">\(\langle x_1, \ldots, x_8\rangle = \langle -2, 1, 1, 0, -1, 1, 1, 1\rangle\)</span>. Then <span class="math">\(\sum x_i = 2\)</span>, and <span class="math">\(x_2, x_6\)</span> are the only positive-sum shifts:</p>
       <table>

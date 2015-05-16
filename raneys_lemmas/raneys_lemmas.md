@@ -14,16 +14,18 @@ finite sequences of independent, uniformly random
 values; as far as I know, the work in that section is new.
 
 I personally learned of these lemmas in chapter 7 of
-the book Concrete Mathematics [@concrete],
+the book *Concrete Mathematics* [@concrete],
 which explores their applications to generating functions.
+The presentation of the lemmas here is based on the
+presentation in *Concrete Mathematics* rather than on
+Raney's original paper.
 
 # Exact values for finite integer sequences
 
-## Lemma 1 {-}
-
-Suppose $\sum_{i=1}^n x_i = 1$, where all $x_i\in\mathbb{Z}$.
+**Lemma 1**
+*Suppose $\sum_{i=1}^n x_i = 1$, where all $x_i\in\mathbb{Z}$.
 Extend the sequence by letting $x_{n+p}=x_p$ for $1\le p\le n$.
-Then there is a unique $j$, $1 \le j \le n$, such that
+Then there is a unique $j$, $1 \le j \le n$, such that*
 
 $$\sum_{i=j}^{j+k-1} x_i > 0; \quad 1 \le k \le n.$$
 
@@ -52,12 +54,11 @@ $x_k$ with $k\in \{1, \ldots, n\}, k\equiv j \pmod n$.
 
 Raney also proved the related result:
 
-## Lemma 2 {-}
-
-Suppose $\sum_{i=1}^nx_i=\ell$, where $x_i\in\mathbb{Z}$ and
+**Lemma 2**
+*Suppose $\sum_{i=1}^nx_i=\ell$, where $x_i\in\mathbb{Z}$ and
 $x_i \le 1$ for all $i$.
 Then exactly $\ell$ indexes in $\{1, \ldots, n\}$ are
-positive-sum shifts.
+positive-sum shifts.*
 
 ---
 
