@@ -24,7 +24,7 @@
       <p>In a 1960 paper, George Raney proved the first two lemmas below; the lemmas suppose we have a finite sequence of numbers meeting certain constraints, and provide the number of cycle shifts that contain all-positive partial sums <span class="citation">(Raney 1960)</span>.</p>
       <p>These notes expand on the ideas behind these lemmas. The final section of these notes discusses cyclic shifts for finite sequences of independent, uniformly random values; as far as I know, the work in that section is new.</p>
       <p>I personally learned of these lemmas in chapter 7 of the book <em>Concrete Mathematics</em> <span class="citation">(Knuth, Patashnik, and Graham 1998)</span>, which explores their applications to generating functions. The presentation of the lemmas here is based on the presentation in <em>Concrete Mathematics</em> rather than on Raney's original paper.</p>
-      <h1 id="exact-values-for-finite-integer-sequences"><span class="header-section-number">1</span> Exact values for finite integer sequences</h1>
+      <h1 id="integer-sequences"><span class="header-section-number">1</span> Integer sequences</h1>
       <p><strong>Lemma 1</strong>  <em>Suppose <span class="math">\(\sum_{i=1}^n x_i = 1\)</span>, where all <span class="math">\(x_i\in\mathbb{Z}\)</span>. Extend the sequence by letting <span class="math">\(x_{n+p}=x_p\)</span> for <span class="math">\(1\le p\le n\)</span>. Then there is a unique <span class="math">\(j\)</span>, <span class="math">\(1 \le j \le n\)</span>, such that</em></p>
       <p><span class="math">\[\sum_{i=j}^{j+k-1} x_i &gt; 0; \quad 1 \le k \le n.\]</span></p>
       <hr />
@@ -56,7 +56,7 @@
       </table>
       <p>Note that lemma 2 is not a strict generalization of lemma 1 as it adds the condition <span class="math">\(x_i \le 1\)</span>. This condition is necessary for lemma 2; without it we may have, for example, the one-element sequence <span class="math">\(x = \langle 2\rangle\)</span> with sum <span class="math">\(\ell = 2\)</span> and <span class="math">\(\sigma(x) = 1\)</span>.</p>
       <p>Rather than proving the above two lemmas directly, we'll jump to the general case of real sequences <span class="math">\(x\)</span> and prove strictly more general bounds on <span class="math">\(\sigma(x)\)</span> in that context.</p>
-      <h1 id="bounds-for-real-finite-sequences"><span class="header-section-number">2</span> Bounds for real finite sequences</h1>
+      <h1 id="real-sequences"><span class="header-section-number">2</span> Real sequences</h1>
       <p>We start with a general guarantee that <span class="math">\(\sum x_i &gt; 0 \Rightarrow \sigma(x) \ge 1\)</span>. In the context of a sequence <span class="math">\(x\)</span>, it will be useful to write <span class="math">\(s_i\)</span> to denote the <span class="math">\(i^\mathrm{th}\)</span> partial sum of <span class="math">\(x\)</span>; that is, <span class="math">\(s_0 = 0\)</span>, and <span class="math">\[ s_i = \sum_{j=1}^i x_j, \quad \text{for } i \ge 1. \]</span> We can define <span class="math">\(s_i\)</span> for <span class="math">\(i &gt; n\)</span> using the implicitly periodic sequence characterized by <span class="math">\(x_{n + i} = x_i\)</span>.</p>
       <p><strong>Property 3</strong>  <em>Suppose <span class="math">\(\sum_{i=1}^nx_i &gt; 0\)</span>, where <span class="math">\(x_i\in\mathbb{R}\)</span>. Let <span class="math">\(s_i\)</span> denote the <span class="math">\(i^\mathrm{th}\)</span> partial sum of <span class="math">\(x\)</span>, and let <span class="math">\(j\)</span> be the largest index in <span class="math">\(\{1, \ldots, n\}\)</span> with <span class="math">\(s_{j-1} = \min_{0\le i &lt; n} s_i\)</span>. Then <span class="math">\(j\)</span> is a positive-sum shift.</em></p>
       <hr />
@@ -67,7 +67,8 @@
       \end{cases}\]</span> <span class="math">\(\Box\)</span></p>
       <p>Now we can assume without loss of generality that any sequence of real numbers <span class="math">\(\langle x_1, \ldots, x_n\rangle\)</span> with <span class="math">\(\sum x_i &gt; 0\)</span> is already shifted so that all its partial sums <span class="math">\(s_i &gt; 0\)</span> for <span class="math">\(i &gt; 0\)</span>. This allows us to provide a nice general expression for <span class="math">\(\sigma(x)\)</span>.</p>
       <p><strong>Property 4</strong>  <em>Suppose that <span class="math">\(x\)</span> is a finite real sequence with <span class="math">\(i^\text{th}\)</span> partial sum <span class="math">\(s_i\)</span>, and that <span class="math">\(s_i &gt; 0\)</span> for all <span class="math">\(i &gt; 0\)</span>. Then <span class="math">\[\sigma(x) = \#\left\{\min_{k \le i \le n} s_i\; \big|\; 0 \le k \le n \right\} - 1.\]</span> Specifically, index <span class="math">\(j\)</span> is a positive-sum shift iff there is some <span class="math">\(k, 0 \le k \le n\)</span> so that <span class="math">\(j\)</span> is the largest index with <span class="math">\(s_{j-1} = \min_{k \le i \le n} s_i\)</span>.</em></p>
-      <h1 id="finite-sequences-with-uniformly-random-values"><span class="header-section-number">3</span> Finite sequences with uniformly random values</h1>
+      <p>(Next: note why the specifically case matches the <span class="math">\(\sigma(x)\)</span> value; proof; example illustration for intuition)</p>
+      <h1 id="random-sequences"><span class="header-section-number">3</span> Random sequences</h1>
       <p>Add more content here.</p>
       <div class="references">
       <h1 id="references" class="unnumbered">References</h1>

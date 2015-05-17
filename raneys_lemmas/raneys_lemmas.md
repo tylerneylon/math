@@ -20,7 +20,7 @@ The presentation of the lemmas here is based on the
 presentation in *Concrete Mathematics* rather than on
 Raney's original paper.
 
-# Exact values for finite integer sequences
+# Integer sequences
 
 **Lemma 1**\ 
 *Suppose $\sum_{i=1}^n x_i = 1$, where all $x_i\in\mathbb{Z}$.
@@ -83,7 +83,7 @@ Rather than proving the above two lemmas directly, we'll jump to the
 general case of real sequences $x$ and prove strictly more general bounds
 on $\sigma(x)$ in that context.
 
-# Bounds for real finite sequences
+# Real sequences
 
 We start with a general guarantee that
 $\sum x_i > 0 \Rightarrow \sigma(x) \ge 1$.
@@ -129,8 +129,10 @@ Specifically, index $j$ is a positive-sum shift iff there is some
 $k, 0 \le k \le n$ so that $j$ is the largest index with
 $s_{j-1} = \min_{k \le i \le n} s_i$.*
 
+(Next: note why the specifically case matches the $\sigma(x)$ value; proof; example
+illustration for intuition)
 
-# Finite sequences with uniformly random values
+# Random sequences
 
 Add more content here.
 
