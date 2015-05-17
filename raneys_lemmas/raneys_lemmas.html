@@ -65,6 +65,8 @@
       &gt; 0 \text{ (by definition of $j$)} &amp; \text{when } j+i-1 &lt; n \\
       = s_n + s_{j+i-1-n}-s_{j-1} \ge s_n &gt; 0 &amp; \text{when } j+i-1 \ge n. \\
       \end{cases}\]</span> <span class="math">\(\Box\)</span></p>
+      <p>Now we can assume without loss of generality that any sequence of real numbers <span class="math">\(\langle x_1, \ldots, x_n\rangle\)</span> with <span class="math">\(\sum x_i &gt; 0\)</span> is already shifted so that all its partial sums <span class="math">\(s_i &gt; 0\)</span> for <span class="math">\(i &gt; 0\)</span>. This allows us to provide a nice general expression for <span class="math">\(\sigma(x)\)</span>.</p>
+      <p><strong>Property 4</strong>  <em>Suppose that <span class="math">\(x\)</span> is a finite real sequence with <span class="math">\(i^\text{th}\)</span> partial sum <span class="math">\(s_i\)</span>, and that <span class="math">\(s_i &gt; 0\)</span> for all <span class="math">\(i &gt; 0\)</span>. Then <span class="math">\[\sigma(x) = \#\left\{\min_{k \le i \le n} s_i\; \big|\; 0 \le k \le n \right\} - 1.\]</span> Specifically, index <span class="math">\(j\)</span> is a positive-sum shift iff there is some <span class="math">\(k, 0 \le k \le n\)</span> so that <span class="math">\(j\)</span> is the largest index with <span class="math">\(s_{j-1} = \min_{k \le i \le n} s_i\)</span>.</em></p>
       <h1 id="finite-sequences-with-uniformly-random-values"><span class="header-section-number">3</span> Finite sequences with uniformly random values</h1>
       <p>Add more content here.</p>
       <div class="references">

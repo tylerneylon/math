@@ -115,6 +115,21 @@ $$s'_i = s_{j+i-1} - s_{j-1}
 \end{cases}$$
 $\Box$
 
+Now we can assume without loss of generality that any sequence of
+real numbers $\langle x_1, \ldots, x_n\rangle$ with $\sum x_i > 0$
+is already shifted
+so that all its partial sums $s_i > 0$ for $i > 0$.
+This allows us to provide a nice general expression for $\sigma(x)$.
+
+**Property 4**\ 
+*Suppose that $x$ is a finite real sequence with $i^\text{th}$ partial sum
+$s_i$, and that $s_i > 0$ for all $i > 0$. Then
+$$\sigma(x) = \#\left\{\min_{k \le i \le n} s_i\; \big|\; 0 \le k \le n \right\} - 1.$$
+Specifically, index $j$ is a positive-sum shift iff there is some
+$k, 0 \le k \le n$ so that $j$ is the largest index with
+$s_{j-1} = \min_{k \le i \le n} s_i$.*
+
+
 # Finite sequences with uniformly random values
 
 Add more content here.
