@@ -131,7 +131,24 @@ $s_{j-1} < s_i$ for all $i$ with $j \le i \le n$.*
 ---
 
 **Proof**\ 
-proof here
+We'll start by supposing we have an index $j$ with $1 \le j \le n$ and
+$s_{j-1} < s_i$ for all $i$ with $j \le i \le n$; our goal is to show that such
+a $j$ must be a positive-sum shift. Our approach will be similar to the proof of
+property 3.
+
+Let $s'_i$ denote the $i^\text{th}$ partial sum of $\langle x_j, \ldots, x_{j+n-1}\rangle$:
+$$s'_i = \sum_{k=j}^{j+i-1}x_k.$$
+Then
+$$s'_i = s_{j+i-1} - s_{j-1} \begin{cases}
+> 0 & \text{if } j+i-1 \le n, \\
+= s_{j+i-1-n} + s_n - s_{j-1} & \text{if } j+i-1 > n; \\
+\end{cases}$$
+the last inequality follows since $s_{j+i-1-n} > 0$ and $s_n > s_{j-1}$.
+
+On the other hand, if $s_{j-1}\ge s_i$ for some $i,j$ with $1\le j\le i\le n$, then
+$s'_{i-j+1}=s_i-s_{j-1}\le 0$, so that $j$ isn't a positive-sum shift.
+This completes the proof of the last part of the property; next we'll justify
+the expression for $\sigma(x)$.
 $\Box$
 
 (Next: note why the specifically case matches the $\sigma(x)$ value; proof; example
