@@ -124,10 +124,15 @@ This allows us to provide a nice general expression for $\sigma(x)$.
 **Property 4**\ 
 *Suppose that $x$ is a finite real sequence with $i^\text{th}$ partial sum
 $s_i$, and that $s_i > 0$ for all $i > 0$. Then
-$$\sigma(x) = \#\left\{\min_{k \le i \le n} s_i\; \big|\; 0 \le k \le n \right\} - 1.$$
-Specifically, index $j$ is a positive-sum shift iff there is some
-$k, 0 \le k \le n$ so that $j$ is the largest index with
-$s_{j-1} = \min_{k \le i \le n} s_i$.*
+$$\sigma(x) = \#\left\{\min_{j \le i \le n} s_i\; \big|\; 1 \le j \le n \right\}.$$
+More specifically, an index $j$ with $1 \le j \le n$ is a positive-sum shift iff
+$s_{j-1} < s_i$ for all $i$ with $j \le i \le n$.*
+
+---
+
+**Proof**\ 
+proof here
+$\Box$
 
 (Next: note why the specifically case matches the $\sigma(x)$ value; proof; example
 illustration for intuition)
