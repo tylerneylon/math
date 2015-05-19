@@ -123,10 +123,13 @@ This allows us to provide a nice general expression for $\sigma(x)$.
 
 **Property 4**\ 
 *Suppose that $x$ is a finite real sequence with $i^\text{th}$ partial sum
-$s_i$, and that $s_i > 0$ for all $i > 0$. Then
-$$\sigma(x) = \#\left\{\min_{j \le i \le n} s_i\; \big|\; 1 \le j \le n \right\}.$$
-More specifically, an index $j$ with $1 \le j \le n$ is a positive-sum shift iff
-$s_{j-1} < s_i$ for all $i$ with $j \le i \le n$.*
+$s_i$, and that $s_i > 0$ for all $i > 0$. Then*
+
+$$\sigma(x) = \#\left\{\min_{j \le i \le n} s_i\; \big|\; 1 \le j \le n \right\}.$$ {#eq:prop4pt1}
+
+*More specifically, an index $j$ with $1 \le j \le n$ is a positive-sum shift iff*
+
+$$s_{j-1} < s_i \;\forall i: j\le i \le n.$$ {#eq:prop4pt2}
 
 ---
 
@@ -147,8 +150,23 @@ the last inequality follows since $s_{j+i-1-n} > 0$ and $s_n > s_{j-1}$.
 
 On the other hand, if $s_{j-1}\ge s_i$ for some $i,j$ with $1\le j\le i\le n$, then
 $s'_{i-j+1}=s_i-s_{j-1}\le 0$, so that $j$ isn't a positive-sum shift.
-This completes the proof of the last part of the property; next we'll justify
-the expression for $\sigma(x)$.
+This completes the proof of the last part of the property.
+
+Let's see that condition (@eq:prop4pt2) corresponds with our equation ([@eq:prop4pt1])
+for $\sigma(x)$.
+Let $m_x = \{\min_{j \le i \le n} s_i\; \big|\; 1 \le j \le n\}$.
+
+Suppose $t\in m_x$. If $t \neq s_n$, then there's a corresponding largest index $j$
+with $1 \le j \le n$ and $s_{j-1}=t$ that meets condition (@eq:prop4pt2).
+If $t = s_n$, then we can think of this is corresponding to $j=n+1$, which is
+effectively the null shift, meaning that $x_1$ remains the first element.
+Any $j>1$ meeting condition (@eq:prop4pt2) has its value $s_{j-1}\in m_x$ by
+definition; the value $j=1$ can be seen as corresponding to the value $s_n\in m_x$
+as before.
+In other words, the set $m_x$ contains exactly the values $s_{j-1}$ for each
+positive-sum shift $j$, with $j=1$ replaced by the value $j=n+1$ that effectively
+provides the same shift. Condition (@eq:prop4pt2) guarantees that these values
+$s_{j-1}$ are distinct.
 $\Box$
 
 (Next: note why the specifically case matches the $\sigma(x)$ value; proof; example
