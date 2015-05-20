@@ -144,7 +144,7 @@ $$s'_i = \sum_{k=j}^{j+i-1}x_k.$$
 Then
 $$s'_i = s_{j+i-1} - s_{j-1} \begin{cases}
 > 0 & \text{if } j+i-1 \le n, \\
-= s_{j+i-1-n} + s_n - s_{j-1} & \text{if } j+i-1 > n; \\
+= s_{j+i-1-n} + s_n - s_{j-1} > 0 & \text{if } j+i-1 > n; \\
 \end{cases}$$
 the last inequality follows since $s_{j+i-1-n} > 0$ and $s_n > s_{j-1}$.
 
@@ -152,21 +152,23 @@ On the other hand, if $s_{j-1}\ge s_i$ for some $i,j$ with $1\le j\le i\le n$, t
 $s'_{i-j+1}=s_i-s_{j-1}\le 0$, so that $j$ isn't a positive-sum shift.
 This completes the proof of the last part of the property.
 
-Let's see that condition (@eq:prop4pt2) corresponds with our equation ([@eq:prop4pt1])
-for $\sigma(x)$.
-Let $m_x = \{\min_{j \le i \le n} s_i\; \big|\; 1 \le j \le n\}$.
+Now let's verify that the set $S = \{\min_{j \le i \le n} s_i\; |\; 1 \le j \le n\}$
+from (@eq:prop4pt1) has size $\sigma(x)$.
 
-Suppose $t\in m_x$. If $t \neq s_n$, then there's a corresponding largest index $j$
-with $1 \le j \le n$ and $s_{j-1}=t$ that meets condition (@eq:prop4pt2).
-If $t = s_n$, then we can think of this is corresponding to $j=n+1$, which is
-effectively the null shift, meaning that $x_1$ remains the first element.
-Any $j>1$ meeting condition (@eq:prop4pt2) has its value $s_{j-1}\in m_x$ by
-definition; the value $j=1$ can be seen as corresponding to the value $s_n\in m_x$
-as before.
-In other words, the set $m_x$ contains exactly the values $s_{j-1}$ for each
-positive-sum shift $j$, with $j=1$ replaced by the value $j=n+1$ that effectively
-provides the same shift. Condition (@eq:prop4pt2) guarantees that these values
-$s_{j-1}$ are distinct.
+Let $j_1, \ldots, j_k$ be all the positive-sum shifts with $1 < j_i \le n$;
+note that $k = \sigma(x) - 1$ since the trivial shift index 1 has been excluded.
+Let $T = \{s_{j_1 - 1}, \ldots, s_{j_k - 1}, s_n\}$.
+
+Notice that $j=n+1$ trivially meets condition @eq:prop4pt2; combine this with
+the first part of the proof to see that all elements of $T$ meet condition
+@eq:prop4pt2. This guarantees that all the elements are unique, so that
+$|T| = \sigma(x)$.
+This also means that $T \subset S$.
+Finally, observe that, for any $s_j \in S$,
+there's a largest index $j'$ with $1\le j' \le n$ and
+$s_{j'} = s_j$; this index $j'$ meets
+condition @eq:prop4pt2, so that $S\subset T$, confirming that
+$|S| = |T| = \sigma(x)$.
 $\Box$
 
 (Next: note why the specifically case matches the $\sigma(x)$ value; proof; example
