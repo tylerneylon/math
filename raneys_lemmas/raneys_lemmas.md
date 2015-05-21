@@ -85,7 +85,7 @@ on $\sigma(x)$ in that context.
 
 # Real sequences
 
-We start with a general guarantee that
+In a moment we'll prove a general guarantee that
 $\sum x_i > 0 \Rightarrow \sigma(x) \ge 1$.
 In the context of a sequence $x$,
 it will be useful to write $s_i$ to denote the
