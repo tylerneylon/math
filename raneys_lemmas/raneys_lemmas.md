@@ -171,10 +171,25 @@ condition @eq:prop4pt2, so that $S\subset T$, confirming that
 $|S| = |T| = \sigma(x)$.
 $\Box$
 
+Property 4 lends itself to a nice visual intuition.
+Consider the example sequence
+$\langle 2, -1, 2, 2, -3, 2, 1, 1, -1, -2\rangle$ of
+length $n=10$.
+Below is the line graph of its partial sums, starting with $s_0=0$.
+
 ![*Line graph of the partial sums $s_i$ of the example sequence.*](images/figure1.png)
 
-(Next: note why the specifically case matches the $\sigma(x)$ value; proof; example
-illustration for intuition)
+Imagine an observer standing far to the right of the graph and looking
+directly to the left so they can only see along a perfectly horizontal line
+of sight.
+Below $s_n$, they can only see the three points $s_0$, $s_2$, and $s_5$.
+These are exactly the partial sums meeting condition (@eq:prop4pt2), so
+that they correspond directly to all the positive-sum shifts
+of $x$, which have indexes 1, 3, and 6.
+
+This visual intuition — that points visible-from-the-right and below
+$s_n$ correspond exactly to the positive-sum shifts —  extends to
+any sequence meeting the suppositions of property 4.
 
 
 

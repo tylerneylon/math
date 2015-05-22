@@ -3,3 +3,4 @@
 *.gz
 !set_theory_ideas*.pdf
 .*.swp
+.DS_Store
