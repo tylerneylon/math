@@ -171,8 +171,12 @@ condition @eq:prop4pt2, so that $S\subset T$, confirming that
 $|S| = |T| = \sigma(x)$.
 $\Box$
 
+![*Line graph of the partial sums $s_i$ of the example sequence.*](images/figure1.png)
+
 (Next: note why the specifically case matches the $\sigma(x)$ value; proof; example
 illustration for intuition)
+
+
 
 # Random sequences
 

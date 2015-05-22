@@ -11,13 +11,15 @@
       q       { quotes: "“" "”" "‘" "’"; }
       h1      { font-size: 1.5em; }
       h2      { font-size: 1.17em; }
+      img     { width: 760px; }
       .title  { font-size: 2em; font-weight: bold; }
       .author { color: #AAA; line-height: 150%; }
       .date   { color: #AAA; line-height: 150%; font-size: 0.8em; }
+      .main   { width: 760px; margin: auto; }
     </style>
   </head>
   <body>
-    <div style="width:760px;margin:auto">
+    <div class="main">
       <div class="title">Notes on Raney's Lemmas</div>
       <div class="author">Tyler Neylon</div>
       <div class="date">251.2015</div>
@@ -80,6 +82,10 @@
       <p>Now let's verify that the set <span class="math">\(S = \{\min_{j \le i \le n} s_i\; |\; 1 \le j \le n\}\)</span> from (1) has size <span class="math">\(\sigma(x)\)</span>.</p>
       <p>Let <span class="math">\(j_1, \ldots, j_k\)</span> be all the positive-sum shifts with <span class="math">\(1 &lt; j_i \le n\)</span>; note that <span class="math">\(k = \sigma(x) - 1\)</span> since the trivial shift index 1 has been excluded. Let <span class="math">\(T = \{s_{j_1 - 1}, \ldots, s_{j_k - 1}, s_n\}\)</span>.</p>
       <p>Notice that <span class="math">\(j=n+1\)</span> trivially meets condition 2; combine this with the first part of the proof to see that all elements of <span class="math">\(T\)</span> meet condition 2. This guarantees that all the elements are unique, so that <span class="math">\(|T| = \sigma(x)\)</span>. This also means that <span class="math">\(T \subset S\)</span>. Finally, observe that, for any <span class="math">\(s_j \in S\)</span>, there's a largest index <span class="math">\(j&#39;\)</span> with <span class="math">\(1\le j&#39; \le n\)</span> and <span class="math">\(s_{j&#39;} = s_j\)</span>; this index <span class="math">\(j&#39;\)</span> meets condition 2, so that <span class="math">\(S\subset T\)</span>, confirming that <span class="math">\(|S| = |T| = \sigma(x)\)</span>. <span class="math">\(\Box\)</span></p>
+      <div class="figure">
+      <img src="images/figure1.png" alt="Line graph of the partial sums s_i of the example sequence." />
+      <p class="caption"><em>Line graph of the partial sums <span class="math">\(s_i\)</span> of the example sequence.</em></p>
+      </div>
       <p>(Next: note why the specifically case matches the <span class="math">\(\sigma(x)\)</span> value; proof; example illustration for intuition)</p>
       <h1 id="random-sequences"><span class="header-section-number">3</span> Random sequences</h1>
       <p>Add more content here.</p>
