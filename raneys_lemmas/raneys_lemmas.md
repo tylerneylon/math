@@ -191,6 +191,34 @@ This visual intuition — that points visible-from-the-right and below
 $s_n$ correspond exactly to the positive-sum shifts —  extends to
 any sequence meeting the suppositions of property 4.
 
+**The Contraction Perspective**
+
+Next we'll consider a contraction operation that may shorten a sequence
+$x$ while preserving $\sigma(x)$.
+
+Call a sequence $x = \langle x_1, \ldots, x_n\rangle$
+*sum-positive* iff $s_i > 0$ when $i > 0$.
+We'll say that a sequence $x' = \langle x'_1, \ldots, x'_{n-1} \rangle$
+is a *contraction* of the length-$n$ sum-positive sequence
+$x$ iff there is some index $j$ so that $x_{j + 1} \le 0$ and,
+for $1 \le i \le n-1$,
+$$x'_i = \begin{cases}
+x_i & \text{if } i < j, \\
+x_i + x_{i + 1} & \text{if } i = j, \text{and} \\
+x_{i + 1} & \text{if } i > j.
+\end{cases}$$
+
+**Property 5**\ 
+*If $x'$ is a contraction of $x$, then $x'$ is sum-positive and
+$\sigma(x') = \sigma(x)$.*
+
+**Proof**\ 
+Suppose $x'_i = x_i + x_{i + 1}$ and $x_{i + 1} \le 0$.
+
+(todo: rest of the proof)
+
+$\Box$
+
 
 
 # Random sequences
