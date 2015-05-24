@@ -213,9 +213,21 @@ x_{i + 1} & \text{if } i > j.
 $\sigma(x') = \sigma(x)$.*
 
 **Proof**\ 
-Suppose $x'_i = x_i + x_{i + 1}$ and $x_{i + 1} \le 0$.
+Let $j$ be the contracted index, so that
+$x'_j = x_j + x_{j + 1}$ and $x_{j + 1} \le 0$.
+
+Let $s'_i$ denote the $i^\text{th}$ partial sum of $x'$.
+Then
+$$s'_i = \begin{cases}
+s_i & \text{if } 0 \le i < j \\
+s_{i + 1} & \text{if } j \le i \le n-1.
+\end{cases}$$
+
+So clearly $s'_i > 0$ for $0 < i \le n - 1$, making $x'$
+sum-positive.
 
 (todo: rest of the proof)
+(consider: earlier, an example of a contraction)
 
 $\Box$
 
