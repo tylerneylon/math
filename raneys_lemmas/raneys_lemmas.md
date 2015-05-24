@@ -208,6 +208,14 @@ x_i + x_{i + 1} & \text{if } i = j, \text{and} \\
 x_{i + 1} & \text{if } i > j.
 \end{cases}$$
 
+For example. $x' = \langle 2, -1, 2\rangle$ is
+a contraction of $x = \langle 3, -1, -1, 2\rangle$
+since the sequences are same except for the replacement
+of $x_1, x_2$ by their sum as $x'_1$, and $x_2 = -1 \le 0$.
+The alternative sequence $x'' = \langle 3, -1, 1\rangle$
+is *not* a contraction as it replaces $x_3, x_4$ with their sum
+$x''_3$, but $x_4 = 2 > 0$.
+
 **Property 5**\ 
 *If $x'$ is a contraction of $x$, then $x'$ is sum-positive and
 $\sigma(x') = \sigma(x)$.*

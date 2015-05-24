@@ -97,6 +97,7 @@
       x_i + x_{i + 1} &amp; \text{if } i = j, \text{and} \\
       x_{i + 1} &amp; \text{if } i &gt; j.
       \end{cases}\]</span></p>
+      <p>For example. <span class="math">\(x&#39; = \langle 2, -1, 2\rangle\)</span> is a contraction of <span class="math">\(x = \langle 3, -1, -1, 2\rangle\)</span> since the sequences are same except for the replacement of <span class="math">\(x_1, x_2\)</span> by their sum as <span class="math">\(x&#39;_1\)</span>, and <span class="math">\(x_2 = -1 \le 0\)</span>. The alternative sequence <span class="math">\(x&#39;&#39; = \langle 3, -1, 1\rangle\)</span> is <em>not</em> a contraction as it replaces <span class="math">\(x_3, x_4\)</span> with their sum <span class="math">\(x&#39;&#39;_3\)</span>, but <span class="math">\(x_4 = 2 &gt; 0\)</span>.</p>
       <p><strong>Property 5</strong>  <em>If <span class="math">\(x&#39;\)</span> is a contraction of <span class="math">\(x\)</span>, then <span class="math">\(x&#39;\)</span> is sum-positive and <span class="math">\(\sigma(x&#39;) = \sigma(x)\)</span>.</em></p>
       <p><strong>Proof</strong>  Let <span class="math">\(j\)</span> be the contracted index, so that <span class="math">\(x&#39;_j = x_j + x_{j + 1}\)</span> and <span class="math">\(x_{j + 1} \le 0\)</span>.</p>
       <p>Let <span class="math">\(s&#39;_i\)</span> denote the <span class="math">\(i^\text{th}\)</span> partial sum of <span class="math">\(x&#39;\)</span>. Then <span class="math">\[s&#39;_i = \begin{cases}
@@ -104,7 +105,7 @@
       s_{i + 1} &amp; \text{if } j \le i \le n-1.
       \end{cases}\]</span></p>
       <p>So clearly <span class="math">\(s&#39;_i &gt; 0\)</span> for <span class="math">\(0 &lt; i \le n - 1\)</span>, making <span class="math">\(x&#39;\)</span> sum-positive.</p>
-      <p>(todo: rest of the proof)</p>
+      <p>(todo: rest of the proof) (consider: earlier, an example of a contraction)</p>
       <p><span class="math">\(\Box\)</span></p>
       <h1 id="random-sequences"><span class="header-section-number">3</span> Random sequences</h1>
       <p>Add more content here.</p>
