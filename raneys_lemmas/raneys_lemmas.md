@@ -119,13 +119,19 @@ Now we can assume without loss of generality that any sequence of
 real numbers $\langle x_1, \ldots, x_n\rangle$ with $\sum x_i > 0$
 is already shifted
 so that all its partial sums $s_i > 0$ for $i > 0$.
-This allows us to provide a nice general expression for $\sigma(x)$.
+As we'll see in the next property, this assumption allows us
+to provide a nice general expression for $\sigma(x)$.
+This expression depends on the set
+$S(x)$, defined as
+$\{\min_{j \le i \le n} s_i\; \big|\; 1 \le j \le n \}$
+for any finite sequence $x$ with $i^\text{th}$ partial sum $s_i$.
 
 **Property 4**\ 
 *Suppose that $x$ is a finite real sequence with $i^\text{th}$ partial sum
 $s_i$, and that $s_i > 0$ for all $i > 0$. Then*
 
-$$\sigma(x) = \#\left\{\min_{j \le i \le n} s_i\; \big|\; 1 \le j \le n \right\}.$$ {#eq:prop4pt1}
+$$\sigma(x) = \#S(x) =
+\#\left\{\min_{j \le i \le n} s_i\; \big|\; 1 \le j \le n \right\}.$$ {#eq:prop4pt1}
 
 *More specifically, an index $j$ with $1 \le j \le n$ is a positive-sum shift iff*
 
@@ -152,22 +158,22 @@ On the other hand, if $s_{j-1}\ge s_i$ for some $i,j$ with $1\le j\le i\le n$, t
 $s'_{i-j+1}=s_i-s_{j-1}\le 0$, so that $j$ isn't a positive-sum shift.
 This completes the proof of the last part of the property.
 
-Now let's verify that the set $S = \{\min_{j \le i \le n} s_i\; |\; 1 \le j \le n\}$
+Now let's verify that the set $S = S(x)$
 from (@eq:prop4pt1) has size $\sigma(x)$.
 
 Let $j_1, \ldots, j_k$ be all the positive-sum shifts with $1 < j_i \le n$;
 note that $k = \sigma(x) - 1$ since the trivial shift index 1 has been excluded.
 Let $T = \{s_{j_1 - 1}, \ldots, s_{j_k - 1}, s_n\}$.
 
-Notice that $j=n+1$ trivially meets condition @eq:prop4pt2; combine this with
+Notice that $j=n+1$ trivially meets condition (@eq:prop4pt2); combine this with
 the first part of the proof to see that all elements of $T$ meet condition
-@eq:prop4pt2. This guarantees that all the elements are unique, so that
+(@eq:prop4pt2). This guarantees that all the elements are unique, so that
 $|T| = \sigma(x)$.
 This also means that $T \subset S$.
 Finally, observe that, for any $s_j \in S$,
 there's a largest index $j'$ with $1\le j' \le n$ and
 $s_{j'} = s_j$; this index $j'$ meets
-condition @eq:prop4pt2, so that $S\subset T$, confirming that
+condition (@eq:prop4pt2), so that $S\subset T$, confirming that
 $|S| = |T| = \sigma(x)$.
 $\Box$
 
@@ -231,12 +237,23 @@ s_i & \text{if } 0 \le i < j \\
 s_{i + 1} & \text{if } j \le i \le n-1.
 \end{cases}$$
 
-So clearly $s'_i > 0$ for $0 < i \le n - 1$, making $x'$
+So $s'_i > 0$ for $0 < i \le n - 1$, making $x'$
 sum-positive.
 
-(todo: rest of the proof)
-(consider: earlier, an example of a contraction)
-
+Since $x_{j+1} \le 0$, $s_{j+1} \le s_j$.
+This means that
+$$
+\min_{k \le i \le n} s_i = \min_{k \le i \le n, i \ne j} s_i,
+\;\;\text{and}\;\;
+\min_{k \le i \le n} s'_i = \begin{cases}
+\min_{k \le i \le n} s_i & \text{if } k < j, \text{ and} \\
+\min_{k+1 \le i \le n} s_i & \text{if } k \ge j,\\
+\end{cases}
+$$
+for all $k$ with $1 \le k \le n$.
+This last equality ensures that $S(x) = S(x')$, so that
+$\sigma(x) = \sigma(x')$ using property 4.
+This completes the proof.
 $\Box$
 
 

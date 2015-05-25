@@ -68,9 +68,10 @@
       &gt; 0 \text{ (by definition of $j$)} &amp; \text{when } j+i-1 &lt; n \\
       = s_n + s_{j+i-1-n}-s_{j-1} \ge s_n &gt; 0 &amp; \text{when } j+i-1 \ge n. \\
       \end{cases}\]</span> <span class="math">\(\Box\)</span></p>
-      <p>Now we can assume without loss of generality that any sequence of real numbers <span class="math">\(\langle x_1, \ldots, x_n\rangle\)</span> with <span class="math">\(\sum x_i &gt; 0\)</span> is already shifted so that all its partial sums <span class="math">\(s_i &gt; 0\)</span> for <span class="math">\(i &gt; 0\)</span>. This allows us to provide a nice general expression for <span class="math">\(\sigma(x)\)</span>.</p>
+      <p>Now we can assume without loss of generality that any sequence of real numbers <span class="math">\(\langle x_1, \ldots, x_n\rangle\)</span> with <span class="math">\(\sum x_i &gt; 0\)</span> is already shifted so that all its partial sums <span class="math">\(s_i &gt; 0\)</span> for <span class="math">\(i &gt; 0\)</span>. As we'll see in the next property, this assumption allows us to provide a nice general expression for <span class="math">\(\sigma(x)\)</span>. This expression depends on the set <span class="math">\(S(x)\)</span>, defined as <span class="math">\(\{\min_{j \le i \le n} s_i\; \big|\; 1 \le j \le n \}\)</span> for any finite sequence <span class="math">\(x\)</span> with <span class="math">\(i^\text{th}\)</span> partial sum <span class="math">\(s_i\)</span>.</p>
       <p><strong>Property 4</strong>  <em>Suppose that <span class="math">\(x\)</span> is a finite real sequence with <span class="math">\(i^\text{th}\)</span> partial sum <span class="math">\(s_i\)</span>, and that <span class="math">\(s_i &gt; 0\)</span> for all <span class="math">\(i &gt; 0\)</span>. Then</em></p>
-      <p><span class="math">\[\sigma(x) = \#\left\{\min_{j \le i \le n} s_i\; \big|\; 1 \le j \le n \right\}.\qquad(1)\]</span></p>
+      <p><span class="math">\[\sigma(x) = \#S(x) =
+      \#\left\{\min_{j \le i \le n} s_i\; \big|\; 1 \le j \le n \right\}.\qquad(1)\]</span></p>
       <p><em>More specifically, an index <span class="math">\(j\)</span> with <span class="math">\(1 \le j \le n\)</span> is a positive-sum shift iff</em></p>
       <p><span class="math">\[s_{j-1} &lt; s_i \;\forall i: j\le i \le n.\qquad(2)\]</span></p>
       <hr />
@@ -80,9 +81,9 @@
       = s_{j+i-1-n} + s_n - s_{j-1} &gt; 0 &amp; \text{if } j+i-1 &gt; n; \\
       \end{cases}\]</span> the last inequality follows since <span class="math">\(s_{j+i-1-n} &gt; 0\)</span> and <span class="math">\(s_n &gt; s_{j-1}\)</span>.</p>
       <p>On the other hand, if <span class="math">\(s_{j-1}\ge s_i\)</span> for some <span class="math">\(i,j\)</span> with <span class="math">\(1\le j\le i\le n\)</span>, then <span class="math">\(s&#39;_{i-j+1}=s_i-s_{j-1}\le 0\)</span>, so that <span class="math">\(j\)</span> isn't a positive-sum shift. This completes the proof of the last part of the property.</p>
-      <p>Now let's verify that the set <span class="math">\(S = \{\min_{j \le i \le n} s_i\; |\; 1 \le j \le n\}\)</span> from (1) has size <span class="math">\(\sigma(x)\)</span>.</p>
+      <p>Now let's verify that the set <span class="math">\(S = S(x)\)</span> from (1) has size <span class="math">\(\sigma(x)\)</span>.</p>
       <p>Let <span class="math">\(j_1, \ldots, j_k\)</span> be all the positive-sum shifts with <span class="math">\(1 &lt; j_i \le n\)</span>; note that <span class="math">\(k = \sigma(x) - 1\)</span> since the trivial shift index 1 has been excluded. Let <span class="math">\(T = \{s_{j_1 - 1}, \ldots, s_{j_k - 1}, s_n\}\)</span>.</p>
-      <p>Notice that <span class="math">\(j=n+1\)</span> trivially meets condition 2; combine this with the first part of the proof to see that all elements of <span class="math">\(T\)</span> meet condition 2. This guarantees that all the elements are unique, so that <span class="math">\(|T| = \sigma(x)\)</span>. This also means that <span class="math">\(T \subset S\)</span>. Finally, observe that, for any <span class="math">\(s_j \in S\)</span>, there's a largest index <span class="math">\(j&#39;\)</span> with <span class="math">\(1\le j&#39; \le n\)</span> and <span class="math">\(s_{j&#39;} = s_j\)</span>; this index <span class="math">\(j&#39;\)</span> meets condition 2, so that <span class="math">\(S\subset T\)</span>, confirming that <span class="math">\(|S| = |T| = \sigma(x)\)</span>. <span class="math">\(\Box\)</span></p>
+      <p>Notice that <span class="math">\(j=n+1\)</span> trivially meets condition (2); combine this with the first part of the proof to see that all elements of <span class="math">\(T\)</span> meet condition (2). This guarantees that all the elements are unique, so that <span class="math">\(|T| = \sigma(x)\)</span>. This also means that <span class="math">\(T \subset S\)</span>. Finally, observe that, for any <span class="math">\(s_j \in S\)</span>, there's a largest index <span class="math">\(j&#39;\)</span> with <span class="math">\(1\le j&#39; \le n\)</span> and <span class="math">\(s_{j&#39;} = s_j\)</span>; this index <span class="math">\(j&#39;\)</span> meets condition (2), so that <span class="math">\(S\subset T\)</span>, confirming that <span class="math">\(|S| = |T| = \sigma(x)\)</span>. <span class="math">\(\Box\)</span></p>
       <p>Property 4 lends itself to a nice visual intuition. Consider the example sequence <span class="math">\(\langle 2, -1, 2, 2, -3, 2, 1, 1, -1, -2\rangle\)</span> of length <span class="math">\(n=10\)</span>. Below is the line graph of its partial sums, starting with <span class="math">\(s_0=0\)</span>.</p>
       <div class="figure">
       <img src="images/figure1.png" alt="Line graph of the partial sums s_i of the example sequence." />
@@ -104,9 +105,15 @@
       s_i &amp; \text{if } 0 \le i &lt; j \\
       s_{i + 1} &amp; \text{if } j \le i \le n-1.
       \end{cases}\]</span></p>
-      <p>So clearly <span class="math">\(s&#39;_i &gt; 0\)</span> for <span class="math">\(0 &lt; i \le n - 1\)</span>, making <span class="math">\(x&#39;\)</span> sum-positive.</p>
-      <p>(todo: rest of the proof) (consider: earlier, an example of a contraction)</p>
-      <p><span class="math">\(\Box\)</span></p>
+      <p>So <span class="math">\(s&#39;_i &gt; 0\)</span> for <span class="math">\(0 &lt; i \le n - 1\)</span>, making <span class="math">\(x&#39;\)</span> sum-positive.</p>
+      <p>Since <span class="math">\(x_{j+1} \le 0\)</span>, <span class="math">\(s_{j+1} \le s_j\)</span>. This means that <span class="math">\[
+      \min_{k \le i \le n} s_i = \min_{k \le i \le n, i \ne j} s_i,
+      \;\;\text{and}\;\;
+      \min_{k \le i \le n} s&#39;_i = \begin{cases}
+      \min_{k \le i \le n} s_i &amp; \text{if } k &lt; j, \text{ and} \\
+      \min_{k+1 \le i \le n} s_i &amp; \text{if } k \ge j,\\
+      \end{cases}
+      \]</span> for all <span class="math">\(k\)</span> with <span class="math">\(1 \le k \le n\)</span>. This last equality ensures that <span class="math">\(S(x) = S(x&#39;)\)</span>, so that <span class="math">\(\sigma(x) = \sigma(x&#39;)\)</span> using property 4. This completes the proof. <span class="math">\(\Box\)</span></p>
       <h1 id="random-sequences"><span class="header-section-number">3</span> Random sequences</h1>
       <p>Add more content here.</p>
       <div class="references">
