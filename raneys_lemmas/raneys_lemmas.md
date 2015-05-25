@@ -197,6 +197,42 @@ This visual intuition — that points visible-from-the-right and below
 $s_n$ correspond exactly to the positive-sum shifts —  extends to
 any sequence meeting the suppositions of property 4.
 
+**TEMP begin work on bounds**
+
+It's now possible to prove a simple general upper and lower bound
+for $\sigma(x)$ in the case that each $x_i$ is an integer.
+
+**Property 5**\ 
+*Suppose we have a finite integer sequence
+$x = \langle x_1, \ldots, x_n\rangle$ with
+$s_n > 0$. Let $m = \max_i x_i$.
+Then
+$$
+\lceil s_n / m \rceil \le \sigma(x) \le s_n.
+$$*
+
+**Proof**\ 
+Notice that we can work with any cyclic shift $x'$
+of $x$ without changing $s_n$ or $m$.
+Thus, using property 3, we can assume without loss
+of generality that
+$s_i > 0$ for $i > 0$.
+
+Next, we can bound the elements of $S(x)$ via
+$$
+0 < \min_{j\le i\le n}s_i \le s_n
+$$
+for all $j$ with
+$1\le j \le n$.
+So all elements of $S(x)$ are in
+the range $(0, s_n]$, and are integers.
+Hence
+$\#S(x) \le s_n$, completing the proof of the upper bound.
+$\Box$
+
+**TEMP end work on bounds**
+
+
 **The Contraction Perspective**
 
 Next we'll consider a contraction operation that may shorten a sequence
