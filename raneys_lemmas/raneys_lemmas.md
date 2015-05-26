@@ -201,6 +201,8 @@ any sequence meeting the suppositions of property 4.
 
 It's now possible to prove a simple general upper and lower bound
 for $\sigma(x)$ in the case that each $x_i$ is an integer.
+We'll see below that these bounds provide both lemmas 1 and 2 as
+corollaries.
 
 **Property 5**\ 
 *Suppose we have a finite integer sequence
@@ -228,6 +230,46 @@ So all elements of $S(x)$ are in
 the range $(0, s_n]$, and are integers.
 Hence
 $\#S(x) \le s_n$, completing the proof of the upper bound.
+
+Toward the lower bound, let's suppose that
+$S(x) = \{s_{j_1}, \ldots, s_{j_k}\}$ with
+each $s_{j_i}$ meeting condition (@eq:prop4pt2) and
+$0 < s_{j_i} < s_{j_{i+1}}$;
+refer to the proof of property 4 for more details
+on why we can suppose these conditions.
+
+By our definition of $s_{j_i}$, we have
+$$
+s_{j_i} = \min_{j_i \le k \le n}s_k
+\;\text{ and }\;
+s_{j_{i+1}} = \min_{j_i+1 \le k \le n}s_k.
+$$
+We also have 
+$s_{j_i+1} - s_{j_i} \le m$.
+Together, these last two facts tell us that
+$s_{j_{i+1}} - s_{j_i} \le m$.
+
+Note that $s_{j_k}=s_n$ so that
+$s_n - s_{j_{k-1}} \le m \Rightarrow
+s_{j_{k-1}} \ge s_n - m$.
+This can be extended to see that
+$s_{j_{k-2}} \ge s_n - 2m$, and in general that
+$$
+s_{j_{k-p}} \ge s_n - pm.
+$$
+
+Our definition of $m$ gives us that $s_{j_1} \le m$, so
+$m \ge s_{j_1} \ge s_n - (k-1)m$, from which we can
+derive that
+$$
+1 \ge s_n/m - (k - 1)
+\quad \Rightarrow \quad
+k \ge s_n/m
+\quad \Rightarrow \quad
+k \ge \lceil s_n/m \rceil;
+$$
+the last inequality uses the fact that $k = \sigma(x)$ is an integer.
+This completes the proof.
 $\Box$
 
 **TEMP end work on bounds**
