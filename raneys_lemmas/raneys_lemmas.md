@@ -197,8 +197,6 @@ This visual intuition — that points visible-from-the-right and below
 $s_n$ correspond exactly to the positive-sum shifts —  extends to
 any sequence meeting the suppositions of property 4.
 
-**TEMP begin work on bounds**
-
 It's now possible to prove a simple general upper and lower bound
 for $\sigma(x)$ in the case that each $x_i$ is an integer.
 We'll see below that these bounds provide both lemmas 1 and 2 as
@@ -212,6 +210,17 @@ Then
 $$
 \lceil s_n / m \rceil \le \sigma(x) \le s_n.
 $$*
+
+**Proof idea**\ 
+Here is the informal intuition behind the proof:
+We'll start by noticing that, for sum-positive $x$,
+$S(x) \subset (0, s_n]$; this is the basis used for the upper bound.
+The lower bound is based on the idea that
+each jump upwards from one $s_i\in S(x)$ to the next
+$s_j\in S(x)$ is limited by distance $m$.
+The smallest element in $S(x)$ can be at most $m$ above
+$s_0=0$, and the largest is necessarily $s_n$, so that
+there must be at least $s_n/m$ elements between the extremes.
 
 **Proof**\ 
 Notice that we can work with any cyclic shift $x'$
@@ -234,9 +243,10 @@ $\#S(x) \le s_n$, completing the proof of the upper bound.
 Toward the lower bound, let's suppose that
 $S(x) = \{s_{j_1}, \ldots, s_{j_k}\}$ with
 each $s_{j_i}$ meeting condition (@eq:prop4pt2) and
-$0 < s_{j_i} < s_{j_{i+1}}$;
-refer to the proof of property 4 for more details
-on why we can suppose these conditions.
+$0 < s_{j_i} < s_{j_{i+1}}$.
+We know such $s_{j_i}$ exist as they are simply those
+partial sums in $s_{j_i}\in S(x)$ chosen so that 
+$j_i = \max_{1\le k\le n} \{k: s_k = s_{j_i}\}$.
 
 By our definition of $s_{j_i}$, we have
 $$
@@ -244,10 +254,10 @@ s_{j_i} = \min_{j_i \le k \le n}s_k
 \;\text{ and }\;
 s_{j_{i+1}} = \min_{j_i+1 \le k \le n}s_k.
 $$
-We also have 
-$s_{j_i+1} - s_{j_i} \le m$.
-Together, these last two facts tell us that
-$s_{j_{i+1}} - s_{j_i} \le m$.
+This means that
+$$s_{j_{i+1}} - s_{j_i} = \min_{j_i+1 \le k \le n}s_k - s_{j_i} \le
+s_{j_i+1} - s_{j_i} \le
+m.$$
 
 Note that $s_{j_k}=s_n$ so that
 $s_n - s_{j_{k-1}} \le m \Rightarrow
@@ -271,9 +281,6 @@ $$
 the last inequality uses the fact that $k = \sigma(x)$ is an integer.
 This completes the proof.
 $\Box$
-
-**TEMP end work on bounds**
-
 
 **The Contraction Perspective**
 
