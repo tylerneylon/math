@@ -341,7 +341,69 @@ $\sigma(x) = \sigma(x')$ using property 4.
 This completes the proof.
 $\Box$
 
+As long as a sum-positive sequence $x$ has any element $x_i \le 0$, we
+can apply a contraction to it to arrive at a shorter sequence.
+Thus, we can always apply a series of contractions to arrive at
+a sum-positive, length-$k$ sequence $x'$ with all elements $x'_i > 0$.
+All shifts of this $x'$ are positive-sum shifts, so that $\sigma(x')=k$,
+and thus $\sigma(x)=k$ as well. In other words, we can find
+$\sigma(x)$ by contracting $x$ until it can be contracted no more.
 
+To add both intuition and more detail to this process, think of any
+sum-positive sequence $x$ as consisting of subsequences starting
+with $x_j$ for each positive-sum shift index $j$. For example,
+suppose sequence $x$ has positive-sum shift indexes 1, 3, and 4. Then
+$$
+\langle x_1, x_2, x_3, x_4, x_5, x_6\rangle =
+\langle x_1, x_2\rangle
+\langle x_3 \rangle
+\langle x_4, x_5, x_6 \rangle.
+$$
+
+Contractions effectively work within these subsequences.
+A contraction can never combine elements across a subsequence boundary
+because the first element of any subsequence must be positive.
+Our last proof showed that 
+the set $S(x)$ is preserved by contraction. That proof
+also showed that the indexes $j_1, \ldots, j_k$ with
+$\{s_{j_1}, \ldots, s_{j_k}\} = S(x)$ are preserved as well, excepting
+a possible shift-by-one in the latter elements to account for the
+contraction. 
+In other words, if an element $x_j$ begins a subsequence before a contraction,
+then it will be mapped to $x'_k$ with either $k=j$ or $k=j-1$, with $x'_k = x_j$,
+and with $x'_k$ also acting as a positive-sum shift for $x'$.
+
+The final result of any maximal series of contractions is therefore deterministic:
+we must arrive at exactly the sequence of sums of the original subsequences.
+Using our last example sequence, we may make the following
+series of underlined contractions:
+$$
+\begin{array}{cccc}
+&
+\langle x_1, x_2\rangle &
+\langle x_3 \rangle &
+\langle x_4, x_5, x_6 \rangle \\
+\rightarrow &
+\langle x_1, x_2\rangle &
+\langle x_3 \rangle &
+\langle \underline{x_4 + x_5}, x_6 \rangle \\
+\rightarrow &
+\langle \underline{x_1 + x_2}\rangle &
+\langle x_3 \rangle &
+\langle x_4 + x_5, x_6 \rangle \\
+\rightarrow &
+\langle x_1 + x_2\rangle &
+\langle x_3 \rangle &
+\langle x_4 + \underline{x_5 + x_6} \rangle. \\
+\end{array}
+$$
+
+The final sequence has 3 positive elements, so we can't perform
+any more contractions.
+We have freedom in the order in which we execute those contractions,
+but the end result is independent of this order.
+Note that, although we've highlighted the subsequence structure here,
+we don't need to be aware of that structure to execute the contractions.
 
 # Random sequences
 

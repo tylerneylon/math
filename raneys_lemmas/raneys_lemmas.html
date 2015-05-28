@@ -95,7 +95,7 @@
       <p><strong>Property 5</strong>  <em>Suppose we have a finite integer sequence <span class="math">\(x = \langle x_1, \ldots, x_n\rangle\)</span> with <span class="math">\(s_n &gt; 0\)</span>. Let <span class="math">\(m = \max_i x_i\)</span>. Then <span class="math">\[
       \lceil s_n / m \rceil \le \sigma(x) \le s_n.
       \]</span></em></p>
-      <p><strong>Proof idea</strong>  Here is the informal intuition behind the proof: We'll start by noticing that, for positive-sum <span class="math">\(x\)</span>, <span class="math">\(S(x) \subset (0, s_n]\)</span>; this is the basis used for the upper bound. The lower bound is based on the idea that each jump upwards from one <span class="math">\(s_i\in S(x)\)</span> to the next <span class="math">\(s_j\in S(x)\)</span> is limited by distance <span class="math">\(m\)</span>. The smallest element in <span class="math">\(S(x)\)</span> can be at most <span class="math">\(m\)</span> above <span class="math">\(s_0=0\)</span>, and the largest is necessarily <span class="math">\(s_n\)</span>, so that there must be at least <span class="math">\(s_n/m\)</span> elements between the extremes.</p>
+      <p><strong>Proof idea</strong>  Here is the informal intuition behind the proof: We'll start by noticing that, for sum-positive <span class="math">\(x\)</span>, <span class="math">\(S(x) \subset (0, s_n]\)</span>; this is the basis used for the upper bound. The lower bound is based on the idea that each jump upwards from one <span class="math">\(s_i\in S(x)\)</span> to the next <span class="math">\(s_j\in S(x)\)</span> is limited by distance <span class="math">\(m\)</span>. The smallest element in <span class="math">\(S(x)\)</span> can be at most <span class="math">\(m\)</span> above <span class="math">\(s_0=0\)</span>, and the largest is necessarily <span class="math">\(s_n\)</span>, so that there must be at least <span class="math">\(s_n/m\)</span> elements between the extremes.</p>
       <p><strong>Proof</strong>  Notice that we can work with any cyclic shift <span class="math">\(x&#39;\)</span> of <span class="math">\(x\)</span> without changing <span class="math">\(s_n\)</span> or <span class="math">\(m\)</span>. Thus, using property 3, we can assume without loss of generality that <span class="math">\(s_i &gt; 0\)</span> for <span class="math">\(i &gt; 0\)</span>.</p>
       <p>Next, we can bound the elements of <span class="math">\(S(x)\)</span> via <span class="math">\[
       0 &lt; \min_{j\le i\le n}s_i \le s_n
@@ -141,6 +141,35 @@
       \min_{k+1 \le i \le n} s_i &amp; \text{if } k \ge j,\\
       \end{cases}
       \]</span> for all <span class="math">\(k\)</span> with <span class="math">\(1 \le k \le n\)</span>. This last equality ensures that <span class="math">\(S(x) = S(x&#39;)\)</span>, so that <span class="math">\(\sigma(x) = \sigma(x&#39;)\)</span> using property 4. This completes the proof. <span class="math">\(\Box\)</span></p>
+      <p>As long as a sum-positive sequence <span class="math">\(x\)</span> has any element <span class="math">\(x_i \le 0\)</span>, we can apply a contraction to it to arrive at a shorter sequence. Thus, we can always apply a series of contractions to arrive at a sum-positive, length-<span class="math">\(k\)</span> sequence <span class="math">\(x&#39;\)</span> with all elements <span class="math">\(x&#39;_i &gt; 0\)</span>. All shifts of this <span class="math">\(x&#39;\)</span> are positive-sum shifts, so that <span class="math">\(\sigma(x&#39;)=k\)</span>, and thus <span class="math">\(\sigma(x)=k\)</span> as well. In other words, we can find <span class="math">\(\sigma(x)\)</span> by contracting <span class="math">\(x\)</span> until it can be contracted no more.</p>
+      <p>To add both intuition and more detail to this process, think of any sum-positive sequence <span class="math">\(x\)</span> as consisting of subsequences starting with <span class="math">\(x_j\)</span> for each positive-sum shift index <span class="math">\(j\)</span>. For example, suppose sequence <span class="math">\(x\)</span> has positive-sum shift indexes 1, 3, and 4. Then <span class="math">\[
+      \langle x_1, x_2, x_3, x_4, x_5, x_6\rangle =
+      \langle x_1, x_2\rangle
+      \langle x_3 \rangle
+      \langle x_4, x_5, x_6 \rangle.
+      \]</span></p>
+      <p>Contractions effectively work within these subsequences. A contraction can never combine elements across a subsequence boundary because the first element of any subsequence must be positive. Our last proof showed that the set <span class="math">\(S(x)\)</span> is preserved by contraction. That proof also showed that the indexes <span class="math">\(j_1, \ldots, j_k\)</span> with <span class="math">\(\{s_{j_1}, \ldots, s_{j_k}\} = S(x)\)</span> are preserved as well, excepting a possible shift-by-one in the latter elements to account for the contraction. In other words, if an element <span class="math">\(x_j\)</span> begins a subsequence before a contraction, then it will be mapped to <span class="math">\(x&#39;_k\)</span> with either <span class="math">\(k=j\)</span> or <span class="math">\(k=j-1\)</span>, with <span class="math">\(x&#39;_k = x_j\)</span>, and with <span class="math">\(x&#39;_k\)</span> also acting as a positive-sum shift for <span class="math">\(x&#39;\)</span>.</p>
+      <p>The final result of any maximal series of contractions is therefore deterministic: we must arrive at exactly the sequence of sums of the original subsequences. Using our last example sequence, we may make the following series of underlined contractions: <span class="math">\[
+      \begin{array}{cccc}
+      &amp;
+      \langle x_1, x_2\rangle &amp;
+      \langle x_3 \rangle &amp;
+      \langle x_4, x_5, x_6 \rangle \\
+      \rightarrow &amp;
+      \langle x_1, x_2\rangle &amp;
+      \langle x_3 \rangle &amp;
+      \langle \underline{x_4 + x_5}, x_6 \rangle \\
+      \rightarrow &amp;
+      \langle \underline{x_1 + x_2}\rangle &amp;
+      \langle x_3 \rangle &amp;
+      \langle x_4 + x_5, x_6 \rangle \\
+      \rightarrow &amp;
+      \langle x_1 + x_2\rangle &amp;
+      \langle x_3 \rangle &amp;
+      \langle x_4 + \underline{x_5 + x_6} \rangle. \\
+      \end{array}
+      \]</span></p>
+      <p>The final sequence has 3 positive elements, so we can't perform any more contractions. We have freedom in the order in which we execute those contractions, but the end result is independent of this order. Note that, although we've highlighted the subsequence structure here, we don't need to be aware of that structure to execute the contractions.</p>
       <h1 id="random-sequences"><span class="header-section-number">3</span> Random sequences</h1>
       <p>Add more content here.</p>
       <div class="references">
