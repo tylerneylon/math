@@ -407,7 +407,29 @@ we don't need to be aware of that structure to execute the contractions.
 
 # Random sequences
 
-Add more content here.
+In this section, we'll consider a finite sequence $x$ of length
+$n$ whose elements $x_i$ are independent random variables, each
+uniformly distributed in the interval $[-1, 1]$.
+
+The partial sums of such a sequence have two interesting properties:
+
+1. If $i \ne j$, then $s_i \ne s_j$ with probability 1.
+2. $\text{Prob}(s_i > s_j)$ = $\text{Prob}(s_i < s_j)$.
+
+To see the first property, suppose $i < j$ and that we're given
+the values of
+$x_1, \ldots, x_{j-1}$. If we are about to choose a random
+value $x_j\in [-1, 1]$, then there is at most one value which
+could give $s_i = s_j$, so that the event must have probability zero.
+
+We can verify the second probaby by a symmetry argument.
+Notice that any fixed value for $x_i$ is as likely as its
+opposite value $-x_i$.
+This means that every measurable set of sequences
+$X$ has the same probability as its negation
+$\{-x = \langle -x_1, \ldots, -x_n\rangle \,|\, x \in X\}$.
+So the set $\{x \,|\, s_i < s_j\}$ has the same probability as the set
+$\{x \,|\, s_i > s_j \}$.
 
 # References
 

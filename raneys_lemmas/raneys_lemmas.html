@@ -171,7 +171,14 @@
       \]</span></p>
       <p>The final sequence has 3 positive elements, so we can't perform any more contractions. We have freedom in the order in which we execute those contractions, but the end result is independent of this order. Note that, although we've highlighted the subsequence structure here, we don't need to be aware of that structure to execute the contractions.</p>
       <h1 id="random-sequences"><span class="header-section-number">3</span> Random sequences</h1>
-      <p>Add more content here.</p>
+      <p>In this section, we'll consider a finite sequence <span class="math">\(x\)</span> of length <span class="math">\(n\)</span> whose elements <span class="math">\(x_i\)</span> are independent random variables, each uniformly distributed in the interval <span class="math">\([-1, 1]\)</span>.</p>
+      <p>The partial sums of such a sequence have two interesting properties:</p>
+      <ol style="list-style-type: decimal">
+      <li>If <span class="math">\(i \ne j\)</span>, then <span class="math">\(s_i \ne s_j\)</span> with probability 1.</li>
+      <li><span class="math">\(\text{Prob}(s_i &gt; s_j)\)</span> = <span class="math">\(\text{Prob}(s_i &lt; s_j)\)</span>.</li>
+      </ol>
+      <p>To see the first property, suppose <span class="math">\(i &lt; j\)</span> and that we're given the values of <span class="math">\(x_1, \ldots, x_{j-1}\)</span>. If we are about to choose a random value <span class="math">\(x_j\in [-1, 1]\)</span>, then there is at most one value which could give <span class="math">\(s_i = s_j\)</span>, so that the event must have probability zero.</p>
+      <p>We can verify the second probaby by a symmetry argument. Notice that any fixed value for <span class="math">\(x_i\)</span> is as likely as its opposite value <span class="math">\(-x_i\)</span>. This means that every measurable set of sequences <span class="math">\(X\)</span> has the same probability as its negation <span class="math">\(\{-x = \langle -x_1, \ldots, -x_n\rangle \,|\, x \in X\}\)</span>. So the set <span class="math">\(\{x \,|\, s_i &lt; s_j\}\)</span> has the same probability as the set <span class="math">\(\{x \,|\, s_i &gt; s_j \}\)</span>.</p>
       <div class="references">
       <h1 id="references" class="unnumbered">References</h1>
       <p>Knuth, Donald E., Oren Patashnik, and Ronald L. Graham. 1998. <em>Concrete Mathematics: A Foundation for Computer Science</em>. addison-wesley.</p>
