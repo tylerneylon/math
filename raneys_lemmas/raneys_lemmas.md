@@ -307,7 +307,7 @@ The alternative sequence $x'' = \langle 3, -1, 1\rangle$
 is *not* a contraction as it replaces $x_3, x_4$ with their sum
 $x''_3$, but $x_4 = 2 > 0$.
 
-**Property 5**\ 
+**Property 6**\ 
 *If $x'$ is a contraction of $x$, then $x'$ is sum-positive and
 $\sigma(x') = \sigma(x)$.*
 
@@ -430,6 +430,43 @@ $X$ has the same probability as its negation
 $\{-x = \langle -x_1, \ldots, -x_n\rangle \,|\, x \in X\}$.
 So the set $\{x \,|\, s_i < s_j\}$ has the same probability as the set
 $\{x \,|\, s_i > s_j \}$.
+
+So, almost surely,
+$\text{Prob}(s_i > s_j) = \text{Prob}(s_i > s_j) = 1/2$ for any
+$i,j$ with $0 \le i < j \le n$.
+As we'll explain in more detail below, this 
+means that the sequence $s = \langle s_0, \ldots, s_n\rangle$,
+seen as a permutation, is probabilistically equivalent to
+a uniformly random permutation.
+
+(TODO argue that this means almost surely that the order of the
+$s_i$ sequence is probabilistically equivalent to a uniformly
+random permutation. Also improve the phrasing in the last paragraph.)
+
+So we can learn more about our random sequence $x$ by considering
+what we can learn about a partial order sequence $s$ which is
+directly chosen as a uniformly random permutation. The next
+property focuses on the expected value of $\sigma(x)$ in this
+setting. It will be useful to define the $n^\text{th}$ harmonic
+number $H_n$ as $\sum_{i=1}^n1/i$.
+
+**Property 7**\ 
+*Suppose that the random length-$n$ sequence $x$ has $i^\text{th}$
+partial sum $s_i$, that
+$s_i > 0$ for $1 \le i \le n$, and that 
+$\text{Prob}(s_i > s_j) = \text{Prob}(s_i > s_j) = 1/2$ for any
+$i,j$ with $0 \le i < j \le n$.
+Then the expected value of $\sigma(x)$ is $H_n$ or something like that.*
+
+(TODO
+ 1. Figure out the statement of the property.
+ 2. Prove it.
+ 3. Go back and review whatever depth of connection I want to
+    make with uniformly random permutations.
+)
+
+
+
 
 # References
 
