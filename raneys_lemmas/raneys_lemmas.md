@@ -456,7 +456,32 @@ partial sum $s_i$, that
 $s_i > 0$ for $1 \le i \le n$, and that 
 $\text{Prob}(s_i > s_j) = \text{Prob}(s_i > s_j) = 1/2$ for any
 $i,j$ with $0 \le i < j \le n$.
-Then the expected value of $\sigma(x)$ is $H_n$ or something like that.*
+Then the expected value of $\sigma(x)$ is $H_n$.*
+
+This property immediately tells us that $\sigma(x)$ averages to
+$H_n$ across all $x$ with sum $s_n > 0$ since we can always
+shift $x$ so that $s_i > 0$ for $i > 0$ without changing $\sigma(x)$.
+To make this even more general, we can notice that
+$\text{Prob}(s_n > 0) = \text{Prob}(s_n < 0) = 1/2$.
+There are zero positive-sum
+shifts when $s_n < 0$, so the average of $\sigma(x)$ for an
+arbitrary length-$n$ sequence is exactly $H_n/2$.
+
+**Proof of property 7**\ 
+We can assume without loss of generality that $s_i \ne s_j$ for
+$i\ne j$; this is excluding a zero-probability case, so it doesn't
+affect the expected value of $\sigma(x)$.
+
+We'll say that $s_i$, with $1\le i\le n$,
+is the $j^\text{th}$ smallest partial sum
+iff $j = \#\{s_k | s_k < s_j, 0 \le k\le n \}$.
+Now we can define a map $\pi:[1, n] \to [1, n]$ so
+that $s_{\pi(i)}$ is the $i^\text{th}$ smallest partial sum.
+Effectively, $\pi$ is a permutation that captures the order of
+the elements of $s_1, \ldots, s_n$;
+$s_{\pi(i)} < s_{\pi(j)}$ iff $i < j$.
+
+$\Box$
 
 (TODO
  1. Figure out the statement of the property.
