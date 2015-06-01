@@ -481,6 +481,20 @@ Effectively, $\pi$ is a permutation that captures the order of
 the elements of $s_1, \ldots, s_n$;
 $s_{\pi(i)} < s_{\pi(j)}$ iff $i < j$.
 
+We can use the set $S(x)$ to determine $\sigma(x)$.
+Notice that $s_{\pi(k)} \in S(x)$ iff
+$\pi(i) < \pi(k)$ for all $i < k$; call this
+event $e_k$.
+This event is entirely determined by the order of
+$\pi(1), \ldots, \pi(k)$, of which there are $k!$
+equally likely possibilities. Exactly $1/k$ of those
+orderings have $\pi(k)$ as the largest element.
+Thus, $\text{Prob}(e_k) = 1/k$.
+
+Finally, the expected value of $\sigma(x)$ is
+$$\sum_{k=1}^n \text{Prob}(e_k) = \sum_{k=1}^n1/k = H_n,$$
+using the linearity of the expected value.
+This completes the proof.
 $\Box$
 
 (TODO
