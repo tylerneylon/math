@@ -443,6 +443,32 @@ a uniformly random permutation.
 $s_i$ sequence is probabilistically equivalent to a uniformly
 random permutation. Also improve the phrasing in the last paragraph.)
 
+TODO transition into the remark below
+TEMP Remove the two horizontal breaks below and these remarks
+     (including the TODO above)
+
+---
+
+**Remark**\ 
+*Suppose we have a probability space whose elements are length-$n$
+permutations, and that $\text{Prob}(\pi(i) < \pi(j)) = 1/2$ for all
+$i\ne j$. Then all length-$n$ permutations are equally likely in
+this space.*
+
+**Proof**\ 
+This is not actually true.
+Consider
+```
+
+1 2 3 4
+4 3 2 1
+```
+Oh, dear.
+$\Box$
+
+
+---
+
 So we can learn more about our random sequence $x$ by considering
 what we can learn about a partial order sequence $s$ which is
 directly chosen as a uniformly random permutation. The next
