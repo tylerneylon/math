@@ -18,6 +18,8 @@ local function make_rand_seq(n)
   local seq = {}
   for i = 1, n do
     seq[#seq + 1] = math.random() * 2 - 1
+    -- Switch on the next statement to see what a discrete version looks like.
+    --seq[#seq + 1] = math.random(0, 1) - 0.5
   end
   return seq
 end
@@ -75,23 +77,23 @@ end
 print('Position of 1st sum:')
 
 io.write(' pos: ')
-for pos = 1, n do io.write(string.format('%4d ', pos)) end
+for pos = 1, n do io.write(string.format('%6d ', pos)) end
 io.write('\n')
 
 io.write('freq: ')
 for pos = 1, n do
-  io.write(string.format('%4d ', pos1_freq[pos] or 0))
+  io.write(string.format('%6d ', pos1_freq[pos] or 0))
 end
 io.write('\n')
 
 print('Position of last sum:')
 
 io.write(' pos: ')
-for pos = 1, n do io.write(string.format('%4d ', pos)) end
+for pos = 1, n do io.write(string.format('%6d ', pos)) end
 io.write('\n')
 
 io.write('freq: ')
 for pos = 1, n do
-  io.write(string.format('%4d ', pos10_freq[pos] or 0))
+  io.write(string.format('%6d ', pos10_freq[pos] or 0))
 end
 io.write('\n')
