@@ -407,6 +407,19 @@ we don't need to be aware of that structure to execute the contractions.
 
 # Random sequences
 
+(NOTE This section is kind of messed up currently while I fix some
+ major plot holes.)
+
+In this section, we'll consider a finite sequence
+$s = \langle s_1, \ldots, s_n\rangle$ whose elements $s_i$ are
+independent random variables, each uniformly distributed in the
+interval $[-1, 1]$. These are the partial sums of the
+sequence $x_i = s_i - s_{i-1}$, where we define $s_0 = 0$.
+
+---
+
+(TODO stuff below here will be heavily edited or rewritten altogether.)
+
 In this section, we'll consider a finite sequence $x$ of length
 $n$ whose elements $x_i$ are independent random variables, each
 uniformly distributed in the interval $[-1, 1]$.
