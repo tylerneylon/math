@@ -416,6 +416,35 @@ independent random variables, each uniformly distributed in the
 interval $[-1, 1]$. These are the partial sums of the
 sequence $x_i = s_i - s_{i-1}$, where we define $s_0 = 0$.
 
+Notice that, if $i \ne j$, then $s_i \ne s_j$ with probability 1.
+We'll focus on finding the expected value of $\sigma(x)$; in that
+context we can thus assume without loss of generality that we're
+only considering sequences $x$ with distinct partial sums $s_i$.
+
+The remark below will help us formally establish that the order
+of the elements of $s_i$ is essentially chosen as a uniformly
+random permutation. This is a "remark" rather than a "property" so
+that all the properties in these notes are directly about cyclic shifts.
+
+From here on, the term $n-$*permutation* refers to a bijective map
+$\pi:\{1,\ldots,n\}\to\{1,\ldots,n\}$.
+A *swap* is a permutation $\rho$ such that there are two distinct
+elements $i, j$ in its range with $\rho(i) = j$, $\rho(j) = i$, and
+for which $\rho (k) = k$ for $k \ne i, j$.
+
+
+**Remark**\ 
+*Suppose we have a probability space over the set of $n-$permutations,
+and that, for any measurable set $S$ and swap $\rho$,
+$\text{Prob}(S) = \text{Prob}(\{\rho(s)|s\in S\})$.
+Intuitively, this means we can apply any swap to a set $S$, and
+the result has the same probability as the original.*
+
+**Proof**\ 
+TODO
+$\Box$
+
+
 ---
 
 (TODO stuff below here will be heavily edited or rewritten altogether.)
