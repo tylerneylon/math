@@ -428,9 +428,9 @@ that all the properties in these notes are directly about cyclic shifts.
 
 From here on, the term $n-$*permutation* refers to a bijective map
 $\pi:\{1,\ldots,n\}\to\{1,\ldots,n\}$.
-A *swap* is a permutation $\rho$ such that there are two distinct
-elements $i, j$ in its range with $\rho(i) = j$, $\rho(j) = i$, and
-for which $\rho (k) = k$ for $k \ne i, j$.
+A *swap of $i$ and $j$* is a permutation $\rho$ such that the distinct
+elements $i, j$ in its range have $\rho(i) = j$, $\rho(j) = i$, and
+for which $\rho (k) = k$ when $k \ne i, j$.
 
 
 **Remark**\ 
@@ -441,6 +441,15 @@ Intuitively, this means we can apply any swap to a set $S$, and
 the result has the same probability as the original.*
 
 **Proof**\ 
+Let $\rho_{ij}$ denote the swap of $i$ and $j$. Then the set of
+swaps $\{\rho_{ij} | 1\le i < j \le n\}$, when closed
+under composition, generates the set of all $n-$permutations.
+One way to see this is by considering the
+Steinhaus-Johnson-Trotter algorithm, which enumerates all
+$n-$permutations using a single swap between any two successive
+elements [@s-j-t-alg].
+
+
 TODO
 $\Box$
 
