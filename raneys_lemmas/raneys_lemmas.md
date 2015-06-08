@@ -449,8 +449,16 @@ Steinhaus-Johnson-Trotter algorithm, which enumerates all
 $n-$permutations using a single swap between any two successive
 elements [@s-j-t-alg].
 
-
-TODO
+Since any pair of $n-$permutations $\pi_1$ and $\pi_2$ are 
+a finite pair of swaps apart, they must have the same probability.
+More formally, there must exist a finite sequence of swaps
+$\rho_1, \ldots, \rho_k$ so that
+$\pi_1 = \rho_1 \circ \ldots \circ \rho_k \circ \pi_2$.
+Then
+$$\text{Prob}(\pi_2) = \text{Prob}(\rho_k \circ \pi_2)
+                     = \ldots
+                     = \text{Prob}(\rho_1 \circ \ldots \circ \rho_k \circ \pi_2)
+                     = \text{Prob}(\pi_1).$$
 $\Box$
 
 
