@@ -414,17 +414,26 @@ In this section, we'll consider a finite sequence
 $s = \langle s_1, \ldots, s_n\rangle$ whose elements $s_i$ are
 independent random variables, each uniformly distributed in the
 interval $(0, 1]$. These are the partial sums of the
-sequence $x_i = s_i - s_{i-1}$, where we define $s_0 = 0$.
+sequence $x_i = s_i - s_{i-1}$, $1 \le i \le n$, where we define $s_0 = 0$.
 Generating $x$ in this manner ensures it is sum-positive.
 
+This section focuses on the question: what is the expected value of $\sigma(x)$?
+
 Notice that, if $i \ne j$, then $s_i \ne s_j$ with probability 1.
-We'll focus on finding the expected value of $\sigma(x)$; in that
-context we can thus assume without loss of generality that we're
+In the context of finding an expected value,
+we can thus assume without loss of generality that we're
 only considering sequences $x$ with distinct partial sums $s_i$.
 
 The remark below will help us formally establish that the order
 of the elements of $s_i$ is essentially chosen as a uniformly
 random permutation.
+The core intuition is to notice that, for any partial sum sequence
+$s = \langle \ldots s_i \ldots s_j \ldots\rangle$,
+the new sequence with $s_i$ and $s_j$ swapped,
+$s' = \langle \ldots s_j \ldots s_i \ldots\rangle$,
+is just as likely. The remark will help solidify this intuition
+into a more formal argument that we're working with uniformly
+random permutations as the order seen in the random sequence $s$.
 
 From here on, the term $n-$*permutation* refers to a bijective map
 $\pi:\{1,\ldots,n\}\to\{1,\ldots,n\}$.
@@ -447,8 +456,8 @@ swaps $\{\rho_{ij} | 1\le i < j \le n\}$, when closed
 under composition, generates the set of all $n-$permutations.
 One way to see this is by considering the
 Steinhaus-Johnson-Trotter algorithm, which enumerates all
-$n-$permutations using a single swap between any two successive
-elements [@s-j-t-alg].
+$n-$permutations using only swap operations to move from one
+to the next [@s-j-t-alg].
 
 Since any pair of $n-$permutations $\pi_1$ and $\pi_2$ are 
 a finite pair of swaps apart, they must have the same probability.
