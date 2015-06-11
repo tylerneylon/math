@@ -424,31 +424,36 @@ In the context of finding an expected value,
 we can thus assume without loss of generality that we're
 only considering sequences $x$ with distinct partial sums $s_i$.
 
-The remark below will help us formally establish that the order
-of the elements of $s_i$ is essentially chosen as a uniformly
-random permutation.
+Let's use the term $n-$*permutation* to refer to a bijective map
+$\pi:\{1,\ldots,n\}\to\{1,\ldots,n\}$.
+Then we can view a sequence $s$ of distinct elements $s_i$ as corresponding
+to a permutation $\pi$ such that $s_{\pi(i)}$ is the $i^\text{th}$ smallest
+element, where $1 \le i \le n$.
+For example, a strictly increasing $s$ would correspond to the permutation
+$\pi$ with $\pi(i) = i$; a strictly decreasing $s$ would correspond to
+$\pi$ with $\pi(i) = n - i + 1$.
+
+In a moment, we'll prove that our random choice of $s$ corresponds with
+a uniformly random permutation $\pi$.
 The core intuition is to notice that, for any partial sum sequence
 $s = \langle \ldots s_i \ldots s_j \ldots\rangle$,
 the new sequence with $s_i$ and $s_j$ swapped,
 $s' = \langle \ldots s_j \ldots s_i \ldots\rangle$,
-is just as likely. The remark will help solidify this intuition
-into a more formal argument that we're working with uniformly
-random permutations as the order seen in the random sequence $s$.
+is just as likely.
 
-From here on, the term $n-$*permutation* refers to a bijective map
-$\pi:\{1,\ldots,n\}\to\{1,\ldots,n\}$.
-A *swap of $i$ and $j$* is a permutation $\rho$ such that the distinct
+It will be useful to define a *swap of $i$ and $j$*
+as a permutation $\rho$ such that the distinct
 elements $i, j$ in its range have $\rho(i) = j$, $\rho(j) = i$, and
 for which $\rho (k) = k$ when $k \ne i, j$.
 Given two $n-$permutations $\pi_1$ and $\pi_2$, we'll use the equivalent
 notations $\pi_1(\pi_2)$ and $\pi_1 \circ \pi_2$ to denote the composed
 permutation $\pi_3$ defined by $\pi_3(i) = \pi_1(\pi_2(i))$.
 
-**Remark**\ 
+**Claim**\ 
 *Suppose we have a probability space over the set of $n-$permutations,
 and that, for any $n-$permutation $\pi$ and swap $\rho$,
 $\text{Prob}(\pi) = \text{Prob}(\rho(\pi))$.
-Then all length-$n$ permutations are equally likely in this space.*
+Then all $n-$permutations are equally likely in this space.*
 
 **Proof**\ 
 Let $\rho_{ij}$ denote the swap of $i$ and $j$. Then the set of
@@ -457,7 +462,7 @@ under composition, generates the set of all $n-$permutations.
 One way to see this is by considering the
 Steinhaus-Johnson-Trotter algorithm, which enumerates all
 $n-$permutations using only swap operations to move from one
-to the next [@s-j-t-alg].
+permutation to the next [@s-j-t-alg].
 
 Since any pair of $n-$permutations $\pi_1$ and $\pi_2$ are 
 a finite pair of swaps apart, they must have the same probability.
@@ -471,6 +476,16 @@ $$\text{Prob}(\pi_2) = \text{Prob}(\rho_k \circ \pi_2)
                      = \text{Prob}(\pi_1).$$
 $\Box$
 
+The proof only depended on two key facts about the probability space on sequences
+$s$:
+
+1. that elements $s_i$ are distinct with probability 1, and
+2. that permutation elements separated by a swap have the same probability.
+
+In other words, the claim holds for any sequence $s_i$ whose elements are chosen
+independently using the same probability distribution in which all individual
+elements have probability zero. Choosing $s_i$ uniformly from $(0, 1]$ is just
+one example of a probability space that meets these conditions.
 
 ---
 
