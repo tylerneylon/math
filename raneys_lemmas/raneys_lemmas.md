@@ -487,6 +487,18 @@ independently using the same probability distribution in which all individual
 elements have probability zero. Choosing $s_i$ uniformly from $(0, 1]$ is just
 one example of a probability space that meets these conditions.
 
+Armed with this characterization of uniformly random permutations, we're
+ready to find the expected value of $\sigma(x)$. To do so, it will be
+useful to define the $n^\text{th}$ *harmonic
+number* $H_n$ as $\sum_{i=1}^n1/i$.
+
+**Property 7**\ 
+*Suppose that the random sequence $s$ is determined by
+independently choosing each $s_i$ uniformly from $(0, 1]$ for each
+$i$ with $1 \le i \le n$; suppose also that $x_i = s_i - s_{i-1}$,
+where $1 \le i \le n$ and $s_0 = 0$.
+Then the expected value of $\sigma(x)$ is $H_n$.*
+
 ---
 
 (TODO stuff below here will be heavily edited or rewritten altogether.)
@@ -495,7 +507,7 @@ In this section, we'll consider a finite sequence $x$ of length
 $n$ whose elements $x_i$ are independent random variables, each
 uniformly distributed in the interval $[-1, 1]$.
 
-The partial sums of such a sequence have two interesting properties:
+the partial sums of such a sequence have two interesting properties:
 
 1. If $i \ne j$, then $s_i \ne s_j$ with probability 1.
 2. $\text{Prob}(s_i > s_j)$ = $\text{Prob}(s_i < s_j)$.
