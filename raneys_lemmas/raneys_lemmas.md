@@ -407,9 +407,6 @@ we don't need to be aware of that structure to execute the contractions.
 
 # Random sequences
 
-(NOTE This section is kind of messed up currently while I fix some
- major plot holes.)
-
 In this section, we'll consider a finite sequence
 $s = \langle s_1, \ldots, s_n\rangle$ whose elements $s_i$ are
 independent random variables, each uniformly distributed in the
@@ -424,7 +421,11 @@ In the context of finding an expected value,
 we can thus assume without loss of generality that we're
 only considering sequences $x$ with distinct partial sums $s_i$.
 
-Let's use the term $n-$*permutation* to refer to a bijective map
+Property 4 tells us that the order of the elements in $s$ is all that we
+need to know in order to find $\sigma(x)$, so we'll abstract away the
+exact values of the $s_i$ and focus on their relative ordering alone.
+To this end, 
+let's use the term $n-$*permutation* to refer to a bijective map
 $\pi:\{1,\ldots,n\}\to\{1,\ldots,n\}$.
 Then we can view a sequence $s$ of distinct elements $s_i$ as corresponding
 to a permutation $\pi$ such that $s_{\pi(i)}$ is the $i^\text{th}$ smallest
@@ -499,108 +500,16 @@ $i$ with $1 \le i \le n$; suppose also that $x_i = s_i - s_{i-1}$,
 where $1 \le i \le n$ and $s_0 = 0$.
 Then the expected value of $\sigma(x)$ is $H_n$.*
 
----
-
-(TODO stuff below here will be heavily edited or rewritten altogether.)
-
-In this section, we'll consider a finite sequence $x$ of length
-$n$ whose elements $x_i$ are independent random variables, each
-uniformly distributed in the interval $[-1, 1]$.
-
-the partial sums of such a sequence have two interesting properties:
-
-1. If $i \ne j$, then $s_i \ne s_j$ with probability 1.
-2. $\text{Prob}(s_i > s_j)$ = $\text{Prob}(s_i < s_j)$.
-
-To see the first property, suppose $i < j$ and that we're given
-the values of
-$x_1, \ldots, x_{j-1}$. If we are about to choose a random
-value $x_j\in [-1, 1]$, then there is at most one value which
-could give $s_i = s_j$, so that the event must have probability zero.
-
-We can verify the second probaby by a symmetry argument.
-Notice that any fixed value for $x_i$ is as likely as its
-opposite value $-x_i$.
-This means that every measurable set of sequences
-$X$ has the same probability as its negation
-$\{-x = \langle -x_1, \ldots, -x_n\rangle \,|\, x \in X\}$.
-So the set $\{x \,|\, s_i < s_j\}$ has the same probability as the set
-$\{x \,|\, s_i > s_j \}$.
-
-So, almost surely,
-$\text{Prob}(s_i > s_j) = \text{Prob}(s_i > s_j) = 1/2$ for any
-$i,j$ with $0 \le i < j \le n$.
-As we'll explain in more detail below, this 
-means that the sequence $s = \langle s_0, \ldots, s_n\rangle$,
-seen as a permutation, is probabilistically equivalent to
-a uniformly random permutation.
-
-(TODO argue that this means almost surely that the order of the
-$s_i$ sequence is probabilistically equivalent to a uniformly
-random permutation. Also improve the phrasing in the last paragraph.)
-
-TODO transition into the remark below
-TEMP Remove the two horizontal breaks below and these remarks
-     (including the TODO above)
-
----
-
-**Remark**\ 
-*Suppose we have a probability space whose elements are length-$n$
-permutations, and that $\text{Prob}(\pi(i) < \pi(j)) = 1/2$ for all
-$i\ne j$. Then all length-$n$ permutations are equally likely in
-this space.*
-
-**Proof**\ 
-This is not actually true.
-Consider
-```
-
-1 2 3 4
-4 3 2 1
-```
-Oh, dear.
-$\Box$
-
-
----
-
-So we can learn more about our random sequence $x$ by considering
-what we can learn about a partial order sequence $s$ which is
-directly chosen as a uniformly random permutation. The next
-property focuses on the expected value of $\sigma(x)$ in this
-setting. It will be useful to define the $n^\text{th}$ harmonic
-number $H_n$ as $\sum_{i=1}^n1/i$.
-
-**Property 7**\ 
-*Suppose that the random length-$n$ sequence $x$ has $i^\text{th}$
-partial sum $s_i$, that
-$s_i > 0$ for $1 \le i \le n$, and that 
-$\text{Prob}(s_i > s_j) = \text{Prob}(s_i > s_j) = 1/2$ for any
-$i,j$ with $0 \le i < j \le n$.
-Then the expected value of $\sigma(x)$ is $H_n$.*
-
-This property immediately tells us that $\sigma(x)$ averages to
-$H_n$ across all $x$ with sum $s_n > 0$ since we can always
-shift $x$ so that $s_i > 0$ for $i > 0$ without changing $\sigma(x)$.
-To make this even more general, we can notice that
-$\text{Prob}(s_n > 0) = \text{Prob}(s_n < 0) = 1/2$.
-There are zero positive-sum
-shifts when $s_n < 0$, so the average of $\sigma(x)$ for an
-arbitrary length-$n$ sequence is exactly $H_n/2$.
-
 **Proof of property 7**\ 
-We can assume without loss of generality that $s_i \ne s_j$ for
+As noted above,
+we can assume without loss of generality that $s_i \ne s_j$ for
 $i\ne j$; this is excluding a zero-probability case, so it doesn't
 affect the expected value of $\sigma(x)$.
 
-We'll say that $s_i$, with $1\le i\le n$,
-is the $j^\text{th}$ smallest partial sum
-iff $j = \#\{s_k | s_k < s_j, 0 \le k\le n \}$.
-Now we can define a map $\pi:[1, n] \to [1, n]$ so
-that $s_{\pi(i)}$ is the $i^\text{th}$ smallest partial sum.
-Effectively, $\pi$ is a permutation that captures the order of
-the elements of $s_1, \ldots, s_n$;
+Let $\pi$ be the $n-$permutation such that
+$s_{\pi(i)}$ is the $i^\text{th}$ smallest partial sum
+for $1 \le i \le n$.
+Note that
 $s_{\pi(i)} < s_{\pi(j)}$ iff $i < j$.
 
 We can use the set $S(x)$ to determine $\sigma(x)$.
@@ -613,20 +522,16 @@ equally likely possibilities. Exactly $1/k$ of those
 orderings have $\pi(k)$ as the largest element.
 Thus, $\text{Prob}(e_k) = 1/k$.
 
-Finally, the expected value of $\sigma(x)$ is
+So the expected value of $\sigma(x)$ is
 $$\sum_{k=1}^n \text{Prob}(e_k) = \sum_{k=1}^n1/k = H_n,$$
 using the linearity of the expected value.
 This completes the proof.
 $\Box$
 
-(TODO
- 1. Figure out the statement of the property.
- 2. Prove it.
- 3. Go back and review whatever depth of connection I want to
-    make with uniformly random permutations.
-)
+---
 
-
+(TODO add code that checks this; consider the case $x_i\in[-1, 1]$ but
+      don't spend too much time on it if it's tricky)
 
 
 # References
