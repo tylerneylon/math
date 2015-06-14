@@ -89,6 +89,19 @@ local function sigma(x, s)
   return sigma
 end
 
+local function wr(...)
+  io.write(string.format(...))
+end
+
+-- This prints out a numerical-valued array on a single line.
+local function print_arr(arr, label)
+  wr('%10s: ', label)
+  for i = 1, #arr do
+    wr('%6.3g ', arr[i])
+  end
+  wr('\n')
+end
+
 
 -------------------------------------------------------------------------------
 -- Main.
@@ -96,78 +109,29 @@ end
 
 math.randomseed(os.time())
 
-local n = 20
-local num_trials = 100000
+-- These are useful for printing out the values later.
+local   n_arr = {}
+local avg_arr = {}
+local  Hn_arr = {}
 
-local sigma_sum = 0
+local num_trials = 10000
 
-for trial = 1, num_trials do
-  local s = make_rand_01_seq(n)
-  local s_no_zero = {}
-  for i = 1, #s do s_no_zero[i] = s[i] end  -- Non-shallow copy.
-  table.insert(s, 1, 0)  -- Insert a new first value = 0.
-  local x = diff_seq(s)
-  sigma_sum = sigma_sum + sigma(x, s_no_zero)
+for n = 1, 20 do
+  table.insert(n_arr, n)
+  local sigma_sum = 0
+  for trial = 1, num_trials do
+    local s = make_rand_01_seq(n)
+    local s_no_zero = {}
+    for i = 1, #s do s_no_zero[i] = s[i] end  -- Non-shallow copy.
+    table.insert(s, 1, 0)  -- Insert a new first value = 0.
+    local x = diff_seq(s)
+    sigma_sum = sigma_sum + sigma(x, s_no_zero)
+  end
+  table.insert(avg_arr, sigma_sum / num_trials)
+  table.insert( Hn_arr, H(n))
 end
 
---[[
-io.write('s: ')
-for i = 2, #s do io.write(string.format('%5.2f ', s[i])) end
-io.write('\n')
-print('sigma(x) = ', sigma(x, s_no_zero))
---]]
+print_arr(  n_arr, 'n')
+print_arr(avg_arr, 'avg sigma')
+print_arr( Hn_arr, 'H(n)')
 
-print('avg sigma = ', sigma_sum / num_trials)
-print(string.format('H(%d) = %g', n, H(n)))
-
-os.exit()
-
--------------------------------------------------------------------------------
--- Old main.
--------------------------------------------------------------------------------
-
-local n = 10
-local pos1s  = {}
-local pos10s = {}
-for t = 1, 100000 do
-  local s = sum_seq(make_rand_seq(n))
-  local pos1  = get_pos_of_ith_item(s, 1)
-  local pos10 = get_pos_of_ith_item(s, n)
-  table.insert(pos1s, pos1)
-  table.insert(pos10s, pos10)
-end
-
--- Build histogram data for each.
-local pos1_freq  = {}  -- Maps pos -> freq.
-local pos10_freq = {}
-for _, pos in pairs(pos1s) do
-  pos1_freq[pos] = (pos1_freq[pos] or 0) + 1
-end
-for _, pos in pairs(pos10s) do
-  pos10_freq[pos] = (pos10_freq[pos] or 0) + 1
-end
-
--- Print out the results.
-print('Position of 1st sum:')
-
-io.write(' pos: ')
-for pos = 1, n do io.write(string.format('%6d ', pos)) end
-io.write('\n')
-
-io.write('freq: ')
-for pos = 1, n do
-  io.write(string.format('%6d ', pos1_freq[pos] or 0))
-end
-io.write('\n')
-
-print('Position of last sum:')
-
-io.write(' pos: ')
-for pos = 1, n do io.write(string.format('%6d ', pos)) end
-io.write('\n')
-
-io.write('freq: ')
-for pos = 1, n do
-  io.write(string.format('%6d ', pos10_freq[pos] or 0))
-end
-io.write('\n')
