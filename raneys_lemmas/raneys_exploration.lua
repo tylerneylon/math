@@ -76,10 +76,40 @@ local function get_pos_of_ith_item(seq, i)
   return pos
 end
 
+-- This modifies x in place and returns the did_shift boolean indicating whether
+-- or not a shift was needed to make x sum-positive. This expects that the total
+-- sum of x is already positive so this is possible.
+local function shift_to_positive(x)
+  local s = sum_seq(x)
+
+  -- Find the minimum partial sum.
+  local min, min_ind = s[#s], #s
+  for i = #s - 1, 1, -1 do
+    if s[i] < min then
+      min, min_ind = s[i], i
+    end
+  end
+
+  -- If no shift is needed, return did_shift = false.
+  if min > 0 then return false end
+
+  -- Make a copy of x to more easily shift it.
+  local y = {}
+  for i = 1, #x do y[i] = x[i] end
+  for i = 1, #y do
+    local j = (i + min_ind - 1) % #y + 1
+    x[i] = y[j]
+  end
+
+  return true  -- true --> yes we did shift x
+end
+
 -- This function returns sigma(x) = #positive-sum shifts for the sequence x.
 -- If the optional s value is supplied, it's used as the partial sums of x.
 local function sigma(x, s)
-  s = s or sum_seq(x)
+  if shift_to_positive(x) or not s then
+    s = sum_seq(x)
+  end
   local m = s[#s]
   if m <= 0 then return 0 end
   local sigma = 1
@@ -90,6 +120,13 @@ local function sigma(x, s)
     end
   end
   return sigma
+end
+
+local function pr_vec(x)
+  for i = 1, #x do
+    io.write(string.format('%4g ', x[i]))
+  end
+  io.write('\n')
 end
 
 
@@ -123,12 +160,11 @@ print('sigma(x) = ', sigma(x, s_no_zero))
 print('avg sigma = ', sigma_sum / num_trials)
 print(string.format('H(%d) = %g', n, H(n)))
 
-os.exit()
-
 -------------------------------------------------------------------------------
 -- Old main.
 -------------------------------------------------------------------------------
 
+--[[
 local n = 10
 local pos1s  = {}
 local pos10s = {}
@@ -174,3 +210,4 @@ for pos = 1, n do
   io.write(string.format('%6d ', pos10_freq[pos] or 0))
 end
 io.write('\n')
+--]]
