@@ -129,6 +129,65 @@ local function pr_vec(x)
   io.write('\n')
 end
 
+local function wr(...)
+  io.write(string.format(...))
+end
+
+-- This prints out a numerical-valued array on a single line.
+local function print_arr(arr, label)
+  wr('%10s: ', label)
+  for i = 1, #arr do
+    wr('%6.3g ', arr[i])
+  end
+  wr('\n')
+end
+
+
+-------------------------------------------------------------------------------
+-- Functions to explore specific behavior.
+-------------------------------------------------------------------------------
+
+local function check_sigma_with_rand_partial_sums(num_trials)
+  num_trials = num_trials or 10000
+  local   n_arr = {}
+  local avg_arr = {}
+  local  Hn_arr = {}
+  for n = 1, 20 do
+    table.insert(n_arr, n)
+    local sigma_sum = 0
+    for trial = 1, num_trials do
+      local s = make_rand_01_seq(n)
+      local s_no_zero = {}
+      for i = 1, #s do s_no_zero[i] = s[i] end  -- Non-shallow copy.
+      table.insert(s, 1, 0)  -- Insert a new first value = 0.
+      local x = diff_seq(s)
+      sigma_sum = sigma_sum + sigma(x, s_no_zero)
+    end
+    table.insert(avg_arr, sigma_sum / num_trials)
+    table.insert( Hn_arr, H(n))
+  end
+  print_arr(  n_arr, 'n')
+  print_arr(avg_arr, 'avg')
+  print_arr( Hn_arr, 'H(n)')
+end
+
+local function check_sigma_with_rand_x_vals(num_trials)
+  num_trials = num_trials or 10000
+  local   n_arr = {}
+  local avg_arr = {}
+  for n = 1, 20 do
+    table.insert(n_arr, n)
+    local sigma_sum = 0
+    for trial = 1, num_trials do
+      local x = make_rand_seq(n)
+      sigma_sum = sigma_sum + sigma(x)
+    end
+    table.insert(avg_arr, sigma_sum / num_trials)
+  end
+  print_arr(  n_arr, 'n')
+  print_arr(avg_arr, 'avg')
+end
+
 
 -------------------------------------------------------------------------------
 -- Main.
@@ -136,29 +195,8 @@ end
 
 math.randomseed(os.time())
 
-local n = 20
-local num_trials = 100000
+check_sigma_with_rand_x_vals(10000)
 
-local sigma_sum = 0
-
-for trial = 1, num_trials do
-  local s = make_rand_01_seq(n)
-  local s_no_zero = {}
-  for i = 1, #s do s_no_zero[i] = s[i] end  -- Non-shallow copy.
-  table.insert(s, 1, 0)  -- Insert a new first value = 0.
-  local x = diff_seq(s)
-  sigma_sum = sigma_sum + sigma(x, s_no_zero)
-end
-
---[[
-io.write('s: ')
-for i = 2, #s do io.write(string.format('%5.2f ', s[i])) end
-io.write('\n')
-print('sigma(x) = ', sigma(x, s_no_zero))
---]]
-
-print('avg sigma = ', sigma_sum / num_trials)
-print(string.format('H(%d) = %g', n, H(n)))
 
 -------------------------------------------------------------------------------
 -- Old main.
