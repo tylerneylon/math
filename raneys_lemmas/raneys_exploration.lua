@@ -137,7 +137,7 @@ end
 local function print_arr(arr, label)
   wr('%10s: ', label)
   for i = 1, #arr do
-    wr('%6.3g ', arr[i])
+    wr('%7.3g ', arr[i])
   end
   wr('\n')
 end
@@ -171,10 +171,28 @@ local function check_sigma_with_rand_partial_sums(num_trials)
   print_arr( Hn_arr, 'H(n)')
 end
 
+-- This expects the input n to be a nonnegative integer.
+-- The return value is n * (n - 2) * (n - 4) * ... * (n % 2 + 2).
+local function double_fact(n)
+  assert(n >= 0)
+  local product = 1
+  for k = n, 1, -2 do
+    product = product * k
+  end
+  return product
+end
+
+-- s_k = (2k-1)!! / (2k)!!.
+local function s(k)
+  assert(k > 0)
+  return double_fact(2 * k - 1) / double_fact(2 * k)
+end
+
 local function check_sigma_with_rand_x_vals(num_trials)
   num_trials = num_trials or 10000
   local   n_arr = {}
   local avg_arr = {}
+  local prd_arr = {}  -- These are predicted values.
   for n = 1, 20 do
     table.insert(n_arr, n)
     local sigma_sum = 0
@@ -183,9 +201,11 @@ local function check_sigma_with_rand_x_vals(num_trials)
       sigma_sum = sigma_sum + sigma(x)
     end
     table.insert(avg_arr, sigma_sum / num_trials)
+    table.insert(prd_arr, s(n) * n)
   end
   print_arr(  n_arr, 'n')
-  print_arr(avg_arr, 'avg')
+  print_arr(avg_arr, 'avg sigma')
+  print_arr(prd_arr, 'predicted')
 end
 
 
@@ -195,7 +215,7 @@ end
 
 math.randomseed(os.time())
 
-check_sigma_with_rand_x_vals(10000)
+check_sigma_with_rand_x_vals(100000)
 
 
 -------------------------------------------------------------------------------
