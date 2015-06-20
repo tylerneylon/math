@@ -547,7 +547,23 @@ $$\text{Pr}(s_k>0\,\forall\,k:1\le k\le n) = \frac{(2n-1)!!}{(2n)!!}.$$*
 The event in that last expression could be alternatively stated as
 "$x$ is sum-positive."
 The proof of this lemma is involved, so we'll defer it until after we've
-seen how it can be used to understand $\sigma(x)$.
+seen how it can be used to prove the following property which answers
+our key question about $\sigma(x)$.
+
+**Property 10**\ 
+*Suppose that the random sequence $x$ is determined by independently choosing
+each $x_i$ uniformly from $[-1, 1]$ for each $i$ with $1\le i\le n$. Then
+the expected value of $\sigma(x)$ is
+$$n\frac{(2n-1)!!}{(2n)!!}.$$*
+
+Before proving this, it may be interesting to shed more light on the
+quantity $E_n = n(2n-1)!!/(2n)!!$.
+For example, it may not be obvious at first glance if $E_n$ increases
+or decreases as $n\to\infty$.
+
+Here's a table of the first few values:
+
+(TODO add the table)
 
 ---
 
