@@ -528,6 +528,27 @@ using the linearity of the expected value.
 This completes the proof.
 $\Box$
 
+Now we're ready to consider a more interesting random sequence —
+one where each $x_i$ is chosen uniformly from $[-1, 1]$. As before, the
+goal is to find the expected value of $\sigma(x)$.
+
+The following lemma is the key. We'll need to introduce notation for a
+*double factorial*, written $n!!$, which is defined as
+$$n!! = n(n-2)(n-4)\cdots(1 \text{ or } 2).$$
+In other words, $n!!$ is the product of all the integers in $[1, n]$
+with the same parity — being even or odd — as $n$.
+
+**Lemma 9**\ 
+*Suppose that the random sequence $x$ is determined by independently
+choosing each $x_i$ uniformly from $[-1, 1]$ for each $i$ with $1\le i\le n$
+and that $s_k = \sum_{i=1}^kx_i$. Then
+$$\text{Pr}(s_k>0\,\forall\,k:1\le k\le n) = \frac{(2n-1)!!}{(2n)!!}.$$*
+
+The event in that last expression could be alternatively stated as
+"$x$ is sum-positive."
+The proof of this lemma is involved, so we'll defer it until after we've
+seen how it can be used to understand $\sigma(x)$.
+
 ---
 
 (TODO add code that checks this; consider the case $x_i\in[-1, 1]$ but
