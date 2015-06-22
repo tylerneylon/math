@@ -450,7 +450,7 @@ Given two $n-$permutations $\pi_1$ and $\pi_2$, we'll use the equivalent
 notations $\pi_1(\pi_2)$ and $\pi_1 \circ \pi_2$ to denote the composed
 permutation $\pi_3$ defined by $\pi_3(i) = \pi_1(\pi_2(i))$.
 
-**Claim**\ 
+**Lemma 7**\ 
 *Suppose we have a probability space over the set of $n-$permutations,
 and that, for any $n-$permutation $\pi$ and swap $\rho$,
 $\text{Prob}(\pi) = \text{Prob}(\rho(\pi))$.
@@ -483,7 +483,7 @@ $s$:
 1. that elements $s_i$ are distinct with probability 1, and
 2. that permutation elements separated by a swap have the same probability.
 
-In other words, the claim holds for any sequence $s_i$ whose elements are chosen
+In other words, lemma 7 applies to any sequence $s_i$ whose elements are chosen
 independently using the same probability distribution in which all individual
 elements have probability zero. Choosing $s_i$ uniformly from $(0, 1]$ is just
 one example of a probability space that meets these conditions.
@@ -493,14 +493,14 @@ ready to find the expected value of $\sigma(x)$. To do so, it will be
 useful to define the $n^\text{th}$ *harmonic
 number* $H_n$ as $\sum_{i=1}^n1/i$.
 
-**Property 7**\ 
+**Property 8**\ 
 *Suppose that the random sequence $s$ is determined by
 independently choosing each $s_i$ uniformly from $(0, 1]$ for each
 $i$ with $1 \le i \le n$; suppose also that $x_i = s_i - s_{i-1}$,
 where $1 \le i \le n$ and $s_0 = 0$.
 Then the expected value of $\sigma(x)$ is $H_n$.*
 
-**Proof of property 7**\ 
+**Proof **\ 
 As noted above,
 we can assume without loss of generality that $s_i \ne s_j$ for
 $i\ne j$; this is excluding a zero-probability case, so it doesn't
@@ -566,9 +566,9 @@ Here's a table of the first few values:
 $n$            1                                     2               3                   4                   5                   6                   7                     8                   
 -----------  - ------------------------------------  --------------  ------------------  ------------------  ------------------  ------------------  --------------------  --------------------
 $E_n\;\;$      $\frac{1}{2}\vphantom{\bigg|}$        $\frac{3}{4}$   $\frac{15}{16}$     $\frac{35}{32}$     $\frac{315}{256}$   $\frac{693}{512}$   $\frac{3003}{2048}$   $\frac{6435}{4096}$
-$\approx$      0.50$\vphantom{ }\quad$               0.74$\quad$     0.93$\quad$         1.09$\quad$         1.23$\quad$         1.35$\quad$         1.46$\quad$           1.57
+$\approx$      0.50$\vphantom{ }\quad$               0.75$\quad$     0.93$\quad$         1.09$\quad$         1.23$\quad$         1.35$\quad$         1.46$\quad$           1.57
 
-(TODO add the table)
+
 
 ---
 
