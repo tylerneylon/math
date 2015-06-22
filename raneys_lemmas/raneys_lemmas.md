@@ -568,7 +568,13 @@ $n$            1                                     2               3          
 $E_n\;\;$      $\frac{1}{2}\vphantom{\bigg|}$        $\frac{3}{4}$   $\frac{15}{16}$     $\frac{35}{32}$     $\frac{315}{256}$   $\frac{693}{512}$   $\frac{3003}{2048}$   $\frac{6435}{4096}$
 $\approx$      0.50$\vphantom{ }\quad$               0.75$\quad$     0.93$\quad$         1.09$\quad$         1.23$\quad$         1.35$\quad$         1.46$\quad$           1.57
 
+The ratio between consecutive values is, for $n > 1$,
+$$\frac{E_n}{E_{n-1}} = \frac{n}{n-1}\frac{2n-1}{2n}=\frac{n-1/2}{n-1}=1+\frac{1}{2n-2} > 1,$$
+so that they are indeed strictly increasing. In fact, since
+$\sum_{1 < k \le n} \frac{1}{2k-2}\to\infty$ as $n\to\infty$, we also have
+$E_n = \frac{1}{2}\prod_{1 < k \le n}\left( 1 + \frac{1}{2k-2}\right) \to \infty$ as $n\to\infty$.
 
+Let's prove property 10, assuming for now that lemma 9 is true.
 
 ---
 
