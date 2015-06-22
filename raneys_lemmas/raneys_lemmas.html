@@ -202,6 +202,48 @@
       <p><strong>Property 10</strong>  <em>Suppose that the random sequence <span class="math">\(x\)</span> is determined by independently choosing each <span class="math">\(x_i\)</span> uniformly from <span class="math">\([-1, 1]\)</span> for each <span class="math">\(i\)</span> with <span class="math">\(1\le i\le n\)</span>. Then the expected value of <span class="math">\(\sigma(x)\)</span> is <span class="math">\[n\frac{(2n-1)!!}{(2n)!!}.\]</span></em></p>
       <p>Before proving this, it may be interesting to shed more light on the quantity <span class="math">\(E_n = n(2n-1)!!/(2n)!!\)</span>. For example, it may not be obvious at first glance if <span class="math">\(E_n\)</span> increases or decreases as <span class="math">\(n\to\infty\)</span>.</p>
       <p>Here's a table of the first few values:</p>
+      <table>
+      <thead>
+      <tr class="header">
+      <th align="left"><span class="math">\(n\)</span></th>
+      <th align="left"></th>
+      <th align="left">1</th>
+      <th align="left">2</th>
+      <th align="left">3</th>
+      <th align="left">4</th>
+      <th align="left">5</th>
+      <th align="left">6</th>
+      <th align="left">7</th>
+      <th align="left">8</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="odd">
+      <td align="left"><span class="math">\(E_n\;\;\)</span></td>
+      <td align="left"></td>
+      <td align="left"><span class="math">\(\frac{1}{2}\vphantom{\bigg|}\)</span></td>
+      <td align="left"><span class="math">\(\frac{3}{4}\)</span></td>
+      <td align="left"><span class="math">\(\frac{15}{16}\)</span></td>
+      <td align="left"><span class="math">\(\frac{35}{32}\)</span></td>
+      <td align="left"><span class="math">\(\frac{315}{256}\)</span></td>
+      <td align="left"><span class="math">\(\frac{693}{512}\)</span></td>
+      <td align="left"><span class="math">\(\frac{3003}{2048}\)</span></td>
+      <td align="left"><span class="math">\(\frac{6435}{4096}\)</span></td>
+      </tr>
+      <tr class="even">
+      <td align="left"><span class="math">\(\approx\)</span></td>
+      <td align="left"></td>
+      <td align="left">0.50<span class="math">\(\vphantom{ }\quad\)</span></td>
+      <td align="left">0.74<span class="math">\(\quad\)</span></td>
+      <td align="left">0.93<span class="math">\(\quad\)</span></td>
+      <td align="left">1.09<span class="math">\(\quad\)</span></td>
+      <td align="left">1.23<span class="math">\(\quad\)</span></td>
+      <td align="left">1.35<span class="math">\(\quad\)</span></td>
+      <td align="left">1.46<span class="math">\(\quad\)</span></td>
+      <td align="left">1.57</td>
+      </tr>
+      </tbody>
+      </table>
       <p>(TODO add the table)</p>
       <hr />
       <p>(TODO add code that checks this; consider the case <span class="math">\(x_i\in[-1, 1]\)</span> but don't spend too much time on it if it's tricky)</p>
