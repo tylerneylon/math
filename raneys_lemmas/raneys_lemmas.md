@@ -598,6 +598,20 @@ $$E\,\sigma(x) = n \, \text{Pr}(x\text{ is sum-positive})
 using lemma 9 for the final equation.
 $\Box$
 
+Now we're ready to dive into the proof of lemma 9.
+
+**Proof of lemma 9**\ 
+Our goal is to study the event
+$e_n = (s_k > 0 \,\forall\, k:1\le k \le n)$.
+To this end, we'll study the distribution of the random variable
+$(s_k | e_{k-1})$; that is, the value of $s_k$ given that
+$s_j > 0$ for $j < k$.
+Let $g_k$ be the probability density function of $(s_k | e_{k-1})$,
+characterized by $\text{Pr}(s_k \in A \,|\, e_{k-1}) = \int_A g_k(x)dx$.
+The first few $g_k$ functions are illustrated below.
+
+![*Outlines of the probability density functions $g_k$.*](images/g_k_outlines.png)
+
 ---
 
 (TODO add code that checks this; consider the case $x_i\in[-1, 1]$ but

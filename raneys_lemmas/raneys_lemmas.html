@@ -251,8 +251,15 @@
                      = \sum_{k=0}^{n-1}\text{Pr}(\rho_k(x)\text{ is sum-positive}).\]</span> Since the elements of <span class="math">\(x\)</span> are chosen independently, and with an identical distribution, we also have <span class="math">\[\text{Pr}(\rho_i(x)\text{ is sum-positive}) =
         \text{Pr}(\rho_j(x)\text{ is sum-positive}) \quad \forall i,j.\]</span> In other words, <span class="math">\[E\,\sigma(x) = n \, \text{Pr}(x\text{ is sum-positive})
                      = n \, \frac{(2n-1)!!}{(2n)!!},\]</span> using lemma 9 for the final equation. <span class="math">\(\Box\)</span></p>
+      <p>Now we're ready to dive into the proof of lemma 9.</p>
+      <p><strong>Proof of lemma 9</strong>  Our goal is to study the event <span class="math">\(e_n = (s_k &gt; 0 \,\forall\, k:1\le k \le n)\)</span>. To this end, we'll study the distribution of the random variable <span class="math">\((s_k | e_{k-1})\)</span>; that is, the value of <span class="math">\(s_k\)</span> given that <span class="math">\(s_j &gt; 0\)</span> for <span class="math">\(j &lt; k\)</span>. Let <span class="math">\(g_k\)</span> be the probability density function of <span class="math">\((s_k | e_{k-1})\)</span>, characterized by <span class="math">\(\text{Pr}(s_k \in A \,|\, e_{k-1}) = \int_A g_k(x)dx\)</span>. The first few <span class="math">\(g_k\)</span> functions are illustrated below.</p>
+      <div class="figure">
+      <img src="images/g_k_outlines.png" alt="Outlines of the probability density functions g_k." />
+      <p class="caption"><em>Outlines of the probability density functions <span class="math">\(g_k\)</span>.</em></p>
+      </div>
       <hr />
       <p>(TODO add code that checks this; consider the case <span class="math">\(x_i\in[-1, 1]\)</span> but don't spend too much time on it if it's tricky)</p>
+      <p>(TODO show that lemmas 1 and 2 are corollaries of property 5)</p>
       <div class="references">
       <h1 id="references" class="unnumbered">References</h1>
       <p>Knuth, Donald E., Oren Patashnik, and Ronald L. Graham. 1998. <em>Concrete Mathematics: A Foundation for Computer Science</em>. addison-wesley.</p>
