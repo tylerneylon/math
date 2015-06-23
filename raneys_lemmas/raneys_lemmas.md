@@ -576,6 +576,28 @@ $E_n = \frac{1}{2}\prod_{1 < k \le n}\left( 1 + \frac{1}{2k-2}\right) \to \infty
 
 Let's prove property 10, assuming for now that lemma 9 is true.
 
+**Proof of property 10**\ 
+For $0 \le k < n$, let $\rho_k(x)$ denote the cyclic shift $\langle x_{k+1}, \ldots, x_n, x_1, \ldots, x_k\rangle$
+of $x = \langle x_1, \ldots, x_n\rangle$.
+Thus $\rho_0$ is the identity, and $x_2$ is the first element of $\rho_1(x)$; we can think of $\rho_k$ as being a
+cycle-by-$k$ mapping.
+
+For random event $A$, let $[A]$ denote the function with value 1 if $A$ is true, and 0 otherwise.
+Then we can write
+$$\sigma(x) = \sum_{k=0}^{n-1}[\rho_k(x)\text{ is sum-positive}].$$
+Let $E\,X$ denote the expected value of a random variable $X$. Then
+$$E\,\sigma(x) = \sum_{k=0}^{n-1}E\,[\rho_k(x)\text{ is sum-positive}]
+               = \sum_{k=0}^{n-1}\text{Pr}(\rho_k(x)\text{ is sum-positive}).$$
+Since the elements of $x$ are chosen independently, and with an identical
+distribution, we also have
+$$\text{Pr}(\rho_i(x)\text{ is sum-positive}) =
+  \text{Pr}(\rho_j(x)\text{ is sum-positive}) \quad \forall i,j.$$
+In other words,
+$$E\,\sigma(x) = n \, \text{Pr}(x\text{ is sum-positive})
+               = n \, \frac{(2n-1)!!}{(2n)!!},$$
+using lemma 9 for the final equation.
+$\Box$
+
 ---
 
 (TODO add code that checks this; consider the case $x_i\in[-1, 1]$ but
