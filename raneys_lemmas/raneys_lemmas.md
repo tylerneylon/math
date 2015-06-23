@@ -603,6 +603,8 @@ $\Box$
 (TODO add code that checks this; consider the case $x_i\in[-1, 1]$ but
       don't spend too much time on it if it's tricky)
 
+(TODO show that lemmas 1 and 2 are corollaries of property 5)
+
 
 # References
 
