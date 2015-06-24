@@ -612,6 +612,27 @@ The first few $g_k$ functions are illustrated below.
 
 ![*Outlines of the probability density functions $g_k$.*](images/g_k_outlines.png)
 
+The first function, $g_1$, is entirely determined by the distribution
+of $x_1$ itself; that is, $g_1 = \frac{1}{2}[-1 \le x \le 1]$.
+For $k > 1$, we can recursively compute $g_k$ by considering the
+probability that $s_k=w$ given event $e_{k-1}$. In event $e_{k-1}$,
+the density function of $s_{k-1}$ is simply the value of $g_{k-1}(x)$
+restricted to $x > 0$ and normalized to integrate to 1.
+Let $q_k = \int_{x > 0} g_k(x) dx$, and we can express the density
+function of $(s_{k-1}|e_{k-1})$ as $g_{k-1}(x)[x>0]/q_{k-1}$.
+
+From here, the density function value for $s_k=w$ given $e_{k-1}$ is
+intuitively the sum of probabilities
+$\text{Pr}(s_{k-1}=w_1 | e_{k-1}) \text{Pr}(x_k=w_2)$
+across all $w_1, w_2$ pairs with $w_1 + w_2 = w$.
+More formally, we convolute the density functions of $x_k$ and
+$(s_{k-1} | e_{k-1})$ to arrive at
+$$g_k(w) = \frac{1}{2q_{k-1}}\int_{w-1}^{w+1}g_{k-1}(x)[x>0]dx.$$
+
+By the structure of this definition, each $g_k$ with $k > 1$ is
+continuous everywhere and linear on each interval between integers
+$[n, n+1]$, $n\in\mathbb{Z}$.
+
 ---
 
 (TODO add code that checks this; consider the case $x_i\in[-1, 1]$ but
