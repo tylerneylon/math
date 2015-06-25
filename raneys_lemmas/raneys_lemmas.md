@@ -633,6 +633,14 @@ By the structure of this definition, each $g_k$ with $k > 1$ is
 continuous everywhere and linear on each interval between integers
 $[n, n+1]$, $n\in\mathbb{Z}$.
 
+It's also the case that, for $k > 1$, $g_k(w) = 0$ when $w \le -1$ and
+when $w \ge k$, which can be verified inductively.
+This means we can consider each function as an element
+of a vector space with basis elements
+$$b_w(x) = \max (1-|x-w|, 0).$$
+This is essentially a triangle with base width 2 and height and
+area 1.
+
 ---
 
 (TODO add code that checks this; consider the case $x_i\in[-1, 1]$ but
