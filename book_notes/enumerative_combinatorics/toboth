@@ -1,0 +1,13 @@
+#!/bin/bash
+# Add a -x to the end of the above line to help debug this script.
+
+NAME=enum_comb
+FLAGS="-s --filter pandoc-crossref -M eqnPrefix='' -M linkcolor=black --number-sections --bibliography=${NAME}.bib ${NAME}.md"
+
+# Make and open the html file.
+pandoc --mathjax --template=template.html ${FLAGS} > ${NAME}.html
+open ${NAME}.html
+
+# Make and open the pdf file.
+#pandoc -t latex -o ${NAME}.pdf -s ${FLAGS}
+#open ${NAME}.pdf
