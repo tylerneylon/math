@@ -1,0 +1,177 @@
+<!DOCTYPE HTML>
+<html>
+  <body>
+    <svg width="600" height="600" vertion="1.1"
+    id="svg" xmlns="http://www.w3.org/2000/svg">
+
+      <defs>
+        <clipPath id="alphaClip">
+          <polygon id="clipAlpha" />
+        </clipPath>
+        <clipPath id="betaClip">
+          <polygon id="clipBeta" />
+        </clipPath>
+        <clipPath id="gammaClip">
+          <polygon id="clipGamma" />
+        </clipPath>
+      </defs>
+
+      <!-- The circle center and radius line. -->
+      <!--
+      <line x1="300" y1="300" x2="476.8" y2="123.2"
+      stroke="#ccc" fill="transparent" stroke-width="3" />
+      <circle cx="300" cy="300" r="9"
+      stroke="#ccc" fill="white" stroke-width="3"/>
+      -->
+
+      <!-- The triangles. -->
+      <!--
+      <polygon points="534.9 214.5, 65.1 214.5, 108.5 460.7"
+      stroke="#aaa" fill="transparent" stroke-width="3" />
+      <polygon points="300 300, 65.1 214.5, 108.5 460.7"
+      stroke="#aaa" fill="transparent" stroke-width="3" />
+      -->
+
+      <!--
+      <line x1="300" y1="300" x2="86.8" y2="337.6"
+      stroke="#aaa" stroke-width="3" />
+      -->
+
+      <!-- The points. -->
+      <!--
+      <circle cx="534.9" cy="214.5" r="6"
+      stroke="black" fill="black" />
+      <circle cx="65.1" cy="214.5" r="6"
+      stroke="black" fill="black" />
+      <circle cx="108.5" cy="460.7" r="6"
+      stroke="black" fill="black" />
+      <circle cx="300" cy="300" r="6"
+      stroke="black" fill="black" />
+      <circle cx="86.8" cy="337.6" r="6"
+      stroke="black" fill="black" />
+      -->
+
+      <!-- The circle. -->
+      <!--
+      <circle cx="300" cy="300" r="250"
+      stroke="black" fill="transparent" stroke-width="3" />
+      -->
+
+      <!--
+      <polygon points="20 20, 190 60, 70 400" stroke="black"
+      fill="transparent" stroke-width="3" />
+      -->
+    </svg>
+    <script>
+
+      function xOfRads(a) {
+        return cx + radius * Math.cos(a)
+      }
+
+      function yOfRads(a) {
+        return cy - radius * Math.sin(a)
+      }
+
+      function ptOfAngleInRadians(a) {
+        return xOfRads(a) + ' ' + yOfRads(a)
+      }
+
+      // This expects an array of radians as input.
+      // The output is formatted for use as a 'points' value in a polygon elt.
+      function polyPoints(arr) {
+        var s = []
+        for (var i = 0; i < arr.length; i++) {
+          s.push(ptOfAngleInRadians(arr[i]))
+        }
+        return s.join(', ')
+      }
+
+      function dist(x1, y1, x2, y2) {
+        var d1 = x1 - x2
+        var d2 = y1 - y2
+        return Math.sqrt(d1 * d1 + d2 * d2)
+      }
+
+      function addAttributes(elt, attr) {
+        for (var key in attr) {
+          elt.setAttribute(key, attr[key])
+        }
+        return elt
+      }
+
+      function add(eltName, attr) {
+        var elt = document.createElementNS(svgNS, eltName)
+        svg.appendChild(elt)
+        if (attr) addAttributes(elt, attr)
+        return elt
+      }
+
+      function addDot() {
+        var dotStyle = {stroke: 'transparent', fill: '#444', r: 5}
+        return add('circle', dotStyle)
+      }
+
+      // [ cos(a)  -sin(a) ]  [ x ]
+      // [ sin(a)   cos(a) ]  [ y ]
+      function rotatePt(x, y, angle) {
+        var newPt = []
+        newPt[0] = x * Math.cos(angle) - y * Math.sin(angle)
+        newPt[1] = x * Math.sin(angle) + y * Math.cos(angle)
+        return newPt
+      }
+
+      // Begin instance-specific code.
+
+      var svg = document.getElementById('svg')
+      var svgNS = svg.namespaceURI
+
+      var lightStyle = {stroke: '#ddd', fill: 'transparent', 'stroke-width': 2}
+      var darkStyle = {stroke: '#666', fill: 'transparent', 'stroke-width': 2}
+
+      if (!assert) {
+        function assert(condition, message) {
+          if (!condition) {
+            throw message || "Assertion failed"
+          }
+        }
+      }
+
+      var treeAngle = 0.3
+
+      // This expects (dx, dy) to be a unit vector.
+      function drawSubtree(x, y, dx, dy, size) {
+        assert(Math.abs(Math.sqrt(dx * dx + dy * dy) - 1) < 0.001)
+        if (size < 10) { return }
+        var line = add('line', darkStyle)
+        var x2 = x + size * dx
+        var y2 = y + size * dy
+        addAttributes(line, {x1: x, y1: y, x2: x2, y2: y2})
+        var newDir
+        newDir = rotatePt(dx, dy, treeAngle)
+        drawSubtree(x2, y2, newDir[0], newDir[1], 0.8 * size)
+        newDir = rotatePt(dx, dy, -treeAngle)
+        drawSubtree(x2, y2, newDir[0], newDir[1], 0.8 * size)
+      }
+
+      /*
+      var circle = add('circle', lightStyle)
+      addAttributes(circle, {cx: 300, cy: 500, r: 460})
+      */
+
+      // The following two shapes fit together so well that it feels like there
+      // might be some kind of property to extract explaining the fit.
+
+      var ellipse = add('ellipse', lightStyle)
+      addAttributes(ellipse, {cx:300, cy:230, rx:270, ry:193})
+
+      drawSubtree(300, 500, 0, -1, 100)
+
+      // TODO Draw some kind of histogram around the ellipse.
+
+
+
+
+
+    </script>
+  </body>
+</html>

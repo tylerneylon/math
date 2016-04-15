@@ -17,6 +17,16 @@ below.
 
 # An application
 
+I became interested in self-replicating functions by working on algorithms to
+procedurally generate 3d models of natural-looking trees. When algorithmically
+making trees, it makes sense to start from the idea of an
+[*L-system*](https://en.wikipedia.org/wiki/L-system), which can
+be visualized as a kind of fractal in which a trunk forks into branches that
+fork into smaller subranches, this process repeating infintely.
+
+![An example *L*-system](images/ellsystem1.png)
+
+
 TODO Mention L-systems and the idea of even canopy coverage.
 
 
