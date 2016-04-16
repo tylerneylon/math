@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
   <body>
-    <svg width="600" height="600" vertion="1.1"
+    <svg width="800" height="800" vertion="1.1"
     id="svg" xmlns="http://www.w3.org/2000/svg">
 
       <defs>
@@ -107,7 +107,7 @@
       }
 
       function addDot() {
-        var dotStyle = {stroke: 'transparent', fill: '#444', r: 5}
+        var dotStyle = {stroke: 'transparent', fill: 'rgba(1, 1, 1, 0.2)', r: 5}
         return add('circle', dotStyle)
       }
 
@@ -118,6 +118,16 @@
         newPt[0] = x * Math.cos(angle) - y * Math.sin(angle)
         newPt[1] = x * Math.sin(angle) + y * Math.cos(angle)
         return newPt
+      }
+
+      function lengthOfPt(pt) {
+        return Math.sqrt(pt[0] * pt[0] + pt[1] * pt[1])
+      }
+
+      function normalizePt(pt) {
+        var len = lengthOfPt(pt)
+        assert(len > 0)
+        return [pt[0] / len, pt[1] / len]
       }
 
       // Begin instance-specific code.
@@ -138,10 +148,15 @@
 
       var treeAngle = 0.3
 
+      var leafPts = []
+
       // This expects (dx, dy) to be a unit vector.
       function drawSubtree(x, y, dx, dy, size) {
         assert(Math.abs(Math.sqrt(dx * dx + dy * dy) - 1) < 0.001)
-        if (size < 10) { return }
+        if (size < 10) {
+          leafPts.push([x, y])
+          return
+        }
         var line = add('line', darkStyle)
         var x2 = x + size * dx
         var y2 = y + size * dy
@@ -162,9 +177,25 @@
       // might be some kind of property to extract explaining the fit.
 
       var ellipse = add('ellipse', lightStyle)
-      addAttributes(ellipse, {cx:300, cy:230, rx:270, ry:193})
+      var cx = 400, cy = 330
+      var rx = 270, ry = 193
+      addAttributes(ellipse, {cx:cx, cy:cy, rx:rx, ry:ry})
 
-      drawSubtree(300, 500, 0, -1, 100)
+      drawSubtree(400, 600, 0, -1, 100)
+
+      console.log('#leafPt = ' + leafPts.length)
+
+      var radiusFactor = 1.07
+
+      for (var i = 0; i < leafPts.length; i++) {
+        var pt = [leafPts[i][0] - cx, leafPts[i][1] - cy]
+        pt = [pt[0] / rx, pt[1] / ry]
+        pt = normalizePt(pt)
+        var rf = radiusFactor + 0.2 * Math.random()
+        pt = [pt[0] * rx * rf + cx, pt[1] * ry * rf + cy]
+        var dot = addDot()
+        addAttributes(dot, {cx: pt[0], cy: pt[1]})
+      }
 
       // TODO Draw some kind of histogram around the ellipse.
 
