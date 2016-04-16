@@ -15,7 +15,7 @@ notion of "strong resemblance" — although I plan to investigate more precise
 requirements
 below.
 
-# An application
+# Motivation
 
 I became interested in self-replicating functions by working on algorithms to
 procedurally generate 3d models of natural-looking trees. When algorithmically
@@ -24,10 +24,28 @@ making trees, it makes sense to start from the idea of an
 be visualized as a kind of fractal in which a trunk forks into branches that
 fork into smaller subranches, this process repeating infintely.
 
-![An example *L*-system](images/ellsystem1.png)
+I noticed that tree-like *L*-systems can have a large amount of
+"branch overlap" concentrated around a central area of their apparent surface.
+For example, consider the two images below. On the left is a standard
+*L*-system along with a histogram showing the density of leaf points along the
+edge. Intuitively, the leaf points achieve a reasonable density even toward the
+extreme angles of the tree's top. However, the density increases continuously
+toward the center.
 
+We could think of each leaf point as doing a certain amount
+of work by covering some area along the top of the *L*-system.
+Each subtree is so oblivious to its other subtrees that they overlap heavily,
+and the central leaf
+points end up being highly redundant. To illustrate this redundancy, the
+right-hand figure shows the exact same *L*-system with fully *half* the leaf
+points removed — yet the shape formed by the leaf points is only slightly
+changed.
 
-TODO Mention L-systems and the idea of even canopy coverage.
+![Left: An *L*-system; Right: the same system with two large subtrees removed.
+In both cases, a histogram of leaf point density is provided around an
+outer ellipse.](images/ellsystem2.png)
+
+TODO explain how this motivated the problem
 
 
 # Piece-wise linear cases
@@ -52,6 +70,17 @@ See my notes on Raney's lemmas for more examples.
 
 Here is a reference [@concrete].
 
+
+# Questions
+
+* The ellipse around my first *L*-system appears to fit surprisingly well.
+  Is there a nice way to discover when an ellipse and an *L*-system may fit like
+  this? Is there, perhaps, a series of shapes which converge on the system or
+  its leaf points, analogous to
+  [Mandelbrot set
+  lemniscates](http://mathworld.wolfram.com/MandelbrotSetLemniscate.html)?
+* The histogram around my first *L*-system appears simple in shape. Can its
+  shape be described precisely?
 
 # References
 

@@ -13,5 +13,5 @@ mv $TMP ${NAME}.html
 open ${NAME}.html
 
 # Make and open the pdf file.
-pandoc -t latex -o ${NAME}.pdf -s ${FLAGS}
-open ${NAME}.pdf
+#pandoc -t latex -o ${NAME}.pdf -s ${FLAGS}
+#open ${NAME}.pdf
