@@ -172,46 +172,17 @@
         path.push(1)
         for (var i = 0; i < path.length; i++) {
           x += digitValue * path[i]
-          digitValue *= 0.5
+          digitValue *= 1.07
         }
         path.pop()
         var angle = (maxAngle - minAngle) * x + minAngle
         return [Math.cos(angle), Math.sin(angle)]
       }
 
-      var centerPt = []
-
-      // This returns a point that's on the ray from centerPt in direction dir,
-      // as well as on the circle centered at fromPt with radius size. If there
-      // are two intersection points, this returns the one farther along the
-      // ray. If there are no intersection points, this throws an error.
-      function ptOnRayAndCircle(dir, fromPt, size) {
-        var ax = dir[0], bx = centerPt[0] - fromPt[0]
-        var ay = dir[1], by = centerPt[1] - fromPt[1]
-
-        // Set up toward using the quadratic equation.
-        var A =     ax * ax +     ay * ay
-        var B = 2 * ax * bx + 2 * ay * by
-        var C =     bx * bx +     by * by - size * size
-
-        assert(B * B >= 4 * A * C)
-
-        var delta = Math.sqrt(B * B - 4 * A * C) / (2 * A)
-        var mid   = -B / (2 * A)
-        var solns = [mid + delta, mid - delta]
-
-        var t = Math.max(solns[0], solns[1])
-
-        return [centerPt[0] + t * dir[0], centerPt[1] + t * dir[1]]
-      }
-
       // This expects (dx, dy) to be a unit vector.
       function drawSubtree(x, y, size, doDraw, path) {
         if (doDraw == undefined) doDraw = true
-        if (path   == undefined) {
-          path     = []
-          centerPt = [x, y - 30]
-        }
+        if (path   == undefined) path = []
         if (size < 10) {
           leafPts.push([x, y])
           return
@@ -219,9 +190,8 @@
 
         var dir = dirFromPath(path)
         var dx = dir[0], dy = dir[1]
-        var newPt = ptOnRayAndCircle(dir, [x, y], size)
-        var x2 = newPt[0]
-        var y2 = newPt[1]
+        var x2 = x + size * dx
+        var y2 = y + size * dy
         if (doDraw) {
           var line = add('line', darkStyle)
           addAttributes(line, {x1: x, y1: y, x2: x2, y2: y2})
@@ -229,6 +199,7 @@
         path.push(0)
         drawSubtree(x2, y2, 0.8 * size, doDraw, path)
         path.pop()
+        newDir = rotatePt(dx, dy, -treeAngle)
         path.push(1)
         drawSubtree(x2, y2, 0.8 * size, doDraw, path)
         path.pop()

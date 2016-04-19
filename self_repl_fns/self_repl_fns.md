@@ -22,7 +22,7 @@ procedurally generate 3d models of natural-looking trees. When algorithmically
 making trees, it makes sense to start from the idea of an
 [*L-system*](https://en.wikipedia.org/wiki/L-system), which can
 be visualized as a kind of fractal in which a trunk forks into branches that
-fork into smaller subranches, this process repeating infintely.
+fork into smaller subranches, this process repeating infinitely.
 
 I noticed that tree-like *L*-systems can have a large amount of
 "branch overlap" concentrated around a central area of their apparent surface.
@@ -37,15 +37,48 @@ of work by covering some area along the top of the *L*-system.
 Each subtree is so oblivious to its other subtrees that they overlap heavily,
 and the central leaf
 points end up being highly redundant. To illustrate this redundancy, the
-right-hand figure shows the exact same *L*-system with fully *half* the leaf
-points removed — yet the shape formed by the leaf points is only slightly
+right-hand figure shows the exact same *L*-system with essentially half of
+the tree removed — yet the shape formed by the leaf points is only slightly
 changed.
 
 ![Left: An *L*-system; Right: the same system with two large subtrees removed.
 In both cases, a histogram of leaf point density is provided around an
 outer ellipse.](images/ellsystem2.png)
 
-TODO explain how this motivated the problem
+One approach to smoothing out the distribution of leaf points would be to
+compromise the fractal-like nature of the system by choosing each line direction
+based on where it is within the fractal, rather than simply by making each
+branching point a smaller version of its parent.
+The line directions can be chosen so that
+the set of points at a fixed distance from the trunk point
+form a set of equidistant angles from a central point.
+The result is an extremely
+regular edge, as seen below.
+
+![A *L*-like system in which line directions are chosen to maximize the
+regularity of leaf point distribution.](images/well_distributed_ell_like_system.png)
+
+This is ideally efficient in that each leaf point is equally important
+in forming the shape of the
+system. However, this
+system is defined in terms of
+the path to each point. Is it possible to design a system so
+that the overall distribution of leaf points is fairly even, yet each subtree's
+shape is independent of its position within the full tree?
+
+If this goal were achieved, we would necessarily have a leaf point distribution
+which was the sum of two smaller versions of itself.
+Intuitively, the leaf-point distribution of any *L*-system is
+already a self-replication function
+because, if its two main subtrees have distribution functions $g_1$ and $g_2$,
+then the full tree has distribution function $f = g_1 + g_2$.
+I have to say *intuitively* here because I haven't formally defined the
+leaf-point distribution of an *L*-system.
+
+Thus, *L*-systems naturally coincide with self-replicating functions. Although
+there are probably self-replicating functions which do not correspond with
+*L*-systems, I nonetheless find it interesting to independently explore the
+world of self-replicating functions.
 
 
 # Piece-wise linear cases
@@ -59,6 +92,11 @@ $y = e^{-x^2/2}$.
 ![$y=e^{-x^2/2}$](images/normal@2x.png)
 
 
+# Leaf-point distributions of *L*-systems
+
+
+# Temporary example content
+
 **Lemma 1**\ 
 *Content of lemma 1, including some $\pi+3$ mathy bits.*
 
@@ -69,6 +107,8 @@ Content
 See my notes on Raney's lemmas for more examples.
 
 Here is a reference [@concrete].
+
+
 
 
 # Questions
