@@ -1,0 +1,195 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+    \usepackage{xltxtra,xunicode}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={Tyler Neylon},
+            pdftitle={Self-Replicating Functions},
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=black,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\setcounter{secnumdepth}{5}
+
+\title{Self-Replicating Functions}
+\author{Tyler Neylon}
+\date{204.2016}
+
+\begin{document}
+\maketitle
+
+These are notes I'm creating for myself as I explore functions \(f\)
+that can be written as a sum \(f = g_1 + g_2\) where \(g_1\) and \(g_2\)
+are the same up to symmetry, and both \(g_1\) and \(g_2\) strongly
+resemble the original function \(f\). When a function \(f\) has these
+properties, I informally call it a \emph{self-replicating function}.
+
+Like the word \emph{fractal}, this term is not rigorously defined --- in
+particular, it depends on the ambiguous notion of ``strong resemblance''
+--- although I plan to investigate more precise requirements below.
+
+\section{Motivation}\label{motivation}
+
+I became interested in self-replicating functions by working on
+algorithms to procedurally generate 3d models of natural-looking trees.
+When algorithmically making trees, it makes sense to start from the idea
+of an \href{https://en.wikipedia.org/wiki/L-system}{\emph{L-system}},
+which can be visualized as a kind of fractal in which a trunk forks into
+branches that fork into smaller subranches, this process repeating
+infinitely.
+
+I noticed that tree-like \emph{L}-systems can have a large amount of
+``branch overlap'' concentrated around a central area of their apparent
+surface. For example, consider the two images below. On the left is a
+standard \emph{L}-system along with a histogram showing the density of
+leaf points along the edge. Intuitively, the leaf points achieve a
+reasonable density even toward the extreme angles of the tree's top.
+However, the density increases continuously toward the center.
+
+We could think of each leaf point as doing a certain amount of work by
+covering some area along the top of the \emph{L}-system. Each subtree is
+so oblivious to its other subtrees that they overlap heavily, and the
+central leaf points end up being highly redundant. To illustrate this
+redundancy, the right-hand figure shows the exact same \emph{L}-system
+with essentially half of the tree removed --- yet the shape formed by
+the leaf points is only slightly changed.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{images/pdfs/ellsystem2.pdf}
+\caption{Left: An \emph{L}-system; Right: the same system with two large
+subtrees removed. In both cases, a histogram of leaf point density is
+provided around an outer ellipse.}
+\end{figure}
+
+One approach to smoothing out the distribution of leaf points would be
+to compromise the fractal-like nature of the system by choosing each
+line direction based on where it is within the fractal, rather than
+simply by making each branching point a smaller version of its parent.
+The line directions can be chosen so that the set of points at a fixed
+distance from the trunk point form a set of equidistant angles from a
+central point. The result is an extremely regular edge, as seen below.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{images/pdfs/well_distributed_ell_like_system.pdf}
+\caption{A \emph{L}-like system in which line directions are chosen to
+maximize the regularity of leaf point distribution.}
+\end{figure}
+
+This is ideally efficient in that each leaf point is equally important
+in forming the shape of the system. However, this system is defined in
+terms of the path to each point. Is it possible to design a system so
+that the overall distribution of leaf points is fairly even, yet each
+subtree's shape is independent of its position within the full tree?
+
+If this goal were achieved, we would necessarily have a leaf point
+distribution which was the sum of two smaller versions of itself.
+Intuitively, the leaf-point distribution of any \emph{L}-system is
+already a self-replication function because, if its two main subtrees
+have distribution functions \(g_1\) and \(g_2\), then the full tree has
+distribution function \(f = g_1 + g_2\). I have to say
+\emph{intuitively} here because I haven't formally defined the
+leaf-point distribution of an \emph{L}-system.
+
+Thus, \emph{L}-systems naturally coincide with self-replicating
+functions. Although there are probably self-replicating functions which
+do not correspond with \emph{L}-systems, I nonetheless find it
+interesting to independently explore the world of self-replicating
+functions.
+
+\section{Piece-wise linear cases}\label{piece-wise-linear-cases}
+
+\section{The normal curve}\label{the-normal-curve}
+
+The normal curve is described by \(y = e^{-x^2/2}\).
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{images/normal@2x.png}
+\caption{\(y=e^{-x^2/2}\)}
+\end{figure}
+
+\section{\texorpdfstring{Leaf-point distributions of
+\emph{L}-systems}{Leaf-point distributions of L-systems}}\label{leaf-point-distributions-of-l-systems}
+
+\section{Temporary example content}\label{temporary-example-content}
+
+\textbf{Lemma 1}~ \emph{Content of lemma 1, including some \(\pi+3\)
+mathy bits.}
+
+\subsection{Subheader}\label{subheader}
+
+Content
+
+See my notes on Raney's lemmas for more examples.
+
+Here is a reference (Knuth, Patashnik, and Graham 1998).
+
+\section{Questions}\label{questions}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  The ellipse around my first \emph{L}-system appears to fit
+  surprisingly well. Is there a nice way to discover when an ellipse and
+  an \emph{L}-system may fit like this? Is there, perhaps, a series of
+  shapes which converge on the system or its leaf points, analogous to
+  \href{http://mathworld.wolfram.com/MandelbrotSetLemniscate.html}{Mandelbrot
+  set lemniscates}?
+\item
+  The histogram around my first \emph{L}-system appears simple in shape.
+  Can its shape be described precisely?
+\end{itemize}
+
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
+
+Knuth, Donald E., Oren Patashnik, and Ronald L. Graham. 1998.
+\emph{Concrete Mathematics: A Foundation for Computer Science}.
+addison-wesley.
+
+\end{document}

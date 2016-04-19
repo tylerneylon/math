@@ -1,0 +1,283 @@
+<!DOCTYPE HTML>
+<html>
+  <body>
+    <svg width="800" height="800" vertion="1.1"
+    id="svg" xmlns="http://www.w3.org/2000/svg">
+
+      <defs>
+        <clipPath id="alphaClip">
+          <polygon id="clipAlpha" />
+        </clipPath>
+        <clipPath id="betaClip">
+          <polygon id="clipBeta" />
+        </clipPath>
+        <clipPath id="gammaClip">
+          <polygon id="clipGamma" />
+        </clipPath>
+      </defs>
+
+      <!-- The circle center and radius line. -->
+      <!--
+      <line x1="300" y1="300" x2="476.8" y2="123.2"
+      stroke="#ccc" fill="transparent" stroke-width="3" />
+      <circle cx="300" cy="300" r="9"
+      stroke="#ccc" fill="white" stroke-width="3"/>
+      -->
+
+      <!-- The triangles. -->
+      <!--
+      <polygon points="534.9 214.5, 65.1 214.5, 108.5 460.7"
+      stroke="#aaa" fill="transparent" stroke-width="3" />
+      <polygon points="300 300, 65.1 214.5, 108.5 460.7"
+      stroke="#aaa" fill="transparent" stroke-width="3" />
+      -->
+
+      <!--
+      <line x1="300" y1="300" x2="86.8" y2="337.6"
+      stroke="#aaa" stroke-width="3" />
+      -->
+
+      <!-- The points. -->
+      <!--
+      <circle cx="534.9" cy="214.5" r="6"
+      stroke="black" fill="black" />
+      <circle cx="65.1" cy="214.5" r="6"
+      stroke="black" fill="black" />
+      <circle cx="108.5" cy="460.7" r="6"
+      stroke="black" fill="black" />
+      <circle cx="300" cy="300" r="6"
+      stroke="black" fill="black" />
+      <circle cx="86.8" cy="337.6" r="6"
+      stroke="black" fill="black" />
+      -->
+
+      <!-- The circle. -->
+      <!--
+      <circle cx="300" cy="300" r="250"
+      stroke="black" fill="transparent" stroke-width="3" />
+      -->
+
+      <!--
+      <polygon points="20 20, 190 60, 70 400" stroke="black"
+      fill="transparent" stroke-width="3" />
+      -->
+    </svg>
+    <script>
+
+      var pi = Math.PI
+
+      function xOfRads(a) {
+        return cx + radius * Math.cos(a)
+      }
+
+      function yOfRads(a) {
+        return cy - radius * Math.sin(a)
+      }
+
+      function ptOfAngleInRadians(a) {
+        return xOfRads(a) + ' ' + yOfRads(a)
+      }
+
+      // This expects an array of radians as input.
+      // The output is formatted for use as a 'points' value in a polygon elt.
+      function polyPoints(arr) {
+        var s = []
+        for (var i = 0; i < arr.length; i++) {
+          s.push(ptOfAngleInRadians(arr[i]))
+        }
+        return s.join(', ')
+      }
+
+      function dist(x1, y1, x2, y2) {
+        var d1 = x1 - x2
+        var d2 = y1 - y2
+        return Math.sqrt(d1 * d1 + d2 * d2)
+      }
+
+      function addAttributes(elt, attr) {
+        for (var key in attr) {
+          elt.setAttribute(key, attr[key])
+        }
+        return elt
+      }
+
+      function add(eltName, attr) {
+        var elt = document.createElementNS(svgNS, eltName)
+        svg.appendChild(elt)
+        if (attr) addAttributes(elt, attr)
+        return elt
+      }
+
+      function addDot() {
+        var dotStyle = {stroke: 'transparent', fill: 'rgba(100, 100, 100, 0.2)', r: 5}
+        return add('circle', dotStyle)
+      }
+
+      // [ cos(a)  -sin(a) ]  [ x ]
+      // [ sin(a)   cos(a) ]  [ y ]
+      function rotatePt(x, y, angle) {
+        var newPt = []
+        newPt[0] = x * Math.cos(angle) - y * Math.sin(angle)
+        newPt[1] = x * Math.sin(angle) + y * Math.cos(angle)
+        return newPt
+      }
+
+      function lengthOfPt(pt) {
+        return Math.sqrt(pt[0] * pt[0] + pt[1] * pt[1])
+      }
+
+      function normalizePt(pt) {
+        var len = lengthOfPt(pt)
+        assert(len > 0)
+        return [pt[0] / len, pt[1] / len]
+      }
+
+      function realMod(a, b) {
+        var c = a % b
+        if (c < 0) { c += b }
+        return c
+      }
+
+      // This returns a value in the range [0, 2 * pi).
+      function angleOfPt(pt) {
+        var angle = Math.atan2(pt[1], pt[0])  // Yep, this order is correct.
+        if (angle < 0) angle += 2 * pi
+        return angle
+      }
+
+      // Begin instance-specific code.
+
+      var svg = document.getElementById('svg')
+      var svgNS = svg.namespaceURI
+
+      var lightStyle = {stroke: '#ddd', fill: 'transparent', 'stroke-width': 2}
+      var darkStyle = {stroke: '#666', fill: 'transparent', 'stroke-width': 2}
+
+      if (!assert) {
+        function assert(condition, message) {
+          if (!condition) {
+            throw message || "Assertion failed"
+          }
+        }
+      }
+
+      var treeAngle = 0.3
+
+      var leafPts = []
+
+      // This expects (dx, dy) to be a unit vector.
+      function drawSubtree(x, y, dx, dy, size, doDraw, path) {
+        if (doDraw == undefined) doDraw = true
+        if (path   == undefined) path = []
+        assert(Math.abs(Math.sqrt(dx * dx + dy * dy) - 1) < 0.001)
+        if (size < 10) {
+          leafPts.push([x, y])
+          return
+        }
+
+        if (path.length >= 2 &&
+            (path[0] == 0 && path[1] == 1) ||
+            (path[0] == 1 && path[1] == 0)) {
+          return
+        }
+
+        var x2 = x + size * dx
+        var y2 = y + size * dy
+        if (doDraw) {
+          var line = add('line', darkStyle)
+          addAttributes(line, {x1: x, y1: y, x2: x2, y2: y2})
+        }
+        var newDir
+        newDir = rotatePt(dx, dy, treeAngle)
+        path.push(0)
+        drawSubtree(x2, y2, newDir[0], newDir[1], 0.8 * size, doDraw, path)
+        path.pop()
+        newDir = rotatePt(dx, dy, -treeAngle)
+        path.push(1)
+        drawSubtree(x2, y2, newDir[0], newDir[1], 0.8 * size, doDraw, path)
+        path.pop()
+      }
+
+      /*
+      var circle = add('circle', lightStyle)
+      addAttributes(circle, {cx: 300, cy: 500, r: 460})
+      */
+
+      // The following two shapes fit together so well that it feels like there
+      // might be some kind of property to extract explaining the fit.
+
+      var cx = 400, cy = 330
+      var rx = 270, ry = 193
+
+      var ellipse = add('ellipse', lightStyle)
+      addAttributes(ellipse, {cx:cx, cy:cy, rx:rx, ry:ry})
+
+      // Don't draw the tree the first time; just compute leafPts.
+      // This is so the tree can be drawn last and overlap other things.
+      drawSubtree(400, 600, 0, -1, 100, false)
+
+      console.log('#leafPt = ' + leafPts.length)
+
+      // Set up the histogram data.
+
+      var numBuckets = 64
+      var bucketAngleSize = 2 * pi / numBuckets
+      var hist = []
+      for (var i = 0; i < numBuckets; i++) hist[i] = 0
+
+      function bucketOfAngle(angle) {
+        angle = realMod(angle, 2 * pi)
+        var b = Math.floor(angle / bucketAngleSize)
+        assert(0 <= b && b < numBuckets)
+        return b
+      }
+
+      var histMax = 0
+      for (var i = 0; i < leafPts.length; i++) {
+        var pt = [leafPts[i][0] - cx, leafPts[i][1] - cy]
+        pt = [pt[0] / rx, pt[1] / ry]
+        var angle = angleOfPt(pt)
+        var b = bucketOfAngle(angleOfPt(pt))
+        hist[b]++
+        histMax = Math.max(histMax, hist[b])
+      }
+
+      // Draw a polyline histogram around the ellipse.
+      var numHistLinePts = 200
+      var histHeight     = 40
+      var pts            = []
+      for (var i = 0; i <= numHistLinePts; i++) {
+        var angle = i / numHistLinePts * 2 * pi
+        var b     = bucketOfAngle(angle)
+        var prevB = (b + numBuckets - 1) % numBuckets
+        var nextB = (b + 1) % numBuckets
+        var h     = 0.25 * hist[prevB] + 0.5 * hist[b] + 0.25 * hist[nextB]
+        h         = h / histMax  // h is now a height in [0, 1].
+        var pt    = [Math.cos(angle) * rx, Math.sin(angle) * ry]
+        var ptDir = normalizePt(pt)
+        pt = [pt[0] + histHeight * h * ptDir[0] + cx,
+              pt[1] + histHeight * h * ptDir[1] + cy]
+        pts.push(pt[0], pt[1])
+      }
+
+      var polyline = add('polyline', lightStyle)
+      addAttributes(polyline, {points: pts.join(' ')})
+      drawSubtree(400, 600, 0, -1, 100)
+
+      /*
+      var radiusFactor = 1.07
+
+      for (var i = 0; i < leafPts.length; i++) {
+        var pt = [leafPts[i][0] - cx, leafPts[i][1] - cy]
+        pt = [pt[0] / rx, pt[1] / ry]
+        pt = normalizePt(pt)
+        var rf = radiusFactor + 0.2 * Math.random()
+        pt = [pt[0] * rx * rf + cx, pt[1] * ry * rf + cy]
+        var dot = addDot()
+        addAttributes(dot, {cx: pt[0], cy: pt[1]})
+      }
+      */
+
+    </script>
+  </body>
+</html>
