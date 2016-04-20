@@ -89,10 +89,18 @@ world of self-replicating functions.
 The normal curve is described by
 $y = e^{-x^2/2}$.
 
-![$y=e^{-x^2/2}$](images/normal@2x.png)
+![The normal curve: $y=e^{-x^2/2}$.](images/normal3.png)
 
 
 # Leaf-point distributions of *L*-systems
+
+
+# Fractal functions
+
+This section is for functions similar to the Cantor diagonal.
+It may turn out that I can't find any functions that fit here, or that the
+*L*-systems distributions includes this case, or even that I can prove that no
+functions could exist here (as far as I know).
 
 
 # Temporary example content

@@ -7,11 +7,15 @@ FLAGS="-s --filter pandoc-crossref -M eqnPrefix='' -M linkcolor=black --number-s
 # Make and open the html file.
 pandoc --mathjax --template=template.html ${FLAGS} > ${NAME}.html
 # Move captions to be before figures in the html file.
-TMP=$(mktemp XXXX)
+TMP=$(mktemp tmp_XXXX)
 cat ${NAME}.html | awk '{if(x) { print $0; print x; x = "" } else if (/<img/) { x = $0 } else { print $0 }}' > ${TMP}
-mv $TMP ${NAME}.html
+mv ${TMP} ${NAME}.html
 open ${NAME}.html
 
 # Make and open the pdf file.
 pandoc -t latex -o ${NAME}.tex -s ${FLAGS}
-#open ${NAME}.pdf
+TMP=$(mktemp tmp_XXXX)
+sed 's|images/\(.*\)\.png|images/pdfs/\1.pdf|' self_repl_fns.tex > ${TMP}
+mv ${TMP} ${NAME}.tex
+pdflatex ${NAME}.tex
+open ${NAME}.pdf
