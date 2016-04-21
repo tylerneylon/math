@@ -18,4 +18,4 @@ TMP=$(mktemp tmp_XXXX)
 sed 's|images/\(.*\)\.png|images/pdfs/\1.pdf|' self_repl_fns.tex > ${TMP}
 mv ${TMP} ${NAME}.tex
 pdflatex ${NAME}.tex
-open ${NAME}.pdf
+#open ${NAME}.pdf

@@ -245,7 +245,7 @@ div.table-wrapper { overflow-x: auto;
 
 h1 .code, h2 .code, h3 .code { font-size: 0.80em; }
 
-.marginnote .code, .sidenote .code { font-size: 1rem; }
+.marginnote .code, .sidenote .code, p.caption .code { font-size: 1rem; }
 
 pre.code { width: 52.5%;
            padding-left: 2.5%;
@@ -264,8 +264,9 @@ label.sidenote-number { display: inline; }
 label.margin-toggle:not(.sidenote-number) { display: none; }
 
 @media (max-width: 760px) { label.margin-toggle:not(.sidenote-number) { display: inline; }
-                            .sidenote, .marginnote { display: none; }
+                            .sidenote, .marginnote, p.caption { display: none; }
                             .margin-toggle:checked + .sidenote,
+                            .margin-toggle:checked + p.caption,
                             .margin-toggle:checked + .marginnote { display: block;
                                                                    float: left;
                                                                    left: 1rem;
@@ -289,4 +290,6 @@ label.margin-toggle:not(.sidenote-number) { display: none; }
                                              position: relative; }
                             div.table-wrapper, table, table.booktabs { width: 85%; }
                             div.table-wrapper { border-right: 1px solid #efefef; }
+                            div.figure { max-width: 90%; }
+                            div.title { width: 90%; }
                             img { width: 100%; } }
