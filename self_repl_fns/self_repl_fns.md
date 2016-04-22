@@ -4,7 +4,8 @@
 
 These are notes I'm creating for myself as I explore
 functions $f$ that can be written as a sum $f = g_1 + g_2$ where $g_1$ and $g_2$
-are the same up to symmetry, and both $g_1$ and $g_2$ strongly resemble the
+are the same up to symmetry, and both $g_1$ and $g_2$ strongly resemble shifts
+of the
 original function $f$.
 When a function $f$ has these properties, I informally call it a
 *self-replicating function*.
@@ -81,7 +82,57 @@ there are probably self-replicating functions which do not correspond with
 world of self-replicating functions.
 
 
-# Piece-wise linear cases
+# Simple cases
+
+Technically, any polynomial can be seen as a kind of
+self-replicating function. For example, if $f(x) = x^2$,
+
+$$\begin{array}{rcl}
+  g_1(x) & = & (x + 1)^2 - 1 = x^2 + 2x, \quad \text{and} \\
+  g_2(x) & = & (x - 1)^2 - 1 = x^2 - 2x, \\
+\end{array}$$
+
+then $f = g_1 + g_2$, and each $g_i$ is a shift of the original function $f$.
+In general, if $f(x) = ax^n + O(x^{n-1})$ then we can choose
+$g_i(x) = a(x\pm 1)^n + O(x^{n-1})$ so that $f = g_1 + g_2$,
+and each $g_i$ has
+
+$$ \lim_{x\to\pm\infty}\frac{g_i(x)}{f(x)} = 1,$$
+
+which is good enough for me to somewhat subjectively say that they strongly
+resemble shifts of $f$.
+
+However, the original motivation for self-replicating functions is based on
+distribution functions, so the rest of this note focuses on functions $f$
+for which $\lim_{x\to\pm\infty}f(x) = 0$.
+
+Another simple approach would be to set $g_1 = g_2 = \frac{1}{2}f$ for
+any function $f$. This is not very interesting, and the word *shift* in the
+informal definition of a self-replicating function is intended to defeat this
+trivial case. That is, each $g_i$ is expected to be similar to a translation of
+$f$, such as $f(x-1)$ or $f(x+1)$.
+
+TODO In the paragraph below, add citation of proper reference for the $[P(x)]$
+notation.
+
+A very simple function that meets all our requirements so far is the indicator
+function of an interval.
+Given a boolean property $P(x)$ of $x$, I'll use Knuth's notation
+$[P(x)]$ to denote the $\{0,1\}-$valued function of $x$ with value 1 iff
+$P(x)$ is true. Using this, we can denote a function with value 1 on
+half-open interval $[a,b)$, and 0 elsewhere, as
+
+$$f_{[a, b)}(x) = \big[x\in[a, b)\big].$$
+
+Then
+
+$$f_{[0,1)} = g_{[0,1/2)} + g_{[1/2,1)}.$$
+
+TODO Add an image here giving a graphical equation.
+
+We can consider the above $g-$functions as horizontally scaled versions of the
+original. It's not clear that they're "shifts," but this kind of flexibility is
+the reason the definition of a self-replicating function is informal.
 
 
 # The normal curve
