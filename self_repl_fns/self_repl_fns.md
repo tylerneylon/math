@@ -99,7 +99,7 @@ and each $g_i$ has
 
 $$ \lim_{x\to\pm\infty}\frac{g_i(x)}{f(x)} = 1,$$
 
-which is good enough for me to somewhat subjectively say that they strongly
+which is good enough for me to subjectively say that they strongly
 resemble shifts of $f$.
 
 However, the original motivation for self-replicating functions is based on
@@ -128,7 +128,8 @@ Then
 
 $$f_{[0,1)} = g_{[0,1/2)} + g_{[1/2,1)}.$$
 
-TODO Add an image here giving a graphical equation.
+![Visual representation of the addition $g_1 + g_2 = f$ for the indicator
+functions of intervals.](images/added_intervals.png)
 
 We can consider the above $g-$functions as horizontally scaled versions of the
 original. It's not clear that they're "shifts," but this kind of flexibility is

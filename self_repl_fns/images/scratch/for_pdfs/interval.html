@@ -239,6 +239,17 @@
       var ySize = 280
       addAttributes(svg, {width: xSize, height: ySize})
 
+      function areLinear(x1, y1, x2, y2, x3, y3) {
+        var dx1 = x2 - x1, dy1 = y2 - y1
+        var dx2 = x3 - x2, dy2 = y3 - y2
+
+        // Intuitively, we want to check that dx2 / dx1 == dy2 / dy1; this is
+        // the same as dy1 * dx2 == dx1 * dy2, and this latter form handles edge
+        // cases where the first expression would have hit a division by zero.
+
+        return (Math.abs(dy1 * dx2 - dx1 * dy2) < 0.001)
+      }
+
       var numFnPts = 300
 
       function drawFn(xMin, xMax, yMin, yMax, opts, fn) {
@@ -310,43 +321,65 @@
           }
         }
 
-  var xDelta = (xMax - xMin) / (numFnPts - 1)
-  var pts = []
-  var xPrev = xMin
-  var prevCanvasY = false
+        var xDelta = (xMax - xMin) / (numFnPts - 1)
+        var pts = []
+        var xPrev = xMin
+        var prevCanvasY = false
 
-  for (var i = 0; i < numFnPts; i++) {
-    var x, xTarget = xMin + i * xDelta
-    do {
-      x = xTarget
-      var y = fn(x)
-      var canvasPt = canvasPtFromXY(x, y)
-      var perc = 0.5
-      while (prevCanvasY && Math.abs(prevCanvasY - canvasPt[1]) > 30 &&
-             perc > 0.0001) {
-        x = (1 - perc) * xPrev + perc * xTarget
-        var y = fn(x)
-        var canvasPt = canvasPtFromXY(x, y)
-        perc /= 2
-      }
-      pts.push(canvasPt[0], canvasPt[1])
-      xPrev = x
-      prevCanvasY = canvasPt[1]
-    } while (x < xTarget);
-  }
+        for (var i = 0; i < numFnPts; i++) {
+          var x, xTarget = xMin + i * xDelta
+          do {
+            x = xTarget
+            var y = fn(x)
+            var canvasPt = canvasPtFromXY(x, y)
+            var perc = 0.5
+            while (prevCanvasY && Math.abs(prevCanvasY - canvasPt[1]) > 30 &&
+                   perc > 0.001) {
+              x = (1 - perc) * xPrev + perc * xTarget
+              var y = fn(x)
+              var canvasPt = canvasPtFromXY(x, y)
+              perc /= 2
+            }
+            var n = pts.length
+            if (n >= 4 && areLinear(pts[n - 4], pts[n - 3],
+                                    pts[n - 2], pts[n - 1],
+                                    canvasPt[0], canvasPt[1])) {
+              pts.pop()
+              pts.pop()
+            }
+            pts.push(canvasPt[0], canvasPt[1])
+            xPrev = x
+            prevCanvasY = canvasPt[1]
+          } while (x < xTarget);
+        }
+
+        console.log('pts.length =', pts.length)  // TEMP
 
         var polyline = add('polyline', darkStyle)
         addAttributes(polyline, {points: pts.join(' ')})
       }
 
-      numFnPts = 200
+      numFnPts = 400
 
       var opts = {doEqualizeAxes: true, doDrawAxes: true}
+
       drawFn(-2.9, 2.9, -0.1, 1.1, opts, function (x) {
         return (0 <= x && x < 1 ? 1 : 0)
-        //return Math.exp(-x * x)
-        //return x * x
       })
+
+      // Below is test code of the drawFn function.
+
+      if (false) {
+
+        drawFn(-2.9, 2.9, -0.1, 1.1, opts, function (x) {
+          return 1/x
+        })
+
+        drawFn(-2, 2, -2, 2, opts, function (x) {
+          return 1/x
+        })
+
+      }
 
     </script>
   </body>
