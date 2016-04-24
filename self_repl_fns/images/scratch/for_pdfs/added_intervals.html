@@ -44,7 +44,7 @@
       }
 
       var xSize = 1232
-      var ySize = 340
+      var ySize =  940
       addAttributes(svg, {width: xSize, height: ySize})
 
       var xOffset = 0
@@ -67,7 +67,12 @@
       // It keeps the old frame as a subframe, and maintains the same center pt.
       // In other words, this may increase the frame just enough so that all
       // axes have the same scale.
-      function equalizeAxes(xMin, xMax, yMin, yMax) {
+      function equalizeAxes(frame) {
+        var xMin = frame[0]
+        var xMax = frame[1]
+        var yMin = frame[2]
+        var yMax = frame[3]
+
         var xRatio = (xMax - xMin) / xSize
         var yRatio = (yMax - yMin) / ySize
         if (xRatio < yRatio) {
@@ -110,7 +115,7 @@
             var canvasPt = canvasPtFromXY(x, y)
             var perc = 0.5
             while (prevCanvasY && Math.abs(prevCanvasY - canvasPt[1]) > 30 &&
-                   perc > 0.001) {
+                   Math.abs(x - xPrev) > 0.001) {
               x = (1 - perc) * xPrev + perc * xTarget
               var y = fn(x)
               var canvasPt = canvasPtFromXY(x, y)
@@ -138,7 +143,56 @@
 
       }
 
-      function shapeBelowFn1AboveFn2(xMin, xMax, yMin, yMax, opts, fn1, fn2) {
+      function drawAxes(frame) {
+        var xMin = frame[0]
+        var xMax = frame[1]
+        var yMin = frame[2]
+        var yMax = frame[3]
+
+        function canvasPtFromXY(x, y) {
+          var xPerc = (x - xMin) / (xMax - xMin)
+          var yPerc = (y - yMin) / (yMax - yMin)
+          return [xPerc * xSize + xOffset, ySize - yPerc * ySize + yOffset]
+        }
+
+        function drawTickAroundPt(p, dir) {
+          var tick = add('line', lightStyle)
+          var a = [p[0], p[1]]
+          a[dir] -= 5
+          var b = [p[0], p[1]]
+          b[dir] += 5
+          addAttributes(tick, {x1: a[0], y1: a[1], x2: b[0], y2: b[1]})
+        }
+
+        // The x-axis.
+        var leftPt  = canvasPtFromXY(xMin, 0)
+        var rightPt = canvasPtFromXY(xMax, 0)
+        if (0 <= leftPt[1] && leftPt[1] < (ySize + yOffset)) {
+          var xAxis = add('line', lightStyle)
+          addAttributes(xAxis, {x1:  leftPt[0], y1:  leftPt[1],
+                                x2: rightPt[0], y2: rightPt[1]})
+          for (var x = Math.ceil(xMin); x <= Math.floor(xMax); x++) {
+            var p = canvasPtFromXY(x, 0)
+            drawTickAroundPt(p, 1)  // 1 == vertical tick
+          }
+        }
+
+        // The y-axis.
+        var botPt = canvasPtFromXY(0, yMin)
+        var topPt = canvasPtFromXY(0, yMax)
+        if (0 <= botPt[0] && botPt[0] < (xSize + xOffset)) {
+          var yAxis = add('line', lightStyle)
+          addAttributes(yAxis, {x1: botPt[0], y1: botPt[1],
+                                x2: topPt[0], y2: topPt[1]})
+          for (var y = Math.ceil(yMin); y <= Math.floor(yMax); y++) {
+            var p = canvasPtFromXY(0, y)
+            drawTickAroundPt(p, 0)  // 0 == horizontal tick
+          }
+        }
+      }
+
+      // frame = [xMin, xMax, yMin, yMax]
+      function shapeBelowFn1AboveFn2(frame, opts, fn1, fn2) {
 
         if (opts && fn2 === undefined) {
           fn2  = fn1
@@ -146,9 +200,8 @@
           opts = null
         }
 
-        var frame = [xMin, xMax, yMin, yMax]
         if (opts && opts.doEqualizeAxes) {
-          frame = equalizeAxes(xMin, xMax, yMin, yMax)
+          frame = equalizeAxes(frame)
         }
 
         var pts1 = ptsForFn(frame, fn1)
@@ -167,64 +220,20 @@
         return poly
       }
 
-      function drawFn(xMin, xMax, yMin, yMax, opts, fn) {
+      // frame = [xMin, xMax, yMin, yMax]
+      function drawFn(frame, opts, fn) {
 
         if (opts && fn === undefined) {
           fn   = opts
           opts = null
         }
 
-        var frame = [xMin, xMax, yMin, yMax]
         if (opts && opts.doEqualizeAxes) {
-          frame = equalizeAxes(xMin, xMax, yMin, yMax)
-          xMin = frame[0]
-          xMax = frame[1]
-          yMin = frame[2]
-          yMax = frame[3]
-        }
-
-        function canvasPtFromXY(x, y) {
-          var xPerc = (x - xMin) / (xMax - xMin)
-          var yPerc = (y - yMin) / (yMax - yMin)
-          return [xPerc * xSize + xOffset, ySize - yPerc * ySize + yOffset]
-        }
-
-        function drawTickAroundPt(p, dir) {
-          var tick = add('line', lightStyle)
-          var a = [p[0], p[1]]
-          a[dir] -= 5
-          var b = [p[0], p[1]]
-          b[dir] += 5
-          addAttributes(tick, {x1: a[0], y1: a[1], x2: b[0], y2: b[1]})
+          frame = equalizeAxes(frame)
         }
 
         if (opts && opts.doDrawAxes) {
-
-          // The x-axis.
-          var leftPt  = canvasPtFromXY(xMin, 0)
-          var rightPt = canvasPtFromXY(xMax, 0)
-          if (0 <= leftPt[1] && leftPt[1] < (ySize + yOffset)) {
-            var xAxis = add('line', lightStyle)
-            addAttributes(xAxis, {x1:  leftPt[0], y1:  leftPt[1],
-                                  x2: rightPt[0], y2: rightPt[1]})
-            for (var x = Math.ceil(xMin); x <= Math.floor(xMax); x++) {
-              var p = canvasPtFromXY(x, 0)
-              drawTickAroundPt(p, 1)  // 1 == vertical tick
-            }
-          }
-
-          // The y-axis.
-          var botPt = canvasPtFromXY(0, yMin)
-          var topPt = canvasPtFromXY(0, yMax)
-          if (0 <= botPt[0] && botPt[0] < (xSize + xOffset)) {
-            var yAxis = add('line', lightStyle)
-            addAttributes(yAxis, {x1: botPt[0], y1: botPt[1],
-                                  x2: topPt[0], y2: topPt[1]})
-            for (var y = Math.ceil(yMin); y <= Math.floor(yMax); y++) {
-              var p = canvasPtFromXY(0, y)
-              drawTickAroundPt(p, 0)  // 0 == horizontal tick
-            }
-          }
+          drawAxes(frame)
         }
 
         var pts = ptsForFn(frame, fn)
@@ -240,20 +249,25 @@
 
       var opts = {doEqualizeAxes: true, doDrawAxes: true}
 
-      var w = 350, h = 100
-      var xMargin = 170
+      //var w = 280, h = 250
+      var w = 450, h = 400
+      var xMargin = 40
       var xSizeOrig = xSize
       var ySizeOrig = ySize
 
       xSize = w
       ySize = h
 
-      // Setup graph 1: f_[0, 1/2).
+      var frame = [-0.1, 1, -0.1, 1.1]
+
+
+
+      // --- Setup graph 1: f_[0, 1/2).
 
       xOffset = xMargin
       yOffset = 0
 
-      var poly = shapeBelowFn1AboveFn2(-2.9, 2.9, -0.1, 1.1, opts,
+      var poly = shapeBelowFn1AboveFn2(frame, opts,
       function (x) {
         return (0 <= x && x < 0.5 ? 1 : 0)
       }, function (x) {
@@ -262,17 +276,19 @@
       addAttributes(poly, {fill: '#D8E2C9'})
       //addAttributes(poly, {fill: '#92B06A'})
 
-      poly = drawFn(-2.9, 2.9, -0.1, 1.1, opts, function (x) {
+      poly = drawFn(frame, opts, function (x) {
         return (0 <= x && x < 0.5 ? 1 : 0)
       })
       addAttributes(poly, {stroke: '#576544'})
       //addAttributes(poly, {stroke: '#92B06A'})
 
-      // Setup graph 2: f_[1/2, 1).
+
+
+      // --- Setup graph 2: f_[1/2, 1).
 
       yOffset = h + 140  // 140 appears to be a good vert space.
 
-      poly = shapeBelowFn1AboveFn2(-2.9, 2.9, -0.1, 1.1, opts,
+      poly = shapeBelowFn1AboveFn2(frame, opts,
       function (x) {
         return (0.5 <= x && x < 1 ? 1 : 0)
       }, function (x) {
@@ -281,20 +297,22 @@
       addAttributes(poly, {fill: '#F0E0C5'})
       //addAttributes(poly, {fill: '#E19D29'})
 
-      poly = drawFn(-2.9, 2.9, -0.1, 1.1, opts, function (x) {
+      poly = drawFn(frame, opts, function (x) {
         return (0.5 <= x && x < 1 ? 1 : 0)
       })
       addAttributes(poly, {stroke: '#AB9269'})
 
-      // Setup graph 3: f_[0, 1).
+
+
+      // --- Setup graph 3: f_[0, 1).
 
       xOffset = xSizeOrig - w - xMargin
-      yOffset = (ySizeOrig - h) / 2
+      yOffset = (h + 140) / 2
 
       // TODO Update interface so that frame is *always* passed as an array.
 
       /*
-      var p = shapeBelowFn1AboveFn2(-2.9, 2.9, -0.1, 1.1, opts, function (x) {
+      var p = shapeBelowFn1AboveFn2(frame, opts, function (x) {
         return x * x
       }, function (x) {
         return 0
@@ -302,7 +320,7 @@
       addAttributes(p, {fill: 'red'})
       */
 
-      poly = shapeBelowFn1AboveFn2(-2.9, 2.9, -0.1, 1.1, opts,
+      poly = shapeBelowFn1AboveFn2(frame, opts,
       function (x) {
         return (0.5 <= x && x < 1 ? 1 : 0)
       }, function (x) {
@@ -310,7 +328,7 @@
       })
       addAttributes(poly, {fill: '#F0E0C5', stroke: 'transparent'})
 
-      var poly = shapeBelowFn1AboveFn2(-2.9, 2.9, -0.1, 1.1, opts,
+      var poly = shapeBelowFn1AboveFn2(frame, opts,
       function (x) {
         return (0 <= x && x < 0.5 ? 1 : 0)
       }, function (x) {
@@ -318,7 +336,7 @@
       })
       addAttributes(poly, {fill: '#D8E2C9', stroke: 'transparent'})
 
-      drawFn(-2.9, 2.9, -0.1, 1.1, opts, function (x) {
+      drawFn(frame, opts, function (x) {
         return (0 <= x && x < 1 ? 1 : 0)
         //return Math.exp(-x * x)
       })
