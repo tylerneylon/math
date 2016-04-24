@@ -129,7 +129,7 @@ Then
 $$f_{[0,1)} = g_{[0,1/2)} + g_{[1/2,1)}.$$
 
 ![Visual representation of the addition $g_1 + g_2 = f$ for the indicator
-functions of intervals.](images/added_intervals.png)
+functions of intervals.](images/added_intervals2.png)
 
 We can consider the above $g-$functions as horizontally scaled versions of the
 original. It's not clear that they're "shifts," but this kind of flexibility is
