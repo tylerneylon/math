@@ -112,27 +112,25 @@ informal definition of a self-replicating function is intended to defeat this
 trivial case. That is, each $g_i$ is expected to be similar to a translation of
 $f$, such as $f(x-1)$ or $f(x+1)$.
 
-TODO In the paragraph below, add citation of proper reference for the $[P(x)]$
-notation.
+The next function I'll describe is simple and meets all of the requirements so
+far. An *indicator function* is a function taking on only the value 0 or 1; it's
+also sometimes referred to as a *characteristic function*.
+If $f$ is an indicator function, then you can think of those $x$ with $f(x) = 1$
+as belonging to the subset of the domain which is *indicated* by the function.
+It's handy to use the following bracket notation of Knuth and
+others:
+given any boolean predicate $P(x)$, let $[P(x)]$ denote the value 1 when $P(x)$
+is true, and false otherwise [@taocp1].
 
-A very simple function that meets all our requirements so far is the indicator
-function of an interval.
-Given a boolean property $P(x)$ of $x$, I'll use Knuth's notation
-$[P(x)]$ to denote the $\{0,1\}-$valued function of $x$ with value 1 iff
-$P(x)$ is true. Using this, we can denote a function with value 1 on
-half-open interval $[a,b)$, and 0 elsewhere, as
+Given a half-open interval $[a, b)$, define $I_{[a, b)}$ to be the function
+$[x\in[a, b)]$. The following equation shows how such indicator functions can be
+considered simple self-replicating functions:
+$I_{[0, 2)} = I_{[0, 1)} + I_{[1, 2)}$.
 
-$$f_{[a, b)}(x) = \big[x\in[a, b)\big].$$
+![Visual representation of the addition of indicator functions of intervals.](images/added_intervals3.png)
 
-Then
-
-$$f_{[0,1)} = g_{[0,1/2)} + g_{[1/2,1)}.$$
-
-![Visual representation of the addition $g_1 + g_2 = f$ for the indicator
-functions of intervals.](images/added_intervals2.png)
-
-We can consider the above $g-$functions as horizontally scaled versions of the
-original. It's not clear that they're "shifts," but this kind of flexibility is
+One can consider the addends above as horizontally scaled versions of their
+sum. It's not clear that they're "shifts," but this kind of flexibility is
 the reason the definition of a self-replicating function is informal.
 
 
