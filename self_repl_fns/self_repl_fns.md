@@ -127,12 +127,30 @@ $[x\in[a, b)]$. The following equation shows how such indicator functions can be
 considered simple self-replicating functions:
 $I_{[0, 2)} = I_{[0, 1)} + I_{[1, 2)}$.
 
-![Visual representation of the addition of indicator functions of intervals.](images/added_intervals3.png)
+![Visual representation of the addition of indicator functions of intervals.](images/added_intervals4.png)
 
-One can consider the addends above as horizontally scaled versions of their
-sum. It's not clear that they're "shifts," but this kind of flexibility is
-the reason the definition of a self-replicating function is informal.
+In order to match the equation $f = g_1 + g_2$, emphasizing the similarity
+between the $g_i$'s and $f$, we can set $f = I_{[0, 2)}$,
+$g_1 = f(2x) = I_{[0, 1)}$, and $g_2 = f(2(x - 1)) = I_{[1, 2)}$.
 
+Things get more interesting when $g_1(x) g_2(x) \ne 0$ for some $x$.
+To this end, define the *ramp function* for values $a,b,c,d$ with
+$a < b < c < d$ via
+
+$$ J_{a,b,c,d} = \begin{cases}
+(x - a) / (b - a) & \text{if } x \in [a, b), \\
+1 & \text{if } x \in [b, c), \\
+(d - x) / (d - c) & \text{if } x \in [c, d), \text{and} \\
+0 & \text{otherwise.} \\
+\end{cases}$$
+
+Then $J_{0,1,4,5} = J_{0,1,2,3} + J_{2,3,4,5}$.
+
+TODO Place the appropriate image here.
+
+NEXT up mention that the ramps need not be linear nor symmetric;
+I'm interested in exploring fractal-esque, nonflat midsections, even though this
+would most likely not be true scales of the sum
 
 # The normal curve
 

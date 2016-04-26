@@ -43,13 +43,6 @@
         }
       }
 
-      var xSize = 1232
-      var ySize =  540
-      addAttributes(svg, {width: xSize, height: ySize})
-
-      var xOffset = 0
-      var yOffset = 400
-
       function areLinear(x1, y1, x2, y2, x3, y3) {
         var dx1 = x2 - x1, dy1 = y2 - y1
         var dx2 = x3 - x2, dy2 = y3 - y2
@@ -60,6 +53,13 @@
 
         return (Math.abs(dy1 * dx2 - dx1 * dy2) < 0.001)
       }
+
+      var xSize = 1232
+      var ySize =  360
+      addAttributes(svg, {width: xSize, height: ySize})
+
+      var xOffset = 0
+      var yOffset = 400
 
       var numFnPts = 300
 
@@ -250,10 +250,11 @@
       var opts = {doEqualizeAxes: true, doDrawAxes: true}
 
       //var w = 280, h = 250
-      var w = 450, h = 200
+      var w = 450, h = 140
       var xMargin = 40
       var xSizeOrig = xSize
       var ySizeOrig = ySize
+      var vSkip = 80
 
       xSize = w
       ySize = h
@@ -282,7 +283,7 @@
 
       // --- Setup graph 2: f_[1/2, 1).
 
-      yOffset = h + 140  // 140 appears to be a good vert space.
+      yOffset = h + vSkip
 
       function f12(x) { return (1 <= x && x < 2 ? 1 : 0) }
 
@@ -298,7 +299,7 @@
       // --- Setup graph 3: f_[0, 1).
 
       xOffset = xSizeOrig - w - xMargin
-      yOffset = (h + 140) / 2
+      yOffset = (h + vSkip) / 2
 
       function f02(x) { return (0 <= x && x < 2 ? 1 : 0) }
 
@@ -311,15 +312,16 @@
 
       drawFn(frame, opts, f02)
 
+      var yText = h + vSkip / 2 + 15
 
       var text = add('text', lightStyle)
-      addAttributes(text, {x: (w / 2 + xMargin - 20), y: (h + 85),
+      addAttributes(text, {x: (w / 2 + xMargin - 20), y: yText,
                            fill: '#ddd', stroke: 'transparent'})
       addAttributes(text, {'font-size': '64px'})
       text.innerHTML = '+'
 
       var text = add('text', lightStyle)
-      addAttributes(text, {x: ((xSizeOrig - 2 * w) / 2) + w - 20, y: (h + 85),
+      addAttributes(text, {x: ((xSizeOrig - 2 * w) / 2) + w - 20, y: yText,
                            fill: '#ddd', stroke: 'transparent'})
       addAttributes(text, {'font-size': '64px'})
       text.innerHTML = '='
