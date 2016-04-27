@@ -1,0 +1,351 @@
+<!DOCTYPE HTML>
+<html>
+  <body style="background-color:#808">
+    <svg width="10" height="10" vertion="1.1"
+     style="background-color:#fff"
+    id="svg" xmlns="http://www.w3.org/2000/svg">
+    </svg>
+    <script>
+
+      function addAttributes(elt, attr) {
+        for (var key in attr) {
+          elt.setAttribute(key, attr[key])
+        }
+        return elt
+      }
+
+      function add(eltName, attr) {
+        var elt = document.createElementNS(svgNS, eltName)
+        svg.appendChild(elt)
+        if (attr) addAttributes(elt, attr)
+        return elt
+      }
+
+      function realMod(a, b) {
+        var c = a % b
+        if (c < 0) { c += b }
+        return c
+      }
+
+      // Begin instance-specific code.
+
+      var svg = document.getElementById('svg')
+      var svgNS = svg.namespaceURI
+
+      var lightStyle = {stroke: '#ddd', fill: 'transparent', 'stroke-width': 3}
+      var darkStyle = {stroke: '#666', fill: 'transparent', 'stroke-width': 3}
+
+      if (!assert) {
+        function assert(condition, message) {
+          if (!condition) {
+            throw message || "Assertion failed"
+          }
+        }
+      }
+
+      function areLinear(x1, y1, x2, y2, x3, y3) {
+        var dx1 = x2 - x1, dy1 = y2 - y1
+        var dx2 = x3 - x2, dy2 = y3 - y2
+
+        // Intuitively, we want to check that dx2 / dx1 == dy2 / dy1; this is
+        // the same as dy1 * dx2 == dx1 * dy2, and this latter form handles edge
+        // cases where the first expression would have hit a division by zero.
+
+        return (Math.abs(dy1 * dx2 - dx1 * dy2) < 0.001)
+      }
+
+      var numFnPts = 300
+
+      // This returns [xMin, xMax, yMin, yMax] for equalized axes.
+      // It keeps the old frame as a subframe, and maintains the same center pt.
+      // In other words, this may increase the frame just enough so that all
+      // axes have the same scale.
+      function equalizeAxes(frame) {
+        var xMin = frame[0]
+        var xMax = frame[1]
+        var yMin = frame[2]
+        var yMax = frame[3]
+
+        var xRatio = (xMax - xMin) / xSize
+        var yRatio = (yMax - yMin) / ySize
+        if (xRatio < yRatio) {
+          var xMid = (xMax + xMin) / 2
+          var half = (xMax - xMin) / 2
+          xMin = xMid - half * (yRatio / xRatio)
+          xMax = xMid + half * (yRatio / xRatio)
+        } else {
+          var yMid = (yMax + yMin) / 2
+          var half = (yMax - yMin) / 2
+          yMin = yMid - half * (xRatio / yRatio)
+          yMax = yMid + half * (xRatio / yRatio)
+        }
+        return [xMin, xMax, yMin, yMax]
+      }
+
+      function ptsForFn(frame, fn) {
+
+        var xMin = frame[0]
+        var xMax = frame[1]
+        var yMin = frame[2]
+        var yMax = frame[3]
+
+        function canvasPtFromXY(x, y) {
+          var xPerc = (x - xMin) / (xMax - xMin)
+          var yPerc = (y - yMin) / (yMax - yMin)
+          return [xPerc * xSize + xOffset, ySize - yPerc * ySize + yOffset]
+        }
+
+        var xDelta = (xMax - xMin) / (numFnPts - 1)
+        var pts = []
+        var xPrev = xMin
+        var prevCanvasY = false
+
+        for (var i = 0; i < numFnPts; i++) {
+          var x, xTarget = xMin + i * xDelta
+          do {
+            x = xTarget
+            var y = fn(x)
+            var canvasPt = canvasPtFromXY(x, y)
+            var perc = 0.5
+            while (prevCanvasY && Math.abs(prevCanvasY - canvasPt[1]) > 30 &&
+                   Math.abs(x - xPrev) > 0.001) {
+              x = (1 - perc) * xPrev + perc * xTarget
+              var y = fn(x)
+              var canvasPt = canvasPtFromXY(x, y)
+              perc /= 2
+            }
+            var n = pts.length
+            if (n >= 4 && areLinear(pts[n - 4], pts[n - 3],
+                                    pts[n - 2], pts[n - 1],
+                                    canvasPt[0], canvasPt[1])) {
+              pts.pop()
+              pts.pop()
+            }
+            pts.push(canvasPt[0], canvasPt[1])
+            xPrev = x
+            prevCanvasY = canvasPt[1]
+          } while (x < xTarget);
+        }
+
+        return pts
+
+        console.log('pts.length =', pts.length)  // TEMP
+
+        var polyline = add('polyline', darkStyle)
+        addAttributes(polyline, {points: pts.join(' ')})
+
+      }
+
+      function drawAxes(frame) {
+        var xMin = frame[0]
+        var xMax = frame[1]
+        var yMin = frame[2]
+        var yMax = frame[3]
+
+        function canvasPtFromXY(x, y) {
+          var xPerc = (x - xMin) / (xMax - xMin)
+          var yPerc = (y - yMin) / (yMax - yMin)
+          return [xPerc * xSize + xOffset, ySize - yPerc * ySize + yOffset]
+        }
+
+        function drawTickAroundPt(p, dir) {
+          var tick = add('line', lightStyle)
+          var a = [p[0], p[1]]
+          a[dir] -= 5
+          var b = [p[0], p[1]]
+          b[dir] += 5
+          addAttributes(tick, {x1: a[0], y1: a[1], x2: b[0], y2: b[1]})
+        }
+
+        // The x-axis.
+        var leftPt  = canvasPtFromXY(xMin, 0)
+        var rightPt = canvasPtFromXY(xMax, 0)
+        if (0 <= leftPt[1] && leftPt[1] < (ySize + yOffset)) {
+          var xAxis = add('line', lightStyle)
+          addAttributes(xAxis, {x1:  leftPt[0], y1:  leftPt[1],
+                                x2: rightPt[0], y2: rightPt[1]})
+          for (var x = Math.ceil(xMin); x <= Math.floor(xMax); x++) {
+            var p = canvasPtFromXY(x, 0)
+            drawTickAroundPt(p, 1)  // 1 == vertical tick
+          }
+        }
+
+        // The y-axis.
+        var botPt = canvasPtFromXY(0, yMin)
+        var topPt = canvasPtFromXY(0, yMax)
+        if (0 <= botPt[0] && botPt[0] < (xSize + xOffset)) {
+          var yAxis = add('line', lightStyle)
+          addAttributes(yAxis, {x1: botPt[0], y1: botPt[1],
+                                x2: topPt[0], y2: topPt[1]})
+          for (var y = Math.ceil(yMin); y <= Math.floor(yMax); y++) {
+            var p = canvasPtFromXY(0, y)
+            drawTickAroundPt(p, 0)  // 0 == horizontal tick
+          }
+        }
+      }
+
+      // frame = [xMin, xMax, yMin, yMax]
+      function shapeBelowFn1AboveFn2(frame, opts, fn1, fn2) {
+
+        if (opts && fn2 === undefined) {
+          fn2  = fn1
+          fn1  = opts
+          opts = null
+        }
+
+        if (opts && opts.doEqualizeAxes) {
+          frame = equalizeAxes(frame)
+        }
+
+        var pts1 = ptsForFn(frame, fn1)
+        var pts2 = ptsForFn(frame, fn2)
+
+        // Both pts arrays provide left-to-right points. To form a full polygon,
+        // we need to reverse the order of one of the arrays.
+
+        for (var i = pts2.length - 2; i >= 0; i -= 2) {
+          pts1.push(pts2[i])
+          pts1.push(pts2[i + 1])
+        }
+
+        var poly = add('polygon', lightStyle)
+        addAttributes(poly, {points: pts1.join(' ')})
+        return poly
+      }
+
+      // frame = [xMin, xMax, yMin, yMax]
+      function drawFn(frame, opts, fn) {
+
+        if (opts && fn === undefined) {
+          fn   = opts
+          opts = null
+        }
+
+        if (opts && opts.doEqualizeAxes) {
+          frame = equalizeAxes(frame)
+        }
+
+        if (opts && opts.doDrawAxes) {
+          drawAxes(frame)
+        }
+
+        var pts = ptsForFn(frame, fn)
+
+        console.log('pts.length =', pts.length)  // TEMP
+
+        var polyline = add('polyline', darkStyle)
+        addAttributes(polyline, {points: pts.join(' ')})
+        return polyline
+      }
+
+      numFnPts = 400
+
+      var opts = {doEqualizeAxes: true, doDrawAxes: true}
+
+      //var w = 280, h = 250
+      var w1 = 530, h1 = 100
+      var w2 = 530, h2 = 140
+      var xMargin = 20
+      var vSkip = 80
+
+      var xSize = 1232
+      var ySize = 2 * h1 + vSkip
+      addAttributes(svg, {width: xSize, height: ySize})
+
+      var xOffset = 0
+      var yOffset = 400
+
+      var xSizeOrig = xSize
+      var ySizeOrig = ySize
+
+      xSize = w1
+      ySize = h1
+
+      var frame1 = [-2.7, 2.7, -0.1, 0.8]
+      var frame2 = [-2.7, 2.7, -0.1, 1.1]
+
+
+      function sumFn(x) {
+        return Math.exp(-x * x / 2)
+      }
+
+      function leftAddend(x) {
+        return Math.exp(-x * x / 2) / (1 + Math.exp(x))
+      }
+
+      function rightAddend(x) {
+        return Math.exp(-x * x / 2) / (1 + Math.exp(-x))
+      }
+
+      function just0(x) { return 0 }
+
+
+
+      // --- Setup graph 1: left addend.
+
+      xOffset = xMargin
+      yOffset = 0
+
+      var poly = shapeBelowFn1AboveFn2(frame1, opts, leftAddend, just0)
+      addAttributes(poly, {fill: '#D8E2C9'})
+      //addAttributes(poly, {fill: '#92B06A'})
+
+      poly = drawFn(frame1, opts, leftAddend)
+      addAttributes(poly, {stroke: '#576544'})
+      //addAttributes(poly, {stroke: '#92B06A'})
+
+
+
+      // --- Setup graph 2: right addend.
+
+      yOffset = h1 + vSkip
+
+      poly = shapeBelowFn1AboveFn2(frame1, opts, rightAddend, just0)
+      addAttributes(poly, {fill: '#F0E0C5'})
+      //addAttributes(poly, {fill: '#E19D29'})
+
+      poly = drawFn(frame1, opts, rightAddend)
+      addAttributes(poly, {stroke: '#AB9269'})
+
+
+
+      // --- Setup graph 3: sum.
+
+      xSize = w2
+      ySize = h2
+
+      xOffset = xSizeOrig - w2 - xMargin
+      yOffset = (h1 + vSkip) / 2
+
+      poly = shapeBelowFn1AboveFn2(frame2, opts, leftAddend, just0)
+      addAttributes(poly, {fill: '#D8E2C9', stroke: 'transparent'})
+
+      poly = shapeBelowFn1AboveFn2(frame2, opts, sumFn, leftAddend)
+      addAttributes(poly, {fill: '#F0E0C5', stroke: 'transparent'})
+
+      poly = drawFn(frame2, {doEqualizeAxes: true}, leftAddend)
+      addAttributes(poly, {stroke: '#fff'})
+      //drawFn(frame2, opts, leftAddend)
+
+      drawFn(frame2, opts, sumFn)
+
+
+      // --- The + and = characters.
+
+      var yText = h1 + vSkip / 2 + 15
+
+      var text = add('text', lightStyle)
+      addAttributes(text, {x: (w1 / 2 + xMargin - 20), y: yText,
+                           fill: '#ddd', stroke: 'transparent'})
+      addAttributes(text, {'font-size': '64px'})
+      text.innerHTML = '+'
+
+      var text = add('text', lightStyle)
+      addAttributes(text, {x: (xSizeOrig - w2 + w1) / 2 - 20, y: yText,
+                           fill: '#ddd', stroke: 'transparent'})
+      addAttributes(text, {'font-size': '64px'})
+      text.innerHTML = '='
+
+    </script>
+  </body>
+</html>

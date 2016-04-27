@@ -16,6 +16,9 @@ notion of "strong resemblance" — although I plan to investigate more precise
 requirements
 below.
 
+![The normal curve can be expressed as the sum of two symmetric normal-like
+curves.](images/added_normals1.png)
+
 # Motivation
 
 I became interested in self-replicating functions by working on algorithms to
@@ -144,9 +147,9 @@ $$ J_{a,b,c,d} = \begin{cases}
 0 & \text{otherwise.} \\
 \end{cases}$$
 
-Then $J_{0,1,4,5} = J_{0,1,2,3} + J_{2,3,4,5}$.
+Then $J_{0,1,4,5} = J_{0,1,2,3} + J_{2,3,4,5}$, as illustrated below.
 
-TODO Place the appropriate image here.
+![Visual addition of two ramp functions to form another.](images/ramp_fns.png)
 
 NEXT up mention that the ramps need not be linear nor symmetric;
 I'm interested in exploring fractal-esque, nonflat midsections, even though this
