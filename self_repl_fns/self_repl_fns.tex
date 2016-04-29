@@ -227,9 +227,49 @@ Then \(J_{0,1,4,5} = J_{0,1,2,3} + J_{2,3,4,5}\), as illustrated below.
 \caption{Visual addition of two ramp functions to form another.}
 \end{figure}
 
-NEXT up mention that the ramps need not be linear nor symmetric; I'm
-interested in exploring fractal-esque, nonflat midsections, even though
-this would most likely not be true scales of the sum
+The ramp function example gives me four ideas for further study:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  The addends and the sum cannot be expressed as linearly related; that
+  is, there is no linear function \(\ell(x)\) so that
+  \(J_{0, 1, 2, 3}(\ell(x)) = J_{0, 1, 4, 5}(x)\). Contrast this with
+  the interval functions where \(I_{[0, 1)}(x / 2) = I_{[0, 2)}\). This
+  raises the questions: Which self-replicating functions allow for this
+  linear-relation restriction? Is there a slight modification of ramp
+  functions which meets this linear-relation restriction?
+\item
+  The ramp functions are piece-wise linear, but that linearity is not
+  really the key to their being self-replicating. Rather, the key is
+  that the left ramp and right ramp sum to 1, which matches the middle
+  height of the functions. Which more general self-replicating functions
+  can be constructed using this idea?
+\item
+  What happens if we treat the sum \(f = g_1 + g_2\) as part of a
+  sequence? Thinking of \emph{L} and \emph{R} for \emph{left} and
+  \emph{right}, let \(f^{(0)}_L = J_{0, 1, 2, 3}\), and
+  \(f^{(i)}_R = f^{(i)}_L(x-2)\) for \(i \ge 0\). Thinking of \emph{S}
+  for \emph{sum}, define \(f^{(i+1)}_S = f^{(i)}_L + f^{(i)}_R\) for
+  \(i \ge 1\). If \(f^{(i)}_L\) is positive on \((0, b)\), then
+  \(f^{(i)}_R\) is positive on \((2, b + 2)\), so \(f^{(i+1)}_S\) is
+  positive on \((0, b + 2)\). Set
+  \(f^{(i+1)}_L = f^{(i+1)}_S(x (b + 2) / b)\) so that we maintain the
+  region on which the left function is positive. In this way, we get a
+  sequence of functions. What is the limiting behavior? Can we attempt
+  to extend the sequence backwards? Can we say anything in general about
+  the limiting behavior of a class of starting functions \(f^{(0)}_L\)?
+\item
+  For the current ramp functions, the middle section is flat with value
+  1, while the edges sum to 1. Can we do something more interesting
+  where the edges sum to a non-constant value? I can imagine this
+  leading to a discontinuous function. Is there a way to do this where
+  the functions are continuous, or at least continuous almost
+  everywhere? Can we describe a general class of self-replicating
+  functions which are not continuous, such as the indicator function of
+  the Cantor dust?
+\end{enumerate}
 
 \section{The normal curve}\label{the-normal-curve}
 
