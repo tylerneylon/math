@@ -43,7 +43,7 @@
         }
       }
 
-      function areLinear(x1, y1, x2, y2, x3, y3) {
+      function areKindaLinear(x1, y1, x2, y2, x3, y3) {
         var dx1 = x2 - x1, dy1 = y2 - y1
         var dx2 = x3 - x2, dy2 = y3 - y2
 
@@ -51,7 +51,7 @@
         // the same as dy1 * dx2 == dx1 * dy2, and this latter form handles edge
         // cases where the first expression would have hit a division by zero.
 
-        return (Math.abs(dy1 * dx2 - dx1 * dy2) < 0.001)
+        return (Math.abs(dy1 * dx2 - dx1 * dy2) < 0.2)
       }
 
       var numFnPts = 300
@@ -80,6 +80,15 @@
           yMax = yMid + half * (xRatio / yRatio)
         }
         return [xMin, xMax, yMin, yMax]
+      }
+
+      // This expects an array of numbers. It converts them to a space-separated
+      // string join using the nearest-tenth rounded values. For example, the
+      // number 3.14159 would be represented as 3.1 in the string.
+      function joinPts(pts) {
+        var s = []
+        for (var i = 0; i < pts.length; i++) s.push(pts[i].toFixed(1))
+        return s.join(' ')
       }
 
       function ptsForFn(frame, fn) {
@@ -115,7 +124,7 @@
               perc /= 2
             }
             var n = pts.length
-            if (n >= 4 && areLinear(pts[n - 4], pts[n - 3],
+            if (n >= 4 && areKindaLinear(pts[n - 4], pts[n - 3],
                                     pts[n - 2], pts[n - 1],
                                     canvasPt[0], canvasPt[1])) {
               pts.pop()
@@ -132,7 +141,7 @@
         console.log('pts.length =', pts.length)  // TEMP
 
         var polyline = add('polyline', darkStyle)
-        addAttributes(polyline, {points: pts.join(' ')})
+        addAttributes(polyline, {points: joinPts(pts)})
 
       }
 
