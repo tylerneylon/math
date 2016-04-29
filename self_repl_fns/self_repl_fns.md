@@ -16,8 +16,9 @@ notion of "strong resemblance" — although I plan to investigate more precise
 requirements
 below.
 
-![The normal curve can be expressed as the sum of two symmetric normal-like
-curves.](images/added_normals2.png)
+![As an example of a self-replicating function, the normal curve can be
+expressed as the sum of two normal-like curves that are reflections of each
+other.](images/added_normals3.png)
 
 # Motivation
 

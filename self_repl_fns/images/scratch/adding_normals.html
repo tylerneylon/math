@@ -32,7 +32,7 @@
       var svg = document.getElementById('svg')
       var svgNS = svg.namespaceURI
 
-      var lightStyle = {stroke: '#ddd', fill: 'transparent', 'stroke-width': 3}
+      var lightStyle = {stroke: '#eee', fill: 'transparent', 'stroke-width': 3}
       var darkStyle = {stroke: '#666', fill: 'transparent', 'stroke-width': 3}
 
       if (!assert) {
@@ -240,7 +240,7 @@
 
       numFnPts = 400
 
-      var opts = {doEqualizeAxes: true, doDrawAxes: true}
+      var opts = {doEqualizeAxes: true}
 
       //var w = 280, h = 250
       var w1 = 530, h1 = 100
@@ -340,10 +340,13 @@
       xOffset = xMargin
       yOffset = 0
 
-      var poly = shapeBelowFn1AboveFn2(frame1, opts, leftAddend, just0)
+      frame1 = equalizeAxes(frame1)
+      drawAxes(frame1)
+
+      var poly = shapeBelowFn1AboveFn2(frame1, leftAddend, just0)
       addAttributes(poly, {fill: colorStr(fill1)})
 
-      poly = drawFn(frame1, opts, leftAddend)
+      poly = drawFn(frame1, leftAddend)
       addAttributes(poly, {stroke: colorStr(darken(fill1))})
 
 
@@ -352,10 +355,12 @@
 
       yOffset = h1 + vSkip
 
-      poly = shapeBelowFn1AboveFn2(frame1, opts, rightAddend, just0)
+      drawAxes(frame1)
+
+      poly = shapeBelowFn1AboveFn2(frame1, rightAddend, just0)
       addAttributes(poly, {fill: colorStr(fill2)})
 
-      poly = drawFn(frame1, opts, rightAddend)
+      poly = drawFn(frame1, rightAddend)
       addAttributes(poly, {stroke: colorStr(darken(fill2))})
 
 
@@ -368,17 +373,21 @@
       xOffset = xSizeOrig - w2 - xMargin
       yOffset = (h1 + vSkip) / 2
 
-      poly = shapeBelowFn1AboveFn2(frame2, opts, leftAddend, just0)
+      // Don't equalize axes on frame2 before now, as we just changed xSize and
+      // ySize.
+      frame2 = equalizeAxes(frame2)
+      drawAxes(frame2)
+
+      poly = shapeBelowFn1AboveFn2(frame2, leftAddend, just0)
       addAttributes(poly, {fill: colorStr(fill1), stroke: 'transparent'})
 
-      poly = shapeBelowFn1AboveFn2(frame2, opts, sumFn, leftAddend)
+      poly = shapeBelowFn1AboveFn2(frame2, sumFn, leftAddend)
       addAttributes(poly, {fill: colorStr(fill2), stroke: 'transparent'})
 
-      poly = drawFn(frame2, {doEqualizeAxes: true}, leftAddend)
+      poly = drawFn(frame2, leftAddend)
       addAttributes(poly, {stroke: '#fff'})
-      //drawFn(frame2, opts, leftAddend)
 
-      drawFn(frame2, opts, sumFn)
+      drawFn(frame2, sumFn)
 
 
       // --- The + and = characters.
