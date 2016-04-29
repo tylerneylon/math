@@ -131,7 +131,7 @@ $[x\in[a, b)]$. The following equation shows how such indicator functions can be
 considered simple self-replicating functions:
 $I_{[0, 2)} = I_{[0, 1)} + I_{[1, 2)}$.
 
-![Visual representation of the addition of indicator functions of intervals.](images/added_intervals4.png)
+![Visual representation of the addition of indicator functions of intervals.](images/added_intervals5.png)
 
 In order to match the equation $f = g_1 + g_2$, emphasizing the similarity
 between the $g_i$'s and $f$, we can set $f = I_{[0, 2)}$,
@@ -150,7 +150,7 @@ $$ J_{a,b,c,d} = \begin{cases}
 
 Then $J_{0,1,4,5} = J_{0,1,2,3} + J_{2,3,4,5}$, as illustrated below.
 
-![Visual addition of two ramp functions to form another.](images/ramp_fns.png)
+![Visual addition of two ramp functions to form another.](images/ramp_fns2.png)
 
 NEXT up mention that the ramps need not be linear nor symmetric;
 I'm interested in exploring fractal-esque, nonflat midsections, even though this
