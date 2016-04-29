@@ -280,6 +280,53 @@
       function just0(x) { return 0 }
 
 
+      // --- Setup the colors.
+
+      var fill1 = {h: 200, s: 0.30, l: 0.87}
+      var fill2 = {h:  90, s: 0.30, l: 0.87}
+
+      function hslToRgb(color) {
+
+        // This is from http://stackoverflow.com/a/9493060/3561
+
+        var h = color.h, s = color.s, l = color.l
+        var r, g, b
+
+        if (s == 0) {
+          r = g = b = l  // achromatic
+        } else {
+          var hue2rgb = function hue2rgb(p, q, t){
+            if (t < 0) t += 1;
+            if (t > 1) t -= 1;
+            if (t < 1/6) return p + (q - p) * 6 * t;
+            if (t < 1/2) return q;
+            if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+            return p;
+          }
+
+          var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+          var p = 2 * l - q;
+          r = hue2rgb(p, q, h + 1/3);
+          g = hue2rgb(p, q, h);
+          b = hue2rgb(p, q, h - 1/3);
+        }
+
+        return {r: Math.round(r * 255),
+                g: Math.round(g * 255),
+                b: Math.round(b * 255)}
+      }
+
+      function colorStr(color) {
+        // TODO Make this output an RGB hex code.
+        var channels = [color.h, color.s * 100 + '%', color.l * 100 + '%']
+        return 'hsl(' + channels.join(', ') + ')'
+      }
+
+      function darken(color) {
+        return {h: color.h, s: (0.5 * color.s), l: (0.6 * color.l)}
+      }
+
+
 
       // --- Setup graph 1: left addend.
 
@@ -287,12 +334,10 @@
       yOffset = 0
 
       var poly = shapeBelowFn1AboveFn2(frame1, opts, leftAddend, just0)
-      addAttributes(poly, {fill: '#D8E2C9'})
-      //addAttributes(poly, {fill: '#92B06A'})
+      addAttributes(poly, {fill: colorStr(fill1)})
 
       poly = drawFn(frame1, opts, leftAddend)
-      addAttributes(poly, {stroke: '#576544'})
-      //addAttributes(poly, {stroke: '#92B06A'})
+      addAttributes(poly, {stroke: colorStr(darken(fill1))})
 
 
 
@@ -301,11 +346,10 @@
       yOffset = h1 + vSkip
 
       poly = shapeBelowFn1AboveFn2(frame1, opts, rightAddend, just0)
-      addAttributes(poly, {fill: '#F0E0C5'})
-      //addAttributes(poly, {fill: '#E19D29'})
+      addAttributes(poly, {fill: colorStr(fill2)})
 
       poly = drawFn(frame1, opts, rightAddend)
-      addAttributes(poly, {stroke: '#AB9269'})
+      addAttributes(poly, {stroke: colorStr(darken(fill2))})
 
 
 
@@ -318,10 +362,10 @@
       yOffset = (h1 + vSkip) / 2
 
       poly = shapeBelowFn1AboveFn2(frame2, opts, leftAddend, just0)
-      addAttributes(poly, {fill: '#D8E2C9', stroke: 'transparent'})
+      addAttributes(poly, {fill: colorStr(fill1), stroke: 'transparent'})
 
       poly = shapeBelowFn1AboveFn2(frame2, opts, sumFn, leftAddend)
-      addAttributes(poly, {fill: '#F0E0C5', stroke: 'transparent'})
+      addAttributes(poly, {fill: colorStr(fill2), stroke: 'transparent'})
 
       poly = drawFn(frame2, {doEqualizeAxes: true}, leftAddend)
       addAttributes(poly, {stroke: '#fff'})

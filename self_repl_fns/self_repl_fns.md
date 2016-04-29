@@ -17,7 +17,7 @@ requirements
 below.
 
 ![The normal curve can be expressed as the sum of two symmetric normal-like
-curves.](images/added_normals1.png)
+curves.](images/added_normals2.png)
 
 # Motivation
 
