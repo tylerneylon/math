@@ -218,7 +218,7 @@
         }
 
         var poly = add('polygon', lightStyle)
-        addAttributes(poly, {points: pts1.join(' ')})
+        addAttributes(poly, {points: joinPts(pts1)})
         return poly
       }
 
@@ -243,7 +243,7 @@
         console.log('pts.length =', pts.length)  // TEMP
 
         var polyline = add('polyline', darkStyle)
-        addAttributes(polyline, {points: pts.join(' ')})
+        addAttributes(polyline, {points: joinPts(pts)})
         return polyline
       }
 
