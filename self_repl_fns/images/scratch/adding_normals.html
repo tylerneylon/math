@@ -289,7 +289,7 @@
 
         // This is from http://stackoverflow.com/a/9493060/3561
 
-        var h = color.h, s = color.s, l = color.l
+        var h = color.h / 360, s = color.s, l = color.l
         var r, g, b
 
         if (s == 0) {
@@ -316,10 +316,17 @@
                 b: Math.round(b * 255)}
       }
 
+      // The output here must be an rgb hex code in order for my current
+      // conversion tools to pdf to work correctly.
       function colorStr(color) {
-        // TODO Make this output an RGB hex code.
+        var rgb = hslToRgb(color)
+        var arr = [rgb.r.toString(16), rgb.g.toString(16), rgb.b.toString(16)]
+        return '#' + arr.join('')
+
+        /*
         var channels = [color.h, color.s * 100 + '%', color.l * 100 + '%']
         return 'hsl(' + channels.join(', ') + ')'
+        */
       }
 
       function darken(color) {
