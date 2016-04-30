@@ -390,11 +390,11 @@
       poly = shapeBelowFn1AboveFn2(frame2, leftAddend, just0)
       addAttributes(poly, {fill: colorStr(fill1), stroke: 'transparent'})
 
-      poly = shapeBelowFn1AboveFn2(frame2, sumFn, leftAddend)
-      addAttributes(poly, {fill: colorStr(fill2), stroke: 'transparent'})
-
       poly = drawFn(frame2, leftAddend)
       addAttributes(poly, {stroke: '#fff'})
+
+      poly = shapeBelowFn1AboveFn2(frame2, sumFn, leftAddend)
+      addAttributes(poly, {fill: colorStr(fill2), stroke: 'transparent'})
 
       drawFn(frame2, sumFn)
 
