@@ -271,6 +271,32 @@ The ramp function example gives me four ideas for further study:
   the Cantor dust?
 \end{enumerate}
 
+TODO Mention how I'm following up with further study idea 1.
+
+\subsection{Nonlinear ramps}\label{nonlinear-ramps}
+
+Other curves that sum to 1 could easily take the place of the left and
+right edges of the ramp function. For example, the left and right ramps
+could be replaced by curves with the shapes \(x^2\) and \(1-x^2\) on
+\([0, 1]\), as illustrated below.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{images/pdfs/nonlinear_ramps.pdf}
+\caption{An example of nonlinear ramp functions using \(x^2\) to
+determine the edge shapes}
+\end{figure}
+
+Given any function \(f:[0,1]\to [0,1]\) with \(f(0) = 0\) and \(f(1)=1\)
+the general form of this case is the function
+
+\[ K_{a,b,c,d} = \begin{cases}
+f\big((x - a) / (b - a)\big) & \text{if } x \in [a, b), \\
+1 & \text{if } x \in [b, c), \\
+1 - f\big((x - c) / (d - c)\big) & \text{if } x \in [c, d), \text{and} \\
+0 & \text{otherwise.} \\
+\end{cases}\]
+
 \section{The normal curve}\label{the-normal-curve}
 
 The normal curve is described by \(y = e^{-x^2/2}\).
