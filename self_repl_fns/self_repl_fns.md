@@ -209,13 +209,29 @@ f\big((x - a) / (b - a)\big) & \text{if } x \in [a, b), \\
 0 & \text{otherwise.} \\
 \end{cases}$$
 
+If any function can be written as $K_{a,b,c,d}$ for some value of $f$, I'll call
+it a $K-$*function*.
 This form is general enough to include interval functions — for example, by
 using $f(x) = 0$ — and to include the previous ramp function $J(x)$ by setting
 $f(x)=x$.
 
-TODO more comments before the next image
+The versatility of the $K-$functions shows that we can produce self-replicating
+functions that are highly discontinuous, such as by setting $f(x)$ to be the
+indicator function of a set with many border elements. Even among continuous
+functions, we can produce self-replicating functions which avoid being "mostly
+monotonic." In particular, I'll say that a function
+$f:\mathbb{R}\to\mathbb{R}$ is
+*peak monotonic* iff there is a point $x$ such that
+$a < b < x \Rightarrow f(a) < f(b)$ and $x < c < d \Rightarrow f(c) > f(d)$.
+The indicator function of an interval and the ramp function are both peak
+monotonic, while the example $K-$functions below are not.
 
-![TODO](images/other_ramps.png)
+![Example $K-$functions: on the left is a function more discontinuous than the
+indicator function of an interval; on the right is a continuous but
+non-peak-monotonic function.](images/other_ramps.png)
+
+
+
 
 
 # The normal curve
