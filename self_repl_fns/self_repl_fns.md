@@ -193,13 +193,13 @@ TODO Mention how I'm following up with further study idea 1.
 
 Other curves that sum to 1 could easily take the place of the left and right
 edges of the ramp function. For example, the left and right ramps could be
-replaced by curves with the shapes $x^2$ and $1-x^2$ on $[0, 1]$, as illustrated
-below.
+replaced by curves with the shapes of $x^2$ and $1-x^2$ on $x\in [0, 1]$, as
+illustrated below.
 
-![An example of nonlinear ramp functions using $x^2$ to determine the edge
+![An example of nonlinear ramp functions using $x^2$ on $x\in [0, 1]$ to determine the edge
 shapes.](images/nonlinear_ramps.png)
 
-Given any function $f:[0,1]\to [0,1]$ with $f(0) = 0$ and $f(1)=1$ the general
+Given any function $f:[0,1]\to [0,1]$,
 form of this case is the function
 
 $$ K_{a,b,c,d} = \begin{cases}
@@ -208,6 +208,14 @@ f\big((x - a) / (b - a)\big) & \text{if } x \in [a, b), \\
 1 - f\big((x - c) / (d - c)\big) & \text{if } x \in [c, d), \text{and} \\
 0 & \text{otherwise.} \\
 \end{cases}$$
+
+This form is general enough to include interval functions — for example, by
+using $f(x) = 0$ — and to include the previous ramp function $J(x)$ by setting
+$f(x)=x$.
+
+TODO more comments before the next image
+
+![TODO](images/other_ramps.png)
 
 
 # The normal curve
