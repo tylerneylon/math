@@ -199,8 +199,7 @@ illustrated below.
 ![An example of nonlinear ramp functions using $x^2$ on $x\in [0, 1]$ to determine the edge
 shapes.](images/nonlinear_ramps.png)
 
-Given any function $f:[0,1]\to [0,1]$,
-form of this case is the function
+Given any function $f:[0,1]\to [0,1]$, the generalized ramp function is
 
 $$ K_{a,b,c,d} = \begin{cases}
 f\big((x - a) / (b - a)\big) & \text{if } x \in [a, b), \\
