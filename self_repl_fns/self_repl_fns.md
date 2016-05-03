@@ -18,7 +18,7 @@ below.
 
 ![As an example of a self-replicating function, the normal curve can be
 expressed as the sum of two normal-like curves that are reflections of each
-other.](images/added_normals3.png)
+other.](images/added_normals4.png)
 
 # Motivation
 
@@ -131,7 +131,7 @@ $[x\in[a, b)]$. The following equation shows how such indicator functions can be
 considered simple self-replicating functions:
 $I_{[0, 2)} = I_{[0, 1)} + I_{[1, 2)}$.
 
-![Visual representation of the addition of indicator functions of intervals.](images/added_intervals5.png)
+![Visual representation of the addition of indicator functions of intervals.](images/added_intervals6.png)
 
 In order to match the equation $f = g_1 + g_2$, emphasizing the similarity
 between the $g_i$'s and $f$, we can set $f = I_{[0, 2)}$,
@@ -150,7 +150,7 @@ $$ J_{a,b,c,d} = \begin{cases}
 
 Then $J_{0,1,4,5} = J_{0,1,2,3} + J_{2,3,4,5}$, as illustrated below.
 
-![Visual addition of two ramp functions to form another.](images/ramp_fns2.png)
+![Visual addition of two ramp functions to form another.](images/ramp_fns3.png)
 
 The ramp function example gives me four ideas for further study:
 
@@ -197,7 +197,7 @@ replaced by curves with the shapes of $x^2$ and $1-x^2$ on $x\in [0, 1]$, as
 illustrated below.
 
 ![An example of nonlinear ramp functions using $x^2$ on $x\in [0, 1]$ to determine the edge
-shapes.](images/nonlinear_ramps.png)
+shapes.](images/nonlinear_ramps2.png)
 
 Given any function $f:[0,1]\to [0,1]$, the generalized ramp function is
 
@@ -227,7 +227,7 @@ monotonic, while the example $K-$functions below are not.
 
 ![Example $K-$functions: on the left is a function more discontinuous than the
 indicator function of an interval; on the right is a continuous but
-non-peak-monotonic function.](images/other_ramps.png)
+non-peak-monotonic function.](images/other_ramps2.png)
 
 
 

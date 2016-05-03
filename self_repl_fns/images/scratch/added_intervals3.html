@@ -51,7 +51,7 @@
         // the same as dy1 * dx2 == dx1 * dy2, and this latter form handles edge
         // cases where the first expression would have hit a division by zero.
 
-        return (Math.abs(dy1 * dx2 - dx1 * dy2) < 0.2)
+        return (Math.abs(dy1 * dx2 - dx1 * dy2) < 0.1)
       }
 
       var numFnPts = 300
@@ -291,8 +291,8 @@
 
       // --- Setup the colors.
 
-      var fill1 = {h: 200, s: 0.30, l: 0.87}
-      var fill2 = {h:  90, s: 0.30, l: 0.87}
+      var fill1 = {h: 200, s: 0.40, l: 0.88}
+      var fill2 = {h:  45, s: 0.55, l: 0.88}
 
       function hslToRgb(color) {
 
