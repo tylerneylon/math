@@ -75,9 +75,9 @@ particular, it depends on the ambiguous notion of ``strong resemblance''
 \begin{figure}[htbp]
 \centering
 \includegraphics{images/pdfs/added_normals4.pdf}
-\caption{As an example of a self-replicating function, the normal curve
-can be expressed as the sum of two normal-like curves that are
-reflections of each other.}
+\caption{\label{fig:added_normals}As an example of a self-replicating
+function, the normal curve can be expressed as the sum of two
+normal-like curves that are reflections of each other.}
 \end{figure}
 
 \section{Motivation}\label{motivation}
@@ -87,16 +87,17 @@ algorithms to procedurally generate 3d models of natural-looking trees.
 When algorithmically making trees, it makes sense to start from the idea
 of an \href{https://en.wikipedia.org/wiki/L-system}{\emph{L-system}},
 which can be visualized as a kind of fractal in which a trunk forks into
-branches that fork into smaller subranches, this process repeating
-infinitely.
+branches that themselves fork into smaller subranches, this process
+repeating infinitely.
 
 I noticed that tree-like \emph{L}-systems can have a large amount of
 ``branch overlap'' concentrated around a central area of their apparent
-surface. For example, consider the two images below. On the left is a
-standard \emph{L}-system along with a histogram showing the density of
-leaf points along the edge. Intuitively, the leaf points achieve a
-reasonable density even toward the extreme angles of the tree's top.
-However, the density increases continuously toward the center.
+surface. For example, consider the two images in
+figure~\ref{fig:ellsystem}. On the left is a standard \emph{L}-system
+along with a histogram showing the density of leaf points along the
+edge. Intuitively, the leaf points are dense even toward the extreme
+angles of the tree's top. However, the density increases continuously
+toward the center.
 
 We could think of each leaf point as doing a certain amount of work by
 covering some area along the top of the \emph{L}-system. Each subtree is
@@ -109,9 +110,9 @@ the leaf points is only slightly changed.
 \begin{figure}[htbp]
 \centering
 \includegraphics{images/pdfs/ellsystem2.pdf}
-\caption{Left: An \emph{L}-system; Right: the same system with two large
-subtrees removed. In both cases, a histogram of leaf point density is
-provided around an outer ellipse.}
+\caption{\label{fig:ellsystem}Left: An \emph{L}-system; Right: the same
+system with two large subtrees removed. In both cases, a histogram of
+leaf point density is provided around an outer ellipse.}
 \end{figure}
 
 One approach to smoothing out the distribution of leaf points would be
@@ -120,13 +121,15 @@ line direction based on where it is within the fractal, rather than
 simply by making each branching point a smaller version of its parent.
 The line directions can be chosen so that the set of points at a fixed
 distance from the trunk point form a set of equidistant angles from a
-central point. The result is an extremely regular edge, as seen below.
+central point. The result is an extremely regular edge, as seen in
+figure~\ref{fig:well_dist}.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics{images/pdfs/well_distributed_ell_like_system.pdf}
-\caption{A \emph{L}-like system in which line directions are chosen to
-maximize the regularity of leaf point distribution.}
+\caption{\label{fig:well_dist}A \emph{L}-like system in which line
+directions are chosen to maximize the regularity of leaf point
+distribution.}
 \end{figure}
 
 This is ideally efficient in that each leaf point is equally important
@@ -199,8 +202,8 @@ indicator functions can be considered simple self-replicating functions:
 \begin{figure}[htbp]
 \centering
 \includegraphics{images/pdfs/added_intervals6.pdf}
-\caption{Visual representation of the addition of indicator functions of
-intervals.}
+\caption{\label{fig:added_intervals}Visual representation of the
+addition of indicator functions of intervals.}
 \end{figure}
 
 In order to match the equation \(f = g_1 + g_2\), emphasizing the
@@ -219,12 +222,14 @@ To this end, define the \emph{ramp function} for values \(a,b,c,d\) with
 0 & \text{otherwise.} \\
 \end{cases}\]
 
-Then \(J_{0,1,4,5} = J_{0,1,2,3} + J_{2,3,4,5}\), as illustrated below.
+Then \(J_{0,1,4,5} = J_{0,1,2,3} + J_{2,3,4,5}\), as illustrated in
+figure~\ref{fig:ramp_fns}.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics{images/pdfs/ramp_fns3.pdf}
-\caption{Visual addition of two ramp functions to form another.}
+\caption{\label{fig:ramp_fns}Visual addition of two ramp functions to
+form another.}
 \end{figure}
 
 The ramp function example gives me four ideas for further study:
@@ -278,13 +283,14 @@ TODO Mention how I'm following up with further study idea 1.
 Other curves that sum to 1 could easily take the place of the left and
 right edges of the ramp function. For example, the left and right ramps
 could be replaced by curves with the shapes of \(x^2\) and \(1-x^2\) on
-\(x\in [0, 1]\), as illustrated below.
+\(x\in [0, 1]\), as illustrated in figure~\ref{fig:nonlinear_ramps}.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics{images/pdfs/nonlinear_ramps2.pdf}
-\caption{An example of nonlinear ramp functions using \(x^2\) on
-\(x\in [0, 1]\) to determine the edge shapes.}
+\caption{\label{fig:nonlinear_ramps}An example of nonlinear ramp
+functions using \(x^2\) on \(x\in [0, 1]\) to determine the edge
+shapes.}
 \end{figure}
 
 Given any function \(f:[0,1]\to [0,1]\), the generalized ramp function
@@ -313,14 +319,14 @@ particular, I'll say that a function \(f:\mathbb{R}\to\mathbb{R}\) is
 \(a < b < x \Rightarrow f(a) \le f(b)\) and
 \(x < c < d \Rightarrow f(c) \ge f(d)\). The indicator function of an
 interval and the ramp function are both peak monotonic, while the
-example \(K-\)functions below are not.
+example \(K-\)functions in figure~\ref{fig:other_ramps} are not.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics{images/pdfs/other_ramps2.pdf}
-\caption{Example \(K-\)functions: on the left is a function more
-discontinuous than the indicator function of an interval; on the right
-is a continuous but non-peak-monotonic function.}
+\caption{\label{fig:other_ramps}Example \(K-\)functions: on the top is a
+function more discontinuous than the indicator function of an interval;
+on the bottom is a continuous but non-peak-monotonic function.}
 \end{figure}
 
 \section{The normal curve}\label{the-normal-curve}

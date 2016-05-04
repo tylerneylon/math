@@ -18,7 +18,7 @@ below.
 
 ![As an example of a self-replicating function, the normal curve can be
 expressed as the sum of two normal-like curves that are reflections of each
-other.](images/added_normals4.png)
+other.](images/added_normals4.png){#fig:added_normals}
 
 # Motivation
 
@@ -27,13 +27,14 @@ procedurally generate 3d models of natural-looking trees. When algorithmically
 making trees, it makes sense to start from the idea of an
 [*L-system*](https://en.wikipedia.org/wiki/L-system), which can
 be visualized as a kind of fractal in which a trunk forks into branches that
-fork into smaller subranches, this process repeating infinitely.
+themselves fork into smaller subranches, this process repeating infinitely.
 
 I noticed that tree-like *L*-systems can have a large amount of
 "branch overlap" concentrated around a central area of their apparent surface.
-For example, consider the two images below. On the left is a standard
+For example, consider the two images in [@fig:ellsystem]. On the left is a
+standard
 *L*-system along with a histogram showing the density of leaf points along the
-edge. Intuitively, the leaf points achieve a reasonable density even toward the
+edge. Intuitively, the leaf points are dense even toward the
 extreme angles of the tree's top. However, the density increases continuously
 toward the center.
 
@@ -48,7 +49,7 @@ changed.
 
 ![Left: An *L*-system; Right: the same system with two large subtrees removed.
 In both cases, a histogram of leaf point density is provided around an
-outer ellipse.](images/ellsystem2.png)
+outer ellipse.](images/ellsystem2.png){#fig:ellsystem}
 
 One approach to smoothing out the distribution of leaf points would be to
 compromise the fractal-like nature of the system by choosing each line direction
@@ -58,10 +59,11 @@ The line directions can be chosen so that
 the set of points at a fixed distance from the trunk point
 form a set of equidistant angles from a central point.
 The result is an extremely
-regular edge, as seen below.
+regular edge, as seen in [@fig:well_dist].
 
 ![A *L*-like system in which line directions are chosen to maximize the
-regularity of leaf point distribution.](images/well_distributed_ell_like_system.png)
+regularity of leaf point
+distribution.](images/well_distributed_ell_like_system.png){#fig:well_dist}
 
 This is ideally efficient in that each leaf point is equally important
 in forming the shape of the
@@ -131,7 +133,8 @@ $[x\in[a, b)]$. The following equation shows how such indicator functions can be
 considered simple self-replicating functions:
 $I_{[0, 2)} = I_{[0, 1)} + I_{[1, 2)}$.
 
-![Visual representation of the addition of indicator functions of intervals.](images/added_intervals6.png)
+![Visual representation of the addition of indicator functions of
+intervals.](images/added_intervals6.png){#fig:added_intervals}
 
 In order to match the equation $f = g_1 + g_2$, emphasizing the similarity
 between the $g_i$'s and $f$, we can set $f = I_{[0, 2)}$,
@@ -148,9 +151,11 @@ $$ J_{a,b,c,d} = \begin{cases}
 0 & \text{otherwise.} \\
 \end{cases}$$
 
-Then $J_{0,1,4,5} = J_{0,1,2,3} + J_{2,3,4,5}$, as illustrated below.
+Then $J_{0,1,4,5} = J_{0,1,2,3} + J_{2,3,4,5}$, as illustrated in
+[@fig:ramp_fns].
 
-![Visual addition of two ramp functions to form another.](images/ramp_fns3.png)
+![Visual addition of two ramp functions to form
+another.](images/ramp_fns3.png){#fig:ramp_fns}
 
 The ramp function example gives me four ideas for further study:
 
@@ -194,10 +199,10 @@ TODO Mention how I'm following up with further study idea 1.
 Other curves that sum to 1 could easily take the place of the left and right
 edges of the ramp function. For example, the left and right ramps could be
 replaced by curves with the shapes of $x^2$ and $1-x^2$ on $x\in [0, 1]$, as
-illustrated below.
+illustrated in [@fig:nonlinear_ramps].
 
 ![An example of nonlinear ramp functions using $x^2$ on $x\in [0, 1]$ to determine the edge
-shapes.](images/nonlinear_ramps2.png)
+shapes.](images/nonlinear_ramps2.png){#fig:nonlinear_ramps}
 
 Given any function $f:[0,1]\to [0,1]$, the generalized ramp function is
 
@@ -223,11 +228,11 @@ $f:\mathbb{R}\to\mathbb{R}$ is
 *peak monotonic* iff there is a point $x$ such that
 $a < b < x \Rightarrow f(a) \le f(b)$ and $x < c < d \Rightarrow f(c) \ge f(d)$.
 The indicator function of an interval and the ramp function are both peak
-monotonic, while the example $K-$functions below are not.
+monotonic, while the example $K-$functions in [@fig:other_ramps] are not.
 
-![Example $K-$functions: on the left is a function more discontinuous than the
-indicator function of an interval; on the right is a continuous but
-non-peak-monotonic function.](images/other_ramps2.png)
+![Example $K-$functions: on the top is a function more discontinuous than the
+indicator function of an interval; on the bottom is a continuous but
+non-peak-monotonic function.](images/other_ramps2.png){#fig:other_ramps}
 
 
 
