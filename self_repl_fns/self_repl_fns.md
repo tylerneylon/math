@@ -221,7 +221,7 @@ functions, we can produce self-replicating functions which avoid being "mostly
 monotonic." In particular, I'll say that a function
 $f:\mathbb{R}\to\mathbb{R}$ is
 *peak monotonic* iff there is a point $x$ such that
-$a < b < x \Rightarrow f(a) < f(b)$ and $x < c < d \Rightarrow f(c) > f(d)$.
+$a < b < x \Rightarrow f(a) \le f(b)$ and $x < c < d \Rightarrow f(c) \ge f(d)$.
 The indicator function of an interval and the ramp function are both peak
 monotonic, while the example $K-$functions below are not.
 
