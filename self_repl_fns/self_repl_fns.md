@@ -283,6 +283,12 @@ Here is a reference [@concrete].
   lemniscates](http://mathworld.wolfram.com/MandelbrotSetLemniscate.html)?
 * The histogram around my first *L*-system appears simple in shape. Can its
   shape be described precisely?
+* The sigmoid $\sigma(x)=1/(1+e^{-x})$ provides a near-self-replicating split of
+  $e^{-x^2}$. Is there a function $f(x)$ such that $\sigma(x)$ provides an
+  *exact* self-replicating split? More than one? In general, given any sigmoid
+  $s(x)$, what is the set of functions which it splits exactly in this way?
+  For this question, we can have some precise requirement for a sigmoid, such as
+  being an appropriately scaled and translated odd and bounded function.
 
 # References
 
