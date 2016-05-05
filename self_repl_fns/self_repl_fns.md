@@ -235,6 +235,48 @@ indicator function of an interval; on the bottom is a continuous but
 non-peak-monotonic function.](images/other_ramps2.png){#fig:other_ramps}
 
 
+## Non-plateau functions
+
+The ramp functions $K_{a,b,c,d}$ so far all have the constant value 1 on the
+middle interval $[b, c]$. This requires the ramps on intervals $[a, b]$ and
+$[c, d]$ to sum to 1. What happens if we relax this condition?
+
+I'll describe a sequence of functions which may help us find a self-replicating
+function by starting with an arbitrary function.
+The sequence depends on an initial function $f(x)$, a shift function $s(x)$ that
+captures the relationship between the left and right addends, and
+transformation functions $t_1(x)$ and $t_2(x)$ that formalize the similarity
+between the addends and their sum.
+
+Given these functions, we can define
+
+$$\begin{array}{rcl}
+  f_L(x) & = & f(x), \\
+  f_R(x) & = & f(s(x)), \text{and} \\
+  f_S(x) & = & f_L(x) + f_R(x), \\
+\end{array}$$
+
+with the expectation that
+
+$$f_L(x) = t_2(f_S(t_1(x))).$$
+
+This setup supports the possibility that $f_L$ and $f_R$ are possibly-reflected
+shifts of each other,
+and requires $f_S$ can be transformed to recover exactly $f_L$.
+This is one possible way to formalize the definition of a self-replicating
+function.
+
+It can also be used to set up a sequence of functions via the following
+definitions:
+
+$$\begin{array}{rcl}
+  f^{(1)}_L & = & f(x), \\
+  f^{(i)}_R & = & f^{(i)}_L \\
+  f^{(i+1)}_S = f^{(i)}_L + f^{(i)}_R \\
+\end{array}$$
+
+TODO finish the above
+
 
 
 
@@ -255,6 +297,9 @@ This section is for functions similar to the Cantor diagonal.
 It may turn out that I can't find any functions that fit here, or that the
 *L*-systems distributions includes this case, or even that I can prove that no
 functions could exist here (as far as I know).
+
+TODO Add a note somewhere that the initial setup requires that the sum itself is
+     always the translation of an even function.
 
 
 # Temporary example content
@@ -288,7 +333,10 @@ Here is a reference [@concrete].
   *exact* self-replicating split? More than one? In general, given any sigmoid
   $s(x)$, what is the set of functions which it splits exactly in this way?
   For this question, we can have some precise requirement for a sigmoid, such as
-  being an appropriately scaled and translated odd and bounded function.
+  being an appropriately scaled and translated odd function.
+* Are there variants of self-replicating functions that work for other sets of
+  operations such as using more than two copies of the function in a sum, or by
+  using multiplication or some other operation instead of addition?
 
 # References
 
