@@ -237,9 +237,29 @@ non-peak-monotonic function.](images/other_ramps2.png){#fig:other_ramps}
 
 ## Non-plateau functions
 
-The ramp functions $K_{a,b,c,d}$ so far all have the constant value 1 on the
+The ramp functions $K_{a,b,c,d}$ all have the constant value 1 on the
 middle interval $[b, c]$. This requires the ramps on intervals $[a, b]$ and
-$[c, d]$ to sum to 1. What happens if we relax this condition?
+$[c, d]$ to sum to 1. In this section, I'll consider what can happen if we relax
+this condition.
+
+### A formal definition for self-replicating functions
+
+I think the term *self-replicating function* is best left as an intuitive,
+non-rigorous concept because there seem to be a wide variety of instances that
+are best studied via their own particular flavors of a formal definition.
+A number of other terms used to discuss mathematics are similarly
+unformalized or context-specific: consider *fractal*, *symmetry*, or *closure*
+as examples. Nonetheless, many self-replicating functions meet the conditions
+of the definition I'll present next.
+
+Call a function $f$ *exactly self-replicating* iff there exist continuous
+bijections $s$, $t_1$, and $t_2$ such that
+
+TODO finish from here; don't forget that $s$ can't be the identity function
+
+
+
+### Begin other stuff to rewrite
 
 I'll describe a sequence of functions which may help us find a self-replicating
 function by starting with an arbitrary function.
