@@ -133,6 +133,7 @@ The left expression is the coefficient of $x^k$ on the left side of proposition
 1.3.4, while the right expression is the coefficient of $x^k$ on the
 proposition's right side. This completes the proof.
 
+
 **Correspondence with the book's version of the proof**
 $\quad$ In the table below, I'm informally using the notation $n-X$ on a set $X$ to
 denote $\{n-x \,|\, x\in X\}$, or on a function $X$ to denote another function
@@ -145,6 +146,42 @@ $I = i_1, \ldots, i_m$            $b_1, \ldots, b_m$
 $A(I) = n - I$                    $S$
 $g$                               $n - f$
 $t_1, \ldots, t_k$                $T$
+
+**Notes on the third proof of proposition 1.3.4**
+
+In the book, there is a small mistake: The book gives the condition
+$0 \le a_i \le x + n - i$, but it should really be
+$0 \le a_i \le x + n - i - 1$. That way,
+$a_i$ can take on exactly $x + n - i$ possible values. Since $i$ ranges from
+1 to $n$, there are $x^{\overline{n}}$ possible values for the sequence
+$(a_1, \ldots, a_n)$.
+
+This proof uses a slight variant of the same procedure I described above.
+The procedure is augmented by treating my function $g$ as a map for all
+elements — rather than just for a subset of them —
+and by adding a map from each $z : g(z) = 0$ to some value in
+$[x]$.
+Since each such $z$ becomes the leader of a cycle, this corresponds with the map
+the book presents as $f:C(\pi) \to [x]$.
+
+---
+
+On page 20 is the following proposition, quoted directly:
+
+**Proposition 1.3.7**
+
+Let $n, k\in\mathbb{P}$. The number of integer sequences $(a_1, \ldots, a_n)$
+such that $0 \le a_i \le n-i$ and exactly $k$ values of $a_i$ equal 0 is
+$c(n, k)$.
+
+---
+
+The above proposition follows immediately by my discussion of the procedure at
+hand. Specifically, that procedure generates $k$ cycles when the set
+$\{z : g(z) > 0\}$ has size $n - k$; that is, when the set
+$\{z : g(z) = 0\}$ has size $k$. I phrased the last sentence that way to make
+the connection with the variable $m = n-k$ used in the argument above —
+specifically, the paragraph starting with "In the other direction,—."
 
 ---
 
