@@ -2,7 +2,7 @@
 # Add a -x to the end of the above line to help debug this script.
 
 NAME=self_repl_fns
-FLAGS="-s -S -M figPrefix=figure --filter pandoc-crossref -M eqnPrefix='' -M linkcolor=black --number-sections --bibliography=${NAME}.bib ${NAME}.md"
+FLAGS="-s -S -M figPrefix=figure -M secPrefix="§" --filter pandoc-crossref -M eqnPrefix='' -M linkcolor=black --number-sections --bibliography=${NAME}.bib ${NAME}.md"
 
 # Make and open the html file.
 pandoc --mathjax --template=template.html ${FLAGS} > ${NAME}.html

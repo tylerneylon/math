@@ -9,12 +9,10 @@
 \else % if luatex or xelatex
   \ifxetex
     \usepackage{mathspec}
-    \usepackage{xltxtra,xunicode}
   \else
     \usepackage{fontspec}
   \fi
-  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
-  \newcommand{\euro}{€}
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
 \fi
 % use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -23,7 +21,18 @@
 \usepackage{microtype}
 \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
-\usepackage{graphicx}
+\usepackage{hyperref}
+\PassOptionsToPackage{usenames,dvipsnames}{color} % color is loaded by hyperref
+\hypersetup{unicode=true,
+            pdftitle={Self-Replicating Functions},
+            pdfauthor={Tyler Neylon},
+            colorlinks=true,
+            linkcolor=black,
+            citecolor=Blue,
+            urlcolor=Blue,
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
 \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
@@ -32,27 +41,41 @@
 % margins by default, and it is still possible to overwrite the defaults
 % using explicit options in \includegraphics[width, height, ...]{}
 \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
-\ifxetex
-  \usepackage[setpagesize=false, % page size defined by xetex
-              unicode=false, % unicode breaks when used with xetex
-              xetex]{hyperref}
-\else
-  \usepackage[unicode=true]{hyperref}
-\fi
-\hypersetup{breaklinks=true,
-            bookmarks=true,
-            pdfauthor={Tyler Neylon},
-            pdftitle={Self-Replicating Functions},
-            colorlinks=true,
-            citecolor=blue,
-            urlcolor=blue,
-            linkcolor=black,
-            pdfborder={0 0 0}}
-\urlstyle{same}  % don't use monospace font for urls
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
 \setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \setcounter{secnumdepth}{5}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\usepackage{subfig}
+\AtBeginDocument{%
+\renewcommand*\figurename{Figure}
+\renewcommand*\tablename{Table}
+}
+\AtBeginDocument{%
+\renewcommand*\listfigurename{List of Figures}
+\renewcommand*\listtablename{List of Tables}
+}
+\usepackage{float}
+\floatstyle{ruled}
+\makeatletter
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\makeatother
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
 
 \title{Self-Replicating Functions}
 \author{Tyler Neylon}
@@ -77,7 +100,8 @@ particular, it depends on the ambiguous notion of ``strong resemblance''
 \includegraphics{images/pdfs/added_normals4.pdf}
 \caption{\label{fig:added_normals}As an example of a self-replicating
 function, the normal curve can be expressed as the sum of two
-normal-like curves that are reflections of each other.}
+normal-like curves that are reflections of each
+other.}\label{fig:addedux5fnormals}
 \end{figure}
 
 \section{Motivation}\label{motivation}
@@ -112,7 +136,8 @@ the leaf points is only slightly changed.
 \includegraphics{images/pdfs/ellsystem2.pdf}
 \caption{\label{fig:ellsystem}Left: An \emph{L}-system; Right: the same
 system with two large subtrees removed. In both cases, a histogram of
-leaf point density is provided around an outer ellipse.}
+leaf point density is provided around an outer
+ellipse.}\label{fig:ellsystem}
 \end{figure}
 
 One approach to smoothing out the distribution of leaf points would be
@@ -129,7 +154,7 @@ figure~\ref{fig:well_dist}.
 \includegraphics{images/pdfs/well_distributed_ell_like_system.pdf}
 \caption{\label{fig:well_dist}A \emph{L}-like system in which line
 directions are chosen to maximize the regularity of leaf point
-distribution.}
+distribution.}\label{fig:wellux5fdist}
 \end{figure}
 
 This is ideally efficient in that each leaf point is equally important
@@ -184,6 +209,8 @@ is intended to defeat this trivial case. That is, each \(g_i\) is
 expected to be similar to a translation of \(f\), such as \(f(x-1)\) or
 \(f(x+1)\).
 
+\subsection{Indicator functions}\label{indicator-functions}
+
 The next function I'll describe is simple and meets all of the
 requirements so far. An \emph{indicator function} is a function taking
 on only the value 0 or 1; it's also sometimes referred to as a
@@ -203,13 +230,16 @@ indicator functions can be considered simple self-replicating functions:
 \centering
 \includegraphics{images/pdfs/added_intervals6.pdf}
 \caption{\label{fig:added_intervals}Visual representation of the
-addition of indicator functions of intervals.}
+addition of indicator functions of
+intervals.}\label{fig:addedux5fintervals}
 \end{figure}
 
 In order to match the equation \(f = g_1 + g_2\), emphasizing the
 similarity between the \(g_i\)'s and \(f\), we can set
 \(f = I_{[0, 2)}\), \(g_1 = f(2x) = I_{[0, 1)}\), and
 \(g_2 = f(2(x - 1)) = I_{[1, 2)}\).
+
+\subsection{Ramp functions}\label{sec:rampux5ffunctions}
 
 Things get more interesting when \(g_1(x) g_2(x) \ne 0\) for some \(x\).
 To this end, define the \emph{ramp function} for values \(a,b,c,d\) with
@@ -229,14 +259,14 @@ figure~\ref{fig:ramp_fns}.
 \centering
 \includegraphics{images/pdfs/ramp_fns3.pdf}
 \caption{\label{fig:ramp_fns}Visual addition of two ramp functions to
-form another.}
+form another.}\label{fig:rampux5ffns}
 \end{figure}
 
 The ramp function example gives me four ideas for further study:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
-\itemsep1pt\parskip0pt\parsep0pt
+\tightlist
 \item
   The addends and the sum cannot be expressed as linearly related; that
   is, there is no linear function \(\ell(x)\) so that
@@ -278,7 +308,7 @@ The ramp function example gives me four ideas for further study:
 
 TODO Mention how I'm following up with further study idea 1.
 
-\subsection{Nonlinear ramps}\label{nonlinear-ramps}
+\subsection{Nonlinear ramps}\label{sec:nonlinearux5framps}
 
 Other curves that sum to 1 could easily take the place of the left and
 right edges of the ramp function. For example, the left and right ramps
@@ -290,7 +320,7 @@ could be replaced by curves with the shapes of \(x^2\) and \(1-x^2\) on
 \includegraphics{images/pdfs/nonlinear_ramps2.pdf}
 \caption{\label{fig:nonlinear_ramps}An example of nonlinear ramp
 functions using \(x^2\) on \(x\in [0, 1]\) to determine the edge
-shapes.}
+shapes.}\label{fig:nonlinearux5framps}
 \end{figure}
 
 Given any function \(f:[0,1]\to [0,1]\), the generalized ramp function
@@ -326,7 +356,8 @@ example \(K-\)functions in figure~\ref{fig:other_ramps} are not.
 \includegraphics{images/pdfs/other_ramps2.pdf}
 \caption{\label{fig:other_ramps}Example \(K-\)functions: on the top is a
 function more discontinuous than the indicator function of an interval;
-on the bottom is a continuous but non-peak-monotonic function.}
+on the bottom is a continuous but non-peak-monotonic
+function.}\label{fig:otherux5framps}
 \end{figure}
 
 \subsection{Non-plateau functions}\label{non-plateau-functions}
@@ -334,7 +365,13 @@ on the bottom is a continuous but non-peak-monotonic function.}
 The ramp functions \(K_{a,b,c,d}\) all have the constant value 1 on the
 middle interval \([b, c]\). This requires the ramps on intervals
 \([a, b]\) and \([c, d]\) to sum to 1. In this section, I'll consider
-what can happen if we relax this condition.
+what can happen if we relax this condition. I'll informally call these
+\emph{non-plateau functions}.
+
+It will be useful to propose one possible formalization of a
+self-replicating function before exploring non-plateau functions.
+
+Before
 
 \subsubsection{A formal definition for self-replicating
 functions}\label{a-formal-definition-for-self-replicating-functions}
@@ -349,7 +386,36 @@ self-replicating functions meet the conditions of the definition I'll
 present next.
 
 Call a function \(f\) \emph{exactly self-replicating} iff there exist
-continuous bijections \(s\), \(t_1\), and \(t_2\) such that
+continuous bijections \(s\), \(t_1\), and \(t_2\) such that \(s\) is not
+the identity function and
+
+\begin{equation}\begin{array}{rcl}
+  f_L(x) & = & f(x), \\
+  f_R(x) & = & f(s(x)), \\
+  f_S(x) & = & f_L(x) + f_R(x), \text{and} \\
+  f_L(x) & = & t_2(f_S(t_1(x))).
+\end{array}\label{eq:exact_defn}\end{equation}
+
+The \emph{L}, \emph{R}, and \emph{S} subscripts are meant to hint that
+these functions act as the left addend, right addend, and the sum. The
+last equation in (~\ref{eq:exact_defn}) captures the similarity
+relationship between the addend \(f = f_L\) and the sum
+\(f_S = f_L + f_R\).
+
+\textbf{Example} The ramp functions given in
+§~\ref{sec:rampux5ffunctions} and §~\ref{sec:nonlinearux5framps}, viewed
+as \(K-\)functions, all adhere to the general form
+
+\[K_{0,1,2,3} + K_{2,3,4,5} = K_{0,1,4,5}.\]
+
+TODO Give the example \(s,t_1,t_2\) values. Consider segue into next
+section.
+
+\subsubsection{\texorpdfstring{All possible positive curves for the
+example \(s,t_1,t_2\)
+parameters}{All possible positive curves for the example s,t\_1,t\_2 parameters}}\label{all-possible-positive-curves-for-the-example-stux5f1tux5f2-parameters}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
 
 TODO finish from here; don't forget that \(s\) can't be the identity
 function
@@ -431,7 +497,7 @@ Here is a reference (Knuth, Patashnik, and Graham 1997).
 \section{Questions}\label{questions}
 
 \begin{itemize}
-\itemsep1pt\parskip0pt\parsep0pt
+\tightlist
 \item
   The ellipse around my first \emph{L}-system appears to fit
   surprisingly well. Is there a nice way to discover when an ellipse and
@@ -461,9 +527,12 @@ Here is a reference (Knuth, Patashnik, and Graham 1997).
 \section*{References}\label{references}
 \addcontentsline{toc}{section}{References}
 
+\hypertarget{refs}{}
+\hypertarget{ref-taocp1}{}
 Knuth, Donald E. 1998. \emph{Fundamental Algorithms}. Third Ed. Vol. 1.
 The Art of Computer Programming. Addison-Wesley.
 
+\hypertarget{ref-concrete}{}
 Knuth, Donald E., Oren Patashnik, and Ronald L. Graham. 1997.
 \emph{Concrete Mathematics: A Foundation for Computer Science}.
 Addison-Wesley.

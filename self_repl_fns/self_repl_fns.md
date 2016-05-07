@@ -118,6 +118,8 @@ informal definition of a self-replicating function is intended to defeat this
 trivial case. That is, each $g_i$ is expected to be similar to a translation of
 $f$, such as $f(x-1)$ or $f(x+1)$.
 
+## Indicator functions
+
 The next function I'll describe is simple and meets all of the requirements so
 far. An *indicator function* is a function taking on only the value 0 or 1; it's
 also sometimes referred to as a *characteristic function*.
@@ -139,6 +141,8 @@ intervals.](images/added_intervals6.png){#fig:added_intervals}
 In order to match the equation $f = g_1 + g_2$, emphasizing the similarity
 between the $g_i$'s and $f$, we can set $f = I_{[0, 2)}$,
 $g_1 = f(2x) = I_{[0, 1)}$, and $g_2 = f(2(x - 1)) = I_{[1, 2)}$.
+
+## Ramp functions {#sec:ramp_functions}
 
 Things get more interesting when $g_1(x) g_2(x) \ne 0$ for some $x$.
 To this end, define the *ramp function* for values $a,b,c,d$ with
@@ -194,7 +198,7 @@ The ramp function example gives me four ideas for further study:
 
 TODO Mention how I'm following up with further study idea 1.
 
-## Nonlinear ramps
+## Nonlinear ramps {#sec:nonlinear_ramps}
 
 Other curves that sum to 1 could easily take the place of the left and right
 edges of the ramp function. For example, the left and right ramps could be
@@ -240,7 +244,12 @@ non-peak-monotonic function.](images/other_ramps2.png){#fig:other_ramps}
 The ramp functions $K_{a,b,c,d}$ all have the constant value 1 on the
 middle interval $[b, c]$. This requires the ramps on intervals $[a, b]$ and
 $[c, d]$ to sum to 1. In this section, I'll consider what can happen if we relax
-this condition.
+this condition. I'll informally call these *non-plateau functions*.
+
+It will be useful to propose one possible formalization of a
+self-replicating function before exploring non-plateau functions.
+
+Before
 
 ### A formal definition for self-replicating functions
 
@@ -253,7 +262,37 @@ as examples. Nonetheless, many self-replicating functions meet the conditions
 of the definition I'll present next.
 
 Call a function $f$ *exactly self-replicating* iff there exist continuous
-bijections $s$, $t_1$, and $t_2$ such that
+bijections $s$, $t_1$, and $t_2$ such that $s$ is not the identity function
+and 
+
+$$\begin{array}{rcl}
+  f_L(x) & = & f(x), \\
+  f_R(x) & = & f(s(x)), \\
+  f_S(x) & = & f_L(x) + f_R(x), \text{and} \\
+  f_L(x) & = & t_2(f_S(t_1(x))).
+\end{array}$$ {#eq:exact_defn}
+
+The *L*, *R*, and *S* subscripts are meant to hint that these functions act as
+the left addend, right addend, and the sum. The last equation in
+([@eq:exact_defn]) captures the similarity relationship between the addend
+$f = f_L$ and the
+sum $f_S = f_L + f_R$.
+
+**Example**
+The ramp functions given in [@sec:ramp_functions] and [@sec:nonlinear_ramps],
+viewed as $K-$functions, all adhere to the general form
+
+$$K_{0,1,2,3} + K_{2,3,4,5} = K_{0,1,4,5}.$$
+
+TODO Give the example $s,t_1,t_2$ values. Consider segue into next section.
+
+### All possible positive curves for the example $s,t_1,t_2$ parameters
+
+
+
+---
+
+
 
 TODO finish from here; don't forget that $s$ can't be the identity function
 
