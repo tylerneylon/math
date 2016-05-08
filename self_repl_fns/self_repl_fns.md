@@ -302,7 +302,21 @@ This is a simple yet foundational case — it may be interesting to see
 which other functions are exactly self-replicating with these parameters.
 
 
+TODO Better title for the next section.
+
+
 ### All possible positive curves for the example $s,t_1,t_2$ parameters
+
+Consider a general function $f(x)$ such that $f(x)=0$ except when
+$x \in [0, 5]$. For convenience, I'll introduce the notation
+$\alpha_{[0,1]}$ to denote the function 
+
+$$\alpha_{[0,1]}(x) = \alpha(x) \cdot \big[ x\in [0,1] \big],$$
+
+for any function $\alpha(x)$.
+Using this notation, it will be useful to isolate the left and right ramps
+$r_L(x) = f_{[0,1]}(x)$ and $r_R(x) = \big(f(x + 4)\big)_{[0,1]}$.
+
 
 
 
