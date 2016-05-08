@@ -364,14 +364,12 @@ function.}\label{fig:otherux5framps}
 
 The ramp functions \(K_{a,b,c,d}\) all have the constant value 1 on the
 middle interval \([b, c]\). This requires the ramps on intervals
-\([a, b]\) and \([c, d]\) to sum to 1. In this section, I'll consider
-what can happen if we relax this condition. I'll informally call these
+\([a, b]\) and \([c, d]\) sum to 1. In this section, I'll consider what
+can happen if we relax this condition. I'll informally call these
 \emph{non-plateau functions}.
 
 It will be useful to propose one possible formalization of a
 self-replicating function before exploring non-plateau functions.
-
-Before
 
 \subsubsection{A formal definition for self-replicating
 functions}\label{a-formal-definition-for-self-replicating-functions}
@@ -397,10 +395,11 @@ the identity function and
 \end{array}\label{eq:exact_defn}\end{equation}
 
 The \emph{L}, \emph{R}, and \emph{S} subscripts are meant to hint that
-these functions act as the left addend, right addend, and the sum. The
-last equation in (\ref{eq:exact_defn}) captures the similarity
-relationship between the addend \(f = f_L\) and the sum
-\(f_S = f_L + f_R\).
+these functions act as the \emph{left} addend, \emph{right} addend, and
+the \emph{sum}; the \(s\) function suggests a \emph{shift}, while the
+\(t_1\) and \(t_2\) functions suggest a \emph{transformation}. The last
+equation in (\ref{eq:exact_defn}) captures the similarity relationship
+between the addend \(f = f_L\) and the sum \(f_S = f_L + f_R\).
 
 \textbf{Example} The ramp functions given in
 §\ref{sec:rampux5ffunctions} and §\ref{sec:nonlinearux5framps}, viewed
@@ -408,11 +407,23 @@ as \(K-\)functions, all adhere to the general form
 
 \[K_{0,1,2,3} + K_{2,3,4,5} = K_{0,1,4,5}.\]
 
-TODO Give the example \(s,t_1,t_2\) values. Consider segue into next
-section.
+In this case, \(f(x) = f_L(x) = K_{0,1,2,3}\) and
+\(f_R(x) = K_{2,3,4,5} = f(x-2)\) so that \(s(x) = x - 2\). The equation
+\(f_L(x) = f_S(t_1(x))\) is satisfied by defining
 
-TODO Earlier, mention that s, t\_1, and t\_2 are meant to be a shift and
-transformations.
+\[t_1(x) =
+\begin{cases}
+  x           &   \text{if } x \le 1,                  \\
+  (x - 1)/3   &   \text{if } x \in [1,4], \text{ and}  \\
+  x-3         &   \text{otherwise.}                    \\
+\end{cases}\]
+
+To summarize, \(s(x) = x - 2\), \(t_1(x)\) is defined immediately above,
+and \(t_2(x) = x\).
+
+This is a simple yet foundational case --- it may be interesting to see
+which other functions are exactly self-replicating with these
+parameters.
 
 \subsubsection{\texorpdfstring{All possible positive curves for the
 example \(s,t_1,t_2\)
