@@ -286,6 +286,9 @@ $$K_{0,1,2,3} + K_{2,3,4,5} = K_{0,1,4,5}.$$
 
 TODO Give the example $s,t_1,t_2$ values. Consider segue into next section.
 
+TODO Earlier, mention that s, t_1, and t_2 are meant to be a shift and
+transformations.
+
 ### All possible positive curves for the example $s,t_1,t_2$ parameters
 
 
