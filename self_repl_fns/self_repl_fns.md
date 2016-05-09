@@ -302,7 +302,35 @@ This is a simple yet foundational case — it may be interesting to see
 which other functions are exactly self-replicating with these parameters.
 
 
-TODO Better title for the next section.
+### Characterizing one type of exactly self-replicating function
+
+In this section I'll give sufficient and necessary conditions for a function
+to be exactly self-replicating with the $s$, $t_1$, and $t_2$ functions
+given in the above example, and with $f(x)=0$ outside of the interval
+$[0, 3]$. This can be considered the most general version of the
+category of functions we've explored so far.
+
+\newcommand{\restrict}{\,\big|\,}
+For convenience, I'll introduce a notation to extract a new function with
+domain $[0, 1]$ from any closed domain interval of an original function
+$f$. Specifically, let $f \restrict [a, b]$ denote the function
+mapping $[0,1]\to\mathbb{R}$ where
+
+$$
+\big(f \restrict [a,b]\big)(x) = f(a + (b-a)x).
+$$
+
+Let $f:\mathbb{R}\to\mathbb{R}$ be any function such that $f(x)=0$
+outside of $[0, 3]$.
+Define $r_L = f\restrict [0, 1]$ and $r_R = f\restrict [2,3]$; conceptually,
+these are the left and right ramp functions.
+Let $g = r_L + r_R$. I'll show that the shape of $g$ must dominate the landscape
+of $f$ in order for it to be exactly self-replicating.
+
+
+
+---
+
 
 
 ### All possible positive curves for the example $s,t_1,t_2$ parameters
