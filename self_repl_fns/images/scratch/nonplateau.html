@@ -269,7 +269,7 @@
       xSize = w1
       ySize = h1
 
-      var frame1 = [-0.1, 5.1, -0.1, 1.6]
+      var frame1 = [-0.1, 5.1, -0.1, 1.1]
       var frame2 = frame1
 
       function edge(x) {
@@ -315,7 +315,10 @@
 
       function f(x) {
         //return 6 * (x * x / 2 - x * x * x / 3)
-        return 1 - x * x
+        return (Math.cos(x * 2) + 0.5) / 2
+        //return 1 - Math.sin(x)
+        //return 1 - x * x
+        //return 1 - Math.pow(x, 1.3)
         //return 1 - (x - 1) * (x - 1)
         //return x * x
         //return 1 / (x + 1)
@@ -366,8 +369,8 @@
 
       // --- Setup the colors.
 
-      var fill1 = {h: 200, s: 0.30, l: 0.87}
-      var fill2 = {h:  90, s: 0.30, l: 0.87}
+      var fill1 = {h: 200, s: 0.40, l: 0.88}
+      var fill2 = {h:  45, s: 0.55, l: 0.88}
 
       function hslToRgb(color) {
 

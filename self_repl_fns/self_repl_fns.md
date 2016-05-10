@@ -328,6 +328,10 @@ Let $g = r_L + r_R$. I'll show that the shape of $g$ must dominate the landscape
 of $f$ in order for it to be exactly self-replicating.
 
 
+TODO work up to this image
+
+![TODO](images/nonplateau.png)
+
 
 ---
 
