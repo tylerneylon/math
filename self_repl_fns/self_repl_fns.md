@@ -327,6 +327,37 @@ these are the left and right ramp functions.
 Let $g = r_L + r_R$. I'll show that the shape of $g$ must dominate the landscape
 of $f$ in order for it to be exactly self-replicating.
 
+I'll use the exactly self-replicating definition ([@eq:exact_defn]) to
+provide functions $f_L$, $f_R$, and $f_S$ in terms of $f$, $s$, $t_1$, and
+$t_2$.
+Notice that
+
+$$\big(f_S \restrict [2,3]\big) = \big(f_L + f_R \restrict [2, 3]\big) =
+r_L + r_R = g.$$
+
+Since $f_L(x) = f_S(t_1(x))$, and $t_1$ maps $[2,3]$ to
+$[1\tfrac{1}{3}, 1\tfrac{2}{3}]$,
+this means $(\,f_L \restrict [1\tfrac{1}{3}, 1\tfrac{2}{3}]) = g$.
+
+\newcommand{\zerotwo}{\genfrac{}{}{0pt}{}
+{\raisebox{0pt}{\scriptsize 0}}
+{\raisebox{2pt}{\scriptsize 2}}}
+
+At this point it will be useful to begin using base-3 notation for the
+intervals at hand. If $s$ is a finite string with digits from the set
+$\{0, 1, 2\}$, then let $0.s\overline{*}_3$ denote the closure of the set of
+points whose base-3 expansion begins with $0.s$. For example,
+$0.11\overline{*}_3$ denotes the interval $[0.11_3, 0.12_3]$ while
+$0.012\overline{*}_3$ denotes the interval $[0.12_3, 0.20_3]$.
+I'll also use $\zerotwo$ to denote a digit that may be either a 0 or a 2;
+for example, $0.1\zerotwo 1\overline{*}_3$ denotes the union of intervals
+$[0.101_3, 0.102_3]$ and $[0.121_3, 0.122_3]$.
+
+Now I can write $(\,f_L \restrict 1 + 0.1\overline{*}_3) = g$.
+This means that $(\,f_R \restrict 3 + 0.1\overline{*}_3) = g$, so that
+$(\,f_S \restrict \{1,3\} + 0.1\overline{*}_3) = g$.
+As above, use the map $t_1$ to conclude that
+$(\,f_L \restrict 0.\zerotwo 1\overline{*}_3) = g$.
 
 TODO work up to this image
 
