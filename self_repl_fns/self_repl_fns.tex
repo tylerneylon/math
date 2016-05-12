@@ -463,9 +463,11 @@ Since \(f_L(x) = f_S(t_1(x))\), and \(t_1\) maps \([2,3]\) to
 \([1\tfrac{1}{3}, 1\tfrac{2}{3}]\), this means
 \((\,f_L \restrict [1\tfrac{1}{3}, 1\tfrac{2}{3}]) = g\).
 
-\newcommand{\zerotwo}{\genfrac{}{}{0pt}{}
-{0}
-{\raise2pt\mbox{2}}}
+\newcommand{\zerotwo}{\raise1.5pt\hbox{$\genfrac{}{}{0pt}{}
+{\lower1.8pt\hbox{$\smash{\scriptstyle 0}$}}
+{\raise0pt\hbox{$\smash{\scriptstyle 2}$}}$}}
+
+%\newcommand{\zerotwo}{{\lower1em\hbox{$\smash{0}$}\atop\hbox{$\smash{2}$}}}
 
 At this point it will be useful to begin using base-3 notation for the
 intervals at hand. If \(s\) is a finite string with digits from the set
@@ -478,8 +480,10 @@ may be either a 0 or a 2; for example, \(0.1\zerotwo 1\overline{*}_3\)
 denotes the union of intervals \([0.101_3, 0.102_3]\) and
 \([0.121_3, 0.122_3]\).
 
-Now I can write \((\,f_L \restrict 1 + 0.1\overline{*}_3) = g\). This
-means that \((\,f_R \restrict 3 + 0.1\overline{*}_3) = g\), so that
+Now, instead of writing
+\((\,f_L \restrict [1\tfrac{1}{3}, 1\tfrac{2}{3}]) = g\), I can write
+\((\,f_L \restrict 1 + 0.1\overline{*}_3) = g\). This means that
+\((\,f_R \restrict 3 + 0.1\overline{*}_3) = g\), so that
 \((\,f_S \restrict \{1,3\} + 0.1\overline{*}_3) = g\). As above, use the
 map \(t_1\) to conclude that
 \((\,f_L \restrict 0.\zerotwo 1\overline{*}_3) = g\).
