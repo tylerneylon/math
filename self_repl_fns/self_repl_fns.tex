@@ -448,13 +448,22 @@ function mapping \([0,1]\to\mathbb{R}\) where
 Let \(f:\mathbb{R}\to\mathbb{R}\) be any function such that \(f(x)=0\)
 outside of \([0, 3]\). Define \(r_L = f\restrict [0, 1]\) and
 \(r_R = f\restrict [2,3]\); conceptually, these are the left and right
-ramp functions. Let \(g = r_L + r_R\). I'll show that the shape of \(g\)
-must dominate the landscape of \(f\) in order for it to be exactly
-self-replicating.
+ramp functions. Let \(g = r_L + r_R\).
 
-I'll use the exactly self-replicating definition (\ref{eq:exact_defn})
-to provide functions \(f_L\), \(f_R\), and \(f_S\) in terms of \(f\),
-\(s\), \(t_1\), and \(t_2\). Notice that
+\begin{figure}[htbp]
+\centering
+\includegraphics{images/pdfs/nonpl_setup.pdf}
+\caption{\label{fig:nonpl_setup}An example showing how \(r_L\), \(r_R\),
+and \(g\) are extracted from a function
+\(f\).}\label{fig:nonplux5fsetup}
+\end{figure}
+
+I'll show that the shape of \(g\) must dominate the landscape of \(f\)
+in order for it to be exactly self-replicating.
+
+Now suppose that \(f\) is exactly self-replicating. I'll use definition
+(\ref{eq:exact_defn}) to provide functions \(f_L\), \(f_R\), and \(f_S\)
+in terms of \(f\), \(s\), \(t_1\), and \(t_2\). Notice that
 
 \[\big(f_S \restrict [2,3]\big) = \big(f_L + f_R \restrict [2, 3]\big) =
 r_L + r_R = g.\]

@@ -324,10 +324,18 @@ Let $f:\mathbb{R}\to\mathbb{R}$ be any function such that $f(x)=0$
 outside of $[0, 3]$.
 Define $r_L = f\restrict [0, 1]$ and $r_R = f\restrict [2,3]$; conceptually,
 these are the left and right ramp functions.
-Let $g = r_L + r_R$. I'll show that the shape of $g$ must dominate the landscape
+Let $g = r_L + r_R$.
+
+![An example showing how $r_L$, $r_R$, and $g$ are extracted from a
+function $f$.](images/nonpl_setup.png){#fig:nonpl_setup}
+
+TODO Clean up the font used in this image (looks bad in the pdf right now).
+
+I'll show that the shape of $g$ must dominate the landscape
 of $f$ in order for it to be exactly self-replicating.
 
-I'll use the exactly self-replicating definition ([@eq:exact_defn]) to
+Now suppose that $f$ is exactly self-replicating.
+I'll use definition ([@eq:exact_defn]) to
 provide functions $f_L$, $f_R$, and $f_S$ in terms of $f$, $s$, $t_1$, and
 $t_2$.
 Notice that

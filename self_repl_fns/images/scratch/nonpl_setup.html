@@ -258,17 +258,24 @@
         return polyline
       }
 
+      function added(fn1, fn2) {
+        return function (x) { return fn1(x) + fn2(x) }
+      }
+
       numFnPts = 2500
 
       var opts = {doEqualizeAxes: true}
 
       var w1 = 450, h1 = 140
       var w2 = w1,  h2 = h1
-      var xMargin = 40
-      var vSkip   = 80
+      var xMargin = 282
+      var vSkip   = 30
+      var vBelow  = 70
+
+      var gOffset = xMargin + 550
 
       var xSize = 1232
-      var ySize = 2 * h1 + vSkip
+      var ySize = h1 + vSkip + h2 + vBelow
       addAttributes(svg, {width: xSize, height: ySize})
 
       var xOffset = 0
@@ -463,8 +470,15 @@
       yOffset += (h1 + vSkip)
       xSize    = rightRL[0] - leftRL[0]
       ySize    = xSize
+      h2       = ySize
+
+      addAttributes(svg, {width: 1232, height: h1 + vSkip + h2 + vBelow})
 
       drawAxes(frame2)
+
+      poly = shapeBelowFn1AboveFn2(frame2, f, just0)
+      addAttributes(poly, {fill: colorStr(fill1)})
+
       poly = drawFn(frame2, f)
       addAttributes(poly, {stroke: colorStr(darken(fill1))})
 
@@ -476,27 +490,86 @@
       ySize    = xSize
 
       drawAxes(frame2)
-      poly = drawFn(frame2, function (x) { return f(1 - x) })
-      addAttributes(poly, {stroke: colorStr(darken(fill1))})
+
+      function fprime(x) { return f(1 - x) }
+
+      poly = shapeBelowFn1AboveFn2(frame2, fprime, just0)
+      addAttributes(poly, {fill: colorStr(fill2)})
+
+      poly = drawFn(frame2, fprime)
+      addAttributes(poly, {stroke: colorStr(darken(fill2))})
+
+
+      // --- The g graph.
+
+      xOffset = gOffset
+
+      drawAxes(frame2)
+
+      poly = shapeBelowFn1AboveFn2(frame2, f, just0)
+      addAttributes(poly, {fill: colorStr(fill1), stroke: 'transparent'})
+
+      poly = drawFn(frame2, f)
+      addAttributes(poly, {stroke: '#fff'})
+
+      poly = shapeBelowFn1AboveFn2(frame2, added(f, fprime), f)
+      addAttributes(poly, {fill: colorStr(fill2), stroke: 'transparent'})
+
+      drawFn(frame2, added(f, fprime))
 
 
       // --- The + and = characters.
 
-      /*
-      var yText = h1 + vSkip / 2 + 15
+      var textStyle = {stroke: '#ddd', fill: '#ddd', stroke: 'transparent',
+                       'font-size': '64px'}
 
-      var text = add('text', lightStyle)
-      addAttributes(text, {x: (w1 / 2 + xMargin - 20), y: yText,
-                           fill: '#ddd', stroke: 'transparent'})
-      addAttributes(text, {'font-size': '64px'})
+      var yText = h1 + vSkip + h2 / 2 + 15
+
+      var text = add('text', textStyle)
+      addAttributes(text, {x: (w1 / 2 + xMargin - 20), y: yText})
       text.innerHTML = '+'
 
-      var text = add('text', lightStyle)
-      addAttributes(text, {x: (xSizeOrig - w2 + w1) / 2 - 20, y: yText,
-                           fill: '#ddd', stroke: 'transparent'})
-      addAttributes(text, {'font-size': '64px'})
+      var xOfEquals = (rightRR[0] + gOffset) / 2 - 17
+      var text = add('text', textStyle)
+      addAttributes(text, {x: xOfEquals, y: yText})
       text.innerHTML = '='
-      */
+
+      // --- The r_L, r_R, and g labels.
+
+      textStyle = {fill: '#888', stroke: 'transparent', 'font-size': '64px'}
+
+      // r_L
+
+      text = add('text', textStyle)
+      var xText
+      xText = (leftRL[0] + rightRL[0]) / 2 - 15
+      yText = h1 + vSkip + h2 + vBelow - 20
+      addAttributes(text, {x: xText, y: yText, 'font-style': 'italic'})
+      text.innerHTML = 'r'
+
+      text = add('text', textStyle)
+      addAttributes(text, {x: (xText + 14), y: (yText + 14),
+                           'font-style': 'italic', 'font-size': '24pt'})
+      text.innerHTML = 'L'
+
+      // r_R
+
+      text = add('text', textStyle)
+      xText = (leftRR[0] + rightRR[0]) / 2 - 15
+      addAttributes(text, {x: xText, y: yText, 'font-style': 'italic'})
+      text.innerHTML = 'r'
+
+      text = add('text', textStyle)
+      addAttributes(text, {x: (xText + 14), y: (yText + 14),
+                           'font-style': 'italic', 'font-size': '24pt'})
+      text.innerHTML = 'R'
+
+      // g
+
+      text = add('text', textStyle)
+      xText = gOffset + xSize / 2 - 15
+      addAttributes(text, {x: xText, y: yText, 'font-style': 'italic'})
+      text.innerHTML = 'g'
 
     </script>
   </body>
