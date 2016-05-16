@@ -372,8 +372,12 @@ $(\,f_L \restrict 0.\zerotwo 1\overline{*}_3) = g$.
 
 TODO work up to this image
 
-![TODO](images/nonplateau.png)
+![An exactly self-replicating function $f$ completely determined by
+$r_L(x) = \cos(2x)/2 + 1/4$,
+$r_R(x) = r_L(1 - x)$, and the value $f(x) = r_L(0) + r_R(0)$ for all $x$ not
+determined by $r_L$ and $r_R$.](images/nonplateau.png){#fig:nonplateau}
 
+TODO Clarify the values of $s$, $t_1$, and $t_2$ in that caption.
 
 ---
 
