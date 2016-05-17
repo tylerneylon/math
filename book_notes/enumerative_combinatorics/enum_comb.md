@@ -185,5 +185,62 @@ specifically, the paragraph starting with "In the other direction,—."
 
 ---
 
+**Clarifications around proposition 1.3.12**
+
+Shortly after that, the book presents a permutation in standard cycle
+notation,
+
+$$\pi = (a_1 a_2 \ldots a_{i_1}) \,
+        (a_{i_1+1} a_{i_1+2} \ldots a_{i_2}) \, \cdots \,
+        (a_{i_{k-1}+1} \ldots a_n).$$
+
+It also works with $\hat\pi$, the permutation achieved by dropping the
+parentheses from the standard cycle notation of $\pi$, and the notation
+$d(\hat\pi)$ for the number of descents — places where $a_i > a_{i+1}$ — in the
+permutation $\hat\pi$.
+
+I'm going to clarify the argument leading up to the equation
+
+$$n-d(\hat\pi) = \#\{i\in[n]:\pi(i)\ge i\}.$$ {#eq:num_desc_pi_hat}
+
+The first claim to verify is that "if $\pi(a_i)\ne a_{i+1}$, then
+$a_i<a_{i+1}$."
+The precondition conceptually means that $a_i$ is is an end-of-cycle value.
+The consequence follows by the nature of standard cycle notation — cycle leader
+values are always greater than their preceding value.
+
+The second claim to verify is that
+
+$$a_i<a_{i+1}\text{ or }i=n \quad\Leftrightarrow\quad \pi(a_i)\ge a_i.$$ {#eq:pre_num_desc_iff}
+
+I'll justify this using two cases.
+First, suppose $a_i$ is an end-of-cycle value. We saw in the last paragraph that
+this means the
+left side is true; the right side is also true since $\pi$ was written in
+standard cycle notation, and $\pi(a_i)$ is the leader of $a_i$'s cycle.
+Next, suppose $a_i$ is not an end-of-cycle value. Then $i=n$ is false, so we're
+looking at
+$a_i<a_{i+1}\,\Leftrightarrow\,\pi(a_i)\ge a_i,$ which is clearly true
+since $\pi(a_i) = a_{i+1}$ whenever $a_i$ is not an end-of-cycle value.
+This justifies ([@eq:pre_num_desc_iff]).
+
+The jump from ([@eq:pre_num_desc_iff]) to ([@eq:num_desc_pi_hat]) is
+based on counting. Specifically, rewrite ([@eq:pre_num_desc_iff]) as
+
+$$\#\{i:a_i<a_{i+1}\text{ or }i=n\} = \#\{i:\pi(a_i)\ge a_i\}.$$
+
+The left side is the number of $i$ which are non-descents in $\hat\pi$,
+in other words
+$n - d(\hat\pi)$. That is, we've arrived at ([@eq:num_desc_pi_hat]).
+
+TODO rest of notes from my voice memo
+
+TODO drop the prefix space in the cross refs
+
+
+
+
+---
+
 # References
 
