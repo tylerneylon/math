@@ -5,6 +5,12 @@
 These are somewhat informal notes I'm taking as I read through the book
 *Enumerative Combinatorics, Volume 1* by Richard P. Stanley [@stanley].
 
+If you're also reading this book, I recommend looking at the errata
+for the chapter you're reading. The errata are at the back of the book
+— on page 319 in my edition. I've marked the corrections in pencil in my book to
+avoiding having to scratch my head and rework through any already-known
+bugs.
+
 
 # Notes on chapter 1
 
