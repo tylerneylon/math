@@ -1,8 +1,13 @@
 #!/bin/bash
 # Add a -x to the end of the above line to help debug this script.
 
+# Set up prefix templates for pandoc-crossref.
+ept='$$i$$'
+spt='$$p$$$$i$$'
+crossref_flags="-M secPrefix=§ -M secPrefixTemplate=${spt} -M eqnPrefixTemplate=${ept} --filter pandoc-crossref"
+
 NAME=enum_comb
-FLAGS="-S -s --filter pandoc-crossref -M eqnPrefix='' -M linkcolor=black --number-sections --bibliography=${NAME}.bib ${NAME}.md"
+FLAGS="-s -S ${crossref_flags} -M linkcolor=black --number-sections --bibliography=${NAME}.bib ${NAME}.md"
 
 # Make and open the html file.
 pandoc --mathjax --template=template.html ${FLAGS} > ${NAME}.html
