@@ -233,9 +233,23 @@ The left side is the number of $i$ which are non-descents in $\hat\pi$,
 in other words
 $n - d(\hat\pi)$. That is, we've arrived at ([@eq:num_desc_pi_hat]).
 
-TODO rest of notes from my voice memo
+Next is the claim that "a permutation $\pi=a_1a_2\cdots a_n$ has $k$ weak
+excedences if and only if the permutation $b_1b_2\cdots b_n$ defined by
+$b_i = n+1-a_{n+1-i}$ has $n-k$ excedences." Given the permutation with
+word $a_1a_2\cdots a_n$, I'll use the term *flipped* to refer to the
+permutation with $i^\text{th}$ value $n+1-a_i$, and the term *reversed*
+to refer to the permutation with $i^\text{th}$ value $a_{n+1-i}$.
+So the claim is pointing toward a kind of partitioning of $[n]$ based on
+weak excedences in a permutation versus excedences in its flipped reversal.
+[@Fig:excedence] gives a visual explanation of this partitioning,
+which I hope adds some intuition to the claim.
 
-TODO drop the prefix space in the cross refs
+![This represents the permutation $\pi_a = 21435$ and its flipped reverse
+permutation $\pi_b = 13254$. Permutation values above the bold zig-zagging
+diagonal cut are weak excedences of $\pi_a$ while those below are
+excedences of $\pi_b$.](images/excedence.png){#fig:excedence}
+
+TODO rest of notes from my voice memo
 
 
 
