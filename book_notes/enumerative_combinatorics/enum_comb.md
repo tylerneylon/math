@@ -261,8 +261,6 @@ are a total of $n - 1$ possible descent positions, and from the fact that
 $a_i, a_{i+1}$ is a descent in $\pi$ iff $a_{n-i}, a_{n-i+1}$ is *not* a
 descent in $\dot\pi$.
 
-TK Check the following paragraph.
-
 When reading that previous claim, I had originally interpreted $\pi$ as still
 being specified in the cycle notation
 
@@ -273,7 +271,7 @@ $$\pi = (a_1 a_2 \ldots a_{i_1}) \,
 I no longer think this is what the author had in mind — but under that
 interpretation there arises the question: does $d(\pi) = d(\hat\pi)$?
 I would not expect this to be true, and it is indeed false. But curiously it is
-true for most of the small test cases I tried on it.
+true for most of the small test cases I tried it on.
 The smallest counterexample I could find is the pair
 
 $$\begin{array}{rcccl}
@@ -283,20 +281,34 @@ $$\begin{array}{rcccl}
 
 Then, $d(\pi) = 1$ while $d(\hat\pi) = 2$.
 
-TK Check from here going down against the book.
-
 Now we're ready to justify the proposition itself.
 
 **Proposition 1.3.12**
-TK fill this out
+The number of permutations $\pi\in\mathfrak S_n$ with $k$ excedences, as
+well as the number with $k+1$ weak excedences, is equal to the Eulerian
+number $A(n,k+1)$.
 
-TK TODO rest of notes from my voice memo; I'm at about 5:20.
+---
 
-$n - d(\hat\pi)$ = number of i with 
-suppose we have k + 1 weak excedences in pi
-number of descents of $\hat\pi$ is
+Here is how I see the proof: Suppose $\pi$ has $k + 1$ weak excedences.
+By
+([@eq:num_desc_pi_hat]), there are $n - k - 1$ descents in $\hat\pi$,
+and thus exactly $k$ descents in the reversal of $\hat\pi$. Thus we have
+a bijection between permutations with $k+1$ weak excedences and those
+counted by $A(n,k+1)$.
+Next, suppose $\pi$ has $k$ excedences. Then its flipped reversal $\sigma$
+has $n-k$ weak excedences, and, using ([@eq:num_desc_pi_hat]) again,
+$\hat\sigma$ has exactly $k$ descents. Thus we have a bijection between
+permutations with $k$ excedences and, again, those counted by $A(n,k+1)$.
 
+I could intuitively summarize this by writing, somewhat informally, that
 
+$$\begin{array}{rcl}
+  k     \text{ excedences}      \;\approx\;
+  k     \text{ descents}        \;\approx\;
+  n-k-1 \text{ descents}        & \approx & \\
+  k+1   \text{ weak excedences} & \approx &
+  A(n, k+1).\end{array}$$
 
 
 ---
