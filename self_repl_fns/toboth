@@ -19,7 +19,7 @@ mv ${TMP} ${NAME}.html
 # Make and open the pdf file.
 pandoc -t latex -o ${NAME}.tex -s ${FLAGS}
 TMP=$(mktemp tmp_XXXX)
-sed 's|images/\(.*\)\.png|images/pdfs/\1.pdf|' self_repl_fns.tex > ${TMP}
+sed 's|images/\(.*\)\.png|images/pdfs/\1.pdf|' ${NAME}.tex > ${TMP}
 mv ${TMP} ${NAME}.tex
 pdflatex ${NAME}.tex
 #open ${NAME}.pdf

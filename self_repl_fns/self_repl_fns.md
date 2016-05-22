@@ -243,7 +243,7 @@ non-peak-monotonic function.](images/other_ramps2.png){#fig:other_ramps}
 
 The ramp functions $K_{a,b,c,d}$ all have the constant value 1 on the
 middle interval $[b, c]$. This requires the ramps on intervals $[a, b]$ and
-$[c, d]$ sum to 1. In this section, I'll consider what can happen if we relax
+$[c, d]$ to sum to 1. In this section, I'll consider what can happen if we relax
 this condition. I'll informally call these *non-plateau functions*.
 
 It will be useful to propose one possible formalization of a
@@ -290,9 +290,9 @@ The equation $f_L(x) = f_S(t_1(x))$ is satisfied by defining
 
 $$t_1(x) =
 \begin{cases}
-  x           &   \text{if } x \le 1,                  \\
-  (x - 1)/3   &   \text{if } x \in [1,4], \text{ and}  \\
-  x-3         &   \text{otherwise.}                    \\
+  x              &   \text{if } x \le 1,                  \\
+  (x - 1)/3 + 1  &   \text{if } x \in [1,4], \text{ and}  \\
+  x - 2          &   \text{otherwise.}                    \\
 \end{cases}$$
 
 To summarize, $s(x) = x - 2$, $t_1(x)$ is defined immediately above, and
@@ -314,7 +314,7 @@ category of functions we've explored so far.
 For convenience, I'll introduce a notation to extract a new function with
 domain $[0, 1]$ from any closed domain interval of an original function
 $f$. Specifically, let $f \restrict [a, b]$ denote the function
-mapping $[0,1]\to\mathbb{R}$ where
+with domain $[0,1]$ where
 
 $$
 \big(f \restrict [a,b]\big)(x) = f(a + (b-a)x).
@@ -329,15 +329,14 @@ Let $g = r_L + r_R$.
 ![An example showing how $r_L$, $r_R$, and $g$ are extracted from a
 function $f$.](images/nonpl_setup.png){#fig:nonpl_setup}
 
-TODO Clean up the font used in this image (looks bad in the pdf right now).
-
 I'll show that the shape of $g$ must dominate the landscape
 of $f$ in order for it to be exactly self-replicating.
 
-Now suppose that $f$ is exactly self-replicating.
+Now suppose that $f$, in addition to having $f(x)=0$ outside of $[0,3]$,
+is also exactly self-replicating.
 I'll use definition ([@eq:exact_defn]) to
 provide functions $f_L$, $f_R$, and $f_S$ in terms of $f$, $s$, $t_1$, and
-$t_2$.
+$t_2.$
 Notice that
 
 $$\big(f_S \restrict [2,3]\big) = \big(f_L + f_R \restrict [2, 3]\big) =
@@ -346,6 +345,12 @@ r_L + r_R = g.$$
 Since $f_L(x) = f_S(t_1(x))$, and $t_1$ maps $[2,3]$ to
 $[1\tfrac{1}{3}, 1\tfrac{2}{3}]$,
 this means $(\,f_L \restrict [1\tfrac{1}{3}, 1\tfrac{2}{3}]) = g$.
+Below, I'll show how repeated application of this kind of logic determines
+the non-ramp values of $f$ almost everywhere; a boolean property
+$P:\mathbb{R}\to\{\text{true},\text{false}\}$ is defined to be true
+[*almost everywhere*](https://en.wikipedia.org/wiki/Almost_everywhere)
+when the set $\{x : P(x) = \text{false}\}$ has measure
+zero.
 
 \newcommand{\zerotwo}{\raise1.5pt\hbox{$\genfrac{}{}{0pt}{}
 {\lower1.8pt\hbox{$\smash{\scriptstyle 0}$}}
@@ -364,11 +369,20 @@ for example, $0.1\zerotwo 1\overline{*}_3$ denotes the union of intervals
 $[0.101_3, 0.102_3]$ and $[0.121_3, 0.122_3]$.
 
 Now, instead of writing $(\,f_L \restrict [1\tfrac{1}{3}, 1\tfrac{2}{3}]) = g$,
-I can write $(\,f_L \restrict 1 + 0.1\overline{*}_3) = g$.
-This means that $(\,f_R \restrict 3 + 0.1\overline{*}_3) = g$, so that
-$(\,f_S \restrict \{1,3\} + 0.1\overline{*}_3) = g$.
-As above, use the map $t_1$ to conclude that
-$(\,f_L \restrict 0.\zerotwo 1\overline{*}_3) = g$.
+I can write
+
+$$\big(\,f_L \restrict 1 + 0.1\overline{*}_3\big) = g.$$ {#eq:nonpl_base_case}
+
+It's possible to generalize this last equation so that it defines
+$f_L$ almost everywhere on the interval $[1, 2]$.
+
+**Theorem**
+*For any $k\ge 0$,
+$$\big(\,f_L \restrict 1 + 0.\zerotwo^k1\overline{*}_3\big)=g.$$*
+
+
+
+TODO Explore using latex-like environments for theorems.
 
 TODO work up to this image
 
@@ -380,6 +394,11 @@ determined by $r_L$ and $r_R$.](images/nonplateau.png){#fig:nonplateau}
 TODO Clarify the values of $s$, $t_1$, and $t_2$ in that caption.
 
 ---
+
+This means that $(\,f_R \restrict 3 + 0.1\overline{*}_3) = g$, so that
+$(\,f_S \restrict \{1,3\} + 0.1\overline{*}_3) = g$.
+As above, use the map $t_1$ to conclude that
+$(\,f_L \restrict 0.\zerotwo 1\overline{*}_3) = g$.
 
 
 
