@@ -332,7 +332,7 @@ function $f$.](images/nonpl_setup.png){#fig:nonpl_setup}
 I'll show that the shape of $g$ must dominate the landscape
 of $f$ in order for it to be exactly self-replicating.
 
-Now suppose that $f$, in addition to having $f(x)=0$ outside of $[0,3]$,
+Now suppose that, in addition to having $f(x)=0$ outside of $[0,3]$, $f$ 
 is also exactly self-replicating.
 I'll use definition ([@eq:exact_defn]) to
 provide functions $f_L$, $f_R$, and $f_S$ in terms of $f$, $s$, $t_1$, and
@@ -375,6 +375,12 @@ $$\big(\,f \restrict 1 + 0.1\lstar\big) = g.$$ {#eq:nonpl_base_case}
 
 It's possible to generalize this last equation so that it defines
 $f$ almost everywhere on the interval $[1, 2]$.
+
+Recall that the notation $1 + 0.\zerotwo^k1\lstar$ indicates a union of
+closed intervals.
+In the next theorem, the notation $(\,f \restrict \cup_i [a_i,b_i]) = g$
+indicates
+that, for every $i$ in the union, $(\,f \restrict [a_i,b_i]) = g$.
 
 **Theorem 1** $\;$
 *For any $k\ge 0$,
