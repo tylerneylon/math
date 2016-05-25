@@ -410,6 +410,9 @@ $$\big(f \restrict 1 + 0.\zerotwo^{k+1}1\lstar \big) = g.$$
 \hfill$\Box$
 </p>
 
+![TODO](images/nonpl_process.png)
+
+
 TODO the image for the above proof, and why it is almost everywhere;
      then the remaining cases and relation to Cantor dust.
 
