@@ -532,6 +532,9 @@ Applying \(t_1\) to derive \(f=f_L\) back from \(f_S\), we can see that
 
 \hfill\(\Box\)
 
+Let \(A_k = 1 + 0.\zerotwo^k1\lstar\). Figure~\ref{fig:nonpl_process}
+illustrates \(A_k\) for low values of \(k\).
+
 \begin{figure}[htbp]
 \centering
 \includegraphics{images/pdfs/nonpl_process.pdf}
@@ -541,6 +544,44 @@ below that is the domain \([0,3]\) of \(\,f\); then the subsets of
 \([1,2]\) on which \(f\) is described as the induction
 proceeds.}\label{fig:nonplux5fprocess}
 \end{figure}
+
+If \(x\in A_k\), then either \(x=0.\zerotwo^k1\ldots\) or
+\(x=0.\zerotwo^k2\). Suppose \(x_j\in A_j\) and \(x_k\in A_k\), where
+\(j < k\). Then either the \((j+1)^\text{th}\) digit of \(x_j\) is 1, or
+the \((j+1)^\text{th}\) digit of \(x_j\) is 2 and all subsequent digits
+are 0. In either case, \(x_j\ne x_k\) since the \((j+1)^\text{th}\)
+digit of \(x_k\) can't be 1 and the \((k+1)^\text{th}\) digit of \(x_k\)
+must be 1. Thus all of the \(A_k\) sets are pairwise disjoint.
+
+Because they're disjoint, we can find the total measure of the sets
+\(A_k\) as follows:
+
+\[\mu(\cup_k A_k) = \sum_{k \ge 0}\mu(A_k) = \sum_{k\ge 0}
+\frac{1}{3}\left(\frac{2}{3}\right)^k = 1.\]
+
+Since each \(A_k\subset [1,2]\), this justifies the claim that theorem 1
+characterizes \(f\) almost everywhere in that interval.
+
+What values may \(f\) take on for the points \(x\not\in A_k\) for any
+\(k\)? The choice is still not arbitrary as the values remain related.
+Note that, given \(x\), there is some \(k\) with \(x\in A_k\) iff the
+base-3 expansion of \(x\) contains a 1 or if it ends with the tail
+\(\overline{0}\), excluding \(x=1\) and \(x=2\). This can be written
+somewhat informally as
+
+\[\forall k, x\not\in A_k \Leftrightarrow x - 1 \in 0.\zerotwo^\infty_3 -
+0.\zerotwo^k\overline{0}_3.\]
+
+From here on, I'll more formally use the word \emph{expansion} to
+indicate a function \(b:\mathbb{N}_{\ge 1}\to \{0, 1, 2\}\) which
+denotes the value \(v(b) = \sum_{k\ge 1}b(k)/3^k\). Given an expansion
+\(b\), let
+\(\text{tail}(b) = \{\text{expansion }\beta \;|\; \exists\, j, k: b(j + m) = \beta(k + m) \,\forall\, m \ge 0\}\).
+Conceptually, \(\text{tail}(b)\) is the set of all numbers in \([0, 1]\)
+with the same final sequence of base-3 digits as \(b\), ignoring any
+finite prefix of either expansion. For example,
+\(x=0.21021\overline{011}_3\) and \(y=0.001\overline{011}_3\) have
+\(\text{tail}(x) = \text{tail}(y)\).
 
 TODO the image for the above proof, and why it is almost everywhere;
 then the remaining cases and relation to Cantor dust.
