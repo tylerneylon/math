@@ -410,7 +410,10 @@ $$\big(f \restrict 1 + 0.\zerotwo^{k+1}1\lstar \big) = g.$$
 \hfill$\Box$
 </p>
 
-![TODO](images/nonpl_process.png)
+![The inductive process in the proof of theorem 1. The top
+line is the domain $[0,5]$ of $\,f_S$; the line below that is the
+domain $[0,3]$ of $\,f$; then the subsets of $[1,2]$ on which $f$ is
+described as the induction proceeds.](images/nonpl_process.png){#fig:nonpl_process}
 
 
 TODO the image for the above proof, and why it is almost everywhere;
