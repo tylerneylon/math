@@ -288,6 +288,9 @@ In this case, $f(x) = f_L(x) = K_{0,1,2,3}$ and
 $f_R(x) = K_{2,3,4,5} = f(x-2)$ so that $s(x) = x - 2$.
 The equation $f_L(x) = f_S(t_1(x))$ is satisfied by defining
 
+TODO This is accidentally the inverse of $t_1$. Fix this definition and the
+     corresponding image below; check for any other residual errors.
+
 $$t_1(x) =
 \begin{cases}
   x              &   \text{if } x \le 1,                  \\
@@ -445,16 +448,51 @@ informally as
 $$\forall k, x\not\in A_k \Leftrightarrow x - 1 \in 0.\zerotwo^\infty_3 -
 0.\zerotwo^k\overline{0}_3.$$
 
-From here on, I'll more formally use the word *expansion* to indicate a function
-$b:\mathbb{N}_{\ge 1}\to \{0, 1, 2\}$ which denotes the value $v(b) = \sum_{k\ge
-1}b(k)/3^k$.
-Given an expansion $b$, let $\text{tail}(b) = \{\text{expansion }\beta \;|\;
-\exists\, j, k: b(j + m) = \beta(k + m) \,\forall\, m \ge 0\}$.
-Conceptually, $\text{tail}(b)$ is the set of all numbers in $[0, 1]$ with
-the same final sequence of base-3 digits as $b$, ignoring any finite prefix
+From here on, I'll more formally use the word *expansion* — based on the idea of
+the base-3 expansion of a number in $[0,1]$ — to indicate a function
+$E:\mathbb{N}_{\ge 1}\to \{0, 1, 2\}$ which denotes the value $v(E) = \sum_{k\ge
+1}E(k)/3^k.$
+If $x=v(E)$, we may write $x = 0.E_3$ and think of $E$ as an infinite string
+on the alphabet $\{0,1,2\}$.
+
+TODO Consider where the next paragraph should go.
+
+Given an expansion $E$, let $\text{tail}(E) = \big\{\text{expansion }\eta
+\;\big|\;
+\exists\, j, k: E(j + m) = \eta(k + m) \,\forall\, m \ge 0\big\}$.
+Conceptually, $\text{tail}(E)$ is the set of all numbers in $[0, 1]$ with
+the same final sequence of base-3 digits as $E$, ignoring any finite prefix
 of either expansion.
 For example, $x=0.21021\overline{011}_3$ and
 $y=0.001\overline{011}_3$ have $\text{tail}(x) = \text{tail}(y)$.
+
+Suppose that $f(x) = y$ for some $x\in (1,2)$ and not in any set $A_k$.
+Let $E$ be the expansion with $x=1.E_3$.
+Then $f_S(x+\{0,2\}) = y$ and, by applying $t_1$,
+$f(x') = y$ for $x' = (x+2)/3$ and $x' = (x+4)/3$.
+In expansion notation, we can write these last two
+equations as $x' = x/3 + 2/3 = 0.1E_3 + 0.2_3 = 1.0E_3$ and
+as $x' = x/3 + 4/3 = 0.1E_3 + 1.1_3 = 1.2E_3$.
+We can summarize this reasoning as
+
+$$f(1.E_3) = y \quad \Rightarrow \quad
+  f(1.\zerotwo E_3) = y.$$
+
+TODO HERE Continue this reasoning in the other direction and summarize
+          the aforementioned results (whatever are appropriate in a single
+          theorem statement) as a theorem.
+
+Suppose that $f(x) = y$ for some $x\in (1,2)$ and not in any set $A_k$.
+Let $b$ be an expansion with $v(b) = x-1$.
+Then $f_S(x+\{0,2\}) = y$ and, by applying $t_1$,
+$f((x+\{2,4\})/3) = y$. The expansion of $(x+2)/3 - 1$ is
+
+Now suppose that $f(x) = y$ for some point $x$ not in any set $A_k$.
+Then $f_S(x') = y$ for both $x' = x$ and $x' = x + 2$.
+Suppose $x'' \in (1, 2)$.
+Since $f(x'') = f_S(t_1(x'')) = f_S(3x''-2)$, this means that
+($3x''-2 = x' \Leftrightarrow x'' = (x'+2) / 3 = (x+\{2,4\})/3$)
+$f()$
 
 
 TODO the image for the above proof, and why it is almost everywhere;
