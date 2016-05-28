@@ -582,27 +582,61 @@ denotes the value \(v(E) = \sum_{k\ge 1}E(k)/3^k.\) If \(x=v(E)\), we
 may write \(x = 0.E_3\) and think of \(E\) as an infinite string on the
 alphabet \(\{0,1,2\}\).
 
-TODO Consider where the next paragraph should go.
-
-Given an expansion \(E\), let
-\(\text{tail}(E) = \big\{\text{expansion }\eta \;\big|\; \exists\, j, k: E(j + m) = \eta(k + m) \,\forall\, m \ge 0\big\}\).
-Conceptually, \(\text{tail}(E)\) is the set of all numbers in \([0, 1]\)
-with the same final sequence of base-3 digits as \(E\), ignoring any
-finite prefix of either expansion. For example,
-\(x=0.21021\overline{011}_3\) and \(y=0.001\overline{011}_3\) have
-\(\text{tail}(x) = \text{tail}(y)\).
-
-Suppose that \(f(x) = y\) for some \(x\in (1,2)\) and not in any set
-\(A_k\). Let \(E\) be the expansion with \(x=1.E_3\). Then
-\(f_S(x+\{0,2\}) = y\) and, by applying \(t_1\), \(f(x') = y\) for
-\(x' = (x+2)/3\) and \(x' = (x+4)/3\). In expansion notation, we can
-write these last two equations as
+Suppose that \(f(x) = y\) for some \(x\in (1,2)\). Let \(E\) be the
+expansion with \(x=1.E_3\). Then \(f_S(x+\{0,2\}) = y\) and, by applying
+\(t_1\), \(f(x') = y\) for both \(x' = (x+2)/3\) and \(x' = (x+4)/3\).
+In expansion notation, we can write these last two equations as
 \(x' = x/3 + 2/3 = 0.1E_3 + 0.2_3 = 1.0E_3\) and as
 \(x' = x/3 + 4/3 = 0.1E_3 + 1.1_3 = 1.2E_3\). We can summarize this
 reasoning as
 
-\[f(1.E_3) = y \quad \Rightarrow \quad
-  f(1.\zerotwo E_3) = y.\]
+\begin{equation}f(1.\zerotwo E_3) = f(1.E_3).\label{eq:h_reln}\end{equation}
+
+TODO Introduce a set \(G = \cup G_k\), renaming \(A_k\) to \(G_k\).
+
+\newcommand{\tail}{\text{tail}}
+
+We can expand on this idea to partition \((1,2) - G\) into subsets on
+which \(f\) must have the same value. To do that, it will be useful to
+define the \emph{tail} of an expansion as a way to capture end-of-string
+behavior. More precisely, if \(E\) is an expansion, then define
+\(\tail(E)\) via
+
+\[\tail(E) = \big\{\text{expansion }\eta \;\big|\;
+\exists\, j, k: E(j + m) = \eta(k + m) \,\forall\, m \ge 0\big\}.\]
+
+Intuitively, \(\tail(E)\) is the set of all numbers in \([0, 1]\) with
+the same final sequence of base-3 digits as \(E\), ignoring any finite
+prefix of either expansion. For example, \(x=0.21021\overline{011}_3\)
+and \(y=0.001\overline{011}_3\) have
+\(\text{tail}(x) = \text{tail}(y)\).
+
+The following theorem builds on equation (\ref{eq:h_reln}).
+
+\textbf{Theorem 2} \(\;\) \emph{Suppose \(x=1.E_3\) and \(y=1.F_3\),
+where both expansions \(E\) and \(F\) exlude 1 from their range, which
+we could express as \(x,y\in 1.\zerotwo^\infty_3\). Then}
+
+\[\tail(x) = \tail(y) \quad\Rightarrow\quad f(x) = f(y).\]
+
+\textbf{Proof} \(\;\) If \(\tail(x) = \tail(y)\), then there exist
+integers \(j, k\) such that
+
+\begin{equation}E(j+m)=F(k+m)\, \forall m\ge 0.\label{eq:thm2_pf}\end{equation}
+
+Let \(p_E\) be the length-\(j\) prefix of \(E\) and \(p_F\) be the
+length-\(k\) prefix of \(F\), and choose the expansions \(E'\) and
+\(F'\) so that
+
+\[1.E_3 = 1.p_EE'_3 \quad\text{ and }\quad 1.F_3 = 1.p_FF'_3.\]
+
+By (\ref{eq:thm2_pf}), \(E'=F'\). By repeated application of
+(\ref{eq:h_reln}), \(f(1.p_EE'_3) = f(1.E'_3)\) and
+\(f(1.p_FF'_3) = f(1.F'_3)\). The final result is that
+
+\[f(x) = f(1.E'_3) = f(1.F'_3) = f(y).\]
+
+\hfill\(\Box\)
 
 TODO HERE Continue this reasoning in the other direction and summarize
 the aforementioned results (whatever are appropriate in a single theorem
