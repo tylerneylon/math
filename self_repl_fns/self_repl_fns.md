@@ -2,6 +2,8 @@
 % Tyler Neylon
 % 204.2016
 
+\newcommand{\R}{\mathbb{R}}
+
 These are notes I'm creating for myself as I explore
 functions $f$ that can be written as a sum $f = g_1 + g_2$ where $g_1$ and $g_2$
 are the same up to symmetry, and both $g_1$ and $g_2$ strongly resemble shifts
@@ -228,7 +230,7 @@ functions that are highly discontinuous, such as by setting $f(x)$ to be the
 indicator function of a set with many border elements. Even among continuous
 functions, we can produce self-replicating functions which avoid being "mostly
 monotonic." In particular, I'll say that a function
-$f:\mathbb{R}\to\mathbb{R}$ is
+$f:\R\to\R$ is
 *peak monotonic* iff there is a point $x$ such that
 $a < b < x \Rightarrow f(a) \le f(b)$ and $x < c < d \Rightarrow f(c) \ge f(d)$.
 The indicator function of an interval and the ramp function are both peak
@@ -323,7 +325,7 @@ $$
 \big(f \restrict [a,b]\big)(x) = f(a + (b-a)x).
 $$
 
-Let $f:\mathbb{R}\to\mathbb{R}$ be any function such that $f(x)=0$
+Let $f:\R\to\R$ be any function such that $f(x)=0$
 outside of $[0, 3]$.
 Define $r_L = f\restrict [0, 1]$ and $r_R = f\restrict [2,3]$; conceptually,
 these are the left and right ramp functions.
@@ -350,7 +352,7 @@ $[1\tfrac{1}{3}, 1\tfrac{2}{3}]$,
 this means $(\,f=f_L \restrict [1\tfrac{1}{3}, 1\tfrac{2}{3}]) = g$.
 Below, I'll show how repeated application of this kind of logic determines
 the non-ramp values of $f$ almost everywhere; a boolean property
-$P:\mathbb{R}\to\{\text{true},\text{false}\}$ is defined to be true
+$P:\R\to\{\text{true},\text{false}\}$ is defined to be true
 [*almost everywhere*](https://en.wikipedia.org/wiki/Almost_everywhere)
 when the set $\{x : P(x) = \text{false}\}$ has measure
 zero.
@@ -513,6 +515,13 @@ $$f(x) = f(1.E'_3) = f(1.F'_3) = f(y).$$
 <p align="right">
 \hfill$\Box$
 </p>
+
+Although I haven't proven it yet,
+it turns out that theorems 1 and 2 capture *all* of the restrictions needed for
+$f$ to be exactly self-replicating.
+We can capture this by working with three arbitrary functions:
+$r_L : [0,1] \to \R$
+
 
 
 
