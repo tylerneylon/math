@@ -415,40 +415,42 @@ $$\big(f \restrict 1 + 0.\zerotwo^{k+1}1\lstar \big) = g.$$
 \hfill$\Box$
 </p>
 
-Let $A_k = 1 + 0.\zerotwo^k1\lstar$.
-[@Fig:nonpl_process] illustrates $A_k$ for low values of $k$.
+Let $G_k = 1 + 0.\zerotwo^k1\lstar$.
+[@Fig:nonpl_process] illustrates $G_k$ for low values of $k$.
 
 ![The inductive process in the proof of theorem 1. The top
 line is the domain $[0,5]$ of $\,f_S$; the line below that is the
 domain $[0,3]$ of $\,f$; then the subsets of $[1,2]$ on which $f$ is
 described as the induction proceeds.](images/nonpl_process.png){#fig:nonpl_process}
 
-If $x\in A_k$, then either $x=0.\zerotwo^k1\ldots$ or $x=0.\zerotwo^k2$.
-Suppose $x_j\in A_j$ and $x_k\in A_k$, where $j < k$.
+If $x\in G_k$, then either $x=0.\zerotwo^k1\ldots$ or $x=0.\zerotwo^k2$.
+Suppose $x_j\in G_j$ and $x_k\in G_k$, where $j < k$.
 Then either the $(j+1)^\text{th}$ digit of $x_j$ is 1,
 or the $(j+1)^\text{th}$ digit of $x_j$ is 2 and all subsequent
 digits are 0. In either case, $x_j\ne x_k$ since the $(j+1)^\text{th}$
-digit of $x_k$ can't be 1 and the $(k+1)^\text{th}$ digit of $x_k$ must be 1.
-Thus all of the $A_k$ sets are pairwise disjoint.
+digit of $x_k$ can't be 1 and the $(k+1)^\text{th}$ digit of $x_k$ must be 1 or
+2. Thus all of the $G_k$ sets are pairwise disjoint.
 
-Because they're disjoint, we can find the total measure of the sets
-$A_k$ as follows:
+Because they're disjoint, we can find the total measure of the
+set $G = \cup_k G_k$ as follows:
 
-$$\mu(\cup_k A_k) = \sum_{k \ge 0}\mu(A_k) = \sum_{k\ge 0}
+$$\mu(G) = \sum_{k \ge 0}\mu(G_k) = \sum_{k\ge 0}
 \frac{1}{3}\left(\frac{2}{3}\right)^k = 1.$$
 
-Since each $A_k\subset [1,2]$, this justifies the claim that theorem 1
+Since each $G_k\subset [1,2]$, this justifies the claim that theorem 1
 characterizes $f$ almost everywhere in that interval.
 
-What values may $f$ take on for the points $x\not\in A_k$ for any $k$?
+What values may $f$ take on for the points $x\in (1,2) - G$?
 The choice is still not arbitrary as the values remain related.
-Note that, given $x$, there is some $k$ with $x\in A_k$ iff
+I'll explore this question next.
+
+Given $x\in (1,2)$, there is some $k$ with $x\in G_k$ iff
 the base-3 expansion of $x$ contains a 1 or if it ends with the tail
-$\overline{0}$, excluding $x=1$ and $x=2$. This can be written somewhat
+$\overline{0}$. This can be written somewhat
 informally as
 
-$$\forall k, x\not\in A_k \Leftrightarrow x - 1 \in 0.\zerotwo^\infty_3 -
-0.\zerotwo^k\overline{0}_3.$$
+$$x\in (1,2) - G \quad\Leftrightarrow\quad x \in 1.\zerotwo^\infty_3 -\,
+\bigcup_{k\ge 0} 1.\zerotwo^k\overline{0}_3.$$
 
 From here on, I'll more formally use the word *expansion* — based on the idea of
 the base-3 expansion of a number in $[0,1]$ — to indicate a function
@@ -467,8 +469,6 @@ as $x' = x/3 + 4/3 = 0.1E_3 + 1.1_3 = 1.2E_3$.
 We can summarize this reasoning as
 
 $$f(1.\zerotwo E_3) = f(1.E_3).$$ {#eq:h_reln}
-
-TODO Introduce a set $G = \cup G_k$, renaming $A_k$ to $G_k$.
 
 \newcommand{\tail}{\text{tail}}
 
@@ -490,7 +490,7 @@ The following theorem builds on equation ([@eq:h_reln]).
 
 **Theorem 2** $\;$
 *Suppose $x=1.E_3$ and $y=1.F_3$, where both expansions $E$ and $F$ 
-exlude 1 from their range, which we could express as
+exclude 1 from their range, which we could express as
 $x,y\in 1.\zerotwo^\infty_3$. Then*
 
 $$\tail(x) = \tail(y) \quad\Rightarrow\quad f(x) = f(y).$$
@@ -504,7 +504,7 @@ Let $p_E$ be the length-$j$ prefix of $E$ and
     $p_F$ be the length-$k$ prefix of $F$, and choose the
 expansions $E'$ and $F'$ so that
 
-$$1.E_3 = 1.p_EE'_3 \quad\text{ and }\quad 1.F_3 = 1.p_FF'_3.$$
+$$x = 1.E_3 = 1.p_EE'_3 \quad\text{ and }\quad y = 1.F_3 = 1.p_FF'_3.$$
 
 By ([@eq:thm2_pf]), $E'=F'$. By repeated application of ([@eq:h_reln]),
 $f(1.p_EE'_3) = f(1.E'_3)$ and $f(1.p_FF'_3) = f(1.F'_3)$. The final result
@@ -519,22 +519,24 @@ $$f(x) = f(1.E'_3) = f(1.F'_3) = f(y).$$
 Although I haven't proven it yet,
 it turns out that theorems 1 and 2 capture *all* of the restrictions needed for
 $f$ to be exactly self-replicating.
-We can capture this by working with three arbitrary functions:
-$r_L : [0,1] \to \R$
-
-
+We can capture this by working with three functions:
+$r_L : [0,1] \to \R$,
+$r_R : [0,1] \to \R$, and
+$h   : (1,2) - G \to \R$;
+with the restriction that
+$\tail(x) = \tail(y) \Rightarrow h(x) = h(y)$.
 
 
 TODO HERE Continue this reasoning in the other direction and summarize
           the aforementioned results (whatever are appropriate in a single
           theorem statement) as a theorem.
 
-Suppose that $f(x) = y$ for some $x\in (1,2)$ and not in any set $A_k$.
+Suppose that $f(x) = y$ for some $x\in (1,2)$ and not in any set $G_k$.
 Let $b$ be an expansion with $v(b) = x-1$.
 Then $f_S(x+\{0,2\}) = y$ and, by applying $t_1$,
 $f((x+\{2,4\})/3) = y$. The expansion of $(x+2)/3 - 1$ is
 
-Now suppose that $f(x) = y$ for some point $x$ not in any set $A_k$.
+Now suppose that $f(x) = y$ for some point $x$ not in any set $G_k$.
 Then $f_S(x') = y$ for both $x' = x$ and $x' = x + 2$.
 Suppose $x'' \in (1, 2)$.
 Since $f(x'') = f_S(t_1(x'')) = f_S(3x''-2)$, this means that
