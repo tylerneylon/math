@@ -413,14 +413,11 @@ In this case, \(f(x) = f_L(x) = K_{0,1,2,3}\) and
 \(f_R(x) = K_{2,3,4,5} = f(x-2)\) so that \(s(x) = x - 2\). The equation
 \(f_L(x) = f_S(t_1(x))\) is satisfied by defining
 
-TODO This is accidentally the inverse of \(t_1\). Fix this definition
-and the corresponding image below; check for any other residual errors.
-
 \[t_1(x) =
 \begin{cases}
   x              &   \text{if } x \le 1,                  \\
-  (x - 1)/3 + 1  &   \text{if } x \in [1,4], \text{ and}  \\
-  x - 2          &   \text{otherwise.}                    \\
+  3x - 2         &   \text{if } x \in (1,2), \text{ and}  \\
+  x + 2          &   \text{otherwise.}                    \\
 \end{cases}\]
 
 To summarize, \(s(x) = x - 2\), \(t_1(x)\) is defined immediately above,
@@ -474,8 +471,8 @@ in terms of \(f\), \(s\), \(t_1\), and \(t_2.\) Notice that
 \[\big(f_S \restrict [2,3]\big) = \big(f_L + f_R \restrict [2, 3]\big) =
 r_L + r_R = g.\]
 
-Since \(f_L(x) = f_S(t_1(x))\), and \(t_1\) maps \([2,3]\) to
-\([1\tfrac{1}{3}, 1\tfrac{2}{3}]\), this means
+Since \(f_L(x) = f_S(t_1(x))\), and \(t_1\) maps
+\([1\tfrac{1}{3}, 1\tfrac{2}{3}]\) to \([2,3]\), this means
 \((\,f=f_L \restrict [1\tfrac{1}{3}, 1\tfrac{2}{3}]) = g\). Below, I'll
 show how repeated application of this kind of logic determines the
 non-ramp values of \(f\) almost everywhere; a boolean property
@@ -641,10 +638,11 @@ By (\ref{eq:thm2_pf}), \(E'=F'\). By repeated application of
 
 Although I haven't proven it yet, it turns out that theorems 1 and 2
 capture \emph{all} of the restrictions needed for \(f\) to be exactly
-self-replicating. We can capture this by working with three functions:
+self-replicating. We can see this by working with three functions:
 \(r_L : [0,1] \to \R\), \(r_R : [0,1] \to \R\), and
 \(h : (1,2) - G \to \R\); with the restriction that
-\(\tail(x) = \tail(y) \Rightarrow h(x) = h(y)\).
+\(\tail(x) = \tail(y) \Rightarrow h(x) = h(y)\). Theorem 1 allows us to
+build a function \(f:[0,3]\to\R\) based on \(r_L,\) \(r_R,\) and \(h.\)
 
 TODO HERE Continue this reasoning in the other direction and summarize
 the aforementioned results (whatever are appropriate in a single theorem
