@@ -457,7 +457,9 @@ If $x=v(E)$, we may write $x = 0.E_3$ and think of $E$ as an infinite string
 on the alphabet $\{0,1,2\}$.
 
 Suppose that $f(x) = y$ for some $x\in (1,2)$.
-Let $E$ be the expansion with $x=1.E_3$.
+Let $E$ be the expansion with $x=1.E_3$; note that
+$E$ cannot be the all-zero string $\overline 0$ nor the
+all-two string $\overline 2$ since $x\in (1,2)$.
 Then $f_S(x+\{0,2\}) = y$ and, by applying $t_1$,
 $f(x') = y$ for both $x' = (x+2)/3$ and $x' = (x+4)/3$.
 In expansion notation, we can write these last two
@@ -465,7 +467,8 @@ equations as $x' = x/3 + 2/3 = 0.1E_3 + 0.2_3 = 1.0E_3$ and
 as $x' = x/3 + 4/3 = 0.1E_3 + 1.1_3 = 1.2E_3$.
 We can summarize this reasoning as
 
-$$f(1.\zerotwo E_3) = f(1.E_3).$$ {#eq:h_reln}
+$$E\ne \overline 0, \overline 2 \quad\Rightarrow\quad
+f(1.\zerotwo E_3) = f(1.E_3).$$ {#eq:h_reln}
 
 \newcommand{\tail}{\text{tail}}
 
