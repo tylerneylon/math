@@ -273,10 +273,6 @@ $$\eqnset{\begin{array}{rcl}
   f_L(x) & = & t_2(f_S(t_1(x))).
 \end{array}}$$ {#eq:exact_defn}
 
-TODO NEXT From here down, add references to this eqn number as well as to
-          [@eq:s_t1_t2] in order to help clarify the text. This is a step
-          toward theorem 3.
-
 The *L*, *R*, and *S* subscripts are meant to hint that these functions act as
 the *left* addend, *right* addend, and the *sum*; the $s$ function suggests a
 *shift*, while the $t_1$ and $t_2$ functions suggest a *transformation*.
@@ -315,7 +311,7 @@ which other functions are exactly self-replicating with these parameters.
 
 In this section I'll give sufficient and necessary conditions for a function
 to be exactly self-replicating with the $s$, $t_1$, and $t_2$ functions
-given in the above example, and with $f(x)=0$ outside of the interval
+given in ([@eq:s_t1_t2]), and with $f(x)=0$ outside of the interval
 $[0, 3]$. This can be considered the most general version of the
 category of functions we've explored so far.
 
@@ -336,16 +332,17 @@ these are the left and right ramp functions.
 Let $g = r_L + r_R$.
 
 ![An example showing how $r_L$, $r_R$, and $g$ are extracted from a
-function $f$.](images/nonpl_setup.png){#fig:nonpl_setup}
+function $f$, shown on top.](images/nonpl_setup.png){#fig:nonpl_setup}
 
 I'll show that the shape of $g$ must dominate the landscape
 of $f$ in order for it to be exactly self-replicating.
 
 Now suppose that, in addition to having $f(x)=0$ outside of $[0,3]$, $f$ 
 is also exactly self-replicating.
-I'll use definition ([@eq:exact_defn]) to
-provide functions $f_L$, $f_R$, and $f_S$ in terms of $f$, $s$, $t_1$, and
-$t_2.$
+I'll use ([@eq:exact_defn]) to
+define functions $f_L$, $f_R$, and $f_S$ in terms of $f$ and the
+functions $s$, $t_1$, and
+$t_2$ from ([@eq:s_t1_t2]).
 Notice that
 
 $$\big(f_S \restrict [2,3]\big) = \big(f_L + f_R \restrict [2, 3]\big) =
@@ -372,7 +369,7 @@ intervals at hand. If $s$ is a finite string with digits from the set
 $\{0, 1, 2\}$, then let $0.s\lstar$ denote the closure of the set of
 points whose base-3 expansion begins with $0.s$. For example,
 $0.11\lstar$ denotes the interval $[0.11_3, 0.12_3]$ while
-$0.012\lstar$ denotes the interval $[0.12_3, 0.20_3]$.
+$0.12\lstar$ denotes the interval $[0.12_3, 0.20_3]$.
 I'll also use $\zerotwo$ to denote a digit that may be either a 0 or a 2;
 for example, $0.1\zerotwo 1\lstar$ denotes the union of intervals
 $[0.101_3, 0.102_3]$ and $[0.121_3, 0.122_3]$.
@@ -380,12 +377,12 @@ $[0.101_3, 0.102_3]$ and $[0.121_3, 0.122_3]$.
 Now, instead of writing $(\,f \restrict [1\tfrac{1}{3}, 1\tfrac{2}{3}]) = g$,
 I can write
 
-$$\big(\,f \restrict 1 + 0.1\lstar\big) = g.$$ {#eq:nonpl_base_case}
+$$\big(\,f \restrict 1.1\lstar\big) = g.$$ {#eq:nonpl_base_case}
 
 It's possible to generalize this last equation so that it defines
 $f$ almost everywhere on the interval $[1, 2]$.
 
-Recall that the notation $1 + 0.\zerotwo^k1\lstar$ indicates a union of
+Recall that the notation $1.\zerotwo^k1\lstar$ indicates a union of
 closed intervals.
 In the next theorem, the notation $(\,f \restrict \cup_i [a_i,b_i]) = g$
 indicates
@@ -393,7 +390,7 @@ that, for every $i$ in the union, $(\,f \restrict [a_i,b_i]) = g$.
 
 **Theorem 1** $\;$
 *For any $k\ge 0$,
-$$\big(\,f \restrict 1 + 0.\zerotwo^k1\lstar\big)=g.$$*
+$$\big(\,f \restrict 1.\zerotwo^k1\lstar\big)=g.$$*
 
 **Proof** $\;$
 The proof is by induction on $k$. Equation ([@eq:nonpl_base_case])
@@ -401,7 +398,7 @@ provides the base case.
 
 For the inductive step, suppose
 
-$$\big(f=f_L \restrict 1 + 0.\zerotwo^k1\lstar \big) = g.$$
+$$\big(f=f_L \restrict 1.\zerotwo^k1\lstar \big) = g.$$
 
 Then
 
@@ -411,7 +408,8 @@ so that
 
 $$\big(f_S \restrict \{1,3\} + 0.\zerotwo^k1\lstar \big) = g.$$
 
-Applying $t_1$ to derive $f=f_L$ back from $f_S$, we can see that
+Apply $t_1^{-1}$ to the domain set of $f_S$ to determine the
+corresponding domain set of $f_L$:
 
 $$\big(f \restrict 1 + 0.\zerotwo^{k+1}1\lstar \big) = g.$$
 
@@ -424,18 +422,22 @@ Let $G_k = 1 + 0.\zerotwo^k1\lstar$.
 
 ![The inductive process in the proof of theorem 1. The top
 line is the domain $[0,5]$ of $\,f_S$; the line below that is the
-domain $[0,3]$ of $\,f$; then the subsets of $[1,2]$ on which $f$ is
+domain $[0,3]$ of $\,f;$ then the subsets of $[1,2]$ on which $f$ is
 described as the induction proceeds.](images/nonpl_process.png){#fig:nonpl_process}
 
-If $x\in G_k$, then either $x=0.\zerotwo^k1\ldots$ or $x=0.\zerotwo^k2$.
-Suppose $x_j\in G_j$ and $x_k\in G_k$, where $j < k$.
-Then either the $(j+1)^\text{th}$ digit of $x_j$ is 1,
-or the $(j+1)^\text{th}$ digit of $x_j$ is 2 and all subsequent
-digits are 0. In either case, $x_j\ne x_k$ since the $(j+1)^\text{th}$
-digit of $x_k$ can't be 1 and the $(k+1)^\text{th}$ digit of $x_k$ must be 1 or
-2. Thus all of the $G_k$ sets are pairwise disjoint.
+Let's check that the sets $G_k$ are disjoint.
+Suppose $x_j\in G_j$ and $x_k\in G_k$, where $j < k$, and we'll work with
+the standard base-3 notation in which an all-2 tail is disallowed.
+Either $x_k=0.\zerotwo^k1\!\ldots$ or $x_k=0.\zerotwo^k2$.
+There are two similar cases for $x_j$. In the first case,
+the $(j+1)^\text{th}$ digit of $x_j$ is 1, which is impossible
+for the $(j+1)\text{th}$ digit of $x_k$. In the second case,
+the $(j+1)^\text{th}$ digit of $x_j$ is 2 and all subsequent
+digits, including the $(k+1)^\text{th}$, are 0; this excludes equality
+since the $(k+1)^\text{th}$ digit $x_k$ can't be 0.
+In either case, $x_j\ne x_k$, confirming that $G_j$ and $G_k$ are disjoint.
 
-Because they're disjoint, we can find the total measure of the
+Using this disjointedness, we can find the total measure of the
 set $G = \cup_k G_k$ as follows:
 
 $$\mu(G) = \sum_{k \ge 0}\mu(G_k) = \sum_{k\ge 0}
@@ -454,7 +456,7 @@ $\overline{0}$. This can be expressed as:
 
 $$\text{For } x\in (1,2), \quad
   x\not\in G \;\;\Leftrightarrow\;\; x \in 1.\zerotwo^\infty_3 -\,
-  \bigcup_{k\ge 0} 1.\zerotwo^k\overline{0}_3.$$
+  \bigcup_{k\ge 0} 1.\zerotwo^k\overline{0}_3.$$ {#eq:onetwo_lessG}
 
 From here on, I'll more formally use the word *expansion* — based on the idea of
 the base-3 expansion of a number in $[0,1]$ — to indicate a function
@@ -496,16 +498,18 @@ $y=0.001\overline{011}_3$ have $\text{tail}(x) = \text{tail}(y)$.
 The following theorem builds on equation ([@eq:h_reln]).
 
 **Theorem 2** $\;$
-*Suppose $x=1.E_3$ and $y=1.F_3$, where both expansions $E$ and $F$ 
-exclude 1 from their range, which we could express as
-$x,y\in 1.\zerotwo^\infty_3$. Then*
+*If $x,y\in (1,2)-G$, then*
 
 $$\tail(x) = \tail(y) \quad\Rightarrow\quad f(x) = f(y).$$
 
 **Proof** $\;$
-If $\tail(x) = \tail(y)$, then there exist integers $j, k$ such that
+Note that, by ([@eq:onetwo_lessG]), $x$ and $y$ can be expressed in
+expansion notation as $x=1.E_3$ and $y=1.F_3$ where both $E$ and $F$ exclude
+1 from their range, and neither has an all-0 tail.
 
-$$E(j+m)=F(k+m)\, \forall m\ge 0.$$ {#eq:thm2_pf}
+Since $\tail(x) = \tail(y)$, then there exist integers $j, k$ such that
+
+$$E(j+m)=F(k+m)\; \forall m\ge 0.$$ {#eq:thm2_pf}
 
 Let $p_E$ be the length-$j$ prefix of $E$ and
     $p_F$ be the length-$k$ prefix of $F$, and choose the
