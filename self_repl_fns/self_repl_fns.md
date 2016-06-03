@@ -3,6 +3,7 @@
 % 204.2016
 
 \newcommand{\R}{\mathbb{R}}
+\newcommand{\eqnset}[1]{\left.\mbox{$#1$}\quad\quad\right\rbrace}
 
 These are notes I'm creating for myself as I explore
 functions $f$ that can be written as a sum $f = g_1 + g_2$ where $g_1$ and $g_2$
@@ -265,12 +266,16 @@ Call a function $f$ *exactly self-replicating* iff there exist continuous
 bijections $s$, $t_1$, and $t_2$ such that $s$ is not the identity function
 and 
 
-$$\begin{array}{rcl}
+$$\eqnset{\begin{array}{rcl}
   f_L(x) & = & f(x), \\
   f_R(x) & = & f(s(x)), \\
   f_S(x) & = & f_L(x) + f_R(x), \text{and} \\
   f_L(x) & = & t_2(f_S(t_1(x))).
-\end{array}$$ {#eq:exact_defn}
+\end{array}}$$ {#eq:exact_defn}
+
+TODO NEXT From here down, add references to this eqn number as well as to
+          [@eq:s_t1_t2] in order to help clarify the text. This is a step
+          toward theorem 3.
 
 The *L*, *R*, and *S* subscripts are meant to hint that these functions act as
 the *left* addend, *right* addend, and the *sum*; the $s$ function suggests a
@@ -287,18 +292,20 @@ viewed as $K-$functions, all adhere to the general form
 $$K_{0,1,2,3} + K_{2,3,4,5} = K_{0,1,4,5}.$$
 
 In this case, $f(x) = f_L(x) = K_{0,1,2,3}$ and
-$f_R(x) = K_{2,3,4,5} = f(x-2)$ so that $s(x) = x - 2$.
-The equation $f_L(x) = f_S(t_1(x))$ is satisfied by defining
+$f_R(x) = K_{2,3,4,5} = f(x-2)$.
+We can satisfy all of the equations of ([@eq:exact_defn]) by using these
+functions:
 
-$$t_1(x) =
+$$\eqnset{\begin{array}{rcl}
+t_1(x) & = &
 \begin{cases}
-  x              &   \text{if } x \le 1,                  \\
-  3x - 2         &   \text{if } x \in (1,2), \text{ and}  \\
-  x + 2          &   \text{otherwise.}                    \\
-\end{cases}$$
-
-To summarize, $s(x) = x - 2$, $t_1(x)$ is defined immediately above, and
-$t_2(x) = x$.
+  x              &   \text{if } x \le 1,       \\
+  3x - 2         &   \text{if } x \in (1,2),   \\
+  x + 2          &   \text{otherwise;}         \\
+\end{cases}\\
+t_2(x) & = & x; \text{ and} \\
+s(x)   & = & x - 2. \\
+\end{array}}$$ {#eq:s_t1_t2}
 
 This is a simple yet foundational case — it may be interesting to see
 which other functions are exactly self-replicating with these parameters.
@@ -443,11 +450,11 @@ I'll explore this question next.
 
 Given $x\in (1,2)$, there is some $k$ with $x\in G_k$ iff
 the base-3 expansion of $x$ contains a 1 or if it ends with the tail
-$\overline{0}$. This can be written somewhat
-informally as
+$\overline{0}$. This can be expressed as:
 
-$$x\in (1,2) - G \quad\Leftrightarrow\quad x \in 1.\zerotwo^\infty_3 -\,
-\bigcup_{k\ge 0} 1.\zerotwo^k\overline{0}_3.$$
+$$\text{For } x\in (1,2), \quad
+  x\not\in G \;\;\Leftrightarrow\;\; x \in 1.\zerotwo^\infty_3 -\,
+  \bigcup_{k\ge 0} 1.\zerotwo^k\overline{0}_3.$$
 
 From here on, I'll more formally use the word *expansion* — based on the idea of
 the base-3 expansion of a number in $[0,1]$ — to indicate a function
@@ -516,9 +523,19 @@ $$f(x) = f(1.E'_3) = f(1.F'_3) = f(y).$$
 \hfill$\Box$
 </p>
 
-Although I haven't proven it yet,
-it turns out that theorems 1 and 2 capture *all* of the restrictions needed for
-$f$ to be exactly self-replicating.
+It turns out that theorems 1 and 2 capture *all* of the restrictions needed for
+$f$ to be exactly self-replicating. This idea is captured by the next theorem.
+
+**Theorem 3** $\;$
+*Suppose that $f:\R\to\R$ obeys*
+
+
+
+
+
+
+---
+
 We can see this by working with three functions:
 $r_L : [0,1] \to \R$,
 $r_R : [0,1] \to \R$, and
