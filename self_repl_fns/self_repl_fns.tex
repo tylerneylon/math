@@ -450,9 +450,15 @@ function with domain \([0,1]\) where
 \]
 
 Let \(f:\R\to\R\) be any function such that \(f(x)=0\) outside of
-\([0, 3]\). Define \(r_L = f\restrict [0, 1]\) and
-\(r_R = f\restrict [2,3]\); conceptually, these are the left and right
-ramp functions. Let \(g = r_L + r_R\).
+\([0, 3]\). Define the functions \(r_L,\) \(r_R,\) and \(g\) via:
+
+\begin{equation}\eqnset{\begin{array}{rlc}
+r_L & = & f\restrict [0, 1], \\
+r_R & = & f\restrict [2, 3], \\
+g   & = & r_L + r_R.
+\end{array}}\label{eq:rL_rR_g}\end{equation}
+
+Conceptually, \(r_L\) and \(r_R\) are the left and right ramp functions.
 
 \begin{figure}[htbp]
 \centering
@@ -462,8 +468,8 @@ and \(g\) are extracted from a function \(f\), shown on
 top.}\label{fig:nonplux5fsetup}
 \end{figure}
 
-I'll show that the shape of \(g\) must dominate the landscape of \(f\)
-in order for it to be exactly self-replicating.
+I'll show that many copies of the shape of \(g\) must dominate the
+landscape of \(f\) in order for it to be exactly self-replicating.
 
 Now suppose that, in addition to having \(f(x)=0\) outside of \([0,3]\),
 \(f\) is also exactly self-replicating. I'll use (\ref{eq:exact_defn})
@@ -513,8 +519,11 @@ closed intervals. In the next theorem, the notation
 \((\,f \restrict \cup_i [a_i,b_i]) = g\) indicates that, for every \(i\)
 in the union, \((\,f \restrict [a_i,b_i]) = g\).
 
-\textbf{Theorem 1} \(\;\) \emph{For any \(k\ge 0\),
-\[\big(\,f \restrict 1.\zerotwo^k1\lstar\big)=g.\]}
+\textbf{Theorem 1} \(\;\) \emph{Suppose that \(f\) is exactly
+self-replicating with functions \(s,\) \(t_1,\) and \(t_2\) as given in
+(\ref{eq:s_t1_t2}). Also suppose that \(f(x) = 0\) outside of \([0,3]\),
+and that \(g\) is defined as in (\ref{eq:rL_rR_g}). Then, for any
+\(k\ge 0\), \[\big(\,f \restrict 1.\zerotwo^k1\lstar\big)=g.\]}
 
 \textbf{Proof} \(\;\) The proof is by induction on \(k\). Equation
 (\ref{eq:nonpl_base_case}) provides the base case.
@@ -534,12 +543,17 @@ so that
 Apply \(t_1^{-1}\) to the domain set of \(f_S\) to determine the
 corresponding domain set of \(f_L\):
 
-\[\big(f \restrict 1 + 0.\zerotwo^{k+1}1\lstar \big) = g.\]
+\[\big(f \restrict 1.\zerotwo^{k+1}1\lstar \big) = g.\]
 
 \hfill\(\Box\)
 
-Let \(G_k = 1 + 0.\zerotwo^k1\lstar\). Figure~\ref{fig:nonpl_process}
-illustrates \(G_k\) for low values of \(k\).
+Define the sets \(G_k\) and \(G\) via
+
+\begin{equation}G_k = 1.\zerotwo^k1\lstar \quad\text{and}\quad
+  G = \cup_{k \ge 0}G_k.\label{eq:Gk_G}\end{equation}
+
+Figure~\ref{fig:nonpl_process} illustrates \(G_k\) for low values of
+\(k\).
 
 \begin{figure}[htbp]
 \centering
@@ -563,8 +577,8 @@ digit of \(x_k\). In the second case, the \((j+1)^\text{th}\) digit of
 \((k+1)^\text{th}\) digit \(x_k\) can't be 0. In either case,
 \(x_j\ne x_k\), confirming that \(G_j\) and \(G_k\) are disjoint.
 
-Using this disjointedness, we can find the total measure of the set
-\(G = \cup_k G_k\) as follows:
+Using this disjointedness, we can find the total measure of their union
+\(G\) as follows:
 
 \[\mu(G) = \sum_{k \ge 0}\mu(G_k) = \sum_{k\ge 0}
 \frac{1}{3}\left(\frac{2}{3}\right)^k = 1.\]
@@ -623,7 +637,10 @@ and \(y=0.001\overline{011}_3\) have
 
 The following theorem builds on equation (\ref{eq:h_reln}).
 
-\textbf{Theorem 2} \(\;\) \emph{If \(x,y\in (1,2)-G\), then}
+\textbf{Theorem 2} \(\;\) \emph{Suppose that \(f\) is exactly
+self-replicating with functions \(s,\) \(t_1,\) and \(t_2\) as given in
+(\ref{eq:s_t1_t2}). Also suppose that \(G\) is defined as in
+(\ref{eq:Gk_G}). Then, for} \(x,y\in (1,2)-G,\)
 
 \[\tail(x) = \tail(y) \quad\Rightarrow\quad f(x) = f(y).\]
 

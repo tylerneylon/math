@@ -327,14 +327,20 @@ $$
 
 Let $f:\R\to\R$ be any function such that $f(x)=0$
 outside of $[0, 3]$.
-Define $r_L = f\restrict [0, 1]$ and $r_R = f\restrict [2,3]$; conceptually,
-these are the left and right ramp functions.
-Let $g = r_L + r_R$.
+Define the functions $r_L,$ $r_R,$ and $g$ via:
+
+$$\eqnset{\begin{array}{rlc}
+r_L & = & f\restrict [0, 1], \\
+r_R & = & f\restrict [2, 3], \\
+g   & = & r_L + r_R.
+\end{array}}$$ {#eq:rL_rR_g}
+
+Conceptually, $r_L$ and $r_R$ are the left and right ramp functions.
 
 ![An example showing how $r_L$, $r_R$, and $g$ are extracted from a
 function $f$, shown on top.](images/nonpl_setup.png){#fig:nonpl_setup}
 
-I'll show that the shape of $g$ must dominate the landscape
+I'll show that many copies of the shape of $g$ must dominate the landscape
 of $f$ in order for it to be exactly self-replicating.
 
 Now suppose that, in addition to having $f(x)=0$ outside of $[0,3]$, $f$ 
@@ -389,7 +395,10 @@ indicates
 that, for every $i$ in the union, $(\,f \restrict [a_i,b_i]) = g$.
 
 **Theorem 1** $\;$
-*For any $k\ge 0$,
+*Suppose that $f$ is exactly self-replicating with functions $s,$ $t_1,$ and
+$t_2$ as given in ([@eq:s_t1_t2]). Also suppose that $f(x) = 0$ outside of
+$[0,3]$, and that $g$ is defined as in ([@eq:rL_rR_g]).
+Then, for any $k\ge 0$,
 $$\big(\,f \restrict 1.\zerotwo^k1\lstar\big)=g.$$*
 
 **Proof** $\;$
@@ -411,13 +420,17 @@ $$\big(f_S \restrict \{1,3\} + 0.\zerotwo^k1\lstar \big) = g.$$
 Apply $t_1^{-1}$ to the domain set of $f_S$ to determine the
 corresponding domain set of $f_L$:
 
-$$\big(f \restrict 1 + 0.\zerotwo^{k+1}1\lstar \big) = g.$$
+$$\big(f \restrict 1.\zerotwo^{k+1}1\lstar \big) = g.$$
 
 <p align="right">
 \hfill$\Box$
 </p>
 
-Let $G_k = 1 + 0.\zerotwo^k1\lstar$.
+Define the sets $G_k$ and $G$ via
+
+$$G_k = 1.\zerotwo^k1\lstar \quad\text{and}\quad
+  G = \cup_{k \ge 0}G_k.$$ {#eq:Gk_G}
+
 [@Fig:nonpl_process] illustrates $G_k$ for low values of $k$.
 
 ![The inductive process in the proof of theorem 1. The top
@@ -437,8 +450,8 @@ digits, including the $(k+1)^\text{th}$, are 0; this excludes equality
 since the $(k+1)^\text{th}$ digit $x_k$ can't be 0.
 In either case, $x_j\ne x_k$, confirming that $G_j$ and $G_k$ are disjoint.
 
-Using this disjointedness, we can find the total measure of the
-set $G = \cup_k G_k$ as follows:
+Using this disjointedness, we can find the total measure of their
+union $G$ as follows:
 
 $$\mu(G) = \sum_{k \ge 0}\mu(G_k) = \sum_{k\ge 0}
 \frac{1}{3}\left(\frac{2}{3}\right)^k = 1.$$
@@ -498,7 +511,10 @@ $y=0.001\overline{011}_3$ have $\text{tail}(x) = \text{tail}(y)$.
 The following theorem builds on equation ([@eq:h_reln]).
 
 **Theorem 2** $\;$
-*If $x,y\in (1,2)-G$, then*
+*Suppose that $f$ is exactly self-replicating with functions $s,$ $t_1,$ and
+$t_2$ as given in ([@eq:s_t1_t2]). Also suppose that $G$ is defined as
+in ([@eq:Gk_G]).
+Then, for* $x,y\in (1,2)-G,$
 
 $$\tail(x) = \tail(y) \quad\Rightarrow\quad f(x) = f(y).$$
 
