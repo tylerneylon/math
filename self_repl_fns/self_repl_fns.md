@@ -544,13 +544,22 @@ $$f(x) = f(1.E'_3) = f(1.F'_3) = f(y).$$
 </p>
 
 It turns out that theorems 1 and 2 capture *all* of the restrictions needed for
-$f$ to be exactly self-replicating. This idea is captured by the next theorem.
+$f$ to be exactly self-replicating. This idea is formalized by the next theorem.
 
 **Theorem 3** $\;$
-*Suppose that $f:\R\to\R$ obeys*
+*Suppose that $f:\R\to\R$ has the value 0 outside the domain $[0, 3]$.
+Also suppose we're working in the context of the functions $s,$ $t_1,$ and
+$t_2$ as defined in ([@eq:s_t1_t2]), and that the function $g$ is defined as in
+([@eq:rL_rR_g]). Then $f$ is exactly self-replicating iff*
 
+$$\begin{array}{lcll}
+f(1.\zerotwo E_3) & = & f(1.E_3) & \text{for } E\ne\overline 0,\overline 2;
+  \quad\text{and} \\
+f(1.1E_3)         & = & g(0.E_3) & \text{for any }E. \\
+\end{array}$$
 
-
+**Proof** $\;$
+TODO
 
 
 
