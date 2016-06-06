@@ -555,7 +555,7 @@ $t_2$ as defined in ([@eq:s_t1_t2]), and that the function $g$ is defined as in
 $$\begin{array}{lcll}
 f(1.\zerotwo E_3) & = & f(1.E_3) & \text{for } E\ne\overline 0,\overline 2;
   \quad\text{and} \\
-f(1.1E_3)         & = & g(0.E_3) & \text{for any }E. \\
+f(1.1E_3)         & = & g(0.E_3) & \text{for any }E. \latexonlyrule{0pt}{14pt} \\
 \end{array}$$
 
 **Proof** $\;$

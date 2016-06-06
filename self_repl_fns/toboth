@@ -17,7 +17,7 @@ mv ${TMP} ${NAME}.html
 #open ${NAME}.html
 
 # Make and open the pdf file.
-pandoc -t latex -o ${NAME}.tex -s ${FLAGS}
+pandoc -t latex -o ${NAME}.tex -s ${FLAGS} --template=template.tex
 TMP=$(mktemp tmp_XXXX)
 sed 's|images/\(.*\)\.png|images/pdfs/\1.pdf|' ${NAME}.tex > ${TMP}
 mv ${TMP} ${NAME}.tex
