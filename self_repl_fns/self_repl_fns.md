@@ -552,20 +552,54 @@ Also suppose we're working in the context of the functions $s,$ $t_1,$ and
 $t_2$ as defined in ([@eq:s_t1_t2]), and that the function $g$ is defined as in
 ([@eq:rL_rR_g]). Then $f$ is exactly self-replicating iff*
 
-$$\begin{array}{lcll}
+$$\eqnset{\begin{array}{lcll}
 f(1.\zerotwo E_3) & = & f(1.E_3) & \text{for } E\ne\overline 0,\overline 2;
   \quad\text{and} \\
 f(1.1E_3)         & = & g(0.E_3) & \text{for any }E. \latexonlyrule{0pt}{14pt} \\
-\end{array}$$
+\end{array}}$$ {#eq:thm3}
+
+TODO Any cleanup necessary in the proof below.
 
 **Proof** $\;$
-The forward direction has already been justified by ([@eq:nonpl_base_case]) and
+The forward direction — that the left-hand side implies the right — has already
+been justified by ([@eq:nonpl_base_case]) and
 ([@eq:h_reln]). Note that these two equations are each expanded upon in theorems
 1 and 2.
 
-TODO
+To verify the other direction, it suffices to show that
+
+$$f(x) = f_S(t_1(x)) = f(t_1(x)) + f(t_1(x) - 2);$$ {#eq:thm3_pf}
+
+that equation is enough to
+ensure that definition ([@eq:exact_defn]) is satisfied.
+
+Suppose $x=1.CE_3 \in (1,2)$, where $C \in \{0, 1, 2\}$ and $E$ does not have
+an all-2 tail; let $x' = t_1(x)$.
+The argument can be split into three caseson the value of $C$.
 
 
+*Case* $C=0:\;$
+In this case, $x' = 1.E_3 \in (1, 2)$ and $f_S(x') = f(x') = f(1.E_3).$
+Apply ([@eq:thm3]) to see that $f(1.E_3) = f(1.0E_3) = f(x)$, verifying
+([@eq:thm3_pf]).
+
+*Case* $C=1:\;$
+In this case, $x' = 2.E_3 \in [2,3].$ So
+$f_S(x') = f(2.E_3) + f(0.E_3) = r_R(0.E_3) + r_L(0.E_3) = g(0.E_3).$
+Apply ([@eq:thm3]) and continue: $g(0.E_3) = f(1.1E_3) = f(x).$
+This also verifies ([@eq:thm3_pf]).
+
+*Case* $C=2:\;$
+This cases is similar to $C=0,$ except that $x' \in (3,4).$ Specifically,
+$f_S(x') = f(x'-2) = f(1.E_3) = f(1.2E_3) = f(x),$ again
+verifying ([@eq:thm3_pf]).
+
+In all cases, equation ([@eq:thm3_pf]) holds, ensuring that $f$ is indeed
+exactly self-replicating.
+
+<p align="right">
+\hfill$\Box$
+</p>
 
 ---
 
