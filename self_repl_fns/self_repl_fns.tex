@@ -690,23 +690,23 @@ f(1.\zerotwo E_3) & = & f(1.E_3) & \text{for } E\ne\overline 0,\overline 2;
 f(1.1E_3)         & = & g(0.E_3) & \text{for any }E. \latexonlyrule{0pt}{14pt} \\
 \end{array}}\label{eq:thm3}\end{equation}
 
-TODO Any cleanup necessary in the proof below.
+\textbf{Proof} \(\;\) The forward direction --- that (\ref{eq:thm3}) is
+a consequence of \(f\) being exactly self-replicating --- has already
+been justified by (\ref{eq:nonpl_base_case}) and (\ref{eq:h_reln}). Note
+that these last two equations are each expanded upon in theorems 1 and
+2.
 
-\textbf{Proof} \(\;\) The forward direction --- that the left-hand side
-implies the right --- has already been justified by
-(\ref{eq:nonpl_base_case}) and (\ref{eq:h_reln}). Note that these two
-equations are each expanded upon in theorems 1 and 2.
+To verify the other direction, it will suffice to show that, if
+(\ref{eq:thm3}) is true, then so is:
 
-To verify the other direction, it suffices to show that
+\begin{equation}f(x) = f_S(t_1(x));\label{eq:thm3_pf}\end{equation}
 
-\begin{equation}f(x) = f_S(t_1(x)) = f(t_1(x)) + f(t_1(x) - 2);\label{eq:thm3_pf}\end{equation}
-
-that equation is enough to ensure that definition (\ref{eq:exact_defn})
-is satisfied.
+this equation is enough to ensure that the definition of an exactly
+self-replicating function, given by (\ref{eq:exact_defn}), is satisfied.
 
 Suppose \(x=1.CE_3 \in (1,2)\), where \(C \in \{0, 1, 2\}\) and \(E\)
 does not have an all-2 tail; let \(x' = t_1(x)\). The argument can be
-split into three caseson the value of \(C\).
+split into three cases based on the value of \(C\).
 
 \emph{Case} \(C=0:\;\) In this case, \(x' = 1.E_3 \in (1, 2)\) and
 \(f_S(x') = f(x') = f(1.E_3).\) Apply (\ref{eq:thm3}) to see that
@@ -726,6 +726,8 @@ In all cases, equation (\ref{eq:thm3_pf}) holds, ensuring that \(f\) is
 indeed exactly self-replicating.
 
 \hfill\(\Box\)
+
+TODO Pull in a local copy of mathjax.
 
 \begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
 

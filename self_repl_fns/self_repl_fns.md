@@ -558,25 +558,25 @@ f(1.\zerotwo E_3) & = & f(1.E_3) & \text{for } E\ne\overline 0,\overline 2;
 f(1.1E_3)         & = & g(0.E_3) & \text{for any }E. \latexonlyrule{0pt}{14pt} \\
 \end{array}}$$ {#eq:thm3}
 
-TODO Any cleanup necessary in the proof below.
-
 **Proof** $\;$
-The forward direction — that the left-hand side implies the right — has already
+The forward direction — that ([@eq:thm3]) is a consequence of $f$ being
+exactly self-replicating — has already
 been justified by ([@eq:nonpl_base_case]) and
-([@eq:h_reln]). Note that these two equations are each expanded upon in theorems
-1 and 2.
+([@eq:h_reln]). Note that these last two equations are each expanded upon in
+theorems 1 and 2.
 
-To verify the other direction, it suffices to show that
+To verify the other direction, it will suffice to show that, if
+([@eq:thm3]) is true, then so is:
 
-$$f(x) = f_S(t_1(x)) = f(t_1(x)) + f(t_1(x) - 2);$$ {#eq:thm3_pf}
+$$f(x) = f_S(t_1(x));$$ {#eq:thm3_pf}
 
-that equation is enough to
-ensure that definition ([@eq:exact_defn]) is satisfied.
+this equation is enough to
+ensure that the definition of an exactly self-replicating function,
+given by ([@eq:exact_defn]), is satisfied.
 
 Suppose $x=1.CE_3 \in (1,2)$, where $C \in \{0, 1, 2\}$ and $E$ does not have
 an all-2 tail; let $x' = t_1(x)$.
-The argument can be split into three caseson the value of $C$.
-
+The argument can be split into three cases based on the value of $C$.
 
 *Case* $C=0:\;$
 In this case, $x' = 1.E_3 \in (1, 2)$ and $f_S(x') = f(x') = f(1.E_3).$
@@ -600,6 +600,8 @@ exactly self-replicating.
 <p align="right">
 \hfill$\Box$
 </p>
+
+TODO Pull in a local copy of mathjax.
 
 ---
 
