@@ -601,8 +601,6 @@ exactly self-replicating.
 \hfill$\Box$
 </p>
 
-TODO Pull in a local copy of mathjax.
-
 ---
 
 We can see this by working with three functions:

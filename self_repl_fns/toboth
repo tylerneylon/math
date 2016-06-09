@@ -5,21 +5,25 @@
 ept='$$i$$'
 spt='$$p$$$$i$$'
 
-NAME=self_repl_fns
-FLAGS="-s -S -M figPrefix=figure -M secPrefix="§" -M secPrefixTemplate="${spt}" -M eqnPrefixTemplate="${ept}" --filter pandoc-crossref -M eqnPrefix='' -M linkcolor=black --number-sections --bibliography=${NAME}.bib ${NAME}.md"
+name=self_repl_fns
+FLAGS="-s -S -M figPrefix=figure -M secPrefix="§" -M secPrefixTemplate="${spt}" -M eqnPrefixTemplate="${ept}" --filter pandoc-crossref -M eqnPrefix='' -M linkcolor=black --number-sections --bibliography=${name}.bib ${name}.md"
 
-# Make and open the html file.
-pandoc --mathjax --template=template.html ${FLAGS} > ${NAME}.html
+# Make and the html file.
+pandoc --mathjax --template=template.html ${FLAGS} > ${name}.html
 # Move captions to be before figures in the html file.
 TMP=$(mktemp tmp_XXXX)
-cat ${NAME}.html | awk '{if(x) { print $0; print x; x = "" } else if (/<img/) { x = $0 } else { print $0 }}' > ${TMP}
-mv ${TMP} ${NAME}.html
-#open ${NAME}.html
+cat ${name}.html | awk '{if(x) { print $0; print x; x = "" } else if (/<img/) { x = $0 } else { print $0 }}' > ${TMP}
+mv ${TMP} ${name}.html
+#open ${name}.html
+
+# Make a local-only version of the html for the author to work with.
+sed 's_https://cdn.mathjax.org/mathjax/latest_'${HOME}/Dropbox/Documents/code/MathJax_ ${name}.html > ${name}_local.html
+#open ${name}_local.html
 
 # Make and open the pdf file.
-pandoc -t latex -o ${NAME}.tex -s ${FLAGS} --template=template.tex
+pandoc -t latex -o ${name}.tex -s ${FLAGS} --template=template.tex
 TMP=$(mktemp tmp_XXXX)
-sed 's|images/\(.*\)\.png|images/pdfs/\1.pdf|' ${NAME}.tex > ${TMP}
-mv ${TMP} ${NAME}.tex
-pdflatex ${NAME}.tex
-#open ${NAME}.pdf
+sed 's|images/\(.*\)\.png|images/pdfs/\1.pdf|' ${name}.tex > ${TMP}
+mv ${TMP} ${name}.tex
+pdflatex ${name}.tex
+#open ${name}.pdf
