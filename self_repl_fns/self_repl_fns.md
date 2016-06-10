@@ -601,6 +601,20 @@ exactly self-replicating.
 \hfill$\Box$
 </p>
 
+TODO add Cantor dust mention
+
+Call the function $h$ *tail-consistent* on a domain set $A$ if
+$\tail(x) = \tail(y) \;\Rightarrow\; h(x) = h(y)$ for any $x,y \in A.$
+There's a bijection between the exactly self-replicating functions characterized
+by theorem 3 and an arbitrary choice of the following three functions:
+
+$$\begin{array}{ll}
+r_L : [0,1] \to \R, \\
+r_R : [0,1] \to \R, & \text{and} \\
+h   : (1,2) - G \to \R & \text{which is tail-consistent.}
+\end{array}$$
+
+
 ---
 
 We can see this by working with three functions:
