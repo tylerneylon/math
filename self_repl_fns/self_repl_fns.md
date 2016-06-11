@@ -609,8 +609,8 @@ exactly self-replicating.
 \hfill$\Box$
 </p>
 
-Call the function $h$ *tail-consistent* on a domain set $A$ if
-$\tail(x) = \tail(y) \;\Rightarrow\; h(x) = h(y)$ for any $x,y \in A.$
+Call the function $h$ *tail-consistent* on a domain set $A$ iff
+$\tail(x) = \tail(y) \;\Rightarrow\;$ $h(x) = h(y)$ for any $x,y \in A.$
 There's a bijection between the exactly self-replicating functions characterized
 by theorem 3 and an arbitrary choice of the following three functions:
 
@@ -620,41 +620,14 @@ r_R : [0,1] \to \R, & \text{and} \\
 h   : (1,2) - G \to \R & \text{which is tail-consistent.}
 \end{array}$$
 
+Any choice of these three functions results in an exactly self-replicating
+function. Given any exactly self-replicating function $f$ with respect to
+$s,$ $t_1,$ and $t_2$ given in ([@eq:s_t1_t2]), and with $f(x) = 0$ outside
+$[0,3]$, there exists a unique corresponding triple $r_L,$ $r_R,$ and
+$h$. Theorem 3 is the key to verifying that this correspondence between such $f$
+and triples $(r_L, r_R, h)$ is indeed a bijection.
 
----
-
-We can see this by working with three functions:
-$r_L : [0,1] \to \R$,
-$r_R : [0,1] \to \R$, and
-$h   : (1,2) - G \to \R$;
-with the restriction that
-$\tail(x) = \tail(y) \Rightarrow h(x) = h(y)$.
-Theorem 1 allows us to build a function $f:[0,3]\to\R$ based on
-$r_L,$ $r_R,$ and $h.$
-
-
-TODO HERE Continue this reasoning in the other direction and summarize
-          the aforementioned results (whatever are appropriate in a single
-          theorem statement) as a theorem.
-
-Suppose that $f(x) = y$ for some $x\in (1,2)$ and not in any set $G_k$.
-Let $b$ be an expansion with $v(b) = x-1$.
-Then $f_S(x+\{0,2\}) = y$ and, by applying $t_1$,
-$f((x+\{2,4\})/3) = y$. The expansion of $(x+2)/3 - 1$ is
-
-Now suppose that $f(x) = y$ for some point $x$ not in any set $G_k$.
-Then $f_S(x') = y$ for both $x' = x$ and $x' = x + 2$.
-Suppose $x'' \in (1, 2)$.
-Since $f(x'') = f_S(t_1(x'')) = f_S(3x''-2)$, this means that
-($3x''-2 = x' \Leftrightarrow x'' = (x'+2) / 3 = (x+\{2,4\})/3$)
-$f()$
-
-
-TODO the image for the above proof, and why it is almost everywhere;
-     then the remaining cases and relation to Cantor dust.
-
-
-TODO work up to this image
+TODO briefly explain the image
 
 ![An exactly self-replicating function $f$ completely determined by
 $r_L(x) = \cos(2x)/2 + 1/4$,
