@@ -459,6 +459,14 @@ $$\mu(G) = \sum_{k \ge 0}\mu(G_k) = \sum_{k\ge 0}
 Since each $G_k\subset [1,2]$, this justifies the claim that theorem 1
 characterizes $f$ almost everywhere in that interval.
 
+\newcommand{\cantor}{\mathcal{C}}
+
+Readers familiar with the
+[*Cantor set*](https://en.wikipedia.org/wiki/Cantor_set) $\cantor$
+may notice that it's closely related to the set $G$.
+In fact, $\cantor$ is exactly the closure of $(1,2)-G$ shifted by a unit to
+reside within $[0,1].$
+
 What values may $f$ take on for the points $x\in (1,2) - G$?
 The choice is still not arbitrary as the values remain related.
 I'll explore this question next.
@@ -600,8 +608,6 @@ exactly self-replicating.
 <p align="right">
 \hfill$\Box$
 </p>
-
-TODO add Cantor dust mention
 
 Call the function $h$ *tail-consistent* on a domain set $A$ if
 $\tail(x) = \tail(y) \;\Rightarrow\; h(x) = h(y)$ for any $x,y \in A.$
