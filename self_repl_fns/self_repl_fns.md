@@ -627,16 +627,23 @@ $[0,3]$, there exists a unique corresponding triple $r_L,$ $r_R,$ and
 $h$. Theorem 3 is the key to verifying that this correspondence between such $f$
 and triples $(r_L, r_R, h)$ is indeed a bijection.
 
-TODO briefly explain the image
+Below is an example image depicting the function we get by choosing
+$r_L(x) = \cos(2x)/2 + 1/4$ and $r_R(x) = r_L(1-x)$. The $h$ function has the
+constant value $r_L(0) + r_R(0)$.
 
 ![An exactly self-replicating function $f$ completely determined by
 $r_L(x) = \cos(2x)/2 + 1/4$,
 $r_R(x) = r_L(1 - x)$, and the value $f(x) = r_L(0) + r_R(0)$ for all $x$ not
 determined by $r_L$ and $r_R$.](images/nonplateau.png){#fig:nonplateau}
 
-TODO Clarify the values of $s$, $t_1$, and $t_2$ in that caption.
+Next I'll examine a famous function which is *not* exactly
+self-replicating, but which can be seen as approximately self-replicating:
+the normal curve.
 
 ---
+
+TODO standardize kindle-focused output; eventually mention it from the main html
+page
 
 This means that $(\,f_R \restrict 3 + 0.1\lstar) = g$, so that
 $(\,f_S \restrict \{1,3\} + 0.1\lstar) = g$.
@@ -656,6 +663,7 @@ $$\alpha_{[0,1]}(x) = \alpha(x) \cdot \big[ x\in [0,1] \big],$$
 for any function $\alpha(x)$.
 Using this notation, it will be useful to isolate the left and right ramps
 $r_L(x) = f_{[0,1]}(x)$ and $r_R(x) = \big(f(x + 4)\big)_{[0,1]}$.
+
 
 
 
