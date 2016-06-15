@@ -27,3 +27,11 @@ sed 's|images/\(.*\)\.png|images/pdfs/\1.pdf|' ${name}.tex > ${TMP}
 mv ${TMP} ${name}.tex
 pdflatex ${name}.tex
 #open ${name}.pdf
+
+# Make the kindle-friendly pdf file.
+pandoc -t latex -o ${name}.tex -s ${FLAGS} --template=kindle_template.tex
+TMP=$(mktemp tmp_XXXX)
+sed 's|images/\(.*\)\.png|images/pdfs/\1.pdf|' ${name}.tex > ${TMP}
+mv ${TMP} ${name}_for_kindle.tex
+pdflatex ${name}_for_kindle.tex
+open ${name}_for_kindle.pdf
