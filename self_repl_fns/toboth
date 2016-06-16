@@ -32,6 +32,11 @@ pdflatex ${name}.tex
 pandoc -t latex -o ${name}.tex -s ${FLAGS} --template=kindle_template.tex
 TMP=$(mktemp tmp_XXXX)
 sed 's|images/\(.*\)\.png|images/pdfs/\1.pdf|' ${name}.tex > ${TMP}
-mv ${TMP} ${name}_for_kindle.tex
+TMP2=$(mktemp tmp_XXXX)
+# This next line is a hacky way to modify the definition of \zerotwo so that
+# it looks better in this output format.
+sed 's|\(\\newcommand{\\zerotwo}.*\)\\!|\1|;s|\(\\lower1pt\\hbox.*\)\\!|\1|' ${TMP} > ${TMP2}
+rm ${TMP}
+mv ${TMP2} ${name}_for_kindle.tex
 pdflatex ${name}_for_kindle.tex
-open ${name}_for_kindle.pdf
+#open ${name}_for_kindle.pdf
