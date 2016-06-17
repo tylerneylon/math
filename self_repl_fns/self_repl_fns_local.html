@@ -264,41 +264,17 @@
       <img src="images/nonplateau.png" alt="Figure 10: An exactly self-replicating function f completely determined by r_L(x) = \cos(2x)/2 + 1/4, r_R(x) = r_L(1 - x), and the value f(x) = r_L(0) + r_R(0) for all x not determined by r_L and r_R." id="fig:nonplateau" />
       </div>
       <p>Next I’ll examine a famous function which is <em>not</em> exactly self-replicating, but which can be seen as approximately self-replicating: the normal curve.</p>
-      <hr />
-      <p>TODO standardize kindle-focused output; eventually mention it from the main html page</p>
-      <p>This means that <span class="math inline">\((\,f_R {\,\big|\,}3 + 0.1{\overline{*}_3}) = g\)</span>, so that <span class="math inline">\((\,f_S {\,\big|\,}\{1,3\} + 0.1{\overline{*}_3}) = g\)</span>. As above, use the map <span class="math inline">\(t_1\)</span> to conclude that <span class="math inline">\((\,f_L {\,\big|\,}0.{\big\{\!\raise1.5pt\hbox{$\genfrac{}{}{0pt}{}
-      {\lower1.8pt\hbox{$\smash{\scriptstyle 0}$}}
-      {\lower1pt\hbox{$\smash{\scriptstyle 2}$}}$}\!\big\}}1{\overline{*}_3}) = g\)</span>.</p>
-      <h3 id="all-possible-positive-curves-for-the-example-st_1t_2-parameters"><span class="header-section-number">2.4.3</span> All possible positive curves for the example <span class="math inline">\(s,t_1,t_2\)</span> parameters</h3>
-      <p>Consider a general function <span class="math inline">\(f(x)\)</span> such that <span class="math inline">\(f(x)=0\)</span> except when <span class="math inline">\(x \in [0, 5]\)</span>. For convenience, I’ll introduce the notation <span class="math inline">\(\alpha_{[0,1]}\)</span> to denote the function</p>
-      <p><span class="math display">\[\alpha_{[0,1]}(x) = \alpha(x) \cdot \big[ x\in [0,1] \big],\]</span></p>
-      <p>for any function <span class="math inline">\(\alpha(x)\)</span>. Using this notation, it will be useful to isolate the left and right ramps <span class="math inline">\(r_L(x) = f_{[0,1]}(x)\)</span> and <span class="math inline">\(r_R(x) = \big(f(x + 4)\big)_{[0,1]}\)</span>.</p>
-      <hr />
-      <p>TODO finish from here; don’t forget that <span class="math inline">\(s\)</span> can’t be the identity function</p>
-      <h3 id="begin-other-stuff-to-rewrite"><span class="header-section-number">2.4.4</span> Begin other stuff to rewrite</h3>
-      <p>I’ll describe a sequence of functions which may help us find a self-replicating function by starting with an arbitrary function. The sequence depends on an initial function <span class="math inline">\(f(x)\)</span>, a shift function <span class="math inline">\(s(x)\)</span> that captures the relationship between the left and right addends, and transformation functions <span class="math inline">\(t_1(x)\)</span> and <span class="math inline">\(t_2(x)\)</span> that formalize the similarity between the addends and their sum.</p>
-      <p>Given these functions, we can define</p>
-      <p><span class="math display">\[\begin{array}{rcl}
-        f_L(x) &amp; = &amp; f(x), \\
-        f_R(x) &amp; = &amp; f(s(x)), \text{and} \\
-        f_S(x) &amp; = &amp; f_L(x) + f_R(x), \\
-      \end{array}\]</span></p>
-      <p>with the expectation that</p>
-      <p><span class="math display">\[f_L(x) = t_2(f_S(t_1(x))).\]</span></p>
-      <p>This setup supports the possibility that <span class="math inline">\(f_L\)</span> and <span class="math inline">\(f_R\)</span> are possibly-reflected shifts of each other, and requires <span class="math inline">\(f_S\)</span> can be transformed to recover exactly <span class="math inline">\(f_L\)</span>. This is one possible way to formalize the definition of a self-replicating function.</p>
-      <p>It can also be used to set up a sequence of functions via the following definitions:</p>
-      <p><span class="math display">\[\begin{array}{rcl}
-        f^{(1)}_L &amp; = &amp; f(x), \\
-        f^{(i)}_R &amp; = &amp; f^{(i)}_L \\
-        f^{(i+1)}_S = f^{(i)}_L + f^{(i)}_R \\
-      \end{array}\]</span></p>
-      <p>TODO finish the above</p>
       <h1 id="the-normal-curve"><span class="header-section-number">3</span> The normal curve</h1>
+      <p>TODO better segue here. start with a high-level summary of what’s next, including the current image</p>
       <p>The normal curve is described by <span class="math inline">\(y = e^{-x^2/2}\)</span>.</p>
       <div class="figure">
       <p class="caption">The normal curve: <span class="math inline">\(y=e^{-x^2/2}\)</span>.</p>
       <img src="images/normal3.png" alt="The normal curve: y=e^{-x^2/2}." />
       </div>
+      <p>One general way to look for self-replicating functions is to begin with a function considered as the sum <span class="math inline">\(f_S\)</span>, and then to use a nondecreasing function <span class="math inline">\(s\)</span> with range <span class="math inline">\([0,1]\)</span> to split <span class="math inline">\(f_S\)</span> into the pieces <span class="math inline">\(f_L = (1 - s)\cdot f_S\)</span> and <span class="math inline">\(f_R = s\cdot f_S\)</span>. There’s no immediate reason for all three of these functions to resemble each other, so the challenge is to choose function pairs <span class="math inline">\((s, f_S)\)</span> so that this decomposition is indeed self-replicating.</p>
+      <p>If <span class="math inline">\(f_S\)</span> is an even function, then it seems natural to choose a <em>sigmoid function</em> for <span class="math inline">\(s\)</span>, as defined in this paragraph.</p>
+      <p>TODO define a sigmoid and give the logistic function along with its graph</p>
+      <p>TODO Lead up to the main split of the normal curve I’m going after.</p>
       <h1 id="leaf-point-distributions-of-l-systems"><span class="header-section-number">4</span> Leaf-point distributions of <em>L</em>-systems</h1>
       <h1 id="fractal-functions"><span class="header-section-number">5</span> Fractal functions</h1>
       <p>This section is for functions similar to the Cantor diagonal. It may turn out that I can’t find any functions that fit here, or that the <em>L</em>-systems distributions includes this case, or even that I can prove that no functions could exist here (as far as I know).</p>

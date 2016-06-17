@@ -640,89 +640,33 @@ Next I'll examine a famous function which is *not* exactly
 self-replicating, but which can be seen as approximately self-replicating:
 the normal curve.
 
----
-
-TODO standardize kindle-focused output; eventually mention it from the main html
-page
-
-This means that $(\,f_R \restrict 3 + 0.1\lstar) = g$, so that
-$(\,f_S \restrict \{1,3\} + 0.1\lstar) = g$.
-As above, use the map $t_1$ to conclude that
-$(\,f_L \restrict 0.\zerotwo 1\lstar) = g$.
-
-
-
-### All possible positive curves for the example $s,t_1,t_2$ parameters
-
-Consider a general function $f(x)$ such that $f(x)=0$ except when
-$x \in [0, 5]$. For convenience, I'll introduce the notation
-$\alpha_{[0,1]}$ to denote the function 
-
-$$\alpha_{[0,1]}(x) = \alpha(x) \cdot \big[ x\in [0,1] \big],$$
-
-for any function $\alpha(x)$.
-Using this notation, it will be useful to isolate the left and right ramps
-$r_L(x) = f_{[0,1]}(x)$ and $r_R(x) = \big(f(x + 4)\big)_{[0,1]}$.
-
-
-
-
-
----
-
-
-
-TODO finish from here; don't forget that $s$ can't be the identity function
-
-
-
-### Begin other stuff to rewrite
-
-I'll describe a sequence of functions which may help us find a self-replicating
-function by starting with an arbitrary function.
-The sequence depends on an initial function $f(x)$, a shift function $s(x)$ that
-captures the relationship between the left and right addends, and
-transformation functions $t_1(x)$ and $t_2(x)$ that formalize the similarity
-between the addends and their sum.
-
-Given these functions, we can define
-
-$$\begin{array}{rcl}
-  f_L(x) & = & f(x), \\
-  f_R(x) & = & f(s(x)), \text{and} \\
-  f_S(x) & = & f_L(x) + f_R(x), \\
-\end{array}$$
-
-with the expectation that
-
-$$f_L(x) = t_2(f_S(t_1(x))).$$
-
-This setup supports the possibility that $f_L$ and $f_R$ are possibly-reflected
-shifts of each other,
-and requires $f_S$ can be transformed to recover exactly $f_L$.
-This is one possible way to formalize the definition of a self-replicating
-function.
-
-It can also be used to set up a sequence of functions via the following
-definitions:
-
-$$\begin{array}{rcl}
-  f^{(1)}_L & = & f(x), \\
-  f^{(i)}_R & = & f^{(i)}_L \\
-  f^{(i+1)}_S = f^{(i)}_L + f^{(i)}_R \\
-\end{array}$$
-
-TODO finish the above
-
-
-
 
 # The normal curve
+
+TODO better segue here. start with a high-level summary of what's next,
+     including the current image
 
 The normal curve is described by
 $y = e^{-x^2/2}$.
 
 ![The normal curve: $y=e^{-x^2/2}$.](images/normal3.png)
+
+One general way to look for self-replicating functions is to begin with a
+function considered as the sum $f_S$, and then to use a nondecreasing
+function $s$ with range $[0,1]$ to split $f_S$ into the pieces
+$f_L = (1 - s)\cdot f_S$ and $f_R = s\cdot f_S$.
+There's no immediate reason for all three of these functions to resemble
+each other, so the challenge is to choose function pairs $(s, f_S)$ so that
+this decomposition is indeed self-replicating.
+
+If $f_S$ is an even function, then it seems natural to choose a *sigmoid
+function* for $s$, as defined in this paragraph.
+
+TODO define a sigmoid and give the logistic function along with its graph
+
+
+TODO Lead up to the main split of the normal curve I'm going after.
+
 
 
 # Leaf-point distributions of *L*-systems
