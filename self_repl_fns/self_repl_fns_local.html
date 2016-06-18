@@ -272,8 +272,11 @@
       <img src="images/normal3.png" alt="The normal curve: y=e^{-x^2/2}." />
       </div>
       <p>One general way to look for self-replicating functions is to begin with a function considered as the sum <span class="math inline">\(f_S\)</span>, and then to use a nondecreasing function <span class="math inline">\(s\)</span> with range <span class="math inline">\([0,1]\)</span> to split <span class="math inline">\(f_S\)</span> into the pieces <span class="math inline">\(f_L = (1 - s)\cdot f_S\)</span> and <span class="math inline">\(f_R = s\cdot f_S\)</span>. There’s no immediate reason for all three of these functions to resemble each other, so the challenge is to choose function pairs <span class="math inline">\((s, f_S)\)</span> so that this decomposition is indeed self-replicating.</p>
-      <p>If <span class="math inline">\(f_S\)</span> is an even function, then it seems natural to choose a <em>sigmoid function</em> for <span class="math inline">\(s\)</span>, as defined in this paragraph.</p>
-      <p>TODO define a sigmoid and give the logistic function along with its graph</p>
+      <p>Let’s define a <em>sigmoid function</em> <span class="math inline">\(s:{\mathbb{R}}\to{\mathbb{R}}\)</span> as a nondecreasing function with range in <span class="math inline">\([0, 1]\)</span>, and such that <span class="math inline">\(s-1/2\)</span> is an odd function. If <span class="math inline">\(f_S\)</span> is an even function, then it seems natural to choose a sigmoid function to split <span class="math inline">\(f_S\)</span> into <span class="math inline">\(f_L\)</span> and <span class="math inline">\(f_R\)</span> as described in the last paragraph. Under these conditions, we have the symmetry given by <span class="math inline">\(f_L(x) = f_R(-x)\)</span>. This can be seen by observing that</p>
+      <p><span class="math display">\[1/2 - s(x) = s(-x) - 1/2 \quad\Rightarrow\quad
+      1 - s(x) = s(-x).\]</span></p>
+      <p>Then <span class="math inline">\(f_R(-x) = s(-x)\,f_S(-x) = (1-s(x))\,f_S(x) = f_L(x)\)</span>, confirming the claimed symmetry.</p>
+      <p>There are various sigmoid functions available. A simple one is given by <span class="math inline">\(x/(1+|x|)\)</span>. A more commonly-used one is the <em>logistic function</em> given by <span class="math inline">\(s(x) = 1/(1 + e^{-x})\)</span>, which is the one I’ll focus on in this section.</p>
       <p>TODO Lead up to the main split of the normal curve I’m going after.</p>
       <h1 id="leaf-point-distributions-of-l-systems"><span class="header-section-number">4</span> Leaf-point distributions of <em>L</em>-systems</h1>
       <h1 id="fractal-functions"><span class="header-section-number">5</span> Fractal functions</h1>

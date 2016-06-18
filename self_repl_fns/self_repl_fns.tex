@@ -795,11 +795,24 @@ no immediate reason for all three of these functions to resemble each
 other, so the challenge is to choose function pairs \((s, f_S)\) so that
 this decomposition is indeed self-replicating.
 
-If \(f_S\) is an even function, then it seems natural to choose a
-\emph{sigmoid function} for \(s\), as defined in this paragraph.
+Let's define a \emph{sigmoid function} \(s:\R\to\R\) as a nondecreasing
+function with range in \([0, 1]\), and such that \(s-1/2\) is an odd
+function. If \(f_S\) is an even function, then it seems natural to
+choose a sigmoid function to split \(f_S\) into \(f_L\) and \(f_R\) as
+described in the last paragraph. Under these conditions, we have the
+symmetry given by \(f_L(x) = f_R(-x)\). This can be seen by observing
+that
 
-TODO define a sigmoid and give the logistic function along with its
-graph
+\[1/2 - s(x) = s(-x) - 1/2 \quad\Rightarrow\quad
+1 - s(x) = s(-x).\]
+
+Then \(f_R(-x) = s(-x)\,f_S(-x) = (1-s(x))\,f_S(x) = f_L(x)\),
+confirming the claimed symmetry.
+
+There are various sigmoid functions available. A simple one is given by
+\(x/(1+|x|)\). A more commonly-used one is the \emph{logistic function}
+given by \(s(x) = 1/(1 + e^{-x})\), which is the one I'll focus on in
+this section.
 
 TODO Lead up to the main split of the normal curve I'm going after.
 
