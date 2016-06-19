@@ -34,7 +34,7 @@
       <p><span class="math display">\[h_\theta = \theta_1 x = \theta_0 x + y - \theta_0x = y,\]</span></p>
       <p>which is good. Another intuitive perspective is that we should be making <em>bigger</em> changes to <span class="math inline">\(\theta_j\)</span> when <span class="math inline">\(x_j\)</span> is <em>small</em>, since it’s harder to influence <span class="math inline">\(h_\theta\)</span> for such <span class="math inline">\(x\)</span> values.</p>
       <p>This is not yet a solidified intuition. I’d be interested in revisiting this question if I have time.</p>
-      <h2 id="persistence-of-trace"><span class="header-section-number">1.3</span> Persistence of trace</h2>
+      <h2 id="properties-of-the-trace-operator"><span class="header-section-number">1.3</span> Properties of the trace operator</h2>
       <p>The trace of a square matrix obeys the nice property that</p>
       <p><span class="math display">\[{\text{tr}\;}AB = {\text{tr}\;}BA.\qquad(1)\]</span></p>
       <p>One way to see this is to note that</p>
@@ -42,16 +42,33 @@
       <p>where I’m using the informal shorthand notation that a variable repeated within a single product implies that the sum is taken over all relevant values of that variable. Specifically,</p>
       <p><span class="math display">\[a_{ij}b_{ji} \;\text{means}\; \sum_{i,j} a_{ij}b_{ji}.\]</span></p>
       <p>I wonder if there’s a more elegant way to verify (1).</p>
-      <p>This notation will become more useful in a moment.</p>
       <p>Ng gives other interesting trace-based equations, examined next.</p>
-      <p><span class="math display">\[\text{Goal:}\quad \nabla_A{\text{tr}\;}AB = B^T.\]</span></p>
+      <ul>
+      <li>Goal: <span class="math inline">\(\quad \nabla_A{\text{tr}\;}AB = B^T.\)</span></li>
+      </ul>
       <p>Since</p>
       <p><span class="math display">\[{\text{tr}\;}AB = a_{ij}b_{ji},\]</span></p>
       <p>we have that</p>
       <p><span class="math display">\[(\nabla_A{\text{tr}\;}AB)_{ij} = b_{ji},\]</span></p>
       <p>verifying the goal.</p>
-      <p><span class="math display">\[\text{Goal:}\quad \nabla_{A^T}f(A) = (\nabla_A f(A))^T.\]</span></p>
-      <p>TODO continue from here</p>
+      <ul>
+      <li>Goal: <span class="math inline">\(\quad \nabla_{A^T}f(A) = (\nabla_A f(A))^T.\)</span></li>
+      </ul>
+      <p>This can be viewed as</p>
+      <p><span class="math display">\[(\nabla_{A^T}f(A))_{ij} = \frac{\partial f}{\partial a_{ji}}
+                                = (\nabla_A f(A))_{ji}.\]</span></p>
+      <ul>
+      <li>Goal: <span class="math inline">\(\quad \nabla_A\text{tr}(ABA^TC) = CAB + C^TAB^T.\)</span></li>
+      </ul>
+      <p>I’ll use some nonstandard index variable names below because I think it will help avoid possible confusion. Start with</p>
+      <p><span class="math display">\[(ABA^TC)_{xy} = a_{xz} b_{zw} a_{vw} c_{vy}.\]</span></p>
+      <p>Take the trace of that to arrive at</p>
+      <p><span class="math display">\[\alpha = \text{tr}(ABA^TC) = a_{xz} b_{zw} a_{vw} c_{vx}.\]</span></p>
+      <p>Use the product rule to find <span class="math inline">\(\frac{\partial\alpha}{\partial a_{ij}}\)</span>. You can think of this as, in the equation above, first setting <span class="math inline">\(xz = ij\)</span> for one part of the product rule output, and then setting <span class="math inline">\(vw = ij\)</span> for the other part. The result is</p>
+      <p><span class="math display">\[(\nabla_A\alpha)_{ij} = b_{jw} a_{vw} c_{vi} + a_{xz} b_{zj} c_{ix}
+                              = c_{vi} a_{vw} b_{jw} + c_{ix} a_{xz} b_{zj}.\]</span></p>
+      <p>(The second equality above is based on the fact that we’re free to rearrange terms within products in the repeated-index notation being used. Such rearrangement is commutativity of numbers, not of matrices.)</p>
+      <p>This last expression is exactly the <span class="math inline">\(ij^\text{th}\)</span> entry of the matrix <span class="math inline">\(CAB + C^TAB^T\)</span>, which was the goal.</p>
       <div id="refs" class="references">
       
       </div>

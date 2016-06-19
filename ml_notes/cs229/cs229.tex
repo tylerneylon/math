@@ -153,7 +153,8 @@ since it's harder to influence \(h_\theta\) for such \(x\) values.
 This is not yet a solidified intuition. I'd be interested in revisiting
 this question if I have time.
 
-\subsection{Persistence of trace}\label{persistence-of-trace}
+\subsection{Properties of the trace
+operator}\label{properties-of-the-trace-operator}
 
 The trace of a square matrix obeys the nice property that
 
@@ -172,11 +173,13 @@ values of that variable. Specifically,
 I wonder if there's a more elegant way to verify
 (\ref{eq:persistent_trace}).
 
-This notation will become more useful in a moment.
-
 Ng gives other interesting trace-based equations, examined next.
 
-\[\text{Goal:}\quad \nabla_A\tr AB = B^T.\]
+\begin{itemize}
+\tightlist
+\item
+  Goal: \(\quad \nabla_A\tr AB = B^T.\)
+\end{itemize}
 
 Since
 
@@ -188,9 +191,46 @@ we have that
 
 verifying the goal.
 
-\[\text{Goal:}\quad \nabla_{A^T}f(A) = (\nabla_A f(A))^T.\]
+\begin{itemize}
+\tightlist
+\item
+  Goal: \(\quad \nabla_{A^T}f(A) = (\nabla_A f(A))^T.\)
+\end{itemize}
 
-TODO continue from here
+This can be viewed as
+
+\[(\nabla_{A^T}f(A))_{ij} = \frac{\partial f}{\partial a_{ji}}
+                          = (\nabla_A f(A))_{ji}.\]
+
+\begin{itemize}
+\tightlist
+\item
+  Goal: \(\quad \nabla_A\text{tr}(ABA^TC) = CAB + C^TAB^T.\)
+\end{itemize}
+
+I'll use some nonstandard index variable names below because I think it
+will help avoid possible confusion. Start with
+
+\[(ABA^TC)_{xy} = a_{xz} b_{zw} a_{vw} c_{vy}.\]
+
+Take the trace of that to arrive at
+
+\[\alpha = \text{tr}(ABA^TC) = a_{xz} b_{zw} a_{vw} c_{vx}.\]
+
+Use the product rule to find \(\frac{\partial\alpha}{\partial a_{ij}}\).
+You can think of this as, in the equation above, first setting
+\(xz = ij\) for one part of the product rule output, and then setting
+\(vw = ij\) for the other part. The result is
+
+\[(\nabla_A\alpha)_{ij} = b_{jw} a_{vw} c_{vi} + a_{xz} b_{zj} c_{ix}
+                        = c_{vi} a_{vw} b_{jw} + c_{ix} a_{xz} b_{zj}.\]
+
+(The second equality above is based on the fact that we're free to
+rearrange terms within products in the repeated-index notation being
+used. Such rearrangement is commutativity of numbers, not of matrices.)
+
+This last expression is exactly the \(ij^\text{th}\) entry of the matrix
+\(CAB + C^TAB^T\), which was the goal.
 
 \hypertarget{refs}{}
 
