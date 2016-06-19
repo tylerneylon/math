@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Notes on Andrew Ng’s CS 229 Machine Learning Course</title>
+    <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <link rel="stylesheet" href="tufte-edited.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  </head>
+  <body>
+    <p style="display:none">\(\newcommand{\latexonlyrule}[2]{}\)</p>
+    <div class="main">
+      <div class="title">Notes on Andrew Ng’s CS 229 Machine Learning Course</div>
+      <div class="author">Tyler Neylon</div>
+      <div class="date">331.2016</div>
+      <p>These are notes I’m taking as I review material from Andrew Ng’s CS 229 course on machine learning. Specifically, I’m watching <a href="https://www.youtube.com/view_play_list?p=A89DCFA6ADACE599">these videos</a> and looking at the written notes and assignments posted <a href="http://cs229.stanford.edu/materials.html">here</a>. These notes are available in two formats: <a href="http://tylerneylon.com/notes/cs229/cs229.html">html</a> and <a href="http://tylerneylon.com/notes/cs229/cs229.pdf">pdf</a>.</p>
+      <p>I’ll organize these notes to correspond with the written notes from the class.</p>
+      <h1 id="on-lecture-notes-1"><span class="header-section-number">1</span> On lecture notes 1</h1>
+      <p>The notes in this section are based on <a href="http://cs229.stanford.edu/notes/cs229-notes1.pdf">lecture notes 1</a>.</p>
+      <h2 id="gradient-descent-in-general"><span class="header-section-number">1.1</span> Gradient descent in general</h2>
+      <p>Given a cost function <span class="math inline">\(J(\theta)\)</span>, the general form of an update is</p>
+      <p><span class="math display">\[\theta_j := \theta_j - \alpha\frac{\partial J}{\partial \theta_j}.\]</span></p>
+      <p>It bothers me that <span class="math inline">\(\alpha\)</span> is an arbitrary parameter. What is the best way to choose this parameter? Intuitively, it could be chosen based on some estimate or actual value of the second derivative of <span class="math inline">\(J\)</span>. What can be theoretically guaranteed about the rate of convergence under appropriate conditions?</p>
+      <p>Why not use Newton’s method? A general guess: the second derivative of <span class="math inline">\(J\)</span> becomes cumbersome to work with.</p>
+      <p>It seems worthwhile to keep my eye open for opportunities to apply improved optimization algorithms in specific cases.</p>
+      <h2 id="gradient-descent-on-linear-regression"><span class="header-section-number">1.2</span> Gradient descent on linear regression</h2>
+      <p>I realize this is a toy problem because linear regression in practice is not solve iteratively, but it seems worth understanding well. The general update equation is, for a single example <span class="math inline">\(i\)</span>,</p>
+      <p><span class="math display">\[\theta_j := \theta_j + \alpha(y^{(i)} - h_\theta(x^{(i)}))x_j^{(i)}.\]</span></p>
+      <p>The delta makes sense in that it is proportional to the error <span class="math inline">\(y-h_\theta\)</span>, and in that the sign of the product <span class="math inline">\((y-h_\theta)x\)</span> guarantees moving in the right direction. However, my first guess would be that the expression <span class="math inline">\((y-h_\theta)/x\)</span> would provide a better update.</p>
+      <p>For example, suppose we have a single data point <span class="math inline">\((x, y)\)</span> where <span class="math inline">\(x\ne 0\)</span>, and a random value of <span class="math inline">\(\theta\)</span>. Then a great update would be</p>
+      <p><span class="math display">\[\theta_1 := \theta_0 + (y - \theta_0 x)/x,\]</span></p>
+      <p>since the next hypothesis value <span class="math inline">\(h_\theta\)</span> would then be</p>
+      <p><span class="math display">\[h_\theta = \theta_1 x = \theta_0 x + y - \theta_0x = y,\]</span></p>
+      <p>which is good. Another intuitive perspective is that we should be making <em>bigger</em> changes to <span class="math inline">\(\theta_j\)</span> when <span class="math inline">\(x_j\)</span> is <em>small</em>, since it’s harder to influence <span class="math inline">\(h_\theta\)</span> for such <span class="math inline">\(x\)</span> values.</p>
+      <p>This is not yet a solidified intuition. I’d be interested in revisiting this question if I have time.</p>
+      <h2 id="persistence-of-trace"><span class="header-section-number">1.3</span> Persistence of trace</h2>
+      <p>The trace of a square matrix obeys the nice property that</p>
+      <p><span class="math display">\[{\text{tr}\;}AB = {\text{tr}\;}BA.\qquad(1)\]</span></p>
+      <p>One way to see this is to note that</p>
+      <p><span class="math display">\[{\text{tr}\;}AB = a_{ij}b_{ji} = {\text{tr}\;}BA,\]</span></p>
+      <p>where I’m using the informal shorthand notation that a variable repeated within a single product implies that the sum is taken over all relevant values of that variable. Specifically,</p>
+      <p><span class="math display">\[a_{ij}b_{ji} \;\text{means}\; \sum_{i,j} a_{ij}b_{ji}.\]</span></p>
+      <p>I wonder if there’s a more elegant way to verify (1).</p>
+      <p>This notation will become more useful in a moment.</p>
+      <p>Ng gives other interesting trace-based equations, examined next.</p>
+      <p><span class="math display">\[\text{Goal:}\quad \nabla_A{\text{tr}\;}AB = B^T.\]</span></p>
+      <p>Since</p>
+      <p><span class="math display">\[{\text{tr}\;}AB = a_{ij}b_{ji},\]</span></p>
+      <p>we have that</p>
+      <p><span class="math display">\[(\nabla_A{\text{tr}\;}AB)_{ij} = b_{ji},\]</span></p>
+      <p>verifying the goal.</p>
+      <p><span class="math display">\[\text{Goal:}\quad \nabla_{A^T}f(A) = (\nabla_A f(A))^T.\]</span></p>
+      <p>TODO continue from here</p>
+      <div id="refs" class="references">
+      
+      </div>
+    </div>
+  </body>
+</html>
