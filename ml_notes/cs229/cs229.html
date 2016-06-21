@@ -69,6 +69,27 @@
                               = c_{vi} a_{vw} b_{jw} + c_{ix} a_{xz} b_{zj}.\]</span></p>
       <p>(The second equality above is based on the fact that we’re free to rearrange terms within products in the repeated-index notation being used. Such rearrangement is commutativity of numbers, not of matrices.)</p>
       <p>This last expression is exactly the <span class="math inline">\(ij^\text{th}\)</span> entry of the matrix <span class="math inline">\(CAB + C^TAB^T\)</span>, which was the goal.</p>
+      <h2 id="derivation-of-the-normal-equation"><span class="header-section-number">1.4</span> Derivation of the normal equation</h2>
+      <p>Ng starts with</p>
+      <p><span class="math display">\[\nabla_\theta J(\theta) = \nabla_\theta\frac{1}{2}(X\theta-y)^T(X\theta-y),\]</span></p>
+      <p>and uses some trace tricks to get to</p>
+      <p><span class="math display">\[X^TX\theta - X^Ty.\]</span></p>
+      <p>I thought that the trace tricks were not great in the sense that if I were faced with this problem it would feel like a clever trick out of thin air to use the trace (perhaps due to my own lack of experience with matrix derivatives?), and in the sense that the connection between the definition of <span class="math inline">\(J(\theta)\)</span> and the result is not clear.</p>
+      <p>Next is another approach.</p>
+      <p>Start with <span class="math inline">\(\nabla_\theta J(\theta) = \nabla_\theta \frac{1}{2}(\theta^TZ\theta - 2y^TX\theta);\)</span> where <span class="math inline">\(Z=X^TX\)</span>, and the doubled term is a valid combination of the two similar terms since they’re both real numbers, so we can safely take the transpose of one of them to add them together.</p>
+      <p>The left term, <span class="math inline">\(\theta^T Z\theta\)</span>, can be expressed as <span class="math inline">\(w=\theta_{i1}Z_{ij}\theta_{j1}\)</span>, treating <span class="math inline">\(\theta\)</span> as an <span class="math inline">\((n+1)\times 1\)</span> matrix. Then <span class="math inline">\(({\nabla_\theta}w)_{i1} = Z_{ij}\theta_{j1} + \theta_{j1}Z_{ji}\)</span>, using the product rule; so <span class="math inline">\({\nabla_\theta}w = 2Z\theta\)</span>, using that <span class="math inline">\(Z\)</span> is symmetric.</p>
+      <p>The right term, <span class="math inline">\(v = y^TX\theta = y_{i1}X_{ij}\theta_{j1}\)</span> with <span class="math inline">\(({\nabla_\theta}v)_{i1} = y_{j1}X_{ji}\)</span> so that <span class="math inline">\({\nabla_\theta}v = X^Ty\)</span>.</p>
+      <p>These all lead to <span class="math inline">\({\nabla_\theta}J(\theta) = X^TX\theta - X^Ty\)</span> as before. I think it’s clearer, though, once you grok the sense that</p>
+      <p><span class="math display">\[\begin{array}{rcl}
+      {\nabla_\theta}\theta^TZ\theta &amp; = &amp; Z\theta + \theta^T Z, \text{and} \\
+      {\nabla_\theta}u^T\theta &amp; = &amp; u, \\
+      \end{array}\]</span></p>
+      <p>both as intuitively straightforward matrix versions of derivative properties.</p>
+      <p>I suspect this can be made even cleaner since the general product rule</p>
+      <p><span class="math display">\[\nabla(f\cdot g) = (\nabla f)\cdot g + f \cdot (\nabla g)\]</span></p>
+      <p>holds, even in cases where the product <span class="math inline">\(fg\)</span> is not a scalar; e.g., that it is vector- or matrix-valued. But I’m not going to dive into that right now.</p>
+      <p>Also note that <span class="math inline">\(X^TX\)</span> can easily be singular. A simple example is <span class="math inline">\(X=0\)</span>, the scalar value. However, if <span class="math inline">\(X\)</span> is <span class="math inline">\(m\times n\)</span> with rank <span class="math inline">\(n\)</span>, then <span class="math inline">\(X^TXe_i = X^Tx^{(i)} \ne 0\)</span> since <span class="math inline">\(\langle x^{(i)}, x^{(i)}\rangle \ne 0.\)</span> (If <span class="math inline">\(\langle x^{(i)}, x^{(i)}\rangle = 0\)</span> then <span class="math inline">\(X\)</span> could not have rank <span class="math inline">\(n.\)</span>) So <span class="math inline">\(X^TX\)</span> is nonsingular iff <span class="math inline">\(X\)</span> has rank <span class="math inline">\(n\)</span>.</p>
+      <p>Final note: Ng says something in a lecture (either 2 or 3) that implied that <span class="math inline">\((X^TX)^{-1}X^T\)</span> is <em>not</em> the pseudoinverse of <span class="math inline">\(X\)</span>, but for any real-valued full-rank matrix, it <em>is</em>.</p>
       <div id="refs" class="references">
       
       </div>

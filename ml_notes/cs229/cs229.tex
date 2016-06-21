@@ -232,6 +232,72 @@ used. Such rearrangement is commutativity of numbers, not of matrices.)
 This last expression is exactly the \(ij^\text{th}\) entry of the matrix
 \(CAB + C^TAB^T\), which was the goal.
 
+\subsection{Derivation of the normal
+equation}\label{derivation-of-the-normal-equation}
+
+Ng starts with
+
+\[\nabla_\theta J(\theta) = \nabla_\theta\frac{1}{2}(X\theta-y)^T(X\theta-y),\]
+
+and uses some trace tricks to get to
+
+\[X^TX\theta - X^Ty.\]
+
+I thought that the trace tricks were not great in the sense that if I
+were faced with this problem it would feel like a clever trick out of
+thin air to use the trace (perhaps due to my own lack of experience with
+matrix derivatives?), and in the sense that the connection between the
+definition of \(J(\theta)\) and the result is not clear.
+
+Next is another approach.
+
+Start with
+\(\nabla_\theta J(\theta) = \nabla_\theta \frac{1}{2}(\theta^TZ\theta - 2y^TX\theta);\)
+where \(Z=X^TX\), and the doubled term is a valid combination of the two
+similar terms since they're both real numbers, so we can safely take the
+transpose of one of them to add them together.
+
+\newcommand{\nt}{\nabla_\theta}
+
+The left term, \(\theta^T Z\theta\), can be expressed as
+\(w=\theta_{i1}Z_{ij}\theta_{j1}\), treating \(\theta\) as an
+\((n+1)\times 1\) matrix. Then
+\((\nt w)_{i1} = Z_{ij}\theta_{j1} + \theta_{j1}Z_{ji}\), using the
+product rule; so \(\nt w = 2Z\theta\), using that \(Z\) is symmetric.
+
+The right term, \(v = y^TX\theta = y_{i1}X_{ij}\theta_{j1}\) with
+\((\nt v)_{i1} = y_{j1}X_{ji}\) so that \(\nt v = X^Ty\).
+
+These all lead to \(\nt J(\theta) = X^TX\theta - X^Ty\) as before. I
+think it's clearer, though, once you grok the sense that
+
+\[\begin{array}{rcl}
+\nt \theta^TZ\theta & = & Z\theta + \theta^T Z, \text{and} \\
+\nt u^T\theta & = & u, \\
+\end{array}\]
+
+both as intuitively straightforward matrix versions of derivative
+properties.
+
+I suspect this can be made even cleaner since the general product rule
+
+\[\nabla(f\cdot g) = (\nabla f)\cdot g + f \cdot (\nabla g)\]
+
+holds, even in cases where the product \(fg\) is not a scalar; e.g.,
+that it is vector- or matrix-valued. But I'm not going to dive into that
+right now.
+
+Also note that \(X^TX\) can easily be singular. A simple example is
+\(X=0\), the scalar value. However, if \(X\) is \(m\times n\) with rank
+\(n\), then \(X^TXe_i = X^Tx^{(i)} \ne 0\) since
+\(\langle x^{(i)}, x^{(i)}\rangle \ne 0.\) (If
+\(\langle x^{(i)}, x^{(i)}\rangle = 0\) then \(X\) could not have rank
+\(n.\)) So \(X^TX\) is nonsingular iff \(X\) has rank \(n\).
+
+Final note: Ng says something in a lecture (either 2 or 3) that implied
+that \((X^TX)^{-1}X^T\) is \emph{not} the pseudoinverse of \(X\), but
+for any real-valued full-rank matrix, it \emph{is}.
+
 \hypertarget{refs}{}
 
 \end{document}
