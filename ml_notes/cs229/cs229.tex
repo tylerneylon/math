@@ -294,9 +294,40 @@ Also note that \(X^TX\) can easily be singular. A simple example is
 \(\langle x^{(i)}, x^{(i)}\rangle = 0\) then \(X\) could not have rank
 \(n.\)) So \(X^TX\) is nonsingular iff \(X\) has rank \(n\).
 
-Final note: Ng says something in a lecture (either 2 or 3) that implied
-that \((X^TX)^{-1}X^T\) is \emph{not} the pseudoinverse of \(X\), but
-for any real-valued full-rank matrix, it \emph{is}.
+Ng says something in a lecture (either 2 or 3) that implied that
+\((X^TX)^{-1}X^T\) is \emph{not} the pseudoinverse of \(X\), but for any
+real-valued full-rank matrix, it \emph{is}.
+
+\subsection{A probabilistic motivation for least
+squares}\label{a-probabilistic-motivation-for-least-squares}
+
+This motivation for least squares makes sense when the error is given by
+i.i.d. normal curves, and often this may seem like a natural assumption
+based on the central limit theorem.
+
+However, this same line of argument could be used to justify any cost
+function of the form
+
+\[J(\theta) = \sum_i f(\theta, x^{(i)}, y^{(i)}),\]
+
+where \(f\) is intuitively some measure of distance between
+\(h_\theta(x^{(i)})\) and \(y^{(i)}\). Specifically, model the error
+term \(\varepsilon^{(i)}\) as having the probability density function
+\(e^{-f(\theta, x^{(i)}, y^{(i)})}\). This is intuitively reasonable
+when \(f\) has the aforementioned distance-like property, since error
+values are likely near zero and unlikely far from zero. Then the log
+likelihood function is
+
+\[\ell(\theta) = \log L(\theta)
+               = \log \prod_i e^{-f(\theta, x^{(i)}, y^{(i)})}
+               = \sum_i -f(\theta, x^{(i)}, y^{(i)}),\]
+
+so that maximizing \(L(\theta)\) is the same as minimizing the
+\(J(\theta)\) defined in terms of this arbitrary function \(f.\) To be
+perfectly clear, the motivation Ng provides only works when you have
+good reason to believe the error terms are indeed normal. At the same
+time, using a nice simple algorithm like least squares is quite
+practical even if you don't have a great model for your error terms.
 
 \hypertarget{refs}{}
 
