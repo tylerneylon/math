@@ -81,7 +81,7 @@
       <p>The right term, <span class="math inline">\(v = y^TX\theta = y_{i1}X_{ij}\theta_{j1}\)</span> with <span class="math inline">\(({\nabla_\theta}v)_{i1} = y_{j1}X_{ji}\)</span> so that <span class="math inline">\({\nabla_\theta}v = X^Ty\)</span>.</p>
       <p>These all lead to <span class="math inline">\({\nabla_\theta}J(\theta) = X^TX\theta - X^Ty\)</span> as before. I think it’s clearer, though, once you grok the sense that</p>
       <p><span class="math display">\[\begin{array}{rcl}
-      {\nabla_\theta}\theta^TZ\theta &amp; = &amp; Z\theta + \theta^T Z, \text{and} \\
+      {\nabla_\theta}\theta^TZ\theta &amp; = &amp; Z\theta + (\theta^T Z)^T, \text{and} \\
       {\nabla_\theta}u^T\theta &amp; = &amp; u, \\
       \end{array}\]</span></p>
       <p>both as intuitively straightforward matrix versions of derivative properties.</p>
