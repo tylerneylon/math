@@ -99,6 +99,15 @@
                      = \log \prod_i e^{-f(\theta, x^{(i)}, y^{(i)})}
                      = \sum_i -f(\theta, x^{(i)}, y^{(i)}),\]</span></p>
       <p>so that maximizing <span class="math inline">\(L(\theta)\)</span> is the same as minimizing the <span class="math inline">\(J(\theta)\)</span> defined in terms of this arbitrary function <span class="math inline">\(f.\)</span> To be perfectly clear, the motivation Ng provides only works when you have good reason to believe the error terms are indeed normal. At the same time, using a nice simple algorithm like least squares is quite practical even if you don’t have a great model for your error terms.</p>
+      <h2 id="locally-weighted-linear-regression-lwr"><span class="header-section-number">1.6</span> Locally weighted linear regression (LWR)</h2>
+      <p>This idea is that, given a value <span class="math inline">\(x\)</span>, we can choose <span class="math inline">\(\theta\)</span> to minimize the modified cost function</p>
+      <p><span class="math display">\[\sum_i w^{(i)}(y^{(i)}-\theta^Tx^{(i)})^2,\]</span></p>
+      <p>where</p>
+      <p><span class="math display">\[w^{(i)} = \exp\left(-\frac{(x^{(i)}-x)^2}{2\tau^2}\right).\]</span></p>
+      <p>I wonder: Why not just compute the value</p>
+      <p><span class="math display">\[y = \frac{\sum_i w^{(i)}y^{(i)}}{\sum_i w^{(i)}}\]</span></p>
+      <p>instead?</p>
+      <p>I don’t have a strong intuition for which approach would be better, although the linear interpolation is more work (unless I’m missing a clever way to implement LWR that wouldn’t also work for the simpler equation immediately above). This also reminds me of <a href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm">the <span class="math inline">\(k-\)</span>nearest neighbors algorithm</a>, though I’ve seen that presented as a classification approach while LWR is regression. Nonetheless, perhaps one could apply a locality-sensitive hash to quickly approximately find the <span class="math inline">\(k\)</span> nearest neighbors and then build a regression model using that.</p>
       <div id="refs" class="references">
       
       </div>
