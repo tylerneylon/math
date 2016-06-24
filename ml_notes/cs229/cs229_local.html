@@ -108,6 +108,31 @@
       <p><span class="math display">\[y = \frac{\sum_i w^{(i)}y^{(i)}}{\sum_i w^{(i)}}\]</span></p>
       <p>instead?</p>
       <p>I don’t have a strong intuition for which approach would be better, although the linear interpolation is more work (unless I’m missing a clever way to implement LWR that wouldn’t also work for the simpler equation immediately above). This also reminds me of <a href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm">the <span class="math inline">\(k-\)</span>nearest neighbors algorithm</a>, though I’ve seen that presented as a classification approach while LWR is regression. Nonetheless, perhaps one could apply a locality-sensitive hash to quickly approximately find the <span class="math inline">\(k\)</span> nearest neighbors and then build a regression model using that.</p>
+      <h2 id="logistic-regression"><span class="header-section-number">1.7</span> Logistic regression</h2>
+      <p>This approach uses a hypothesis function of the form</p>
+      <p><span class="math display">\[h_{\theta}(x) = g({\theta}^Tx),\]</span></p>
+      <p>where</p>
+      <p><span class="math display">\[g(z) = 1/(1+e^{-z}).\]</span></p>
+      <p>The update equation from gradient descent turns out to be nice for this setup. However, besides “niceness,” it’s not obvious to me why the logistic function <span class="math inline">\(g\)</span> is signifcantly better than any other sigmoid function.</p>
+      <p>In general, suppose</p>
+      <p><span class="math display">\[h_{\theta}(x) = \tau({\theta}^Tx),\]</span></p>
+      <p>where <span class="math inline">\(\tau\)</span> is any sigmoid function. Then</p>
+      <p><span class="math display">\[\left[\nabla_{\theta}\ell({\theta})\right]_j
+      = \sum_i\left(\frac{y{^{(i)}}}{h{^{(i)}}} - \frac{1-y{^{(i)}}}{1-h{^{(i)}}}\right)
+      \frac{\partial\tau{^{(i)}}}{\partial{\theta}_j}.\]</span></p>
+      <p>Here, <span class="math inline">\(\tau{^{(i)}}\)</span> indicates the function <span class="math inline">\(\tau\)</span> evaluated on <span class="math inline">\({\theta}\)</span> and <span class="math inline">\(x{^{(i)}}\)</span>. We can split up the term inside the sum like so:</p>
+      <p><span class="math display">\[a{^{(i)}}= 
+      \frac{y{^{(i)}}}{h{^{(i)}}} - \frac{1-y{^{(i)}}}{1-h{^{(i)}}}
+      = \frac{y{^{(i)}}- h{^{(i)}}}{h{^{(i)}}(1-h{^{(i)}})},\]</span></p>
+      <p>and</p>
+      <p><span class="math display">\[b{^{(i)}}= 
+      \frac{\partial\tau{^{(i)}}}{\partial{\theta}_j}.\]</span></p>
+      <p>Intuitively, the value of <span class="math inline">\(a{^{(i)}}\)</span> makes sense as it’s the error of <span class="math inline">\(h{^{(i)}}\)</span> weighted more heavily when a wrong output value of <span class="math inline">\(h\)</span> is given with higher confidence. The value <span class="math inline">\(b{^{(i)}}\)</span> makes sense as the direction in which we’d want to move <span class="math inline">\({\theta}_j\)</span> in order to increase <span class="math inline">\(\tau{^{(i)}}\)</span>. Multiplied by the sign of <span class="math inline">\(a{^{(i)}}\)</span>, the end result is a movement of <span class="math inline">\({\theta}_j\)</span> that decreases the error.</p>
+      <p>It’s not obvious to me which choice of function <span class="math inline">\(\tau\)</span> is best. Consider, for example, the alternative function</p>
+      <p><span class="math display">\[\tau(z) = \frac{\arctan(z)}{\pi} + \frac{1}{2}.\]</span></p>
+      <p>In this case, when <span class="math inline">\(z={\theta}^Tx\)</span>,</p>
+      <p><span class="math display">\[b{^{(i)}}= \frac{\partial\tau{^{(i)}}}{\partial{\theta}_j} = \frac{x_j{^{(i)}}}{1+({\theta}^Tx)^2}.\]</span></p>
+      <p>In general, sigmoid functions will tend to give a value of <span class="math inline">\(b{^{(i)}}\)</span> that is small when <span class="math inline">\(|{\theta}^Tx|\)</span> is large, symmetric around <span class="math inline">\({\theta}^Tx=0\)</span>, and has the same sign as <span class="math inline">\(x_j\)</span> since <span class="math inline">\(\tau - 1/2\)</span> will be an increasing odd function; the derivative of an increasing odd function is even and positive; and this positive even function will be multiplied by <span class="math inline">\(x_j\)</span> to derive the final value of <span class="math inline">\(b{^{(i)}}.\)</span> The values of <span class="math inline">\(b{^{(i)}}\)</span> will be small for large <span class="math inline">\(|{\theta}^Tx|\)</span> because <span class="math inline">\(\tau({\theta}^Tx)\)</span> necessarily flattens out for large input values (since it’s monotonic and bounded in <span class="math inline">\([0,1]\)</span>).</p>
       <div id="refs" class="references">
       
       </div>

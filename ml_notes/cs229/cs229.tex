@@ -358,6 +358,74 @@ one could apply a locality-sensitive hash to quickly approximately find
 the \(k\) nearest neighbors and then build a regression model using
 that.
 
+\subsection{Logistic regression}\label{logistic-regression}
+
+This approach uses a hypothesis function of the form
+
+\renewcommand{\th}{\theta}
+
+\[h_\th(x) = g(\th^Tx),\]
+
+where
+
+\[g(z) = 1/(1+e^{-z}).\]
+
+The update equation from gradient descent turns out to be nice for this
+setup. However, besides ``niceness,'' it's not obvious to me why the
+logistic function \(g\) is signifcantly better than any other sigmoid
+function.
+
+In general, suppose
+
+\[h_\th(x) = \tau(\th^Tx),\]
+
+where \(\tau\) is any sigmoid function. Then
+
+\newcommand{\toi}{^{(i)}}
+
+\[\left[\nabla_\th\ell(\th)\right]_j
+= \sum_i\left(\frac{y\toi}{h\toi} - \frac{1-y\toi}{1-h\toi}\right)
+\frac{\partial\tau\toi}{\partial\th_j}.\]
+
+Here, \(\tau\toi\) indicates the function \(\tau\) evaluated on \(\th\)
+and \(x\toi\). We can split up the term inside the sum like so:
+
+\[a\toi = 
+\frac{y\toi}{h\toi} - \frac{1-y\toi}{1-h\toi}
+= \frac{y\toi - h\toi}{h\toi(1-h\toi)},\]
+
+and
+
+\[b\toi = 
+\frac{\partial\tau\toi}{\partial\th_j}.\]
+
+Intuitively, the value of \(a\toi\) makes sense as it's the error of
+\(h\toi\) weighted more heavily when a wrong output value of \(h\) is
+given with higher confidence. The value \(b\toi\) makes sense as the
+direction in which we'd want to move \(\th_j\) in order to increase
+\(\tau\toi\). Multiplied by the sign of \(a\toi\), the end result is a
+movement of \(\th_j\) that decreases the error.
+
+It's not obvious to me which choice of function \(\tau\) is best.
+Consider, for example, the alternative function
+
+\[\tau(z) = \frac{\arctan(z)}{\pi} + \frac{1}{2}.\]
+
+In this case, when \(z=\th^Tx\),
+
+\[b\toi
+= \frac{\partial\tau\toi}{\partial\th_j} = \frac{x_j\toi}{1+(\th^Tx)^2}.\]
+
+In general, sigmoid functions will tend to give a value of \(b\toi\)
+that is small when \(|\th^Tx|\) is large, symmetric around \(\th^Tx=0\),
+and has the same sign as \(x_j\) since \(\tau - 1/2\) will be an
+increasing odd function; the derivative of an increasing odd function is
+even and positive; and this positive even function will be multiplied by
+\(x_j\) to derive the final value of \(b\toi.\) The values of \(b\toi\)
+will be small for large \(|\th^Tx|\) because \(\tau(\th^Tx)\)
+necessarily flattens out for large input values (since it's monotonic
+and bounded in \([0,1]\)).
+
 \hypertarget{refs}{}
 
 \end{document}
