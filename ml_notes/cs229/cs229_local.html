@@ -143,6 +143,29 @@
       <p>which is convenient since we’re working with the product <span class="math inline">\(p(y) = \prod_i p(y{^{(i)}}).\)</span> However, we could have also worked with</p>
       <p><span class="math display">\[p(y|x;{\theta}) = yh + (1-y)(1-h),\]</span></p>
       <p>which also gives exactly the needed values for the cases <span class="math inline">\(y=1\)</span> and <span class="math inline">\(y=0.\)</span> Although the traditional expression is easier to work with, it seems worth nothing that there is a choice to be made.</p>
+      <h2 id="using-newtons-method-for-logistic-regression"><span class="header-section-number">1.8</span> Using Newton’s method for logistic regression</h2>
+      <p>Ng provides the alternative logistic regression update formula</p>
+      <p><span class="math display">\[{\theta}:= {\theta}- H^{-1}\nabla_{\theta}\ell({\theta})\qquad(2)\]</span></p>
+      <p>without justifying it beyond explaining that it’s the vector version of what one would do in a non-vector setting for finding an optima of <span class="math inline">\(\ell&#39;({\theta}),\)</span> namely,</p>
+      <p><span class="math display">\[{\theta}:= {\theta}- \frac{\ell&#39;({\theta})}{\ell&#39;&#39;({\theta})}.\]</span></p>
+      <p>The <span class="math inline">\(H\)</span> in the above equation is the <em>Hessian</em> of <span class="math inline">\(\ell\)</span>, which I’ll write as</p>
+      <p><span class="math display">\[H = (h_{ij}) =
+      \left(\frac{\partial^2\ell}{\partial{\theta}_i\partial{\theta}_j}\right).\]</span></p>
+      <p>Here is one way to arrive at (2):</p>
+      <p><span class="math display">\[\big[\nabla\ell({\theta}+\alpha)\big]_i
+        \approx \big[\nabla\ell({\theta})\big]_i
+        + \sum_j\frac{\partial}{\partial{\theta}_j}\big[\nabla\ell({\theta})\big]_i
+        \cdot\alpha_j.\qquad(3)\]</span></p>
+      <p>This is the linearized approximation of <span class="math inline">\(\nabla\ell\)</span> around <span class="math inline">\({\theta}\)</span>; another perspective is to see this as the first-order Taylor polynomial of <span class="math inline">\(\big[\nabla\ell\big]_i\)</span> around <span class="math inline">\({\theta}\)</span>.</p>
+      <p>We can rewrite (3) more concisely as</p>
+      <p><span class="math display">\[\nabla\ell({\theta}+ \alpha) \approx \nabla\ell({\theta}) + H\alpha.\qquad(4)\]</span></p>
+      <p>Recall that our goal is to iterate on <span class="math inline">\({\theta}\)</span> toward a solution to <span class="math inline">\(\nabla\ell({\theta})=0\)</span>. Use (4) toward this end by looking for <span class="math inline">\(\alpha\)</span> which solves <span class="math inline">\(\nabla\ell({\theta}+ \alpha) \approx 0.\)</span> If <span class="math inline">\(H\)</span> is invertible, then we have</p>
+      <p><span class="math display">\[\nabla\ell({\theta}) + H\alpha = 0
+      {\quad\Leftrightarrow\quad}H\alpha = -\nabla\ell({\theta})
+      {\quad\Leftrightarrow\quad}\alpha = -H^{-1}\nabla\ell({\theta}).\]</span></p>
+      <p>In other words, the desired iteration is</p>
+      <p><span class="math display">\[{\theta}:= {\theta}+ \alpha = {\theta}- H^{-1}\nabla\ell({\theta}),\]</span></p>
+      <p>which confirms the goal, equation (2).</p>
       <div id="refs" class="references">
       
       </div>

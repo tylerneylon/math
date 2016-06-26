@@ -451,6 +451,58 @@ which also gives exactly the needed values for the cases \(y=1\) and
 \(y=0.\) Although the traditional expression is easier to work with, it
 seems worth nothing that there is a choice to be made.
 
+\subsection{Using Newton's method for logistic
+regression}\label{using-newtons-method-for-logistic-regression}
+
+Ng provides the alternative logistic regression update formula
+
+\begin{equation}\th := \th - H^{-1}\nabla_\th\ell(\th)\label{eq:vector_newton}\end{equation}
+
+without justifying it beyond explaining that it's the vector version of
+what one would do in a non-vector setting for finding an optima of
+\(\ell'(\th),\) namely,
+
+\[\th := \th - \frac{\ell'(\th)}{\ell''(\th)}.\]
+
+The \(H\) in the above equation is the \emph{Hessian} of \(\ell\), which
+I'll write as
+
+\[H = (h_{ij}) =
+\left(\frac{\partial^2\ell}{\partial\th_i\partial\th_j}\right).\]
+
+Here is one way to arrive at (\ref{eq:vector_newton}):
+
+\begin{equation}\big[\nabla\ell(\th+\alpha)\big]_i
+  \approx \big[\nabla\ell(\th)\big]_i
+  + \sum_j\frac{\partial}{\partial\th_j}\big[\nabla\ell(\th)\big]_i
+  \cdot\alpha_j.\label{eq:lin_nab_ell}\end{equation}
+
+This is the linearized approximation of \(\nabla\ell\) around \(\th\);
+another perspective is to see this as the first-order Taylor polynomial
+of \(\big[\nabla\ell\big]_i\) around \(\th\).
+
+We can rewrite (\ref{eq:lin_nab_ell}) more concisely as
+
+\begin{equation}\nabla\ell(\th + \alpha) \approx \nabla\ell(\th) + H\alpha.\label{eq:concise_lin_ell}\end{equation}
+
+Recall that our goal is to iterate on \(\th\) toward a solution to
+\(\nabla\ell(\th)=0\). Use (\ref{eq:concise_lin_ell}) toward this end by
+looking for \(\alpha\) which solves
+\(\nabla\ell(\th + \alpha) \approx 0.\) If \(H\) is invertible, then we
+have
+
+\newcommand{\lrarr}{\quad\Leftrightarrow\quad}
+
+\[\nabla\ell(\th) + H\alpha = 0
+\lrarr H\alpha = -\nabla\ell(\th)
+\lrarr \alpha = -H^{-1}\nabla\ell(\th).\]
+
+In other words, the desired iteration is
+
+\[\th := \th + \alpha = \th - H^{-1}\nabla\ell(\th),\]
+
+which confirms the goal, equation (\ref{eq:vector_newton}).
+
 \hypertarget{refs}{}
 
 \end{document}
