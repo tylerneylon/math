@@ -166,6 +166,14 @@
       <p>In other words, the desired iteration is</p>
       <p><span class="math display">\[{\theta}:= {\theta}+ \alpha = {\theta}- H^{-1}\nabla\ell({\theta}),\]</span></p>
       <p>which confirms the goal, equation (2).</p>
+      <h2 id="the-exponential-family"><span class="header-section-number">1.9</span> The exponential family</h2>
+      <p>A class of distributions fits within the exponential family when there are functions <span class="math inline">\(a,\)</span> <span class="math inline">\(b,\)</span> and <span class="math inline">\(T\)</span> such that</p>
+      <p><span class="math display">\[p(y;\eta) = b(y)\exp(\eta^TT(y)-a(\eta))\qquad(5)\]</span></p>
+      <p>expresses a distribution in the class.</p>
+      <p>Ng uses this form to justify the particular use of <span class="math inline">\(g(z) = 1/(1+e^{-z})\)</span> in logistic regression. I see how expressing a Bernoulli distribution in this form naturally result in the traditional form of logistic regression. However, as of the end of lecture 4, I don’t think Ng has justified the power of the exponential family beyond explaining that it captures many popular distribution classes. (To be clear, I believe that this idea is very useful; I just am not convinced that <em>why</em> it’s useful has been explicitly explained yet.)</p>
+      <p>I haven’t fully grokked the exponential family yet, but I noticed that the main restriction in expression (5) seems to be that the only interaction between <span class="math inline">\(\eta\)</span> and <span class="math inline">\(y\)</span> is multiplicative in the sense that we could equally-well have written the density function as</p>
+      <p><span class="math display">\[p(y;\eta) = b(y)c(\eta)\prod_i d_i(y_i)^{\eta_i},\]</span></p>
+      <p>in the case that both <span class="math inline">\(\eta\)</span> and <span class="math inline">\(y\)</span> are vectors.</p>
       <div id="refs" class="references">
       
       </div>
