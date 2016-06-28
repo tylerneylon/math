@@ -174,6 +174,26 @@
       <p>I haven’t fully grokked the exponential family yet, but I noticed that the main restriction in expression (5) seems to be that the only interaction between <span class="math inline">\(\eta\)</span> and <span class="math inline">\(y\)</span> is multiplicative in the sense that we could equally-well have written the density function as</p>
       <p><span class="math display">\[p(y;\eta) = b(y)c(\eta)\prod_i d_i(y_i)^{\eta_i},\]</span></p>
       <p>in the case that both <span class="math inline">\(\eta\)</span> and <span class="math inline">\(y\)</span> are vectors.</p>
+      <h2 id="generalized-linear-models"><span class="header-section-number">1.10</span> Generalized linear models</h2>
+      <p>Ng doesn’t spell this out, but I think the following line of argument is why generalized linear models are considered useful.</p>
+      <p>Suppose <span class="math inline">\(\eta = {\theta}^Tx\)</span> and that we’re working with a distribution parametrized by <span class="math inline">\(\eta\)</span> that can be expressed as</p>
+      <p><span class="math display">\[p(y;\eta) = b(y)\exp\big(\eta^TT(y)-a(y)\big).\]</span></p>
+      <p>Then the log likelihood function is given by</p>
+      <p><span class="math display">\[\ell({\theta}) = \sum_i\log\big(p(y{^{(i)}};\eta{^{(i)}})\big)
+      = \sum_i\log(b(y{^{(i)}})) + \eta^{(i)T}T(y{^{(i)}})-a(\eta{^{(i)}}).\]</span></p>
+      <p>We can express the gradient of this as</p>
+      <p><span class="math display">\[\nabla\ell({\theta}) = \sum_i x{^{(i)}}\big(T(y{^{(i)}})-a&#39;(\eta{^{(i)}})\big),\]</span></p>
+      <p>which corresponds to the gradient ascent update rule</p>
+      <p><span class="math display">\[{\theta}:= {\theta}+ \alpha\big(T(y)-a&#39;({\theta}^Tx)\big)x.\qquad(6)\]</span></p>
+      <p>Let’s see how this nice general update rule looks in a couple special cases. For simplicity, I’ll stick to special cases where <span class="math inline">\(\eta\)</span> is a scalar value.</p>
+      <h3 id="gaussian-glm"><span class="header-section-number">1.10.1</span> Gaussian GLM</h3>
+      <p>In this case, <span class="math inline">\(a(\eta) = \eta^2/2\)</span> so <span class="math inline">\(a&#39;(\eta) = \eta\)</span>; and <span class="math inline">\(T(y)=y\)</span>. Then the update rule (6) becomes</p>
+      <p><span class="math display">\[{\theta}:= {\theta}+ \alpha(y-{\theta}^Tx)x,\]</span></p>
+      <p>which is just gradient ascient applied to least squares.</p>
+      <h3 id="logistic-regression-glm"><span class="header-section-number">1.10.2</span> Logistic regression GLM</h3>
+      <p>In this case, <span class="math inline">\(a(\eta) = \log(1 + e^\eta)\)</span> and <span class="math inline">\(T(y)=y\)</span>. So <span class="math inline">\(a&#39;(\eta) = 1/(1+e^{-\eta})\)</span>, and we can write the update rule (6) as</p>
+      <p><span class="math display">\[{\theta}:= {\theta}+ \alpha(y - g({\theta}^Tx))x,\]</span></p>
+      <p>where <span class="math inline">\(g\)</span> is the logistic function. This matches the earlier update equation we saw for logistic regression, suggesting that our general approach isn’t completely insane. It may even be technically correct.</p>
       <div id="refs" class="references">
       
       </div>
