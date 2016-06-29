@@ -194,6 +194,37 @@
       <p>In this case, <span class="math inline">\(a(\eta) = \log(1 + e^\eta)\)</span> and <span class="math inline">\(T(y)=y\)</span>. So <span class="math inline">\(a&#39;(\eta) = 1/(1+e^{-\eta})\)</span>, and we can write the update rule (6) as</p>
       <p><span class="math display">\[{\theta}:= {\theta}+ \alpha(y - g({\theta}^Tx))x,\]</span></p>
       <p>where <span class="math inline">\(g\)</span> is the logistic function. This matches the earlier update equation we saw for logistic regression, suggesting that our general approach isn’t completely insane. It may even be technically correct.</p>
+      <h1 id="on-lecture-notes-2"><span class="header-section-number">2</span> On lecture notes 2</h1>
+      <p>The notes in this section are based on <a href="http://cs229.stanford.edu/notes/cs229-notes2.pdf">lecture notes 2</a>.</p>
+      <h2 id="why-gaussian-discriminant-analysis-is-like-logistic-regression"><span class="header-section-number">2.1</span> Why Gaussian discriminant analysis is like logistic regression</h2>
+      <p>Ng mentions this fact in the lecture and in the notes, but he doesn’t go into the details of justifying it, so let’s do that.</p>
+      <p>The goal is to show that</p>
+      <p><span class="math display">\[p(y=1\mid x) = \frac{1}{1+e^{-{\theta}^T x}},\qquad(7)\]</span></p>
+      <p>where <span class="math inline">\({\theta}\)</span> is some function of the learned parameters <span class="math inline">\(\phi,\)</span> <span class="math inline">\(\Sigma,\)</span> <span class="math inline">\(\mu_0,\)</span> and <span class="math inline">\(\mu_1;\)</span> and we can consider <span class="math inline">\(x\)</span> as being augmented by a new coordinate <span class="math inline">\(x_0=1\)</span> to effectively allow the addition of a constant in the expression <span class="math inline">\({\theta}^Tx.\)</span> In Gaussian discriminant analysis, we learn a model for <span class="math inline">\(p(x\mid y)\)</span> and for <span class="math inline">\(p(y).\)</span> Specifically,</p>
+      <p><span class="math display">\[\begin{array}{rcl}
+      p(y) &amp; = &amp; \phi^y(1-\phi)^{1-y}, \\
+      p(x\mid y=0) &amp; = &amp; N(\mu_0, \Sigma), \text{ and} \\
+      p(x\mid y=1) &amp; = &amp; N(\mu_1, \Sigma), \\
+      \end{array}\]</span></p>
+      <p>where <span class="math inline">\(N(\mu,\Sigma)\)</span> indicates the multivariate normal distribution. From this we can derive</p>
+      <p><span class="math display">\[p(y=1\mid x) = p(x\mid y=1)p(y=1)/p(x).\qquad(8)\]</span></p>
+      <p>For <span class="math inline">\(j=0,1,\)</span> let <span class="math inline">\(A_j=p(x\mid y=j).\)</span> Then we can write</p>
+      <p><span class="math display">\[p(x) = p(x\mid y=0)p(y=0) + p(x\mid y=1)p(y=1) = A_0(1-\phi) + A_1\phi.\]</span></p>
+      <p>Plug this expression for <span class="math inline">\(p(x)\)</span> back into (8) to get</p>
+      <p><span class="math display">\[p(y=1\mid x) = \frac{\phi A_1}{(1-\phi)A_0 + \phi A_1}
+      = \frac{1}{1 + \frac{A_0}{A_1}\left(\frac{1-\phi}{\phi}\right)}.\qquad(9)\]</span></p>
+      <p>At this point it will be useful to introduce the shorthand notation</p>
+      <p><span class="math display">\[\langle x, y\rangle := x^T\Sigma^{-1}y,\]</span></p>
+      <p>noting that this is linear in both terms just as the usual inner product is. It will also be convenient to define</p>
+      <p><span class="math display">\[B_j = \langle x-\mu_j, x-\mu_j\rangle
+            = \langle x, x\rangle - 2\langle \mu_j,x\rangle + \langle \mu_j, \mu_j
+            \rangle.\]</span></p>
+      <p>Our ultimate goal (7) can now be reduced to showing that the denominator of (9) is of the form <span class="math inline">\(1 + \exp(a\langle b,x\rangle + c)\)</span> for some constants <span class="math inline">\(a,\)</span> <span class="math inline">\(b,\)</span> and <span class="math inline">\(c.\)</span></p>
+      <p>Notice that</p>
+      <p><span class="math display">\[\frac{A_0}{A_1} = \frac{\exp(-1/2 B_0)}{\exp(-1/2 B_1)}
+         = \exp\left(\frac{1}{2}(B_1-B_0)\right)
+         = \exp\left(\frac{1}{2}\big(\langle 2\mu_0 - 2\mu_1, x\rangle+C\big)\right),\]</span></p>
+      <p>where <span class="math inline">\(C\)</span> is based on the terms of <span class="math inline">\(B_j\)</span> that use <span class="math inline">\(\mu_j\)</span> but not <span class="math inline">\(x.\)</span> The scalar factor of <span class="math inline">\(A_0/A_1\)</span> in (9) can also be absorbed into the constant <span class="math inline">\(c\)</span> in the expression <span class="math inline">\(\exp(a\langle b, x\rangle + c).\)</span> This confirms that the denominator of (9) is indeed of the needed form, confirming the goal (7).</p>
       <div id="refs" class="references">
       
       </div>
