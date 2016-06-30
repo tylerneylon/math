@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>CS 229 Homework</title>
+    <script src='/Users/tylerneylon/Dropbox/Documents/code/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <link rel="stylesheet" href="tufte-edited.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  </head>
+  <body>
+    <p style="display:none">\(\newcommand{\latexonlyrule}[2]{}\)</p>
+    <div class="main">
+      <div class="title">CS 229 Homework</div>
+      <div class="author">Tyler Neylon</div>
+      <div class="date">345.2016</div>
+      <p>These are solutions to the most recent problems posted for Stanford’s CS 229 course, as of June 2016. I’m not sure if this course re-uses old problems, but please don’t copy the answers if so.</p>
+      <h1 id="problem-set-1"><span class="header-section-number">1</span> Problem set 1</h1>
+      <h2 id="logistic-regression"><span class="header-section-number">1.1</span> Logistic regression</h2>
+      <h3 id="part-a"><span class="header-section-number">1.1.1</span> Part (a)</h3>
+      <p>The problem is to compute the Hessian matrix <span class="math inline">\(H\)</span> for the function</p>
+      <p><span class="math display">\[J({\theta}) = -\frac{1}{m}\sum_{i=1}^m\log(g(y{^{(i)}}x{^{(i)}})),\]</span></p>
+      <p>where <span class="math inline">\(g(z)\)</span> is the logistic function, and to show that <span class="math inline">\(H\)</span> is positive semi-definite; specifically, that <span class="math inline">\(z^THz\ge 0\)</span> for any vector <span class="math inline">\(z.\)</span></p>
+      <p>We’ll use the fact that <span class="math inline">\(g&#39;(z) = g(z)(1-g(z)).\)</span> We’ll also note that since all relevant operations are linear, it will suffice to ignore the summation over <span class="math inline">\(i\)</span> in the definition of <span class="math inline">\(J.\)</span> I’ll use the notation <span class="math inline">\(\partial_j\)</span> for <span class="math inline">\(\frac{\partial}{\partial{\theta}_j},\)</span> and introduce <span class="math inline">\(t\)</span> for <span class="math inline">\(y{\theta}^Tx.\)</span> Then</p>
+      <p><span class="math display">\[-\partial_j(mJ) = \frac{g(t)(1-g(t))}{g(t)}x_jy = x_jy(1-g(t)).\]</span></p>
+      <p>Next</p>
+      <p><span class="math display">\[-\partial_k\partial_j(mJ) = x_jy\big(-g(t)(1-g(t))\big)x_ky,\]</span></p>
+      <p>so that</p>
+      <p><span class="math display">\[\partial_{jk}(mJ) = x_jx_ky^2\alpha,\]</span></p>
+      <p>where <span class="math inline">\(\alpha = g(t)(1-g(t)) &gt; 0.\)</span></p>
+      <p>Thus we can use repeated-index summation notation to arrive at</p>
+      <p><span class="math display">\[z^THz = z_ih_{ij}z_j = (\alpha y^2)(z_ix_ix_jz_j)
+              = (\alpha y^2)(x^Tz)^2 \ge 0.\]</span></p>
+      <p>This completes this part of the problem.</p>
+    </div>
+  </body>
+</html>
