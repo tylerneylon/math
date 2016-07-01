@@ -89,7 +89,9 @@
 
 These are solutions to the most recent problems posted for Stanford's CS
 229 course, as of June 2016. I'm not sure if this course re-uses old
-problems, but please don't copy the answers if so.
+problems, but please don't copy the answers if so. This document is also
+available as a
+\href{http://tylerneylon.com/notes/cs229/cs229hw.pdf}{pdf}.
 
 \section{Problem set 1}\label{problem-set-1}
 
@@ -129,5 +131,27 @@ Thus we can use repeated-index summation notation to arrive at
         = (\alpha y^2)(x^Tz)^2 \ge 0.\]
 
 This completes this part of the problem.
+
+\subsection{Poisson regression and the exponential
+family}\label{poisson-regression-and-the-exponential-family}
+
+\subsubsection{Part (a)}\label{part-a-1}
+
+Write the Poisson distribution as an exponential family:
+
+\[p(y;\eta) = b(y)\exp\big(\eta^T T(y) - a(\eta)\big),\]
+
+where
+
+\[p(y;\lambda) = \frac{e^{-\lambda}\lambda^y}{y!}.\]
+
+This can be done via
+
+\[\begin{array}{rcl}
+\eta & = & \log(\lambda), \\
+a(\eta) & = & e^\eta = \lambda, \\
+b(y) & = & 1/y!, \text{ and} \\
+T(y) & = & y.
+\end{array}\]
 
 \end{document}

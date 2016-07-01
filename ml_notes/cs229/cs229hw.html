@@ -14,7 +14,7 @@
       <div class="title">CS 229 Homework</div>
       <div class="author">Tyler Neylon</div>
       <div class="date">345.2016</div>
-      <p>These are solutions to the most recent problems posted for Stanford’s CS 229 course, as of June 2016. I’m not sure if this course re-uses old problems, but please don’t copy the answers if so.</p>
+      <p>These are solutions to the most recent problems posted for Stanford’s CS 229 course, as of June 2016. I’m not sure if this course re-uses old problems, but please don’t copy the answers if so. This document is also available as a <a href="http://tylerneylon.com/notes/cs229/cs229hw.pdf">pdf</a>.</p>
       <h1 id="problem-set-1"><span class="header-section-number">1</span> Problem set 1</h1>
       <h2 id="logistic-regression"><span class="header-section-number">1.1</span> Logistic regression</h2>
       <h3 id="part-a"><span class="header-section-number">1.1.1</span> Part (a)</h3>
@@ -32,6 +32,19 @@
       <p><span class="math display">\[z^THz = z_ih_{ij}z_j = (\alpha y^2)(z_ix_ix_jz_j)
               = (\alpha y^2)(x^Tz)^2 \ge 0.\]</span></p>
       <p>This completes this part of the problem.</p>
+      <h2 id="poisson-regression-and-the-exponential-family"><span class="header-section-number">1.2</span> Poisson regression and the exponential family</h2>
+      <h3 id="part-a-1"><span class="header-section-number">1.2.1</span> Part (a)</h3>
+      <p>Write the Poisson distribution as an exponential family:</p>
+      <p><span class="math display">\[p(y;\eta) = b(y)\exp\big(\eta^T T(y) - a(\eta)\big),\]</span></p>
+      <p>where</p>
+      <p><span class="math display">\[p(y;\lambda) = \frac{e^{-\lambda}\lambda^y}{y!}.\]</span></p>
+      <p>This can be done via</p>
+      <p><span class="math display">\[\begin{array}{rcl}
+      \eta &amp; = &amp; \log(\lambda), \\
+      a(\eta) &amp; = &amp; e^\eta = \lambda, \\
+      b(y) &amp; = &amp; 1/y!, \text{ and} \\
+      T(y) &amp; = &amp; y.
+      \end{array}\]</span></p>
     </div>
   </body>
 </html>

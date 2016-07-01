@@ -11,6 +11,8 @@
 These are solutions to the most recent problems posted for Stanford's
 CS 229 course, as of June 2016. I'm not sure if this course re-uses old
 problems, but please don't copy the answers if so.
+This document is also available as a
+[pdf](http://tylerneylon.com/notes/cs229/cs229hw.pdf).
 
 # Problem set 1
 
@@ -51,3 +53,24 @@ $$z^THz = z_ih_{ij}z_j = (\alpha y^2)(z_ix_ix_jz_j)
         = (\alpha y^2)(x^Tz)^2 \ge 0.$$
 
 This completes this part of the problem.
+
+## Poisson regression and the exponential family
+
+### Part (a)
+
+Write the Poisson distribution as an exponential family:
+
+$$p(y;\eta) = b(y)\exp\big(\eta^T T(y) - a(\eta)\big),$$
+
+where
+
+$$p(y;\lambda) = \frac{e^{-\lambda}\lambda^y}{y!}.$$
+
+This can be done via
+
+$$\begin{array}{rcl}
+\eta & = & \log(\lambda), \\
+a(\eta) & = & e^\eta = \lambda, \\
+b(y) & = & 1/y!, \text{ and} \\
+T(y) & = & y.
+\end{array}$$
