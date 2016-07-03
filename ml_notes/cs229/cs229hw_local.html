@@ -14,37 +14,93 @@
       <div class="title">CS 229 Homework</div>
       <div class="author">Tyler Neylon</div>
       <div class="date">345.2016</div>
-      <p>These are solutions to the most recent problems posted for Stanford’s CS 229 course, as of June 2016. I’m not sure if this course re-uses old problems, but please don’t copy the answers if so. This document is also available as a <a href="http://tylerneylon.com/notes/cs229/cs229hw.pdf">pdf</a>.</p>
-      <h1 id="problem-set-1"><span class="header-section-number">1</span> Problem set 1</h1>
-      <h2 id="logistic-regression"><span class="header-section-number">1.1</span> Logistic regression</h2>
-      <h3 id="part-a"><span class="header-section-number">1.1.1</span> Part (a)</h3>
-      <p>The problem is to compute the Hessian matrix <span class="math inline">\(H\)</span> for the function</p>
-      <p><span class="math display">\[J({\theta}) = -\frac{1}{m}\sum_{i=1}^m\log(g(y{^{(i)}}x{^{(i)}})),\]</span></p>
-      <p>where <span class="math inline">\(g(z)\)</span> is the logistic function, and to show that <span class="math inline">\(H\)</span> is positive semi-definite; specifically, that <span class="math inline">\(z^THz\ge 0\)</span> for any vector <span class="math inline">\(z.\)</span></p>
-      <p>We’ll use the fact that <span class="math inline">\(g&#39;(z) = g(z)(1-g(z)).\)</span> We’ll also note that since all relevant operations are linear, it will suffice to ignore the summation over <span class="math inline">\(i\)</span> in the definition of <span class="math inline">\(J.\)</span> I’ll use the notation <span class="math inline">\(\partial_j\)</span> for <span class="math inline">\(\frac{\partial}{\partial{\theta}_j},\)</span> and introduce <span class="math inline">\(t\)</span> for <span class="math inline">\(y{\theta}^Tx.\)</span> Then</p>
-      <p><span class="math display">\[-\partial_j(mJ) = \frac{g(t)(1-g(t))}{g(t)}x_jy = x_jy(1-g(t)).\]</span></p>
-      <p>Next</p>
-      <p><span class="math display">\[-\partial_k\partial_j(mJ) = x_jy\big(-g(t)(1-g(t))\big)x_ky,\]</span></p>
-      <p>so that</p>
-      <p><span class="math display">\[\partial_{jk}(mJ) = x_jx_ky^2\alpha,\]</span></p>
-      <p>where <span class="math inline">\(\alpha = g(t)(1-g(t)) &gt; 0.\)</span></p>
-      <p>Thus we can use repeated-index summation notation to arrive at</p>
-      <p><span class="math display">\[z^THz = z_ih_{ij}z_j = (\alpha y^2)(z_ix_ix_jz_j)
-              = (\alpha y^2)(x^Tz)^2 \ge 0.\]</span></p>
-      <p>This completes this part of the problem.</p>
-      <h2 id="poisson-regression-and-the-exponential-family"><span class="header-section-number">1.2</span> Poisson regression and the exponential family</h2>
-      <h3 id="part-a-1"><span class="header-section-number">1.2.1</span> Part (a)</h3>
-      <p>Write the Poisson distribution as an exponential family:</p>
-      <p><span class="math display">\[p(y;\eta) = b(y)\exp\big(\eta^T T(y) - a(\eta)\big),\]</span></p>
-      <p>where</p>
-      <p><span class="math display">\[p(y;\lambda) = \frac{e^{-\lambda}\lambda^y}{y!}.\]</span></p>
-      <p>This can be done via</p>
-      <p><span class="math display">\[\begin{array}{rcl}
-      \eta &amp; = &amp; \log(\lambda), \\
-      a(\eta) &amp; = &amp; e^\eta = \lambda, \\
-      b(y) &amp; = &amp; 1/y!, \text{ and} \\
-      T(y) &amp; = &amp; y.
-      \end{array}\]</span></p>
+<p>These are solutions to the most recent problems posted for Stanford’s CS 229 course, as of June 2016. I’m not sure if this course re-uses old problems, but please don’t copy the answers if so. This document is also available as a <a href="http://tylerneylon.com/notes/cs229/cs229hw.pdf">pdf</a>.</p>
+<h1 id="problem-set-1"><span class="header-section-number">1</span> Problem set 1</h1>
+<h2 id="logistic-regression"><span class="header-section-number">1.1</span> Logistic regression</h2>
+<h3 id="part-a"><span class="header-section-number">1.1.1</span> Part (a)</h3>
+<p>The problem is to compute the Hessian matrix <span class="math inline">\(H\)</span> for the function</p>
+<p><span class="math display">\[J({\theta}) = -\frac{1}{m}\sum_{i=1}^m\log(g(y{^{(i)}}x{^{(i)}})),\]</span></p>
+<p>where <span class="math inline">\(g(z)\)</span> is the logistic function, and to show that <span class="math inline">\(H\)</span> is positive semi-definite; specifically, that <span class="math inline">\(z^THz\ge 0\)</span> for any vector <span class="math inline">\(z.\)</span></p>
+<p>We’ll use the fact that <span class="math inline">\(g&#39;(z) = g(z)(1-g(z)).\)</span> We’ll also note that since all relevant operations are linear, it will suffice to ignore the summation over <span class="math inline">\(i\)</span> in the definition of <span class="math inline">\(J.\)</span> I’ll use the notation <span class="math inline">\(\partial_j\)</span> for <span class="math inline">\(\frac{\partial}{\partial{\theta}_j},\)</span> and introduce <span class="math inline">\(t\)</span> for <span class="math inline">\(y{\theta}^Tx.\)</span> Then</p>
+<p><span class="math display">\[-\partial_j(mJ) = \frac{g(t)(1-g(t))}{g(t)}x_jy = x_jy(1-g(t)).\]</span></p>
+<p>Next</p>
+<p><span class="math display">\[-\partial_k\partial_j(mJ) = x_jy\big(-g(t)(1-g(t))\big)x_ky,\]</span></p>
+<p>so that</p>
+<p><span class="math display">\[\partial_{jk}(mJ) = x_jx_ky^2\alpha,\]</span></p>
+<p>where <span class="math inline">\(\alpha = g(t)(1-g(t)) &gt; 0.\)</span></p>
+<p>Thus we can use repeated-index summation notation to arrive at</p>
+<p><span class="math display">\[z^THz = z_ih_{ij}z_j = (\alpha y^2)(z_ix_ix_jz_j)
+        = (\alpha y^2)(x^Tz)^2 \ge 0.\]</span></p>
+<p>This completes this part of the problem.</p>
+<h3 id="part-b"><span class="header-section-number">1.1.2</span> Part (b)</h3>
+<p>Here is a matlab script to solve this part of the problem:</p>
+<pre><code>% problem1_1b.m
+%
+% Run Newton&#39;s method on a given cost function for a logistic
+% regression setup.
+%
+
+printf(&#39;Running problem1_1b.m\n&#39;);
+
+% Be able to compute J.
+function val = J(Z, theta)
+  [m, _] = size(Z);
+  g      = 1 ./ (1 + exp(Z * theta));
+  val    = -sum(log(g)) / m;
+end
+
+% Setup.
+X      = load(&#39;logistic_x.txt&#39;);
+[m, n] = size(X);
+X      = [ones(m, 1) X];
+Y      = load(&#39;logistic_y.txt&#39;);
+Z      = diag(Y) * X;
+
+% Initialize the parameters to learn.
+old_theta =  ones(n + 1, 1);
+theta     = zeros(n + 1, 1);
+i         = 1;  % i = iteration number.
+
+% Perform Newton&#39;s method.
+while norm(old_theta - theta) &gt; 1e-5
+  printf(&#39;J = %g\n&#39;, J(Z, theta));
+  printf(&#39;theta:\n&#39;);
+  disp(theta);
+  printf(&#39;Running iteration %d\n&#39;, i);
+
+  g         = 1 ./ (1 + exp(Z * theta));
+  f         = (1 - g);
+  alpha     = f .* g;
+  A         = diag(alpha);
+  H         = Z&#39; * A * Z / m;
+  nabla     = Z&#39; * f / m;
+  old_theta = theta;
+  theta     = theta - inv(H) *  nabla;
+
+  i++;
+end
+
+% Show and save output.
+printf(&#39;Final theta:\n&#39;);
+disp(theta);
+save(&#39;theta.mat&#39;, &#39;theta&#39;);</code></pre>
+<p>The final value of <span class="math inline">\({\theta}\)</span> that I arrived at is</p>
+<p><span class="math display">\[{\theta}= (2.62051, -0.76037, -1.17195).\]</span></p>
+<p>The first value <span class="math inline">\({\theta}_0\)</span> represents the constant term, so that the final model is given by</p>
+<p><span class="math display">\[y = g(2.62 - 0.76x_1 - 1.17x_2).\]</span></p>
+<h2 id="poisson-regression-and-the-exponential-family"><span class="header-section-number">1.2</span> Poisson regression and the exponential family</h2>
+<h3 id="part-a-1"><span class="header-section-number">1.2.1</span> Part (a)</h3>
+<p>Write the Poisson distribution as an exponential family:</p>
+<p><span class="math display">\[p(y;\eta) = b(y)\exp\big(\eta^T T(y) - a(\eta)\big),\]</span></p>
+<p>where</p>
+<p><span class="math display">\[p(y;\lambda) = \frac{e^{-\lambda}\lambda^y}{y!}.\]</span></p>
+<p>This can be done via</p>
+<p><span class="math display">\[\begin{array}{rcl}
+\eta &amp; = &amp; \log(\lambda), \\
+a(\eta) &amp; = &amp; e^\eta = \lambda, \\
+b(y) &amp; = &amp; 1/y!, \text{ and} \\
+T(y) &amp; = &amp; y.
+\end{array}\]</span></p>
     </div>
   </body>
 </html>
