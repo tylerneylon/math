@@ -22,8 +22,8 @@ sed 's_https://cdn.mathjax.org/mathjax/latest_'${HOME}/Dropbox/Documents/code/Ma
 
 # Make and open the pdf file.
 pandoc -t latex -o ${name}.tex -s ${FLAGS} --template=template.tex
-TMP=$(mktemp tmp_XXXX)
-sed 's|images/\(.*\)\.png|images/pdfs/\1.pdf|' ${name}.tex > ${TMP}
-mv ${TMP} ${name}.tex
+#TMP=$(mktemp tmp_XXXX)
+#sed 's|images/\(.*\)\.png|images/pdfs/\1.pdf|' ${name}.tex > ${TMP}
+#mv ${TMP} ${name}.tex
 pdflatex ${name}.tex
 #open ${name}.pdf

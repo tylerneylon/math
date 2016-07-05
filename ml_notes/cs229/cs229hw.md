@@ -175,6 +175,12 @@ given by
 
 $$y = g(2.62 - 0.76x_1 - 1.17x_2).$$
 
+### Part (c)
+
+![The data points given for problem 1.1 along with the
+decision boundary learned by logistic regression as
+executed by Newton's method.](images/pr1_1c.png)
+
 ## Poisson regression and the exponential family
 
 ### Part (a)

@@ -32,6 +32,15 @@
             urlcolor=Blue,
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 \IfFileExists{parskip.sty}{%
 \usepackage{parskip}
 }{% else
@@ -252,6 +261,15 @@ The first value \(\th_0\) represents the constant term, so that the
 final model is given by
 
 \[y = g(2.62 - 0.76x_1 - 1.17x_2).\]
+
+\subsubsection{Part (c)}\label{part-c}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{images/pr1_1c.png}
+\caption{The data points given for problem 1.1 along with the decision
+boundary learned by logistic regression as executed by Newton's method.}
+\end{figure}
 
 \subsection{Poisson regression and the exponential
 family}\label{poisson-regression-and-the-exponential-family}
