@@ -84,6 +84,54 @@ end
 printf(&#39;Final theta:\n&#39;);
 disp(theta);
 save(&#39;theta.mat&#39;, &#39;theta&#39;);</code></pre>
+<p>Because I have copious free time, I also wrote a Python version. Also because I’m learning numpy and would prefer to consistently use a language that I know can produce decent-looking graphs. Here is the Python script:</p>
+<pre><code>#!/usr/bin/env python
+
+import numpy as np
+from numpy import linalg as la
+
+
+# Define the J function.
+def J(Z, theta):
+  m, _ = Z.shape
+  g    = 1 / (1 + np.exp(Z.dot(theta)))
+  return -sum(np.log(g)) / m
+
+# Load data.
+X    = np.loadtxt(&#39;logistic_x.txt&#39;)
+m, n = X.shape
+X    = np.insert(X, 0, 1, axis=1)  # Prefix an all-1 column.
+Y    = np.loadtxt(&#39;logistic_y.txt&#39;)
+Z    = np.diag(Y).dot(X);
+
+# Initialize the learning parameters.
+old_theta = np.ones((n + 1,))
+theta     = np.zeros((n + 1,))
+i         = 1
+
+# Perform Newton&#39;s method.
+while np.linalg.norm(old_theta - theta) &gt; 1e-5:
+
+  # Print progress.
+  print(&#39;J = {}&#39;.format(J(Z, theta)))
+  print(&#39;theta = {}&#39;.format(theta))
+  print(&#39;Running iteration {}&#39;.format(i))
+
+  # Update theta.
+  g         = 1 / (1 + np.exp(Z.dot(theta)))
+  f         = 1 - g
+  alpha     = (f * g).flatten()
+  H         = (Z.T * alpha).dot(Z) / m
+  nabla     = Z.T.dot(f) / m
+  old_theta = theta
+  theta     = theta - la.inv(H).dot(nabla)
+
+  # Update i = the iteration counter.
+  i += 1
+
+# Print and save the final value.
+print(&#39;Final theta = {}&#39;.format(theta))
+np.savetxt(&#39;theta.txt&#39;, theta)</code></pre>
 <p>The final value of <span class="math inline">\({\theta}\)</span> that I arrived at is</p>
 <p><span class="math display">\[{\theta}= (2.62051, -0.76037, -1.17195).\]</span></p>
 <p>The first value <span class="math inline">\({\theta}_0\)</span> represents the constant term, so that the final model is given by</p>
