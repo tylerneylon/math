@@ -164,6 +164,20 @@ T(y) &amp; = &amp; y.
 = x_j(y-e^{{\theta}^Tx}).\]</span></p>
 <p>So stochastic gradient ascent for a single point <span class="math inline">\((x, y)\)</span> would use the update rule</p>
 <p><span class="math display">\[{\theta}:= {\theta}+ \alpha x(y - h(x)).\]</span></p>
+<h3 id="part-d"><span class="header-section-number">1.2.4</span> Part (d)</h3>
+<p>In section 1.10 of my notes — the section on generalized linear models — I derived the update rule:</p>
+<p><span class="math display">\[{\theta}:= {\theta}+ \alpha\big(T(y)-a&#39;({\theta}^Tx)\big)x.\]</span></p>
+<p>The missing piece is to proof that <span class="math inline">\(h(x) = E[y] = a&#39;(\eta),\)</span> which we’ll do next. We’ll work in the context of <span class="math inline">\(T(y)=y,\)</span> as given by the problem statement. Notice that, for any <span class="math inline">\(\eta,\)</span></p>
+<p><span class="math display">\[\int p(y)dy = \int b(y)\exp(\eta^Ty - a(\eta))dy = 1.\]</span></p>
+<p>Since this identity is true for all values of <span class="math inline">\(\eta,\)</span> we can take <span class="math inline">\(\frac{\partial}{\partial\eta}\)</span> of it to arrive at the value 0:</p>
+<p><span class="math display">\[\begin{array}{rcl}
+ 0 &amp; = &amp; \frac{\partial}{\partial\eta}\int p(y)dy \\
+   &amp; = &amp; \int \frac{\partial}{\partial\eta} b(y)\exp(\eta^Ty - a(\eta))dy \\
+   &amp; = &amp; \int b(y)(y - a&#39;(\eta))\exp(\eta^Ty - a(\eta)) dy \\
+   &amp; = &amp; \int y p(y)dy - a&#39;(\eta)\int p(y)dy \\
+   &amp; = &amp; E[y] - a&#39;(\eta).
+\end{array}\]</span></p>
+<p>Thus we can conclude that <span class="math inline">\(E[y] = a&#39;(\eta) = a&#39;({\theta}^Tx),\)</span> which completes the solution.</p>
     </div>
   </body>
 </html>

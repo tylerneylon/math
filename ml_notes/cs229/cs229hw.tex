@@ -316,4 +316,31 @@ the update rule
 
 \[\th := \th + \alpha x(y - h(x)).\]
 
+\subsubsection{Part (d)}\label{part-d}
+
+In section 1.10 of my notes --- the section on generalized linear models
+--- I derived the update rule:
+
+\[\th := \th + \alpha\big(T(y)-a'(\th^Tx)\big)x.\]
+
+The missing piece is to proof that \(h(x) = E[y] = a'(\eta),\) which
+we'll do next. We'll work in the context of \(T(y)=y,\) as given by the
+problem statement. Notice that, for any \(\eta,\)
+
+\[\int p(y)dy = \int b(y)\exp(\eta^Ty - a(\eta))dy = 1.\]
+
+Since this identity is true for all values of \(\eta,\) we can take
+\(\frac{\partial}{\partial\eta}\) of it to arrive at the value 0:
+
+\[\begin{array}{rcl}
+ 0 & = & \frac{\partial}{\partial\eta}\int p(y)dy \\
+   & = & \int \frac{\partial}{\partial\eta} b(y)\exp(\eta^Ty - a(\eta))dy \\
+   & = & \int b(y)(y - a'(\eta))\exp(\eta^Ty - a(\eta)) dy \\
+   & = & \int y p(y)dy - a'(\eta)\int p(y)dy \\
+   & = & E[y] - a'(\eta).
+\end{array}\]
+
+Thus we can conclude that \(E[y] = a'(\eta) = a'(\th^Tx),\) which
+completes the solution.
+
 \end{document}
