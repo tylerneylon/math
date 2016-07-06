@@ -201,3 +201,29 @@ a(\eta) & = & e^\eta = \lambda, \\
 b(y) & = & 1/y!, \text{ and} \\
 T(y) & = & y.
 \end{array}$$
+
+### Part (b)
+
+As is usual with generalized linear models, we'll let
+$\eta = \th^Tx.$
+The canonical response function is then given by
+
+$$g(\eta) = E[y;\eta] = \lambda = e^\eta = e^{\th^Tx}.$$
+
+### Part (c)
+
+Based on the last part, I'll define the hypothesis function
+$h$ via $h(x) = e^{\th^Tx}.$
+
+For a single data point $(x, y),$
+let $\ell(\th) = \log(p(y|x)) =$ $\log(\frac{1}{y!}) + (y\th^T x-e^{\th^Tx}).$
+Then
+
+$$\frac{\partial}{\partial\th_j}\ell(\th) = yx_j - x_je^{\th^Tx}
+= x_j(y-e^{\th^Tx}).$$
+
+So stochastic gradient ascent for a single point $(x, y)$ would use
+the update rule
+
+$$\th := \th + \alpha x(y - h(x)).$$
+

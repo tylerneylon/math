@@ -154,6 +154,16 @@ a(\eta) &amp; = &amp; e^\eta = \lambda, \\
 b(y) &amp; = &amp; 1/y!, \text{ and} \\
 T(y) &amp; = &amp; y.
 \end{array}\]</span></p>
+<h3 id="part-b-1"><span class="header-section-number">1.2.2</span> Part (b)</h3>
+<p>As is usual with generalized linear models, we’ll let <span class="math inline">\(\eta = {\theta}^Tx.\)</span> The canonical response function is then given by</p>
+<p><span class="math display">\[g(\eta) = E[y;\eta] = \lambda = e^\eta = e^{{\theta}^Tx}.\]</span></p>
+<h3 id="part-c-1"><span class="header-section-number">1.2.3</span> Part (c)</h3>
+<p>Based on the last part, I’ll define the hypothesis function <span class="math inline">\(h\)</span> via <span class="math inline">\(h(x) = e^{{\theta}^Tx}.\)</span></p>
+<p>For a single data point <span class="math inline">\((x, y),\)</span> let <span class="math inline">\(\ell({\theta}) = \log(p(y|x)) =\)</span> <span class="math inline">\(\log(\frac{1}{y!}) + (y{\theta}^T x-e^{{\theta}^Tx}).\)</span> Then</p>
+<p><span class="math display">\[\frac{\partial}{\partial{\theta}_j}\ell({\theta}) = yx_j - x_je^{{\theta}^Tx}
+= x_j(y-e^{{\theta}^Tx}).\]</span></p>
+<p>So stochastic gradient ascent for a single point <span class="math inline">\((x, y)\)</span> would use the update rule</p>
+<p><span class="math display">\[{\theta}:= {\theta}+ \alpha x(y - h(x)).\]</span></p>
     </div>
   </body>
 </html>
