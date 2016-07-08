@@ -287,3 +287,41 @@ $$\begin{array}{crcl}
 \Rightarrow & [\nabla_b]_k x & = & -c_{kj}(a_j - b_j) - (a_i - b_i)c_{ik} \\
  & & = & -2C(a-b). \\
 \end{array}$$
+
+Next I'll show that
+
+$$\frac{\partial}{\partial C}(a-b)^T C (a-b) = (a-b)(a-b)^T.$$
+
+This follows since
+
+$$(a-b)^T C (a-b) = (a_i - b_i) c_{ij} (a_j - b_j),$$
+
+so that
+
+$$\frac{\partial}{\partial c_{ij}} (a-b)^T C (a-b)
+= (a_i - b_i)(a_j - b_j).$$
+
+In other words, the $ij^\text{th}$ entry of the matrix derivative is exactly
+the $ij^\text{th}$ entry of the matrix $(a-b)(a-b)^T.$
+
+Finally, I'll mention that, when a matrix $A$ is invertibe,
+
+$$\frac{d}{dA} |A| = |A|\,A^{-T}.$$ {#eq:deriv_of_det}
+
+This can be seen by considering that the $ij^\text{th}$ entry of $A^{-1}$
+can be written as
+
+$$(A^{-1})_{ij} = ((-1)^{i+j}M_{ji})/|A|,$$ {#eq:inv_eqn}
+
+where $M_{ij}$ denotes the determinant of the minor of $A$ achieved by removing
+the $i^\text{th}$ row and $j^\text{th}$ column. Next, consider the expression
+for $A$ as a sum of products $\sigma(\pi)\prod a_{i\pi(i)}$ over all
+permutations $\pi:[n]\to[n]$ where $\sigma(\pi)$ is the sign of permutation
+$\pi$
+([reference](https://en.wikipedia.org/wiki/Determinant#n_.C3.97_n_matrices)).
+Based on that definition of a determinant, it can be derived that
+
+$$\frac{\partial}{\partial a_{ij}}|A| = (-1)^{i+j}M_{ij}.$$
+
+Combine this last result with ([@eq:inv_eqn]) to arrive at
+([@eq:deriv_of_det]).

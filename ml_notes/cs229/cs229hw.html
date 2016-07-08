@@ -192,6 +192,21 @@ T(y) &amp; = &amp; y.
 \Rightarrow &amp; [\nabla_b]_k x &amp; = &amp; -c_{kj}(a_j - b_j) - (a_i - b_i)c_{ik} \\
  &amp; &amp; = &amp; -2C(a-b). \\
 \end{array}\]</span></p>
+<p>Next I’ll show that</p>
+<p><span class="math display">\[\frac{\partial}{\partial C}(a-b)^T C (a-b) = (a-b)(a-b)^T.\]</span></p>
+<p>This follows since</p>
+<p><span class="math display">\[(a-b)^T C (a-b) = (a_i - b_i) c_{ij} (a_j - b_j),\]</span></p>
+<p>so that</p>
+<p><span class="math display">\[\frac{\partial}{\partial c_{ij}} (a-b)^T C (a-b)
+= (a_i - b_i)(a_j - b_j).\]</span></p>
+<p>In other words, the <span class="math inline">\(ij^\text{th}\)</span> entry of the matrix derivative is exactly the <span class="math inline">\(ij^\text{th}\)</span> entry of the matrix <span class="math inline">\((a-b)(a-b)^T.\)</span></p>
+<p>Finally, I’ll mention that, when a matrix <span class="math inline">\(A\)</span> is invertibe,</p>
+<p><span class="math display">\[\frac{d}{dA} |A| = |A|\,A^{-T}.\qquad(1)\]</span></p>
+<p>This can be seen by considering that the <span class="math inline">\(ij^\text{th}\)</span> entry of <span class="math inline">\(A^{-1}\)</span> can be written as</p>
+<p><span class="math display">\[(A^{-1})_{ij} = ((-1)^{i+j}M_{ji})/|A|,\qquad(2)\]</span></p>
+<p>where <span class="math inline">\(M_{ij}\)</span> denotes the determinant of the minor of <span class="math inline">\(A\)</span> achieved by removing the <span class="math inline">\(i^\text{th}\)</span> row and <span class="math inline">\(j^\text{th}\)</span> column. Next, consider the expression for <span class="math inline">\(A\)</span> as a sum of products <span class="math inline">\(\sigma(\pi)\prod a_{i\pi(i)}\)</span> over all permutations <span class="math inline">\(\pi:[n]\to[n]\)</span> where <span class="math inline">\(\sigma(\pi)\)</span> is the sign of permutation <span class="math inline">\(\pi\)</span> (<a href="https://en.wikipedia.org/wiki/Determinant#n_.C3.97_n_matrices">reference</a>). Based on that definition of a determinant, it can be derived that</p>
+<p><span class="math display">\[\frac{\partial}{\partial a_{ij}}|A| = (-1)^{i+j}M_{ij}.\]</span></p>
+<p>Combine this last result with (2) to arrive at (1).</p>
     </div>
   </body>
 </html>
