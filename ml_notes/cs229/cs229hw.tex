@@ -353,4 +353,28 @@ provides a model that takes the form of a logistic function, similar to
 logistic regression. This is something I already did in section 2.1 of
 \href{http://tylerneylon.com/notes/cs229/cs229.html}{my notes}.
 
+\subsubsection{Parts (b) and (c)}\label{parts-b-and-c}
+
+These parts ask to derive the maximum likelihood estimates of \(\phi,\)
+\(\mu_0,\) \(\mu_1,\) and \(\Sigma\) for GDA. Part (b) is a special case
+of part (c), so I'll just do part (c).
+
+It will be useful to know a couple vector- and matrix-oriented calculus
+facts which I'll briefly derive here.
+
+First I'll show that, given column vectors \(a\) and \(b,\) and
+symmetric matrix \(C,\)
+
+\[\nabla_b [ (a-b)^T C (a-b) ] = -2C(a-b).\]
+
+We can derive this by looking at the \(k^\text{th}\) coordinate of the
+gradient. Let \(x = (a-b)^T C (a-b).\) Then, using repeated index
+summation notation,
+
+\[\begin{array}{crcl}
+& x & = & (a_i - b_i)c_{ij}(a_j-b_j) \\
+\Rightarrow & [\nabla_b]_k x & = & -c_{kj}(a_j - b_j) - (a_i - b_i)c_{ik} \\
+ & & = & -2C(a-b). \\
+\end{array}\]
+
 \end{document}

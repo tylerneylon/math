@@ -181,6 +181,17 @@ T(y) &amp; = &amp; y.
 <h2 id="gaussian-discriminant-analysis"><span class="header-section-number">1.3</span> Gaussian discriminant analysis</h2>
 <h3 id="part-a-2"><span class="header-section-number">1.3.1</span> Part (a)</h3>
 <p>This problem is to show that a two-class GDA solution effectively provides a model that takes the form of a logistic function, similar to logistic regression. This is something I already did in section 2.1 of <a href="http://tylerneylon.com/notes/cs229/cs229.html">my notes</a>.</p>
+<h3 id="parts-b-and-c"><span class="header-section-number">1.3.2</span> Parts (b) and (c)</h3>
+<p>These parts ask to derive the maximum likelihood estimates of <span class="math inline">\(\phi,\)</span> <span class="math inline">\(\mu_0,\)</span> <span class="math inline">\(\mu_1,\)</span> and <span class="math inline">\(\Sigma\)</span> for GDA. Part (b) is a special case of part (c), so I’ll just do part (c).</p>
+<p>It will be useful to know a couple vector- and matrix-oriented calculus facts which I’ll briefly derive here.</p>
+<p>First I’ll show that, given column vectors <span class="math inline">\(a\)</span> and <span class="math inline">\(b,\)</span> and symmetric matrix <span class="math inline">\(C,\)</span></p>
+<p><span class="math display">\[\nabla_b [ (a-b)^T C (a-b) ] = -2C(a-b).\]</span></p>
+<p>We can derive this by looking at the <span class="math inline">\(k^\text{th}\)</span> coordinate of the gradient. Let <span class="math inline">\(x = (a-b)^T C (a-b).\)</span> Then, using repeated index summation notation,</p>
+<p><span class="math display">\[\begin{array}{crcl}
+&amp; x &amp; = &amp; (a_i - b_i)c_{ij}(a_j-b_j) \\
+\Rightarrow &amp; [\nabla_b]_k x &amp; = &amp; -c_{kj}(a_j - b_j) - (a_i - b_i)c_{ik} \\
+ &amp; &amp; = &amp; -2C(a-b). \\
+\end{array}\]</span></p>
     </div>
   </body>
 </html>
