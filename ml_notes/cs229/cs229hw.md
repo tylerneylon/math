@@ -254,3 +254,13 @@ $$\begin{array}{rcl}
 
 Thus we can conclude that $E[y] = a'(\eta) = a'(\th^Tx),$ which completes
 the solution.
+
+## Gaussian discriminant analysis
+
+### Part (a)
+
+This problem is to show that a two-class GDA solution effectively provides a
+model that takes the form of a logistic function, similar to logistic
+regression.
+This is something I already did in
+section 2.1 of [my notes](http://tylerneylon.com/notes/cs229/cs229.html).
