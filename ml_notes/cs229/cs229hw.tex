@@ -359,13 +359,15 @@ These parts ask to derive the maximum likelihood estimates of \(\phi,\)
 \(\mu_0,\) \(\mu_1,\) and \(\Sigma\) for GDA. Part (b) is a special case
 of part (c), so I'll just do part (c).
 
+\textbf{Some lemmas}
+
 It will be useful to know a couple vector- and matrix-oriented calculus
 facts which I'll briefly derive here.
 
 First I'll show that, given column vectors \(a\) and \(b,\) and
 symmetric matrix \(C,\)
 
-\[\nabla_b [ (a-b)^T C (a-b) ] = -2C(a-b).\]
+\begin{equation}\nabla_b [ (a-b)^T C (a-b) ] = -2C(a-b).\label{eq:nabla_b}\end{equation}
 
 We can derive this by looking at the \(k^\text{th}\) coordinate of the
 gradient. Let \(x = (a-b)^T C (a-b).\) Then, using repeated index
@@ -379,7 +381,7 @@ summation notation,
 
 Next I'll show that
 
-\[\frac{\partial}{\partial C}(a-b)^T C (a-b) = (a-b)(a-b)^T.\]
+\begin{equation}\frac{\partial}{\partial C}(a-b)^T C (a-b) = (a-b)(a-b)^T.\label{eq:partial_C}\end{equation}
 
 This follows since
 
@@ -414,5 +416,95 @@ Based on that definition of a determinant, it can be derived that
 
 Combine this last result with (\ref{eq:inv_eqn}) to arrive at
 (\ref{eq:deriv_of_det}).
+
+\textbf{The solution}
+
+We're now ready to derive the equations for the GDA parameters based on
+maximum likelihood estimation.
+
+The log likelihood function is
+
+\[\ell = \sum_i \log(p(x|y)) + \log(p(y)).\]
+
+\(\phi\)
+
+\newcommand{\pd}[1]{\frac{\partial}{\partial#1}}
+
+In this section I'll start to use the notation \([\textsf{Pred}(x)]\)
+for the indicator function of a boolean predicate \(\textsf{Pred}(x):\)
+
+\[[\textsf{Pred}(x)] := \begin{cases}
+1 & \text{if }\textsf{Pred}(x)\text{ is true, and} \\
+0 & \text{otherwise.} \\
+\end{cases}\]
+
+This is the notation that Knuth uses, and I prefer it to Ng's notation
+\(1\{\textsf{Pred}(x)\}.\)
+
+Treating \(p(y)\) as \(\phi^y(1-\phi)^{1-y},\) set \(\pd{\phi}\) of
+\(\ell\) to 0; the result is
+
+\[\sum_i\pd\phi\big(y\log\phi + (1-y)\log(1-\phi)\big)
+= \sum_i \frac{y}{\phi} - \frac{1-y}{1-\phi} = 0\]
+
+\[\Rightarrow\quad \sum_i y(1-\phi) - (1-y)\phi = 0\]
+
+\[\Rightarrow\quad m_1 - m_1\phi = m_0\phi,\]
+
+where \(m_j = \sum_i [y\toi = j],\) and I'm treating the possible \(y\)
+values as 0 or 1. Then
+
+\[m_1 = \phi(m_0 + m_1) \;\Rightarrow\; \phi = \frac{m_1}{m},\]
+
+using that \(m = m_0 + m_1.\)
+
+\(\mu_j\)
+
+\newcommand{\Sinv}{\Sigma^{-1}}
+
+
+\[\pd{\mu_j}\ell = \pd{\mu_j}\sum_{y=j}-\frac{1}{2}(x-\mu_j)^T\Sinv(x-\mu_j)\]
+
+We can use (\ref{eq:nabla_b}) to see that this is the same as
+
+\[\sum_{y=j} \Sinv(x-\mu_j).\]
+
+Setting \(\pd{\mu_j}\ell = 0,\) and noticing that \(\Sinv\) must be
+nonsingular as it's an inverse, we get
+
+\[\sum_{y=j} x = \sum_{y=j} \mu_j,\]
+
+resulting in
+
+\[
+\sum_{y=j} x = m_j \mu_j \quad \Rightarrow \quad
+\mu_j = \frac{1}{m_j}\sum_{y=j}x
+.\]
+
+\(\Sigma\)
+
+To get an equation for \(\Sigma,\) we'll actually maximize \(\ell\) with
+respect to its inverse \(\Sinv.\) This works because there is a
+bijection between all possible values of \(\Sinv\) and of \(\Sigma\)
+under the constraint that \(\Sigma\) is invertible, which is required
+for GDA to make sense. Thus the value of \(\Sinv\) which maximizes
+\(\ell\) uniquely identifies the value of \(\Sigma\) which maximizes
+\(\ell.\)
+
+\[\pd{\Sinv}\ell = \sum_i\pd\Sinv\left(C + \frac{1}{2}\log |\Sinv| -
+\frac{1}{2}(x-\mu_y)^T\Sinv(x-\mu_y)\right).\]
+
+Use (\ref{eq:partial_C}) to see that this is the same as
+
+\[\sum_i \frac{|\Sinv|\Sigma^T}{|\Sinv|} - \frac{1}{2}(x-\mu_y)(x-\mu_y)^T.\]
+
+Set this value to 0 to arrive at
+
+\[\sum_i \Sigma^T = \sum_i (x-\mu_y)(x-\mu_y)^T
+\quad\Rightarrow\quad
+\Sigma^T = \frac{1}{m}\sum_i (x-\mu_y)(x-\mu_y)^T.\]
+
+Since the expression on the right must give a symmetric matrix, this
+same expression also gives the value for \(\Sigma\) itself.
 
 \end{document}

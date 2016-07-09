@@ -183,9 +183,10 @@ T(y) &amp; = &amp; y.
 <p>This problem is to show that a two-class GDA solution effectively provides a model that takes the form of a logistic function, similar to logistic regression. This is something I already did in section 2.1 of <a href="http://tylerneylon.com/notes/cs229/cs229.html">my notes</a>.</p>
 <h3 id="parts-b-and-c"><span class="header-section-number">1.3.2</span> Parts (b) and (c)</h3>
 <p>These parts ask to derive the maximum likelihood estimates of <span class="math inline">\(\phi,\)</span> <span class="math inline">\(\mu_0,\)</span> <span class="math inline">\(\mu_1,\)</span> and <span class="math inline">\(\Sigma\)</span> for GDA. Part (b) is a special case of part (c), so I’ll just do part (c).</p>
+<p><strong>Some lemmas</strong></p>
 <p>It will be useful to know a couple vector- and matrix-oriented calculus facts which I’ll briefly derive here.</p>
 <p>First I’ll show that, given column vectors <span class="math inline">\(a\)</span> and <span class="math inline">\(b,\)</span> and symmetric matrix <span class="math inline">\(C,\)</span></p>
-<p><span class="math display">\[\nabla_b [ (a-b)^T C (a-b) ] = -2C(a-b).\]</span></p>
+<p><span class="math display">\[\nabla_b [ (a-b)^T C (a-b) ] = -2C(a-b).\qquad(1)\]</span></p>
 <p>We can derive this by looking at the <span class="math inline">\(k^\text{th}\)</span> coordinate of the gradient. Let <span class="math inline">\(x = (a-b)^T C (a-b).\)</span> Then, using repeated index summation notation,</p>
 <p><span class="math display">\[\begin{array}{crcl}
 &amp; x &amp; = &amp; (a_i - b_i)c_{ij}(a_j-b_j) \\
@@ -193,7 +194,7 @@ T(y) &amp; = &amp; y.
  &amp; &amp; = &amp; -2C(a-b). \\
 \end{array}\]</span></p>
 <p>Next I’ll show that</p>
-<p><span class="math display">\[\frac{\partial}{\partial C}(a-b)^T C (a-b) = (a-b)(a-b)^T.\]</span></p>
+<p><span class="math display">\[\frac{\partial}{\partial C}(a-b)^T C (a-b) = (a-b)(a-b)^T.\qquad(2)\]</span></p>
 <p>This follows since</p>
 <p><span class="math display">\[(a-b)^T C (a-b) = (a_i - b_i) c_{ij} (a_j - b_j),\]</span></p>
 <p>so that</p>
@@ -201,12 +202,53 @@ T(y) &amp; = &amp; y.
 = (a_i - b_i)(a_j - b_j).\]</span></p>
 <p>In other words, the <span class="math inline">\(ij^\text{th}\)</span> entry of the matrix derivative is exactly the <span class="math inline">\(ij^\text{th}\)</span> entry of the matrix <span class="math inline">\((a-b)(a-b)^T.\)</span></p>
 <p>Finally, I’ll mention that, when a matrix <span class="math inline">\(A\)</span> is invertibe,</p>
-<p><span class="math display">\[\frac{d}{dA} |A| = |A|\,A^{-T}.\qquad(1)\]</span></p>
+<p><span class="math display">\[\frac{d}{dA} |A| = |A|\,A^{-T}.\qquad(3)\]</span></p>
 <p>This can be seen by considering that the <span class="math inline">\(ij^\text{th}\)</span> entry of <span class="math inline">\(A^{-1}\)</span> can be written as</p>
-<p><span class="math display">\[(A^{-1})_{ij} = ((-1)^{i+j}M_{ji})/|A|,\qquad(2)\]</span></p>
+<p><span class="math display">\[(A^{-1})_{ij} = ((-1)^{i+j}M_{ji})/|A|,\qquad(4)\]</span></p>
 <p>where <span class="math inline">\(M_{ij}\)</span> denotes the determinant of the minor of <span class="math inline">\(A\)</span> achieved by removing the <span class="math inline">\(i^\text{th}\)</span> row and <span class="math inline">\(j^\text{th}\)</span> column. Next, consider the expression for <span class="math inline">\(A\)</span> as a sum of products <span class="math inline">\(\sigma(\pi)\prod a_{i\pi(i)}\)</span> over all permutations <span class="math inline">\(\pi:[n]\to[n]\)</span> where <span class="math inline">\(\sigma(\pi)\)</span> is the sign of permutation <span class="math inline">\(\pi\)</span> (<a href="https://en.wikipedia.org/wiki/Determinant#n_.C3.97_n_matrices">reference</a>). Based on that definition of a determinant, it can be derived that</p>
 <p><span class="math display">\[\frac{\partial}{\partial a_{ij}}|A| = (-1)^{i+j}M_{ij}.\]</span></p>
-<p>Combine this last result with (2) to arrive at (1).</p>
+<p>Combine this last result with (4) to arrive at (3).</p>
+<p><strong>The solution</strong></p>
+<p>We’re now ready to derive the equations for the GDA parameters based on maximum likelihood estimation.</p>
+<p>The log likelihood function is</p>
+<p><span class="math display">\[\ell = \sum_i \log(p(x|y)) + \log(p(y)).\]</span></p>
+<p><span class="math inline">\(\phi\)</span></p>
+<p>In this section I’ll start to use the notation <span class="math inline">\([\textsf{Pred}(x)]\)</span> for the indicator function of a boolean predicate <span class="math inline">\(\textsf{Pred}(x):\)</span></p>
+<p><span class="math display">\[[\textsf{Pred}(x)] := \begin{cases}
+1 &amp; \text{if }\textsf{Pred}(x)\text{ is true, and} \\
+0 &amp; \text{otherwise.} \\
+\end{cases}\]</span></p>
+<p>This is the notation that Knuth uses, and I prefer it to Ng’s notation <span class="math inline">\(1\{\textsf{Pred}(x)\}.\)</span></p>
+<p>Treating <span class="math inline">\(p(y)\)</span> as <span class="math inline">\(\phi^y(1-\phi)^{1-y},\)</span> set <span class="math inline">\({\frac{\partial}{\partial\phi}}\)</span> of <span class="math inline">\(\ell\)</span> to 0; the result is</p>
+<p><span class="math display">\[\sum_i{\frac{\partial}{\partial\phi}}\big(y\log\phi + (1-y)\log(1-\phi)\big)
+= \sum_i \frac{y}{\phi} - \frac{1-y}{1-\phi} = 0\]</span></p>
+<p><span class="math display">\[\Rightarrow\quad \sum_i y(1-\phi) - (1-y)\phi = 0\]</span></p>
+<p><span class="math display">\[\Rightarrow\quad m_1 - m_1\phi = m_0\phi,\]</span></p>
+<p>where <span class="math inline">\(m_j = \sum_i [y{^{(i)}}= j],\)</span> and I’m treating the possible <span class="math inline">\(y\)</span> values as 0 or 1. Then</p>
+<p><span class="math display">\[m_1 = \phi(m_0 + m_1) \;\Rightarrow\; \phi = \frac{m_1}{m},\]</span></p>
+<p>using that <span class="math inline">\(m = m_0 + m_1.\)</span></p>
+<p><span class="math inline">\(\mu_j\)</span></p>
+<p><span class="math display">\[{\frac{\partial}{\partial\mu_j}}\ell = {\frac{\partial}{\partial\mu_j}}\sum_{y=j}-\frac{1}{2}(x-\mu_j)^T{\Sigma^{-1}}(x-\mu_j)\]</span></p>
+<p>We can use (1) to see that this is the same as</p>
+<p><span class="math display">\[\sum_{y=j} {\Sigma^{-1}}(x-\mu_j).\]</span></p>
+<p>Setting <span class="math inline">\({\frac{\partial}{\partial\mu_j}}\ell = 0,\)</span> and noticing that <span class="math inline">\({\Sigma^{-1}}\)</span> must be nonsingular as it’s an inverse, we get</p>
+<p><span class="math display">\[\sum_{y=j} x = \sum_{y=j} \mu_j,\]</span></p>
+<p>resulting in</p>
+<p><span class="math display">\[
+\sum_{y=j} x = m_j \mu_j \quad \Rightarrow \quad
+\mu_j = \frac{1}{m_j}\sum_{y=j}x
+.\]</span></p>
+<p><span class="math inline">\(\Sigma\)</span></p>
+<p>To get an equation for <span class="math inline">\(\Sigma,\)</span> we’ll actually maximize <span class="math inline">\(\ell\)</span> with respect to its inverse <span class="math inline">\({\Sigma^{-1}}.\)</span> This works because there is a bijection between all possible values of <span class="math inline">\({\Sigma^{-1}}\)</span> and of <span class="math inline">\(\Sigma\)</span> under the constraint that <span class="math inline">\(\Sigma\)</span> is invertible, which is required for GDA to make sense. Thus the value of <span class="math inline">\({\Sigma^{-1}}\)</span> which maximizes <span class="math inline">\(\ell\)</span> uniquely identifies the value of <span class="math inline">\(\Sigma\)</span> which maximizes <span class="math inline">\(\ell.\)</span></p>
+<p><span class="math display">\[{\frac{\partial}{\partial{\Sigma^{-1}}}}\ell = \sum_i{\frac{\partial}{\partial{\Sigma^{-1}}}}\left(C + \frac{1}{2}\log |{\Sigma^{-1}}| -
+\frac{1}{2}(x-\mu_y)^T{\Sigma^{-1}}(x-\mu_y)\right).\]</span></p>
+<p>Use (2) to see that this is the same as</p>
+<p><span class="math display">\[\sum_i \frac{|{\Sigma^{-1}}|\Sigma^T}{|{\Sigma^{-1}}|} - \frac{1}{2}(x-\mu_y)(x-\mu_y)^T.\]</span></p>
+<p>Set this value to 0 to arrive at</p>
+<p><span class="math display">\[\sum_i \Sigma^T = \sum_i (x-\mu_y)(x-\mu_y)^T
+\quad\Rightarrow\quad
+\Sigma^T = \frac{1}{m}\sum_i (x-\mu_y)(x-\mu_y)^T.\]</span></p>
+<p>Since the expression on the right must give a symmetric matrix, this same expression also gives the value for <span class="math inline">\(\Sigma\)</span> itself.</p>
     </div>
   </body>
 </html>
