@@ -654,6 +654,26 @@ be absorbed into the constant \(c\) in the expression
 of (\ref{eq:gda_part2}) is indeed of the needed form, confirming the
 goal (\ref{eq:gda_goal}).
 
+TODO Any remaining notes from lecture notes 2.
+
+\section{One lecture notes 3}\label{one-lecture-notes-3}
+
+\subsection{Support vector machines}\label{support-vector-machines}
+
+At one point, Ng says that any constraint on \(w\) will work to avoid
+the problem that maximizing the functional margin simply requires making
+both \(w\) and \(b\) larger. However, I think many constraints make less
+sense than \(||w||=1.\) The only case that doesn't fit well with
+\(||w||=1\) is the case that the best weights are actually \(w=0\), but
+this vector can only ever give a single output, so it's useless as long
+as we have more than one label, which is the only interesting case. On
+the other hand, a constraint like \(|w_3|=1\) would avoid the exploding
+\((w,b)\) problem, but it may be the case that the best weight vector
+has \(w_3=0,\) which would fail to be found under such a constraint. In
+general, constraints tend to assume that some subset of values in
+\((w,b)\) are nonzero, and anything more specific than \(||w||=1\) would
+add an assumption that may end up missing the truly optimal weights.
+
 \hypertarget{refs}{}
 
 \end{document}
