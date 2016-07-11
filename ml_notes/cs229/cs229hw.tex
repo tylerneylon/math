@@ -428,7 +428,7 @@ The log likelihood function is
 
 \(\phi\)
 
-\newcommand{\pd}[1]{\frac{\partial}{\partial#1}}
+\newcommand{\pd}[1]{\frac{\partial}{\partial #1}}
 
 In this section I'll start to use the notation \([\textsf{Pred}(x)]\)
 for the indicator function of a boolean predicate \(\textsf{Pred}(x):\)
@@ -461,7 +461,6 @@ using that \(m = m_0 + m_1.\)
 \(\mu_j\)
 
 \newcommand{\Sinv}{\Sigma^{-1}}
-
 
 \[\pd{\mu_j}\ell = \pd{\mu_j}\sum_{y=j}-\frac{1}{2}(x-\mu_j)^T\Sinv(x-\mu_j)\]
 
@@ -506,5 +505,72 @@ Set this value to 0 to arrive at
 
 Since the expression on the right must give a symmetric matrix, this
 same expression also gives the value for \(\Sigma\) itself.
+
+\subsection{Linear invariance of optimization
+algorithms}\label{linear-invariance-of-optimization-algorithms}
+
+\subsubsection{Part (a)}\label{part-a-3}
+
+This problem is to show that Newton's method is invariant to linear
+reparametrizations.
+
+Specifically, suppose \(x^{(0)} = z^{(0)} = 0,\) that matrix \(A\) is
+invertible, and that \(g(z) = f(Az).\) Our goal is to show that if the
+sequence \(x^{(1)}, x^{(2)}, \ldots\) results from Newton's method
+applied to \(f\), then the corresponding sequence
+\(z^{(1)}, z^{(2)}, \ldots\) resulting from Newton's method applied to
+\(g\) obeys the equation \(x^{(i)} = Az^{(i)}\) for all \(i,\) so that
+the two versions of Newton's method are in a sense doing the exact same
+work. We'll think of \(f\) consistently as a function of \(x,\) and
+\(g\) as a function of \(z.\)
+
+\newcommand{\pdd}[2]{\frac{\partial #1}{\partial #2}}
+
+Start with
+
+\[\big[\nabla_z g\big]_i = \pdd{f}{z_i} = \pdd{f}{x_j}\pdd{x_j}{z_i}
+= \pdd{f}{x_j}a_{ji},\]
+
+from which it follows that
+
+\[\nabla g = A^T\nabla f.\]
+
+Next, introduce the variables \(H\) as the Hessian of \(f,\) and \(P\)
+as the Hessian of \(g.\) Then
+
+\[
+\begin{aligned}
+p_{ij} & = \pd{z_i}\pdd{f}{z_j} = \pd{z_i}\left(\pdd{f}{x_k}a_{kj}\right)
+= \left(\pd{z_i}\pdd{f}{x_k}\right)a_{kj} \\
+& = \left(\pd{x_\ell}\pdd{x_\ell}{z_i}\pdd{f}{x_k}\right)a_{kj}
+= \left(a_{\ell i}\frac{\partial^2f}{\partial x_\ell\partial x_k}\right)a_{kj}
+= a_{\ell i}h_{\ell k}a_{kj}.
+\end{aligned}
+\]
+
+We can summarize this as
+
+\[P = A^T H A.\]
+
+Newton's method in this context can be expressed by the two equations
+
+\[\begin{aligned}
+x^{(i+1)} & = x^{(i)} - H^{-1}(x^{(i)}) \nabla f(x^{(i)}), \text{ and} \\
+z^{(i+1)} & = z^{(i)} - P^{-1}(z^{(i)}) \nabla g(z^{(i)}) \\
+          & = z^{(i)} - (A^THA)^{-1}(x^{(i)}) A^T\nabla f(x^{(i)}). \\
+\end{aligned}\]
+
+We'll show by induction on \(i\) that \(x^{(i)} = Az^{(i)}\) for all
+\(i.\) The base case for \(i=0\) is true by definition. For the
+inductive step, assume that \(x^{(i)} = Az^{(i)},\) and use the above
+equations to see that
+
+\[\begin{aligned}
+Az^{(i+1)} & = Az^{(i)} - AA^{-1}H(x^{(i)})A^{-T}A^T\nabla f(x^{(i)}) \\
+           & = x^{(i)} - H(x^{(i)}) \nabla f(x^{(i)}) \\
+           & = x^{(i+1)},
+\end{aligned}\]
+
+which completes this part of the problem.
 
 \end{document}

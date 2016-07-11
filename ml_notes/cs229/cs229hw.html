@@ -219,8 +219,8 @@ T(y) &amp; = &amp; y.
 0 &amp; \text{otherwise.} \\
 \end{cases}\]</span></p>
 <p>This is the notation that Knuth uses, and I prefer it to Ng’s notation <span class="math inline">\(1\{\textsf{Pred}(x)\}.\)</span></p>
-<p>Treating <span class="math inline">\(p(y)\)</span> as <span class="math inline">\(\phi^y(1-\phi)^{1-y},\)</span> set <span class="math inline">\({\frac{\partial}{\partial\phi}}\)</span> of <span class="math inline">\(\ell\)</span> to 0; the result is</p>
-<p><span class="math display">\[\sum_i{\frac{\partial}{\partial\phi}}\big(y\log\phi + (1-y)\log(1-\phi)\big)
+<p>Treating <span class="math inline">\(p(y)\)</span> as <span class="math inline">\(\phi^y(1-\phi)^{1-y},\)</span> set <span class="math inline">\({\frac{\partial}{\partial \phi}}\)</span> of <span class="math inline">\(\ell\)</span> to 0; the result is</p>
+<p><span class="math display">\[\sum_i{\frac{\partial}{\partial \phi}}\big(y\log\phi + (1-y)\log(1-\phi)\big)
 = \sum_i \frac{y}{\phi} - \frac{1-y}{1-\phi} = 0\]</span></p>
 <p><span class="math display">\[\Rightarrow\quad \sum_i y(1-\phi) - (1-y)\phi = 0\]</span></p>
 <p><span class="math display">\[\Rightarrow\quad m_1 - m_1\phi = m_0\phi,\]</span></p>
@@ -228,10 +228,10 @@ T(y) &amp; = &amp; y.
 <p><span class="math display">\[m_1 = \phi(m_0 + m_1) \;\Rightarrow\; \phi = \frac{m_1}{m},\]</span></p>
 <p>using that <span class="math inline">\(m = m_0 + m_1.\)</span></p>
 <p><span class="math inline">\(\mu_j\)</span></p>
-<p><span class="math display">\[{\frac{\partial}{\partial\mu_j}}\ell = {\frac{\partial}{\partial\mu_j}}\sum_{y=j}-\frac{1}{2}(x-\mu_j)^T{\Sigma^{-1}}(x-\mu_j)\]</span></p>
+<p><span class="math display">\[{\frac{\partial}{\partial \mu_j}}\ell = {\frac{\partial}{\partial \mu_j}}\sum_{y=j}-\frac{1}{2}(x-\mu_j)^T{\Sigma^{-1}}(x-\mu_j)\]</span></p>
 <p>We can use (1) to see that this is the same as</p>
 <p><span class="math display">\[\sum_{y=j} {\Sigma^{-1}}(x-\mu_j).\]</span></p>
-<p>Setting <span class="math inline">\({\frac{\partial}{\partial\mu_j}}\ell = 0,\)</span> and noticing that <span class="math inline">\({\Sigma^{-1}}\)</span> must be nonsingular as it’s an inverse, we get</p>
+<p>Setting <span class="math inline">\({\frac{\partial}{\partial \mu_j}}\ell = 0,\)</span> and noticing that <span class="math inline">\({\Sigma^{-1}}\)</span> must be nonsingular as it’s an inverse, we get</p>
 <p><span class="math display">\[\sum_{y=j} x = \sum_{y=j} \mu_j,\]</span></p>
 <p>resulting in</p>
 <p><span class="math display">\[
@@ -240,7 +240,7 @@ T(y) &amp; = &amp; y.
 .\]</span></p>
 <p><span class="math inline">\(\Sigma\)</span></p>
 <p>To get an equation for <span class="math inline">\(\Sigma,\)</span> we’ll actually maximize <span class="math inline">\(\ell\)</span> with respect to its inverse <span class="math inline">\({\Sigma^{-1}}.\)</span> This works because there is a bijection between all possible values of <span class="math inline">\({\Sigma^{-1}}\)</span> and of <span class="math inline">\(\Sigma\)</span> under the constraint that <span class="math inline">\(\Sigma\)</span> is invertible, which is required for GDA to make sense. Thus the value of <span class="math inline">\({\Sigma^{-1}}\)</span> which maximizes <span class="math inline">\(\ell\)</span> uniquely identifies the value of <span class="math inline">\(\Sigma\)</span> which maximizes <span class="math inline">\(\ell.\)</span></p>
-<p><span class="math display">\[{\frac{\partial}{\partial{\Sigma^{-1}}}}\ell = \sum_i{\frac{\partial}{\partial{\Sigma^{-1}}}}\left(C + \frac{1}{2}\log |{\Sigma^{-1}}| -
+<p><span class="math display">\[{\frac{\partial}{\partial {\Sigma^{-1}}}}\ell = \sum_i{\frac{\partial}{\partial {\Sigma^{-1}}}}\left(C + \frac{1}{2}\log |{\Sigma^{-1}}| -
 \frac{1}{2}(x-\mu_y)^T{\Sigma^{-1}}(x-\mu_y)\right).\]</span></p>
 <p>Use (2) to see that this is the same as</p>
 <p><span class="math display">\[\sum_i \frac{|{\Sigma^{-1}}|\Sigma^T}{|{\Sigma^{-1}}|} - \frac{1}{2}(x-\mu_y)(x-\mu_y)^T.\]</span></p>
@@ -249,6 +249,40 @@ T(y) &amp; = &amp; y.
 \quad\Rightarrow\quad
 \Sigma^T = \frac{1}{m}\sum_i (x-\mu_y)(x-\mu_y)^T.\]</span></p>
 <p>Since the expression on the right must give a symmetric matrix, this same expression also gives the value for <span class="math inline">\(\Sigma\)</span> itself.</p>
+<h2 id="linear-invariance-of-optimization-algorithms"><span class="header-section-number">1.4</span> Linear invariance of optimization algorithms</h2>
+<h3 id="part-a-3"><span class="header-section-number">1.4.1</span> Part (a)</h3>
+<p>This problem is to show that Newton’s method is invariant to linear reparametrizations.</p>
+<p>Specifically, suppose <span class="math inline">\(x^{(0)} = z^{(0)} = 0,\)</span> that matrix <span class="math inline">\(A\)</span> is invertible, and that <span class="math inline">\(g(z) = f(Az).\)</span> Our goal is to show that if the sequence <span class="math inline">\(x^{(1)}, x^{(2)}, \ldots\)</span> results from Newton’s method applied to <span class="math inline">\(f\)</span>, then the corresponding sequence <span class="math inline">\(z^{(1)}, z^{(2)}, \ldots\)</span> resulting from Newton’s method applied to <span class="math inline">\(g\)</span> obeys the equation <span class="math inline">\(x^{(i)} = Az^{(i)}\)</span> for all <span class="math inline">\(i,\)</span> so that the two versions of Newton’s method are in a sense doing the exact same work. We’ll think of <span class="math inline">\(f\)</span> consistently as a function of <span class="math inline">\(x,\)</span> and <span class="math inline">\(g\)</span> as a function of <span class="math inline">\(z.\)</span></p>
+<p>Start with</p>
+<p><span class="math display">\[\big[\nabla_z g\big]_i = {\frac{\partial f}{\partial z_i}} = {\frac{\partial f}{\partial x_j}}{\frac{\partial x_j}{\partial z_i}}
+= {\frac{\partial f}{\partial x_j}}a_{ji},\]</span></p>
+<p>from which it follows that</p>
+<p><span class="math display">\[\nabla g = A^T\nabla f.\]</span></p>
+<p>Next, introduce the variables <span class="math inline">\(H\)</span> as the Hessian of <span class="math inline">\(f,\)</span> and <span class="math inline">\(P\)</span> as the Hessian of <span class="math inline">\(g.\)</span> Then</p>
+<p><span class="math display">\[
+\begin{aligned}
+p_{ij} &amp; = {\frac{\partial}{\partial z_i}}{\frac{\partial f}{\partial z_j}} = {\frac{\partial}{\partial z_i}}\left({\frac{\partial f}{\partial x_k}}a_{kj}\right)
+= \left({\frac{\partial}{\partial z_i}}{\frac{\partial f}{\partial x_k}}\right)a_{kj} \\
+&amp; = \left({\frac{\partial}{\partial x_\ell}}{\frac{\partial x_\ell}{\partial z_i}}{\frac{\partial f}{\partial x_k}}\right)a_{kj}
+= \left(a_{\ell i}\frac{\partial^2f}{\partial x_\ell\partial x_k}\right)a_{kj}
+= a_{\ell i}h_{\ell k}a_{kj}.
+\end{aligned}
+\]</span></p>
+<p>We can summarize this as</p>
+<p><span class="math display">\[P = A^T H A.\]</span></p>
+<p>Newton’s method in this context can be expressed by the two equations</p>
+<p><span class="math display">\[\begin{aligned}
+x^{(i+1)} &amp; = x^{(i)} - H^{-1}(x^{(i)}) \nabla f(x^{(i)}), \text{ and} \\
+z^{(i+1)} &amp; = z^{(i)} - P^{-1}(z^{(i)}) \nabla g(z^{(i)}) \\
+          &amp; = z^{(i)} - (A^THA)^{-1}(x^{(i)}) A^T\nabla f(x^{(i)}). \\
+\end{aligned}\]</span></p>
+<p>We’ll show by induction on <span class="math inline">\(i\)</span> that <span class="math inline">\(x^{(i)} = Az^{(i)}\)</span> for all <span class="math inline">\(i.\)</span> The base case for <span class="math inline">\(i=0\)</span> is true by definition. For the inductive step, assume that <span class="math inline">\(x^{(i)} = Az^{(i)},\)</span> and use the above equations to see that</p>
+<p><span class="math display">\[\begin{aligned}
+Az^{(i+1)} &amp; = Az^{(i)} - AA^{-1}H(x^{(i)})A^{-T}A^T\nabla f(x^{(i)}) \\
+           &amp; = x^{(i)} - H(x^{(i)}) \nabla f(x^{(i)}) \\
+           &amp; = x^{(i+1)},
+\end{aligned}\]</span></p>
+<p>which completes this part of the problem.</p>
     </div>
   </body>
 </html>
