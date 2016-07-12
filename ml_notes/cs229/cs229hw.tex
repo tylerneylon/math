@@ -573,4 +573,23 @@ Az^{(i+1)} & = Az^{(i)} - AA^{-1}H(x^{(i)})A^{-T}A^T\nabla f(x^{(i)}) \\
 
 which completes this part of the problem.
 
+\subsubsection{Part (b)}\label{part-b-2}
+
+Gradient descent is not invariant to linear reparametrizations. The
+update equation for \(f\) is
+
+\[x^{(i+1)} = x^{(i)} - \alpha\nabla f,\]
+
+and for \(g\) is
+
+\[z^{(i+1)} = z^{(i)} - \alpha\nabla g = z^{(i)} - \alpha A^T\nabla f.\]
+
+In order for \(Az^{(i+1)} = x^{(i+1)},\) we would need
+
+\[A(z^{(i)} - \alpha A^T\nabla f) = Az^{(i)} - A\alpha\nabla f
+\quad\Leftrightarrow\quad
+AA^T\nabla f = A\nabla f,\]
+
+but this is only guaranteed when \(A\) is unitary.
+
 \end{document}
