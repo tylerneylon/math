@@ -230,6 +230,25 @@ p(x\mid y=1) &amp; = &amp; N(\mu_1, \Sigma), \\
 <h1 id="on-lecture-notes-3"><span class="header-section-number">3</span> On lecture notes 3</h1>
 <h2 id="support-vector-machines"><span class="header-section-number">3.1</span> Support vector machines</h2>
 <p>At one point, Ng says that any constraint on <span class="math inline">\(w\)</span> will work to avoid the problem that maximizing the functional margin simply requires making both <span class="math inline">\(w\)</span> and <span class="math inline">\(b\)</span> larger. However, I think many constraints make less sense than <span class="math inline">\(||w||=1.\)</span> The only case that doesn’t fit well with <span class="math inline">\(||w||=1\)</span> is the case that the best weights are actually <span class="math inline">\(w=0\)</span>, but this vector can only ever give a single output, so it’s useless as long as we have more than one label, which is the only interesting case. On the other hand, a constraint like <span class="math inline">\(|w_3|=1\)</span> would avoid the exploding <span class="math inline">\((w,b)\)</span> problem, but it may be the case that the best weight vector has <span class="math inline">\(w_3=0,\)</span> which would fail to be found under such a constraint. In general, constraints tend to assume that some subset of values in <span class="math inline">\((w,b)\)</span> are nonzero, and anything more specific than <span class="math inline">\(||w||=1\)</span> would add an assumption that may end up missing the truly optimal weights.</p>
+<h3 id="max-min-le-min-max"><span class="header-section-number">3.1.1</span> max min <span class="math inline">\(\le\)</span> min max</h3>
+<p>Ng notes that for any function <span class="math inline">\(f(x, y),\)</span></p>
+<p><span class="math display">\[\max_x \min_y f(x, y) \;\le\; \min_y \max_x f(x, y).\]</span></p>
+<p>Let’s justify this. Let</p>
+<p><span class="math display">\[\begin{aligned}
+x_0 &amp; = {\text{argmax}}_x \min_y f(x, y), \quad \text{and} \\
+y_0 &amp; = {\text{argmin}}_y \max_x f(x, y).
+\end{aligned}\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[\begin{aligned}
+\max_x \min_y f(x, y) &amp; =   \; \min_y f(x_0, y) \\
+                      &amp; \le \; f(x_0, y_0)      \\
+                      &amp; \le \; \max_x f(x, y_0) = \min_y \max_x f(x, y), \\
+\end{aligned}\]</span></p>
+<p>which completes the proof.</p>
+<p>There are only two inequalities in that proof; if they were equalities, then the final result would itself be an equality as well. Specifically, if <span class="math inline">\((x_0, y_0)\)</span> is a saddle point in the sense that</p>
+<p><span class="math display">\[f(x, y_0) \le f(x_0, y_0) \le f(x_0, y) \quad \forall x, y,\]</span></p>
+<p>then</p>
+<p><span class="math display">\[\max_x \min_y f(x, y) \; = \; \min_y \max_x f(x, y).\]</span></p>
 <div id="refs" class="references">
 
 </div>

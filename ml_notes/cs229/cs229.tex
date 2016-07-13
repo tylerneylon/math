@@ -674,6 +674,43 @@ general, constraints tend to assume that some subset of values in
 \((w,b)\) are nonzero, and anything more specific than \(||w||=1\) would
 add an assumption that may end up missing the truly optimal weights.
 
+\subsubsection{\texorpdfstring{max min \(\le\) min
+max}{max min \textbackslash{}le min max}}\label{max-min-le-min-max}
+
+Ng notes that for any function \(f(x, y),\)
+
+\[\max_x \min_y f(x, y) \;\le\; \min_y \max_x f(x, y).\]
+
+Let's justify this. Let
+
+\newcommand{\argmax}{\text{argmax}}
+\newcommand{\argmin}{\text{argmin}}
+
+\[\begin{aligned}
+x_0 & = \argmax_x \min_y f(x, y), \quad \text{and} \\
+y_0 & = \argmin_y \max_x f(x, y).
+\end{aligned}\]
+
+Then
+
+\[\begin{aligned}
+\max_x \min_y f(x, y) & =   \; \min_y f(x_0, y) \\
+                      & \le \; f(x_0, y_0)      \\
+                      & \le \; \max_x f(x, y_0) = \min_y \max_x f(x, y), \\
+\end{aligned}\]
+
+which completes the proof.
+
+There are only two inequalities in that proof; if they were equalities,
+then the final result would itself be an equality as well. Specifically,
+if \((x_0, y_0)\) is a saddle point in the sense that
+
+\[f(x, y_0) \le f(x_0, y_0) \le f(x_0, y) \quad \forall x, y,\]
+
+then
+
+\[\max_x \min_y f(x, y) \; = \; \min_y \max_x f(x, y).\]
+
 \hypertarget{refs}{}
 
 \end{document}
