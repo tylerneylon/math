@@ -654,7 +654,37 @@ be absorbed into the constant \(c\) in the expression
 of (\ref{eq:gda_part2}) is indeed of the needed form, confirming the
 goal (\ref{eq:gda_goal}).
 
-TODO Any remaining notes from lecture notes 2.
+\subsection{Naive Bayes}\label{naive-bayes}
+
+I've heard that, in practice, naive Bayes works well for spam
+classification. If its assumption is so blatantly false, then why does
+it work so well? I don't have an answer, but I wanted to mention that as
+an interesting question.
+
+Also, independence of random variables is not just a pair-wise property.
+You could have three random variables \(x_1,\) \(x_2,\) and \(x_3\)
+which are all pair-wise independent, but not independent as a group. As
+an example of this, here are three random variables defined as indicator
+functions over the domain \(\{a, b, c, d\}:\)
+
+\[\begin{aligned}
+x_1(w) & = [w \in \{a, b\}] \\
+x_2(w) & = [w \in \{b, d\}] \\
+x_3(w) & = [w \in \{a, d\}] \\
+\end{aligned}\]
+
+If we know the value of \(x_i\) for any \(i,\) then we have no extra
+information about the value of \(x_j\) for any \(j\ne i.\) However, if
+we know any two values \(x_i\) and \(x_j,\) then we've completely
+determined the value of \(x_k.\)
+
+This is all leading up to the point that the naive Bayes assumption,
+stated carefully, is that the entire set of events \(\{x_i \mid y\}\) is
+independent, as opposed to just pair-wise independent.
+
+I'm curious about any theoretical justification for Laplace smoothing.
+As presented so far, it mainly seems like a hacky way to avoid a
+potential implementation issue.
 
 \section{On lecture notes 3}\label{on-lecture-notes-3}
 
