@@ -781,7 +781,24 @@ corresponding Fredholm paper.
 
 \subsubsection{The Gaussian kernel}\label{the-gaussian-kernel}
 
-NEXT: justify why this is a kernel
+Let's confirm that the Gaussian kernel is indeed a kernel. As a side
+note, this kernel is also referred to as the radial basis function
+kernel, or the RBF kernel. I'll use \(K'\) for the function version and
+\(K\) for the matrix version, both defined in a moment. The function is
+defined as
+
+\[K'(x, z) = \exp\left(-\frac{||x-z||^2}{2\sigma^2}\right).\]
+
+Suppose we have a set of points \(\{x^{(1)}, \ldots, x^{(m)}\};\) define
+matrix \(K\) by letting \(K_{ij} = K'(x^{(i)}, x^{(j)}).\) By Mercer's
+theorem, our job is to show that, for any vector \(z,\) \(z^TKz \ge 0.\)
+
+Let's proceed as follows:
+
+\[\begin{aligned}
+z^TKz & = z_i K_{ij} z_j \\
+      & = z_i z_j \exp(-||x^{(i)} - x^{(j)}||^2/2\sigma^2)
+\end{aligned}\]
 
 \hypertarget{refs}{}
 

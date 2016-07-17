@@ -266,7 +266,14 @@ y_0 &amp; = {\text{argmin}}_y \max_x f(x, y).
 <p>In the context of SVMs, the name <em>kernel</em> comes from the idea of a <a href="https://en.wikipedia.org/wiki/Positive-definite_kernel">positive-definite kernel</a>, which originated mainly in work done by James Mercer, although as far as I can tell the actual name <em>positive-definite kernel</em> came from a 1904 paper of David Hilbert on Fredholm integral equations of the second kind.</p>
 <p>Based on <a href="http://math.stackexchange.com/a/1281138/10785">this math.stackexchange answer</a>, it sounds like the group-theoretic and algebraic use cases — that is, the two listed above — of the word <em>kernel</em> are not formally linked. Rather, it seems that Ivar Fredholm used the French word <em>noyau</em> in a paper on integral equations that later became <em>kernel</em> in the aforementioned paper of Hilbert. <em>Noyau</em> roughly means <em>core</em>, and was perhaps used because it is inside an integral when a convolution is performed. The referenced answer states that the original Hilbert paper never justifies the term, so I suppose it’s up to folks who understand that paper to make an educated guess as to why it was chosen; or by looking at the corresponding Fredholm paper.</p>
 <h3 id="the-gaussian-kernel"><span class="header-section-number">3.1.3</span> The Gaussian kernel</h3>
-<p>NEXT: justify why this is a kernel</p>
+<p>Let’s confirm that the Gaussian kernel is indeed a kernel. As a side note, this kernel is also referred to as the radial basis function kernel, or the RBF kernel. I’ll use <span class="math inline">\(K&#39;\)</span> for the function version and <span class="math inline">\(K\)</span> for the matrix version, both defined in a moment. The function is defined as</p>
+<p><span class="math display">\[K&#39;(x, z) = \exp\left(-\frac{||x-z||^2}{2\sigma^2}\right).\]</span></p>
+<p>Suppose we have a set of points <span class="math inline">\(\{x^{(1)}, \ldots, x^{(m)}\};\)</span> define matrix <span class="math inline">\(K\)</span> by letting <span class="math inline">\(K_{ij} = K&#39;(x^{(i)}, x^{(j)}).\)</span> By Mercer’s theorem, our job is to show that, for any vector <span class="math inline">\(z,\)</span> <span class="math inline">\(z^TKz \ge 0.\)</span></p>
+<p>Let’s proceed as follows:</p>
+<p><span class="math display">\[\begin{aligned}
+z^TKz &amp; = z_i K_{ij} z_j \\
+      &amp; = z_i z_j \exp(-||x^{(i)} - x^{(j)}||^2/2\sigma^2)
+\end{aligned}\]</span></p>
 <div id="refs" class="references">
 
 </div>
