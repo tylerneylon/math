@@ -784,37 +784,90 @@ corresponding Fredholm paper.
 
 Let's confirm that the Gaussian kernel is indeed a kernel. As a side
 note, this kernel is also referred to as the radial basis function
-kernel, or the RBF kernel. I'll use \(K'\) for the function version and
-\(K\) for the matrix version, both defined in a moment. The function is
-defined as
+kernel, or the RBF kernel.
 
-\[K'(x, z) = \exp\left(-\frac{||x-z||^2}{2\sigma^2}\right).\]
+I had some difficulty proving this myself, so I found
+\href{http://stats.stackexchange.com/a/35638/123609}{this answer by
+Douglas Zare} that I'll use as the basis for this proof.
 
-Suppose we have a set of points \(\{x^{(1)}, \ldots, x^{(m)}\};\) define
-matrix \(K\) by letting \(K_{ij} = K'(x^{(i)}, x^{(j)}).\) By Mercer's
-theorem, our job is to show that, for any vector \(z,\) \(z^TKz \ge 0.\)
+The goal is to show that the function
 
-NOTE The solution below is not correct. I'm working on updating it with
-a correct version.
+\[k(x, y) = \exp\left(\frac{-||x-y||^2}{2\sigma^2}\right)\]
 
-Let's proceed as follows, using \(c = -\frac{1}{2\sigma^2}:\)
+is a kernel.
+
+The proof will proceed by providing a function \(\phi_w\) such that the
+inner product \(\langle\phi_x, \phi_y\rangle = k(x, y)\) for any vectors
+\(x,y\in\R^n.\) I'll be using an inner product defined on functions of
+\(\R^n\) as in
+
+\[\langle f, g\rangle = \int_{\R^n} f(z) g(z) dz.\]
+
+Begin by letting
+\(c_\sigma = \left(\frac{\sqrt 2}{\sigma\sqrt\pi}\right)^{n/2}.\) Define
+
+\[\phi_w(z) = c_\sigma\exp\left(\frac{-||z-w||^2}{\sigma^2}\right).\]
+
+Then
+
+\[\langle\phi_x, \phi_y\rangle
+  = \int_{\R^n} c_\sigma^2
+    \exp\left(\frac{-||z-x||^2}{\sigma^2}\right)
+    \exp\left(\frac{-||z-y||^2}{\sigma^2}\right) dz.\]
+
+Let
+
+\[a = \frac{x+y}{2}, \quad
+  b = \frac{x-y}{2}, \quad
+  v = z - a,\]
+
+so that
 
 \[\begin{aligned}
-z^TKz & = z_i K_{ij} z_j \\
-      & = z_i z_j \exp(c||x\toi - x\toj||^2) \\
-      & = z_i z_j \exp\bigg(c\big(||x\toi||^2 + ||x\toj||^2 - 2\langle x\toi,
-           x\toj \rangle\big) \bigg) \\
-      & = z_i e^{c||x\toi||^2} z_j e^{c||x\toj||^2}
-              \exp\left(-2c\sum_k \big(x_k\toi x_k\toj\big)\right) \\
-      & = z_i e^{c||x\toi||^2} z_j e^{c||x\toj||^2}
-              \prod_k e^{-2cx_k\toi} e^{-2cx_k\toj} \\
-      & = \left(z_i e^{c||x\toi||^2} \prod_k e^{-2cx_k\toi}\right)
-          \left(z_j e^{c||x\toj||^2} \prod_k e^{-2cx_k\toj}\right) \\
-      & = \left(z_i e^{c||x\toi||^2} \prod_k e^{-2cx_k\toi}\right)^2 \\
-      & \ge 0.
+z-x & = z - a - b = v - b, \\
+z-y & = z - a + b = v + b. \\
 \end{aligned}\]
 
-That completes the proof.
+Then
+
+\[\begin{aligned}
+\langle\phi_x, \phi_y\rangle
+  & = c_\sigma^2\int
+      \exp\left(\frac{-||v-b||^2 - ||v+b||^2}{\sigma^2}\right) dv \\
+  & = c_\sigma^2 \int \exp\left(\frac{-2||v||^2 - 2||b||^2}{\sigma^2}\right)dv.
+\end{aligned}\]
+
+The last equation uses the facts that
+\(||v-b||^2 = \langle v-b, v-b\rangle = \langle v, v\rangle - 2\langle v, b\rangle + \langle b, b\rangle,\)
+and that, similarly,
+\(||v+b||^2 = ||v||^2 + 2\langle v, b\rangle + ||b||^2.\)
+
+Continuing,
+
+\[\langle\phi_x, \phi_y\rangle
+  = c_\sigma^2 \exp\left(\frac{-2||b||^2}{\sigma^2}\right)
+    \int\exp\left(\frac{-2||v||^2}{\sigma^2}\right) dv.\]
+
+Make the substitution
+
+\[\frac{\sqrt 2 v}{\sigma} = u, \quad
+  dv = \left(\frac{\sigma}{\sqrt 2}\right)^n du.\]
+
+We get
+
+\[\begin{aligned}
+\langle\phi_x, \phi_y\rangle
+  & = c_\sigma^2 \exp\left(\frac{-2||b||^2}{\sigma^2}\right)
+      \left(\frac{\sigma}{\sqrt 2}\right)^n
+      \int \exp(-||u||^2) du  \\
+  & = c_\sigma^2 \exp\left(\frac{-2||b||^2}{\sigma^2}\right)
+      \left(\frac{\sigma\sqrt\pi}{\sqrt 2}\right)^n \\
+  & = \exp\left(\frac{-2||x-y||^2}{4\sigma^2}\right) \\
+  & = \exp\left(\frac{-||x-y||^2}{2\sigma^2}\right) \\
+  & = k(x, y),
+\end{aligned}\]
+
+which completes the proof.
 
 \hypertarget{refs}{}
 
