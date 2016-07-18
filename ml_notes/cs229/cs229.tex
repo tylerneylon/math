@@ -386,6 +386,7 @@ In general, suppose
 where \(\tau\) is any sigmoid function. Then
 
 \newcommand{\toi}{^{(i)}}
+\newcommand{\toj}{^{(j)}}
 
 \[\left[\nabla_\th\ell(\th)\right]_j
 = \sum_i\left(\frac{y\toi}{h\toi} - \frac{1-y\toi}{1-h\toi}\right)
@@ -793,12 +794,27 @@ Suppose we have a set of points \(\{x^{(1)}, \ldots, x^{(m)}\};\) define
 matrix \(K\) by letting \(K_{ij} = K'(x^{(i)}, x^{(j)}).\) By Mercer's
 theorem, our job is to show that, for any vector \(z,\) \(z^TKz \ge 0.\)
 
-Let's proceed as follows:
+NOTE The solution below is not correct. I'm working on updating it with
+a correct version.
+
+Let's proceed as follows, using \(c = -\frac{1}{2\sigma^2}:\)
 
 \[\begin{aligned}
 z^TKz & = z_i K_{ij} z_j \\
-      & = z_i z_j \exp(-||x^{(i)} - x^{(j)}||^2/2\sigma^2)
+      & = z_i z_j \exp(c||x\toi - x\toj||^2) \\
+      & = z_i z_j \exp\bigg(c\big(||x\toi||^2 + ||x\toj||^2 - 2\langle x\toi,
+           x\toj \rangle\big) \bigg) \\
+      & = z_i e^{c||x\toi||^2} z_j e^{c||x\toj||^2}
+              \exp\left(-2c\sum_k \big(x_k\toi x_k\toj\big)\right) \\
+      & = z_i e^{c||x\toi||^2} z_j e^{c||x\toj||^2}
+              \prod_k e^{-2cx_k\toi} e^{-2cx_k\toj} \\
+      & = \left(z_i e^{c||x\toi||^2} \prod_k e^{-2cx_k\toi}\right)
+          \left(z_j e^{c||x\toj||^2} \prod_k e^{-2cx_k\toj}\right) \\
+      & = \left(z_i e^{c||x\toi||^2} \prod_k e^{-2cx_k\toi}\right)^2 \\
+      & \ge 0.
 \end{aligned}\]
+
+That completes the proof.
 
 \hypertarget{refs}{}
 
