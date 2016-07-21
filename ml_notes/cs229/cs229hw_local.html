@@ -293,6 +293,16 @@ Az^{(i+1)} &amp; = Az^{(i)} - AA^{-1}H(x^{(i)})A^{-T}A^T\nabla f(x^{(i)}) \\
 \quad\Leftrightarrow\quad
 AA^T\nabla f = A\nabla f,\]</span></p>
 <p>but this is only guaranteed when <span class="math inline">\(A\)</span> is unitary.</p>
+<h2 id="regression-for-denoising-quasar-spectra"><span class="header-section-number">1.5</span> Regression for denoising quasar spectra</h2>
+<h3 id="part-a-4"><span class="header-section-number">1.5.1</span> Part (a)</h3>
+<ol style="list-style-type: lower-roman">
+<li></li>
+</ol>
+<p>Let the <span class="math inline">\(i{^\text{th}}\)</span> row of <span class="math inline">\(X\)</span> be <span class="math inline">\(x{^{(i)}}.\)</span> Then <span class="math inline">\((X{\theta})_i = \langle x{^{(i)}},{\theta}\rangle\)</span> and <span class="math inline">\((X{\theta}- y)_i = \langle x{^{(i)}}, {\theta}\rangle - y{^{(i)}}.\)</span></p>
+<p>Let the <span class="math inline">\(i{^\text{th}}\)</span> diagonal element of <span class="math inline">\(W\)</span> be <span class="math inline">\(\frac{w{^{(i)}}}{2}.\)</span> Then <span class="math inline">\(((X{\theta}-y)^T W)_i = \frac{w{^{(i)}}}{2}(\langle x{^{(i)}},{\theta}\rangle-y{^{(i)}}\rangle)\)</span> so that</p>
+<p><span class="math display">\[J({\theta}) = (X{\theta}- y)^T W (X{\theta}- y) =
+  \sum_i \frac{w{^{(i)}}}{2}(\langle x{^{(i)}},{\theta}\rangle - y{^{(i)}})^2.\]</span></p>
+<p>This gives us a nice way to express <span class="math inline">\(J({\theta})\)</span> in terms of matrices and vectors, as the problem requested.</p>
     </div>
   </body>
 </html>

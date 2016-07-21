@@ -502,3 +502,25 @@ $$A(z^{(i)} - \alpha A^T\nabla f) = Az^{(i)} - A\alpha\nabla f
 AA^T\nabla f = A\nabla f,$$
 
 but this is only guaranteed when $A$ is unitary.
+
+## Regression for denoising quasar spectra
+
+### Part (a)
+
+i.
+
+\newcommand{\up}[1]{^\text{#1}}
+
+Let the $i\up{th}$ row of $X$ be $x\toi.$
+Then $(X\th)_i = \langle x\toi,\th\rangle$ and
+$(X\th - y)_i = \langle x\toi, \th\rangle - y\toi.$
+
+Let the $i\up{th}$ diagonal element of $W$ be $\frac{w\toi}{2}.$
+Then $((X\th-y)^T W)_i = \frac{w\toi}{2}(\langle x\toi,\th\rangle-y\toi\rangle)$
+so that
+
+$$J(\th) = (X\th - y)^T W (X\th - y) =
+  \sum_i \frac{w\toi}{2}(\langle x\toi,\th\rangle - y\toi)^2.$$
+
+This gives us a nice way to express $J(\th)$ in terms of matrices and vectors,
+as the problem requested.
