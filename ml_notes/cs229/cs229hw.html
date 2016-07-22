@@ -303,6 +303,47 @@ AA^T\nabla f = A\nabla f,\]</span></p>
 <p><span class="math display">\[J({\theta}) = (X{\theta}- y)^T W (X{\theta}- y) =
   \sum_i \frac{w{^{(i)}}}{2}(\langle x{^{(i)}},{\theta}\rangle - y{^{(i)}})^2.\]</span></p>
 <p>This gives us a nice way to express <span class="math inline">\(J({\theta})\)</span> in terms of matrices and vectors, as the problem requested.</p>
+<ol start="2" style="list-style-type: lower-roman">
+<li></li>
+</ol>
+<p>This problem is to explicitly solve for <span class="math inline">\(\nabla_{\theta}J({\theta}) = 0\)</span> for the function <span class="math inline">\(J({\theta})\)</span> given in the last part.</p>
+<p>I’ll begin by defining the general notation</p>
+<p><span class="math display">\[\langle a, b \rangle_W := a^T W b.\]</span></p>
+<p>This is similar to a standard inner product when both <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are column vectors, but the notation still works when <span class="math inline">\(a\)</span> or <span class="math inline">\(b\)</span> are matrices of appropriate dimensions.</p>
+<p>Let’s find some gradient formulas for <span class="math inline">\(\nabla_{\theta}\langle a, b\rangle_W\)</span> in the case that <span class="math inline">\(a, b\)</span> depend on <span class="math inline">\({\theta}\)</span> but <span class="math inline">\(W\)</span> doesn’t. It will be useful to keep in mind that</p>
+<p><span class="math display">\[\langle a, b \rangle_W = a_i w_{ij} b_j.\]</span></p>
+<p>Then</p>
+<p><span class="math display">\[{\frac{\partial}{\partial {\theta}_k}}(a_i w_{ij} b_j) = a&#39;_i w_{ij} b_j + a_i w_{ij} b&#39;_j,\]</span></p>
+<p>where <span class="math inline">\(x&#39;\)</span> denotes <span class="math inline">\({\frac{\partial x}{\partial {\theta}_k}}.\)</span></p>
+<p>Define the matrix <span class="math inline">\(A&#39;\)</span> so that it has <span class="math inline">\(k{^\text{th}}\)</span> column <span class="math inline">\({\frac{\partial}{\partial {\theta}_k}} a,\)</span> and similarly for <span class="math inline">\(B&#39;\)</span> from <span class="math inline">\(b.\)</span> Then</p>
+<p><span class="math display">\[{\frac{\partial}{\partial {\theta}_k}}\langle a, b\rangle_W
+  = \langle {\frac{\partial a}{\partial {\theta}_k}}, b \rangle_W
+  + \langle a, {\frac{\partial b}{\partial {\theta}_k}} \rangle_W,\]</span></p>
+<p>which we can summarize as</p>
+<p><span class="math display">\[\nabla_{\theta}\langle a, b\rangle_W = \langle A&#39;,b \rangle_W
+                                   + \langle a,B&#39; \rangle_W^T.\]</span></p>
+<p>In the special case that <span class="math inline">\(W\)</span> is symmetric, we also have</p>
+<p><span class="math display">\[\begin{aligned}
+\nabla_{\theta}\langle z, z \rangle_W
+  &amp; = \langle Z&#39;, z\rangle_W + \langle z, Z&#39; \rangle_W^T \\
+  &amp; = \langle Z&#39;, z\rangle_W + (z^T W Z&#39;)^T \\
+  &amp; = \langle Z&#39;, z\rangle_W + Z&#39;^T W z \\
+  &amp; = 2 \langle Z&#39;, z\rangle_W, \\
+\end{aligned}\]</span></p>
+<p>which can be summarized as</p>
+<p><span class="math display">\[\nabla_{\theta}\langle z, z \rangle_W = 2\langle Z&#39;, z\rangle_W.\]</span></p>
+<p>To get back to the actual problem, notice that, by letting <span class="math inline">\(z = X{\theta}- y,\)</span> we can write <span class="math inline">\(J = \langle z, z \rangle_W.\)</span></p>
+<p>Then</p>
+<p><span class="math display">\[\begin{aligned}
+\nabla J &amp; = 2\langle Z&#39;, z\rangle_W \\
+&amp; = 2 Z&#39;^T W z \\
+&amp; = 2 X^T W z \\
+&amp; = 2 X^T W (X {\theta}- y) = 0 \\
+\Rightarrow \; X^T W X {\theta}&amp; = X^T W y \\
+\Rightarrow \; {\theta}&amp; = (X^T W X)^{-1} X^T W y
+ = (\langle X, X\rangle_W)^{-1} \langle X, y \rangle_W, \\
+\end{aligned}\]</span></p>
+<p>which is the closed-form expression the problem asked for.</p>
     </div>
   </body>
 </html>

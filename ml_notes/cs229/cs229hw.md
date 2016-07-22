@@ -524,3 +524,71 @@ $$J(\th) = (X\th - y)^T W (X\th - y) =
 
 This gives us a nice way to express $J(\th)$ in terms of matrices and vectors,
 as the problem requested.
+
+ii.
+
+This problem is to explicitly solve for $\nabla_\th J(\th) = 0$ for
+the function $J(\th)$ given in the last part.
+
+I'll begin by defining the general notation
+
+$$\langle a, b \rangle_W := a^T W b.$$
+
+This is similar to a standard inner product when both $a$ and $b$ are column
+vectors, but the notation still works when $a$ or $b$ are matrices of
+appropriate dimensions.
+
+Let's find some gradient formulas for $\nabla_\th \langle a, b\rangle_W$ in the
+case that $a, b$ depend on $\th$ but $W$ doesn't. It will be useful to keep in
+mind that
+
+$$\langle a, b \rangle_W = a_i w_{ij} b_j.$$
+
+Then
+
+$$\pd{\th_k}(a_i w_{ij} b_j) = a'_i w_{ij} b_j + a_i w_{ij} b'_j,$$
+
+where $x'$ denotes $\pdd{x}{\th_k}.$
+
+Define the matrix $A'$ so that it has $k\up{th}$ column $\pd{\th_k} a,$
+and similarly for $B'$ from $b.$ Then
+
+$$\pd{\th_k}\langle a, b\rangle_W
+  = \langle \pdd{a}{\th_k}, b \rangle_W
+  + \langle a, \pdd{b}{\th_k} \rangle_W,$$
+
+which we can summarize as
+
+$$\nabla_\th \langle a, b\rangle_W = \langle A',b \rangle_W
+                                   + \langle a,B' \rangle_W^T.$$
+
+In the special case that $W$ is symmetric, we also have
+
+$$\begin{aligned}
+\nabla_\th \langle z, z \rangle_W
+  & = \langle Z', z\rangle_W + \langle z, Z' \rangle_W^T \\
+  & = \langle Z', z\rangle_W + (z^T W Z')^T \\
+  & = \langle Z', z\rangle_W + Z'^T W z \\
+  & = 2 \langle Z', z\rangle_W, \\
+\end{aligned}$$
+
+which can be summarized as
+
+$$\nabla_\th \langle z, z \rangle_W = 2\langle Z', z\rangle_W.$$
+
+To get back to the actual problem, notice that, by letting
+$z = X\th - y,$ we can write $J = \langle z, z \rangle_W.$
+
+Then
+
+$$\begin{aligned}
+\nabla J & = 2\langle Z', z\rangle_W \\
+& = 2 Z'^T W z \\
+& = 2 X^T W z \\
+& = 2 X^T W (X \th - y) = 0 \\
+\Rightarrow \; X^T W X \th & = X^T W y \\
+\Rightarrow \; \th & = (X^T W X)^{-1} X^T W y
+ = (\langle X, X\rangle_W)^{-1} \langle X, y \rangle_W, \\
+\end{aligned}$$
+
+which is the closed-form expression the problem asked for.
