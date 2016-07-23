@@ -592,3 +592,50 @@ $$\begin{aligned}
 \end{aligned}$$
 
 which is the closed-form expression the problem asked for.
+
+iii.
+
+In this problem, we suppose that
+
+$$(y\toi \mid x\toi) \sim \mathcal N(\th^T x\toi, \sigma\toi).$$
+
+Our goal is to show that maximizing the log likelihood in this scenario is
+the same as an application of weighted linear regression as seen in the
+previous two parts.
+
+Begin by writing that
+
+$$\begin{aligned}
+\ell(\th) & = \sum_i \log\left(c_i \exp\left(
+    -\frac{(y\toi - \th^T x\toi)^2}{2(\sigma\toi)^2}\right)\right) \\
+  & = \sum_i \log(c_i) - \frac{(y\toi - \th^T x\toi)^2}{2(\sigma\toi)^2},
+\end{aligned}$$
+
+where $c_i$ is a value independent of $\th,$ so that we may safely ignore it
+when taking $\nabla_\th.$
+
+From this point on I won't write the $i$ index on variables. I hope it's clear
+from context. Then
+
+$$\nabla_\th \ell = \sum_i \frac{2(y - \th^T x)x}{2\sigma^2},$$
+
+so that $\nabla\ell = 0$ when
+
+$$\sum_i \frac{1}{\sigma^2}(y - \th^T x)x = 0.$$
+
+Let the $k\up{th}$ diagonal element of $W$ be $1/(\sigma^{(k)})^2,$
+and define matrix $X$ so that its $i\up{th}$ row is $x\toi.$
+Also let $\vec y$ denote the column vector with $i\up{th}$ coordinate
+$y\toi.$
+Then
+
+$$\sum_i \frac{1}{\sigma^2}(y - \th^T x)x = X^T W (\vec y - X\th).$$
+
+This can be confirmed by seeing that the column vector
+$m = W(\vec y - X\th)$ has $i\up{th}$ coordinate
+$\frac{1}{(\sigma\toi)^2}(y\toi - \th^T x\toi),$ and seeing the product
+$X^T m$ as $\sum_i x\toi m_i.$
+
+But this last expression matches what we found in part *ii* of this problem,
+showing that solving this maximum likelihood estimate is effectively the same as
+solving a weighted linear regression problem.

@@ -344,6 +344,27 @@ AA^T\nabla f = A\nabla f,\]</span></p>
  = (\langle X, X\rangle_W)^{-1} \langle X, y \rangle_W, \\
 \end{aligned}\]</span></p>
 <p>which is the closed-form expression the problem asked for.</p>
+<ol start="3" style="list-style-type: lower-roman">
+<li></li>
+</ol>
+<p>In this problem, we suppose that</p>
+<p><span class="math display">\[(y{^{(i)}}\mid x{^{(i)}}) \sim \mathcal N({\theta}^T x{^{(i)}}, \sigma{^{(i)}}).\]</span></p>
+<p>Our goal is to show that maximizing the log likelihood in this scenario is the same as an application of weighted linear regression as seen in the previous two parts.</p>
+<p>Begin by writing that</p>
+<p><span class="math display">\[\begin{aligned}
+\ell({\theta}) &amp; = \sum_i \log\left(c_i \exp\left(
+    -\frac{(y{^{(i)}}- {\theta}^T x{^{(i)}})^2}{2(\sigma{^{(i)}})^2}\right)\right) \\
+  &amp; = \sum_i \log(c_i) - \frac{(y{^{(i)}}- {\theta}^T x{^{(i)}})^2}{2(\sigma{^{(i)}})^2},
+\end{aligned}\]</span></p>
+<p>where <span class="math inline">\(c_i\)</span> is a value independent of <span class="math inline">\({\theta},\)</span> so that we may safely ignore it when taking <span class="math inline">\(\nabla_{\theta}.\)</span></p>
+<p>From this point on I won’t write the <span class="math inline">\(i\)</span> index on variables. I hope it’s clear from context. Then</p>
+<p><span class="math display">\[\nabla_{\theta}\ell = \sum_i \frac{2(y - {\theta}^T x)x}{2\sigma^2},\]</span></p>
+<p>so that <span class="math inline">\(\nabla\ell = 0\)</span> when</p>
+<p><span class="math display">\[\sum_i \frac{1}{\sigma^2}(y - {\theta}^T x)x = 0.\]</span></p>
+<p>Let the <span class="math inline">\(k{^\text{th}}\)</span> diagonal element of <span class="math inline">\(W\)</span> be <span class="math inline">\(1/(\sigma^{(k)})^2,\)</span> and define matrix <span class="math inline">\(X\)</span> so that its <span class="math inline">\(i{^\text{th}}\)</span> row is <span class="math inline">\(x{^{(i)}}.\)</span> Also let <span class="math inline">\(\vec y\)</span> denote the column vector with <span class="math inline">\(i{^\text{th}}\)</span> coordinate <span class="math inline">\(y{^{(i)}}.\)</span> Then</p>
+<p><span class="math display">\[\sum_i \frac{1}{\sigma^2}(y - {\theta}^T x)x = X^T W (\vec y - X{\theta}).\]</span></p>
+<p>This can be confirmed by seeing that the column vector <span class="math inline">\(m = W(\vec y - X{\theta})\)</span> has <span class="math inline">\(i{^\text{th}}\)</span> coordinate <span class="math inline">\(\frac{1}{(\sigma{^{(i)}})^2}(y{^{(i)}}- {\theta}^T x{^{(i)}}),\)</span> and seeing the product <span class="math inline">\(X^T m\)</span> as <span class="math inline">\(\sum_i x{^{(i)}}m_i.\)</span></p>
+<p>But this last expression matches what we found in part <em>ii</em> of this problem, showing that solving this maximum likelihood estimate is effectively the same as solving a weighted linear regression problem.</p>
     </div>
   </body>
 </html>
