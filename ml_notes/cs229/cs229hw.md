@@ -639,3 +639,56 @@ $X^T m$ as $\sum_i x\toi m_i.$
 But this last expression matches what we found in part *ii* of this problem,
 showing that solving this maximum likelihood estimate is effectively the same as
 solving a weighted linear regression problem.
+
+### Part (b)
+
+i
+
+I interpret this problem as applying linear regression to the first row
+of the given data file as a function of the wavelengths.
+This is the Python code I used:
+
+~~~
+#!/usr/bin/env python
+"""Problem 1_5b_i.py
+
+Graph the first row of data and a linear regression for
+this data.
+"""
+
+import matplotlib.pyplot as plt
+import numpy as np
+import numpy.linalg as la
+
+
+# Load the data.
+all_data = np.loadtxt('quasar_train.csv', delimiter=',')
+lambdas  = all_data[0, :]
+data     = all_data[1:, :]
+row1     = data[0, :]
+
+# Run least squares.
+A    = np.vstack((lambdas, np.ones(len(lambdas)))).T
+m, c = la.lstsq(A, row1)[0]
+
+# Plot the data and line.
+plt.plot(lambdas, row1, 'o', label='spectra data',
+    markersize=2)
+plt.plot(lambdas, m * lambdas + c, 'r', label='fitted line')
+plt.title('Problem 1.5(b)i')
+plt.legend()
+plt.show()
+~~~
+
+The code generated this image:
+
+![The first row of quasar spectra data plotted against wavelengths along with
+the line of best fit.](images/pr1_5bi.png)
+
+The line found had a slope of -0.000981122145459 with an intercept value of
+2.5133990556. In other words, the spectra value $v$ is approximated via the
+equation
+
+$$v = 2.5134 - 9.8112\mathrm{e}{-4} \, \lambda,$$
+
+where $\lambda$ is the wavelength.

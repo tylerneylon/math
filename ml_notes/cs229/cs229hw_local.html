@@ -365,6 +365,46 @@ AA^T\nabla f = A\nabla f,\]</span></p>
 <p><span class="math display">\[\sum_i \frac{1}{\sigma^2}(y - {\theta}^T x)x = X^T W (\vec y - X{\theta}).\]</span></p>
 <p>This can be confirmed by seeing that the column vector <span class="math inline">\(m = W(\vec y - X{\theta})\)</span> has <span class="math inline">\(i{^\text{th}}\)</span> coordinate <span class="math inline">\(\frac{1}{(\sigma{^{(i)}})^2}(y{^{(i)}}- {\theta}^T x{^{(i)}}),\)</span> and seeing the product <span class="math inline">\(X^T m\)</span> as <span class="math inline">\(\sum_i x{^{(i)}}m_i.\)</span></p>
 <p>But this last expression matches what we found in part <em>ii</em> of this problem, showing that solving this maximum likelihood estimate is effectively the same as solving a weighted linear regression problem.</p>
+<h3 id="part-b-3"><span class="header-section-number">1.5.2</span> Part (b)</h3>
+<p>i</p>
+<p>I interpret this problem as applying linear regression to the first row of the given data file as a function of the wavelengths. This is the Python code I used:</p>
+<pre><code>#!/usr/bin/env python
+&quot;&quot;&quot;Problem 1_5b_i.py
+
+Graph the first row of data and a linear regression for
+this data.
+&quot;&quot;&quot;
+
+import matplotlib.pyplot as plt
+import numpy as np
+import numpy.linalg as la
+
+
+# Load the data.
+all_data = np.loadtxt(&#39;quasar_train.csv&#39;, delimiter=&#39;,&#39;)
+lambdas  = all_data[0, :]
+data     = all_data[1:, :]
+row1     = data[0, :]
+
+# Run least squares.
+A    = np.vstack((lambdas, np.ones(len(lambdas)))).T
+m, c = la.lstsq(A, row1)[0]
+
+# Plot the data and line.
+plt.plot(lambdas, row1, &#39;o&#39;, label=&#39;spectra data&#39;,
+    markersize=2)
+plt.plot(lambdas, m * lambdas + c, &#39;r&#39;, label=&#39;fitted line&#39;)
+plt.title(&#39;Problem 1.5(b)i&#39;)
+plt.legend()
+plt.show()</code></pre>
+<p>The code generated this image:</p>
+<div class="figure">
+<p class="caption">The first row of quasar spectra data plotted against wavelengths along with the line of best fit.</p>
+<img src="images/pr1_5bi.png" alt="The first row of quasar spectra data plotted against wavelengths along with the line of best fit." />
+</div>
+<p>The line found had a slope of -0.000981122145459 with an intercept value of 2.5133990556. In other words, the spectra value <span class="math inline">\(v\)</span> is approximated via the equation</p>
+<p><span class="math display">\[v = 2.5134 - 9.8112\mathrm{e}{-4} \, \lambda,\]</span></p>
+<p>where <span class="math inline">\(\lambda\)</span> is the wavelength.</p>
     </div>
   </body>
 </html>
