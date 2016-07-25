@@ -405,6 +405,61 @@ plt.show()</code></pre>
 <p>The line found had a slope of -0.000981122145459 with an intercept value of 2.5133990556. In other words, the spectra value <span class="math inline">\(v\)</span> is approximated via the equation</p>
 <p><span class="math display">\[v = 2.5134 - 9.8112\mathrm{e}{-4} \, \lambda,\]</span></p>
 <p>where <span class="math inline">\(\lambda\)</span> is the wavelength.</p>
+<p>ii</p>
+<p>Here is the code:</p>
+<pre><code>#!/usr/bin/env python
+&quot;&quot;&quot;Problem 1_5b_ii.py
+
+Graph the first row of data along with a locally weighted
+linear regression.
+&quot;&quot;&quot;
+
+import matplotlib.pyplot as plt
+import numpy as np
+import numpy.linalg as la
+
+
+# A function to solve locally weighted linear regression for
+# given matrices X and W.
+def lwlr_theta(X, W, y):
+  A = X.T.dot(W)
+  B = A.dot(X)
+  return la.inv(B).dot(A).dot(y)
+
+def lwlr_at_pt(all_x, y, query_x):
+  X     = np.vstack((np.ones(len(all_x)), all_x)).T
+  x     = query_x
+  tau   = 5
+  denom = 2.0 * tau ** 2
+  w     = np.exp([-(x - xi) ** 2/denom for xi in all_x])
+  W     = np.diag(w)
+  theta = lwlr_theta(X, W, y)
+  return theta[0] + theta[1] * query_x
+
+def main():
+  # Load the data.
+  all_data = np.loadtxt(&#39;quasar_train.csv&#39;, delimiter=&#39;,&#39;)
+  lambdas  = all_data[0, :]
+  data     = all_data[1:, :]
+  row1     = data[0, :]
+
+  # Compute the LWLR curve at each lambda.
+  curve = [lwlr_at_pt(lambdas, row1, x) for x in lambdas]
+
+  # Plot the data and line.
+  plt.plot(lambdas, row1, &#39;o&#39;, label=&#39;spectra data&#39;,
+      markersize=2)
+  plt.plot(lambdas, curve, &#39;r&#39;, label=&#39;LWLR curve&#39;)
+  plt.title(&#39;Problem 1.5(b)ii&#39;)
+  plt.legend()
+  plt.show()
+
+if __name__ == &#39;__main__&#39;: main()</code></pre>
+<p>Here is the graph generated:</p>
+<div class="figure">
+<p class="caption">The first row of quasar spectra data plotted against wavelengths along with the curve resulting from a locally weighted linear regression with <span class="math inline">\(\tau = 5.\)</span></p>
+<img src="images/pr1_5bii.png" alt="The first row of quasar spectra data plotted against wavelengths along with the curve resulting from a locally weighted linear regression with \tau = 5." />
+</div>
     </div>
   </body>
 </html>
