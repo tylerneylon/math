@@ -320,6 +320,20 @@ z-y &amp; = z - a + b = v + b. \\
 <h3 id="sequential-minimal-optimization-smo"><span class="header-section-number">3.1.4</span> Sequential minimal optimization (SMO)</h3>
 <p>SMO can be used to solve the dual optimization problem for support vector machines. I wonder: Can an SMO approach be used to solve a general linear or quadratic programming problem?</p>
 <p>The original SMO paper by John Platt specifically applied the algorithm to support vector machines. Based on a quick search, I don’t see any applications of SMO to other fields or problems. I could be missing something, but my answer so far is that SMO either hasn’t been tried or simply doesn’t offer new value as a more general approach.</p>
+<p>TODO any remaining notes from lecture notes 3</p>
+<h1 id="on-lecture-notes-4"><span class="header-section-number">4</span> On lecture notes 4</h1>
+<p>The notes in this section are based on <a href="http://cs229.stanford.edu/notes/cs229-notes4.pdf">lecture notes 4</a>.</p>
+<h2 id="the-question-of-k-in-the-case-of-finite-mathcal-h"><span class="header-section-number">4.1</span> The question of <span class="math inline">\(k\)</span> in the case of finite <span class="math inline">\(\mathcal H\)</span></h2>
+<p>In the case of finite <span class="math inline">\(\mathcal H,\)</span> I was confused for a moment about the need to include <span class="math inline">\(k\)</span> in the following line of thinking:</p>
+<p><span class="math display">\[\begin{aligned}
+{\epsilon}(\hat h) &amp; \le \hat{\epsilon}(\hat h) + \gamma \\
+              &amp; \le \hat{\epsilon}(h^*) + \gamma \\
+              &amp; \le {\epsilon}(h^*) + 2 \gamma. \\
+\end{aligned}\]</span></p>
+<p>This argument is given in the context of</p>
+<p><span class="math display">\[\gamma = \sqrt{\frac{1}{2m}\log\frac{2k}{\delta}},\]</span></p>
+<p>where is where the value <span class="math inline">\(k = |\mathcal H|\)</span> comes in.</p>
+<p>My confusion arose because the line of inequalities only involve two particular hypotheses, <span class="math inline">\(\hat h\)</span> and <span class="math inline">\(h^*,\)</span> so that it seems unnecessary to build the value of <span class="math inline">\(\gamma\)</span> on top of a limit for <em>all</em> possibly hypotheses in <span class="math inline">\(\mathcal H.\)</span> However, I realized that the exact value of <span class="math inline">\(\hat h\)</span> is in fact dependent on the entire set <span class="math inline">\(\mathcal H,\)</span> and so the same argument given with <span class="math inline">\(k\)</span> replaced by 2 would no longer be sound.</p>
 <div id="refs" class="references">
 
 </div>
