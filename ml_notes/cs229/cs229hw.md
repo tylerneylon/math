@@ -753,3 +753,18 @@ Here is the graph generated:
 ![The first row of quasar spectra data plotted against wavelengths along with
 the curve resulting from a locally weighted linear regression with
 $\tau = 5.$](images/pr1_5bii.png)
+
+iii
+
+In this problem, we repeat part ii, except with 
+the $\tau$ values 1, 10, 100, and 1000.
+
+The code is similar to the above. Here is the graph generated:
+
+![The first row of quasar spectra data plotted against wavelengths along with
+the curves resulting from locally weighted linear regressions with
+$\tau = 1, 10, 100,$ and 1000.](images/pr1_5biii.png)
+
+As $\tau$ increases, the resulting LWLR curve becomes smoother.
+Smaller $\tau$ values allow for more variation at a local level, thus
+fitting the data more closely, but also enabling wild variations due to noise.
