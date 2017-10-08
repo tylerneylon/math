@@ -3,7 +3,16 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Self-Replicating Functions</title>
-    <script src='/Users/tylerneylon/Dropbox/Documents/code/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <!--
+	<script type="text/x-mathjax-config">
+	  MathJax.Hub.Config({
+		CommonHTML: { linebreaks: { automatic: true } },
+		"HTML-CSS": { linebreaks: { automatic: true } },
+			   SVG: { linebreaks: { automatic: true } }
+	  });
+	</script>
+	-->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
     <link rel="stylesheet" href="tufte-edited.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -75,7 +84,7 @@
       <li>What happens if we treat the sum <span class="math inline">\(f = g_1 + g_2\)</span> as part of a sequence? Thinking of <em>L</em> and <em>R</em> for <em>left</em> and <em>right</em>, let <span class="math inline">\(f^{(0)}_L = J_{0, 1, 2, 3}\)</span>, and <span class="math inline">\(f^{(i)}_R = f^{(i)}_L(x-2)\)</span> for <span class="math inline">\(i \ge 0\)</span>. Thinking of <em>S</em> for <em>sum</em>, define <span class="math inline">\(f^{(i+1)}_S = f^{(i)}_L + f^{(i)}_R\)</span> for <span class="math inline">\(i \ge 1\)</span>. If <span class="math inline">\(f^{(i)}_L\)</span> is positive on <span class="math inline">\((0, b)\)</span>, then <span class="math inline">\(f^{(i)}_R\)</span> is positive on <span class="math inline">\((2, b + 2)\)</span>, so <span class="math inline">\(f^{(i+1)}_S\)</span> is positive on <span class="math inline">\((0, b + 2)\)</span>. Set <span class="math inline">\(f^{(i+1)}_L = f^{(i+1)}_S(x (b + 2) / b)\)</span> so that we maintain the region on which the left function is positive. In this way, we get a sequence of functions. What is the limiting behavior? Can we attempt to extend the sequence backwards? Can we say anything in general about the limiting behavior of a class of starting functions <span class="math inline">\(f^{(0)}_L\)</span>?</li>
       <li>For the current ramp functions, the middle section is flat with value 1, while the edges sum to 1. Can we do something more interesting where the edges sum to a non-constant value? I can imagine this leading to a discontinuous function. Is there a way to do this where the functions are continuous, or at least continuous almost everywhere? Can we describe a general class of self-replicating functions which are not continuous, such as the indicator function of the Cantor dust?</li>
       </ol>
-      <p>TODO Mention how I’m following up with further study idea 1.</p>
+      <p>Some of these questions will be answered below.</p>
       <h2 id="sec:nonlinear_ramps"><span class="header-section-number">2.3</span> Nonlinear ramps</h2>
       <p>Other curves that sum to 1 could easily take the place of the left and right edges of the ramp function. For example, the left and right ramps could be replaced by curves with the shapes of <span class="math inline">\(x^2\)</span> and <span class="math inline">\(1-x^2\)</span> on <span class="math inline">\(x\in [0, 1]\)</span>, as illustrated in figure 6.</p>
       <div class="figure">
@@ -101,17 +110,17 @@
       <h3 id="a-formal-definition-for-self-replicating-functions"><span class="header-section-number">2.4.1</span> A formal definition for self-replicating functions</h3>
       <p>I think the term <em>self-replicating function</em> is best left as an intuitive, non-rigorous concept because there seem to be a wide variety of instances that are best studied via their own particular flavors of a formal definition. A number of other terms used to discuss mathematics are similarly unformalized or context-specific: consider <em>fractal</em>, <em>symmetry</em>, or <em>closure</em> as examples. Nonetheless, many self-replicating functions meet the conditions of the definition I’ll present next.</p>
       <p>Call a function <span class="math inline">\(f\)</span> <em>exactly self-replicating</em> iff there exist continuous bijections <span class="math inline">\(s\)</span>, <span class="math inline">\(t_1\)</span>, and <span class="math inline">\(t_2\)</span> such that <span class="math inline">\(s\)</span> is not the identity function and</p>
-      <p><span class="math display">\[{\left.\mbox{$\begin{array}{rcl}
+      <p><span id="eq:exact_defn"><span class="math display">\[{\left.\mbox{$\begin{array}{rcl}
         f_L(x) &amp; = &amp; f(x), \\
         f_R(x) &amp; = &amp; f(s(x)), \\
         f_S(x) &amp; = &amp; f_L(x) + f_R(x), \text{and} \\
         f_L(x) &amp; = &amp; t_2(f_S(t_1(x))).
-      \end{array}$}\quad\quad\right\rbrace}\qquad(1)\]</span></p>
+      \end{array}$}\quad\quad\right\rbrace}\qquad(1)\]</span></span></p>
       <p>The <em>L</em>, <em>R</em>, and <em>S</em> subscripts are meant to hint that these functions act as the <em>left</em> addend, <em>right</em> addend, and the <em>sum</em>; the <span class="math inline">\(s\)</span> function suggests a <em>shift</em>, while the <span class="math inline">\(t_1\)</span> and <span class="math inline">\(t_2\)</span> functions suggest a <em>transformation</em>. The last equation in (1) captures the similarity relationship between the addend <span class="math inline">\(f = f_L\)</span> and the sum <span class="math inline">\(f_S = f_L + f_R\)</span>.</p>
       <p><strong>Example</strong> The ramp functions given in §2.2 and §2.3, viewed as <span class="math inline">\(K-\)</span>functions, all adhere to the general form</p>
       <p><span class="math display">\[K_{0,1,2,3} + K_{2,3,4,5} = K_{0,1,4,5}.\]</span></p>
       <p>In this case, <span class="math inline">\(f(x) = f_L(x) = K_{0,1,2,3}\)</span> and <span class="math inline">\(f_R(x) = K_{2,3,4,5} = f(x-2)\)</span>. We can satisfy all of the equations of (1) by using these functions:</p>
-      <p><span class="math display">\[{\left.\mbox{$\begin{array}{rcl}
+      <p><span id="eq:s_t1_t2"><span class="math display">\[{\left.\mbox{$\begin{array}{rcl}
       t_1(x) &amp; = &amp;
       \begin{cases}
         x              &amp;   \text{if } x \le 1,       \\
@@ -120,7 +129,7 @@
       \end{cases}\\
       t_2(x) &amp; = &amp; x; \text{ and} \\
       s(x)   &amp; = &amp; x - 2. \\
-      \end{array}$}\quad\quad\right\rbrace}\qquad(2)\]</span></p>
+      \end{array}$}\quad\quad\right\rbrace}\qquad(2)\]</span></span></p>
       <p>This is a simple yet foundational case — it may be interesting to see which other functions are exactly self-replicating with these parameters.</p>
       <h3 id="characterizing-one-type-of-exactly-self-replicating-function"><span class="header-section-number">2.4.2</span> Characterizing one type of exactly self-replicating function</h3>
       <p>In this section I’ll give sufficient and necessary conditions for a function to be exactly self-replicating with the <span class="math inline">\(s\)</span>, <span class="math inline">\(t_1\)</span>, and <span class="math inline">\(t_2\)</span> functions given in (2), and with <span class="math inline">\(f(x)=0\)</span> outside of the interval <span class="math inline">\([0, 3]\)</span>. This can be considered the most general version of the category of functions we’ve explored so far.</p>
@@ -129,11 +138,11 @@
       \big(f {\,\big|\,}[a,b]\big)(x) = f(a + (b-a)x).
       \]</span></p>
       <p>Let <span class="math inline">\(f:{\mathbb{R}}\to{\mathbb{R}}\)</span> be any function such that <span class="math inline">\(f(x)=0\)</span> outside of <span class="math inline">\([0, 3]\)</span>. Define the functions <span class="math inline">\(r_L,\)</span> <span class="math inline">\(r_R,\)</span> and <span class="math inline">\(g\)</span> via:</p>
-      <p><span class="math display">\[{\left.\mbox{$\begin{array}{rlc}
+      <p><span id="eq:rL_rR_g"><span class="math display">\[{\left.\mbox{$\begin{array}{rlc}
       r_L &amp; = &amp; f{\,\big|\,}[0, 1], \\
       r_R &amp; = &amp; f{\,\big|\,}[2, 3], \\
       g   &amp; = &amp; r_L + r_R.
-      \end{array}$}\quad\quad\right\rbrace}\qquad(3)\]</span></p>
+      \end{array}$}\quad\quad\right\rbrace}\qquad(3)\]</span></span></p>
       <p>Conceptually, <span class="math inline">\(r_L\)</span> and <span class="math inline">\(r_R\)</span> are the left and right ramp functions.</p>
       <div class="figure">
       <p class="caption">Figure 8: An example showing how <span class="math inline">\(r_L\)</span>, <span class="math inline">\(r_R\)</span>, and <span class="math inline">\(g\)</span> are extracted from a function <span class="math inline">\(f\)</span>, shown on top.</p>
@@ -150,7 +159,7 @@
       {\lower1.8pt\hbox{$\smash{\scriptstyle 0}$}}
       {\lower1pt\hbox{$\smash{\scriptstyle 2}$}}$}\!\big\}}1{\overline{*}_3}\)</span> denotes the union of intervals <span class="math inline">\([0.101_3, 0.102_3]\)</span> and <span class="math inline">\([0.121_3, 0.122_3]\)</span>.</p>
       <p>Now, instead of writing <span class="math inline">\((\,f {\,\big|\,}[1\tfrac{1}{3}, 1\tfrac{2}{3}]) = g\)</span>, I can write</p>
-      <p><span class="math display">\[\big(\,f {\,\big|\,}1.1{\overline{*}_3}\big) = g.\qquad(4)\]</span></p>
+      <p><span id="eq:nonpl_base_case"><span class="math display">\[\big(\,f {\,\big|\,}1.1{\overline{*}_3}\big) = g.\qquad(4)\]</span></span></p>
       <p>It’s possible to generalize this last equation so that it defines <span class="math inline">\(f\)</span> almost everywhere on the interval <span class="math inline">\([1, 2]\)</span>.</p>
       <p>Recall that the notation <span class="math inline">\(1.{\big\{\!\raise1.5pt\hbox{$\genfrac{}{}{0pt}{}
       {\lower1.8pt\hbox{$\smash{\scriptstyle 0}$}}
@@ -179,10 +188,10 @@
       <span class="math inline">\(\Box\)</span>
       </p>
       <p>Define the sets <span class="math inline">\(G_k\)</span> and <span class="math inline">\(G\)</span> via</p>
-      <p><span class="math display">\[G_k = 1.{\big\{\!\raise1.5pt\hbox{$\genfrac{}{}{0pt}{}
+      <p><span id="eq:Gk_G"><span class="math display">\[G_k = 1.{\big\{\!\raise1.5pt\hbox{$\genfrac{}{}{0pt}{}
       {\lower1.8pt\hbox{$\smash{\scriptstyle 0}$}}
       {\lower1pt\hbox{$\smash{\scriptstyle 2}$}}$}\!\big\}}^k1{\overline{*}_3}\quad\text{and}\quad
-        G = \cup_{k \ge 0}G_k.\qquad(5)\]</span></p>
+        G = \cup_{k \ge 0}G_k.\qquad(5)\]</span></span></p>
       <p>Figure 9 illustrates <span class="math inline">\(G_k\)</span> for low values of <span class="math inline">\(k\)</span>.</p>
       <div class="figure">
       <p class="caption">Figure 9: The inductive process in the proof of theorem 1. The top line is the domain <span class="math inline">\([0,5]\)</span> of <span class="math inline">\(\,f_S\)</span>; the line below that is the domain <span class="math inline">\([0,3]\)</span> of <span class="math inline">\(\,f;\)</span> then the subsets of <span class="math inline">\([1,2]\)</span> on which <span class="math inline">\(f\)</span> is described as the induction proceeds.</p>
@@ -200,19 +209,19 @@
       <p>Readers familiar with the <a href="https://en.wikipedia.org/wiki/Cantor_set"><em>Cantor set</em></a> <span class="math inline">\({\mathcal{C}}\)</span> may notice that it’s closely related to the set <span class="math inline">\(G\)</span>. In fact, <span class="math inline">\({\mathcal{C}}\)</span> is exactly the closure of <span class="math inline">\((1,2)-G\)</span> shifted by a unit to reside within <span class="math inline">\([0,1].\)</span></p>
       <p>What values may <span class="math inline">\(f\)</span> take on for the points <span class="math inline">\(x\in (1,2) - G\)</span>? The choice is still not arbitrary as the values remain related. I’ll explore this question next.</p>
       <p>Given <span class="math inline">\(x\in (1,2)\)</span>, there is some <span class="math inline">\(k\)</span> with <span class="math inline">\(x\in G_k\)</span> iff the base-3 expansion of <span class="math inline">\(x\)</span> contains a 1 or if it ends with the tail <span class="math inline">\(\overline{0}\)</span>. This can be expressed as:</p>
-      <p><span class="math display">\[\text{For } x\in (1,2), \quad
+      <p><span id="eq:onetwo_lessG"><span class="math display">\[\text{For } x\in (1,2), \quad
         x\not\in G \;\;\Leftrightarrow\;\; x \in 1.{\big\{\!\raise1.5pt\hbox{$\genfrac{}{}{0pt}{}
       {\lower1.8pt\hbox{$\smash{\scriptstyle 0}$}}
       {\lower1pt\hbox{$\smash{\scriptstyle 2}$}}$}\!\big\}}^\infty_3 -\,
         \bigcup_{k\ge 0} 1.{\big\{\!\raise1.5pt\hbox{$\genfrac{}{}{0pt}{}
       {\lower1.8pt\hbox{$\smash{\scriptstyle 0}$}}
-      {\lower1pt\hbox{$\smash{\scriptstyle 2}$}}$}\!\big\}}^k\overline{0}_3.\qquad(6)\]</span></p>
+      {\lower1pt\hbox{$\smash{\scriptstyle 2}$}}$}\!\big\}}^k\overline{0}_3.\qquad(6)\]</span></span></p>
       <p>From here on, I’ll more formally use the word <em>expansion</em> — based on the idea of the base-3 expansion of a number in <span class="math inline">\([0,1]\)</span> — to indicate a function <span class="math inline">\(E:\mathbb{N}_{\ge 1}\to \{0, 1, 2\}\)</span> which denotes the value <span class="math inline">\(v(E) = \sum_{k\ge 1}E(k)/3^k.\)</span> If <span class="math inline">\(x=v(E)\)</span>, we may write <span class="math inline">\(x = 0.E_3\)</span> and think of <span class="math inline">\(E\)</span> as an infinite string on the alphabet <span class="math inline">\(\{0,1,2\}\)</span>.</p>
       <p>Suppose that <span class="math inline">\(f(x) = y\)</span> for some <span class="math inline">\(x\in (1,2)\)</span>. Let <span class="math inline">\(E\)</span> be the expansion with <span class="math inline">\(x=1.E_3\)</span>; note that <span class="math inline">\(E\)</span> cannot be the all-zero string <span class="math inline">\(\overline 0\)</span> nor the all-two string <span class="math inline">\(\overline 2\)</span> since <span class="math inline">\(x\in (1,2)\)</span>. Then <span class="math inline">\(f_S(x+\{0,2\}) = y\)</span> and, by applying <span class="math inline">\(t_1\)</span>, <span class="math inline">\(f(x&#39;) = y\)</span> for both <span class="math inline">\(x&#39; = (x+2)/3\)</span> and <span class="math inline">\(x&#39; = (x+4)/3\)</span>. In expansion notation, we can write these last two equations as <span class="math inline">\(x&#39; = x/3 + 2/3 = 0.1E_3 + 0.2_3 = 1.0E_3\)</span> and as <span class="math inline">\(x&#39; = x/3 + 4/3 = 0.1E_3 + 1.1_3 = 1.2E_3\)</span>. We can summarize this reasoning as</p>
-      <p><span class="math display">\[E\ne \overline 0, \overline 2 \quad\Rightarrow\quad
+      <p><span id="eq:h_reln"><span class="math display">\[E\ne \overline 0, \overline 2 \quad\Rightarrow\quad
       f(1.{\big\{\!\raise1.5pt\hbox{$\genfrac{}{}{0pt}{}
       {\lower1.8pt\hbox{$\smash{\scriptstyle 0}$}}
-      {\lower1pt\hbox{$\smash{\scriptstyle 2}$}}$}\!\big\}}E_3) = f(1.E_3).\qquad(7)\]</span></p>
+      {\lower1pt\hbox{$\smash{\scriptstyle 2}$}}$}\!\big\}}E_3) = f(1.E_3).\qquad(7)\]</span></span></p>
       <p>We can expand on this idea to partition <span class="math inline">\((1,2) - G\)</span> into subsets on which <span class="math inline">\(f\)</span> must have the same value. To do that, it will be useful to define the <em>tail</em> of an expansion as a way to capture end-of-string behavior. More precisely, if <span class="math inline">\(E\)</span> is an expansion, then define <span class="math inline">\({\text{tail}}(E)\)</span> via</p>
       <p><span class="math display">\[{\text{tail}}(E) = \big\{\text{expansion }\eta \;\big|\;
       \exists\, j, k: E(j + m) = \eta(k + m) \,\forall\, m \ge 0\big\}.\]</span></p>
@@ -222,7 +231,7 @@
       <p><span class="math display">\[{\text{tail}}(x) = {\text{tail}}(y) \quad\Rightarrow\quad f(x) = f(y).\]</span></p>
       <p><strong>Proof</strong> <span class="math inline">\(\;\)</span> Note that, by (6), <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> can be expressed in expansion notation as <span class="math inline">\(x=1.E_3\)</span> and <span class="math inline">\(y=1.F_3\)</span> where both <span class="math inline">\(E\)</span> and <span class="math inline">\(F\)</span> exclude 1 from their range, and neither has an all-0 tail.</p>
       <p>Since <span class="math inline">\({\text{tail}}(x) = {\text{tail}}(y)\)</span>, then there exist integers <span class="math inline">\(j, k\)</span> such that</p>
-      <p><span class="math display">\[E(j+m)=F(k+m)\; \forall m\ge 0.\qquad(8)\]</span></p>
+      <p><span id="eq:thm2_pf"><span class="math display">\[E(j+m)=F(k+m)\; \forall m\ge 0.\qquad(8)\]</span></span></p>
       <p>Let <span class="math inline">\(p_E\)</span> be the length-<span class="math inline">\(j\)</span> prefix of <span class="math inline">\(E\)</span> and <span class="math inline">\(p_F\)</span> be the length-<span class="math inline">\(k\)</span> prefix of <span class="math inline">\(F\)</span>, and choose the expansions <span class="math inline">\(E&#39;\)</span> and <span class="math inline">\(F&#39;\)</span> so that</p>
       <p><span class="math display">\[x = 1.E_3 = 1.p_EE&#39;_3 \quad\text{ and }\quad y = 1.F_3 = 1.p_FF&#39;_3.\]</span></p>
       <p>By (8), <span class="math inline">\(E&#39;=F&#39;\)</span>. By repeated application of (7), <span class="math inline">\(f(1.p_EE&#39;_3) = f(1.E&#39;_3)\)</span> and <span class="math inline">\(f(1.p_FF&#39;_3) = f(1.F&#39;_3)\)</span>. The final result is that</p>
@@ -232,16 +241,16 @@
       </p>
       <p>It turns out that theorems 1 and 2 capture <em>all</em> of the restrictions needed for <span class="math inline">\(f\)</span> to be exactly self-replicating. This idea is formalized by the next theorem.</p>
       <p><strong>Theorem 3</strong> <span class="math inline">\(\;\)</span> <em>Suppose that <span class="math inline">\(f:{\mathbb{R}}\to{\mathbb{R}}\)</span> has the value 0 outside the domain <span class="math inline">\([0, 3].\)</span> Also suppose we’re working in the context of the functions <span class="math inline">\(s,\)</span> <span class="math inline">\(t_1,\)</span> and <span class="math inline">\(t_2\)</span> as defined in (2), and that the function <span class="math inline">\(g\)</span> is defined as in (3). Then <span class="math inline">\(f\)</span> is exactly self-replicating iff</em></p>
-      <p><span class="math display">\[{\left.\mbox{$\begin{array}{lcll}
+      <p><span id="eq:thm3"><span class="math display">\[{\left.\mbox{$\begin{array}{lcll}
       f(1.{\big\{\!\raise1.5pt\hbox{$\genfrac{}{}{0pt}{}
       {\lower1.8pt\hbox{$\smash{\scriptstyle 0}$}}
       {\lower1pt\hbox{$\smash{\scriptstyle 2}$}}$}\!\big\}}E_3) &amp; = &amp; f(1.E_3) &amp; \text{for } E\ne\overline 0,\overline 2;
         \quad\text{and} \\
       f(1.1E_3)         &amp; = &amp; g(0.E_3) &amp; \text{for any }E. \latexonlyrule{0pt}{14pt} \\
-      \end{array}$}\quad\quad\right\rbrace}\qquad(9)\]</span></p>
+      \end{array}$}\quad\quad\right\rbrace}\qquad(9)\]</span></span></p>
       <p><strong>Proof</strong> <span class="math inline">\(\;\)</span> The forward direction — that (9) is a consequence of <span class="math inline">\(f\)</span> being exactly self-replicating — has already been justified by (4) and (7). Note that these last two equations are each expanded upon in theorems 1 and 2.</p>
       <p>To verify the other direction, it will suffice to show that, if (9) is true, then so is:</p>
-      <p><span class="math display">\[f(x) = f_S(t_1(x));\qquad(10)\]</span></p>
+      <p><span id="eq:thm3_pf"><span class="math display">\[f(x) = f_S(t_1(x));\qquad(10)\]</span></span></p>
       <p>this equation is enough to ensure that the definition of an exactly self-replicating function, given by (1), is satisfied.</p>
       <p>Suppose <span class="math inline">\(x=1.CE_3 \in (1,2)\)</span>, where <span class="math inline">\(C \in \{0, 1, 2\}\)</span> and <span class="math inline">\(E\)</span> does not have an all-2 tail; let <span class="math inline">\(x&#39; = t_1(x)\)</span>. The argument can be split into three cases based on the value of <span class="math inline">\(C\)</span>.</p>
       <p><em>Case</em> <span class="math inline">\(C=0:\;\)</span> In this case, <span class="math inline">\(x&#39; = 1.E_3 \in (1, 2)\)</span> and <span class="math inline">\(f_S(x&#39;) = f(x&#39;) = f(1.E_3).\)</span> Apply (9) to see that <span class="math inline">\(f(1.E_3) = f(1.0E_3) = f(x)\)</span>, verifying (10).</p>
@@ -264,44 +273,10 @@
       <img src="images/nonplateau.png" alt="Figure 10: An exactly self-replicating function f completely determined by r_L(x) = \cos(2x)/2 + 1/4, r_R(x) = r_L(1 - x), and the value f(x) = r_L(0) + r_R(0) for all x not determined by r_L and r_R." id="fig:nonplateau" />
       </div>
       <p>Next I’ll examine a famous function which is <em>not</em> exactly self-replicating, but which can be seen as approximately self-replicating: the normal curve.</p>
-      <h1 id="the-normal-curve"><span class="header-section-number">3</span> The normal curve</h1>
-      <p>TODO better segue here. start with a high-level summary of what’s next, including the current image</p>
-      <p>The normal curve is described by <span class="math inline">\(y = e^{-x^2/2}\)</span>.</p>
-      <div class="figure">
-      <p class="caption">The normal curve: <span class="math inline">\(y=e^{-x^2/2}\)</span>.</p>
-      <img src="images/normal3.png" alt="The normal curve: y=e^{-x^2/2}." />
-      </div>
-      <p>One general way to look for self-replicating functions is to begin with a function considered as the sum <span class="math inline">\(f_S\)</span>, and then to use a nondecreasing function <span class="math inline">\(s\)</span> with range <span class="math inline">\([0,1]\)</span> to split <span class="math inline">\(f_S\)</span> into the pieces <span class="math inline">\(f_L = (1 - s)\cdot f_S\)</span> and <span class="math inline">\(f_R = s\cdot f_S\)</span>. There’s no immediate reason for all three of these functions to resemble each other, so the challenge is to choose function pairs <span class="math inline">\((s, f_S)\)</span> so that this decomposition is indeed self-replicating.</p>
-      <p>Let’s define a <em>sigmoid function</em> <span class="math inline">\(s:{\mathbb{R}}\to{\mathbb{R}}\)</span> as a nondecreasing function with range in <span class="math inline">\([0, 1]\)</span>, and such that <span class="math inline">\(s-1/2\)</span> is an odd function. If <span class="math inline">\(f_S\)</span> is an even function, then it seems natural to choose a sigmoid function to split <span class="math inline">\(f_S\)</span> into <span class="math inline">\(f_L\)</span> and <span class="math inline">\(f_R\)</span> as described in the last paragraph. Under these conditions, we have the symmetry given by <span class="math inline">\(f_L(x) = f_R(-x)\)</span>. This can be seen by observing that</p>
-      <p><span class="math display">\[1/2 - s(x) = s(-x) - 1/2 \quad\Rightarrow\quad
-      1 - s(x) = s(-x).\]</span></p>
-      <p>Then <span class="math inline">\(f_R(-x) = s(-x)\,f_S(-x) = (1-s(x))\,f_S(x) = f_L(x)\)</span>, confirming the claimed symmetry.</p>
-      <p>There are various sigmoid functions available. A simple one is given by <span class="math inline">\(x/(1+|x|)\)</span>. A more commonly-used one is the <em>logistic function</em> given by <span class="math inline">\(s(x) = 1/(1 + e^{-x})\)</span>, which is the one I’ll focus on in this section.</p>
-      <p>TODO Lead up to the main split of the normal curve I’m going after.</p>
-      <h1 id="leaf-point-distributions-of-l-systems"><span class="header-section-number">4</span> Leaf-point distributions of <em>L</em>-systems</h1>
-      <h1 id="fractal-functions"><span class="header-section-number">5</span> Fractal functions</h1>
-      <p>This section is for functions similar to the Cantor diagonal. It may turn out that I can’t find any functions that fit here, or that the <em>L</em>-systems distributions includes this case, or even that I can prove that no functions could exist here (as far as I know).</p>
-      <p>TODO Add a note somewhere that the initial setup requires that the sum itself is always the translation of an even function.</p>
-      <h1 id="temporary-example-content"><span class="header-section-number">6</span> Temporary example content</h1>
-      <p><strong>Lemma 1</strong>  <em>Content of lemma 1, including some <span class="math inline">\(\pi+3\)</span> mathy bits.</em></p>
-      <h2 id="subheader"><span class="header-section-number">6.1</span> Subheader</h2>
-      <p>Content</p>
-      <p>See my notes on Raney’s lemmas for more examples.</p>
-      <p>Here is a reference <span class="citation">(Knuth, Patashnik, and Graham 1997)</span>.</p>
-      <h1 id="questions"><span class="header-section-number">7</span> Questions</h1>
-      <ul>
-      <li>The ellipse around my first <em>L</em>-system appears to fit surprisingly well. Is there a nice way to discover when an ellipse and an <em>L</em>-system may fit like this? Is there, perhaps, a series of shapes which converge on the system or its leaf points, analogous to <a href="http://mathworld.wolfram.com/MandelbrotSetLemniscate.html">Mandelbrot set lemniscates</a>?</li>
-      <li>The histogram around my first <em>L</em>-system appears simple in shape. Can its shape be described precisely?</li>
-      <li>The sigmoid <span class="math inline">\(\sigma(x)=1/(1+e^{-x})\)</span> provides a near-self-replicating split of <span class="math inline">\(e^{-x^2}\)</span>. Is there a function <span class="math inline">\(f(x)\)</span> such that <span class="math inline">\(\sigma(x)\)</span> provides an <em>exact</em> self-replicating split? More than one? In general, given any sigmoid <span class="math inline">\(s(x)\)</span>, what is the set of functions which it splits exactly in this way? For this question, we can have some precise requirement for a sigmoid, such as being an appropriately scaled and translated odd function.</li>
-      <li>Are there variants of self-replicating functions that work for other sets of operations such as using more than two copies of the function in a sum, or by using multiplication or some other operation instead of addition?</li>
-      </ul>
       <h1 id="references" class="unnumbered">References</h1>
       <div id="refs" class="references">
       <div id="ref-taocp1">
       <p>Knuth, Donald E. 1998. <em>Fundamental Algorithms</em>. Third Ed. Vol. 1. The Art of Computer Programming. Addison-Wesley.</p>
-      </div>
-      <div id="ref-concrete">
-      <p>Knuth, Donald E., Oren Patashnik, and Ronald L. Graham. 1997. <em>Concrete Mathematics: A Foundation for Computer Science</em>. Addison-Wesley.</p>
       </div>
       </div>
     </div>

@@ -39,20 +39,45 @@
 html { font-size: 15px; }
 
 body { width: 87.5%;
-       margin-left: auto;
        margin-right: auto;
-       padding-left: 12.5%;
        font-family: et-book, Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
        background-color: #fff;
        color: #111;
        max-width: 1400px;
        counter-reset: sidenote-counter; }
 
+@media screen and (min-width: 761px) {
+  body {
+    padding-left: 12.5%;
+    margin-left: auto;
+  }
+}
+
+@media screen and (max-width: 760px) {
+  body {
+    padding-left: 7%;
+    margin-left: 0;
+  }
+}
+
 div.title { font-weight: 400;
-            margin-top: 4rem;
             margin-bottom: 1.5rem;
             font-size: 3.2rem;
             line-height: 1; }
+
+@media screen and (min-width: 761px) {
+  div.title {
+    font-size: 3.2rem;
+    margin-top: 4rem;
+  }
+}
+
+@media screen and (max-width: 760px) {
+  div.title {
+    font-size: 2.7rem;
+    margin-top: 2rem;
+  }
+}
 
 h1 { font-style: italic;
      font-weight: 400;
@@ -77,7 +102,7 @@ h3 { font-style: italic;
 
 p.subtitle, div.author { font-style: italic;
                          margin-top: 1rem;
-                         color: #bbb;
+                         color: #777;
                          margin-bottom: 1rem;
                          font-size: 1.7rem;
                          display: block;
@@ -85,7 +110,7 @@ p.subtitle, div.author { font-style: italic;
 
 div.date { font-style: italic;
            margin-top: 1rem;
-           color: #bbb;
+           color: #777;
            margin-bottom: 1rem;
            font-size: 1.5rem;
            display: block;
@@ -109,6 +134,14 @@ p { line-height: 2rem;
     padding-right: 0;
     vertical-align: baseline; }
 
+@media screen and (min-width: 761px) {
+  p, ol, ul { font-size: 1.4rem; }
+}
+
+@media screen and (max-width: 760px) {
+  p, ol, ul { font-size: 1.3rem; }
+}
+
 /* Chapter Epigraphs */
 div.epigraph { margin: 5em 0; }
 
@@ -131,9 +164,12 @@ blockquote footer { width: 50%;
                     font-size: 1.1rem;
                     text-align: right; }
 
-ol, ul { width: 45%;
-         -webkit-padding-start: 5%;
+ol, ul { -webkit-padding-start: 5%;
          -webkit-padding-end: 5%; }
+
+@media screen and (min-width: 761px) {
+  ol, ul { width: 45%; }
+}
 
 li { padding: 0.5rem 0; }
 

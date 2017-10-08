@@ -199,7 +199,7 @@ The ramp function example gives me four ideas for further study:
    general class of self-replicating functions which are not continuous, such
    as the indicator function of the Cantor dust?
 
-Some of these questions will be answered below.
+TODO Mention how I'm following up with further study idea 1.
 
 ## Nonlinear ramps {#sec:nonlinear_ramps}
 
@@ -640,4 +640,96 @@ Next I'll examine a famous function which is *not* exactly
 self-replicating, but which can be seen as approximately self-replicating:
 the normal curve.
 
+
+# The normal curve
+
+TODO better segue here. start with a high-level summary of what's next,
+     including the current image
+
+The normal curve is described by
+$y = e^{-x^2/2}$.
+
+![The normal curve: $y=e^{-x^2/2}$.](images/normal3.png)
+
+One general way to look for self-replicating functions is to begin with a
+function considered as the sum $f_S$, and then to use a nondecreasing
+function $s$ with range $[0,1]$ to split $f_S$ into the pieces
+$f_L = (1 - s)\cdot f_S$ and $f_R = s\cdot f_S$.
+There's no immediate reason for all three of these functions to resemble
+each other, so the challenge is to choose function pairs $(s, f_S)$ so that
+this decomposition is indeed self-replicating.
+
+Let's define a *sigmoid function* $s:\R\to\R$ as a nondecreasing function with
+range in $[0, 1]$, and such that $s-1/2$ is an odd function.
+If $f_S$ is an even function, then it seems natural to choose a sigmoid
+function to split $f_S$ into $f_L$ and $f_R$ as described in the last
+paragraph. Under these conditions, we have the symmetry given by
+$f_L(x) = f_R(-x)$. This can be seen by observing that
+
+$$1/2 - s(x) = s(-x) - 1/2 \quad\Rightarrow\quad
+1 - s(x) = s(-x).$$
+
+Then $f_R(-x) = s(-x)\,f_S(-x) = (1-s(x))\,f_S(x) = f_L(x)$, confirming
+the claimed symmetry.
+
+There are various sigmoid functions available. A simple one is given by
+$x/(1+|x|)$. A more commonly-used one is the *logistic function* given by
+$s(x) = 1/(1 + e^{-x})$, which is the one I'll focus on in this section.
+
+
+TODO Lead up to the main split of the normal curve I'm going after.
+
+
+
+# Leaf-point distributions of *L*-systems
+
+
+# Fractal functions
+
+This section is for functions similar to the Cantor diagonal.
+It may turn out that I can't find any functions that fit here, or that the
+*L*-systems distributions includes this case, or even that I can prove that no
+functions could exist here (as far as I know).
+
+TODO Add a note somewhere that the initial setup requires that the sum itself is
+     always the translation of an even function.
+
+
+# Temporary example content
+
+**Lemma 1**\ 
+*Content of lemma 1, including some $\pi+3$ mathy bits.*
+
+## Subheader
+
+Content
+
+See my notes on Raney's lemmas for more examples.
+
+Here is a reference [@concrete].
+
+
+
+
+# Questions
+
+* The ellipse around my first *L*-system appears to fit surprisingly well.
+  Is there a nice way to discover when an ellipse and an *L*-system may fit like
+  this? Is there, perhaps, a series of shapes which converge on the system or
+  its leaf points, analogous to
+  [Mandelbrot set
+  lemniscates](http://mathworld.wolfram.com/MandelbrotSetLemniscate.html)?
+* The histogram around my first *L*-system appears simple in shape. Can its
+  shape be described precisely?
+* The sigmoid $\sigma(x)=1/(1+e^{-x})$ provides a near-self-replicating split of
+  $e^{-x^2}$. Is there a function $f(x)$ such that $\sigma(x)$ provides an
+  *exact* self-replicating split? More than one? In general, given any sigmoid
+  $s(x)$, what is the set of functions which it splits exactly in this way?
+  For this question, we can have some precise requirement for a sigmoid, such as
+  being an appropriately scaled and translated odd function.
+* Are there variants of self-replicating functions that work for other sets of
+  operations such as using more than two copies of the function in a sum, or by
+  using multiplication or some other operation instead of addition?
+
 # References
+
