@@ -3,7 +3,7 @@
 % 204.2016
 
 \newcommand{\R}{\mathbb{R}}
-\newcommand{\eqnset}[1]{\left.\mbox{$#1$}\quad\quad\right\rbrace}
+\newcommand{\eqnset}[1]{\left.\mbox{$#1$}\;\;\right\rbrace}
 
 These are notes I'm creating for myself as I explore
 functions $f$ that can be written as a sum $f = g_1 + g_2$ where $g_1$ and $g_2$
@@ -13,15 +13,15 @@ original function $f$.
 When a function $f$ has these properties, I informally call it a
 *self-replicating function*.
 
+![As an example of a self-replicating function, the normal curve can be
+expressed as the sum of two normal-like curves that are reflections of each
+other.](images/added_normals4.png){#fig:added_normals}
+
 Like the word *fractal*, this term is not
 rigorously defined — in particular, it depends on the ambiguous
 notion of "strong resemblance" — although I plan to investigate more precise
 requirements
 below.
-
-![As an example of a self-replicating function, the normal curve can be
-expressed as the sum of two normal-like curves that are reflections of each
-other.](images/added_normals4.png){#fig:added_normals}
 
 # Motivation
 
@@ -152,9 +152,9 @@ To this end, define the *ramp function* for values $a,b,c,d$ with
 $a < b < c < d$ via
 
 $$ J_{a,b,c,d} = \begin{cases}
-(x - a) / (b - a) & \text{if } x \in [a, b), \\
+\frac{x - a}{b - a} & \text{if } x \in [a, b), \\
 1 & \text{if } x \in [b, c), \\
-(d - x) / (d - c) & \text{if } x \in [c, d), \text{and} \\
+\frac{d - x}{d - c} & \text{if } x \in [c, d), \text{and} \\
 0 & \text{otherwise.} \\
 \end{cases}$$
 
@@ -214,9 +214,9 @@ shapes.](images/nonlinear_ramps2.png){#fig:nonlinear_ramps}
 Given any function $f:[0,1]\to [0,1]$, the generalized ramp function is
 
 $$ K_{a,b,c,d} = \begin{cases}
-f\big((x - a) / (b - a)\big) & \text{if } x \in [a, b), \\
+f\big(\frac{x - a}{b - a}\big) & \text{if } x \in [a, b), \\
 1 & \text{if } x \in [b, c), \\
-1 - f\big((x - c) / (d - c)\big) & \text{if } x \in [c, d), \text{and} \\
+1 - f\big(\frac{x - c}{d - c}\big) & \text{if } x \in [c, d), \\
 0 & \text{otherwise.} \\
 \end{cases}$$
 
@@ -266,12 +266,12 @@ Call a function $f$ *exactly self-replicating* iff there exist continuous
 bijections $s$, $t_1$, and $t_2$ such that $s$ is not the identity function
 and 
 
-$$\eqnset{\begin{array}{rcl}
-  f_L(x) & = & f(x), \\
-  f_R(x) & = & f(s(x)), \\
-  f_S(x) & = & f_L(x) + f_R(x), \text{and} \\
-  f_L(x) & = & t_2(f_S(t_1(x))).
-\end{array}}$$ {#eq:exact_defn}
+$$\eqnset{\begin{densearray}
+  f_L(x)&=&f(x), \\
+  f_R(x)&=&f(s(x)), \\
+  f_S(x)&=&f_L(x) + f_R(x), \text{and} \\
+  f_L(x)&=&t_2(f_S(t_1(x))).
+\end{densearray}}$$ {#eq:exact_defn}
 
 The *L*, *R*, and *S* subscripts are meant to hint that these functions act as
 the *left* addend, *right* addend, and the *sum*; the $s$ function suggests a
@@ -351,8 +351,10 @@ functions $s$, $t_1$, and
 $t_2$ from ([@eq:s_t1_t2]).
 Notice that
 
-$$\big(f_S \restrict [2,3]\big) = \big(f_L + f_R \restrict [2, 3]\big) =
-r_L + r_R = g.$$
+$$\begin{array}{rcl}
+\big(f_S \restrict [2,3]\big) & = & \big(f_L + f_R \restrict [2, 3]\big) \\
+ & = & r_L + r_R = g. \\
+\end{array}$$
 
 Since $f_L(x) = f_S(t_1(x))$, and $t_1$ maps
 $[1\tfrac{1}{3}, 1\tfrac{2}{3}]$ to $[2,3]$,
@@ -561,8 +563,7 @@ $t_2$ as defined in ([@eq:s_t1_t2]), and that the function $g$ is defined as in
 ([@eq:rL_rR_g]). Then $f$ is exactly self-replicating iff*
 
 $$\eqnset{\begin{array}{lcll}
-f(1.\zerotwo E_3) & = & f(1.E_3) & \text{for } E\ne\overline 0,\overline 2;
-  \quad\text{and} \\
+f(1.\zerotwo E_3) & = & f(1.E_3) & \text{for } E\ne\overline 0,\overline 2; \\
 f(1.1E_3)         & = & g(0.E_3) & \text{for any }E. \latexonlyrule{0pt}{14pt} \\
 \end{array}}$$ {#eq:thm3}
 
@@ -593,13 +594,13 @@ Apply ([@eq:thm3]) to see that $f(1.E_3) = f(1.0E_3) = f(x)$, verifying
 
 *Case* $C=1:\;$
 In this case, $x' = 2.E_3 \in [2,3].$ So
-$f_S(x') = f(2.E_3) + f(0.E_3) = r_R(0.E_3) + r_L(0.E_3) = g(0.E_3).$
+$f_S(x') = f(2.E_3) + f(0.E_3) =$ $r_R(0.E_3) + r_L(0.E_3) =$ $g(0.E_3).$
 Apply ([@eq:thm3]) and continue: $g(0.E_3) = f(1.1E_3) = f(x).$
 This also verifies ([@eq:thm3_pf]).
 
 *Case* $C=2:\;$
 This cases is similar to $C=0,$ except that $x' \in (3,4).$ Specifically,
-$f_S(x') = f(x'-2) = f(1.E_3) = f(1.2E_3) = f(x),$ again
+$f_S(x') = f(x'-2) =$ $f(1.E_3) =$ $f(1.2E_3) = f(x),$ again
 verifying ([@eq:thm3_pf]).
 
 In all cases, equation ([@eq:thm3_pf]) holds, ensuring that $f$ is indeed

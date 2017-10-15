@@ -86,6 +86,7 @@
 % Begin custom, non-pandoc commands.
 
 \newcommand{\latexonlyrule}{\rule}
+\newenvironment{densearray}{\begin{array}{rcl}}{\end{array}}
 
 % End custom, non-pandoc commands.
 
@@ -93,7 +94,7 @@
 \maketitle
 
 \newcommand{\R}{\mathbb{R}}
-\newcommand{\eqnset}[1]{\left.\mbox{$#1$}\quad\quad\right\rbrace}
+\newcommand{\eqnset}[1]{\left.\mbox{$#1$}\;\;\right\rbrace}
 
 These are notes I'm creating for myself as I explore functions \(f\)
 that can be written as a sum \(f = g_1 + g_2\) where \(g_1\) and \(g_2\)
@@ -102,10 +103,6 @@ resemble shifts of the original function \(f\). When a function \(f\)
 has these properties, I informally call it a \emph{self-replicating
 function}.
 
-Like the word \emph{fractal}, this term is not rigorously defined --- in
-particular, it depends on the ambiguous notion of ``strong resemblance''
---- although I plan to investigate more precise requirements below.
-
 \begin{figure}
 \centering
 \includegraphics{images/added_normals4.png}
@@ -113,6 +110,10 @@ particular, it depends on the ambiguous notion of ``strong resemblance''
 can be expressed as the sum of two normal-like curves that are
 reflections of each other.}\label{fig:added_normals}
 \end{figure}
+
+Like the word \emph{fractal}, this term is not rigorously defined --- in
+particular, it depends on the ambiguous notion of ``strong resemblance''
+--- although I plan to investigate more precise requirements below.
 
 \section{Motivation}\label{motivation}
 
@@ -254,9 +255,9 @@ To this end, define the \emph{ramp function} for values \(a,b,c,d\) with
 \(a < b < c < d\) via
 
 \[ J_{a,b,c,d} = \begin{cases}
-(x - a) / (b - a) & \text{if } x \in [a, b), \\
+\frac{x - a}{b - a} & \text{if } x \in [a, b), \\
 1 & \text{if } x \in [b, c), \\
-(d - x) / (d - c) & \text{if } x \in [c, d), \text{and} \\
+\frac{d - x}{d - c} & \text{if } x \in [c, d), \text{and} \\
 0 & \text{otherwise.} \\
 \end{cases}\]
 
@@ -335,9 +336,9 @@ Given any function \(f:[0,1]\to [0,1]\), the generalized ramp function
 is
 
 \[ K_{a,b,c,d} = \begin{cases}
-f\big((x - a) / (b - a)\big) & \text{if } x \in [a, b), \\
+f\big(\frac{x - a}{b - a}\big) & \text{if } x \in [a, b), \\
 1 & \text{if } x \in [b, c), \\
-1 - f\big((x - c) / (d - c)\big) & \text{if } x \in [c, d), \text{and} \\
+1 - f\big(\frac{x - c}{d - c}\big) & \text{if } x \in [c, d), \\
 0 & \text{otherwise.} \\
 \end{cases}\]
 
@@ -394,12 +395,12 @@ Call a function \(f\) \emph{exactly self-replicating} iff there exist
 continuous bijections \(s\), \(t_1\), and \(t_2\) such that \(s\) is not
 the identity function and
 
-\begin{equation}\eqnset{\begin{array}{rcl}
-  f_L(x) & = & f(x), \\
-  f_R(x) & = & f(s(x)), \\
-  f_S(x) & = & f_L(x) + f_R(x), \text{and} \\
-  f_L(x) & = & t_2(f_S(t_1(x))).
-\end{array}}\label{eq:exact_defn}\end{equation}
+\begin{equation}\eqnset{\begin{densearray}
+  f_L(x)&=&f(x), \\
+  f_R(x)&=&f(s(x)), \\
+  f_S(x)&=&f_L(x) + f_R(x), \text{and} \\
+  f_L(x)&=&t_2(f_S(t_1(x))).
+\end{densearray}}\label{eq:exact_defn}\end{equation}
 
 The \emph{L}, \emph{R}, and \emph{S} subscripts are meant to hint that
 these functions act as the \emph{left} addend, \emph{right} addend, and
@@ -480,8 +481,10 @@ to define functions \(f_L\), \(f_R\), and \(f_S\) in terms of \(f\) and
 the functions \(s\), \(t_1\), and \(t_2\) from (\ref{eq:s_t1_t2}).
 Notice that
 
-\[\big(f_S \restrict [2,3]\big) = \big(f_L + f_R \restrict [2, 3]\big) =
-r_L + r_R = g.\]
+\[\begin{array}{rcl}
+\big(f_S \restrict [2,3]\big) & = & \big(f_L + f_R \restrict [2, 3]\big) \\
+ & = & r_L + r_R = g. \\
+\end{array}\]
 
 Since \(f_L(x) = f_S(t_1(x))\), and \(t_1\) maps
 \([1\tfrac{1}{3}, 1\tfrac{2}{3}]\) to \([2,3]\), this means
@@ -689,8 +692,7 @@ context of the functions \(s,\) \(t_1,\) and \(t_2\) as defined in
 (\ref{eq:rL_rR_g}). Then \(f\) is exactly self-replicating iff}
 
 \begin{equation}\eqnset{\begin{array}{lcll}
-f(1.\zerotwo E_3) & = & f(1.E_3) & \text{for } E\ne\overline 0,\overline 2;
-  \quad\text{and} \\
+f(1.\zerotwo E_3) & = & f(1.E_3) & \text{for } E\ne\overline 0,\overline 2; \\
 f(1.1E_3)         & = & g(0.E_3) & \text{for any }E. \latexonlyrule{0pt}{14pt} \\
 \end{array}}\label{eq:thm3}\end{equation}
 
@@ -717,14 +719,13 @@ split into three cases based on the value of \(C\).
 \(f(1.E_3) = f(1.0E_3) = f(x)\), verifying (\ref{eq:thm3_pf}).
 
 \emph{Case} \(C=1:\;\) In this case, \(x' = 2.E_3 \in [2,3].\) So
-\(f_S(x') = f(2.E_3) + f(0.E_3) = r_R(0.E_3) + r_L(0.E_3) = g(0.E_3).\)
-Apply (\ref{eq:thm3}) and continue: \(g(0.E_3) = f(1.1E_3) = f(x).\)
-This also verifies (\ref{eq:thm3_pf}).
+\(f_S(x') = f(2.E_3) + f(0.E_3) =\) \(r_R(0.E_3) + r_L(0.E_3) =\)
+\(g(0.E_3).\) Apply (\ref{eq:thm3}) and continue:
+\(g(0.E_3) = f(1.1E_3) = f(x).\) This also verifies (\ref{eq:thm3_pf}).
 
 \emph{Case} \(C=2:\;\) This cases is similar to \(C=0,\) except that
-\(x' \in (3,4).\) Specifically,
-\(f_S(x') = f(x'-2) = f(1.E_3) = f(1.2E_3) = f(x),\) again verifying
-(\ref{eq:thm3_pf}).
+\(x' \in (3,4).\) Specifically, \(f_S(x') = f(x'-2) =\) \(f(1.E_3) =\)
+\(f(1.2E_3) = f(x),\) again verifying (\ref{eq:thm3_pf}).
 
 In all cases, equation (\ref{eq:thm3_pf}) holds, ensuring that \(f\) is
 indeed exactly self-replicating.
