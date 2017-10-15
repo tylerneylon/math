@@ -93,6 +93,20 @@ div.title { font-weight: 400;
   }
 }
 
+@media screen and (min-width: 761px) {
+  .MathJax .optquad {
+    width: 1.2em;
+    display: inline-block;
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .MathJax .optquad {
+    width: 0.2em;
+    display: inline-block;
+  }
+}
+
 h1 { font-style: italic;
      font-weight: 400;
      margin-top: 3.2rem;
