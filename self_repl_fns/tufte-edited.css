@@ -79,6 +79,20 @@ div.title { font-weight: 400;
   }
 }
 
+// Customize postbrace spacing per screen size.
+
+@media screen and (min-width: 761px) {
+  .MathJax .postbrace {
+    margin-left: 0em;
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .MathJax .postbrace {
+    margin-left: -1em;
+  }
+}
+
 h1 { font-style: italic;
      font-weight: 400;
      margin-top: 3.2rem;

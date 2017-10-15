@@ -3,7 +3,7 @@
 % 204.2016
 
 \newcommand{\R}{\mathbb{R}}
-\newcommand{\eqnset}[1]{\left.\mbox{$#1$}\;\;\right\rbrace}
+\newcommand{\eqnset}[1]{\left.\mbox{$#1$}\;\;\right\rbrace\class{postbrace}{ }}
 
 These are notes I'm creating for myself as I explore
 functions $f$ that can be written as a sum $f = g_1 + g_2$ where $g_1$ and $g_2$
@@ -292,16 +292,16 @@ $f_R(x) = K_{2,3,4,5} = f(x-2)$.
 We can satisfy all of the equations of ([@eq:exact_defn]) by using these
 functions:
 
-$$\eqnset{\begin{array}{rcl}
+$$\eqnset{\begin{densearray}
 t_1(x) & = &
 \begin{cases}
-  x              &   \text{if } x \le 1,       \\
-  3x - 2         &   \text{if } x \in (1,2),   \\
-  x + 2          &   \text{otherwise;}         \\
+  x              &   x \le 1,       \\
+  3x - 2         &   1 < x < 2,   \\
+  x + 2          &   x \ge 2; \\
 \end{cases}\\
 t_2(x) & = & x; \text{ and} \\
 s(x)   & = & x - 2. \\
-\end{array}}$$ {#eq:s_t1_t2}
+\end{densearray}}$$ {#eq:s_t1_t2}
 
 This is a simple yet foundational case — it may be interesting to see
 which other functions are exactly self-replicating with these parameters.

@@ -2,16 +2,14 @@
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="format-detection" content="telephone=no">
     <title>Self-Replicating Functions</title>
-    <!--
-	<script type="text/x-mathjax-config">
-	  MathJax.Hub.Config({
-		CommonHTML: { linebreaks: { automatic: true } },
-		"HTML-CSS": { linebreaks: { automatic: true } },
-			   SVG: { linebreaks: { automatic: true } }
-	  });
+	<script type="text/x-mathjax-config"> 
+      MathJax.Hub.Register.StartupHook("TeX AMSmath Ready",function () { 
+        MathJax.InputJax.TeX.Definitions.environment["densearray"] = 
+          ['AMSarray',null,true,true,'rcl','0em .4em']; 
+      }); 
 	</script>
-	-->
     <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
     <link rel="stylesheet" href="tufte-edited.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,11 +22,11 @@
       <div class="author">Tyler Neylon</div>
       <div class="date">204.2016</div>
       <p>These are notes I’m creating for myself as I explore functions <span class="math inline">\(f\)</span> that can be written as a sum <span class="math inline">\(f = g_1 + g_2\)</span> where <span class="math inline">\(g_1\)</span> and <span class="math inline">\(g_2\)</span> are the same up to symmetry, and both <span class="math inline">\(g_1\)</span> and <span class="math inline">\(g_2\)</span> strongly resemble shifts of the original function <span class="math inline">\(f\)</span>. When a function <span class="math inline">\(f\)</span> has these properties, I informally call it a <em>self-replicating function</em>.</p>
-      <p>Like the word <em>fractal</em>, this term is not rigorously defined — in particular, it depends on the ambiguous notion of “strong resemblance” — although I plan to investigate more precise requirements below.</p>
       <div class="figure">
       <p class="caption">Figure 1: As an example of a self-replicating function, the normal curve can be expressed as the sum of two normal-like curves that are reflections of each other.</p>
       <img src="images/added_normals4.png" alt="Figure 1: As an example of a self-replicating function, the normal curve can be expressed as the sum of two normal-like curves that are reflections of each other." id="fig:added_normals" />
       </div>
+      <p>Like the word <em>fractal</em>, this term is not rigorously defined — in particular, it depends on the ambiguous notion of “strong resemblance” — although I plan to investigate more precise requirements below.</p>
       <h1 id="motivation"><span class="header-section-number">1</span> Motivation</h1>
       <p>I became interested in self-replicating functions by working on algorithms to procedurally generate 3d models of natural-looking trees. When algorithmically making trees, it makes sense to start from the idea of an <a href="https://en.wikipedia.org/wiki/L-system"><em>L-system</em></a>, which can be visualized as a kind of fractal in which a trunk forks into branches that themselves fork into smaller subranches, this process repeating infinitely.</p>
       <p>I noticed that tree-like <em>L</em>-systems can have a large amount of “branch overlap” concentrated around a central area of their apparent surface. For example, consider the two images in figure 2. On the left is a standard <em>L</em>-system along with a histogram showing the density of leaf points along the edge. Intuitively, the leaf points are dense even toward the extreme angles of the tree’s top. However, the density increases continuously toward the center.</p>
@@ -67,9 +65,9 @@
       <h2 id="sec:ramp_functions"><span class="header-section-number">2.2</span> Ramp functions</h2>
       <p>Things get more interesting when <span class="math inline">\(g_1(x) g_2(x) \ne 0\)</span> for some <span class="math inline">\(x\)</span>. To this end, define the <em>ramp function</em> for values <span class="math inline">\(a,b,c,d\)</span> with <span class="math inline">\(a &lt; b &lt; c &lt; d\)</span> via</p>
       <p><span class="math display">\[ J_{a,b,c,d} = \begin{cases}
-      (x - a) / (b - a) &amp; \text{if } x \in [a, b), \\
+      \frac{x - a}{b - a} &amp; \text{if } x \in [a, b), \\
       1 &amp; \text{if } x \in [b, c), \\
-      (d - x) / (d - c) &amp; \text{if } x \in [c, d), \text{and} \\
+      \frac{d - x}{d - c} &amp; \text{if } x \in [c, d), \text{and} \\
       0 &amp; \text{otherwise.} \\
       \end{cases}\]</span></p>
       <p>Then <span class="math inline">\(J_{0,1,4,5} = J_{0,1,2,3} + J_{2,3,4,5}\)</span>, as illustrated in figure 5.</p>
@@ -93,9 +91,9 @@
       </div>
       <p>Given any function <span class="math inline">\(f:[0,1]\to [0,1]\)</span>, the generalized ramp function is</p>
       <p><span class="math display">\[ K_{a,b,c,d} = \begin{cases}
-      f\big((x - a) / (b - a)\big) &amp; \text{if } x \in [a, b), \\
+      f\big(\frac{x - a}{b - a}\big) &amp; \text{if } x \in [a, b), \\
       1 &amp; \text{if } x \in [b, c), \\
-      1 - f\big((x - c) / (d - c)\big) &amp; \text{if } x \in [c, d), \text{and} \\
+      1 - f\big(\frac{x - c}{d - c}\big) &amp; \text{if } x \in [c, d), \\
       0 &amp; \text{otherwise.} \\
       \end{cases}\]</span></p>
       <p>If any function can be written as <span class="math inline">\(K_{a,b,c,d}\)</span> for some value of <span class="math inline">\(f\)</span>, I’ll call it a <span class="math inline">\(K-\)</span><em>function</em>. This form is general enough to include interval functions — for example, by using <span class="math inline">\(f(x) = 0\)</span> — and to include the previous ramp function <span class="math inline">\(J(x)\)</span> by setting <span class="math inline">\(f(x)=x\)</span>.</p>
@@ -110,26 +108,26 @@
       <h3 id="a-formal-definition-for-self-replicating-functions"><span class="header-section-number">2.4.1</span> A formal definition for self-replicating functions</h3>
       <p>I think the term <em>self-replicating function</em> is best left as an intuitive, non-rigorous concept because there seem to be a wide variety of instances that are best studied via their own particular flavors of a formal definition. A number of other terms used to discuss mathematics are similarly unformalized or context-specific: consider <em>fractal</em>, <em>symmetry</em>, or <em>closure</em> as examples. Nonetheless, many self-replicating functions meet the conditions of the definition I’ll present next.</p>
       <p>Call a function <span class="math inline">\(f\)</span> <em>exactly self-replicating</em> iff there exist continuous bijections <span class="math inline">\(s\)</span>, <span class="math inline">\(t_1\)</span>, and <span class="math inline">\(t_2\)</span> such that <span class="math inline">\(s\)</span> is not the identity function and</p>
-      <p><span id="eq:exact_defn"><span class="math display">\[{\left.\mbox{$\begin{array}{rcl}
-        f_L(x) &amp; = &amp; f(x), \\
-        f_R(x) &amp; = &amp; f(s(x)), \\
-        f_S(x) &amp; = &amp; f_L(x) + f_R(x), \text{and} \\
-        f_L(x) &amp; = &amp; t_2(f_S(t_1(x))).
-      \end{array}$}\quad\quad\right\rbrace}\qquad(1)\]</span></span></p>
+      <p><span id="eq:exact_defn"><span class="math display">\[{\left.\mbox{$\begin{densearray}
+        f_L(x)&amp;=&amp;f(x), \\
+        f_R(x)&amp;=&amp;f(s(x)), \\
+        f_S(x)&amp;=&amp;f_L(x) + f_R(x), \text{and} \\
+        f_L(x)&amp;=&amp;t_2(f_S(t_1(x))).
+      \end{densearray}$}\;\;\right\rbrace\class{postbrace}{ }}\qquad(1)\]</span></span></p>
       <p>The <em>L</em>, <em>R</em>, and <em>S</em> subscripts are meant to hint that these functions act as the <em>left</em> addend, <em>right</em> addend, and the <em>sum</em>; the <span class="math inline">\(s\)</span> function suggests a <em>shift</em>, while the <span class="math inline">\(t_1\)</span> and <span class="math inline">\(t_2\)</span> functions suggest a <em>transformation</em>. The last equation in (1) captures the similarity relationship between the addend <span class="math inline">\(f = f_L\)</span> and the sum <span class="math inline">\(f_S = f_L + f_R\)</span>.</p>
       <p><strong>Example</strong> The ramp functions given in §2.2 and §2.3, viewed as <span class="math inline">\(K-\)</span>functions, all adhere to the general form</p>
       <p><span class="math display">\[K_{0,1,2,3} + K_{2,3,4,5} = K_{0,1,4,5}.\]</span></p>
       <p>In this case, <span class="math inline">\(f(x) = f_L(x) = K_{0,1,2,3}\)</span> and <span class="math inline">\(f_R(x) = K_{2,3,4,5} = f(x-2)\)</span>. We can satisfy all of the equations of (1) by using these functions:</p>
-      <p><span id="eq:s_t1_t2"><span class="math display">\[{\left.\mbox{$\begin{array}{rcl}
+      <p><span id="eq:s_t1_t2"><span class="math display">\[{\left.\mbox{$\begin{densearray}
       t_1(x) &amp; = &amp;
       \begin{cases}
-        x              &amp;   \text{if } x \le 1,       \\
-        3x - 2         &amp;   \text{if } x \in (1,2),   \\
-        x + 2          &amp;   \text{otherwise;}         \\
+        x              &amp;   x \le 1,       \\
+        3x - 2         &amp;   1 &lt; x &lt; 2,   \\
+        x + 2          &amp;   x \ge 2; \\
       \end{cases}\\
       t_2(x) &amp; = &amp; x; \text{ and} \\
       s(x)   &amp; = &amp; x - 2. \\
-      \end{array}$}\quad\quad\right\rbrace}\qquad(2)\]</span></span></p>
+      \end{densearray}$}\;\;\right\rbrace\class{postbrace}{ }}\qquad(2)\]</span></span></p>
       <p>This is a simple yet foundational case — it may be interesting to see which other functions are exactly self-replicating with these parameters.</p>
       <h3 id="characterizing-one-type-of-exactly-self-replicating-function"><span class="header-section-number">2.4.2</span> Characterizing one type of exactly self-replicating function</h3>
       <p>In this section I’ll give sufficient and necessary conditions for a function to be exactly self-replicating with the <span class="math inline">\(s\)</span>, <span class="math inline">\(t_1\)</span>, and <span class="math inline">\(t_2\)</span> functions given in (2), and with <span class="math inline">\(f(x)=0\)</span> outside of the interval <span class="math inline">\([0, 3]\)</span>. This can be considered the most general version of the category of functions we’ve explored so far.</p>
@@ -142,7 +140,7 @@
       r_L &amp; = &amp; f{\,\big|\,}[0, 1], \\
       r_R &amp; = &amp; f{\,\big|\,}[2, 3], \\
       g   &amp; = &amp; r_L + r_R.
-      \end{array}$}\quad\quad\right\rbrace}\qquad(3)\]</span></span></p>
+      \end{array}$}\;\;\right\rbrace\class{postbrace}{ }}\qquad(3)\]</span></span></p>
       <p>Conceptually, <span class="math inline">\(r_L\)</span> and <span class="math inline">\(r_R\)</span> are the left and right ramp functions.</p>
       <div class="figure">
       <p class="caption">Figure 8: An example showing how <span class="math inline">\(r_L\)</span>, <span class="math inline">\(r_R\)</span>, and <span class="math inline">\(g\)</span> are extracted from a function <span class="math inline">\(f\)</span>, shown on top.</p>
@@ -150,8 +148,10 @@
       </div>
       <p>I’ll show that many copies of the shape of <span class="math inline">\(g\)</span> must dominate the landscape of <span class="math inline">\(f\)</span> in order for it to be exactly self-replicating.</p>
       <p>Now suppose that, in addition to having <span class="math inline">\(f(x)=0\)</span> outside of <span class="math inline">\([0,3]\)</span>, <span class="math inline">\(f\)</span> is also exactly self-replicating. I’ll use (1) to define functions <span class="math inline">\(f_L\)</span>, <span class="math inline">\(f_R\)</span>, and <span class="math inline">\(f_S\)</span> in terms of <span class="math inline">\(f\)</span> and the functions <span class="math inline">\(s\)</span>, <span class="math inline">\(t_1\)</span>, and <span class="math inline">\(t_2\)</span> from (2). Notice that</p>
-      <p><span class="math display">\[\big(f_S {\,\big|\,}[2,3]\big) = \big(f_L + f_R {\,\big|\,}[2, 3]\big) =
-      r_L + r_R = g.\]</span></p>
+      <p><span class="math display">\[\begin{array}{rcl}
+      \big(f_S {\,\big|\,}[2,3]\big) &amp; = &amp; \big(f_L + f_R {\,\big|\,}[2, 3]\big) \\
+       &amp; = &amp; r_L + r_R = g. \\
+      \end{array}\]</span></p>
       <p>Since <span class="math inline">\(f_L(x) = f_S(t_1(x))\)</span>, and <span class="math inline">\(t_1\)</span> maps <span class="math inline">\([1\tfrac{1}{3}, 1\tfrac{2}{3}]\)</span> to <span class="math inline">\([2,3]\)</span>, this means <span class="math inline">\((\,f=f_L {\,\big|\,}[1\tfrac{1}{3}, 1\tfrac{2}{3}]) = g\)</span>. Below, I’ll show how repeated application of this kind of logic determines the non-ramp values of <span class="math inline">\(f\)</span> almost everywhere; a boolean property <span class="math inline">\(P:{\mathbb{R}}\to\{\text{true},\text{false}\}\)</span> is defined to be true <a href="https://en.wikipedia.org/wiki/Almost_everywhere"><em>almost everywhere</em></a> when the set <span class="math inline">\(\{x : P(x) = \text{false}\}\)</span> has measure zero.</p>
       <p>At this point it will be useful to begin using base-3 notation for the intervals at hand. If <span class="math inline">\(s\)</span> is a finite string with digits from the set <span class="math inline">\(\{0, 1, 2\}\)</span>, then let <span class="math inline">\(0.s{\overline{*}_3}\)</span> denote the closure of the set of points whose base-3 expansion begins with <span class="math inline">\(0.s\)</span>. For example, <span class="math inline">\(0.11{\overline{*}_3}\)</span> denotes the interval <span class="math inline">\([0.11_3, 0.12_3]\)</span> while <span class="math inline">\(0.12{\overline{*}_3}\)</span> denotes the interval <span class="math inline">\([0.12_3, 0.20_3]\)</span>. I’ll also use <span class="math inline">\({\big\{\!\raise1.5pt\hbox{$\genfrac{}{}{0pt}{}
       {\lower1.8pt\hbox{$\smash{\scriptstyle 0}$}}
@@ -244,18 +244,17 @@
       <p><span id="eq:thm3"><span class="math display">\[{\left.\mbox{$\begin{array}{lcll}
       f(1.{\big\{\!\raise1.5pt\hbox{$\genfrac{}{}{0pt}{}
       {\lower1.8pt\hbox{$\smash{\scriptstyle 0}$}}
-      {\lower1pt\hbox{$\smash{\scriptstyle 2}$}}$}\!\big\}}E_3) &amp; = &amp; f(1.E_3) &amp; \text{for } E\ne\overline 0,\overline 2;
-        \quad\text{and} \\
+      {\lower1pt\hbox{$\smash{\scriptstyle 2}$}}$}\!\big\}}E_3) &amp; = &amp; f(1.E_3) &amp; \text{for } E\ne\overline 0,\overline 2; \\
       f(1.1E_3)         &amp; = &amp; g(0.E_3) &amp; \text{for any }E. \latexonlyrule{0pt}{14pt} \\
-      \end{array}$}\quad\quad\right\rbrace}\qquad(9)\]</span></span></p>
+      \end{array}$}\;\;\right\rbrace\class{postbrace}{ }}\qquad(9)\]</span></span></p>
       <p><strong>Proof</strong> <span class="math inline">\(\;\)</span> The forward direction — that (9) is a consequence of <span class="math inline">\(f\)</span> being exactly self-replicating — has already been justified by (4) and (7). Note that these last two equations are each expanded upon in theorems 1 and 2.</p>
       <p>To verify the other direction, it will suffice to show that, if (9) is true, then so is:</p>
       <p><span id="eq:thm3_pf"><span class="math display">\[f(x) = f_S(t_1(x));\qquad(10)\]</span></span></p>
       <p>this equation is enough to ensure that the definition of an exactly self-replicating function, given by (1), is satisfied.</p>
       <p>Suppose <span class="math inline">\(x=1.CE_3 \in (1,2)\)</span>, where <span class="math inline">\(C \in \{0, 1, 2\}\)</span> and <span class="math inline">\(E\)</span> does not have an all-2 tail; let <span class="math inline">\(x&#39; = t_1(x)\)</span>. The argument can be split into three cases based on the value of <span class="math inline">\(C\)</span>.</p>
       <p><em>Case</em> <span class="math inline">\(C=0:\;\)</span> In this case, <span class="math inline">\(x&#39; = 1.E_3 \in (1, 2)\)</span> and <span class="math inline">\(f_S(x&#39;) = f(x&#39;) = f(1.E_3).\)</span> Apply (9) to see that <span class="math inline">\(f(1.E_3) = f(1.0E_3) = f(x)\)</span>, verifying (10).</p>
-      <p><em>Case</em> <span class="math inline">\(C=1:\;\)</span> In this case, <span class="math inline">\(x&#39; = 2.E_3 \in [2,3].\)</span> So <span class="math inline">\(f_S(x&#39;) = f(2.E_3) + f(0.E_3) = r_R(0.E_3) + r_L(0.E_3) = g(0.E_3).\)</span> Apply (9) and continue: <span class="math inline">\(g(0.E_3) = f(1.1E_3) = f(x).\)</span> This also verifies (10).</p>
-      <p><em>Case</em> <span class="math inline">\(C=2:\;\)</span> This cases is similar to <span class="math inline">\(C=0,\)</span> except that <span class="math inline">\(x&#39; \in (3,4).\)</span> Specifically, <span class="math inline">\(f_S(x&#39;) = f(x&#39;-2) = f(1.E_3) = f(1.2E_3) = f(x),\)</span> again verifying (10).</p>
+      <p><em>Case</em> <span class="math inline">\(C=1:\;\)</span> In this case, <span class="math inline">\(x&#39; = 2.E_3 \in [2,3].\)</span> So <span class="math inline">\(f_S(x&#39;) = f(2.E_3) + f(0.E_3) =\)</span> <span class="math inline">\(r_R(0.E_3) + r_L(0.E_3) =\)</span> <span class="math inline">\(g(0.E_3).\)</span> Apply (9) and continue: <span class="math inline">\(g(0.E_3) = f(1.1E_3) = f(x).\)</span> This also verifies (10).</p>
+      <p><em>Case</em> <span class="math inline">\(C=2:\;\)</span> This cases is similar to <span class="math inline">\(C=0,\)</span> except that <span class="math inline">\(x&#39; \in (3,4).\)</span> Specifically, <span class="math inline">\(f_S(x&#39;) = f(x&#39;-2) =\)</span> <span class="math inline">\(f(1.E_3) =\)</span> <span class="math inline">\(f(1.2E_3) = f(x),\)</span> again verifying (10).</p>
       <p>In all cases, equation (10) holds, ensuring that <span class="math inline">\(f\)</span> is indeed exactly self-replicating.</p>
       <p align="right">
       <span class="math inline">\(\Box\)</span>
