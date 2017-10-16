@@ -94,6 +94,19 @@ div.title { font-weight: 400;
 }
 
 @media screen and (min-width: 761px) {
+  .MathJax .smallscrneg {
+    margin-left: 0em;
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .MathJax .smallscrneg {
+    margin-left: -1em;
+  }
+}
+
+
+@media screen and (min-width: 761px) {
   .MathJax .optquad {
     width: 1.2em;
     display: inline-block;

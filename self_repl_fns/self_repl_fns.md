@@ -5,6 +5,7 @@
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\eqnset}[1]{\left.\mbox{$#1$}\;\;\right\rbrace\class{postbrace}{ }}
 \providecommand{\optquad}{\class{optquad}{}}
+\providecommand{\smallscrneg}{\class{smallscrneg}{ }}
 
 These are notes I'm creating for myself as I explore
 functions $f$ that can be written as a sum $f = g_1 + g_2$ where $g_1$ and $g_2$
@@ -504,7 +505,7 @@ as $x' = x/3 + 4/3 = 0.1E_3 + 1.1_3 = 1.2E_3$.
 We can summarize this reasoning as
 
 $$E\ne \overline 0, \overline 2 \optquad\Rightarrow\optquad
-f(1.\zerotwo E_3) = f(1.E_3).$$ {#eq:h_reln}
+f(1.\zerotwo E_3) = f(1.E_3).\smallscrneg$$ {#eq:h_reln}
 
 \newcommand{\tail}{\text{tail}}
 
