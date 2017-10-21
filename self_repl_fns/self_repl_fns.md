@@ -6,6 +6,8 @@
 \newcommand{\eqnset}[1]{\left.\mbox{$#1$}\;\;\right\rbrace\class{postbrace}{ }}
 \providecommand{\optquad}{\class{optquad}{}}
 \providecommand{\smallscrneg}{\class{smallscrneg}{ }}
+\providecommand{\bigscr}[1]{\class{bigscr}{#1}}
+\providecommand{\smallscr}[1]{\class{smallscr}{#1}}
 
 These are notes I'm creating for myself as I explore
 functions $f$ that can be written as a sum $f = g_1 + g_2$ where $g_1$ and $g_2$
@@ -514,11 +516,12 @@ $f$ must have the same value. To do that, it will be useful to define the
 *tail* of an expansion as a way to capture end-of-string behavior.
 More precisely, if $E$ is an expansion, then define $\tail(E)$ via
 
-$$\begin{array}{l}
-\tail(E) = \big\{\text{expansion }\eta \;\big|\;
+$$\bigscr{\tail(E) = \big\{\text{expansion }\eta \;\big|\;
+\exists\, j, k: 
+E(j + m) = \eta(k + m) \,\forall\, m \ge 0\big\}.}
+\smallscr{\begin{array}{l}\tail(E) = \big\{\text{expansion }\eta \;\big|\;
 \exists\, j, k: \\
-\quad E(j + m) = \eta(k + m) \,\forall\, m \ge 0\big\}.
-\end{array}$$
+\quad E(j + m) = \eta(k + m) \,\forall\, m \ge 0\big\}.\end{array}}$$
 
 Intuitively, $\tail(E)$ is the set of all numbers in $[0, 1]$ with
 the same final sequence of base-3 digits as $E$, ignoring any finite prefix

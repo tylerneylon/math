@@ -120,6 +120,18 @@ div.title { font-weight: 400;
   }
 }
 
+@media screen and (min-width: 761px) {
+  .MathJax .smallscr {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .MathJax .bigscr {
+    display: none;
+  }
+}
+
 h1 { font-style: italic;
      font-weight: 400;
      margin-top: 3.2rem;
