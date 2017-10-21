@@ -239,7 +239,17 @@
       <p>Since <span class="math inline">\({\text{tail}}(x) = {\text{tail}}(y)\)</span>, then there exist integers <span class="math inline">\(j, k\)</span> such that</p>
       <p><span id="eq:thm2_pf"><span class="math display">\[E(j+m)=F(k+m)\; \forall m\ge 0.\qquad(8)\]</span></span></p>
       <p>Let <span class="math inline">\(p_E\)</span> be the length-<span class="math inline">\(j\)</span> prefix of <span class="math inline">\(E\)</span> and <span class="math inline">\(p_F\)</span> be the length-<span class="math inline">\(k\)</span> prefix of <span class="math inline">\(F\)</span>, and choose the expansions <span class="math inline">\(E&#39;\)</span> and <span class="math inline">\(F&#39;\)</span> so that</p>
-      <p><span class="math display">\[x = 1.E_3 = 1.p_EE&#39;_3 \quad\text{ and }\quad y = 1.F_3 = 1.p_FF&#39;_3.\]</span></p>
+      <p><span class="math display">\[
+      {\class{bigscr}{
+      x = 1.E_3 = 1.p_EE&#39;_3 \quad\text{ and }\quad y = 1.F_3 = 1.p_FF&#39;_3.
+      }}
+      {\class{smallscr}{
+      \begin{array}{rcl}
+      x &amp; = &amp; 1.E_3 = 1.p_EE&#39;_3 \quad\text{ and }\\
+      y &amp; = &amp; 1.F_3 = 1.p_FF&#39;_3.
+      \end{array}
+      }}
+      \]</span></p>
       <p>By (8), <span class="math inline">\(E&#39;=F&#39;\)</span>. By repeated application of (7), <span class="math inline">\(f(1.p_EE&#39;_3) = f(1.E&#39;_3)\)</span> and <span class="math inline">\(f(1.p_FF&#39;_3) = f(1.F&#39;_3)\)</span>. The final result is that</p>
       <p><span class="math display">\[f(x) = f(1.E&#39;_3) = f(1.F&#39;_3) = f(y).\]</span></p>
       <p align="right">
@@ -250,9 +260,9 @@
       <p><span id="eq:thm3"><span class="math display">\[{\left.\mbox{$\begin{array}{lcll}
       f(1.{\big\{\!\raise1.5pt\hbox{$\genfrac{}{}{0pt}{}
       {\lower1.8pt\hbox{$\smash{\scriptstyle 0}$}}
-      {\lower1pt\hbox{$\smash{\scriptstyle 2}$}}$}\!\big\}}E_3) &amp; = &amp; f(1.E_3) &amp; \text{for } E\ne\overline 0,\overline 2; \\
-      f(1.1E_3)         &amp; = &amp; g(0.E_3) &amp; \text{for any }E. \latexonlyrule{0pt}{14pt} \\
-      \end{array}$}\;\;\right\rbrace\class{postbrace}{ }}\qquad(9)\]</span></span></p>
+      {\lower1pt\hbox{$\smash{\scriptstyle 2}$}}$}\!\big\}}E_3) &amp; {\class{smallscrskip}{\hskip -1em}} = &amp; {\class{smallscrskip}{\hskip -0.5em}} f(1.E_3) &amp; E\ne\overline 0,\overline 2;                {\class{smallscrneg}{ }}\\
+      f(1.1E_3)         &amp; {\class{smallscrskip}{\hskip -1em}} = &amp; {\class{smallscrskip}{\hskip -0.5em}} g(0.E_3) &amp; \text{for any }E. \latexonlyrule{0pt}{14pt} {\class{smallscrneg}{ }}\\
+      \end{array} $}\;\;\right\rbrace\class{postbrace}{ }} {\class{smallscrneg}{ }}\qquad(9)\]</span></span></p>
       <p><strong>Proof</strong> <span class="math inline">\(\;\)</span> The forward direction — that (9) is a consequence of <span class="math inline">\(f\)</span> being exactly self-replicating — has already been justified by (4) and (7). Note that these last two equations are each expanded upon in theorems 1 and 2.</p>
       <p>To verify the other direction, it will suffice to show that, if (9) is true, then so is:</p>
       <p><span id="eq:thm3_pf"><span class="math display">\[f(x) = f_S(t_1(x));\qquad(10)\]</span></span></p>

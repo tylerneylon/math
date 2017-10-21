@@ -8,6 +8,7 @@
 \providecommand{\smallscrneg}{\class{smallscrneg}{ }}
 \providecommand{\bigscr}[1]{\class{bigscr}{#1}}
 \providecommand{\smallscr}[1]{\class{smallscr}{#1}}
+\providecommand{\smallscrskip}[1]{\class{smallscrskip}{\hskip #1}}
 
 These are notes I'm creating for myself as I explore
 functions $f$ that can be written as a sum $f = g_1 + g_2$ where $g_1$ and $g_2$
@@ -552,7 +553,17 @@ Let $p_E$ be the length-$j$ prefix of $E$ and
     $p_F$ be the length-$k$ prefix of $F$, and choose the
 expansions $E'$ and $F'$ so that
 
-$$x = 1.E_3 = 1.p_EE'_3 \quad\text{ and }\quad y = 1.F_3 = 1.p_FF'_3.$$
+$$
+\bigscr{
+x = 1.E_3 = 1.p_EE'_3 \quad\text{ and }\quad y = 1.F_3 = 1.p_FF'_3.
+}
+\smallscr{
+\begin{array}{rcl}
+x & = & 1.E_3 = 1.p_EE'_3 \quad\text{ and }\\
+y & = & 1.F_3 = 1.p_FF'_3.
+\end{array}
+}
+$$
 
 By ([@eq:thm2_pf]), $E'=F'$. By repeated application of ([@eq:h_reln]),
 $f(1.p_EE'_3) = f(1.E'_3)$ and $f(1.p_FF'_3) = f(1.F'_3)$. The final result
@@ -574,9 +585,9 @@ $t_2$ as defined in ([@eq:s_t1_t2]), and that the function $g$ is defined as in
 ([@eq:rL_rR_g]). Then $f$ is exactly self-replicating iff*
 
 $$\eqnset{\begin{array}{lcll}
-f(1.\zerotwo E_3) & = & f(1.E_3) & \text{for } E\ne\overline 0,\overline 2; \\
-f(1.1E_3)         & = & g(0.E_3) & \text{for any }E. \latexonlyrule{0pt}{14pt} \\
-\end{array}}$$ {#eq:thm3}
+f(1.\zerotwo E_3) & \smallscrskip{-1em} = & \smallscrskip{-0.5em} f(1.E_3) & E\ne\overline 0,\overline 2;                \smallscrneg \\
+f(1.1E_3)         & \smallscrskip{-1em} = & \smallscrskip{-0.5em} g(0.E_3) & \text{for any }E. \latexonlyrule{0pt}{14pt} \smallscrneg \\
+\end{array} } \smallscrneg$$ {#eq:thm3}
 
 **Proof** $\;$
 The forward direction — that ([@eq:thm3]) is a consequence of $f$ being
