@@ -45,10 +45,10 @@
       <p>Thus, <em>L</em>-systems naturally coincide with self-replicating functions. Although there are probably self-replicating functions which do not correspond with <em>L</em>-systems, I nonetheless find it interesting to independently explore the world of self-replicating functions.</p>
       <h1 id="simple-cases"><span class="header-section-number">2</span> Simple cases</h1>
       <p>Technically, any polynomial can be seen as a kind of self-replicating function. For example, if <span class="math inline">\(f(x) = x^2\)</span>,</p>
-      <p><span class="math display">\[\begin{array}{rcl}
-        g_1(x) &amp; = &amp; (x + 1)^2 - 1 = x^2 + 2x, \quad \text{and} \\
+      <p><span class="math display">\[\begin{densearray}
+        g_1(x) &amp; = &amp; (x + 1)^2 - 1 = x^2 + 2x, {\class{optquad}{}}\text{and} \\
         g_2(x) &amp; = &amp; (x - 1)^2 - 1 = x^2 - 2x, \\
-      \end{array}\]</span></p>
+      \end{densearray}\]</span></p>
       <p>then <span class="math inline">\(f = g_1 + g_2\)</span>, and each <span class="math inline">\(g_i\)</span> is a shift of the original function <span class="math inline">\(f\)</span>. In general, if <span class="math inline">\(f(x) = ax^n + O(x^{n-1})\)</span> then we can choose <span class="math inline">\(g_i(x) = a(x\pm 1)^n + O(x^{n-1})\)</span> so that <span class="math inline">\(f = g_1 + g_2\)</span>, and each <span class="math inline">\(g_i\)</span> has</p>
       <p><span class="math display">\[ \lim_{x\to\pm\infty}\frac{g_i(x)}{f(x)} = 1,\]</span></p>
       <p>which is good enough for me to subjectively say that they strongly resemble shifts of <span class="math inline">\(f\)</span>.</p>
@@ -211,7 +211,7 @@
       <p>Given <span class="math inline">\(x\in (1,2)\)</span>, there is some <span class="math inline">\(k\)</span> with <span class="math inline">\(x\in G_k\)</span> iff the base-3 expansion of <span class="math inline">\(x\)</span> contains a 1 or if it ends with the tail <span class="math inline">\(\overline{0}\)</span>. This can be expressed as:</p>
       <p><span id="eq:onetwo_lessG"><span class="math display">\[\begin{array}{l}
       \text{For } x\in (1,2),\quad
-        x\not\in G \;\;\Leftrightarrow\;\; \\
+        \Rule{0px}{1px}{0.7em}x\not\in G \;\;\Leftrightarrow\;\; \\
         x \in 1.{\big\{\!\raise1.5pt\hbox{$\genfrac{}{}{0pt}{}
       {\lower1.8pt\hbox{$\smash{\scriptstyle 0}$}}
       {\lower1pt\hbox{$\smash{\scriptstyle 2}$}}$}\!\big\}}^\infty_3 -\,
@@ -225,8 +225,11 @@
       {\lower1.8pt\hbox{$\smash{\scriptstyle 0}$}}
       {\lower1pt\hbox{$\smash{\scriptstyle 2}$}}$}\!\big\}}E_3) = f(1.E_3).{\class{smallscrneg}{ }}\qquad(7)\]</span></span></p>
       <p>We can expand on this idea to partition <span class="math inline">\((1,2) - G\)</span> into subsets on which <span class="math inline">\(f\)</span> must have the same value. To do that, it will be useful to define the <em>tail</em> of an expansion as a way to capture end-of-string behavior. More precisely, if <span class="math inline">\(E\)</span> is an expansion, then define <span class="math inline">\({\text{tail}}(E)\)</span> via</p>
-      <p><span class="math display">\[{\text{tail}}(E) = \big\{\text{expansion }\eta \;\big|\;
-      \exists\, j, k: E(j + m) = \eta(k + m) \,\forall\, m \ge 0\big\}.\]</span></p>
+      <p><span class="math display">\[\begin{array}{l}
+      {\text{tail}}(E) = \big\{\text{expansion }\eta \;\big|\;
+      \exists\, j, k: \\
+      \quad E(j + m) = \eta(k + m) \,\forall\, m \ge 0\big\}.
+      \end{array}\]</span></p>
       <p>Intuitively, <span class="math inline">\({\text{tail}}(E)\)</span> is the set of all numbers in <span class="math inline">\([0, 1]\)</span> with the same final sequence of base-3 digits as <span class="math inline">\(E\)</span>, ignoring any finite prefix of either expansion. For example, <span class="math inline">\(x=0.21021\overline{011}_3\)</span> and <span class="math inline">\(y=0.001\overline{011}_3\)</span> have <span class="math inline">\(\text{tail}(x) = \text{tail}(y)\)</span>.</p>
       <p>The following theorem builds on equation (7).</p>
       <p><strong>Theorem 2</strong> <span class="math inline">\(\;\)</span> <em>Suppose that <span class="math inline">\(f\)</span> is exactly self-replicating with functions <span class="math inline">\(s,\)</span> <span class="math inline">\(t_1,\)</span> and <span class="math inline">\(t_2\)</span> as given in (2). Also suppose that <span class="math inline">\(G\)</span> is defined as in (5). Then, for</em> <span class="math inline">\(x,y\in (1,2)-G,\)</span></p>

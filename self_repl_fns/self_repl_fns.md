@@ -98,10 +98,10 @@ world of self-replicating functions.
 Technically, any polynomial can be seen as a kind of
 self-replicating function. For example, if $f(x) = x^2$,
 
-$$\begin{array}{rcl}
-  g_1(x) & = & (x + 1)^2 - 1 = x^2 + 2x, \quad \text{and} \\
+$$\begin{densearray}
+  g_1(x) & = & (x + 1)^2 - 1 = x^2 + 2x, \optquad \text{and} \\
   g_2(x) & = & (x - 1)^2 - 1 = x^2 - 2x, \\
-\end{array}$$
+\end{densearray}$$
 
 then $f = g_1 + g_2$, and each $g_i$ is a shift of the original function $f$.
 In general, if $f(x) = ax^n + O(x^{n-1})$ then we can choose
@@ -481,7 +481,7 @@ $\overline{0}$. This can be expressed as:
 
 $$\begin{array}{l}
 \text{For } x\in (1,2),\quad
-  x\not\in G \;\;\Leftrightarrow\;\; \\
+  \Rule{0px}{1px}{0.7em}x\not\in G \;\;\Leftrightarrow\;\; \\
   x \in 1.\zerotwo^\infty_3 -\,
   \bigcup_{k\ge 0} 1.\zerotwo^k\overline{0}_3.
 \end{array}$$ {#eq:onetwo_lessG}
@@ -514,8 +514,11 @@ $f$ must have the same value. To do that, it will be useful to define the
 *tail* of an expansion as a way to capture end-of-string behavior.
 More precisely, if $E$ is an expansion, then define $\tail(E)$ via
 
-$$\tail(E) = \big\{\text{expansion }\eta \;\big|\;
-\exists\, j, k: E(j + m) = \eta(k + m) \,\forall\, m \ge 0\big\}.$$
+$$\begin{array}{l}
+\tail(E) = \big\{\text{expansion }\eta \;\big|\;
+\exists\, j, k: \\
+\quad E(j + m) = \eta(k + m) \,\forall\, m \ge 0\big\}.
+\end{array}$$
 
 Intuitively, $\tail(E)$ is the set of all numbers in $[0, 1]$ with
 the same final sequence of base-3 digits as $E$, ignoring any finite prefix
