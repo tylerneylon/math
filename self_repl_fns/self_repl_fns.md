@@ -640,7 +640,7 @@ by theorem 3 and an arbitrary choice of the following three functions:
 $$\begin{array}{ll}
 r_L : [0,1] \to \R, \\
 r_R : [0,1] \to \R, & \text{and} \\
-h   : (1,2) - G \to \R & \text{which is tail-consistent.}
+h   : (1,2) - G \to \R, & \text{tail-consistent } h.
 \end{array}$$
 
 Any choice of these three functions results in an exactly self-replicating
