@@ -12,9 +12,8 @@
 
 These are notes I'm creating for myself as I explore
 functions $f$ that can be written as a sum $f = g_1 + g_2$ where $g_1$ and $g_2$
-are the same up to symmetry, and both $g_1$ and $g_2$ strongly resemble shifts
-of the
-original function $f$.
+are shifted and possibly reflected versions of each other, both strongly
+resembling the original function $f$.
 When a function $f$ has these properties, I informally call it a
 *self-replicating function*.
 
@@ -27,6 +26,13 @@ rigorously defined — in particular, it depends on the ambiguous
 notion of "strong resemblance" — although I plan to investigate more precise
 requirements
 below.
+
+[These notes are available in several formats:
+[html](http://tylerneylon.com/a/self_repl/self_repl_fns.html) | 
+[standard pdf](http://tylerneylon.com/a/self_repl/self_repl_fns.pdf) |
+[kindle-friendly pdf](http://tylerneylon.com/a/self_repl/self_repl_fns_for_kindle.pdf).
+The source files, in LaTeX/markdown format, are available
+[on github](https://github.com/tylerneylon/math).]
 
 # Motivation
 
@@ -99,7 +105,7 @@ world of self-replicating functions.
 # Simple cases
 
 Technically, any polynomial can be seen as a kind of
-self-replicating function. For example, if $f(x) = x^2$,
+self-replicating function. For example, if $f(x) = 2x^2$,
 
 $$\begin{densearray}
   g_1(x) & = & (x + 1)^2 - 1 = x^2 + 2x, \optquad \text{and} \\
@@ -121,7 +127,7 @@ distribution functions, so the rest of this note focuses on functions $f$
 for which $\lim_{x\to\pm\infty}f(x) = 0$.
 
 Another simple approach would be to set $g_1 = g_2 = \frac{1}{2}f$ for
-any function $f$. This is not very interesting, and the word *shift* in the
+any function $f$. This is not very interesting, and the word *shifted* in the
 informal definition of a self-replicating function is intended to defeat this
 trivial case. That is, each $g_i$ is expected to be similar to a translation of
 $f$, such as $f(x-1)$ or $f(x+1)$.
@@ -171,40 +177,50 @@ another.](images/ramp_fns3.png){#fig:ramp_fns}
 
 The ramp function example gives me four ideas for further study:
 
-1. The addends and the sum cannot be expressed as linearly related; that is,
-   there is no linear function $\ell(x)$ so that
-   $J_{0, 1, 2, 3}(\ell(x)) = J_{0, 1, 4, 5}(x)$. Contrast this with the
-   interval functions where $I_{[0, 1)}(x / 2) = I_{[0, 2)}$.
-   This raises the questions: Which self-replicating functions allow for this
-   linear-relation restriction? Is there a slight modification of ramp functions
-   which meets this linear-relation restriction?
-2. The ramp functions are piece-wise linear, but that linearity is not really
-   the key to their being self-replicating. Rather, the key is that the left
-   ramp and right ramp sum to 1, which matches the middle height of the
-   functions. Which more general self-replicating functions can be constructed
-   using this idea?
-3. What happens if we treat the sum $f = g_1 + g_2$ as part of a sequence?
-   Thinking of *L* and *R* for *left* and *right*,
-   let $f^{(0)}_L = J_{0, 1, 2, 3}$, and $f^{(i)}_R = f^{(i)}_L(x-2)$ for
-   $i \ge 0$.
-   Thinking of *S* for *sum*,
-   define $f^{(i+1)}_S = f^{(i)}_L + f^{(i)}_R$ for $i \ge 1$.
-   If $f^{(i)}_L$ is positive on $(0, b)$, then $f^{(i)}_R$ is positive on
-   $(2, b + 2)$, so $f^{(i+1)}_S$ is positive on $(0, b + 2)$.
-   Set $f^{(i+1)}_L = f^{(i+1)}_S(x (b + 2) / b)$ so that we maintain the 
-   region on which the left function is positive. In this way, we get a sequence
-   of functions. What is the limiting behavior? Can we attempt to extend the
-   sequence backwards? Can we say anything in general about the limiting
-   behavior of a class of starting functions $f^{(0)}_L$?
-4. For the current ramp functions, the middle section is flat with value 1,
-   while the edges sum to 1. Can we do something more interesting where the
-   edges sum to a non-constant value? I can imagine this leading to a
-   discontinuous function. Is there a way to do this where the functions are
-   continuous, or at least continuous almost everywhere? Can we describe a
-   general class of self-replicating functions which are not continuous, such
-   as the indicator function of the Cantor dust?
+1.  The addends and the sum cannot be expressed as linearly related; that is,
+    there is no linear function $\ell(x)$ so that
+    $J_{0, 1, 2, 3}(\ell(x)) = J_{0, 1, 4, 5}(x)$. Contrast this with the
+    interval functions where $I_{[0, 1)}(x / 2) = I_{[0, 2)}$.
+    This raises the questions: Which self-replicating functions allow for this
+    linear-relation restriction? Is there a slight modification of ramp functions
+    which meets this linear-relation restriction?
 
-Some of these questions will be answered below.
+    *[This question isn't answered in these notes.]*
+
+2.  The ramp functions are piece-wise linear, but that linearity is not really
+    the key to their being self-replicating. Rather, the key is that the left
+    ramp and right ramp sum to 1, which matches the middle height of the
+    functions. Which more general self-replicating functions can be constructed
+    using this idea?
+
+    *[This question is answered below.]*
+
+3.  What happens if we treat the sum $f = g_1 + g_2$ as part of a sequence?
+    Thinking of *L* and *R* for *left* and *right*,
+    let $f^{(0)}_L = J_{0, 1, 2, 3}$, and $f^{(i)}_R = f^{(i)}_L(x-2)$ for
+    $i \ge 0$.
+    Thinking of *S* for *sum*,
+    define $f^{(i+1)}_S = f^{(i)}_L + f^{(i)}_R$ for $i \ge 1$.
+    If $f^{(i)}_L$ is positive on $(0, b)$, then $f^{(i)}_R$ is positive on
+    $(2, b + 2)$, so $f^{(i+1)}_S$ is positive on $(0, b + 2)$.
+    Set $f^{(i+1)}_L = f^{(i+1)}_S(x (b + 2) / b)$ so that we maintain the 
+    region on which the left function is positive. In this way, we get a sequence
+    of functions. What is the limiting behavior? Can we attempt to extend the
+    sequence backwards? Can we say anything in general about the limiting
+    behavior of a class of starting functions $f^{(0)}_L$?
+
+    *[This question isn't explicitly answered below, but I suspect
+    these notes offer some solid hints toward the solution.]*
+
+4.  For the current ramp functions, the middle section is flat with value 1,
+    while the edges sum to 1. Can we do something more interesting where the
+    edges sum to a non-constant value? I can imagine this leading to a
+    discontinuous function. Is there a way to do this where the functions are
+    continuous, or at least continuous almost everywhere? Can we describe a
+    general class of self-replicating functions which are not continuous, such
+    as the indicator function of the Cantor dust?
+
+    *[The continuous flavors of this question are answered below.]*
 
 ## Nonlinear ramps {#sec:nonlinear_ramps}
 
@@ -227,9 +243,9 @@ f\big(\frac{x - a}{b - a}\big) & \text{if } x \in [a, b), \\
 
 If any function can be written as $K_{a,b,c,d}$ for some value of $f$, I'll call
 it a $K-$*function*.
-This form is general enough to include interval functions — for example, by
-using $f(x) = 0$ — and to include the previous ramp function $J(x)$ by setting
-$f(x)=x$.
+This form is general enough to include interval functions by using, for example,
+$f(x)=0$. All previous ramp functions $J(x)$ are also $K-$functions, as can be
+seen by setting $f(x)=x$.
 
 The versatility of the $K-$functions shows that we can produce self-replicating
 functions that are highly discontinuous, such as by setting $f(x)$ to be the

@@ -110,10 +110,9 @@
 
 These are notes I'm creating for myself as I explore functions \(f\)
 that can be written as a sum \(f = g_1 + g_2\) where \(g_1\) and \(g_2\)
-are the same up to symmetry, and both \(g_1\) and \(g_2\) strongly
-resemble shifts of the original function \(f\). When a function \(f\)
-has these properties, I informally call it a \emph{self-replicating
-function}.
+are shifted and possibly reflected versions of each other, both strongly
+resembling the original function \(f\). When a function \(f\) has these
+properties, I informally call it a \emph{self-replicating function}.
 
 \begin{figure}
 \centering
@@ -126,6 +125,15 @@ reflections of each other.}\label{fig:added_normals}
 Like the word \emph{fractal}, this term is not rigorously defined --- in
 particular, it depends on the ambiguous notion of ``strong resemblance''
 --- although I plan to investigate more precise requirements below.
+
+{[}These notes are available in several formats:
+\href{http://tylerneylon.com/a/self_repl/self_repl_fns.html}{html}
+\textbar{}
+\href{http://tylerneylon.com/a/self_repl/self_repl_fns.pdf}{standard
+pdf} \textbar{}
+\href{http://tylerneylon.com/a/self_repl/self_repl_fns_for_kindle.pdf}{kindle-friendly
+pdf}. The source files, in LaTeX/markdown format, are available
+\href{https://github.com/tylerneylon/math}{on github}.{]}
 
 \section{Motivation}\label{motivation}
 
@@ -203,7 +211,7 @@ functions.
 \section{Simple cases}\label{simple-cases}
 
 Technically, any polynomial can be seen as a kind of self-replicating
-function. For example, if \(f(x) = x^2\),
+function. For example, if \(f(x) = 2x^2\),
 
 \[\begin{densearray}
   g_1(x) & = & (x + 1)^2 - 1 = x^2 + 2x, \optquad \text{and} \\
@@ -226,7 +234,7 @@ on distribution functions, so the rest of this note focuses on functions
 
 Another simple approach would be to set \(g_1 = g_2 = \frac{1}{2}f\) for
 any function \(f\). This is not very interesting, and the word
-\emph{shift} in the informal definition of a self-replicating function
+\emph{shifted} in the informal definition of a self-replicating function
 is intended to defeat this trivial case. That is, each \(g_i\) is
 expected to be similar to a translation of \(f\), such as \(f(x-1)\) or
 \(f(x+1)\).
@@ -287,7 +295,6 @@ The ramp function example gives me four ideas for further study:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
-\tightlist
 \item
   The addends and the sum cannot be expressed as linearly related; that
   is, there is no linear function \(\ell(x)\) so that
@@ -296,12 +303,16 @@ The ramp function example gives me four ideas for further study:
   raises the questions: Which self-replicating functions allow for this
   linear-relation restriction? Is there a slight modification of ramp
   functions which meets this linear-relation restriction?
+
+  \emph{{[}This question isn't answered in these notes.{]}}
 \item
   The ramp functions are piece-wise linear, but that linearity is not
   really the key to their being self-replicating. Rather, the key is
   that the left ramp and right ramp sum to 1, which matches the middle
   height of the functions. Which more general self-replicating functions
   can be constructed using this idea?
+
+  \emph{{[}This question is answered below.{]}}
 \item
   What happens if we treat the sum \(f = g_1 + g_2\) as part of a
   sequence? Thinking of \emph{L} and \emph{R} for \emph{left} and
@@ -316,6 +327,9 @@ The ramp function example gives me four ideas for further study:
   sequence of functions. What is the limiting behavior? Can we attempt
   to extend the sequence backwards? Can we say anything in general about
   the limiting behavior of a class of starting functions \(f^{(0)}_L\)?
+
+  \emph{{[}This question isn't explicitly answered below, but I suspect
+  these notes offer some solid hints toward the solution.{]}}
 \item
   For the current ramp functions, the middle section is flat with value
   1, while the edges sum to 1. Can we do something more interesting
@@ -325,9 +339,10 @@ The ramp function example gives me four ideas for further study:
   everywhere? Can we describe a general class of self-replicating
   functions which are not continuous, such as the indicator function of
   the Cantor dust?
-\end{enumerate}
 
-Some of these questions will be answered below.
+  \emph{{[}The continuous flavors of this question are answered
+  below.{]}}
+\end{enumerate}
 
 \subsection{Nonlinear ramps}\label{sec:nonlinear_ramps}
 
@@ -356,9 +371,9 @@ f\big(\frac{x - a}{b - a}\big) & \text{if } x \in [a, b), \\
 
 If any function can be written as \(K_{a,b,c,d}\) for some value of
 \(f\), I'll call it a \(K-\)\emph{function}. This form is general enough
-to include interval functions --- for example, by using \(f(x) = 0\)
----~and to include the previous ramp function \(J(x)\) by setting
-\(f(x)=x\).
+to include interval functions by using, for example, \(f(x)=0\). All
+previous ramp functions \(J(x)\) are also \(K-\)functions, as can be
+seen by setting \(f(x)=x\).
 
 The versatility of the \(K-\)functions shows that we can produce
 self-replicating functions that are highly discontinuous, such as by
