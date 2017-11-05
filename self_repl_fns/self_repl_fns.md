@@ -1,6 +1,6 @@
 % Self-Replicating Functions
 % Tyler Neylon
-% 204.2016
+% 620.2017
 
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\eqnset}[1]{\left.\mbox{$#1$}\;\;\right\rbrace\class{postbrace}{ }}
@@ -246,6 +246,9 @@ it a $K-$*function*.
 This form is general enough to include interval functions by using, for example,
 $f(x)=0$. All previous ramp functions $J(x)$ are also $K-$functions, as can be
 seen by setting $f(x)=x$.
+Note that a $K-$function $K_{a,b,c,d}$
+must have $|b-a| = |d-c|$ in order to allow a shifted
+version to sum to 1 throughout the middle.
 
 The versatility of the $K-$functions shows that we can produce self-replicating
 functions that are highly discontinuous, such as by setting $f(x)$ to be the
@@ -267,7 +270,8 @@ non-peak-monotonic function.](images/other_ramps2.png){#fig:other_ramps}
 
 The ramp functions $K_{a,b,c,d}$ all have the constant value 1 on the
 middle interval $[b, c]$. This requires the ramps on intervals $[a, b]$ and
-$[c, d]$ to sum to 1. In this section, I'll consider what can happen if we relax
+$[c, d]$ to sum to 1.
+In this section, I'll consider what can happen if we relax
 this condition. I'll informally call these *non-plateau functions*.
 
 It will be useful to propose one possible formalization of a
@@ -330,6 +334,9 @@ which other functions are exactly self-replicating with these parameters.
 
 ### Characterizing one type of exactly self-replicating function
 
+*Note: The style of writing is about to get a tad more logically
+precise as some proofs start to show up.*
+
 In this section I'll give sufficient and necessary conditions for a function
 to be exactly self-replicating with the $s$, $t_1$, and $t_2$ functions
 given in ([@eq:s_t1_t2]), and with $f(x)=0$ outside of the interval
@@ -379,7 +386,8 @@ $$\begin{array}{rcl}
 
 Since $f_L(x) = f_S(t_1(x))$, and $t_1$ maps
 $[1\tfrac{1}{3}, 1\tfrac{2}{3}]$ to $[2,3]$,
-this means $(\,f=f_L \restrict [1\tfrac{1}{3}, 1\tfrac{2}{3}]) = g$.
+this means $(\,f=f_L \restrict [1\tfrac{1}{3}, 1\tfrac{2}{3}]) = g$
+([@fig:nonpl_process] below may help clarify the action of $t_1$).
 Below, I'll show how repeated application of this kind of logic determines
 the non-ramp values of $f$ almost everywhere; a boolean property
 $P:\R\to\{\text{true},\text{false}\}$ is defined to be true
@@ -517,10 +525,10 @@ Let $E$ be the expansion with $x=1.E_3$; note that
 $E$ cannot be the all-zero string $\overline 0$ nor the
 all-two string $\overline 2$ since $x\in (1,2)$.
 Then $f_S(x+\{0,2\}) = y$ and, by applying $t_1$,
-$f(x') = y$ for both $x' = (x+2)/3$ and $x' = (x+4)/3$.
+$f(x') = y$ for both $x_1' = (x+2)/3$ and $x_2' = (x+4)/3.$
 In expansion notation, we can write these last two
-equations as $x' = x/3 + 2/3 = 0.1E_3 + 0.2_3 = 1.0E_3$ and
-as $x' = x/3 + 4/3 = 0.1E_3 + 1.1_3 = 1.2E_3$.
+equations as $x_1' = x/3 + 2/3 = 0.1E_3 + 0.2_3 = 1.0E_3$ and
+as $x_2' = x/3 + 4/3 = 0.1E_3 + 1.1_3 = 1.2E_3$.
 We can summarize this reasoning as
 
 $$E\ne \overline 0, \overline 2 \optquad\Rightarrow\optquad
@@ -533,10 +541,11 @@ $f$ must have the same value. To do that, it will be useful to define the
 *tail* of an expansion as a way to capture end-of-string behavior.
 More precisely, if $E$ is an expansion, then define $\tail(E)$ via
 
-$$\bigscr{\tail(E) = \big\{\text{expansion }\eta \;\big|\;
+$$\bigscr{\tail(E) = \big\{y=0.F_3
+\;\big|\;
 \exists\, j, k: 
-E(j + m) = \eta(k + m) \,\forall\, m \ge 0\big\}.}
-\smallscr{\begin{array}{l}\tail(E) = \big\{\text{expansion }\eta \;\big|\;
+E(j + m) = F(k + m) \,\forall\, m \ge 0\big\}.}
+\smallscr{\begin{array}{l}\tail(E) = \big\{y=0.F_3 \;\big|\;
 \exists\, j, k: \\
 \quad E(j + m) = \eta(k + m) \,\forall\, m \ge 0\big\}.\end{array}}$$
 
@@ -675,8 +684,8 @@ $r_L(x) = \cos(2x)/2 + 1/4$,
 $r_R(x) = r_L(1 - x)$, and the value $f(x) = r_L(0) + r_R(0)$ for all $x$ not
 determined by $r_L$ and $r_R$.](images/nonplateau.png){#fig:nonplateau}
 
-Next I'll examine a famous function which is *not* exactly
-self-replicating, but which can be seen as approximately self-replicating:
-the normal curve.
+There are many exciting directions to explore from here, but I'm going to
+take a break now, considering this as a nice initial step into the realm
+of self-replicating functions.
 
 # References
