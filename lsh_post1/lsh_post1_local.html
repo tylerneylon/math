@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <title>Introduction to Locality-Sensitive Hashes</title>
+	<script type="text/x-mathjax-config"> 
+      MathJax.Hub.Register.StartupHook("TeX AMSmath Ready",function () { 
+        MathJax.InputJax.TeX.Definitions.environment["densearray"] = 
+          ['AMSarray',null,true,true,'rcl','0em .4em']; 
+      }); 
+	</script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <link rel="stylesheet" href="tufte-edited.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  </head>
+  <body>
+    <p style="display:none">\(\newcommand{\latexonlyrule}[2]{}\)</p>
+    <div class="main">
+      <div class="title">Introduction to Locality-Sensitive Hashes</div>
+      <div class="author">Tyler Neylon</div>
+      <div class="date">145.2018</div>
+      <p><em>Locality-sensitive hashes</em> are techniques that dramatically speed up search or de-duplication operations on data. They can be used, for example, to filter out duplicates of scraped web pages at an impressive speed, or to perform near-constant-time lookups of nearby points from a geospatial data set.</p>
+      <p>When you think about hash functions, you might think about <em>hash tables</em>, which is perhaps the most common use case. As a reminder, the hash functions used in a hash table are designed to map a data structure to an integer that can be used to look in a particular <em>bucket</em> within the hash table to retrieve (or delete) that element. Common containers with string keys like JavaScript object attributes and Python dictionaries are based on hash tables. Although they might not <em>guarantee</em> constant-time lookups, in practice they effectively provide them. Hash functions used for hash tables are called <em>universal hash functions</em>. [CHECK]</p>
+      <p>There are a number of other classes of hash functions as well. For example the SHA1 cryptographic hash function is designed to be <em>difficult to reverse</em>, which is useful if you want to store someone’s password as a hashed value. [CHECK] Another security-oriented hash function is CHECK, which is actually designed to be <em>expensive to compute</em>, as this can deter malicious ne’er-do-wells from easily building large lookup tables to be able to reverse a hash on more likely input values. Hash functions like these are called <em>secure hash functions</em>. [CHECK]</p>
+      <p>Here are what all these various hash functions have in common: * They map a wide variety of input data types to discrete values. * In practice, we care about whether or not two (or more) input values map to the same output (hashed) value.</p>
+      <p>Locality-sensitive hash (LSH) functions are specifically designed so that collisions of the hash value are <em>more likely</em> given two input values that are <em>close together</em>. Just as there are different implementations of secure hash functions for different use cases, there are different implementations of LSH functions for different data types and for different definitions of being <em>close together</em>. In this post, I’ll give a brief overview of the key ideas, and take a look at a toy example based on <em>random projections</em> of vectors into lower-dimensional spaces.</p>
+      <h1 id="an-example"><span class="header-section-number">1</span> An example</h1>
+      <p>It will probably be much easier to grasp the main idea with an example. (The “toy example” for random projections will come later. This is like a mini-toy example.)</p>
+      <p>Suppose you have a million people from across the United States all standing in a huge room. It’s your job to get people who live close together to stand together in groups. Imagine how much time it would take to walk up to each person, ask for their street address, map that to a lat/long pair, then write some code to find reasonable geographic clusters, and walk up to every person again and tell them their cluster number. It’s a disaster.</p>
+      <p>Here’s a much better way to solve this problem: Write every U.S. zip code on poster boards, and hang those from the ceiling. Then announce to everyone to go stand under the zip code where they live.</p>
+      <p>Voila! That’s much easier, right? The main idea here is also the main idea behind locality-sensitive hashes. We’re taking an arbitrary data type (a person, who we could of as a ton of data including their street address), and mapping that data into a set of discrete values (zip codes) such that people who live close together probably hash to the same value. In other words, the clusters are very likely to be groups of neighbors.</p>
+      <p>The distinction between walking sequentially up to each person versus parallelizing the work by asking everyone to find their own way to their zip code was not an accident. Besides avoiding whatever clustering algorithm you’d have to run on lat/long coordinates, another advantage of this hashing approach is that it’s extremely friendly to parallel processing. Despite caring about <em>relationships</em> within your data, you can still split up the data any way you like and compute the hashes in a fully parallelized fashion.</p>
+      <p>Another property of this example is that it is <em>approximate</em> in the sense that some people may live across the street from each other, but happen to cross a zip code line, in which case they would not be clustered together here. As we’ll see below, it’s also possible for data points to be clustered together even when they’re very far apart, although a well-designed LSH can at least give some mathematical evidence that this will be a rare event, and some implementations manage to guarantee certain bad cases (such as clustering of very far points or non-clustering of very close points) never happen.</p>
+      <h1 id="hashing-points-via-projection"><span class="header-section-number">2</span> Hashing points via projection</h1>
+      <p>Let’s start with an incredibly simple mathematical function that we can treat as an LSH. Define <span class="math inline">\(f:{\mathbb{R}}^2 \to {\mathbb{Z}}\)</span> for a point <span class="math inline">\(x\in{\mathbb{R}}^2\)</span> by</p>
+      <p><span class="math display">\[ f(x) := \lfloor x_1 \rfloor; \]</span></p>
+      <p>that is <span class="math inline">\(f(x)\)</span> is the largest integer <span class="math inline">\(a\)</span> for which <span class="math inline">\(a\le x_1.\)</span> (For example, <span class="math inline">\(f((3.2, -1.2)) = 3.\)</span>)</p>
+      <p>Let’s suppose we choose points at random by uniformly sampling from the origin-centered circle <span class="math inline">\(\mathcal C\)</span> with radius 3:</p>
+      <p><span class="math display">\[ \mathcal C := \{ (x, y) : x^2 + y^2 \le 3^2 \}. \]</span></p>
+      <p>If we want to find which of our points in <span class="math inline">\(\mathcal C\)</span> are close together, we can estimate this relationship by clustering together points <span class="math inline">\(a\)</span> and <span class="math inline">\(b \in \mathcal C\)</span> iff (if and only if) <span class="math inline">\(f(a) = f(b).\)</span> It will be handy to introduce the notation <span class="math inline">\(a \sim b\)</span> to indicate that <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are in the same cluster. With that notation, we can write our current hash setup as</p>
+      <p><span class="math display">\[ a \sim b \iff h_1(a) = h_1(b). \]</span></p>
+      <p>Here’s an example of such a clustering:</p>
+      <p>IMAGE</p>
+      <p>You can immediately see that some points are far apart yet clustered, while others are relatively close yet unclustered. There’s also a sense that this particular hash function <span class="math inline">\(h_1\)</span> was arbitrarily chosen to focus on the x-axis. What would have happened with the same data if we had used instead <span class="math inline">\(h_2(x) := \lfloor x_2 \rfloor?\)</span> Here’s that image:</p>
+      <p>IMAGE</p>
+      <p>While neither clustering alone is amazing, things start to work better if we use both of them simultaneously. That is, we can redefine our clustering via</p>
+      <p><span class="math display">\[ a \sim b \iff h_1(a) = h_1(b) \text{ and } h_2(a) = h_2(b). \]</span></p>
+      <p>Our same example points look like this under the new clustering rule:</p>
+      <p>IMAGE</p>
+      <h2 id="randomizing-our-hashes"><span class="header-section-number">2.1</span> Randomizing our hashes</h2>
+      <p>So far we’ve defined deterministic hash functions. Let’s change that by choosing a random rotation matrix <span class="math inline">\(U\)</span> (a rotation around the origin) along with a random offset <span class="math inline">\(b \in [0, 1).\)</span> Given such a random <span class="math inline">\(U\)</span> and <span class="math inline">\(b,\)</span> we could define a new hash function via</p>
+      <p><span class="math display">\[ h(x) := \lfloor (Ux)_1 + b \rfloor, \]</span></p>
+      <p>where I’m using the notation <span class="math inline">\(( \textit{vec} )_1\)</span> to indicate the first coordinate of the vector value <em>vec</em>.</p>
+      <hr />
+      <h1 id="references"><span class="header-section-number">3</span> References</h1>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+#!/bin/bash
+# Add a -x to the end of the above line to help debug this script.
+
+# Set up prefix templates for pandoc-crossref.
+ept='$$i$$'
+spt='$$p$$$$i$$'
+
+name=lsh_post1
+FLAGS="-s -S -M figPrefix=figure -M secPrefix="§" -M secPrefixTemplate="${spt}" -M eqnPrefixTemplate="${ept}" --filter pandoc-crossref -M eqnPrefix='' -M linkcolor=black --number-sections --bibliography=${name}.bib ${name}.md"
+
+# Make and the html file.
+pandoc --mathjax --template=template.html ${FLAGS} > ${name}.html
+# Move captions to be before figures in the html file.
+TMP=$(mktemp tmp_XXXX)
+cat ${name}.html | awk '{if(x) { print $0; print x; x = "" } else if (/<img/) { x = $0 } else { print $0 }}' > ${TMP}
+mv ${TMP} ${name}.html
+#open ${name}.html
+
+# Make a local-only version of the html for the author to work with.
+sed 's_https://cdn.mathjax.org/mathjax/latest_'${HOME}/Dropbox/Documents/code/MathJax_ ${name}.html > ${name}_local.html
+#open ${name}_local.html
+
+# Make and open the pdf file.
+pandoc -t latex -o ${name}.tex -s ${FLAGS} --template=template.tex
+TMP=$(mktemp tmp_XXXX)
+sed 's|images/\(.*\)\.png|images/pdfs/\1.pdf|' ${name}.tex > ${TMP}
+mv ${TMP} ${name}.tex
+pdflatex ${name}.tex
+#open ${name}.pdf
+
+# Make the kindle-friendly pdf file.
+pandoc -t latex -o ${name}.tex -s ${FLAGS} --template=kindle_template.tex
+TMP=$(mktemp tmp_XXXX)
+sed 's|images/\(.*\)\.png|images/pdfs/\1.pdf|' ${name}.tex > ${TMP}
+TMP2=$(mktemp tmp_XXXX)
+# This next line is a hacky way to modify the definition of \zerotwo so that
+# it looks better in this output format.
+sed 's|\(\\newcommand{\\zerotwo}.*\)\\!|\1|;s|\(\\lower1pt\\hbox.*\)\\!|\1|' ${TMP} > ${TMP2}
+rm ${TMP}
+mv ${TMP2} ${name}_for_kindle.tex
+pdflatex ${name}_for_kindle.tex
+#open ${name}_for_kindle.pdf

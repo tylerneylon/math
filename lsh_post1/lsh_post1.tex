@@ -1,0 +1,253 @@
+\documentclass[20pt,]{extarticle}
+\usepackage[margin=0.6in]{geometry}
+\pagenumbering{gobble}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{hyperref}
+\PassOptionsToPackage{usenames,dvipsnames}{color} % color is loaded by hyperref
+\hypersetup{unicode=true,
+            pdftitle={Introduction to Locality-Sensitive Hashes},
+            pdfauthor={Tyler Neylon},
+            colorlinks=true,
+            linkcolor=black,
+            citecolor=Blue,
+            urlcolor=Blue,
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\usepackage{subfig}
+\AtBeginDocument{%
+\renewcommand*\figurename{Figure}
+\renewcommand*\tablename{Table}
+}
+\AtBeginDocument{%
+\renewcommand*\listfigurename{List of Figures}
+\renewcommand*\listtablename{List of Tables}
+}
+\usepackage{float}
+\floatstyle{ruled}
+\makeatletter
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\makeatother
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+
+\title{Introduction to Locality-Sensitive Hashes}
+\author{Tyler Neylon}
+\date{145.2018}
+
+% Begin custom, non-pandoc commands.
+
+\newcommand{\latexonlyrule}{\rule}
+\newenvironment{densearray}{\begin{array}{rcl}}{\end{array}}
+\newcommand{\class}[1]{}
+\newcommand{\Rule}[3]{}
+\newcommand{\optquad}{\quad}
+\newcommand{\smallscrneg}{}
+\newcommand{\smallscr}[1]{}
+\newcommand{\bigscr}[1]{#1}
+\newcommand{\smallscrskip}[1]{}
+
+% End custom, non-pandoc commands.
+
+\begin{document}
+\maketitle
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\eqnset}[1]{\left.\mbox{$#1$}\;\;\right\rbrace\class{postbrace}{ }}
+\providecommand{\optquad}{\class{optquad}{}}
+\providecommand{\smallscrneg}{\class{smallscrneg}{ }}
+\providecommand{\bigscr}[1]{\class{bigscr}{#1}}
+\providecommand{\smallscr}[1]{\class{smallscr}{#1}}
+\providecommand{\smallscrskip}[1]{\class{smallscrskip}{\hskip #1}}
+
+\emph{Locality-sensitive hashes} are techniques that dramatically speed
+up search or de-duplication operations on data. They can be used, for
+example, to filter out duplicates of scraped web pages at an impressive
+speed, or to perform near-constant-time lookups of nearby points from a
+geospatial data set.
+
+When you think about hash functions, you might think about \emph{hash
+tables}, which is perhaps the most common use case. As a reminder, the
+hash functions used in a hash table are designed to map a data structure
+to an integer that can be used to look in a particular \emph{bucket}
+within the hash table to retrieve (or delete) that element. Common
+containers with string keys like JavaScript object attributes and Python
+dictionaries are based on hash tables. Although they might not
+\emph{guarantee} constant-time lookups, in practice they effectively
+provide them. Hash functions used for hash tables are called
+\emph{universal hash functions}. {[}CHECK{]}
+
+There are a number of other classes of hash functions as well. For
+example the SHA1 cryptographic hash function is designed to be
+\emph{difficult to reverse}, which is useful if you want to store
+someone's password as a hashed value. {[}CHECK{]} Another
+security-oriented hash function is CHECK, which is actually designed to
+be \emph{expensive to compute}, as this can deter malicious
+ne'er-do-wells from easily building large lookup tables to be able to
+reverse a hash on more likely input values. Hash functions like these
+are called \emph{secure hash functions}. {[}CHECK{]}
+
+Here are what all these various hash functions have in common: * They
+map a wide variety of input data types to discrete values. * In
+practice, we care about whether or not two (or more) input values map to
+the same output (hashed) value.
+
+Locality-sensitive hash (LSH) functions are specifically designed so
+that collisions of the hash value are \emph{more likely} given two input
+values that are \emph{close together}. Just as there are different
+implementations of secure hash functions for different use cases, there
+are different implementations of LSH functions for different data types
+and for different definitions of being \emph{close together}. In this
+post, I'll give a brief overview of the key ideas, and take a look at a
+toy example based on \emph{random projections} of vectors into
+lower-dimensional spaces.
+
+\section{An example}\label{an-example}
+
+It will probably be much easier to grasp the main idea with an example.
+(The ``toy example'' for random projections will come later. This is
+like a mini-toy example.)
+
+Suppose you have a million people from across the United States all
+standing in a huge room. It's your job to get people who live close
+together to stand together in groups. Imagine how much time it would
+take to walk up to each person, ask for their street address, map that
+to a lat/long pair, then write some code to find reasonable geographic
+clusters, and walk up to every person again and tell them their cluster
+number. It's a disaster.
+
+Here's a much better way to solve this problem: Write every U.S. zip
+code on poster boards, and hang those from the ceiling. Then announce to
+everyone to go stand under the zip code where they live.
+
+Voila! That's much easier, right? The main idea here is also the main
+idea behind locality-sensitive hashes. We're taking an arbitrary data
+type (a person, who we could of as a ton of data including their street
+address), and mapping that data into a set of discrete values (zip
+codes) such that people who live close together probably hash to the
+same value. In other words, the clusters are very likely to be groups of
+neighbors.
+
+The distinction between walking sequentially up to each person versus
+parallelizing the work by asking everyone to find their own way to their
+zip code was not an accident. Besides avoiding whatever clustering
+algorithm you'd have to run on lat/long coordinates, another advantage
+of this hashing approach is that it's extremely friendly to parallel
+processing. Despite caring about \emph{relationships} within your data,
+you can still split up the data any way you like and compute the hashes
+in a fully parallelized fashion.
+
+Another property of this example is that it is \emph{approximate} in the
+sense that some people may live across the street from each other, but
+happen to cross a zip code line, in which case they would not be
+clustered together here. As we'll see below, it's also possible for data
+points to be clustered together even when they're very far apart,
+although a well-designed LSH can at least give some mathematical
+evidence that this will be a rare event, and some implementations manage
+to guarantee certain bad cases (such as clustering of very far points or
+non-clustering of very close points) never happen.
+
+\section{Hashing points via
+projection}\label{hashing-points-via-projection}
+
+Let's start with an incredibly simple mathematical function that we can
+treat as an LSH. Define \(f:\R^2 \to \Z\) for a point \(x\in\R^2\) by
+
+\[ f(x) := \lfloor x_1 \rfloor; \]
+
+that is \(f(x)\) is the largest integer \(a\) for which \(a\le x_1.\)
+(For example, \(f((3.2, -1.2)) = 3.\))
+
+Let's suppose we choose points at random by uniformly sampling from the
+origin-centered circle \(\mathcal C\) with radius 3:
+
+\[ \mathcal C := \{ (x, y) : x^2 + y^2 \le 3^2 \}. \]
+
+If we want to find which of our points in \(\mathcal C\) are close
+together, we can estimate this relationship by clustering together
+points \(a\) and \(b \in \mathcal C\) iff (if and only if)
+\(f(a) = f(b).\) It will be handy to introduce the notation \(a \sim b\)
+to indicate that \(a\) and \(b\) are in the same cluster. With that
+notation, we can write our current hash setup as
+
+\[ a \sim b \iff h_1(a) = h_1(b). \]
+
+Here's an example of such a clustering:
+
+IMAGE
+
+You can immediately see that some points are far apart yet clustered,
+while others are relatively close yet unclustered. There's also a sense
+that this particular hash function \(h_1\) was arbitrarily chosen to
+focus on the x-axis. What would have happened with the same data if we
+had used instead \(h_2(x) := \lfloor x_2 \rfloor?\) Here's that image:
+
+IMAGE
+
+While neither clustering alone is amazing, things start to work better
+if we use both of them simultaneously. That is, we can redefine our
+clustering via
+
+\[ a \sim b \iff h_1(a) = h_1(b) \text{ and } h_2(a) = h_2(b). \]
+
+Our same example points look like this under the new clustering rule:
+
+IMAGE
+
+\subsection{Randomizing our hashes}\label{randomizing-our-hashes}
+
+So far we've defined deterministic hash functions. Let's change that by
+choosing a random rotation matrix \(U\) (a rotation around the origin)
+along with a random offset \(b \in [0, 1).\) Given such a random \(U\)
+and \(b,\) we could define a new hash function via
+
+\[ h(x) := \lfloor (Ux)_1 + b \rfloor, \]
+
+where I'm using the notation \(( \textit{vec} )_1\) to indicate the
+first coordinate of the vector value \emph{vec}.
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\section{References}\label{references}
+
+\end{document}
