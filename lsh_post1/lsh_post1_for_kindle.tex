@@ -228,7 +228,7 @@ While neither clustering alone is amazing, things start to work better
 if we use both of them simultaneously. That is, we can redefine our
 clustering via
 
-\[ a \sim b \iff h_1(a) = h_1(b) \text{ and } h_2(a) = h_2(b). \]
+\begin{equation} a \sim b \iff h_1(a) = h_1(b) \text{ and } h_2(a) = h_2(b). \label{eq:eq1}\end{equation}
 
 Our same example points look like this under the new clustering rule:
 
@@ -244,7 +244,61 @@ and \(b,\) we could define a new hash function via
 \[ h(x) := \lfloor (Ux)_1 + b \rfloor, \]
 
 where I'm using the notation \(( \textit{vec} )_1\) to indicate the
-first coordinate of the vector value \emph{vec}.
+first coordinate of the vector value \emph{vec} (that is, the notation
+\((Ux)_1\) means the first coordinate of the vector \(Ux\)).
+
+It may seem a tad arbitrary to use only the first coordinate here rather
+than any other, but the fact that we're taking a random rotation first
+means that we have the same set of possibilities, with the same
+probability distribution, as we would when pulling out any other single
+coordinate value.
+
+The advantage of using randomized hash functions is that any theoretical
+properties we want to discuss will apply without having to worry about
+pathologically weird data. Conceptually, if we were using deterministic
+hash functions, then someone could choose the worst-case data for our
+hash function, and we'd be stuck with that poor performance (for
+example, choosing maximally-far apart points that are still clustered
+together by our \(h_1\) function above). By using randomly chosen hash
+functions, we can ensure that any average-case behavior of our hash
+functions applies equally well to \emph{all data}. This same perspective
+is useful for hash tables in the form of \emph{universal hashing}; if
+randomized hash functions are a new idea for you, I recommend checking
+out \href{https://en.wikipedia.org/wiki/Universal_hashing}{Wikipedia's
+universal hashing page}.
+
+Let's revisit the example points we used above, but now apply some
+randomized hash functions. In figure CHECK, points are clustered iff
+both of their hash values (from \(h_1()\) and \(h_2()\)) collide. We'll
+use that same idea, but this time choose four rotations
+\(U_1, \ldots, U_4\) as well as four offsets \(b_1, \ldots, b_4\) to
+define \(h_1(), \ldots, h_4()\) via
+
+\[ h_i(x) := \lfloor (U_i x)_1 + b_i \rfloor. \]
+
+Here's the resulting clustering:
+
+IMAGE
+
+It's not obvious that we actually want to use all four of our hash
+functions. The issue is that our clusters have become quite small. There
+are a couple ways to address this. One is to simply increase the scale
+of the hash functions; for example:
+
+\[ \tilde h_i(x) := \left\lfloor \left(U_i \frac{x}{s}\right)_1 + b_i \right\rfloor, \]
+
+where \(s\) is a scale factor (larger \(s\) values will result in larger
+clusters).
+
+However, there is something a bit more nuanced we can look at, which is
+to allow some adaptability in terms of \emph{how many hash collisions we
+require}. In other words, suppose we have \(k\) total hash functions
+(just above, we had \(k=4\)). Instead of insisting that all \(k\) hash
+values must match, we could look at cases where some numer \(j \le k\)
+of them matches. To state this mathematically, we would be rewriting
+equation (\ref{eq:eq1}) as
+
+\[ a \sim b \iff \#\{i: h_i(a) = h_i(b)\} \ge j. \]
 
 \begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
 

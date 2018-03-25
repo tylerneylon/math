@@ -141,7 +141,7 @@ While neither clustering alone is amazing, things start to work better
 if we use both of them simultaneously. That is, we can redefine our
 clustering via
 
-$$ a \sim b \iff h_1(a) = h_1(b) \text{ and } h_2(a) = h_2(b). $$
+$$ a \sim b \iff h_1(a) = h_1(b) \text{ and } h_2(a) = h_2(b). $$ {#eq:eq1}
 
 Our same example points look like this under the new clustering
 rule:
@@ -183,10 +183,34 @@ Let's revisit the example points we used above, but now apply some randomized
 hash functions. In figure CHECK, points are clustered iff both of their
 hash values (from $h_1()$ and $h_2()$) collide. We'll use that same idea, but
 this time choose four rotations $U_1, \ldots, U_4$ as well as four
-offsets $b_1, \ldots, b_4$ to define $h_1(), \ldots, h_4().$ Here's the
+offsets $b_1, \ldots, b_4$ to define $h_1(), \ldots, h_4()$
+via
+
+$$ h_i(x) := \lfloor (U_i x)_1 + b_i \rfloor. $$
+
+Here's the
 resulting clustering:
 
 IMAGE
+
+It's not obvious that we actually want to use all four of our hash functions.
+The issue is that our clusters have become quite small. There are a couple
+ways to address this. One is to simply increase the scale of the hash
+functions; for example:
+
+$$ \tilde h_i(x) := \left\lfloor \left(U_i \frac{x}{s}\right)_1 + b_i \right\rfloor, $$
+
+where $s$ is a scale factor (larger $s$ values will result in larger clusters).
+
+However, there is something a bit more nuanced we can look at, which is to
+allow some adaptability in terms of *how many hash collisions we require*.
+In other words, suppose we have $k$ total hash functions (just above, we had
+$k=4$). Instead of insisting that all $k$ hash values must match before we
+say two points are in the same cluster, we could
+look at cases where some numer $j \le k$ of them matches. To state this
+mathematically, we would be rewriting equation ([@eq:eq1]) as
+
+$$ a \sim b \iff \#\{i: h_i(a) = h_i(b)\} \ge j. $$
 
 
 
