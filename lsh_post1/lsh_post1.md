@@ -191,14 +191,14 @@ $$ h_i(x) := \lfloor (U_i x)_1 + b_i \rfloor. $$
 Here's the
 resulting clustering:
 
-IMAGE
+IMAGE 4
 
 It's not obvious that we actually want to use all four of our hash functions.
 The issue is that our clusters have become quite small. There are a couple
 ways to address this. One is to simply increase the scale of the hash
 functions; for example:
 
-$$ \tilde h_i(x) := \left\lfloor \left(U_i \frac{x}{s}\right)_1 + b_i \right\rfloor, $$
+$$ \tilde h_i(x) := h_i(x/s), $$
 
 where $s$ is a scale factor (larger $s$ values will result in larger clusters).
 
@@ -207,20 +207,112 @@ allow some adaptability in terms of *how many hash collisions we require*.
 In other words, suppose we have $k$ total hash functions (just above, we had
 $k=4$). Instead of insisting that all $k$ hash values must match before we
 say two points are in the same cluster, we could
-look at cases where some numer $j \le k$ of them matches. To state this
-mathematically, we would be rewriting equation ([@eq:eq1]) as
+look at cases where some number $j \le k$ of them matches. To state this
+mathematically, we would rewrite equation ([@eq:eq1]) as
 
-$$ a \sim b \iff \#\{i: h_i(a) = h_i(b)\} \ge j. $$
+$$ a \sim b \iff \#\{i: h_i(a) = h_i(b)\} \ge j. $$ {#eq:eq2}
 
+Something interesting happens here, which is that the $a \sim b$ relationship
+is no longer a clustering, but becomes more like adjacency (that is, sharing
+an edge) in a graph. The difference is that, in a clustering, if $a\sim b$ and
+$b\sim c,$ the we must have $a\sim c$ as well; this is called being
+*transitively closed*. Graphs don't need to have this property, and in our
+case as well, it's no longer true that our similarity relationship is
+transitively closed.
 
+It may help your intuition to visualize this new definition of $a\sim b$
+on our previous data points:
 
+IMAGE 5
 
+In fact, we can visualize all possible cutoff values (values of $j$ in
+([@eq:eq2])) in a single image by using weighted edges, like so:
 
+IMAGE 6
 
+Yet another fun way to get an intuitive feel for how much information we're
+getting from our hashes is to see which subsets of our circle are matched ---
+and to what degree --- by a given point:
 
+IMAGE 8
 
+## Why this is faster
 
+So far we've been sticking to 2-dimensional data because that's easier to
+visualize in an article. However, if you think about computing 10 hashes for
+every 2-dimensional point in order to find neighbors, it may feel like
+you're doing more work than the simple solution of a linear search through
+your points. Let's review cases where using an LSH is more efficient than
+other methods of finding nearby points.
 
+### Zero linear search
+
+If you have a huge number $n$ of points, and it's reasonable for you to
+index those points ahead of time --- meaning, you can afford to compute
+all $k$ hash values for each point --- then you can completely avoid the
+linear-time cost of a brute force search for nearby points given a new
+query point. This speed-up is relevant in any dimension, including the
+simple 2-dimensional case.
+
+### Fewer hashes needed in higher dimensions
+
+Another effect that may be less obvious is that you can get away with
+fewer hash values (a smaller $k$ value) in higher dimensions.
+There are some mathematically sophisticated ways to quantify that statement,
+but it may be even easier to understand graph based on empirically derived data.
+
+Here's a summary of some random sampling I did in order to explore the
+relationship between various values of $j$ for $d=100$ dimensional data using
+$k=10$ different random hashes:      CHECK
+
+IMAGE 9
+
+CHECK the whole next paragraph
+What's interesting here is that we get a relatively tight
+box plot for $j$ values around CHECK. This means that we can choose the
+threshold $j=CHECK$ in equation ([@eq:eq2]) and have fairly good confidence
+that our hash-based "nearby" relationship closely matches reality.
+
+We can even quantify this precisely. 
+Although this article doesn't *prove* the following implications, the
+empirical evidence found CHECK(add link to code) strongly suggests that these
+are in fact the correct values:
+
+$$ \text{dist}(a, b) > \alpha \Rightarrow P(\#\{i : h_i(a) = h_i(b)\} < j) > 0.95; $$
+
+$$ \text{dist}(a, b) < \beta  \Rightarrow P(\#\{i : h_i(a) = h_i(b)\} \ge j) < 0.05. $$
+
+CHECK(the actual identities may end up being based on the left side
+      using a $j$ value rather than a distance to start with).
+
+We might interpret these last two expressions as saying that 
+we believe at least 99% of our pairwise relationships are correctly
+classified. And we're able to do so while saving about
+$O(n)$ speed.
+
+## Other data types and approaches
+
+This article has focused on numeric, 2-dimensional data
+because it's easier to visualize. Locality-sensitive hashes can certainly
+be used for many other data types, including strings, sets, or high-dimensional
+vectors.
+
+There are also other ways to specifically measure the performance of a
+particular hashing approach. For example, CHECK.
+
+Yet another ingredient to throw into the mix here are techniques to boost
+performance which can treat any LSH as a black box. My favorite approach here
+is to simply perform multiple lookups on a hash system, each time using
+$q + \varepsilon$ as an input, where $q$ is your query value, and
+$\varepsilon$ is a random variable centered at zero.
+CHECK(add a bit about what this achieves; add a reference for it)
+
+There's a lot more that can be said about LSH techniques.
+If there is reader interest, I may write a follow-up article explaining
+the details of min-wise hashing, which is a fun case that's simultaneously
+good at quickly finding nearby sets as well as nearby strings.
+
+CHECK ensure that the references section is not numbered
 
 ---
 
