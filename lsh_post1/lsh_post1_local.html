@@ -21,10 +21,22 @@
       <div class="title">Introduction to Locality-Sensitive Hashes</div>
       <div class="author">Tyler Neylon</div>
       <div class="date">145.2018</div>
-      <p><em>Locality-sensitive hashes</em> are techniques that dramatically speed up search or de-duplication operations on data. They can be used, for example, to filter out duplicates of scraped web pages at an impressive speed, or to perform near-constant-time lookups of nearby points from a geospatial data set.</p>
+      <p>CHECK:</p>
+      <ul>
+      <li>Search this file for all instances of CHECK, IMAGE, XXX</li>
+      <li>Check that the two pdf versions look good, including cross-references</li>
+      <li>Check that the references header has no number</li>
+      <li>Try to nicify the images in the pdf files</li>
+      <li>Ensure that all references to figures in the text are done by mentioning a figure number.</li>
+      </ul>
+      <p><em>Locality-sensitive hashes</em> are techniques that dramatically speed up search-for-neighbors or near-duplication detection on data. They can be used, for example, to filter out duplicates of scraped web pages at an impressive speed, or to perform near-constant-time lookups of nearby points from a geospatial data set.</p>
       <p>When you think about hash functions, you might think about <em>hash tables</em>, which is perhaps the most common use case. As a reminder, the hash functions used in a hash table are designed to map a data structure to an integer that can be used to look in a particular <em>bucket</em> within the hash table to retrieve (or delete) that element. Common containers with string keys like JavaScript object attributes and Python dictionaries are based on hash tables. Although they might not <em>guarantee</em> constant-time lookups, in practice they effectively provide them. Hash functions used for hash tables are called <em>universal hash functions</em>. [CHECK]</p>
       <p>There are a number of other classes of hash functions as well. For example the SHA1 cryptographic hash function is designed to be <em>difficult to reverse</em>, which is useful if you want to store someone’s password as a hashed value. [CHECK] Another security-oriented hash function is CHECK, which is actually designed to be <em>expensive to compute</em>, as this can deter malicious ne’er-do-wells from easily building large lookup tables to be able to reverse a hash on more likely input values. Hash functions like these are called <em>secure hash functions</em>. [CHECK]</p>
-      <p>Here are what all these various hash functions have in common: * They map a wide variety of input data types to discrete values. * In practice, we care about whether or not two (or more) input values map to the same output (hashed) value.</p>
+      <p>Here are what all these various hash functions have in common:</p>
+      <ul>
+      <li>They map a wide variety of input data types to discrete values.</li>
+      <li>In practice, we care about whether or not two (or more) input values map to the same output (hashed) value.</li>
+      </ul>
       <p>Locality-sensitive hash (LSH) functions are specifically designed so that collisions of the hash value are <em>more likely</em> given two input values that are <em>close together</em>. Just as there are different implementations of secure hash functions for different use cases, there are different implementations of LSH functions for different data types and for different definitions of being <em>close together</em>. In this post, I’ll give a brief overview of the key ideas, and take a look at a toy example based on <em>random projections</em> of vectors into lower-dimensional spaces.</p>
       <h1 id="an-example"><span class="header-section-number">1</span> An example</h1>
       <p>It will probably be much easier to grasp the main idea with an example. (The “toy example” for random projections will come later. This is like a mini-toy example.)</p>
@@ -41,14 +53,23 @@
       <p><span class="math display">\[ \mathcal C := \{ (x, y) : x^2 + y^2 \le 3^2 \}. \]</span></p>
       <p>If we want to find which of our points in <span class="math inline">\(\mathcal C\)</span> are close together, we can estimate this relationship by clustering together points <span class="math inline">\(a\)</span> and <span class="math inline">\(b \in \mathcal C\)</span> iff (if and only if) <span class="math inline">\(f(a) = f(b).\)</span> It will be handy to introduce the notation <span class="math inline">\(a \sim b\)</span> to indicate that <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are in the same cluster. With that notation, we can write our current hash setup as</p>
       <p><span class="math display">\[ a \sim b \iff h_1(a) = h_1(b). \]</span></p>
-      <p>Here’s an example of such a clustering:</p>
-      <p>IMAGE</p>
-      <p>You can immediately see that some points are far apart yet clustered, while others are relatively close yet unclustered. There’s also a sense that this particular hash function <span class="math inline">\(h_1\)</span> was arbitrarily chosen to focus on the x-axis. What would have happened with the same data if we had used instead <span class="math inline">\(h_2(x) := \lfloor x_2 \rfloor?\)</span> Here’s that image:</p>
-      <p>IMAGE</p>
+      <p>Figure 1 shows an example of such a clustering.</p>
+      <div class="figure">
+      <p class="caption">Figure 1: Twenty points chosen randomly in a circle with radius 4. Each point <span class="math inline">\(x\)</span> is colored based on its hash value <span class="math inline">\(h_1(x).\)</span></p>
+      <img src="images/lsh_image1_v2.png" alt="Figure 1: Twenty points chosen randomly in a circle with radius 4. Each point x is colored based on its hash value h_1(x)." id="fig:fig1" />
+      </div>
+      <p>You can immediately see that some points are far apart yet clustered, while others are relatively close yet unclustered. There’s also a sense that this particular hash function <span class="math inline">\(h_1\)</span> was arbitrarily chosen to focus on the x-axis. What would have happened with the same data if we had used instead <span class="math inline">\(h_2(x) := \lfloor x_2 \rfloor?\)</span> The result is figure 2.</p>
+      <div class="figure">
+      <p class="caption">Figure 2: The same twenty points as figure 1, except that we’re using the <span class="math inline">\(y\)</span> values (instead of <span class="math inline">\(x\)</span> values) to determine the hash-based cluster colors this time around.</p>
+      <img src="images/lsh_image2.png" alt="Figure 2: The same twenty points as figure 1, except that we’re using the y values (instead of x values) to determine the hash-based cluster colors this time around." id="fig:fig2" />
+      </div>
       <p>While neither clustering alone is amazing, things start to work better if we use both of them simultaneously. That is, we can redefine our clustering via</p>
       <p><span id="eq:eq1"><span class="math display">\[ a \sim b \iff h_1(a) = h_1(b) \text{ and } h_2(a) = h_2(b). \qquad(1)\]</span></span></p>
-      <p>Our same example points look like this under the new clustering rule:</p>
-      <p>IMAGE</p>
+      <p>Our same example points are shown under this new clustering in figure 3.</p>
+      <div class="figure">
+      <p class="caption">Figure 3: The same twenty points clustered via two different hashes — one using <span class="math inline">\(\lfloor x\rfloor\)</span>, the other using <span class="math inline">\(\lfloor y\rfloor.\)</span> As before, points are colored based on which cluster they’re in; a cluster is the set of all points who share both their <span class="math inline">\(\lfloor x\rfloor\)</span> and their <span class="math inline">\(\lfloor y\rfloor\)</span> values.</p>
+      <img src="images/lsh_image3.png" alt="Figure 3: The same twenty points clustered via two different hashes — one using \lfloor x\rfloor, the other using \lfloor y\rfloor. As before, points are colored based on which cluster they’re in; a cluster is the set of all points who share both their \lfloor x\rfloor and their \lfloor y\rfloor values." id="fig:fig3" />
+      </div>
       <h2 id="randomizing-our-hashes"><span class="header-section-number">2.1</span> Randomizing our hashes</h2>
       <p>So far we’ve defined deterministic hash functions. Let’s change that by choosing a random rotation matrix <span class="math inline">\(U\)</span> (a rotation around the origin) along with a random offset <span class="math inline">\(b \in [0, 1).\)</span> Given such a random <span class="math inline">\(U\)</span> and <span class="math inline">\(b,\)</span> we could define a new hash function via</p>
       <p><span class="math display">\[ h(x) := \lfloor (Ux)_1 + b \rfloor, \]</span></p>
@@ -90,6 +111,7 @@
       <p>There are also other ways to specifically measure the performance of a particular hashing approach. For example, CHECK.</p>
       <p>Yet another ingredient to throw into the mix here are techniques to boost performance which can treat any LSH as a black box. My favorite approach here is to simply perform multiple lookups on a hash system, each time using <span class="math inline">\(q + \varepsilon\)</span> as an input, where <span class="math inline">\(q\)</span> is your query value, and <span class="math inline">\(\varepsilon\)</span> is a random variable centered at zero. CHECK(add a bit about what this achieves; add a reference for it)</p>
       <p>There’s a lot more that can be said about LSH techniques. If there is reader interest, I may write a follow-up article explaining the details of min-wise hashing, which is a fun case that’s simultaneously good at quickly finding nearby sets as well as nearby strings.</p>
+      <p>CHECK ensure that the references section is not numbered</p>
       <hr />
       <h1 id="references"><span class="header-section-number">3</span> References</h1>
     </div>

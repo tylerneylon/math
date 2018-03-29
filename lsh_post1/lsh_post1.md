@@ -2,6 +2,15 @@
 % Tyler Neylon
 % 145.2018
 
+CHECK:
+
+* Search this file for all instances of CHECK, IMAGE, XXX
+* Check that the two pdf versions look good, including cross-references
+* Check that the references header has no number
+* Try to nicify the images in the pdf files
+* Ensure that all references to figures in the text are done
+  by mentioning a figure number.
+
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\eqnset}[1]{\left.\mbox{$#1$}\;\;\right\rbrace\class{postbrace}{ }}
@@ -12,7 +21,7 @@
 \providecommand{\smallscrskip}[1]{\class{smallscrskip}{\hskip #1}}
 
 *Locality-sensitive hashes* are techniques that dramatically
-speed up search or de-duplication operations on data.
+speed up search-for-neighbors or near-duplication detection on data.
 They can be used, for example, to filter out duplicates of scraped
 web pages at an impressive speed, or to 
 perform near-constant-time lookups of nearby points from a
@@ -43,9 +52,10 @@ Hash functions like these are called
 *secure hash functions*. [CHECK]
 
 Here are what all these various hash functions have in common:
+
 * They map a wide variety of input data types to discrete values.
-* In practice, we care about whether or not two (or more) input values
-  map to the same output (hashed) value.
+* In practice, we care about whether or not two (or more) input values map to
+  the same output (hashed) value.
 
 Locality-sensitive hash (LSH) functions are specifically designed so that
 collisions of the hash value are *more likely* given two input values that
@@ -123,9 +133,11 @@ our current hash setup as
 
 $$ a \sim b \iff h_1(a) = h_1(b). $$
 
-Here's an example of such a clustering:
+[@Fig:fig1] shows an example of such a clustering.
 
-IMAGE
+![Twenty points chosen randomly in a circle with radius 4.
+Each point $x$ is colored based on its hash
+value $h_1(x).$](images/lsh_image1_v2.png){#fig:fig1}
 
 You can immediately see that some points are far apart yet clustered,
 while others are relatively close yet unclustered.
@@ -133,9 +145,11 @@ There's also a sense that this particular hash function $h_1$ was
 arbitrarily chosen to focus on the x-axis. What would have happened with
 the same data if we had used instead
 $h_2(x) := \lfloor x_2 \rfloor?$
-Here's that image:
+The result is [@fig:fig2].
 
-IMAGE
+![The same twenty points as figure 1, except that we're using the
+$y$ values (instead of $x$ values) to determine the hash-based cluster
+colors this time around.](images/lsh_image2.png){#fig:fig2}
 
 While neither clustering alone is amazing, things start to work better
 if we use both of them simultaneously. That is, we can redefine our
@@ -143,10 +157,18 @@ clustering via
 
 $$ a \sim b \iff h_1(a) = h_1(b) \text{ and } h_2(a) = h_2(b). $$ {#eq:eq1}
 
-Our same example points look like this under the new clustering
-rule:
+Our same example points are shown under this new clustering in
+[@fig:fig3].
 
-IMAGE
+![The same twenty points clustered via two different hashes —
+one using $\lfloor x\rfloor$, the other using $\lfloor y\rfloor.$
+As before, points are colored based on which cluster they're in;
+a cluster is the set of all points who share both their $\lfloor x\rfloor$
+and their $\lfloor y\rfloor$
+values.](images/lsh_image3.png){#fig:fig3}
+
+This does a much better job of avoiding clusters with points far apart,
+although, as we'll see below, we can still make some improvements.
 
 ## Randomizing our hashes
 

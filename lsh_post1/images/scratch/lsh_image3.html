@@ -352,16 +352,24 @@
 
     // --- Draw separator lines between hash areas.
 
-    for (var x = -unitRadius; x <= unitRadius; x++) {
+    for (var y = -unitRadius; y <= unitRadius; y++) {
 
-        var yAbs = Math.sqrt(unitRadius * unitRadius - x * x)
-        var from = mapToCanvasPt({x: x, y: -yAbs})
-        var to   = mapToCanvasPt({x: x, y:  yAbs})
+        var xAbs = Math.sqrt(unitRadius * unitRadius - y * y)
+        var from = mapToCanvasPt({x: -xAbs, y: y})
+        var to   = mapToCanvasPt({x:  xAbs, y: y})
 
         var line = add('line', lightStyle)
         addAttributes(line, {
             x1: from.x, y1: from.y,
             x2:   to.x, y2:   to.y
+        })
+
+        // This is a slightly clever way to draw both
+        // sets of lines at once (switch x, y here).
+        var line = add('line', lightStyle)
+        addAttributes(line, {
+            x1: from.y, y1: from.x,
+            x2:   to.y, y2:   to.x
         })
 
     }
@@ -385,12 +393,14 @@
         '#c5b725'
     ]
 
+    // XXX
+
     // Enable this code to set up random colors.
-    if (false) {
+    if (true) {
 
-        colors = []
+        // colors = []
 
-        for (var i = 0; i < numValues; i++) {
+        for (var i = colors.length; i < numValues * numValues; i++) {
             var rgb = []
             for (var j = 0; j < 3; j++) {
                 rgb.push(Math.floor(random() * 256))
@@ -410,7 +420,9 @@
     for (var i = 0; i < numPoints; i++) {
         var canvasPt = mapToCanvasPt(points[i])
         var dot = addDot(canvasPt)
-        var hashVal = Math.floor((points[i].x + unitRadius) % numValues)
+        var hashVal1 = Math.floor((points[i].x + unitRadius) % numValues)
+        var hashVal2 = Math.floor((points[i].y + unitRadius) % numValues)
+        var hashVal = hashVal1 * numValues + hashVal2
         addAttributes(dot, {fill: colors[hashVal]})
     }
 

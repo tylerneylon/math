@@ -352,11 +352,11 @@
 
     // --- Draw separator lines between hash areas.
 
-    for (var x = -unitRadius; x <= unitRadius; x++) {
+    for (var y = -unitRadius; y <= unitRadius; y++) {
 
-        var yAbs = Math.sqrt(unitRadius * unitRadius - x * x)
-        var from = mapToCanvasPt({x: x, y: -yAbs})
-        var to   = mapToCanvasPt({x: x, y:  yAbs})
+        var xAbs = Math.sqrt(unitRadius * unitRadius - y * y)
+        var from = mapToCanvasPt({x: -xAbs, y: y})
+        var to   = mapToCanvasPt({x:  xAbs, y: y})
 
         var line = add('line', lightStyle)
         addAttributes(line, {
@@ -410,7 +410,7 @@
     for (var i = 0; i < numPoints; i++) {
         var canvasPt = mapToCanvasPt(points[i])
         var dot = addDot(canvasPt)
-        var hashVal = Math.floor((points[i].x + unitRadius) % numValues)
+        var hashVal = Math.floor((points[i].y + unitRadius) % numValues)
         addAttributes(dot, {fill: colors[hashVal]})
     }
 
