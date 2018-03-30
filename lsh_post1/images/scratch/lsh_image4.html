@@ -1,0 +1,476 @@
+<!DOCTYPE HTML>
+<html>
+  <body style="background-color:#808">
+    <svg width="10" height="10" vertion="1.1"
+     style="background-color:#fff"
+    id="svg" xmlns="http://www.w3.org/2000/svg">
+    </svg>
+    <script>
+
+    function addAttributes(elt, attr) {
+      for (var key in attr) {
+        elt.setAttribute(key, attr[key])
+      }
+      return elt
+    }
+
+    function add(eltName, attr) {
+      var elt = document.createElementNS(svgNS, eltName)
+      svg.appendChild(elt)
+      if (attr) addAttributes(elt, attr)
+      return elt
+    }
+
+    function addDot(pt = null) {
+        var dotStyle = {
+            stroke: 'transparent',
+            fill:   'rgba(100, 100, 100, 0.2)',
+            r:      10
+        }
+        var dot = add('circle', dotStyle)
+        if (pt !== null) {
+            addAttributes(dot, {cx: pt.x, cy: pt.y})
+        }
+        return dot
+    }
+
+    function realMod(a, b) {
+      var c = a % b
+      if (c < 0) { c += b }
+      return c
+    }
+
+    // Begin instance-specific code.
+
+    var svg = document.getElementById('svg')
+    var svgNS = svg.namespaceURI
+
+    var lightStyle = {
+        stroke: '#eee',
+        fill: 'transparent',
+        'stroke-width': 10
+    }
+    var darkStyle = {stroke: '#666', fill: 'transparent', 'stroke-width': 3}
+
+    if (!assert) {
+      function assert(condition, message) {
+        if (!condition) {
+          throw message || "Assertion failed"
+        }
+      }
+    }
+
+    function areKindaLinear(x1, y1, x2, y2, x3, y3) {
+      var dx1 = x2 - x1, dy1 = y2 - y1
+      var dx2 = x3 - x2, dy2 = y3 - y2
+
+      // Intuitively, we want to check that dx2 / dx1 == dy2 / dy1; this is
+      // the same as dy1 * dx2 == dx1 * dy2, and this latter form handles edge
+      // cases where the first expression would have hit a division by zero.
+
+      return (Math.abs(dy1 * dx2 - dx1 * dy2) < 0.1)
+    }
+
+    var numFnPts = 300
+
+    // This returns [xMin, xMax, yMin, yMax] for equalized axes.
+    // It keeps the old frame as a subframe, and maintains the same center pt.
+    // In other words, this may increase the frame just enough so that all
+    // axes have the same scale.
+    function equalizeAxes(frame) {
+      var xMin = frame[0]
+      var xMax = frame[1]
+      var yMin = frame[2]
+      var yMax = frame[3]
+
+      var xRatio = (xMax - xMin) / xSize
+      var yRatio = (yMax - yMin) / ySize
+      if (xRatio < yRatio) {
+        var xMid = (xMax + xMin) / 2
+        var half = (xMax - xMin) / 2
+        xMin = xMid - half * (yRatio / xRatio)
+        xMax = xMid + half * (yRatio / xRatio)
+      } else {
+        var yMid = (yMax + yMin) / 2
+        var half = (yMax - yMin) / 2
+        yMin = yMid - half * (xRatio / yRatio)
+        yMax = yMid + half * (xRatio / yRatio)
+      }
+      return [xMin, xMax, yMin, yMax]
+    }
+
+    // This expects an array of numbers. It converts them to a space-separated
+    // string join using the nearest-tenth rounded values. For example, the
+    // number 3.14159 would be represented as 3.1 in the string.
+    function joinPts(pts) {
+      var s = []
+      for (var i = 0; i < pts.length; i++) s.push(pts[i].toFixed(1))
+      return s.join(' ')
+    }
+
+    function ptsForFn(frame, fn) {
+
+      var xMin = frame[0]
+      var xMax = frame[1]
+      var yMin = frame[2]
+      var yMax = frame[3]
+
+      function canvasPtFromXY(x, y) {
+        var xPerc = (x - xMin) / (xMax - xMin)
+        var yPerc = (y - yMin) / (yMax - yMin)
+        return [xPerc * xSize + xOffset, ySize - yPerc * ySize + yOffset]
+      }
+
+      var xDelta = (xMax - xMin) / (numFnPts - 1)
+      var pts = []
+      var xPrev = xMin
+      var prevCanvasY = false
+
+      for (var i = 0; i < numFnPts; i++) {
+        var x, xTarget = xMin + i * xDelta
+        do {
+          x = xTarget
+          var y = fn(x)
+          var canvasPt = canvasPtFromXY(x, y)
+          var perc = 0.5
+          while (prevCanvasY && Math.abs(prevCanvasY - canvasPt[1]) > 30 &&
+                 Math.abs(x - xPrev) > 0.001) {
+            x = (1 - perc) * xPrev + perc * xTarget
+            var y = fn(x)
+            var canvasPt = canvasPtFromXY(x, y)
+            perc /= 2
+          }
+          var n = pts.length
+          if (n >= 4 && areKindaLinear(pts[n - 4], pts[n - 3],
+                                  pts[n - 2], pts[n - 1],
+                                  canvasPt[0], canvasPt[1])) {
+            pts.pop()
+            pts.pop()
+          }
+          pts.push(canvasPt[0], canvasPt[1])
+          xPrev = x
+          prevCanvasY = canvasPt[1]
+        } while (x < xTarget);
+      }
+
+      return pts
+
+      console.log('pts.length =', pts.length)  // TEMP
+
+      var polyline = add('polyline', darkStyle)
+      addAttributes(polyline, {points: joinPts(pts)})
+
+    }
+
+    function drawAxes(frame) {
+      var xMin = frame[0]
+      var xMax = frame[1]
+      var yMin = frame[2]
+      var yMax = frame[3]
+
+      function canvasPtFromXY(x, y) {
+        var xPerc = (x - xMin) / (xMax - xMin)
+        var yPerc = (y - yMin) / (yMax - yMin)
+        return [xPerc * xSize + xOffset, ySize - yPerc * ySize + yOffset]
+      }
+
+      function drawTickAroundPt(p, dir) {
+        var tick = add('line', lightStyle)
+        var a = [p[0], p[1]]
+        a[dir] -= 5
+        var b = [p[0], p[1]]
+        b[dir] += 5
+        addAttributes(tick, {x1: a[0], y1: a[1], x2: b[0], y2: b[1]})
+      }
+
+      // The x-axis.
+      var leftPt  = canvasPtFromXY(xMin, 0)
+      var rightPt = canvasPtFromXY(xMax, 0)
+      if (0 <= leftPt[1] && leftPt[1] < (ySize + yOffset)) {
+        var xAxis = add('line', lightStyle)
+        addAttributes(xAxis, {x1:  leftPt[0], y1:  leftPt[1],
+                              x2: rightPt[0], y2: rightPt[1]})
+        for (var x = Math.ceil(xMin); x <= Math.floor(xMax); x++) {
+          var p = canvasPtFromXY(x, 0)
+          drawTickAroundPt(p, 1)  // 1 == vertical tick
+        }
+      }
+
+      // The y-axis.
+      var botPt = canvasPtFromXY(0, yMin)
+      var topPt = canvasPtFromXY(0, yMax)
+      if (0 <= botPt[0] && botPt[0] < (xSize + xOffset)) {
+        var yAxis = add('line', lightStyle)
+        addAttributes(yAxis, {x1: botPt[0], y1: botPt[1],
+                              x2: topPt[0], y2: topPt[1]})
+        for (var y = Math.ceil(yMin); y <= Math.floor(yMax); y++) {
+          var p = canvasPtFromXY(0, y)
+          drawTickAroundPt(p, 0)  // 0 == horizontal tick
+        }
+      }
+    }
+
+    // frame = [xMin, xMax, yMin, yMax]
+    function shapeBelowFn1AboveFn2(frame, opts, fn1, fn2) {
+
+      if (opts && fn2 === undefined) {
+        fn2  = fn1
+        fn1  = opts
+        opts = null
+      }
+
+      if (opts && opts.doEqualizeAxes) {
+        frame = equalizeAxes(frame)
+      }
+
+      var pts1 = ptsForFn(frame, fn1)
+      var pts2 = ptsForFn(frame, fn2)
+
+      // Both pts arrays provide left-to-right points. To form a full polygon,
+      // we need to reverse the order of one of the arrays.
+
+      for (var i = pts2.length - 2; i >= 0; i -= 2) {
+        pts1.push(pts2[i])
+        pts1.push(pts2[i + 1])
+      }
+
+      var poly = add('polygon', lightStyle)
+      addAttributes(poly, {points: joinPts(pts1)})
+      return poly
+    }
+
+    // frame = [xMin, xMax, yMin, yMax]
+    function drawFn(frame, opts, fn) {
+
+      if (opts && fn === undefined) {
+        fn   = opts
+        opts = null
+      }
+
+      if (opts && opts.doEqualizeAxes) {
+        frame = equalizeAxes(frame)
+      }
+
+      if (opts && opts.doDrawAxes) {
+        drawAxes(frame)
+      }
+
+      var pts = ptsForFn(frame, fn)
+
+      console.log('pts.length =', pts.length)  // TEMP
+
+      var polyline = add('polyline', darkStyle)
+      addAttributes(polyline, {points: joinPts(pts)})
+      return polyline
+    }
+
+
+    // --- A custom random number generator.
+
+    // I got this from here:
+    // https://stackoverflow.com/a/19301306/3561
+
+    var m_w = 123456789;
+    var m_z = 987654321;
+    var mask = 0xffffffff;
+
+    // Takes any integer
+    function seed(i) {
+        m_w = i;
+        m_z = 987654321;
+    }
+
+    // Returns number between 0 (inclusive) and 1.0 (exclusive),
+    // just like Math.random().
+    function random()
+    {
+        m_z = (36969 * (m_z & 65535) + (m_z >> 16)) & mask;
+        m_w = (18000 * (m_w & 65535) + (m_w >> 16)) & mask;
+        var result = ((m_z << 16) + m_w) & mask;
+        result /= 4294967296;
+        return result + 0.5;
+    }
+
+
+    // -- Set a custom random seed that produces data I like :)
+
+    seed(14)
+
+
+    // --- Set the size of the canvas.
+
+    var xSize = 1000, ySize = 1000
+    var size = Math.min(xSize, ySize)
+    addAttributes(svg, {width: xSize, height: ySize})
+
+
+    // --- Functions and constants specific to this (LSH) post.
+
+    var canvasRadius = size * 0.4  // The radius to draw in canvas coords.
+    var unitRadius   = 4           // The radius in unit coords.
+
+    function getRandomPointInCircle(radius = 1) {
+        var x = radius, y = radius
+        while (x * x + y * y > radius * radius) {
+            x = radius * (random() * 2 - 1)
+            y = radius * (random() * 2 - 1)
+        }
+        return {x, y}
+    }
+
+    // This returns the result (the inputs are left unchanged).
+    function translate(pt, by) {
+        return {
+            x: pt.x + by.x,
+            y: pt.y + by.y
+        }
+    }
+
+    // This returns the result (the inputs are left unchanged).
+    function rotateBy(pt, angle) {
+        // Mathematically, we can think of this as matrix multiplication by:
+        //
+        // U = ( cos -sin )
+        //     ( sin  cos )
+        var c = Math.cos(angle), s = Math.sin(angle)
+        return {
+            x: c * pt.x - s * pt.y,
+            y: s * pt.x + c * pt.y
+        }
+    }
+
+    // Map an {x, y} point from unit to canvas coordinates.
+    function mapToCanvasPt(pt) {
+        var scale = canvasRadius / unitRadius
+        return {
+            x: pt.x * scale + xSize / 2,
+            y: pt.y * scale + ySize / 2
+        }
+    }
+
+
+    // --- Draw the outer circle.
+
+    var circle = add('circle', lightStyle)
+    var center = mapToCanvasPt({x: 0, y: 0})
+    addAttributes(circle, {
+        cx: center.x,
+        cy: center.y,
+        r:  canvasRadius
+    })
+
+
+    // --- Choose random points.
+
+    // The points will be unit coordinates; meaning each point
+    // will be in the unit circle.
+    var numPoints = 20
+    var points = []
+    for (var i = 0; i < numPoints; i++) {
+        points.push(getRandomPointInCircle(radius = unitRadius))
+    }
+
+
+    // --- Choose random hash parameters.
+
+    var numHashes = 1
+
+    var thetas = []
+    var biases = []
+    for (var i = 0; i < numHashes; i++) {
+        thetas.push(random() * 2 * Math.PI)
+        biases.push(random())
+    }
+
+    function hashOfPt(pt, hashIdx) {
+        var res = rotateBy(pt, thetas[hashIdx])
+        res = translate(res, {x: biases[hashIdx], y: 0})
+        return Math.floor(res.x)
+    }
+
+
+    // --- Draw separator lines between hash areas.
+
+    for (var hashIdx = 0; hashIdx < numHashes; hashIdx++) {
+
+        // (x0, y0) will be the pre-transformed point.
+
+        for (var x0 = -unitRadius; x0 <= unitRadius; x0++) {
+
+            var xAdj  = x0 - biases[0]
+
+            if (Math.abs(xAdj) > unitRadius) continue
+
+            var y0Abs = Math.sqrt(unitRadius * unitRadius - xAdj * xAdj)
+            var from0 = {x: xAdj, y: -y0Abs}
+            var to0   = {x: xAdj, y:  y0Abs}
+
+            var from = rotateBy(from0, -thetas[0])
+            var to   = rotateBy(to0,   -thetas[0])
+
+            from = mapToCanvasPt(from)
+            to   = mapToCanvasPt(to)
+
+            var line = add('line', lightStyle)
+            addAttributes(line, {
+                x1: from.x, y1: from.y,
+                x2:   to.x, y2:   to.y
+            })
+        }
+    }
+
+
+    // --- Render the points.
+
+    // Choose colors based on hash values.
+
+    var colors = []
+    var numValues = 2 * unitRadius
+
+    var colors = [
+        '#da3a3a',
+        '#3189d2',
+        '#ea6b16',
+        '#4cbd7d',
+        '#5aa6b1',
+        '#76cc14',
+        '#d85c9c',
+        '#c5b725'
+    ]
+
+    // XXX
+
+    // Enable this code to set up random colors.
+    if (true) {
+
+        // colors = []
+
+        for (var i = colors.length; i < numValues * numValues; i++) {
+            var rgb = []
+            for (var j = 0; j < 3; j++) {
+                rgb.push(Math.floor(random() * 256))
+            }
+            colors.push('rgba(' + rgb.join(', ') + ', 1.0)')
+        }
+    }
+
+    // Draw white outlines for the dots first.
+    for (var i = 0; i < numPoints; i++) {
+        var canvasPt = mapToCanvasPt(points[i])
+        var dot = addDot(canvasPt)
+        addAttributes(dot, {fill: 'white', r:17})
+    }
+
+    // Draw the dots themselves.
+    for (var i = 0; i < numPoints; i++) {
+        var canvasPt = mapToCanvasPt(points[i])
+        var dot = addDot(canvasPt)
+
+        var hashVal = realMod(hashOfPt(points[i], 0), numValues)
+
+        addAttributes(dot, {fill: colors[hashVal]})
+    }
+
+    </script>
+  </body>
+</html>
