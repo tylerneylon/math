@@ -23,11 +23,17 @@
       <div class="date">145.2018</div>
       <p>CHECK:</p>
       <ul>
+      <li>Update images to all use unitRadius = 2 (or consider it)</li>
+      <li>I think figure 4 only has 3 hashes and the text says 4 Try updating it to really have 4 hashes, but I can fall back to 3 if 4 looks bad.</li>
       <li>Search this file for all instances of CHECK, IMAGE, XXX</li>
       <li>Check that the two pdf versions look good, including cross-references</li>
       <li>Check that the references header has no number</li>
       <li>Try to nicify the images in the pdf files</li>
       <li>Ensure that all references to figures in the text are done by mentioning a figure number.</li>
+      <li>Follow-up ideas (put these somewhere centralized with other Unbox post ideas)</li>
+      <li>MinHash</li>
+      <li>ProxHash</li>
+      <li>The J-L Lemma</li>
       </ul>
       <p><em>Locality-sensitive hashes</em> are techniques that dramatically speed up search-for-neighbors or near-duplication detection on data. They can be used, for example, to filter out duplicates of scraped web pages at an impressive speed, or to perform near-constant-time lookups of nearby points from a geospatial data set.</p>
       <p>When you think about hash functions, you might think about <em>hash tables</em>, which is perhaps the most common use case. As a reminder, the hash functions used in a hash table are designed to map a data structure to an integer that can be used to look in a particular <em>bucket</em> within the hash table to retrieve (or delete) that element. Common containers with string keys like JavaScript object attributes and Python dictionaries are based on hash tables. Although they might not <em>guarantee</em> constant-time lookups, in practice they effectively provide them. Hash functions used for hash tables are called <em>universal hash functions</em>. [CHECK]</p>
@@ -70,6 +76,7 @@
       <p class="caption">Figure 3: The same twenty points clustered via two different hashes — one using <span class="math inline">\(\lfloor x\rfloor\)</span>, the other using <span class="math inline">\(\lfloor y\rfloor.\)</span> As before, points are colored based on which cluster they’re in; a cluster is the set of all points who share both their <span class="math inline">\(\lfloor x\rfloor\)</span> and their <span class="math inline">\(\lfloor y\rfloor\)</span> values.</p>
       <img src="images/lsh_image3.png" alt="Figure 3: The same twenty points clustered via two different hashes — one using \lfloor x\rfloor, the other using \lfloor y\rfloor. As before, points are colored based on which cluster they’re in; a cluster is the set of all points who share both their \lfloor x\rfloor and their \lfloor y\rfloor values." id="fig:fig3" />
       </div>
+      <p>This does a much better job of avoiding clusters with points far apart, although, as we’ll see below, we can still make some improvements.</p>
       <h2 id="randomizing-our-hashes"><span class="header-section-number">2.1</span> Randomizing our hashes</h2>
       <p>So far we’ve defined deterministic hash functions. Let’s change that by choosing a random rotation matrix <span class="math inline">\(U\)</span> (a rotation around the origin) along with a random offset <span class="math inline">\(b \in [0, 1).\)</span> Given such a random <span class="math inline">\(U\)</span> and <span class="math inline">\(b,\)</span> we could define a new hash function via</p>
       <p><span class="math display">\[ h(x) := \lfloor (Ux)_1 + b \rfloor, \]</span></p>
@@ -77,19 +84,28 @@
       <p>It may seem a tad arbitrary to use only the first coordinate here rather than any other, but the fact that we’re taking a random rotation first means that we have the same set of possibilities, with the same probability distribution, as we would when pulling out any other single coordinate value.</p>
       <p>The advantage of using randomized hash functions is that any theoretical properties we want to discuss will apply without having to worry about pathologically weird data. Conceptually, if we were using deterministic hash functions, then someone could choose the worst-case data for our hash function, and we’d be stuck with that poor performance (for example, choosing maximally-far apart points that are still clustered together by our <span class="math inline">\(h_1\)</span> function above). By using randomly chosen hash functions, we can ensure that any average-case behavior of our hash functions applies equally well to <em>all data</em>. This same perspective is useful for hash tables in the form of <em>universal hashing</em>; if randomized hash functions are a new idea for you, I recommend checking out <a href="https://en.wikipedia.org/wiki/Universal_hashing">Wikipedia’s universal hashing page</a>.</p>
       <p>Let’s revisit the example points we used above, but now apply some randomized hash functions. In figure CHECK, points are clustered iff both of their hash values (from <span class="math inline">\(h_1()\)</span> and <span class="math inline">\(h_2()\)</span>) collide. We’ll use that same idea, but this time choose four rotations <span class="math inline">\(U_1, \ldots, U_4\)</span> as well as four offsets <span class="math inline">\(b_1, \ldots, b_4\)</span> to define <span class="math inline">\(h_1(), \ldots, h_4()\)</span> via</p>
-      <p><span class="math display">\[ h_i(x) := \lfloor (U_i x)_1 + b_i \rfloor. \]</span></p>
-      <p>Here’s the resulting clustering:</p>
-      <p>IMAGE 4</p>
+      <p><span id="eq:eq3"><span class="math display">\[ h_i(x) := \lfloor (U_i x)_1 + b_i \rfloor. \qquad(2)\]</span></span></p>
+      <p>Figure 4 shows the resulting clustering. This time, there are 100 points since using more hash functions has effectively made the cluster areas smaller (so we need higher point density to see points that are clustered together now).</p>
+      <div class="figure">
+      <p class="caption">Figure 4: One hundred random points clustered using four random hash functions as defined by (2). Points have the same color when all four of their hash values are the same. Each set of parallel light gray lines delineates the regions with the same hash value for each of the <span class="math inline">\(h_i()\)</span> functions.</p>
+      <img src="images/lsh_image4.png" alt="Figure 4: One hundred random points clustered using four random hash functions as defined by (2). Points have the same color when all four of their hash values are the same. Each set of parallel light gray lines delineates the regions with the same hash value for each of the h_i() functions." id="fig:fig4" />
+      </div>
       <p>It’s not obvious that we actually want to use all four of our hash functions. The issue is that our clusters have become quite small. There are a couple ways to address this. One is to simply increase the scale of the hash functions; for example:</p>
       <p><span class="math display">\[ \tilde h_i(x) := h_i(x/s), \]</span></p>
       <p>where <span class="math inline">\(s\)</span> is a scale factor (larger <span class="math inline">\(s\)</span> values will result in larger clusters).</p>
       <p>However, there is something a bit more nuanced we can look at, which is to allow some adaptability in terms of <em>how many hash collisions we require</em>. In other words, suppose we have <span class="math inline">\(k\)</span> total hash functions (just above, we had <span class="math inline">\(k=4\)</span>). Instead of insisting that all <span class="math inline">\(k\)</span> hash values must match before we say two points are in the same cluster, we could look at cases where some number <span class="math inline">\(j \le k\)</span> of them matches. To state this mathematically, we would rewrite equation (1) as</p>
-      <p><span id="eq:eq2"><span class="math display">\[ a \sim b \iff \#\{i: h_i(a) = h_i(b)\} \ge j. \qquad(2)\]</span></span></p>
+      <p><span id="eq:eq2"><span class="math display">\[ a \sim b \iff \#\{i: h_i(a) = h_i(b)\} \ge j. \qquad(3)\]</span></span></p>
       <p>Something interesting happens here, which is that the <span class="math inline">\(a \sim b\)</span> relationship is no longer a clustering, but becomes more like adjacency (that is, sharing an edge) in a graph. The difference is that, in a clustering, if <span class="math inline">\(a\sim b\)</span> and <span class="math inline">\(b\sim c,\)</span> the we must have <span class="math inline">\(a\sim c\)</span> as well; this is called being <em>transitively closed</em>. Graphs don’t need to have this property, and in our case as well, it’s no longer true that our similarity relationship is transitively closed.</p>
-      <p>It may help your intuition to visualize this new definition of <span class="math inline">\(a\sim b\)</span> on our previous data points:</p>
-      <p>IMAGE 5</p>
-      <p>In fact, we can visualize all possible cutoff values (values of <span class="math inline">\(j\)</span> in (2)) in a single image by using weighted edges, like so:</p>
-      <p>IMAGE 6</p>
+      <p>It may help your intuition to see this new definition of <span class="math inline">\(a\sim b\)</span> in action on the same 100 points from figure 4. This time (figure 5) there are twenty random hashes, and we’re seeing the graphs generated by (3) using cutoff values (values of <span class="math inline">\(j\)</span>) of 6, 7, 8, and 9. In other words, the top-left graph in figure 5 has an edge drawn between two points <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> whenever there are at least 6 hash functions <span class="math inline">\(h_i()\)</span> with <span class="math inline">\(h_i(a) = h_i(b),\)</span> out of a possible 20 used hash functions.</p>
+      <div class="figure">
+      <p class="caption">Figure 5: A set of 100 random points with graph edges drawn according to (3). There are 20 random hash functions used. The top-left graph uses the cutoff value <span class="math inline">\(j=6.\)</span> The remaining three graphs have cutoff values <span class="math inline">\(j=7,\)</span> 8, and 9; this means each graph is a subgraph (having a subset of the edges) of the previous one.</p>
+      <img src="images/lsh_image5.png" alt="Figure 5: A set of 100 random points with graph edges drawn according to (3). There are 20 random hash functions used. The top-left graph uses the cutoff value j=6. The remaining three graphs have cutoff values j=7, 8, and 9; this means each graph is a subgraph (having a subset of the edges) of the previous one." id="fig:fig5" />
+      </div>
+      <p>In fact, we can visualize all possible cutoff values (values of <span class="math inline">\(j\)</span> in (3)) of 6 or higher in a single image by using weighted edges, like so: CHECK finish that sentence; explain why we start at 6</p>
+      <div class="figure">
+      <p class="caption">description</p>
+      <img src="images/lsh_image6.png" alt="description" />
+      </div>
       <p>Yet another fun way to get an intuitive feel for how much information we’re getting from our hashes is to see which subsets of our circle are matched — and to what degree — by a given point:</p>
       <p>IMAGE 8</p>
       <h2 id="why-this-is-faster"><span class="header-section-number">2.2</span> Why this is faster</h2>
@@ -100,7 +116,7 @@
       <p>Another effect that may be less obvious is that you can get away with fewer hash values (a smaller <span class="math inline">\(k\)</span> value) in higher dimensions. There are some mathematically sophisticated ways to quantify that statement, but it may be even easier to understand graph based on empirically derived data.</p>
       <p>Here’s a summary of some random sampling I did in order to explore the relationship between various values of <span class="math inline">\(j\)</span> for <span class="math inline">\(d=100\)</span> dimensional data using <span class="math inline">\(k=10\)</span> different random hashes: CHECK</p>
       <p>IMAGE 9</p>
-      <p>CHECK the whole next paragraph What’s interesting here is that we get a relatively tight box plot for <span class="math inline">\(j\)</span> values around CHECK. This means that we can choose the threshold <span class="math inline">\(j=CHECK\)</span> in equation (2) and have fairly good confidence that our hash-based “nearby” relationship closely matches reality.</p>
+      <p>CHECK the whole next paragraph What’s interesting here is that we get a relatively tight box plot for <span class="math inline">\(j\)</span> values around CHECK. This means that we can choose the threshold <span class="math inline">\(j=CHECK\)</span> in equation (3) and have fairly good confidence that our hash-based “nearby” relationship closely matches reality.</p>
       <p>We can even quantify this precisely. Although this article doesn’t <em>prove</em> the following implications, the empirical evidence found CHECK(add link to code) strongly suggests that these are in fact the correct values:</p>
       <p><span class="math display">\[ \text{dist}(a, b) &gt; \alpha \Rightarrow P(\#\{i : h_i(a) = h_i(b)\} &lt; j) &gt; 0.95; \]</span></p>
       <p><span class="math display">\[ \text{dist}(a, b) &lt; \beta  \Rightarrow P(\#\{i : h_i(a) = h_i(b)\} \ge j) &lt; 0.05. \]</span></p>
