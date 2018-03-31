@@ -7,6 +7,8 @@
     </svg>
     <script>
 
+    var styleScale = 0.5
+
     function addAttributes(elt, attr) {
       for (var key in attr) {
         elt.setAttribute(key, attr[key])
@@ -25,7 +27,7 @@
         var dotStyle = {
             stroke: 'transparent',
             fill:   'rgba(100, 100, 100, 0.2)',
-            r:      10
+            r:      8 * styleScale
         }
         var dot = add('circle', dotStyle)
         if (pt !== null) {
@@ -46,11 +48,25 @@
     var svgNS = svg.namespaceURI
 
     var lightStyle = {
-        stroke: '#eee',
+        stroke: '#ddd',
         fill: 'transparent',
-        'stroke-width': 10
+        'stroke-width': 1 * styleScale
     }
-    var darkStyle = {stroke: '#666', fill: 'transparent', 'stroke-width': 3}
+    var darkStyle = {
+        stroke: '#666',
+        fill: 'transparent',
+        'stroke-width': 3 * styleScale
+    }
+    var edgeStyle = {
+        stroke: '#222',
+        fill: 'transparent',
+        'stroke-width': 2.5 * styleScale
+    }
+    var outerEdgeStyle = {
+        stroke: '#fff',
+        fill: 'transparent',
+        'stroke-width': 22 * styleScale
+    }
 
     if (!assert) {
       function assert(condition, message) {
@@ -294,7 +310,7 @@
 
     // -- Set a custom random seed that produces data I like :)
 
-    seed(14)
+    seed(13)
 
 
     // --- Set the size of the canvas.
@@ -307,7 +323,7 @@
     // --- Functions and constants specific to this (LSH) post.
 
     var canvasRadius = size * 0.4  // The radius to draw in canvas coords.
-    var unitRadius   = 2           // The radius in unit coords.
+    var unitRadius   = 5           // The radius in unit coords.
 
     function getRandomPointInCircle(radius = 1) {
         var x = radius, y = radius
@@ -318,60 +334,111 @@
         return {x, y}
     }
 
+    // This returns the result (the inputs are left unchanged).
+    function translate(pt, by) {
+        return {
+            x: pt.x + by.x,
+            y: pt.y + by.y
+        }
+    }
+
+    // This returns the result (the inputs are left unchanged).
+    function rotateBy(pt, angle) {
+        // Mathematically, we can think of this as matrix multiplication by:
+        //
+        // U = ( cos -sin )
+        //     ( sin  cos )
+        var c = Math.cos(angle), s = Math.sin(angle)
+        return {
+            x: c * pt.x - s * pt.y,
+            y: s * pt.x + c * pt.y
+        }
+    }
+
+    // Change the values canvasRadius, xMid, yMid to
+    // change how mapToCanvasBehaves.
+
+    var xMid = xSize / 2
+    var yMid = ySize / 2
+
     // Map an {x, y} point from unit to canvas coordinates.
     function mapToCanvasPt(pt) {
         var scale = canvasRadius / unitRadius
         return {
-            x: pt.x * scale + xSize / 2,
-            y: pt.y * scale + ySize / 2
+            x: pt.x * scale + xMid,
+            y: pt.y * scale + yMid
         }
     }
 
 
     // --- Draw the outer circle.
 
-    var circle = add('circle', lightStyle)
-    var center = mapToCanvasPt({x: 0, y: 0})
-    addAttributes(circle, {
-        cx: center.x,
-        cy: center.y,
-        r:  canvasRadius
-    })
+    function drawCircle() {
+        var circle = add('circle', lightStyle)
+        var center = mapToCanvasPt({x: 0, y: 0})
+        addAttributes(circle, {
+            cx: center.x,
+            cy: center.y,
+            r:  canvasRadius
+        })
+    }
 
 
     // --- Choose random points.
 
     // The points will be unit coordinates; meaning each point
     // will be in the unit circle.
-    var numPoints = 20
+    var numPoints = 100
     var points = []
     for (var i = 0; i < numPoints; i++) {
         points.push(getRandomPointInCircle(radius = unitRadius))
     }
 
 
+    // --- Choose random hash parameters.
+
+    var numHashes = 20
+
+    var thetas = []
+    var biases = []
+    for (var i = 0; i < numHashes; i++) {
+        thetas.push(random() * 2 * Math.PI)
+        biases.push(random())
+    }
+
+    function hashOfPt(pt, hashIdx) {
+        var res = rotateBy(pt, thetas[hashIdx])
+        res = translate(res, {x: biases[hashIdx], y: 0})
+        return Math.floor(res.x)
+    }
+
+
     // --- Draw separator lines between hash areas.
 
-    for (var y = -unitRadius; y <= unitRadius; y++) {
+    function drawSeparatorLines(hashIdx) {
 
-        var xAbs = Math.sqrt(unitRadius * unitRadius - y * y)
-        var from = mapToCanvasPt({x: -xAbs, y: y})
-        var to   = mapToCanvasPt({x:  xAbs, y: y})
+        for (var x0 = -unitRadius; x0 <= unitRadius; x0++) {
 
-        var line = add('line', lightStyle)
-        addAttributes(line, {
-            x1: from.x, y1: from.y,
-            x2:   to.x, y2:   to.y
-        })
+            var xAdj  = x0 - biases[hashIdx]
 
-        // This is a slightly clever way to draw both
-        // sets of lines at once (switch x, y here).
-        var line = add('line', lightStyle)
-        addAttributes(line, {
-            x1: from.y, y1: from.x,
-            x2:   to.y, y2:   to.x
-        })
+            if (Math.abs(xAdj) > unitRadius) continue
 
+            var y0Abs = Math.sqrt(unitRadius * unitRadius - xAdj * xAdj)
+            var from0 = {x: xAdj, y: -y0Abs}
+            var to0   = {x: xAdj, y:  y0Abs}
+
+            var from = rotateBy(from0, -thetas[hashIdx])
+            var to   = rotateBy(to0,   -thetas[hashIdx])
+
+            from = mapToCanvasPt(from)
+            to   = mapToCanvasPt(to)
+
+            var line = add('line', lightStyle)
+            addAttributes(line, {
+                x1: from.x, y1: from.y,
+                x2:   to.x, y2:   to.y
+            })
+        }
     }
 
 
@@ -400,31 +467,119 @@
 
         // colors = []
 
-        for (var i = colors.length; i < numValues * numValues; i++) {
+        var numColors = numValues * numValues * numValues * numValues
+
+        for (var i = colors.length; i < numColors; i++) {
             var rgb = []
             for (var j = 0; j < 3; j++) {
                 rgb.push(Math.floor(random() * 256))
             }
-            colors.push('rgba(' + rgb.join(', ') + ', 1.0)')
+
+            var hue = Math.floor(random() * 360)
+            var sat = Math.floor(50 * random() + 30)
+            var lit = Math.floor(50 * random() + 20)
+
+            colors.push(`hsl(${hue}, ${sat}%, ${lit}%)`)
         }
     }
 
-    // Draw white outlines for the dots first.
-    for (var i = 0; i < numPoints; i++) {
-        var canvasPt = mapToCanvasPt(points[i])
-        var dot = addDot(canvasPt)
-        addAttributes(dot, {fill: 'white', r:17})
+    // Helper function to check for point adjacency.
+
+    // This returns an array of integer values.
+    function hashPoint(pt) {
+        var hashValues = []
+        for (var hashIdx = 0; hashIdx < numHashes; hashIdx++) {
+            hashValues.push(realMod(hashOfPt(pt, hashIdx), numValues))
+        }
+        return hashValues
     }
 
-    // Draw the dots themselves.
-    for (var i = 0; i < numPoints; i++) {
-        var canvasPt = mapToCanvasPt(points[i])
-        var dot = addDot(canvasPt)
-        var hashVal1 = Math.floor((points[i].x + unitRadius) % numValues)
-        var hashVal2 = Math.floor((points[i].y + unitRadius) % numValues)
-        var hashVal = hashVal1 * numValues + hashVal2
-        addAttributes(dot, {fill: colors[hashVal]})
+    function getNumMatches(pt1, pt2) {
+        hashes1 = hashPoint(pt1)
+        hashes2 = hashPoint(pt2)
+
+        return hashes1.reduce(
+            (sum, val, idx) => sum + (val === hashes2[idx] ? 1 : 0),
+            0  // Initial value.
+        )
     }
+
+    var minMatches = 6
+    
+    function arePointsAdjacent(pt1, pt2) {
+
+        // Self-note: For now, 6 is the minimum point at which the graph
+        //            looks decent. I have 20 hashes, 100 points, unitRadius 6.
+
+        // I'm interested in graphing this with cutoff = 6, 7, 8, 9
+        // in a 2 x 2 grid layout.
+
+        return getNumMatches(pt1, pt2) >= minMatches
+    }
+
+    function drawAllEdgesWithStyle(style) {
+        for (var i = 0; i < numPoints; i++) {
+            for (var j = 0; j < numPoints; j++) {
+
+                if (i == j) continue
+                if (!arePointsAdjacent(points[i], points[j])) continue
+
+                var line = add('line', style)
+                var pt1 = mapToCanvasPt(points[i])
+                var pt2 = mapToCanvasPt(points[j])
+                addAttributes(line, {
+                    x1: pt1.x, y1: pt1.y,
+                    x2: pt2.x, y2: pt2.y
+                })
+
+            }
+        }
+    }
+
+    function drawDotsWithStyle(style) {
+        for (var i = 0; i < numPoints; i++) {
+            var canvasPt = mapToCanvasPt(points[i])
+            var dot = addDot(canvasPt)
+            addAttributes(dot, style)
+        }
+    }
+
+    function drawGraph() {
+        drawCircle()
+
+        for (var hashIdx = 0; hashIdx < numHashes; hashIdx++) {
+            drawSeparatorLines(hashIdx)
+        }
+
+        drawAllEdgesWithStyle(outerEdgeStyle)
+        drawAllEdgesWithStyle(edgeStyle)
+
+        drawDotsWithStyle({fill: 'white', r: 12 * styleScale})
+        drawDotsWithStyle({fill: colors[4]})
+    }
+
+    canvasRadius = size * 0.22
+    xMid = size * 0.25
+    yMid = size * 0.25
+
+    drawGraph()
+
+    xMid = size * 0.75
+    minMatches = 7
+
+    drawGraph()
+
+    xMid = size * 0.25
+    yMid = size * 0.75
+    minMatches = 8
+
+    drawGraph()
+
+    xMid = size * 0.75
+    yMid = size * 0.75
+    minMatches = 9
+
+    drawGraph()
 
     </script>
   </body>

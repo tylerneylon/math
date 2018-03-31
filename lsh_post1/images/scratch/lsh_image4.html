@@ -294,7 +294,7 @@
 
     // -- Set a custom random seed that produces data I like :)
 
-    seed(14)
+    seed(13)
 
 
     // --- Set the size of the canvas.
@@ -307,7 +307,7 @@
     // --- Functions and constants specific to this (LSH) post.
 
     var canvasRadius = size * 0.4  // The radius to draw in canvas coords.
-    var unitRadius   = 4           // The radius in unit coords.
+    var unitRadius   = 2           // The radius in unit coords.
 
     function getRandomPointInCircle(radius = 1) {
         var x = radius, y = radius
@@ -364,7 +364,7 @@
 
     // The points will be unit coordinates; meaning each point
     // will be in the unit circle.
-    var numPoints = 20
+    var numPoints = 100
     var points = []
     for (var i = 0; i < numPoints; i++) {
         points.push(getRandomPointInCircle(radius = unitRadius))
@@ -373,7 +373,7 @@
 
     // --- Choose random hash parameters.
 
-    var numHashes = 1
+    var numHashes = 4
 
     var thetas = []
     var biases = []
@@ -397,7 +397,7 @@
 
         for (var x0 = -unitRadius; x0 <= unitRadius; x0++) {
 
-            var xAdj  = x0 - biases[0]
+            var xAdj  = x0 - biases[hashIdx]
 
             if (Math.abs(xAdj) > unitRadius) continue
 
@@ -405,8 +405,8 @@
             var from0 = {x: xAdj, y: -y0Abs}
             var to0   = {x: xAdj, y:  y0Abs}
 
-            var from = rotateBy(from0, -thetas[0])
-            var to   = rotateBy(to0,   -thetas[0])
+            var from = rotateBy(from0, -thetas[hashIdx])
+            var to   = rotateBy(to0,   -thetas[hashIdx])
 
             from = mapToCanvasPt(from)
             to   = mapToCanvasPt(to)
@@ -445,12 +445,19 @@
 
         // colors = []
 
-        for (var i = colors.length; i < numValues * numValues; i++) {
+        var numColors = numValues * numValues * numValues * numValues
+
+        for (var i = colors.length; i < numColors; i++) {
             var rgb = []
             for (var j = 0; j < 3; j++) {
                 rgb.push(Math.floor(random() * 256))
             }
-            colors.push('rgba(' + rgb.join(', ') + ', 1.0)')
+
+            var hue = Math.floor(random() * 360)
+            var sat = Math.floor(50 * random() + 30)
+            var lit = Math.floor(50 * random() + 20)
+
+            colors.push(`hsl(${hue}, ${sat}%, ${lit}%)`)
         }
     }
 
@@ -466,7 +473,15 @@
         var canvasPt = mapToCanvasPt(points[i])
         var dot = addDot(canvasPt)
 
-        var hashVal = realMod(hashOfPt(points[i], 0), numValues)
+        var hashValues = []
+        for (var hashIdx = 0; hashIdx < numHashes; hashIdx++) {
+            hashValues.push(realMod(hashOfPt(points[i], hashIdx), numValues))
+        }
+        var preModValue = hashValues.reduce((x, y) => numValues * x + y)
+        var hashVal = realMod(preModValue, numColors)
+
+        // XXX
+        // console.log('hashVal =', hashVal)
 
         addAttributes(dot, {fill: colors[hashVal]})
     }
