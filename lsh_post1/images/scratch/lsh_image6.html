@@ -398,10 +398,12 @@
     // Print out the points in a format I can import into glsl.
     var glslArray = []
     for (var i = 0; i < numPoints; i++) {
-        glslArray.push(`${points[i].x / unitRadius}, ${points[i].y / unitRadius}`)
+        var xVal  = (points[i].x / unitRadius).toFixed(4)
+        var yVal  = (points[i].y / unitRadius).toFixed(4)
+        glslArray.push(`${xVal}, ${yVal}`)
     }
-    var innerData = glslArray.join('), vec2(')
-    var fullGlslData = `vec2[](vec2(${innerData}));`
+    var innerData = glslArray.join('),\n    vec2(')
+    var fullGlslData = `vec2[](\n    vec2(${innerData})\n);`
     console.log(fullGlslData)
 
 
