@@ -9,7 +9,7 @@
 
 #define CIRCLE_RADIUS 0.45
 
-#define DO_SMOOTH_REGIONS 1
+#define DO_SMOOTH_REGIONS 0
 #define DO_USE_DEFAULT_REGIONS 1
 
 float pix1;
@@ -20,6 +20,7 @@ mat2[NUM_HASHES] rotations;
 
 // Color: #5aa6b1
 vec4 dotColor = vec4(0.3529, 0.6510, 0.6941, 1);
+vec4 matchAreaColor = vec4(0.7412, 0.7137, 0.5157, 1);
 
 vec2 pts[100] = vec2[](
     vec2(-0.5353, 0.4295),
@@ -207,7 +208,7 @@ vec4 addRawBackground(
     
     float matchPerc = clamp(1.0 - sqrt(1.0001 - effectiveMatches / matchRange), 0.0, 1.0);
     
-    vec4 bgColor = matchPerc * dotColor + (1.0 - matchPerc) * vec4(1);
+    vec4 bgColor = matchPerc * matchAreaColor + (1.0 - matchPerc) * vec4(1);
     
     return vec4(color.a * color.rgb + (1.0 - color.a) * bgColor.rgb, 1.0);
 }
@@ -248,7 +249,34 @@ vec4 addSmoothedBackground(
     return bgColor / float(n);
 }
 
-void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
+vec4 addLine(
+        vec4 color,
+        vec2 ab,
+        vec2 from,
+        vec2 to,
+        float width,
+        vec4 lineColor) {
+
+    vec2 lineDir = normalize(to - from);
+    float lineA  = dot(from, lineDir);
+    float lineB  = dot(to,   lineDir);
+
+    vec2 sideDir = vec2(lineDir.y, -lineDir.x);
+    float sideA  = dot(from - width / 2.0 * sideDir, sideDir);
+    float sideB  = dot(from + width / 2.0 * sideDir, sideDir);
+
+    float alongLine = dot(ab, lineDir);
+    if (alongLine < lineA) return color;
+    if (alongLine > lineB) return color;
+
+    float alongSide = dot(ab, sideDir);
+    if (alongSide < sideA) return color;
+    if (alongSide > sideB) return color;
+
+    return lineColor;
+}
+
+void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     
     
     // Set up some drawing parameters.
@@ -312,16 +340,28 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
     color = addRing(color, ab, vec2(0), innerR, outerR, vec4(vec3(0.9375), 1));
     
     // Draw all dot backgrounds.
-    color = addDot(color, ab, dotCenter, 8.0 * pix1, vec4(1, 1, 1, 1));
+    color = addDot(color, ab, dotCenter, DOT_RADIUS * 1.6, vec4(1, 1, 1, 1));
     for (int i = 0; i < pts.length(); ++i) {
-        color = addDot(color, ab, pts[i], 8.0 * pix1, vec4(1, 1, 1, 1));
+        color = addDot(color, ab, pts[i], DOT_RADIUS * 1.6, vec4(1, 1, 1, 1));
     }
     
     // Draw all dots.
-    color = addDot(color, ab, dotCenter, 5.0 * pix1, dotColor);
+    color = addDot(color, ab, dotCenter, DOT_RADIUS, dotColor);
     for (int i = 0; i < pts.length(); ++i) {
-        color = addDot(color, ab, pts[i], 5.0 * pix1, dotColor);
+        color = addDot(color, ab, pts[i], DOT_RADIUS, dotColor);
     }
+
+    // XXX
+    /*
+    color = addLine(
+        color,
+        ab,
+        vec2(0.1, 0.1),
+        vec2(0.2, 0.2),
+        2.0 * pix1,
+        vec4(0, 0, 1, 1)
+    );
+    */
         
     fragColor = color;
         
