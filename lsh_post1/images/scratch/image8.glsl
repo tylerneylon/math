@@ -1,5 +1,5 @@
-#define NUM_HASHES  2
-#define MIN_MATCHES 1 /* int(float(NUM_HASHES) * 0.4) */
+#define NUM_HASHES  10
+#define MIN_MATCHES 5 /* int(float(NUM_HASHES) * 0.4) */
 #define HASH_SCALE 5.0
 
 #define DOT_RADIUS (5.0 * pix1)  /* TODO use this value */
@@ -10,7 +10,7 @@
 #define CIRCLE_RADIUS 0.45
 
 #define DO_SMOOTH_REGIONS 0
-#define DO_USE_DEFAULT_REGIONS 1
+#define DO_USE_DEFAULT_REGIONS 0
 
 float pix1;
 
@@ -266,14 +266,18 @@ vec4 addLine(
     float sideB  = dot(from + width / 2.0 * sideDir, sideDir);
 
     float alongLine = dot(ab, lineDir);
-    if (alongLine < lineA) return color;
-    if (alongLine > lineB) return color;
-
     float alongSide = dot(ab, sideDir);
-    if (alongSide < sideA) return color;
-    if (alongSide > sideB) return color;
+    
+    float hw = pix1 / 2.0;  // Half-width of antialiased portion.
+    float inLine = 1.0;
+    
+    inLine *= smoothstep(lineA - hw, lineA + hw, alongLine);
+    inLine *= smoothstep(-lineB - hw, -lineB + hw, -alongLine);
+    
+    inLine *= smoothstep(sideA - hw, sideA + hw, alongSide);
+    inLine *= smoothstep(-sideB - hw, -sideB + hw, -alongSide);
 
-    return lineColor;
+    return vec4(lineColor.rgb * inLine + color.rgb * (1.0 - inLine), 1);
 }
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord) {
@@ -336,6 +340,25 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
 #else
     color = addRawBackground(color, ab, dotCenter, CIRCLE_RADIUS);
 #endif
+
+    // Draw edges.
+
+    if (true) {
+        for (int i = 0; i < pts.length(); ++i) {
+
+            int numMatches = numHashMatches(dotCenter, pts[i]);
+            if (numMatches < MIN_MATCHES) continue;
+
+            color = addLine(
+                color,
+                ab,
+                dotCenter,
+                pts[i],
+                pix1 * 5.0,
+                vec4(0, 0, 0, 1)
+            );
+        }
+    }
     
     color = addRing(color, ab, vec2(0), innerR, outerR, vec4(vec3(0.9375), 1));
     
@@ -351,17 +374,17 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
         color = addDot(color, ab, pts[i], DOT_RADIUS, dotColor);
     }
 
-    // XXX
-    /*
-    color = addLine(
-        color,
-        ab,
-        vec2(0.1, 0.1),
-        vec2(0.2, 0.2),
-        2.0 * pix1,
-        vec4(0, 0, 1, 1)
-    );
-    */
+    // To help debug line-drawing.
+    if (false) {
+        color = addLine(
+            color,
+            ab,
+            vec2(0.1, 0.1),
+            vec2(0.2, 0.2),
+            1.0 * pix1,
+            vec4(0, 0, 1, 1)
+        );
+    }
         
     fragColor = color;
         
