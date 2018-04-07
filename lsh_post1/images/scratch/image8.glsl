@@ -11,6 +11,12 @@
 
 #define DO_SMOOTH_REGIONS 0
 #define DO_USE_DEFAULT_REGIONS 0
+#define DO_SHADE_AREAS 0
+#define DO_DRAW_STATIC_DOTS 1
+
+
+#define maybeEarlyExit /* if (color.a == 1.0) { fragColor = color; return; } */
+
 
 float pix1;
 
@@ -147,8 +153,12 @@ vec4 addDot(vec4 color, vec2 ab, vec2 center, float radius, vec4 dotColor) {
     float dotR_sq = dotDiff.x * dotDiff.x + dotDiff.y * dotDiff.y;
     if (dotR_sq > (radius + pix1) * (radius + pix1)) return color;
     float dotR = sqrt(dotR_sq);
-    float inDot = smoothstep(-pix1/1.0, pix1/1.0, radius - dotR);
-    return inDot * dotColor + (1.0 - inDot) * color;
+    float inDot = smoothstep(-pix1/1.2, pix1/1.2, radius - dotR);
+    //float alpha = (1.0 - color.a) * inDot + color.a;
+    //return vec4(alpha * ((1.0 - color.a) * dotColor.rgb + color.rgb), alpha);
+    return (1.0 - color.a) * inDot * dotColor + color;
+    // return (1.0 - color.a) * vec4(dotColor.rgb, inDot) + color;
+    // return inDot * dotColor + (1.0 - inDot) * color;
 }
 
 vec4 addRing(vec4 color, vec2 ab, vec2 center, float innerR, float outerR, vec4 ringColor) {
@@ -157,18 +167,11 @@ vec4 addRing(vec4 color, vec2 ab, vec2 center, float innerR, float outerR, vec4 
     float centerDist = sqrt(diff.x * diff.x + diff.y * diff.y);
     
     float midR = 0.5 * innerR + 0.5 * outerR;
-    
-    if (centerDist > midR) {
-        
-        float outOfRing = smoothstep(-pix1, pix1, centerDist - outerR);
-        return vec4(1) * outOfRing + ringColor * (1.0 - outOfRing);
-        
-    } else {
-        
-        float inRing = smoothstep(-pix1, pix1, innerR - centerDist);
-        return color * inRing + ringColor * (1.0 - inRing);
-        
-    }
+
+    float inRing = smoothstep(-pix1, pix1, centerDist - innerR);
+    inRing *= smoothstep(-pix1, pix1, outerR - centerDist);
+
+    return (1.0 - color.a) * inRing * ringColor + color;
 }
 
 int hashValue(vec2 pt, int hashIdx) {
@@ -184,6 +187,11 @@ int numHashMatches(vec2 pt1, vec2 pt2) {
     return numMatches;
 }
 
+// I expect to only use this for debugging.
+vec4 addSolidBackground(vec4 color, vec2 ab, vec4 bgColor) {
+    return (1.0 - color.a) * bgColor + color;
+}
+
 // Insert (blended) background color wherever input color has alpha < 1.0.
 vec4 addRawBackground(
         vec4 color,
@@ -191,6 +199,10 @@ vec4 addRawBackground(
         vec2 dotCenter,
         float whiteOutside) {
     
+#if !DO_SHADE_AREAS
+    return vec4(1);
+#endif
+
     if (ab.x * ab.x + ab.y * ab.y > whiteOutside * whiteOutside) {
         return vec4(1);
     }
@@ -329,25 +341,30 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
         MOVING_DOT_RADIUS * cos(dotAngle),
         MOVING_DOT_RADIUS * sin(dotAngle)
     );
-    
-    vec4 color = vec4(0);
 
+    vec4 color = vec4(0);
+    
     float innerR = CIRCLE_RADIUS - 5.0 * pix1;
     float outerR = CIRCLE_RADIUS + 5.0 * pix1;
 
 #if DO_SMOOTH_REGIONS
-    color = addSmoothedBackground(color, ab, dotCenter, CIRCLE_RADIUS);
+    // color = addSmoothedBackground(color, ab, dotCenter, CIRCLE_RADIUS);
 #else
-    color = addRawBackground(color, ab, dotCenter, CIRCLE_RADIUS);
+    // color = addRawBackground(color, ab, dotCenter, CIRCLE_RADIUS);
 #endif
 
     // Draw edges.
 
-    if (true) {
+    if (false) {
         for (int i = 0; i < pts.length(); ++i) {
 
             int numMatches = numHashMatches(dotCenter, pts[i]);
             if (numMatches < MIN_MATCHES) continue;
+
+            float effectiveMatches = float(numMatches - MIN_MATCHES + 1);
+            float matchRange = float(NUM_HASHES - MIN_MATCHES + 1);
+            
+            float matchPerc = clamp(1.0 - sqrt(1.0001 - effectiveMatches / matchRange), 0.0, 1.0);
 
             color = addLine(
                 color,
@@ -355,24 +372,30 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
                 dotCenter,
                 pts[i],
                 pix1 * 5.0,
-                vec4(0, 0, 0, 1)
+                vec4(vec3(0) * matchPerc + vec3(1) * (1.0 - matchPerc), 1)
             );
         }
     }
     
-    color = addRing(color, ab, vec2(0), innerR, outerR, vec4(vec3(0.9375), 1));
-    
-    // Draw all dot backgrounds.
-    color = addDot(color, ab, dotCenter, DOT_RADIUS * 1.6, vec4(1, 1, 1, 1));
-    for (int i = 0; i < pts.length(); ++i) {
-        color = addDot(color, ab, pts[i], DOT_RADIUS * 1.6, vec4(1, 1, 1, 1));
-    }
-    
     // Draw all dots.
     color = addDot(color, ab, dotCenter, DOT_RADIUS, dotColor);
+    maybeEarlyExit;
+#if DO_DRAW_STATIC_DOTS
     for (int i = 0; i < pts.length(); ++i) {
         color = addDot(color, ab, pts[i], DOT_RADIUS, dotColor);
+        maybeEarlyExit;
     }
+#endif
+
+    // Draw all dot backgrounds.
+    color = addDot(color, ab, dotCenter, DOT_RADIUS * 1.6, vec4(1, 1, 1, 1));
+    maybeEarlyExit;
+#if DO_DRAW_STATIC_DOTS
+    for (int i = 0; i < pts.length(); ++i) {
+        color = addDot(color, ab, pts[i], DOT_RADIUS * 1.6, vec4(1, 1, 1, 1));
+        maybeEarlyExit;
+    }
+#endif
 
     // To help debug line-drawing.
     if (false) {
@@ -385,6 +408,10 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
             vec4(0, 0, 1, 1)
         );
     }
+
+    color = addRing(color, ab, vec2(0), innerR, outerR, vec4(vec3(0.9375), 1));
+
+    color = addSolidBackground(color, ab, vec4(1, 0, 0, 1));
         
     fragColor = color;
         
