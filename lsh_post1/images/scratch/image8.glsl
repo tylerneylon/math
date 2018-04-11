@@ -4,16 +4,23 @@
 
 #define DOT_RADIUS (5.0 * pix1)  /* TODO use this value */
 
-#define MOVING_DOT_SPEED 0.5
+#define MOVING_DOT_SPEED 0.5  /* 0.5 */
 #define MOVING_DOT_RADIUS 0.23
 
 #define CIRCLE_RADIUS 0.45
 
+#define NUM_SMOOTH_SAMPLES 20
+
 #define DO_SMOOTH_REGIONS 0
 #define DO_USE_DEFAULT_REGIONS 0
-#define DO_SHADE_AREAS 0
-#define DO_DRAW_STATIC_DOTS 1
+#define DO_SHADE_AREAS 1
 
+#define NUM_DOTS_TO_DRAW 30
+
+// TODO
+// * Finish transition to drawing front-to-back.
+// * Spend at most another hour trying to improve performance.
+// * Improve thumbnail appearance by scaling pixel-based sizes a bit.
 
 #define maybeEarlyExit /* if (color.a == 1.0) { fragColor = color; return; } */
 
@@ -24,9 +31,14 @@ float[NUM_HASHES] angles;
 float[NUM_HASHES] biases;
 mat2[NUM_HASHES] rotations;
 
+int [NUM_HASHES] dotHashValues;
+
 // Color: #5aa6b1
 vec4 dotColor = vec4(0.3529, 0.6510, 0.6941, 1);
 vec4 matchAreaColor = vec4(0.7412, 0.7137, 0.5157, 1);
+
+// XXX
+vec3 ptsToHash[100];
 
 vec2 pts[100] = vec2[](
     vec2(-0.5353, 0.4295),
@@ -187,6 +199,14 @@ int numHashMatches(vec2 pt1, vec2 pt2) {
     return numMatches;
 }
 
+int numHashMatchesWithDot(vec2 pt) {
+    int numMatches = 0;
+    for (int i = 0; i < NUM_HASHES; ++i) {
+        if (hashValue(pt, i) == dotHashValues[i]) ++numMatches;
+    }
+    return numMatches;
+}
+
 // I expect to only use this for debugging.
 vec4 addSolidBackground(vec4 color, vec2 ab, vec4 bgColor) {
     return (1.0 - color.a) * bgColor + color;
@@ -200,20 +220,16 @@ vec4 addRawBackground(
         float whiteOutside) {
     
 #if !DO_SHADE_AREAS
-    return vec4(1);
+    return (1.0 - color.a) * vec4(1) + color;
 #endif
 
     if (ab.x * ab.x + ab.y * ab.y > whiteOutside * whiteOutside) {
-        return vec4(1);
+        return vec4(1.0 - color.a) + color;
     }
 
-    if (color.a == 1.0) return color;
+    int numMatches = numHashMatchesWithDot(ab);
     
-    int numMatches = numHashMatches(ab, dotCenter);
-    
-    if (numMatches < MIN_MATCHES) return vec4(1);
-    
-    //return vec4(0, 1, 0, 1);
+    if (numMatches < MIN_MATCHES) return (1.0 - color.a) * vec4(1) + color;
     
     float effectiveMatches = float(numMatches - MIN_MATCHES + 1);
     float matchRange = float(NUM_HASHES - MIN_MATCHES + 1);
@@ -221,8 +237,8 @@ vec4 addRawBackground(
     float matchPerc = clamp(1.0 - sqrt(1.0001 - effectiveMatches / matchRange), 0.0, 1.0);
     
     vec4 bgColor = matchPerc * matchAreaColor + (1.0 - matchPerc) * vec4(1);
-    
-    return vec4(color.a * color.rgb + (1.0 - color.a) * bgColor.rgb, 1.0);
+
+    return (1.0 - color.a) * bgColor + color;
 }
 
 // Insert (blended) background color wherever input color has alpha < 1.0.
@@ -233,8 +249,10 @@ vec4 addSmoothedBackground(
         float whiteOutside) {
     
     if (ab.x * ab.x + ab.y * ab.y > whiteOutside * whiteOutside) {
-        return vec4(1);
+        return vec4(1.0 - color.a) + color;
     }
+
+	if (color.a == 1.0) return color;
 
     vec4 bgColor;
     
@@ -245,7 +263,7 @@ vec4 addSmoothedBackground(
     color += 0.25 * rawBackground(ab + vec2(pix1, pix1), dotCenter);
     */
     
-    int n = 40;
+    int n = NUM_SMOOTH_SAMPLES;
     for (int i = 0; i < n; ++i) {
         float a = random() * 6.28318;
         float r = pix1 * random() * 0.5;
@@ -289,15 +307,14 @@ vec4 addLine(
     inLine *= smoothstep(sideA - hw, sideA + hw, alongSide);
     inLine *= smoothstep(-sideB - hw, -sideB + hw, -alongSide);
 
-    return vec4(lineColor.rgb * inLine + color.rgb * (1.0 - inLine), 1);
+    return (1.0 - color.a) * inLine * lineColor + color;
+
+    // return vec4(lineColor.rgb * inLine + color.rgb * (1.0 - inLine), 1);
 }
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord) {
-    
-    
+
     // Set up some drawing parameters.
-    
-    vec2 uv = fragCoord / iResolution.xy;
     
     float size = min(iResolution.x, iResolution.y);
     
@@ -310,8 +327,6 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     // Set up hash parameters.
     
     for (int i = 0; i < NUM_HASHES; ++i) {
-        
-        
         
         float a = random() * 6.2831 - 0.0;
         biases[i] = random();
@@ -334,7 +349,6 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
         pts[i] *= CIRCLE_RADIUS;
     }
     
-    // Draw.
     
     float dotAngle = 1.0 + iTime * MOVING_DOT_SPEED;
     vec2 dotCenter = vec2(
@@ -342,60 +356,35 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
         MOVING_DOT_RADIUS * sin(dotAngle)
     );
 
-    vec4 color = vec4(0);
-    
+
+    // Update dotHashValues.
+
+    for (int i = 0; i < NUM_HASHES; ++i) {
+        dotHashValues[i] = hashValue(dotCenter, i);
+    }
+
     float innerR = CIRCLE_RADIUS - 5.0 * pix1;
     float outerR = CIRCLE_RADIUS + 5.0 * pix1;
 
-#if DO_SMOOTH_REGIONS
-    // color = addSmoothedBackground(color, ab, dotCenter, CIRCLE_RADIUS);
-#else
-    // color = addRawBackground(color, ab, dotCenter, CIRCLE_RADIUS);
-#endif
+    // Draw.
 
-    // Draw edges.
-
-    if (false) {
-        for (int i = 0; i < pts.length(); ++i) {
-
-            int numMatches = numHashMatches(dotCenter, pts[i]);
-            if (numMatches < MIN_MATCHES) continue;
-
-            float effectiveMatches = float(numMatches - MIN_MATCHES + 1);
-            float matchRange = float(NUM_HASHES - MIN_MATCHES + 1);
-            
-            float matchPerc = clamp(1.0 - sqrt(1.0001 - effectiveMatches / matchRange), 0.0, 1.0);
-
-            color = addLine(
-                color,
-                ab,
-                dotCenter,
-                pts[i],
-                pix1 * 5.0,
-                vec4(vec3(0) * matchPerc + vec3(1) * (1.0 - matchPerc), 1)
-            );
-        }
-    }
+    vec4 color = vec4(0);
     
     // Draw all dots.
     color = addDot(color, ab, dotCenter, DOT_RADIUS, dotColor);
     maybeEarlyExit;
-#if DO_DRAW_STATIC_DOTS
-    for (int i = 0; i < pts.length(); ++i) {
+    for (int i = 0; i < NUM_DOTS_TO_DRAW; ++i) {
         color = addDot(color, ab, pts[i], DOT_RADIUS, dotColor);
         maybeEarlyExit;
     }
-#endif
 
     // Draw all dot backgrounds.
     color = addDot(color, ab, dotCenter, DOT_RADIUS * 1.6, vec4(1, 1, 1, 1));
     maybeEarlyExit;
-#if DO_DRAW_STATIC_DOTS
-    for (int i = 0; i < pts.length(); ++i) {
+    for (int i = 0; i < NUM_DOTS_TO_DRAW; ++i) {
         color = addDot(color, ab, pts[i], DOT_RADIUS * 1.6, vec4(1, 1, 1, 1));
         maybeEarlyExit;
     }
-#endif
 
     // To help debug line-drawing.
     if (false) {
@@ -409,9 +398,49 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
         );
     }
 
+    // Draw edges.
+
+    if (true) {
+        for (int i = 0; i < NUM_DOTS_TO_DRAW; ++i) {
+
+            int numMatches = numHashMatchesWithDot(pts[i]);
+            if (numMatches < MIN_MATCHES) continue;
+
+            float effectiveMatches = float(numMatches - MIN_MATCHES + 1);
+            float matchRange = float(NUM_HASHES - MIN_MATCHES + 1);
+            
+            float matchPerc = clamp(1.0 - sqrt(1.0001 - effectiveMatches / matchRange), 0.2, 1.0);
+            float a = 0.5 + 0.5 * matchPerc;
+
+            color = addLine(
+                color,
+                ab,
+                dotCenter,
+                pts[i],
+                pix1 * 5.0,
+                vec4(vec3(a * (1.0 - matchPerc)), a)
+            );
+
+            color = addLine(
+                color,
+                ab,
+                dotCenter,
+                pts[i],
+                pix1 * 10.0,
+                vec4(vec3(a), a)
+            );
+        }
+    }
+    
     color = addRing(color, ab, vec2(0), innerR, outerR, vec4(vec3(0.9375), 1));
 
-    color = addSolidBackground(color, ab, vec4(1, 0, 0, 1));
+#if DO_SMOOTH_REGIONS
+    color = addSmoothedBackground(color, ab, dotCenter, CIRCLE_RADIUS);
+#else
+    color = addRawBackground(color, ab, dotCenter, CIRCLE_RADIUS);
+#endif
+
+    // color = addSolidBackground(color, ab, vec4(1, 0, 0, 1));
         
     fragColor = color;
         
