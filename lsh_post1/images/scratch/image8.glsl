@@ -1,24 +1,41 @@
+// Currently looking at 5/3 hashes for the shaded area anim.
+// Capture with browser (not image) full-screen on my large monitor.
+
 #define NUM_HASHES  10
 #define MIN_MATCHES 5 /* int(float(NUM_HASHES) * 0.4) */
-#define HASH_SCALE 5.0
+#define HASH_SCALE 7.0
 
-#define DOT_RADIUS (5.0 * pix1)  /* TODO use this value */
+#define DOT_RADIUS (6.0 * pix1)
+
+#define LINE_WIDTH (2.5 * pix1)
+#define LINE_PADDING_WIDTH (4.5 * pix1)
+
+#define RING_WIDTH (10.0 * pix1)
 
 #define MOVING_DOT_SPEED 0.5  /* 0.5 */
 #define MOVING_DOT_RADIUS 0.23
+#define MOVING_DOT_COLOR vec4(0.8, 0.4, 0.7, 1)
+
+#define LIGHT_GRAY vec4(vec3(0.9375), 1)
+#define ACTIVE_COLOR vec4(0.1, 0.3, 0.5, 1)
+#define INACTIVE_COLOR vec4(vec3(0.97), 1)
+
+#define SEPARATOR_COLOR vec4(1)
+#define SEPARATOR_WIDTH 6.0 * pix1
 
 #define CIRCLE_RADIUS 0.45
 
 #define NUM_SMOOTH_SAMPLES 20
 
-#define DO_SMOOTH_REGIONS 0
 #define DO_USE_DEFAULT_REGIONS 0
-#define DO_SHADE_AREAS 1
+#define DO_SHADE_AREAS 0
+#define DO_SMOOTH_REGIONS 0
 
-#define NUM_DOTS_TO_DRAW 30
+#define DO_DRAW_EDGES 1
+
+#define NUM_DOTS_TO_DRAW 5
 
 // TODO
-// * Finish transition to drawing front-to-back.
 // * Spend at most another hour trying to improve performance.
 // * Improve thumbnail appearance by scaling pixel-based sizes a bit.
 
@@ -30,7 +47,6 @@ float pix1;
 float[NUM_HASHES] angles;
 float[NUM_HASHES] biases;
 mat2[NUM_HASHES] rotations;
-
 int [NUM_HASHES] dotHashValues;
 
 // Color: #5aa6b1
@@ -229,14 +245,14 @@ vec4 addRawBackground(
 
     int numMatches = numHashMatchesWithDot(ab);
     
-    if (numMatches < MIN_MATCHES) return (1.0 - color.a) * vec4(1) + color;
+    if (numMatches < MIN_MATCHES) return (1.0 - color.a) * INACTIVE_COLOR + color;
     
     float effectiveMatches = float(numMatches - MIN_MATCHES + 1);
     float matchRange = float(NUM_HASHES - MIN_MATCHES + 1);
     
     float matchPerc = clamp(1.0 - sqrt(1.0001 - effectiveMatches / matchRange), 0.0, 1.0);
     
-    vec4 bgColor = matchPerc * matchAreaColor + (1.0 - matchPerc) * vec4(1);
+    vec4 bgColor = matchPerc * ACTIVE_COLOR + (1.0 - matchPerc) * INACTIVE_COLOR;
 
     return (1.0 - color.a) * bgColor + color;
 }
@@ -252,7 +268,7 @@ vec4 addSmoothedBackground(
         return vec4(1.0 - color.a) + color;
     }
 
-	if (color.a == 1.0) return color;
+    if (color.a == 1.0) return color;
 
     vec4 bgColor;
     
@@ -312,7 +328,38 @@ vec4 addLine(
     // return vec4(lineColor.rgb * inLine + color.rgb * (1.0 - inLine), 1);
 }
 
+float unitRadius = HASH_SCALE * CIRCLE_RADIUS;
+float unitRadiusSq;
+
+vec4 addSeparatorsForHash(
+        vec4 color,
+        vec2 ab,
+        float width,
+        vec4 lineColor,
+        int hashIndex) {
+
+    for (float x0 = floor(-unitRadius); x0 <= unitRadius; x0 += 1.0) {
+
+        float xAdj = x0 - biases[hashIndex];
+
+        if (abs(xAdj) > unitRadius) continue;
+
+        float y0Abs = sqrt(unitRadiusSq - xAdj * xAdj);
+        vec2 from0  = vec2(xAdj, -y0Abs);
+        vec2 to0    = vec2(xAdj,  y0Abs);
+
+        vec2 from = transpose(rotations[hashIndex]) * from0 / HASH_SCALE;
+        vec2 to   = transpose(rotations[hashIndex]) * to0   / HASH_SCALE;
+
+        color = addLine(color, ab, from, to, width, lineColor);
+    }
+
+    return color;
+}
+
 void mainImage(out vec4 fragColor, in vec2 fragCoord) {
+    
+    seed(1u);
 
     // Set up some drawing parameters.
     
@@ -323,6 +370,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     float pix10 = 10.0 / size;
     pix1 = 1.0 / size;
     
+    unitRadiusSq = unitRadius * unitRadius;
     
     // Set up hash parameters.
     
@@ -363,15 +411,15 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
         dotHashValues[i] = hashValue(dotCenter, i);
     }
 
-    float innerR = CIRCLE_RADIUS - 5.0 * pix1;
-    float outerR = CIRCLE_RADIUS + 5.0 * pix1;
+    float innerR = CIRCLE_RADIUS - 0.5 * RING_WIDTH;
+    float outerR = CIRCLE_RADIUS + 0.5 * RING_WIDTH;
 
     // Draw.
 
     vec4 color = vec4(0);
     
     // Draw all dots.
-    color = addDot(color, ab, dotCenter, DOT_RADIUS, dotColor);
+    color = addDot(color, ab, dotCenter, DOT_RADIUS, MOVING_DOT_COLOR);
     maybeEarlyExit;
     for (int i = 0; i < NUM_DOTS_TO_DRAW; ++i) {
         color = addDot(color, ab, pts[i], DOT_RADIUS, dotColor);
@@ -400,39 +448,43 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
 
     // Draw edges.
 
-    if (true) {
-        for (int i = 0; i < NUM_DOTS_TO_DRAW; ++i) {
+#if DO_DRAW_EDGES
+    for (int i = 0; i < NUM_DOTS_TO_DRAW; ++i) {
 
-            int numMatches = numHashMatchesWithDot(pts[i]);
-            if (numMatches < MIN_MATCHES) continue;
+        int numMatches = numHashMatchesWithDot(pts[i]);
+        if (numMatches < MIN_MATCHES) continue;
 
-            float effectiveMatches = float(numMatches - MIN_MATCHES + 1);
-            float matchRange = float(NUM_HASHES - MIN_MATCHES + 1);
-            
-            float matchPerc = clamp(1.0 - sqrt(1.0001 - effectiveMatches / matchRange), 0.2, 1.0);
-            float a = 0.5 + 0.5 * matchPerc;
+        float effectiveMatches = float(numMatches - MIN_MATCHES + 1);
+        float matchRange = float(NUM_HASHES - MIN_MATCHES + 1);
+        
+        float matchPerc = clamp(1.0 - sqrt(1.0001 - effectiveMatches / matchRange), 0.2, 1.0);
+        float a = 0.5 + 0.5 * matchPerc;
 
-            color = addLine(
-                color,
-                ab,
-                dotCenter,
-                pts[i],
-                pix1 * 5.0,
-                vec4(vec3(a * (1.0 - matchPerc)), a)
-            );
+        color = addLine(
+            color,
+            ab,
+            dotCenter,
+            pts[i],
+            LINE_WIDTH,
+            vec4(vec3(a * (1.0 - matchPerc)), a)
+        );
 
-            color = addLine(
-                color,
-                ab,
-                dotCenter,
-                pts[i],
-                pix1 * 10.0,
-                vec4(vec3(a), a)
-            );
-        }
+        color = addLine(
+            color,
+            ab,
+            dotCenter,
+            pts[i],
+            LINE_PADDING_WIDTH,
+            vec4(vec3(a), a)
+        );
     }
+#endif
+
+    color = addRing(color, ab, vec2(0), innerR, outerR, LIGHT_GRAY);
     
-    color = addRing(color, ab, vec2(0), innerR, outerR, vec4(vec3(0.9375), 1));
+    for (int i = 0; i < NUM_HASHES; ++i) {
+        color = addSeparatorsForHash(color, ab, SEPARATOR_WIDTH, SEPARATOR_COLOR, i);
+    }
 
 #if DO_SMOOTH_REGIONS
     color = addSmoothedBackground(color, ab, dotCenter, CIRCLE_RADIUS);
