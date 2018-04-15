@@ -112,12 +112,12 @@ $$\begin{densearray}
   g_2(x) & = & (x - 1)^2 - 1 = x^2 - 2x, \\
 \end{densearray}$$
 
-then $f = g_1 + g_2$, and each $g_i$ is a shift of the original function $f$.
+then $f = g_1 + g_2$, and each $g_i$ is a scaled shift of the original function $f$.
 In general, if $f(x) = ax^n + O(x^{n-1})$ then we can choose
-$g_i(x) = a(x\pm 1)^n + O(x^{n-1})$ so that $f = g_1 + g_2$,
+$g_i(x) = a/2(x\pm 1)^n + O(x^{n-1})$ so that $f = g_1 + g_2$,
 and each $g_i$ has
 
-$$ \lim_{x\to\pm\infty}\frac{g_i(x)}{f(x)} = 1,$$
+$$ \lim_{x\to\pm\infty}\frac{2g_i(x)}{f(x)} = 1,$$
 
 which is good enough for me to subjectively say that they strongly
 resemble shifts of $f$.
