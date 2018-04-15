@@ -284,6 +284,10 @@ and to what degree --- by a given point:
 
 IMAGE 8
 
+[CHECK text on turning this into a graph]
+
+![Description](images/image8b@2x.gif)
+
 ## Why this is faster
 
 So far we've been sticking to 2-dimensional data because that's easier to
