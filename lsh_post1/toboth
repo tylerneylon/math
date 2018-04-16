@@ -24,6 +24,7 @@ sed 's_https://cdn.mathjax.org/mathjax/latest_'${HOME}/Dropbox/Documents/code/Ma
 pandoc -t latex -o ${name}.tex -s ${FLAGS} --template=template.tex
 TMP=$(mktemp tmp_XXXX)
 sed 's|images/\(.*\)\.png|images/pdfs/\1.pdf|' ${name}.tex > ${TMP}
+sed 's|images/\(.*\)\@2x.gif|images/\1_fixed.png|' ${name}.tex > ${TMP}
 mv ${TMP} ${name}.tex
 pdflatex ${name}.tex
 #open ${name}.pdf
@@ -32,6 +33,7 @@ pdflatex ${name}.tex
 pandoc -t latex -o ${name}.tex -s ${FLAGS} --template=kindle_template.tex
 TMP=$(mktemp tmp_XXXX)
 sed 's|images/\(.*\)\.png|images/pdfs/\1.pdf|' ${name}.tex > ${TMP}
+sed 's|images/\(.*\)\@2x.gif|images/\1_fixed.png|' ${name}.tex > ${TMP}
 TMP2=$(mktemp tmp_XXXX)
 # This next line is a hacky way to modify the definition of \zerotwo so that
 # it looks better in this output format.

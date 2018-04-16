@@ -262,7 +262,7 @@ Figure~\ref{fig:fig1} shows an example of such a clustering.
 
 \begin{figure}
 \centering
-\includegraphics{images/pdfs/lsh_image1_v2.pdf}
+\includegraphics{images/lsh_image1_v2.png}
 \caption{Twenty points chosen randomly in a circle with radius 4. Each
 point \(x\) is colored based on its hash value
 \(h_1(x).\)}\label{fig:fig1}
@@ -277,7 +277,7 @@ figure~\ref{fig:fig2}.
 
 \begin{figure}
 \centering
-\includegraphics{images/pdfs/lsh_image2.pdf}
+\includegraphics{images/lsh_image2.png}
 \caption{The same twenty points as figure 1, except that we're using the
 \(y\) values (instead of \(x\) values) to determine the hash-based
 cluster colors this time around.}\label{fig:fig2}
@@ -294,7 +294,7 @@ figure~\ref{fig:fig3}.
 
 \begin{figure}
 \centering
-\includegraphics{images/pdfs/lsh_image3.pdf}
+\includegraphics{images/lsh_image3.png}
 \caption{The same twenty points clustered via two different hashes ---
 one using \(\lfloor x\rfloor\), the other using \(\lfloor y\rfloor.\) As
 before, points are colored based on which cluster they're in; a cluster
@@ -354,7 +354,7 @@ that are clustered together now).
 
 \begin{figure}
 \centering
-\includegraphics{images/pdfs/lsh_image4.pdf}
+\includegraphics{images/lsh_image4.png}
 \caption{One hundred random points clustered using four random hash
 functions as defined by (\ref{eq:eq3}). Points have the same color when
 all four of their hash values are the same. Each set of parallel light
@@ -401,7 +401,7 @@ figure~\ref{fig:fig5} has an edge drawn between two points \(a\) and
 
 \begin{figure}
 \centering
-\includegraphics{images/pdfs/lsh_image5.pdf}
+\includegraphics{images/lsh_image5.png}
 \caption{A set of 100 random points with graph edges drawn according to
 (\ref{eq:eq2}). There are 20 random hash functions used. The top-left
 graph uses the cutoff value \(j=6.\) The remaining three graphs have
@@ -409,28 +409,65 @@ cutoff values \(j=7,\) 8, and 9; this means each graph is a subgraph
 (having a subset of the edges) of the previous one.}\label{fig:fig5}
 \end{figure}
 
-In fact, we can visualize all possible cutoff values (values of \(j\) in
-(\ref{eq:eq2})) of 6 or higher in a single image by using weighted
-edges, like so: CHECK finish that sentence; explain why we start at 6
+In fact, we can visualize all possible cutoff values of 6 or higher ---
+these are values of \(j\) in equation (\ref{eq:eq2}) --- using a single
+image with weighted edges, as seen in figure~\ref{fig:fig6}.
 
 \begin{figure}
 \centering
-\includegraphics{images/pdfs/lsh_image6.pdf}
-\caption{description}
+\includegraphics{images/lsh_image6.png}
+\caption{The same 100 random points from figure~\ref{fig:fig5}, this
+time rendered with edge weights that depend on how many hash collisions
+are present between any two points. A black edge represents 20 hash
+collisions; the lightest edge represents only 6 hash
+collisions.}\label{fig:fig6}
 \end{figure}
 
 Yet another fun way to get an intuitive feel for how much information
 we're getting from our hashes is to see which subsets of our circle are
-matched --- and to what degree --- by a given point:
+matched, and to what degree, by a given point. We can do this by shading
+regions of the circle that will match a query point, as in
+figure~\ref{fig:fig8a}. All the points in a single shaded region have
+the same hash value for all hashes. The first part of
+figure~\ref{fig:fig8a} shows a scaled version of the two-hash system
+(using \(h_1()\) and \(h_2()\)) that we saw before; the second part has
+5 random hashes. Call the moving query point \(q;\) then any point \(p\)
+in a darkly shaded region will have a hash collision \(h_i(p) = h_i(q)\)
+for all hash functions; in a lightly shaded region that equation will
+only hold true for a subset of the hash functions \(h_i().\)
 
-IMAGE 8
-
-{[}CHECK text on turning this into a graph{]}
+An idealized version of this image would present a shaded circle around
+the query point; notice that the second setting in
+figure~\ref{fig:fig8a} is much closer to this ideal than the left-hand.
+Keep in mind that lookups within the shaded regions are no longer linear
+searches through data, but rather the intersection of \(k\) hash table
+lookups --- that is, lookups of nearby points is significantly faster.
 
 \begin{figure}
 \centering
-\includegraphics{images/image8b@2x.gif}
-\caption{Description}
+\includegraphics{images/image8a_fixed.png}
+\caption{The first setting shows the regions where points would be
+matched by either two (dark regions) or just one (lighter shade) hash
+collisions with the moving query point. The second setting shows the
+same thing for 5 random hash functions; in the right-hand side, the
+lightest shaded region indicates 3 hash collisions.}\label{fig:fig8a}
+\end{figure}
+
+It may further help your intuition to see how similarity edges change as
+a single query point moives. This is the idea behind
+figure~\ref{fig:fig8b}, where weighted edges are drawn between a moving
+query point and 100 random points. Notice that the edge weightings make
+intuitive sense: they tend to connect strongly to very close neighbors,
+weakly to farther neighbors, and not at all to points beyond a certain
+distance.
+
+\begin{figure}
+\centering
+\includegraphics{images/image8b_fixed.png}
+\caption{Edges weighted by how many hash collisions are present between
+the moving query point and 100 random points. Darker edges indicate more
+hash collisions. This image uses 12 random hashes, and requires at least
+6 hash collisions for an edge to appear.}\label{fig:fig8b}
 \end{figure}
 
 \subsection{Why this is faster}\label{why-this-is-faster}
