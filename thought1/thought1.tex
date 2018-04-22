@@ -1,0 +1,173 @@
+\documentclass[20pt,]{extarticle}
+\usepackage[margin=0.6in]{geometry}
+\pagenumbering{gobble}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{hyperref}
+\PassOptionsToPackage{usenames,dvipsnames}{color} % color is loaded by hyperref
+\hypersetup{unicode=true,
+            pdftitle={A Model of Human Thought: Philosophy},
+            pdfauthor={Tyler Neylon},
+            colorlinks=true,
+            linkcolor=black,
+            citecolor=Blue,
+            urlcolor=Blue,
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\usepackage{subfig}
+\AtBeginDocument{%
+\renewcommand*\figurename{Figure}
+\renewcommand*\tablename{Table}
+}
+\AtBeginDocument{%
+\renewcommand*\listfigurename{List of Figures}
+\renewcommand*\listtablename{List of Tables}
+}
+\usepackage{float}
+\floatstyle{ruled}
+\makeatletter
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\makeatother
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+
+\title{A Model of Human Thought: Philosophy}
+\author{Tyler Neylon}
+\date{216.2018}
+
+% Begin custom, non-pandoc commands.
+
+\newcommand{\latexonlyrule}{\rule}
+\newenvironment{densearray}{\begin{array}{rcl}}{\end{array}}
+\newcommand{\class}[1]{}
+\newcommand{\Rule}[3]{}
+\newcommand{\optquad}{\quad}
+\newcommand{\smallscrneg}{}
+\newcommand{\smallscr}[1]{}
+\newcommand{\bigscr}[1]{#1}
+\newcommand{\smallscrskip}[1]{}
+
+% End custom, non-pandoc commands.
+
+\begin{document}
+\maketitle
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\eqnset}[1]{\left.\mbox{$#1$}\;\;\right\rbrace\class{postbrace}{ }}
+\providecommand{\optquad}{\class{optquad}{}}
+\providecommand{\smallscrneg}{\class{smallscrneg}{ }}
+\providecommand{\bigscr}[1]{\class{bigscr}{#1}}
+\providecommand{\smallscr}[1]{\class{smallscr}{#1}}
+\providecommand{\smallscrskip}[1]{\class{smallscrskip}{\hskip #1}}
+
+What does it mean for something to be true?
+
+What can we do to verify that something is true?
+
+How can we discover new truths?
+
+This article is about a conceptual model of truth that may help answer
+these questions. I'm personally motivated to consider these questions
+because I'd like to re-evaluate the scientific method --- the search for
+truth.
+
+I'll argue that this line of pursuit aligns with an understanding of
+human thought itself. As a result, these questions also pertain to
+another deep interest of mine, which is writing software that we would
+recognize as a person.
+
+\section{A traditional view}\label{a-traditional-view}
+
+The usual view of truth is that an idea is true exactly when it
+corresponds to the actual state of the world. A concept you need to
+bundle along with any definition of truth is a concept of what kinds of
+things are candidates for truth; previous philosophers have argued that
+suitable \emph{sentences} or \emph{propositions} are good candidates for
+truth. The word \emph{suitable} here refers to the need to avoid tricky
+cases such as \emph{``This sentence is false.''} I won't dwell on the
+tricky cases because I think they are mostly a distraction from the meat
+of the issue.
+
+The reason I'm not a fan of this definition is that it doesn't really
+explain much. It doesn't tell us how we can verify truthiness. We're
+left asking what it means to correspond to the state of the world. It
+seems to simply exchange one word for a few more without helping us
+learn anything new in the process.
+
+Rather than arguing that this semi-tautological perspective is
+\emph{wrong}, I'll simply provide another that I think is more useful.
+Consider it the difference between Roman numerals and our usual Arabic
+base-10 decimal notation. It's harder to do long division with Roman
+numerals, whereas the structure of a number captured by base-10 notation
+is \emph{useful} --- it enables us to take certain actions that might be
+more difficult with other notations, even though it adds no new
+information. This is the kind of \emph{usefulness} I'm arguing exists in
+an alternative model of truth.
+
+\section{A practical view}\label{a-practical-view}
+
+(truth is what is effective; cf relevant / completely true /
+social/authority) (degrees of truthiness) (the idea of truth itself as a
+useful fiction)
+
+(Charles Pierce / Karl Popper)
+
+\subsubsection{Isn't it true even if no one knows
+it?}\label{isnt-it-true-even-if-no-one-knows-it}
+
+What would that even mean? (want a good analogy)
+
+\section{A model of thought}\label{a-model-of-thought}
+
+(goals / questions / answers / actions) (actions as proofs / algorithms)
+
+\section{A bigger picture}\label{a-bigger-picture}
+
+(philosophy as humanity's relationship with the world, not about the
+world itself)
+
+(David Hume, Descartes)
+
+(aim to close with the big picture idea and some argument as to why)
+
+\end{document}
