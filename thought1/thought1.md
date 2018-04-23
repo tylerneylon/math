@@ -20,17 +20,19 @@ How can we discover new truths?
 This article is about a conceptual model of truth that may help answer
 these questions.
 I'm personally motivated to consider these questions because I'd like to
-re-evaluate the scientific method --- the search for truth.
+re-evaluate the scientific method --- the search for truth (although
+thoughts specific to the scientific method will wait for another article).
 
-I'll argue that this line of pursuit aligns with an understanding of human
+I'll argue that this line of thought aligns with an understanding of human
 thought itself. As a result, these questions also pertain to another deep
 interest of mine, which is writing software that we would recognize as a person.
 
 # A traditional view
 
 The usual view of truth is that an idea is true exactly when
-it corresponds to the actual state of the world. A concept you
-need to bundle along with any definition of truth is a concept
+it corresponds to the actual state of the world.
+Along with a definition of truth, you need to bring with it
+a concept
 of what kinds of things are candidates for truth; previous
 philosophers have argued that suitable *sentences* or
 *propositions* are good candidates for truth. The word *suitable*
@@ -100,16 +102,20 @@ pricing system, and half of people were charged $10 and the other half were
 charged $12? These may feel like edge cases, but the point itself is that
 unclear edge cases *always* exist.
 
-If you concede that human ideas are imperfect models that help us achieve our
+If you agree that human ideas are imperfect models that help us achieve our
 goals, then you can see how it's useful to speak about effective truths rather
 than to insist on an idealized version of truth that could only make perfect
 sense if it knew all the rules of physics to the smallest detail.
 
 ## Relevance and social truths
 
-I want to briefly mention two other potential essential properties of truth.
+I want to mention how effective truth relates to two interesting
+properties of truth --- *relevance* and *social acceptance*.
+These are both interesting aspects of truth that I think make more sense
+from the viewpoint of effective truth than they do in the context
+of traditional truth.
 
-One is that the *relevance* of an idea seems to be important for that idea to
+The *relevance* of an idea seems to be important for that idea to
 be discussed as true or false. Suppose a certain particle of dust in a far-off
 galaxy may or may not one day collide with another certain particle of dust. The
 point of this example is that no one cares. Neither outcome will have any
@@ -123,20 +129,21 @@ to effective truth because we don't bother with things that don't matter. From
 a certain point of view we basically *can't* think about completely irrelevant
 ideas because we simply don't see them.
 
-The other potential essential property I wanted to mention is *social truth,*
+The other property I wanted to mention is *social acceptance,*
 by which I mean the sense that some ideas are accepted or not based on
 large-scale social behaviors. For example, what kind of clothes are currently in
 fashion? While some specific people have more influence on this than others,
 this kind of truth is ultimately up to the actions of the many.
-Another example of social truth are questions of widely-known fictional
+Another example of social acceptance are questions of widely-known fictional
 characters such as Santa Claus. It's generally considered true that
 Santa Claus lives at the North Pole, although there is no such person. In cases
-like this, a story has evolved over time, perhaps influenced more strongly
+like this, a story has evolved over time. Perhaps it's been influenced more
+strongly
 by some individuals than others, but the story takes on meaning through its
 collective acceptance as a kind of truth.
 
-Similar to relevance, the idea of social acceptance can be viewed as indirectly
-meaningful through the lens of effective truth. For example,
+Similar to relevance, the idea of social acceptance can be viewed as gaining
+its value through the lens of effective truth. For example,
 if you want to understand the advertising around, or integrate your children
 into a world of a Santa Claus-celebrating society, then it's useful to
 be aware of the mythology behind Santa Claus.
@@ -156,9 +163,10 @@ of the truth of an idea.
 
 One example is the idea that a trip from your apartment in
 Manhattan to Penn Station takes 20 minutes.
-This is a simple idea that, in practice, may often be true.
-But there are many factors that may need to be taken into
-consideration to make this idea more accurate.
+This is a simple idea that, in practice, may often help you get
+to Penn Station at a desired moment.
+But there are many factors that, when taken into
+consideration, would make this idea more accurate.
 Traffic is worse during rush hour. If the subway is not running
 normally, you may need to find an alternative route.
 The availability of trains and cars decreases on weekends.
@@ -178,7 +186,7 @@ of truth itself? Do we still need it?
 I suggest that, in practice, we already use effectiveness
 as the building blocks for how we decide to do what we do.
 Perhaps the idea of truth itself has come in handy as a
-counterpoint to the technique of lying.
+counterpoint to lying.
 
 Imagine living in a world without communication. Then the
 need to distinguish a truth from a falsehood is far from
@@ -187,8 +195,8 @@ by experimenting and thinking. In other words, you
 already have a model for how the world works without
 need for an explicit concept of truth.
 
-I'll give another example to illustrate the concept
-of a *useful fiction*. Consider the center of gravity of
+Next I'll introduce the idea of a *useful fiction* with an example.
+Consider the center of gravity of
 an object. It is not a part of reality --- nor do we even
 pretend it's a physical object. At the same time, it's
 useful to think in terms of a center of gravity in order to model how
@@ -223,7 +231,7 @@ But this line of questioning is misguided.
 My claim is not about what is false or true.
 Rather, the argument of this article is that
 it's *more useful* to model truth on effectiveness than
-it is to place our first principle on a correspondence
+on a correspondence
 with reality. In other words, I'm never disputing the
 truth or falsity of any particular event; I'm not
 disagreeing with the traditional concept of truth,
@@ -235,22 +243,20 @@ the precepts of thought beforehand.
 
 I wish I were better versed in the relevant schools of philosophy
 before writing this so I could explain exactly how this
-line of thought fits in historically. I don't think I'm an
-expert at the history around these ideas, but I will mention
+line of thought fits in historically.
+Despite my lack of historical expertise, I will at least mention
 a small number of prior ideas and how they relate.
 
-One of the most relevant set of ideas is that of *pragmatism* as
-championed by Charles Pierce in the early 20th century CHECK.
+*Pragmatism* is a relevant set of ideas champtioned by Charles Pierce.
 Pierce's perspective is typically summarized as saying that
-an idea is true exactly when it is *useful*. I have quite deliberately
-gone in a subtly but critically important direction by replacing
-the word *useful* by the word *effective*, and I'll explain the
-distinction I have in mind.
+an idea is true exactly when it is *useful*. I have deliberately
+used the word *effective* rather than *useful* for reasons I'll
+explain below, but the difference is more superficial than profound.
 
 A brief but compelling argument against the idea of truth as
 usefulness is this: It may be useful to think of my spouse as
 faithful, but that certainly doesn't make it true.
-I suspect Pierce himself would have disagreed with this in
+I suspect Pierce himself would have responded to this in
 much the same way I will, though I can't be certain of that;
 so I'll present my reply as my own.
 
@@ -260,7 +266,7 @@ can treat belief as a choice. Do I choose what I think is true?
 I don't think so at all. We can choose to act *as if* one or the
 other thing is true, but even in acting so, we don't really change
 our mind unless we receive more evidence one way or the other
-(which evidence, admittedly, may be based on an internal revelation).
+(this evidence, admittedly, may be based on an internal revelation).
 
 The second --- and I think more important --- reply is to keep in mind
 what something is useful *for*. If pretending your spouse is faithful
@@ -272,6 +278,8 @@ children either of you parent is between the two of you, then clearly
 it's *not* useful to simply "think of" your spouse as faithful. Your
 action of thinking this has essentially no influence over the
 child-centered outcome you want to achieve.
+Your thinking action fails to ensure your spouse's fidelity
+in either the traditional or effective perspectives on truth.
 
 Whatever the case, you need to look at the goals in order to evaluate
 the effectiveness of the decisions made to reach those goals. The
@@ -307,26 +315,28 @@ even more interesting in the framework of a model for how humans
 think. This is probably a line of thought worthy of its own article,
 but I wanted to include an overview here to add some fun context.
 
-The framework is this: Humans have goals, and mental building blocks
-of actions they can take to help achieve those goals. Effective truths
-are these building blocks, and the way we put them together is like
-an algorithm built from subroutines. Put another way, if we're
+The framework is this: Humans have both goals and mental building blocks
+of actions. A sequence of these building block actions can
+help achieve those goals. Effective truths
+are these building blocks. We put them together the way
+an algorithm built is from subroutines. Put another way, if we're
 thinking about a plan of action, then we can see effective truths as
 if-then clauses, and a chain of them as a kind of logical argument
 (albeit non-boolean since we have shades of truth) which begins with the
 state of the world as it is now, and ends with the state of the world
 as we'd like it to be.
 
-Communication is such a critical aspect of thought and action today that
-it deserves special attention. When we express an idea to another person,
+*Communication* deserves special attention as a particular kind of
+building block action.
+When we communicate or express an idea to another person,
 we're trying to do something useful for both of us by working within
 a framework where we each have goals. *Statements* are meaningful in
 that they are effective by distinguishing among multiple possible states of the
 world. In other words, they answer a question, and their meaning only truly
-makes sense in the context of both the goal and the question they imply.
+makes sense in the context of both the *goal* and the *question* they imply.
 
 Although I've been very brief in this section, you can begin to see how these
-ideas might become part of a model for machine intelligence.
+ideas might become part of a model for both humand and machine intelligence.
 
 # A bigger picture
 
