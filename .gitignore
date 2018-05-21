@@ -4,3 +4,5 @@
 !set_theory_ideas*.pdf
 .*.swp
 .DS_Store
+Session.vim
+.ipynb_checkpoints/

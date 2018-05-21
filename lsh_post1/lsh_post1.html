@@ -124,7 +124,10 @@
       <h3 id="fewer-hashes-needed-in-higher-dimensions"><span class="header-section-number">2.2.2</span> Fewer hashes needed in higher dimensions</h3>
       <p>Another effect that may be less obvious is that you can get away with fewer hash values (a smaller <span class="math inline">\(k\)</span> value) in higher dimensions. There are some mathematically sophisticated ways to quantify that statement, but it may be even easier to understand graph based on empirically derived data.</p>
       <p>Here’s a summary of some random sampling I did in order to explore the relationship between various values of <span class="math inline">\(j\)</span> for <span class="math inline">\(d=100\)</span> dimensional data using <span class="math inline">\(k=10\)</span> different random hashes: CHECK</p>
-      <p>IMAGE 9</p>
+      <div class="figure">
+      <p class="caption">Figure 9: CHECK description here</p>
+      <img src="images/image9@2x.png" alt="Figure 9: CHECK description here" id="fig:fig9" />
+      </div>
       <p>CHECK the whole next paragraph What’s interesting here is that we get a relatively tight box plot for <span class="math inline">\(j\)</span> values around CHECK. This means that we can choose the threshold <span class="math inline">\(j=CHECK\)</span> in equation (3) and have fairly good confidence that our hash-based “nearby” relationship closely matches reality.</p>
       <p>We can even quantify this precisely. Although this article doesn’t <em>prove</em> the following implications, the empirical evidence found CHECK(add link to code) strongly suggests that these are in fact the correct values:</p>
       <p><span class="math display">\[ \text{dist}(a, b) &gt; \alpha \Rightarrow P(\#\{i : h_i(a) = h_i(b)\} &lt; j) &gt; 0.95; \]</span></p>

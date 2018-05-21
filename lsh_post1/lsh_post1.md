@@ -351,7 +351,7 @@ Here's a summary of some random sampling I did in order to explore the
 relationship between various values of $j$ for $d=100$ dimensional data using
 $k=10$ different random hashes:      CHECK
 
-IMAGE 9
+![CHECK description here](images/image9@2x.png){#fig:fig9}
 
 CHECK the whole next paragraph
 What's interesting here is that we get a relatively tight
