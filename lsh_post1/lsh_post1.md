@@ -29,113 +29,117 @@ CHECK:
 \providecommand{\smallscr}[1]{\class{smallscr}{#1}}
 \providecommand{\smallscrskip}[1]{\class{smallscrskip}{\hskip #1}}
 
-*Locality-sensitive hashes* are techniques that dramatically
+*Locality-sensitive hashing* (LSH) is a set of techniques that dramatically
 speed up search-for-neighbors or near-duplication detection on data.
-They can be used, for example, to filter out duplicates of scraped
+These techniques can be used, for example, to filter out duplicates of scraped
 web pages at an impressive speed, or to 
 perform near-constant-time lookups of nearby points from a
 geospatial data set.
 
-When you think about hash functions, you might think about *hash tables*,
-which is perhaps the most common use case. As a reminder, the hash
-functions used in a hash table are designed to map a data structure to
+Outside of the LSH world,
+a common use for hash functions is in *hash tables*.
+As a reminder, the hash
+functions used in a hash table are designed to map a piece of data to
 an integer that can be used to look in a particular *bucket* within the
-hash table to retrieve (or delete) that element. Common containers 
-with string keys like
-JavaScript object attributes and Python dictionaries are based on
+hash table to retrieve or delete that element.
+Many containers 
+with string keys, such as
+JavaScript objects or Python dictionaries, are based on
 hash tables.
-Although they might not *guarantee* constant-time lookups, in practice they
-effectively provide them.
-Hash functions used for hash tables are called *universal hash functions*.
-[CHECK]
+Although hash tables might not *guarantee* constant-time lookups, in practice
+they effectively provide them.
+If you're curious, [*universal
+hashing*](https://en.wikipedia.org/wiki/Universal_hashing) is a hashing approach
+that's useful in hash table implementations.
 
-There are a number of other classes of hash functions as well.
-For example the SHA1 cryptographic hash function is designed to be
+There are other classes of hash functions as well.
+For example, the
+[SHA-1 ](https://en.wikipedia.org/wiki/SHA-1) cryptographic hash function
+is designed to be
 *difficult to reverse*, which is useful if you want to store someone's
-password as a hashed value. [CHECK]
-Another security-oriented hash function is CHECK, which is actually
-designed to be *expensive to compute*, as this can deter malicious
-ne'er-do-wells from easily building large lookup tables to be able to reverse a
-hash on more likely input values.
+password as a hashed value.
 Hash functions like these are called
-*secure hash functions*. [CHECK]
+[*cryptographic hash
+functions*](https://en.wikipedia.org/wiki/Cryptographic_hash_function).
 
-Here are what all these various hash functions have in common:
+All hash functions have these key properties:
 
-* They map a wide variety of input data types to discrete values.
-* In practice, we care about whether or not two (or more) input values map to
-  the same output (hashed) value.
+* They map some fixed type of input (such as strings or floats) to discrete
+  values.
+* They're designed so that different input values map to the same
+  output (hashed) value in a manner useful to the application at hand.
 
-Locality-sensitive hash (LSH) functions are specifically designed so that
-collisions of the hash value are *more likely* given two input values that
+Locality-sensitive hash functions are specifically designed so that
+hash value collisions are *more likely* for two input values that
 are *close together*. Just as there are different implementations of
 secure hash functions for different use cases, there are different
 implementations of LSH functions for different data types and for different
 definitions of being *close together*.
 In this post, I'll give a brief overview of the key ideas, and take a look
-at a toy example based on *random projections* of vectors into
-lower-dimensional spaces.
+at a simple example based on *random projections* (defined below)
+of vectors into lower-dimensional spaces.
 
-# An example
+# A human example
 
-It will probably be much easier to grasp the main idea with an example.
-(The "toy example" for random projections will come later. This is like
-a mini-toy example.)
+It will probably be much easier to grasp the main idea with an example
+you can relate to.
+(The random projection example will be next.)
 
 Suppose you have a million people from across the United States all standing
 in a huge room. It's your job to get people who live close together to
-stand together in groups. Imagine how much time it would take to walk up to
+stand in their own groups. Imagine how much time it would take to walk up to
 each person, ask for their street address, map that to a lat/long pair, then
-write some code to find reasonable geographic clusters, and walk up to every
+write code to find geographic clusters, and walk up to every
 person again and tell them their cluster number. It's a disaster.
 
 Here's a much better way to solve this problem: Write every U.S. zip code
-on poster boards, and hang those from the ceiling. Then announce to everyone
+on poster boards and hang those from the ceiling. Then tell everyone
 to go stand under the zip code where they live.
 
 Voila! That's much easier, right? The main idea here is also the main idea
 behind locality-sensitive hashes. We're taking an arbitrary data type (a person,
-who we could of as a ton of data including their street address), and mapping
+who we can think of as a ton of data including their street address),
+and mapping
 that data into a set of discrete values (zip codes) such that 
 people who live close together probably hash to the same value.
-In other words, the clusters are very likely to be groups of neighbors.
+In other words, the clusters (people with the same zip code)
+are very likely to be groups of neighbors.
 
-The distinction between walking sequentially up to each person versus
-parallelizing the work by asking everyone to find their own way to their zip
-code was not an accident. Besides avoiding whatever clustering algorithm
-you'd have to run on lat/long coordinates, another advantage of this hashing
-approach is that it's extremely friendly to parallel processing. Despite caring
-about *relationships* within your data, you can still split up the data any
-way you like and compute the hashes in a fully parallelized fashion.
+A nice benefit of the zip code appraoch is that it's parallel-friendly.
+Instead of requiring a center of communication, every
+person can walk directly to their destination
+without further coordination.
+This is a bit surprising in light of the fact that the result
+(clusters of neighbors) is based entirely on the *relationships* between
+the inputs.
 
-Another property of this example is that it is *approximate* in the sense
-that some people may live across the street from each other, but happen to
-cross a zip code line, in which case they would not be clustered together here.
+Another property of this example is that it is *approximate*:
+some people may live across the street from each other, but happen to have
+different zip codes, in which case they would not be clustered together here.
 As we'll see below, it's also possible for data points to be clustered together
 even when they're very far apart, although a well-designed LSH can at least
 give some mathematical evidence that this will be a rare event, and some
-implementations manage to guarantee certain bad cases (such as clustering
-of very far points or non-clustering of very close points) never happen.
+implementations manage to guarantee this can never happen.
 
-# Hashing points via projection
+# Hashing points with projections
 
 Let's start with an incredibly simple mathematical function that we can
-treat as an LSH. Define $f:\R^2 \to \Z$ for a point $x\in\R^2$ by
+treat as an LSH. Define $h_1:\R^2 \to \Z$ for a point $x=(x_1, x_2)\in\R^2$ by
 
-$$ f(x) := \lfloor x_1 \rfloor; $$
+$$ h_1(x) := \lfloor x_1 \rfloor; $$
 
-that is $f(x)$ is the largest integer $a$ for which $a\le x_1.$
-(For example, $f((3.2, -1.2)) = 3.$)
+that is $h_1(x)$ is the largest integer $a$ for which $a\le x_1.$
+For example, $h_1((3.2, -1.2)) = 3.$
 
 Let's suppose we choose points at random by uniformly sampling from
-the origin-centered circle $\mathcal C$ with radius 3:
+the origin-centered circle $\mathcal C$ with radius 4:
 
-$$ \mathcal C := \{ (x, y) : x^2 + y^2 \le 3^2 \}. $$
+$$ \mathcal C := \{ (x, y) : x^2 + y^2 \le 4^2 \}. $$
 
-If we want to find which of our points in $\mathcal C$ are close together,
-we can estimate this relationship by clustering together points $a$ and
-$b \in \mathcal C$
-iff (if and only if) $f(a) = f(b).$
+Suppose we want to find which of our points in $\mathcal C$ are close together.
+We can estimate this relationship by considering points $a$ and
+$b \in \mathcal C$ to be clustered together
+when $h_1(a) = h_1(b).$
 It will be handy to introduce the notation $a \sim b$ to indicate that
 $a$ and $b$ are in the same cluster. With that notation, we can write
 our current hash setup as
@@ -189,8 +193,8 @@ Given such a random $U$ and $b,$ we could define a new hash function via
 $$ h(x) := \lfloor (Ux)_1 + b \rfloor, $$
 
 where I'm using the notation $( \textit{vec} )_1$ to indicate the first
-coordinate of the vector value *vec* (that is, the notation
-$(Ux)_1$ means the first coordinate of the vector $Ux$).
+coordinate of the vector value *vec*. (That is, the notation
+$(Ux)_1$ means the first coordinate of the vector $Ux$.)
 
 It may seem a tad arbitrary to use only the first coordinate here rather than
 any other, but the fact that we're taking a random rotation first means that
@@ -206,13 +210,13 @@ maximally-far apart points that are still clustered together by our $h_1$
 function above). By using randomly chosen hash functions, we can ensure that
 any average-case behavior of our hash functions applies equally well to
 *all data*. This same perspective is useful for hash tables in the
-form of *universal hashing*; if randomized hash functions are a new idea for
-you, I recommend checking out [Wikipedia's universal hashing
-page](https://en.wikipedia.org/wiki/Universal_hashing).
+form of *universal hashing*.
 
 Let's revisit the example points we used above, but now apply some randomized
-hash functions. In figure CHECK, points are clustered iff both of their
-hash values (from $h_1()$ and $h_2()$) collide. We'll use that same idea, but
+hash functions. In [@fig:fig3],
+points are clustered if and only if both of
+their
+hash values (from $h_1(x)$ and $h_2(x)$) collide. We'll use that same idea, but
 this time choose four rotations $U_1, \ldots, U_4$ as well as four
 offsets $b_1, \ldots, b_4$ to define $h_1(), \ldots, h_4()$
 via
@@ -221,8 +225,8 @@ $$ h_i(x) := \lfloor (U_i x)_1 + b_i \rfloor. $$ {#eq:eq3}
 
 [@Fig:fig4] shows the resulting clustering. This time, there are 100 points
 since using more hash functions has effectively made the cluster areas
-smaller (so we need higher point density to see points that are
-clustered together now).
+smaller. We need higher point density to see points that are
+clustered together now.
 
 ![One hundred random points clustered using four random hash
 functions as defined by ([@eq:eq3]). Points have the same color when
@@ -233,11 +237,12 @@ same hash value for each of the $h_i()$ functions.](images/lsh_image4.png){#fig:
 It's not obvious that we actually want to use all four of our hash functions.
 The issue is that our clusters have become quite small. There are a couple
 ways to address this. One is to simply increase the scale of the hash
-functions; for example:
+functions; for example, set:
 
 $$ \tilde h_i(x) := h_i(x/s), $$
 
-where $s$ is a scale factor (larger $s$ values will result in larger clusters).
+where $s$ is a scale factor. In this setup, larger $s$ values will result
+in larger clusters.
 
 However, there is something a bit more nuanced we can look at, which is to
 allow some adaptability in terms of *how many hash collisions we require*.
@@ -254,14 +259,14 @@ is no longer a clustering, but becomes more like adjacency (that is, sharing
 an edge) in a graph. The difference is that, in a clustering, if $a\sim b$ and
 $b\sim c,$ the we must have $a\sim c$ as well; this is called being
 *transitively closed*. Graphs don't need to have this property, and in our
-case as well, it's no longer true that our similarity relationship is
+case as well, it's no longer true that our similarity relationship $a\sim b$ is
 transitively closed.
 
 It may help your intuition to see this new definition of $a\sim b$ in action
-on the same 100 points from [@fig:fig4]. This time ([@fig:fig5]) there are
+on the same 100 points from [@fig:fig4]. This time, in [@fig:fig5], there are
 twenty random hashes, and we're seeing the graphs generated by
 ([@eq:eq2]) using cutoff values (values of $j$) of 6, 7, 8, and 9.
-In other words, the top-left graph in [@fig:fig5] has an edge drawn between
+The top-left graph in [@fig:fig5] has an edge drawn between
 two points $a$ and $b$ whenever there are at least 6 hash functions $h_i()$
 with $h_i(a) = h_i(b),$ out of a possible 20 used hash functions.
 
@@ -281,6 +286,8 @@ as seen in [@fig:fig6].
 weights that depend on how many hash collisions are present between any
 two points. A black edge represents 20 hash collisions; the lightest edge
 represents only 6 hash collisions.](images/lsh_image6.png){#fig:fig6}
+
+CHECK I'm here in the editing.
 
 Yet another fun way to get an intuitive feel for how much information we're
 getting from our hashes is to see which subsets of our circle are matched,
