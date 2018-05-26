@@ -284,40 +284,47 @@ as seen in [@fig:fig6].
 
 ![The same 100 random points from [@fig:fig5], this time rendered with edge
 weights that depend on how many hash collisions are present between any
-two points. A black edge represents 20 hash collisions; the lightest edge
-represents only 6 hash collisions.](images/lsh_image6.png){#fig:fig6}
+two points. A black edge represents the maximum of 20 hash collisions; the
+lightest edge represents only 6 hash
+collisions.](images/lsh_image6.png){#fig:fig6}
 
-CHECK I'm here in the editing.
-
-Yet another fun way to get an intuitive feel for how much information we're
-getting from our hashes is to see which subsets of our circle are matched,
-and to what degree, by a given point. We can do this by shading regions of
+There's another fun way to build intuition for what information our hashes
+provide.
+Let's see which regions of our circle are matched,
+and to what degree, by a given point.
+We can do this by shading regions of
 the circle that will match a query point, as in [@fig:fig8a].
-All the points in a single shaded region have the same hash value for all
-hashes.
+Every point in each shaded region has the same hash values for all
+the hash functions used.
 The first part of [@fig:fig8a] shows a scaled version of the
-two-hash system (using $h_1()$ and $h_2()$)
-that we saw before; the second part has 5 random hashes.
+two-hash system (using $h_1()$ and $h_2()$, similar to [@fig:fig3])
+that we saw before; the second part uses 5 random hashes.
 Call the moving query point $q;$ then any point $p$ in a darkly shaded region
 will have a hash collision $h_i(p) = h_i(q)$ for all hash functions;
-in a lightly shaded region that equation will only hold true for a subset
-of the hash functions $h_i().$
+in a lightly shaded region that equation will only hold true for a
+smaller subset of the hash functions $h_i().$
 
-An idealized version of this image would present a shaded circle around the
-query point; notice that the second setting in [@fig:fig8a]
+Imagine that we were drawing these same images for some theoretically perfect
+LSH setup that somehow managed to match point $q$ to every point $p$ with 
+$||p-q||\le r$ for some radius $r$; all other points were not matched.
+For that perfect LSH setup, images like [@fig:fig8a] would show a fixed-size
+circle with
+center at $q$ that moved along with $q$. With that in mind as the perfect LSH
+result, notice that the second setting in [@fig:fig8a]
 is much closer to this ideal than
-the left-hand. Keep in mind that lookups within the shaded regions are
+the first setting. Keep in mind that lookups within the shaded regions are
 no longer linear searches through data, but rather the intersection of
-$k$ hash table lookups --- that is, lookups of nearby points is
+$k$ hash table lookups --- that is, lookups of nearby points are
 significantly faster.
 
 ![The first setting shows the regions where points would be matched by
-either two (dark regions) or just one (lighter shade) hash collisions with
-the moving query point. The second setting shows the same thing for 5 random
-hash functions; in the right-hand side, the lightest shaded region indicates
-3 hash collisions.](images/image8a@2x.gif){#fig:fig8a}
+either two (dark regions) or just one (lighter shade) hash collision with
+the moving query point $q$. The second setting shows the analogous idea for 5
+random hash functions; in the latter case, the lightest shaded region
+indicates 3 hash collisions.](images/image8a@2x.gif){#fig:fig8a}
 
-It may further help your intuition to see how similarity edges
+It may further help your intuition to see how similarity edges, like those
+in [@fig:fig6],
 change as a single query point moives. This is the idea behind
 [@fig:fig8b], where weighted edges are drawn between a moving query point and
 100 random points. Notice that the edge weightings make intuitive sense:
