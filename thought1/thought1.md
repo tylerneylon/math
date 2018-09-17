@@ -27,6 +27,11 @@ I'll argue that this line of thought aligns with an understanding of human
 thought itself. As a result, these questions also pertain to another deep
 interest of mine, which is writing software that we would recognize as a person.
 
+[These notes are available in several formats:
+[html](http://tylerneylon.com/a/thought1/thought1.html) | 
+[standard pdf](http://tylerneylon.com/a/thought1/thought1.pdf) |
+[kindle-friendly pdf](http://tylerneylon.com/a/thought1/thought1_for_kindle.pdf).]
+
 # A traditional view
 
 The usual view of truth is that an idea is true exactly when
@@ -239,7 +244,7 @@ rather I'm seeing it as a higher-level concept
 that we've invented in a world that already contained
 the precepts of thought beforehand.
 
-## Charles Pierce and Karl Popper
+## Charles Peirce and Karl Popper
 
 I wish I were better versed in the relevant schools of philosophy
 before writing this so I could explain exactly how this
@@ -247,8 +252,8 @@ line of thought fits in historically.
 Despite my lack of historical expertise, I will at least mention
 a small number of prior ideas and how they relate.
 
-*Pragmatism* is a relevant set of ideas champtioned by Charles Pierce.
-Pierce's perspective is typically summarized as saying that
+*Pragmatism* is a relevant set of ideas champtioned by Charles Peirce.
+Peirce's perspective is typically summarized as saying that
 an idea is true exactly when it is *useful*. I have deliberately
 used the word *effective* rather than *useful* for reasons I'll
 explain below, but the difference is more superficial than profound.
@@ -256,7 +261,7 @@ explain below, but the difference is more superficial than profound.
 A brief but compelling argument against the idea of truth as
 usefulness is this: It may be useful to think of my spouse as
 faithful, but that certainly doesn't make it true.
-I suspect Pierce himself would have responded to this in
+I suspect Peirce himself would have responded to this in
 much the same way I will, though I can't be certain of that;
 so I'll present my reply as my own.
 
@@ -340,7 +345,7 @@ ideas might become part of a model for both humand and machine intelligence.
 
 # A bigger picture
 
-Descarte, arguing from first principles, suggested that 
+Descartes, arguing from first principles, suggested that 
 we can be certain of nothing beyond our thoughts and our existence.
 In light of the non-boolean nature of effective truth, we can see
 his ideas as presaging an acceptance of the things we casually
