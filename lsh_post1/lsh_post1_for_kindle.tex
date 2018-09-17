@@ -470,6 +470,28 @@ hash collisions. This image uses 12 random hashes, and requires at least
 6 hash collisions for an edge to appear.}\label{fig:fig8b}
 \end{figure}
 
+\subsection{\texorpdfstring{Choosing values of \(j\) and
+\(k\)}{Choosing values of j and k}}\label{choosing-values-of-j-and-k}
+
+As a quick reminder, \(k\) is the number of random hash functions being
+used, and \(j\) is the miniminum number of hash collisions you require
+(out of \(k\)) in order to consider points \(p, q\) as being nearby, as
+per (\ref{eq:eq2}). I won't provide a general best answer for the values
+here, but rather provide some understanding of how these numbers affect
+the quality of the results you can achieve. Higher \(k\) values enable
+better behavior in the sense of acting more like a radius cutoff
+function (that is, more like
+\(p\sim q \iff \#\{h_i(p) = h_i(q)\} \ge j\}\); the choice of \(j\) is
+less obvious.
+
+And then work up to this image.
+
+\begin{figure}
+\centering
+\includegraphics{images/image9@2x.png}
+\caption{CHECK description here}\label{fig:fig9}
+\end{figure}
+
 \subsection{Why this is faster}\label{why-this-is-faster}
 
 So far we've been sticking to 2-dimensional data because that's easier
@@ -501,10 +523,12 @@ Here's a summary of some random sampling I did in order to explore the
 relationship between various values of \(j\) for \(d=100\) dimensional
 data using \(k=10\) different random hashes: CHECK
 
+CHECK new image here I guess!
+
 \begin{figure}
 \centering
 \includegraphics{images/image9@2x.png}
-\caption{CHECK description here}\label{fig:fig9}
+\caption{CHECK description here}\label{fig:fig10}
 \end{figure}
 
 CHECK the whole next paragraph What's interesting here is that we get a

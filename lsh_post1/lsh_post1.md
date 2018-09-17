@@ -336,7 +336,75 @@ query point and 100 random points. Darker edges indicate more hash collisions.
 This image uses 12 random hashes, and requires at least 6 hash collisions
 for an edge to appear.](images/image8b@2x.gif){#fig:fig8b}
 
-## Why this is faster
+## Choosing values of $j$ and $k$
+
+As a quick reminder, $k$ is the number of random hash functions being used,
+and $j$ is the minimum number of hash collisions you require (out of $k$)
+in order to consider points $p, q$ as being nearby, as per
+([@eq:eq2]). I won't provide a general best answer for the values here, but
+rather provide some understanding of how these numbers affect the quality of
+the results you can achieve. Higher $k$ values enable better behavior ---
+they support LSH systems that act more like a radius-cutoff function (that is,
+more like $p\sim q \iff ||p-q||\le r$ for some radius $r$); the choice of $j$ is
+less obvious.
+
+I wrote a little Python script to estimate the behavior of various $j$ values
+for
+$k=12$ in 2 dimensions. I've put together an image that I think really captures
+the quality of these $j$ values, but it takes a bit of explaining up-front.
+
+Given a value $s \in (0, 1)$, define the distance $D_s$ as the value satisfying
+the given equation:
+
+$$ P\big(p \sim_j q \, \big| \, ||p-q|| = D_s\big) = s, $$ {#eq:eq4}
+
+where $p\sim_j q$ means that $\#\{i : h_i(p) = h_i(q)\} \ge j.$
+Intuitively, if $\varepsilon$ is close to zero, then
+the distance $D_\varepsilon$ is large because the probability
+of $p\sim_j q$ is small. The value of $D_{1/2}$ is just the perfect distance
+so that $p \sim_j q$ happens half of the time, and $D_{1-\varepsilon}$ is a
+small distance where $p \sim_j q$ happens almost all the time.
+
+Notice that all our values $D_s$ depend on the dimension we're in, as well as
+on $j$ and $k.$
+For a fixed value of $k,$ we would typically want a value of $j$ 
+so that $D_\varepsilon / D_{1 - \varepsilon}$ is minimized; as that ratio gets
+closer to 1 (which is its lower bound),
+our LSH setup acts more like
+the ideal radius-cutoff function.
+
+CHECK update all text (slightly above and below) to be more up-to-date
+with what image 9 now shows
+
+We're ready for [@fig:fig9]. This is a series of box plots that I'm using to
+represent the values $D_s$ for
+$s \in \{\varepsilon, 1/4, 3/4, 1 - \varepsilon\},$ where
+$\varepsilon = 10^{-5}.$ For each value of $j,$ the $D_s$ values have been
+divided through by $D_{1/2}$ so that the effective median value is 1.
+This normalization is important because, without it, it would be much more
+difficult to visually compare the *scales* of the ranges for each $j.$ In a
+normalized setting, the best possible value of $j$ will result in the smallest
+possible ratio $D_\varepsilon / D_{1 - \varepsilon},$ which we can see
+visually as a short box plot. In [@fig:fig9], the value $j=9$ performs the
+best.
+
+![
+Intuitively, each box plot represents the distances
+at which points $p, q$ will achieve mixed results (sometimes classified as
+nearby, other times as not) from our LSH setup.
+A very short box plot is ideal because it means close points
+(closer than the bottom whisker)
+will very likely have $p\sim q$ and far points (farther than the top
+whisker) will very likely have $p\not\sim q.$
+Formally, each box plot shows, from top to bottom, the four values
+$D_\varepsilon$ (top whisker), $D_{1/4}$ (top of the box),
+$D_{3/4}$ (bottom of the box), and $D_{1 - \varepsilon}$ (bottom whisker), with
+these values being each divided through by $D_{1/2}$ so that the effective
+median of the box plot is at 1. The term $D_s$ was defined
+in ([@eq:eq4]).
+](images/image9@2x.png){#fig:fig9}
+
+## Why an LSH is faster
 
 So far we've been sticking to 2-dimensional data because that's easier to
 visualize in an article. However, if you think about computing 10 hashes for
@@ -365,7 +433,9 @@ Here's a summary of some random sampling I did in order to explore the
 relationship between various values of $j$ for $d=100$ dimensional data using
 $k=10$ different random hashes:      CHECK
 
-![CHECK description here](images/image9@2x.png){#fig:fig9}
+CHECK new image here I guess!
+
+![CHECK description here](images/image9@2x.png){#fig:fig10}
 
 CHECK the whole next paragraph
 What's interesting here is that we get a relatively tight
