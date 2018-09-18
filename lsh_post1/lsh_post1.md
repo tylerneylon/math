@@ -9,7 +9,10 @@
 \providecommand{\smallscrneg}{\class{smallscrneg}{ }}
 \providecommand{\bigscr}[1]{\class{bigscr}{#1}}
 \providecommand{\smallscr}[1]{\class{smallscr}{#1}}
-\providecommand{\smallscrskip}[1]{\class{smallscrskip}{\hskip #1}}
+\providecommand{\smallscrskip}[1]{\class{smallscr}{\hskip #1}}
+
+\providecommand{\flexquad}{\quad\smallscrskip{-0.8em}}
+\providecommand{\flexspace}{\;\;\smallscrskip{-0.3em}}
 
 *Locality-sensitive hashing* (LSH) is a set of techniques that dramatically
 speed up search-for-neighbors or near-duplication detection on data.
@@ -52,10 +55,14 @@ Hash functions typically have these key properties:
 Here's how LSH fits in:
 Locality-sensitive hash functions are specifically designed so that
 hash value collisions are *more likely* for two input values that
-are *close together*. Just as there are different implementations of
+are *close together*.
+Just as there are different implementations of
 secure hash functions for different use cases, there are different
 implementations of LSH functions for different data types and for different
 definitions of being *close together*.
+I'll use the terms *neighbors* or *being nearby*
+to refer to points that we deem "close enough"
+together that we'd want to notice their similarity.
 In this post, I'll give a brief overview of the key ideas behind LSH
 and take a look
 at a simple example based on an idea called  *random projections*, which I'll
@@ -158,7 +165,12 @@ While neither clustering alone is amazing, things start to work better
 if we use both of them simultaneously. That is, we can redefine our
 clustering via
 
-$$ a \sim b \iff h_1(a) = h_1(b) \text{ and } h_2(a) = h_2(b). $$ {#eq:eq1}
+$$ a \sim b \iff
+\begin{cases}
+h_1(a) = h_1(b), \text{and} \\
+h_2(a) = h_2(b). \\
+\end{cases} \smallscrneg
+$$ {#eq:eq1}
 
 Our same example points are shown under this new clustering in
 [@fig:fig3].
@@ -185,6 +197,7 @@ $$ h(x) := \lfloor (Ux)_1 + b \rfloor, $$
 where I'm using the notation $( \textit{vec} )_1$ to indicate the first
 coordinate of the vector value *vec*. (That is, the notation
 $(Ux)_1$ means the first coordinate of the vector $Ux$.)
+This function is the *random projection* I had referred to earlier.
 
 It may seem a tad arbitrary to use only the first coordinate here rather than
 any other, but the fact that we're taking a random rotation first means that
@@ -248,7 +261,7 @@ say two points are in the same cluster, we could
 look at cases where some number $j \le k$ of them matches. To state this
 mathematically, we would rewrite equation ([@eq:eq1]) as
 
-$$ a \sim b \iff \#\{i: h_i(a) = h_i(b)\} \ge j. $$ {#eq:eq2}
+$$ a \sim b \iff \#\{i: h_i(a) = h_i(b)\} \ge j. \smallscrneg$$ {#eq:eq2}
 
 Something interesting happens here, which is that the $a \sim b$ relationship
 is no longer a clustering, but becomes more like adjacency (that is, sharing
@@ -302,26 +315,29 @@ collide, so $h_i(p) = h_i(q)$ for all $i$.
 In a lightly shaded region that equation will only hold true for a
 smaller subset of the hash functions $h_i().$
 
+The second part (with 5 hashes) of [@fig:fig8a] shows nicer behavior, and I'll
+try to explain why.
 Imagine that we were drawing these same images for some theoretically perfect
 LSH setup that somehow managed to match point $q$ to every point $p$ with 
 $||p-q||\le r$ for some radius $r$; all other points were not matched.
 For that perfect LSH setup, images like [@fig:fig8a] would show a fixed-size
 circle with
 center at $q$ that moved along with $q$. With that in mind as the perfect LSH
-result, notice that the second setting in [@fig:fig8a]
+result, notice that the second part in [@fig:fig8a]
 is much closer to this ideal than
-the first setting. Keep in mind that lookups within the shaded regions are
+the first part. Keep in mind that lookups within the shaded regions are
 no longer linear searches through data, but rather the intersection of
 $k$ hash table lookups --- that is, lookups of nearby points are
 significantly faster.
 
-![The first setting shows the regions where points would be matched by
+![The first part shows the regions where points would be matched by
 either two (dark regions) or just one (lighter shade) hash collision with
-the moving query point $q$. The second setting shows the analogous idea for 5
+the moving query point $q$. The second part shows the analogous idea for 5
 random hash functions; in the latter case, the lightest shaded region
 indicates 3 hash collisions.](images/image8a@2x.gif){#fig:fig8a}
 
-It may further help your intuition to see how similarity edges, like those
+It may further help your intuition to see how weighted edges connecting a
+point to its neighbors, like those
 in [@fig:fig6],
 change as a single query point moives. This is the idea behind
 [@fig:fig8b], where weighted edges are drawn between a moving query point and
@@ -368,8 +384,8 @@ reminder, our main parameters are $j$ and $k$).
 Now consider what great performance looks like in the context of this random
 variable. Ideally, there is some distance $D$ such that
 
-$$||p-q|| < D-\varepsilon \quad\Rightarrow\quad P(p\sim q) > 1 - \delta;$$
-$$||p-q|| > D+\varepsilon \quad\Rightarrow\quad P(p\sim q) < \delta.$$
+$$||p-q|| < D-\varepsilon \flexquad\Rightarrow\flexquad P(p\sim q) > 1 - \delta;$$
+$$||p-q|| > D+\varepsilon \flexquad\Rightarrow\flexquad P(p\sim q) < \delta.$$
 
 In other words, this distance $D$ acts like a cutoff for our approximate search
 function. Points closer than distance $D$ to query point $q$ are returned, while
@@ -446,9 +462,9 @@ small distance where $p \sim_j q$ happens almost all the time.
 Using this definition, the four values shown in each box plot of [@fig:fig9],
 from bottom to top, are:
 
-$$D_{.99} / D_{.99} ,\;\;
-D_{.75} / D_{.99}   ,\;\;
-D_{.25} / D_{.99}   ,\;\;
+$$D_{.99} / D_{.99} ,\flexspace
+D_{.75} / D_{.99}   ,\flexspace
+D_{.25} / D_{.99}   ,\flexspace
 D_{.01} / D_{.99}.$$
 
 ## Why an LSH is faster
