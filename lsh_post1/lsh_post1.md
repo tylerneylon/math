@@ -389,7 +389,7 @@ $$ P\big(p \sim_j q \, \big| \, ||p-q|| = D\big), $$
 where I've written $p\sim_j q$ to denote that points $p$ and $q$ have at least
 $j$ hash collisions.
 
-Using this Python script, I've visualized the collision behavior of $p\sim j q$ 
+Using this Python script, I've visualized the collision behavior of $p\sim_j q$
 for various $j$ in [@fig:fig9].
 I'll go into more detail about what each tick on the box plot indicates, but the
 intuition is that shorter box plots are better because in this visualization a
