@@ -65,14 +65,17 @@ define in section 2 below.
 
 It will probably be much easier to grasp the main idea with an example
 you can relate to.
-(The random projection example will be next.)
+This way we can build some intuition before diving into those random projections
+that we'll use in the next section.
 
 Suppose you have a million people from across the United States all standing
 in a huge room. It's your job to get people who live close together to
 stand in their own groups. Imagine how much time it would take to walk up to
 each person, ask for their street address, map that to a lat/long pair, then
 write code to find geographic clusters, and walk up to every
-person again and tell them their cluster number. It's a disaster.
+person again and
+tell them how to find the rest of their cluster. I cringe just thinking about
+the time complexity.
 
 Here's a much better way to solve this problem: Write every U.S. zip code
 on poster boards and hang those from the ceiling. Then tell everyone
@@ -87,7 +90,7 @@ people who live close together probably hash to the same value.
 In other words, the clusters (people with the same zip code)
 are very likely to be groups of neighbors.
 
-A nice benefit of the zip code appraoch is that it's parallel-friendly.
+A nice benefit of the zip code approach is that it's *parallel-friendly*.
 Instead of requiring a center of communication, every
 person can walk directly to their destination
 without further coordination.
