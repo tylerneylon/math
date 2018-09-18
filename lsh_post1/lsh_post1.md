@@ -336,27 +336,108 @@ query point and 100 random points. Darker edges indicate more hash collisions.
 This image uses 12 random hashes, and requires at least 6 hash collisions
 for an edge to appear.](images/image8b@2x.gif){#fig:fig8b}
 
-## Choosing values of $j$ and $k$
+## Choosing values of $j$
 
-As a quick reminder, $k$ is the number of random hash functions being used,
-and $j$ is the minimum number of hash collisions you require (out of $k$)
-in order to consider points $p, q$ as being nearby, as per
-([@eq:eq2]). I won't provide a general best answer for the values here, but
-rather provide some understanding of how these numbers affect the quality of
-the results you can achieve. Higher $k$ values enable better behavior ---
-they support LSH systems that act more like a radius-cutoff function (that is,
-more like $p\sim q \iff ||p-q||\le r$ for some radius $r$); the choice of $j$ is
-less obvious.
+So far, we've seen that we can use hash lookups to find nearby neighbors of a
+query point, and that using $k$ different randomized hash functions gives us
+much more accurate lookups than if we used a single hash function. An
+interesting property of [@fig:fig6] and [@fig:fig8b] is that we used
+different numbers of
+hash collisions --- via the variable $j$ --- to discover different degrees of
+similarity between points. In many applications, such as findin near duplicates
+or close geospatial points, we only want a binary output, so we have to choose a
+particular value for $j$. This section provides more insight into this question
+of choosing good values for $j$.
 
-I wrote a little Python script to estimate the behavior of various $j$ values
-for
-$k=12$ in 2 dimensions. I've put together an image that I think really captures
-the quality of these $j$ values, but it takes a bit of explaining up-front.
+Suppose $k$ is fixed. How can we decide which value of $j$ is best?
 
+To answer this question, let's temporarily consider what a perfect function
+would do for us. We'll call this function `search(q)`. In an ideal world
+this function returns all points
+within a fixed distance of the query point. We could visualize this as an
+$n-$dimensional sphere around the query point $q$. A call to `search(q)` ought
+to return all the indexed points $p$ that live within this sphere.
+
+Let's move from that idealized algorithm into our fast-but-approximate world of
+locality-sensitive hashes. With this approach, there is no exact cutoff
+distance, although we keep the property that nearby neighbors are very likely to
+be in the returned list and distant points are very likely to be excluded.
+Since our hash functions are randomized, we can think of the neighbor
+relationship $p\sim q$ as being a *random variable* that has a certain
+probability of being true or false once all our parameters are fixed (as a
+reminder, our main parameters are $j$ and $k$).
+
+Now consider what great performance looks like in the context of this random
+variable. Ideally, there is some distance $D$ such that
+
+$$||p-q|| < D-\varepsilon \quad\Rightarrow\quad P(p\sim q) > 1 - \delta;$$
+$$||p-q|| > D+\varepsilon \quad\Rightarrow\quad P(p\sim q) < \delta.$$
+
+In other words, this distance $D$ acts like a cutoff for our approximate search
+function. Points closer than distance $D$ to query point $q$ are returned, while
+points farther are not.
+
+I wrote a Python script to calculate some of these probabilities for the
+particular parameters $k=2$ and $d=2$ ($d$ is the dimensionality of the points),
+and for various values of $j$. In particular, I restricted my input points to
+certain distances and measured the probability that they had at least $j$ hash
+collisions for different $j$ values. If you're familiar with conditional
+probabilities, then this value can be written as:
+
+$$ P\big(p \sim_j q \, \big| \, ||p-q|| = D\big), $$
+
+where I've written $p\sim_j q$ to denote that points $p$ and $q$ have at least
+$j$ hash collisions.
+
+Using this Python script, I've visualized the collision behavior of $p\sim j q$ 
+for various $j$ in [@fig:fig9].
+I'll go into more detail about what each tick on the box plot indicates, but the
+intuition is that shorter box plots are better because in this visualization a
+shorter box plot indicates a smaller range of uncertainty.
+
+![
+Intuitively, each box plot represents the distances
+at which points $p, q$ will achieve mixed results (sometimes classified as
+nearby, other times as not) from our LSH setup.
+A very short box plot is ideal because it indicates a smaller
+range of uncertainty. In other words, a short box plot
+corresponds to a setting in which most pairs of points are correctly classified
+by an LSH system as nearby or far apart based on their actual distance.
+](images/image9@2x.png){#fig:fig9}
+
+The most interesting element of this graph is that the best value of $j$ appears
+to be $j=6.$ You might have guessed that your best LSH approach is to insist
+that *all* of your random hashes must collide before you consider two points to
+be neighbors, but this measurement shows that intuition to be false.
+
+Next I'll explain exactly what is measured in [@fig:fig9].
+A traditional box plot visualizes the 25th and 75th percentiles of a set of
+scalar data points as the boundaries of the box.
+Often the median (50th percentile) is also shown within the
+box, but we don't include an analogous mark in [@fig:fig9].
+The "whiskers" at either end may
+indicate the minimum and maximum values, or something similar such as the
+extreme values after removing outliers.
+
+In our case, we have one box plot for each value of $j$, and each plot
+has been normalized so that the bottom whiskers all
+align at value 1. I'll explain why this is useful in a moment. The bottom
+whisker indicates the distance between $p$ and $q$ so that $p\sim_j q$ is true
+99% of the time. The bottom of the box is the relative distance at which
+$p\sim_j q$ is true 75% of the time. Continuing in this pattern, the box top
+corresponds to the distance at which we get collisions 25% of the time, and the
+top whisker is the distance at which we get collisions 1% of the time.
+Since the box plots are all normalized (meaning that the distances per $j$ value
+have all been divided through by the smallest distance), it's easy to visually
+see the ratio of each box plot position versus its smallest distance. In other
+words, it's easy to visually see which distance range is smallest.
+
+Because I love math and precision, I'm going to provide one last definition to
+formalize the idea of this figure.
 Given a value $s \in (0, 1)$, define the distance $D_s$ as the value satisfying
 the given equation:
 
-$$ P\big(p \sim_j q \, \big| \, ||p-q|| = D_s\big) = s, $$ {#eq:eq4}
+$$ P\big(p \sim_j q \, \big| \, ||p-q|| = D_s\big) = s, $$
 
 where $p\sim_j q$ means that $\#\{i : h_i(p) = h_i(q)\} \ge j.$
 Intuitively, if $\varepsilon$ is close to zero, then
@@ -364,45 +445,13 @@ the distance $D_\varepsilon$ is large because the probability
 of $p\sim_j q$ is small. The value of $D_{1/2}$ is just the perfect distance
 so that $p \sim_j q$ happens half of the time, and $D_{1-\varepsilon}$ is a
 small distance where $p \sim_j q$ happens almost all the time.
+Using this definition, the four values shown in each box plot of [@fig:fig9],
+from bottom to top, are:
 
-Notice that all our values $D_s$ depend on the dimension we're in, as well as
-on $j$ and $k.$
-For a fixed value of $k,$ we would typically want a value of $j$ 
-so that $D_\varepsilon / D_{1 - \varepsilon}$ is minimized; as that ratio gets
-closer to 1 (which is its lower bound),
-our LSH setup acts more like
-the ideal radius-cutoff function.
-
-CHECK update all text (slightly above and below) to be more up-to-date
-with what image 9 now shows
-
-We're ready for [@fig:fig9]. This is a series of box plots that I'm using to
-represent the values $D_s$ for
-$s \in \{\varepsilon, 1/4, 3/4, 1 - \varepsilon\},$ where
-$\varepsilon = 10^{-5}.$ For each value of $j,$ the $D_s$ values have been
-divided through by $D_{1/2}$ so that the effective median value is 1.
-This normalization is important because, without it, it would be much more
-difficult to visually compare the *scales* of the ranges for each $j.$ In a
-normalized setting, the best possible value of $j$ will result in the smallest
-possible ratio $D_\varepsilon / D_{1 - \varepsilon},$ which we can see
-visually as a short box plot. In [@fig:fig9], the value $j=9$ performs the
-best.
-
-![
-Intuitively, each box plot represents the distances
-at which points $p, q$ will achieve mixed results (sometimes classified as
-nearby, other times as not) from our LSH setup.
-A very short box plot is ideal because it means close points
-(closer than the bottom whisker)
-will very likely have $p\sim q$ and far points (farther than the top
-whisker) will very likely have $p\not\sim q.$
-Formally, each box plot shows, from top to bottom, the four values
-$D_\varepsilon$ (top whisker), $D_{1/4}$ (top of the box),
-$D_{3/4}$ (bottom of the box), and $D_{1 - \varepsilon}$ (bottom whisker), with
-these values being each divided through by $D_{1/2}$ so that the effective
-median of the box plot is at 1. The term $D_s$ was defined
-in ([@eq:eq4]).
-](images/image9@2x.png){#fig:fig9}
+$$D_{.99} / D_{.99} ,\;\;
+D_{.75} / D_{.99}   ,\;\;
+D_{.25} / D_{.99}   ,\;\;
+D_{.01} / D_{.99}.$$
 
 ## Why an LSH is faster
 
