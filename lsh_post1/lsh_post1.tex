@@ -161,15 +161,16 @@ below.
 \section{A human example}\label{a-human-example}
 
 It will probably be much easier to grasp the main idea with an example
-you can relate to. (The random projection example will be next.)
+you can relate to. This way we can build some intuition before diving
+into those random projections that we'll use in the next section.
 
 Suppose you have a million people from across the United States all
 standing in a huge room. It's your job to get people who live close
 together to stand in their own groups. Imagine how much time it would
 take to walk up to each person, ask for their street address, map that
 to a lat/long pair, then write code to find geographic clusters, and
-walk up to every person again and tell them their cluster number. It's a
-disaster.
+walk up to every person again and tell them how to find the rest of
+their cluster. I cringe just thinking about the time complexity.
 
 Here's a much better way to solve this problem: Write every U.S. zip
 code on poster boards and hang those from the ceiling. Then tell
@@ -183,12 +184,12 @@ street address), and mapping that data into a set of discrete values
 the same value. In other words, the clusters (people with the same zip
 code) are very likely to be groups of neighbors.
 
-A nice benefit of the zip code appraoch is that it's parallel-friendly.
-Instead of requiring a center of communication, every person can walk
-directly to their destination without further coordination. This is a
-bit surprising in light of the fact that the result (clusters of
-neighbors) is based entirely on the \emph{relationships} between the
-inputs.
+A nice benefit of the zip code approach is that it's
+\emph{parallel-friendly}. Instead of requiring a center of
+communication, every person can walk directly to their destination
+without further coordination. This is a bit surprising in light of the
+fact that the result (clusters of neighbors) is based entirely on the
+\emph{relationships} between the inputs.
 
 Another property of this example is that it is \emph{approximate}: some
 people may live across the street from each other, but happen to have
@@ -201,6 +202,10 @@ can never happen.
 
 \section{Hashing points with
 projections}\label{hashing-points-with-projections}
+
+In this section, we'll explain exactly how a relatively straightforward
+LSH approach works, explore some key parameters for this LSH system, and
+review why it's an order of magnitude faster than some other approaches.
 
 Let's start with an incredibly simple mathematical function that we can
 treat as an LSH. Define \(h_1:\R^2 \to \Z\) for a point

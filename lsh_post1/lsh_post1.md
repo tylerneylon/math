@@ -108,12 +108,17 @@ implementations manage to guarantee this can never happen.
 
 # Hashing points with projections
 
+In this section, we'll explain exactly how a relatively
+straightforward LSH approach
+works, explore some key parameters for this LSH system, and review why it's an
+order of magnitude faster than some other approaches.
+
 Let's start with an incredibly simple mathematical function that we can
 treat as an LSH. Define $h_1:\R^2 \to \Z$ for a point $x=(x_1, x_2)\in\R^2$ by
 
 $$ h_1(x) := \lfloor x_1 \rfloor; $$
 
-that is $h_1(x)$ is the largest integer $a$ for which $a\le x_1.$
+that is, $h_1(x)$ is the largest integer $a$ for which $a\le x_1.$
 For example, $h_1((3.2, -1.2)) = 3.$
 
 Let's suppose we choose points at random by uniformly sampling from
@@ -122,8 +127,8 @@ the origin-centered circle $\mathcal C$ with radius 4:
 $$ \mathcal C := \{ (x, y) : x^2 + y^2 \le 4^2 \}. $$
 
 Suppose we want to find which of our points in $\mathcal C$ are close together.
-We can estimate this relationship by considering points $a$ and
-$b \in \mathcal C$ to be clustered together
+We can estimate this relationship by considering points
+$a, b \in \mathcal C$ to be clustered together
 when $h_1(a) = h_1(b).$
 It will be handy to introduce the notation $a \sim b$ to indicate that
 $a$ and $b$ are in the same cluster. With that notation, we can write
@@ -186,16 +191,22 @@ any other, but the fact that we're taking a random rotation first means that
 we have the same set of possibilities, with the same probability distribution,
 as we would when pulling out any other single coordinate value.
 
-The advantage of using randomized hash functions is that any theoretical
-properties we want to discuss will apply without having to worry about
-pathologically weird data. Conceptually, if we were using deterministic hash
+A key advantage of using randomized hash functions is that any probabilistic
+statements we want to make about performance (e.g., "99% of the time this
+algorithms will give us the correct answer") applies equally to all data, as
+opposed to applying to some data sets but not to others. As a counterpoint,
+consider the way quicksort is typically fast, but ironically uses $O(n^2)$ time
+to sort a pre-sorted list; this is a case where performance depends on the data,
+and we'd like to avoid that.
+If we were using deterministic hash
 functions, then someone could choose the worst-case data for our hash function,
 and we'd be stuck with that poor performance (for example, choosing
 maximally-far apart points that are still clustered together by our $h_1$
 function above). By using randomly chosen hash functions, we can ensure that
 any average-case behavior of our hash functions applies equally well to
-*all data*. This same perspective is useful for hash tables in the
-form of *universal hashing*.
+all data. This same perspective is useful for hash tables in the
+form of
+[*universal hashing*](https://en.wikipedia.org/wiki/Universal_hashing).
 
 Let's revisit the example points we used above, but now apply some randomized
 hash functions. In [@fig:fig3],
@@ -242,9 +253,9 @@ $$ a \sim b \iff \#\{i: h_i(a) = h_i(b)\} \ge j. $$ {#eq:eq2}
 Something interesting happens here, which is that the $a \sim b$ relationship
 is no longer a clustering, but becomes more like adjacency (that is, sharing
 an edge) in a graph. The difference is that, in a clustering, if $a\sim b$ and
-$b\sim c,$ the we must have $a\sim c$ as well; this is called being
-*transitively closed*. Graphs don't need to have this property, and in our
-case as well, it's no longer true that our similarity relationship $a\sim b$ is
+$b\sim c,$ then we must have $a\sim c$ as well; this is called being
+*transitively closed*. Graphs don't need to have this property.
+Similarly, it's no longer true that our similarity relationship $a\sim b$ is
 transitively closed.
 
 It may help your intuition to see this new definition of $a\sim b$ in action
@@ -265,7 +276,8 @@ of the edges) of the previous one.](images/lsh_image5.png){#fig:fig5}
 In fact, we can visualize all possible cutoff values of 6 or higher ---
 these are values
 of $j$ in equation ([@eq:eq2]) --- using a single image with weighted edges,
-as seen in [@fig:fig6].
+as seen in [@fig:fig6]. Keep in mind that we haven't explicitly computed
+*any* pairwise distances to arrive at this data.
 
 ![The same 100 random points from [@fig:fig5], this time rendered with edge
 weights that depend on how many hash collisions are present between any
@@ -275,18 +287,19 @@ collisions.](images/lsh_image6.png){#fig:fig6}
 
 There's another fun way to build intuition for what information our hashes
 provide.
-Let's see which regions of our circle are matched,
-and to what degree, by a given point.
-We can do this by shading regions of
-the circle that will match a query point, as in [@fig:fig8a].
+Let's visualize regions of the circle where all points have the same number of
+hash collisions with a given query point.
+We can do this by showing an example query point $q$, and shading each region
+based on the number of hash collisions the region's points have with $q$;
+this is shown in [@fig:fig8a].
 Every point in each shaded region has the same hash values for all
 the hash functions used.
 The first part of [@fig:fig8a] shows a scaled version of the
 two-hash system (using $h_1()$ and $h_2()$, similar to [@fig:fig3])
 that we saw before; the second part uses 5 random hashes.
-Call the moving query point $q;$ then any point $p$ in a darkly shaded region
-will have a hash collision $h_i(p) = h_i(q)$ for all hash functions;
-in a lightly shaded region that equation will only hold true for a
+The darkest region contains points $p$ where all hash values
+collide, so $h_i(p) = h_i(q)$ for all $i$.
+In a lightly shaded region that equation will only hold true for a
 smaller subset of the hash functions $h_i().$
 
 Imagine that we were drawing these same images for some theoretically perfect
