@@ -107,13 +107,24 @@
 \providecommand{\smallscrneg}{\class{smallscrneg}{ }}
 \providecommand{\bigscr}[1]{\class{bigscr}{#1}}
 \providecommand{\smallscr}[1]{\class{smallscr}{#1}}
-\providecommand{\smallscrskip}[1]{\class{smallscrskip}{\hskip #1}}
+\providecommand{\smallscrskip}[1]{\class{smallscr}{\hskip #1}}
+
+\providecommand{\flexquad}{\quad\smallscrskip{-0.8em}}
+\providecommand{\flexspace}{\;\;\smallscrskip{-0.3em}}
 
 \emph{Locality-sensitive hashing} (LSH) is a set of techniques that
 dramatically speed up search-for-neighbors or near-duplication detection
 on data. These techniques can be used, for example, to filter out
 duplicates of scraped web pages at an impressive speed, or to perform
 near-constant-time lookups of nearby points from a geospatial data set.
+
+\begin{figure}
+\centering
+\includegraphics{images/image8b_fixed.png}
+\caption{A preview of LSH in action. Only hash collisions were used to
+find the weights in this image --- no pairwise distances were explicitly
+computed.}\label{fig:fig0}
+\end{figure}
 
 Let's take a quick look at other types of hash functions to get a
 bird's-eye view of what counts as a \emph{hash function}, and how LSH
@@ -153,10 +164,12 @@ likely} for two input values that are \emph{close together}. Just as
 there are different implementations of secure hash functions for
 different use cases, there are different implementations of LSH
 functions for different data types and for different definitions of
-being \emph{close together}. In this post, I'll give a brief overview of
-the key ideas behind LSH and take a look at a simple example based on an
-idea called \emph{random projections}, which I'll define in section 2
-below.
+being \emph{close together}. I'll use the terms \emph{neighbors} or
+\emph{being nearby} to refer to points that we deem ``close enough''
+together that we'd want to notice their similarity. In this post, I'll
+give a brief overview of the key ideas behind LSH and take a look at a
+simple example based on an idea called \emph{random projections}, which
+I'll define in section 2 below.
 
 \section{A human example}\label{a-human-example}
 
@@ -213,7 +226,7 @@ treat as an LSH. Define \(h_1:\R^2 \to \Z\) for a point
 
 \[ h_1(x) := \lfloor x_1 \rfloor; \]
 
-that is \(h_1(x)\) is the largest integer \(a\) for which \(a\le x_1.\)
+that is, \(h_1(x)\) is the largest integer \(a\) for which \(a\le x_1.\)
 For example, \(h_1((3.2, -1.2)) = 3.\)
 
 Let's suppose we choose points at random by uniformly sampling from the
@@ -222,8 +235,8 @@ origin-centered circle \(\mathcal C\) with radius 4:
 \[ \mathcal C := \{ (x, y) : x^2 + y^2 \le 4^2 \}. \]
 
 Suppose we want to find which of our points in \(\mathcal C\) are close
-together. We can estimate this relationship by considering points \(a\)
-and \(b \in \mathcal C\) to be clustered together when
+together. We can estimate this relationship by considering points
+\(a, b \in \mathcal C\) to be clustered together when
 \(h_1(a) = h_1(b).\) It will be handy to introduce the notation
 \(a \sim b\) to indicate that \(a\) and \(b\) are in the same cluster.
 With that notation, we can write our current hash setup as
@@ -259,7 +272,12 @@ While neither clustering alone is amazing, things start to work better
 if we use both of them simultaneously. That is, we can redefine our
 clustering via
 
-\begin{equation} a \sim b \iff h_1(a) = h_1(b) \text{ and } h_2(a) = h_2(b). \label{eq:eq1}\end{equation}
+\begin{equation} a \sim b \iff
+\begin{cases}
+h_1(a) = h_1(b), \text{and} \\
+h_2(a) = h_2(b). \\
+\end{cases} \smallscrneg
+\label{eq:eq1}\end{equation}
 
 Our same example points are shown under this new clustering in
 figure~\ref{fig:fig3}.
@@ -288,7 +306,8 @@ and \(b,\) we could define a new hash function via
 
 where I'm using the notation \(( \textit{vec} )_1\) to indicate the
 first coordinate of the vector value \emph{vec}. (That is, the notation
-\((Ux)_1\) means the first coordinate of the vector \(Ux\).)
+\((Ux)_1\) means the first coordinate of the vector \(Ux\).) This
+function is the \emph{random projection} I had referred to earlier.
 
 It may seem a tad arbitrary to use only the first coordinate here rather
 than any other, but the fact that we're taking a random rotation first
@@ -296,16 +315,22 @@ means that we have the same set of possibilities, with the same
 probability distribution, as we would when pulling out any other single
 coordinate value.
 
-The advantage of using randomized hash functions is that any theoretical
-properties we want to discuss will apply without having to worry about
-pathologically weird data. Conceptually, if we were using deterministic
-hash functions, then someone could choose the worst-case data for our
-hash function, and we'd be stuck with that poor performance (for
-example, choosing maximally-far apart points that are still clustered
-together by our \(h_1\) function above). By using randomly chosen hash
-functions, we can ensure that any average-case behavior of our hash
-functions applies equally well to \emph{all data}. This same perspective
-is useful for hash tables in the form of \emph{universal hashing}.
+A key advantage of using randomized hash functions is that any
+probabilistic statements we want to make about performance (e.g., ``99\%
+of the time this algorithms will give us the correct answer'') applies
+equally to all data, as opposed to applying to some data sets but not to
+others. As a counterpoint, consider the way quicksort is typically fast,
+but ironically uses \(O(n^2)\) time to sort a pre-sorted list; this is a
+case where performance depends on the data, and we'd like to avoid that.
+If we were using deterministic hash functions, then someone could choose
+the worst-case data for our hash function, and we'd be stuck with that
+poor performance (for example, choosing maximally-far apart points that
+are still clustered together by our \(h_1\) function above). By using
+randomly chosen hash functions, we can ensure that any average-case
+behavior of our hash functions applies equally well to all data. This
+same perspective is useful for hash tables in the form of
+\href{https://en.wikipedia.org/wiki/Universal_hashing}{\emph{universal
+hashing}}.
 
 Let's revisit the example points we used above, but now apply some
 randomized hash functions. In figure~\ref{fig:fig3}, points are
@@ -349,14 +374,14 @@ values must match before we say two points are in the same cluster, we
 could look at cases where some number \(j \le k\) of them matches. To
 state this mathematically, we would rewrite equation (\ref{eq:eq1}) as
 
-\begin{equation} a \sim b \iff \#\{i: h_i(a) = h_i(b)\} \ge j. \label{eq:eq2}\end{equation}
+\begin{equation} a \sim b \iff \#\{i: h_i(a) = h_i(b)\} \ge j. \smallscrneg\label{eq:eq2}\end{equation}
 
 Something interesting happens here, which is that the \(a \sim b\)
 relationship is no longer a clustering, but becomes more like adjacency
 (that is, sharing an edge) in a graph. The difference is that, in a
-clustering, if \(a\sim b\) and \(b\sim c,\) the we must have \(a\sim c\)
-as well; this is called being \emph{transitively closed}. Graphs don't
-need to have this property, and in our case as well, it's no longer true
+clustering, if \(a\sim b\) and \(b\sim c,\) then we must have
+\(a\sim c\) as well; this is called being \emph{transitively closed}.
+Graphs don't need to have this property. Similarly, it's no longer true
 that our similarity relationship \(a\sim b\) is transitively closed.
 
 It may help your intuition to see this new definition of \(a\sim b\) in
@@ -380,7 +405,9 @@ cutoff values \(j=7,\) 8, and 9; this means each graph is a subgraph
 
 In fact, we can visualize all possible cutoff values of 6 or higher ---
 these are values of \(j\) in equation (\ref{eq:eq2}) --- using a single
-image with weighted edges, as seen in figure~\ref{fig:fig6}.
+image with weighted edges, as seen in figure~\ref{fig:fig6}. Keep in
+mind that we haven't explicitly computed \emph{any} pairwise distances
+to arrive at this data.
 
 \begin{figure}
 \centering
@@ -393,48 +420,51 @@ collisions.}\label{fig:fig6}
 \end{figure}
 
 There's another fun way to build intuition for what information our
-hashes provide. Let's see which regions of our circle are matched, and
-to what degree, by a given point. We can do this by shading regions of
-the circle that will match a query point, as in figure~\ref{fig:fig8a}.
-Every point in each shaded region has the same hash values for all the
-hash functions used. The first part of figure~\ref{fig:fig8a} shows a
-scaled version of the two-hash system (using \(h_1()\) and \(h_2()\),
-similar to figure~\ref{fig:fig3}) that we saw before; the second part
-uses 5 random hashes. Call the moving query point \(q;\) then any point
-\(p\) in a darkly shaded region will have a hash collision
-\(h_i(p) = h_i(q)\) for all hash functions; in a lightly shaded region
-that equation will only hold true for a smaller subset of the hash
-functions \(h_i().\)
+hashes provide. Let's visualize regions of the circle where all points
+have the same number of hash collisions with a given query point. We can
+do this by showing an example query point \(q\), and shading each region
+based on the number of hash collisions the region's points have with
+\(q\); this is shown in figure~\ref{fig:fig8a}. Every point in each
+shaded region has the same hash values for all the hash functions used.
+The first part of figure~\ref{fig:fig8a} shows a scaled version of the
+two-hash system (using \(h_1()\) and \(h_2()\), similar to
+figure~\ref{fig:fig3}) that we saw before; the second part uses 5 random
+hashes. The darkest region contains points \(p\) where all hash values
+collide, so \(h_i(p) = h_i(q)\) for all \(i\). In a lightly shaded
+region that equation will only hold true for a smaller subset of the
+hash functions \(h_i().\)
 
-Imagine that we were drawing these same images for some theoretically
-perfect LSH setup that somehow managed to match point \(q\) to every
-point \(p\) with \(||p-q||\le r\) for some radius \(r\); all other
-points were not matched. For that perfect LSH setup, images like
-figure~\ref{fig:fig8a} would show a fixed-size circle with center at
-\(q\) that moved along with \(q\). With that in mind as the perfect LSH
-result, notice that the second setting in figure~\ref{fig:fig8a} is much
-closer to this ideal than the first setting. Keep in mind that lookups
-within the shaded regions are no longer linear searches through data,
-but rather the intersection of \(k\) hash table lookups --- that is,
-lookups of nearby points are significantly faster.
+The second part (with 5 hashes) of figure~\ref{fig:fig8a} shows nicer
+behavior, and I'll try to explain why. Imagine that we were drawing
+these same images for some theoretically perfect LSH setup that somehow
+managed to match point \(q\) to every point \(p\) with \(||p-q||\le r\)
+for some radius \(r\); all other points were not matched. For that
+perfect LSH setup, images like figure~\ref{fig:fig8a} would show a
+fixed-size circle with center at \(q\) that moved along with \(q\). With
+that in mind as the perfect LSH result, notice that the second part in
+figure~\ref{fig:fig8a} is much closer to this ideal than the first part.
+Keep in mind that lookups within the shaded regions are no longer linear
+searches through data, but rather the intersection of \(k\) hash table
+lookups --- that is, lookups of nearby points are significantly faster.
 
 \begin{figure}
 \centering
 \includegraphics{images/image8a_fixed.png}
-\caption{The first setting shows the regions where points would be
-matched by either two (dark regions) or just one (lighter shade) hash
-collision with the moving query point \(q\). The second setting shows
-the analogous idea for 5 random hash functions; in the latter case, the
-lightest shaded region indicates 3 hash collisions.}\label{fig:fig8a}
+\caption{The first part shows the regions where points would be matched
+by either two (dark regions) or just one (lighter shade) hash collision
+with the moving query point \(q\). The second part shows the analogous
+idea for 5 random hash functions; in the latter case, the lightest
+shaded region indicates 3 hash collisions.}\label{fig:fig8a}
 \end{figure}
 
-It may further help your intuition to see how similarity edges, like
-those in figure~\ref{fig:fig6}, change as a single query point moives.
-This is the idea behind figure~\ref{fig:fig8b}, where weighted edges are
-drawn between a moving query point and 100 random points. Notice that
-the edge weightings make intuitive sense: they tend to connect strongly
-to very close neighbors, weakly to farther neighbors, and not at all to
-points beyond a certain distance.
+It may further help your intuition to see how weighted edges connecting
+a point to its neighbors, like those in figure~\ref{fig:fig6}, change as
+a single query point moives. This is the idea behind
+figure~\ref{fig:fig8b}, where weighted edges are drawn between a moving
+query point and 100 random points. Notice that the edge weightings make
+intuitive sense: they tend to connect strongly to very close neighbors,
+weakly to farther neighbors, and not at all to points beyond a certain
+distance.
 
 \begin{figure}
 \centering
@@ -482,8 +512,8 @@ parameters are \(j\) and \(k\)).
 Now consider what great performance looks like in the context of this
 random variable. Ideally, there is some distance \(D\) such that
 
-\[||p-q|| < D-\varepsilon \quad\Rightarrow\quad P(p\sim q) > 1 - \delta;\]
-\[||p-q|| > D+\varepsilon \quad\Rightarrow\quad P(p\sim q) < \delta.\]
+\[||p-q|| < D-\varepsilon \flexquad\Rightarrow\flexquad P(p\sim q) > 1 - \delta;\]
+\[||p-q|| > D+\varepsilon \flexquad\Rightarrow\flexquad P(p\sim q) < \delta.\]
 
 In other words, this distance \(D\) acts like a cutoff for our
 approximate search function. Points closer than distance \(D\) to query
@@ -565,9 +595,9 @@ small distance where \(p \sim_j q\) happens almost all the time. Using
 this definition, the four values shown in each box plot of
 figure~\ref{fig:fig9}, from bottom to top, are:
 
-\[D_{.99} / D_{.99} ,\;\;
-D_{.75} / D_{.99}   ,\;\;
-D_{.25} / D_{.99}   ,\;\;
+\[D_{.99} / D_{.99} ,\flexspace
+D_{.75} / D_{.99}   ,\flexspace
+D_{.25} / D_{.99}   ,\flexspace
 D_{.01} / D_{.99}.\]
 
 \subsection{Why an LSH is faster}\label{why-an-lsh-is-faster}

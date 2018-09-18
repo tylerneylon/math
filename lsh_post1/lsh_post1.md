@@ -21,6 +21,9 @@ web pages at an impressive speed, or to
 perform near-constant-time lookups of nearby points from a
 geospatial data set.
 
+![A preview of LSH in action. Only hash collisions were used to find the weights
+in this image --- no pairwise distances were explicitly computed.](images/image8b@2x.gif){#fig:fig0}
+
 Let's take a quick look at other types of hash functions to get a bird's-eye
 view of what counts as a *hash function*, and how LSH fits into that world.
 A traditional use for hash functions is in *hash tables*.
