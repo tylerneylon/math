@@ -20,30 +20,16 @@
     <div class="main">
       <div class="title">Introduction to Locality-Sensitive Hashes</div>
       <div class="author">Tyler Neylon</div>
-      <div class="date">145.2018</div>
-      <p>CHECK:</p>
-      <ul>
-      <li>Update images to all use unitRadius = 2 (or consider it)</li>
-      <li>I think figure 4 only has 3 hashes and the text says 4 Try updating it to really have 4 hashes, but I can fall back to 3 if 4 looks bad.</li>
-      <li>Search this file for all instances of CHECK, IMAGE, XXX</li>
-      <li>Check that the two pdf versions look good, including cross-references</li>
-      <li>Check that the references header has no number</li>
-      <li>Try to nicify the images in the pdf files</li>
-      <li>Ensure that all references to figures in the text are done by mentioning a figure number.</li>
-      <li>Follow-up ideas (put these somewhere centralized with other Unbox post ideas)</li>
-      <li>MinHash</li>
-      <li>ProxHash</li>
-      <li>The J-L Lemma</li>
-      </ul>
+      <div class="date">521.2018</div>
       <p><em>Locality-sensitive hashing</em> (LSH) is a set of techniques that dramatically speed up search-for-neighbors or near-duplication detection on data. These techniques can be used, for example, to filter out duplicates of scraped web pages at an impressive speed, or to perform near-constant-time lookups of nearby points from a geospatial data set.</p>
-      <p>Outside of the LSH world, a common use for hash functions is in <em>hash tables</em>. As a reminder, the hash functions used in a hash table are designed to map a piece of data to an integer that can be used to look in a particular <em>bucket</em> within the hash table to retrieve or delete that element. Many containers with string keys, such as JavaScript objects or Python dictionaries, are based on hash tables. Although hash tables might not <em>guarantee</em> constant-time lookups, in practice they effectively provide them. If you’re curious, <a href="https://en.wikipedia.org/wiki/Universal_hashing"><em>universal hashing</em></a> is a hashing approach that’s useful in hash table implementations.</p>
+      <p>Let’s take a quick look at other types of hash functions to get a bird’s-eye view of what counts as a <em>hash function</em>, and how LSH fits into that world. A traditional use for hash functions is in <em>hash tables</em>. As a reminder, the hash functions used in a hash table are designed to map a piece of data to an integer that can be used to look in a particular <em>bucket</em> within the hash table to retrieve or delete that element. Many containers with string keys, such as JavaScript objects or Python dictionaries, are based on hash tables. Although hash tables might not <em>guarantee</em> constant-time lookups, in practice they effectively provide them.</p>
       <p>There are other classes of hash functions as well. For example, the <a href="https://en.wikipedia.org/wiki/SHA-1">SHA-1</a> cryptographic hash function is designed to be <em>difficult to reverse</em>, which is useful if you want to store someone’s password as a hashed value. Hash functions like these are called <a href="https://en.wikipedia.org/wiki/Cryptographic_hash_function"><em>cryptographic hash functions</em></a>.</p>
-      <p>All hash functions have these key properties:</p>
+      <p>Hash functions typically have these key properties:</p>
       <ul>
-      <li>They map some fixed type of input (such as strings or floats) to discrete values.</li>
-      <li>They’re designed so that different input values map to the same output (hashed) value in a manner useful to the application at hand.</li>
+      <li>They map some type of input, such as strings or floats, to discrete values, such as integers.</li>
+      <li>They’re designed so that two inputs will result in hash outputs that are either different or the same based on key properties of the inputs.</li>
       </ul>
-      <p>Locality-sensitive hash functions are specifically designed so that hash value collisions are <em>more likely</em> for two input values that are <em>close together</em>. Just as there are different implementations of secure hash functions for different use cases, there are different implementations of LSH functions for different data types and for different definitions of being <em>close together</em>. In this post, I’ll give a brief overview of the key ideas, and take a look at a simple example based on <em>random projections</em> (defined below) of vectors into lower-dimensional spaces.</p>
+      <p>Here’s how LSH fits in: Locality-sensitive hash functions are specifically designed so that hash value collisions are <em>more likely</em> for two input values that are <em>close together</em>. Just as there are different implementations of secure hash functions for different use cases, there are different implementations of LSH functions for different data types and for different definitions of being <em>close together</em>. In this post, I’ll give a brief overview of the key ideas behind LSH and take a look at a simple example based on an idea called <em>random projections</em>, which I’ll define in section 2 below.</p>
       <h1 id="a-human-example"><span class="header-section-number">1</span> A human example</h1>
       <p>It will probably be much easier to grasp the main idea with an example you can relate to. (The random projection example will be next.)</p>
       <p>Suppose you have a million people from across the United States all standing in a huge room. It’s your job to get people who live close together to stand in their own groups. Imagine how much time it would take to walk up to each person, ask for their street address, map that to a lat/long pair, then write code to find geographic clusters, and walk up to every person again and tell them their cluster number. It’s a disaster.</p>

@@ -81,7 +81,7 @@
 
 \title{Introduction to Locality-Sensitive Hashes}
 \author{Tyler Neylon}
-\date{145.2018}
+\date{521.2018}
 
 % Begin custom, non-pandoc commands.
 
@@ -100,37 +100,6 @@
 \begin{document}
 \maketitle
 
-CHECK:
-
-\begin{itemize}
-\tightlist
-\item
-  Update images to all use unitRadius = 2 (or consider it)
-\item
-  I think figure 4 only has 3 hashes and the text says 4 Try updating it
-  to really have 4 hashes, but I can fall back to 3 if 4 looks bad.
-\item
-  Search this file for all instances of CHECK, IMAGE, XXX
-\item
-  Check that the two pdf versions look good, including cross-references
-\item
-  Check that the references header has no number
-\item
-  Try to nicify the images in the pdf files
-\item
-  Ensure that all references to figures in the text are done by
-  mentioning a figure number.
-\item
-  Follow-up ideas (put these somewhere centralized with other Unbox post
-  ideas)
-\item
-  MinHash
-\item
-  ProxHash
-\item
-  The J-L Lemma
-\end{itemize}
-
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\eqnset}[1]{\left.\mbox{$#1$}\;\;\right\rbrace\class{postbrace}{ }}
@@ -146,17 +115,16 @@ on data. These techniques can be used, for example, to filter out
 duplicates of scraped web pages at an impressive speed, or to perform
 near-constant-time lookups of nearby points from a geospatial data set.
 
-Outside of the LSH world, a common use for hash functions is in
+Let's take a quick look at other types of hash functions to get a
+bird's-eye view of what counts as a \emph{hash function}, and how LSH
+fits into that world. A traditional use for hash functions is in
 \emph{hash tables}. As a reminder, the hash functions used in a hash
 table are designed to map a piece of data to an integer that can be used
 to look in a particular \emph{bucket} within the hash table to retrieve
 or delete that element. Many containers with string keys, such as
 JavaScript objects or Python dictionaries, are based on hash tables.
 Although hash tables might not \emph{guarantee} constant-time lookups,
-in practice they effectively provide them. If you're curious,
-\href{https://en.wikipedia.org/wiki/Universal_hashing}{\emph{universal
-hashing}} is a hashing approach that's useful in hash table
-implementations.
+in practice they effectively provide them.
 
 There are other classes of hash functions as well. For example, the
 \href{https://en.wikipedia.org/wiki/SHA-1}{SHA-1} cryptographic hash
@@ -166,27 +134,29 @@ functions like these are called
 \href{https://en.wikipedia.org/wiki/Cryptographic_hash_function}{\emph{cryptographic
 hash functions}}.
 
-All hash functions have these key properties:
+Hash functions typically have these key properties:
 
 \begin{itemize}
 \tightlist
 \item
-  They map some fixed type of input (such as strings or floats) to
-  discrete values.
+  They map some type of input, such as strings or floats, to discrete
+  values, such as integers.
 \item
-  They're designed so that different input values map to the same output
-  (hashed) value in a manner useful to the application at hand.
+  They're designed so that two inputs will result in hash outputs that
+  are either different or the same based on key properties of the
+  inputs.
 \end{itemize}
 
-Locality-sensitive hash functions are specifically designed so that hash
-value collisions are \emph{more likely} for two input values that are
-\emph{close together}. Just as there are different implementations of
-secure hash functions for different use cases, there are different
-implementations of LSH functions for different data types and for
-different definitions of being \emph{close together}. In this post, I'll
-give a brief overview of the key ideas, and take a look at a simple
-example based on \emph{random projections} (defined below) of vectors
-into lower-dimensional spaces.
+Here's how LSH fits in: Locality-sensitive hash functions are
+specifically designed so that hash value collisions are \emph{more
+likely} for two input values that are \emph{close together}. Just as
+there are different implementations of secure hash functions for
+different use cases, there are different implementations of LSH
+functions for different data types and for different definitions of
+being \emph{close together}. In this post, I'll give a brief overview of
+the key ideas behind LSH and take a look at a simple example based on an
+idea called \emph{random projections}, which I'll define in section 2
+below.
 
 \section{A human example}\label{a-human-example}
 

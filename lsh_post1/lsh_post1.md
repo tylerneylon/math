@@ -1,24 +1,6 @@
 % Introduction to Locality-Sensitive Hashes
 % Tyler Neylon
-% 145.2018
-
-CHECK:
-
-* Update images to all use unitRadius = 2 (or consider it)
-* I think figure 4 only has 3 hashes and the text says 4
-  Try updating it to really have 4 hashes, but I can fall back to
-  3 if 4 looks bad.
-* Search this file for all instances of CHECK, IMAGE, XXX
-* Check that the two pdf versions look good, including cross-references
-* Check that the references header has no number
-* Try to nicify the images in the pdf files
-* Ensure that all references to figures in the text are done
-  by mentioning a figure number.
-* Follow-up ideas (put these somewhere centralized with other Unbox post ideas)
-  + MinHash
-  + ProxHash
-  + The J-L Lemma
-
+% 521.2018
 
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\Z}{\mathbb{Z}}
@@ -36,8 +18,9 @@ web pages at an impressive speed, or to
 perform near-constant-time lookups of nearby points from a
 geospatial data set.
 
-Outside of the LSH world,
-a common use for hash functions is in *hash tables*.
+Let's take a quick look at other types of hash functions to get a bird's-eye
+view of what counts as a *hash function*, and how LSH fits into that world.
+A traditional use for hash functions is in *hash tables*.
 As a reminder, the hash
 functions used in a hash table are designed to map a piece of data to
 an integer that can be used to look in a particular *bucket* within the
@@ -48,9 +31,6 @@ JavaScript objects or Python dictionaries, are based on
 hash tables.
 Although hash tables might not *guarantee* constant-time lookups, in practice
 they effectively provide them.
-If you're curious, [*universal
-hashing*](https://en.wikipedia.org/wiki/Universal_hashing) is a hashing approach
-that's useful in hash table implementations.
 
 There are other classes of hash functions as well.
 For example, the
@@ -62,22 +42,24 @@ Hash functions like these are called
 [*cryptographic hash
 functions*](https://en.wikipedia.org/wiki/Cryptographic_hash_function).
 
-All hash functions have these key properties:
+Hash functions typically have these key properties:
 
-* They map some fixed type of input (such as strings or floats) to discrete
-  values.
-* They're designed so that different input values map to the same
-  output (hashed) value in a manner useful to the application at hand.
+* They map some type of input, such as strings or floats, to discrete values,
+  such as integers.
+* They're designed so that two inputs will result in hash outputs that are
+  either different or the same based on key properties of the inputs.
 
+Here's how LSH fits in:
 Locality-sensitive hash functions are specifically designed so that
 hash value collisions are *more likely* for two input values that
 are *close together*. Just as there are different implementations of
 secure hash functions for different use cases, there are different
 implementations of LSH functions for different data types and for different
 definitions of being *close together*.
-In this post, I'll give a brief overview of the key ideas, and take a look
-at a simple example based on *random projections* (defined below)
-of vectors into lower-dimensional spaces.
+In this post, I'll give a brief overview of the key ideas behind LSH
+and take a look
+at a simple example based on an idea called  *random projections*, which I'll
+define in section 2 below.
 
 # A human example
 
