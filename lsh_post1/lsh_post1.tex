@@ -476,63 +476,63 @@ hash collisions. This image uses 12 random hashes, and requires at least
 So far, we've seen that we can use hash lookups to find nearby neighbors
 of a query point, and that using \(k\) different randomized hash
 functions gives us much more accurate lookups than if we used a single
-hash function. An interesting property of figures figure~\ref{fig:fig6}
-and figure~\ref{fig:fig8} is that we used different numbers of hash
+hash function. An interesting property of figure~\ref{fig:fig6} and
+figure~\ref{fig:fig8b} is that we used different numbers of hash
 collisions --- via the variable \(j\) --- to discover different degrees
 of similarity between points. In many applications, such as findin near
 duplicates or close geospatial points, we only want a binary output, so
 we have to choose a particular value for \(j\). This section provides
 more insight into this question of choosing good values for \(j\).
 
-As a quick reminder, \(k\) is the number of random hash functions being
-used, and \(j\) is the minimum number of hash collisions you require
-(out of \(k\)) in order to consider points \(p, q\) as being nearby, as
-per (\ref{eq:eq2}). I won't provide a general best answer for the values
-here, but rather provide some understanding of how these numbers affect
-the quality of the results you can achieve. Higher \(k\) values enable
-better behavior --- they support LSH systems that act more like a
-radius-cutoff function (that is, more like \(p\sim q \iff ||p-q||\le r\)
-for some radius \(r\)); the choice of \(j\) is less obvious.
+Suppose \(k\) is fixed. How can we decide which value of \(j\) is best?
 
-I wrote a little Python script to estimate the behavior of various \(j\)
-values for \(k=12\) in 2 dimensions. I've put together an image that I
-think really captures the quality of these \(j\) values, but it takes a
-bit of explaining up-front.
+To answer this question, let's temporarily consider what a perfect
+function would do for us. We'll call this function \texttt{search(q)}.
+In an ideal world this function returns all points within a fixed
+distance of the query point. We could visualize this as an
+\(n-\)dimensional sphere around the query point \(q\). A call to
+\texttt{search(q)} ought to return all the indexed points \(p\) that
+live within this sphere.
 
-Given a value \(s \in (0, 1)\), define the distance \(D_s\) as the value
-satisfying the given equation:
+Let's move from that idealized algorithm into our fast-but-approximate
+world of locality-sensitive hashes. With this approach, there is no
+exact cutoff distance, although we keep the property that nearby
+neighbors are very likely to be in the returned list and distant points
+are very likely to be excluded. Since our hash functions are randomized,
+we can think of the neighbor relationship \(p\sim q\) as being a
+\emph{random variable} that has a certain probability of being true or
+false once all our parameters are fixed (as a reminder, our main
+parameters are \(j\) and \(k\)).
 
-\begin{equation} P\big(p \sim_j q \, \big| \, ||p-q|| = D_s\big) = s, \label{eq:eq4}\end{equation}
+Now consider what great performance looks like in the context of this
+random variable. Ideally, there is some distance \(D\) such that
 
-where \(p\sim_j q\) means that \(\#\{i : h_i(p) = h_i(q)\} \ge j.\)
-Intuitively, if \(\varepsilon\) is close to zero, then the distance
-\(D_\varepsilon\) is large because the probability of \(p\sim_j q\) is
-small. The value of \(D_{1/2}\) is just the perfect distance so that
-\(p \sim_j q\) happens half of the time, and \(D_{1-\varepsilon}\) is a
-small distance where \(p \sim_j q\) happens almost all the time.
+\[||p-q|| < D-\varepsilon \quad\Rightarrow\quad P(p\sim q) > 1 - \delta;\]
+\[||p-q|| > D+\varepsilon \quad\Rightarrow\quad P(p\sim q) < \delta.\]
 
-Notice that all our values \(D_s\) depend on the dimension we're in, as
-well as on \(j\) and \(k.\) For a fixed value of \(k,\) we would
-typically want a value of \(j\) so that
-\(D_\varepsilon / D_{1 - \varepsilon}\) is minimized; as that ratio gets
-closer to 1 (which is its lower bound), our LSH setup acts more like the
-ideal radius-cutoff function.
+In other words, this distance \(D\) acts like a cutoff for our
+approximate search function. Points closer than distance \(D\) to query
+point \(q\) are returned, while points farther are not.
 
-CHECK update all text (slightly above and below) to be more up-to-date
-with what image 9 now shows
+I wrote a Python script to calculate some of these probabilities for the
+particular parameters \(k=2\) and \(d=2\) (\(d\) is the dimensionality
+of the points), and for various values of \(j\). In particular, I
+restricted my input points to certain distances and measured the
+probability that they had at least \(j\) hash collisions for different
+\(j\) values. If you're familiar with conditional probabilities, then
+this value can be written as:
 
-We're ready for figure~\ref{fig:fig9}. This is a series of box plots
-that I'm using to represent the values \(D_s\) for
-\(s \in \{\varepsilon, 1/4, 3/4, 1 - \varepsilon\},\) where
-\(\varepsilon = 10^{-5}.\) For each value of \(j,\) the \(D_s\) values
-have been divided through by \(D_{1/2}\) so that the effective median
-value is 1. This normalization is important because, without it, it
-would be much more difficult to visually compare the \emph{scales} of
-the ranges for each \(j.\) In a normalized setting, the best possible
-value of \(j\) will result in the smallest possible ratio
-\(D_\varepsilon / D_{1 - \varepsilon},\) which we can see visually as a
-short box plot. In figure~\ref{fig:fig9}, the value \(j=9\) performs the
-best.
+\[ P\big(p \sim_j q \, \big| \, ||p-q|| = D\big), \]
+
+where I've written \(p\sim_j q\) to denote that points \(p\) and \(q\)
+have at least \(j\) hash collisions.
+
+Using this Python script, I've visualized the collision behavior of
+\(p\sim_j q\) for various \(j\) in figure~\ref{fig:fig9}. I'll go into
+more detail about what each tick on the box plot indicates, but the
+intuition is that shorter box plots are better because in this
+visualization a shorter box plot indicates a smaller range of
+uncertainty.
 
 \begin{figure}
 \centering
@@ -540,16 +540,60 @@ best.
 \caption{Intuitively, each box plot represents the distances at which
 points \(p, q\) will achieve mixed results (sometimes classified as
 nearby, other times as not) from our LSH setup. A very short box plot is
-ideal because it means close points (closer than the bottom whisker)
-will very likely have \(p\sim q\) and far points (farther than the top
-whisker) will very likely have \(p\not\sim q.\) Formally, each box plot
-shows, from top to bottom, the four values \(D_\varepsilon\) (top
-whisker), \(D_{1/4}\) (top of the box), \(D_{3/4}\) (bottom of the box),
-and \(D_{1 - \varepsilon}\) (bottom whisker), with these values being
-each divided through by \(D_{1/2}\) so that the effective median of the
-box plot is at 1. The term \(D_s\) was defined in
-(\ref{eq:eq4}).}\label{fig:fig9}
+ideal because it indicates a smaller range of uncertainty. In other
+words, a short box plot corresponds to a setting in which most pairs of
+points are correctly classified by an LSH system as nearby or far apart
+based on their actual distance.}\label{fig:fig9}
 \end{figure}
+
+The most interesting element of this graph is that the best value of
+\(j\) appears to be \(j=6.\) You might have guessed that your best LSH
+approach is to insist that \emph{all} of your random hashes must collide
+before you consider two points to be neighbors, but this measurement
+shows that intuition to be false.
+
+Next I'll explain exactly what is measured in figure~\ref{fig:fig9}. A
+traditional box plot visualizes the 25th and 75th percentiles of a set
+of scalar data points as the boundaries of the box. Often the median
+(50th percentile) is also shown within the box, but we don't include an
+analogous mark in figure~\ref{fig:fig9}. The ``whiskers'' at either end
+may indicate the minimum and maximum values, or something similar such
+as the extreme values after removing outliers.
+
+In our case, we have one box plot for each value of \(j\), and each plot
+has been normalized so that the bottom whiskers all align at value 1.
+I'll explain why this is useful in a moment. The bottom whisker
+indicates the distance between \(p\) and \(q\) so that \(p\sim_j q\) is
+true 99\% of the time. The bottom of the box is the relative distance at
+which \(p\sim_j q\) is true 75\% of the time. Continuing in this
+pattern, the box top corresponds to the distance at which we get
+collisions 25\% of the time, and the top whisker is the distance at
+which we get collisions 1\% of the time. Since the box plots are all
+normalized (meaning that the distances per \(j\) value have all been
+divided through by the smallest distance), it's easy to visually see the
+ratio of each box plot position versus its smallest distance. In other
+words, it's easy to visually see which distance range is smallest.
+
+Because I love math and precision, I'm going to provide one last
+definition to formalize the idea of this figure. Given a value
+\(s \in (0, 1)\), define the distance \(D_s\) as the value satisfying
+the given equation:
+
+\[ P\big(p \sim_j q \, \big| \, ||p-q|| = D_s\big) = s, \]
+
+where \(p\sim_j q\) means that \(\#\{i : h_i(p) = h_i(q)\} \ge j.\)
+Intuitively, if \(\varepsilon\) is close to zero, then the distance
+\(D_\varepsilon\) is large because the probability of \(p\sim_j q\) is
+small. The value of \(D_{1/2}\) is just the perfect distance so that
+\(p \sim_j q\) happens half of the time, and \(D_{1-\varepsilon}\) is a
+small distance where \(p \sim_j q\) happens almost all the time. Using
+this definition, the four values shown in each box plot of
+figure~\ref{fig:fig9}, from bottom to top, are:
+
+\[D_{.99} / D_{.99} ,\;\;
+D_{.75} / D_{.99}   ,\;\;
+D_{.25} / D_{.99}   ,\;\;
+D_{.01} / D_{.99}.\]
 
 \subsection{Why an LSH is faster}\label{why-an-lsh-is-faster}
 
@@ -560,85 +604,102 @@ feel like you're doing more work than the simple solution of a linear
 search through your points. Let's review cases where using an LSH is
 more efficient than other methods of finding nearby points.
 
-\subsubsection{Zero linear search}\label{zero-linear-search}
+There are two ways an LSH can speed things up: by helping you deal with
+a huge number of points, or by helping you deal with points in a
+high-dimensional space such as image or video data.
 
-If you have a huge number \(n\) of points, and it's reasonable for you
-to index those points ahead of time --- meaning, you can afford to
-compute all \(k\) hash values for each point --- then you can completely
-avoid the linear-time cost of a brute force search for nearby points
-given a new query point. This speed-up is relevant in any dimension,
-including the simple 2-dimensional case.
+\subsubsection{An LSH is fast over many
+points}\label{an-lsh-is-fast-over-many-points}
 
-\subsubsection{Fewer hashes needed in higher
-dimensions}\label{fewer-hashes-needed-in-higher-dimensions}
+If you want to find all points close to a query point \(q,\) you could
+execute a full linear search. A single-hash LSH can give you results in
+constant time. That's faster.
 
-Another effect that may be less obvious is that you can get away with
-fewer hash values (a smaller \(k\) value) in higher dimensions. There
-are some mathematically sophisticated ways to quantify that statement,
-but it may be even easier to understand graph based on empirically
-derived data.
+Things are slightly more complex for higher values of \(j\) and \(k.\)
+If you keep \(j=k,\) then your LSH result is a simple intersection of
+\(k\) different lists, each list being the set of hash collision points
+returned by a given randomized hash function \(h_i().\) Finding this
+intersection can be sped up by starting with the smallest of these lists
+and shrinking it by throwing out points not present in the other lists.
+This throwing-out process can be done quickly by using hash-table
+lookups to test for inclusion in the point lists, which are basically
+constant time. The running time of this approach is essentially
+\(O(mk),\) where \(m\) is the length of the shortest list returned by
+any of your hash functions \(h_i().\) This running time is very likely
+to be an order of magnitude faster than linear search.
 
-Here's a summary of some random sampling I did in order to explore the
-relationship between various values of \(j\) for \(d=100\) dimensional
-data using \(k=10\) different random hashes: CHECK
+\subsubsection{An LSH is faster for high-dimensional
+points}\label{an-lsh-is-faster-for-high-dimensional-points}
 
-CHECK new image here I guess!
+There is a beautiful mathematical result called the
+\href{https://en.wikipedia.org/wiki/Johnson\%E2\%80\%93Lindenstrauss_lemma}{Johnson-Lindenstrauss
+lemma} which shows that random projections (which is what we're using in
+our \(h_i()\) functions) are amazingly good at preserving point-wise
+distances (Dasgupta and Gupta 2003). As a result of this, you can often
+use a much \emph{smaller} number of hash functions than your
+dimensionality \(d\) to set up an effective LSH system.
 
-\begin{figure}
-\centering
-\includegraphics{images/image9@2x.png}
-\caption{CHECK description here}\label{fig:fig10}
-\end{figure}
+In particular, if you have \(n\) points, then you can use on the order
+of \(\log(n)\) hash functions and still achieve good results. With the
+\(j=k\) approach from the last section, a lookup would require
+\(O(m\log(n))\) time, where \(m\) is the length of the smallest list
+returned by your hash functions. Even if you wanted to take the more
+complex approach of setting \(j < k,\) you would still gain a speedup
+even on pairwise comparisons. Normally it requires \(O(d)\) time to
+compute the distance between two points. Using \(k \approx \log(n)\)
+hashes, it would take \(O(\log(n))\) time instead to compute the number
+of hash collisions between two points.
 
-CHECK the whole next paragraph What's interesting here is that we get a
-relatively tight box plot for \(j\) values around CHECK. This means that
-we can choose the threshold \(j=CHECK\) in equation (\ref{eq:eq2}) and
-have fairly good confidence that our hash-based ``nearby'' relationship
-closely matches reality.
+To show how significant this last speedup can be, imagine looking for
+copyright violations among movie files that are 1GB each. There have
+been about 500,000 movies made in the United States so far. With these
+numbers, we would require looking at 2 billion numeric values of data to
+directly compare two video files, versus looking at about 210 numeric
+values of data to compare their LSH values. (The value 210 is twice the
+expression \(8\log(500,000),\) which is a simplified suggested value for
+\(k\) from the Johnson-Lindenstrauss lemma.) The LSH approach here is
+about 10 million times faster.
 
-We can even quantify this precisely. Although this article doesn't
-\emph{prove} the following implications, the empirical evidence found
-CHECK(add link to code) strongly suggests that these are in fact the
-correct values:
-
-\[ \text{dist}(a, b) > \alpha \Rightarrow P(\#\{i : h_i(a) = h_i(b)\} < j) > 0.95; \]
-
-\[ \text{dist}(a, b) < \beta  \Rightarrow P(\#\{i : h_i(a) = h_i(b)\} \ge j) < 0.05. \]
-
-CHECK(the actual identities may end up being based on the left side
-using a \(j\) value rather than a distance to start with).
-
-We might interpret these last two expressions as saying that we believe
-at least 99\% of our pairwise relationships are correctly classified.
-And we're able to do so while saving about \(O(n)\) speed.
-
-\subsection{Other data types and
+\section{Other data types and
 approaches}\label{other-data-types-and-approaches}
 
 This article has focused on numeric, 2-dimensional data because it's
 easier to visualize. Locality-sensitive hashes can certainly be used for
-many other data types, including strings, sets, or high-dimensional
-vectors.
+many data types including strings, sets, or high-dimensional vectors.
 
-There are also other ways to specifically measure the performance of a
-particular hashing approach. For example, CHECK.
-
-Yet another ingredient to throw into the mix here are techniques to
-boost performance which can treat any LSH as a black box. My favorite
+Yet another ingredient to throw into the mix here is a set of techniques
+to boost performance which treat an LSH as a black box. My favorite
 approach here is to simply perform multiple lookups on a hash system,
 each time using \(q + \varepsilon\) as an input, where \(q\) is your
-query value, and \(\varepsilon\) is a random variable centered at zero.
-CHECK(add a bit about what this achieves; add a reference for it)
+query value, and \(\varepsilon\) is a random variable centered at zero
+(Panigrahy 2006).
 
 There's a lot more that can be said about LSH techniques. If there is
 reader interest, I may write a follow-up article explaining the details
 of min-wise hashing, which is a fun case that's simultaneously good at
-quickly finding nearby sets as well as nearby strings.
-
-CHECK ensure that the references section is not numbered
+quickly finding nearby sets as well as nearby strings (Broder et al.
+2000).
 
 \begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
 
-\section{References}\label{references}
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
+
+\hypertarget{refs}{}
+\hypertarget{ref-broder2000min}{}
+Broder, Andrei Z, Moses Charikar, Alan M Frieze, and Michael
+Mitzenmacher. 2000. ``Min-Wise Independent Permutations.'' \emph{Journal
+of Computer and System Sciences} 60 (3). Elsevier: 630--59.
+
+\hypertarget{ref-dasgupta2003elementary}{}
+Dasgupta, Sanjoy, and Anupam Gupta. 2003. ``An Elementary Proof of a
+Theorem of Johnson and Lindenstrauss.'' \emph{Random Structures \&
+Algorithms} 22 (1). Wiley Online Library: 60--65.
+
+\hypertarget{ref-panigrahy2006entropy}{}
+Panigrahy, Rina. 2006. ``Entropy Based Nearest Neighbor Search in High
+Dimensions.'' In \emph{Proceedings of the Seventeenth Annual Acm-Siam
+Symposium on Discrete Algorithm}, 1186--95. Society for Industrial;
+Applied Mathematics.
 
 \end{document}

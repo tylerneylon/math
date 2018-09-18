@@ -491,7 +491,8 @@ There is a beautiful mathematical result called the
 [Johnson-Lindenstrauss
 lemma](https://en.wikipedia.org/wiki/Johnson%E2%80%93Lindenstrauss_lemma) which
 shows that random projections (which is what we're using in our $h_i()$
-functions) are amazingly good at preserving point-wise distances.
+functions) are amazingly good at preserving point-wise distances
+[@dasgupta2003elementary].
 As a result of this, you can often use a much *smaller* number of hash functions
 than your dimensionality $d$ to set up an effective LSH system.
 
@@ -520,27 +521,22 @@ times faster.
 
 This article has focused on numeric, 2-dimensional data
 because it's easier to visualize. Locality-sensitive hashes can certainly
-be used for many other data types, including strings, sets, or high-dimensional
+be used for many data types including strings, sets, or high-dimensional
 vectors.
 
-There are also other ways to specifically measure the performance of a
-particular hashing approach. For example, CHECK.
-
-Yet another ingredient to throw into the mix here are techniques to boost
-performance which can treat any LSH as a black box. My favorite approach here
+Yet another ingredient to throw into the mix here is a set of techniques to
+boost
+performance which treat an LSH as a black box. My favorite approach here
 is to simply perform multiple lookups on a hash system, each time using
 $q + \varepsilon$ as an input, where $q$ is your query value, and
-$\varepsilon$ is a random variable centered at zero.
-CHECK(add a bit about what this achieves; add a reference for it)
+$\varepsilon$ is a random variable centered at zero [@panigrahy2006entropy].
 
 There's a lot more that can be said about LSH techniques.
 If there is reader interest, I may write a follow-up article explaining
 the details of min-wise hashing, which is a fun case that's simultaneously
-good at quickly finding nearby sets as well as nearby strings.
-
-CHECK ensure that the references section is not numbered
+good at quickly finding nearby sets as well as nearby strings
+[@broder2000min].
 
 ---
-
 
 # References
