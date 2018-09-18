@@ -462,54 +462,61 @@ you're doing more work than the simple solution of a linear search through
 your points. Let's review cases where using an LSH is more efficient than
 other methods of finding nearby points.
 
-### Zero linear search
+There are two ways an LSH can speed things up: by helping you deal with a huge
+number of points, or by helping you deal with points in a high-dimensional space
+such as image or video data.
 
-If you have a huge number $n$ of points, and it's reasonable for you to
-index those points ahead of time --- meaning, you can afford to compute
-all $k$ hash values for each point --- then you can completely avoid the
-linear-time cost of a brute force search for nearby points given a new
-query point. This speed-up is relevant in any dimension, including the
-simple 2-dimensional case.
+### An LSH is fast over many points
 
-### Fewer hashes needed in higher dimensions
+If you want to find all points close to a query point $q,$ you could execute a
+full linear search. A single-hash LSH can give you results in constant time.
+That's faster.
 
-Another effect that may be less obvious is that you can get away with
-fewer hash values (a smaller $k$ value) in higher dimensions.
-There are some mathematically sophisticated ways to quantify that statement,
-but it may be even easier to understand graph based on empirically derived data.
+Things are slightly more complex for higher values of $j$ and $k.$
+If you keep $j=k,$ then your LSH result is a simple intersection of $k$
+different lists, each list being the set of hash collision points returned by a
+given randomized hash function $h_i().$ Finding this intersection can be sped up
+by starting with the smallest of these lists and shrinking it by throwing out
+points not present in the other lists. This throwing-out process can be done
+quickly by using hash-table lookups to test for inclusion in the point lists,
+which are basically
+constant time. The running time of this approach is essentially
+$O(mk),$ where $m$ is the length of the shortest list returned by any of your
+hash functions $h_i().$ This running time is very likely to be an order of
+magnitude faster than linear search.
 
-Here's a summary of some random sampling I did in order to explore the
-relationship between various values of $j$ for $d=100$ dimensional data using
-$k=10$ different random hashes:      CHECK
+### An LSH is faster for high-dimensional points
 
-CHECK new image here I guess!
+There is a beautiful mathematical result called the
+[Johnson-Lindenstrauss
+lemma](https://en.wikipedia.org/wiki/Johnson%E2%80%93Lindenstrauss_lemma) which
+shows that random projections (which is what we're using in our $h_i()$
+functions) are amazingly good at preserving point-wise distances.
+As a result of this, you can often use a much *smaller* number of hash functions
+than your dimensionality $d$ to set up an effective LSH system.
 
-![CHECK description here](images/image9@2x.png){#fig:fig10}
+In particular, if you have $n$ points, then you can use on the order of
+$\log(n)$ hash functions and still achieve good results. With the $j=k$ approach
+from the last section, a lookup would require $O(m\log(n))$ time, where $m$ is
+the length of the smallest list returned by your hash functions. Even if you
+wanted to take the more complex approach of setting $j < k,$
+you would still gain a speedup even on pairwise comparisons. Normally it
+requires $O(d)$ time to compute the distance between two points. Using $k
+\approx \log(n)$ hashes, it would take $O(\log(n))$ time instead to compute the
+number of hash collisions between two points.
 
-CHECK the whole next paragraph
-What's interesting here is that we get a relatively tight
-box plot for $j$ values around CHECK. This means that we can choose the
-threshold $j=CHECK$ in equation ([@eq:eq2]) and have fairly good confidence
-that our hash-based "nearby" relationship closely matches reality.
+To show how significant this last speedup can
+be, imagine looking for copyright violations among movie files that are 1GB
+each. There have been about 500,000 movies made in the United States so far.
+With these numbers, we would require looking at 2 billion numeric values of data
+to directly compare two video files, versus looking at about 210 numeric values
+of data to compare their LSH values. (The value 210 is twice the expression
+$8\log(500,000),$ which is a simplified suggested value for $k$
+from the Johnson-Lindenstrauss
+lemma.) The LSH approach here is about 10 million
+times faster.
 
-We can even quantify this precisely. 
-Although this article doesn't *prove* the following implications, the
-empirical evidence found CHECK(add link to code) strongly suggests that these
-are in fact the correct values:
-
-$$ \text{dist}(a, b) > \alpha \Rightarrow P(\#\{i : h_i(a) = h_i(b)\} < j) > 0.95; $$
-
-$$ \text{dist}(a, b) < \beta  \Rightarrow P(\#\{i : h_i(a) = h_i(b)\} \ge j) < 0.05. $$
-
-CHECK(the actual identities may end up being based on the left side
-      using a $j$ value rather than a distance to start with).
-
-We might interpret these last two expressions as saying that 
-we believe at least 99% of our pairwise relationships are correctly
-classified. And we're able to do so while saving about
-$O(n)$ speed.
-
-## Other data types and approaches
+# Other data types and approaches
 
 This article has focused on numeric, 2-dimensional data
 because it's easier to visualize. Locality-sensitive hashes can certainly
