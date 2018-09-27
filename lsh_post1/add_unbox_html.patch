@@ -1,0 +1,26 @@
+16a17,27
+> 
+>     <!-- Global site tag (gtag.js) - Google Analytics -->
+>     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108911796-1"></script>
+>     <script>
+>       window.dataLayer = window.dataLayer || [];
+>       function gtag(){dataLayer.push(arguments);}
+>       gtag('js', new Date());
+> 
+>       gtag('config', 'UA-108911796-1');
+>     </script>
+> 
+20a32,40
+> 
+>         <p><a href="http://unboxresearch.com/tf101">
+>         <b>Learn TensorFlow</b>: 1-day SF Workshop 10/6/18.
+>         <br />
+>         Register by 9/21 to save $250 off regular ticket price.
+>         </a></p>
+> 
+>         <hr />
+> 
+24c44
+<       <p>[Formats: <a href="http://tylerneylon.com/a/lsh1/lsh_post1.html">html</a> | <a href="http://tylerneylon.com/a/lsh1/lsh_post1.pdf">pdf</a> | <a href="http://tylerneylon.com/a/lsh1/lsh_post1_for_kindle.pdf">kindle pdf</a>]</p>
+---
+>       <p>[Formats: <a href="http://unboxresearch.com/articles/lsh_post1.html">html</a> | <a href="http://tylerneylon.com/a/lsh1/lsh_post1.pdf">pdf</a> | <a href="http://tylerneylon.com/a/lsh1/lsh_post1_for_kindle.pdf">kindle pdf</a>]</p>
