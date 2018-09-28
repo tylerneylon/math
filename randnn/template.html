@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <title>$title$</title>
+	<script type="text/x-mathjax-config"> 
+      MathJax.Hub.Register.StartupHook("TeX AMSmath Ready",function () { 
+        MathJax.InputJax.TeX.Definitions.environment["densearray"] = 
+          ['AMSarray',null,true,true,'rcl','0em .4em']; 
+      }); 
+	</script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <link rel="stylesheet" href="tufte-edited.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  </head>
+  <body>
+    <p style="display:none">\(\newcommand{\latexonlyrule}[2]{}\)</p>
+    <div class="main">
+      <div class="title">$title$</div>
+      <div class="author">$author$</div>
+      <div class="date">$date$</div>
+      $body$
+    </div>
+  </body>
+</html>

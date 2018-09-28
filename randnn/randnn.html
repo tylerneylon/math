@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <title>A Visual Exploration of Random Neural Networks</title>
+	<script type="text/x-mathjax-config"> 
+      MathJax.Hub.Register.StartupHook("TeX AMSmath Ready",function () { 
+        MathJax.InputJax.TeX.Definitions.environment["densearray"] = 
+          ['AMSarray',null,true,true,'rcl','0em .4em']; 
+      }); 
+	</script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <link rel="stylesheet" href="tufte-edited.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  </head>
+  <body>
+    <p style="display:none">\(\newcommand{\latexonlyrule}[2]{}\)</p>
+    <div class="main">
+      <div class="title">A Visual Exploration of Random Neural Networks</div>
+      <div class="author">Tyler Neylon</div>
+      <div class="date">533.2018</div>
+      <p>This is an illustrated tour of neural networks in their primordial, untrained state. Neural networks are notoriously difficult beasts to understand, and my aim is to provide both a peek into the inherent beauty of this world, as well as to help you build a bit of intuition to help you shape your initial model — specifically, by an informed choice of hyperparameters. I’ll assume you know that neural networks are tools for machine learning, and that you have a little bit of a coding and math background, but I’ll try to keep things friendly.</p>
+      <p>A random neural network looks like this:</p>
+      <div class="figure">
+      <p class="caption">Figure 1: The graph of a random feedforward neural network.</p>
+      <img src="images/randnn2.png" alt="Figure 1: The graph of a random feedforward neural network." id="fig:fig1" />
+      </div>
+      <p>Why not be even more ambitious and throw in a few more dimensions? Here’s an animated cross-sectional view of another random network:</p>
+      <div class="figure">
+      <p class="caption">Figure 2: The 7-dimensional graph of a random feedforward neural network.</p>
+      <img src="images/randnn_animated.gif" alt="Figure 2: The 7-dimensional graph of a random feedforward neural network." id="fig:fig2" />
+      </div>
+      <p>These are graphs of a specific type of model called a <em>feedforward neural network</em>, also known as a <em>multilayer perceptron</em>. In this post, I’ll show you how this kind of network is built out of simpler mathematical pieces. I’ll also visually show how many of the hyperparameter values for these models affect their behavior. Hyperparameters are values like the number of layers, layer size, or the distribution used to set the initial weights.</p>
+      <p>Figure 1 above shows a mathematical function that accepts two inputs as <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> coordinates, and provides three outputs as red, green, and blue intensities for a given pixel. If I were to define such a function in Python, it would look a bit like this:</p>
+      <pre><code>def neural_net(x, y):
+      
+        # Compute r, g, and b using x and y.
+        return r, g, b</code></pre>
+      <p>A critical property of neural networks is that they are parametrizable through weight values you can adjust. Mathematically, we could choose to think of a neural network as a function <span class="math inline">\(f(x, w)\)</span> where both <span class="math inline">\(x\)</span> and <span class="math inline">\(w\)</span> are vectors. From this perspective, <span class="math inline">\(w\)</span> are the weights that are learned during training from a fixed set of data. Once training is complete, the vector <span class="math inline">\(w\)</span> remains fixed, while the function receives previously-unseen input values for <span class="math inline">\(x,\)</span> and we think of the <span class="math inline">\(x\)</span> values as the data from which we predict the desired output.</p>
+      <p>Feedforward neural networks have a particular form. They’re built with weight matrices <span class="math inline">\(W_1, W_2, \ldots,\)</span> bias vectors <span class="math inline">\(b_1, b_2, \ldots,\)</span> and activation functions <span class="math inline">\(a_1(), a_2(), \ldots.\)</span> A three-layer feedforward network is built like so:</p>
+      <p><span class="math display">\[\begin{cases}
+      y_0 = x \\
+      y_1 = a_1(W_1 y_0 + b_1) \\
+      y_2 = a_2(W_2 y_1 + b_2) \\
+      y_3 = a_3(W_3 y_2 + b_3) \\
+      f(x, w) = y_3 \\
+      \end{cases}
+      \]</span></p>
+      <h1 id="a-single-layer"><span class="header-section-number">1</span> A Single Layer</h1>
+      <p>Let’s take a look at a simple instance, and build our way up to the more sophisticated picture. Consider a single-layer model with matrix <span class="math inline">\(W_1\)</span> having weights given by <span class="math inline">\(w_{11} = 0.4\)</span> and <span class="math inline">\(w_{12} = 1.0,\)</span> bias term <span class="math inline">\(b_1=-0.3,\)</span> and the sigmoid activation function:</p>
+      <p><span id="eq:eq1"><span class="math display">\[\sigma(x) = \frac{1}{1 + e^{-x}}.\qquad(1)\]</span></span></p>
+      <p>Given inputs <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2,\)</span> we can summarize the entire neural network as a relatively simple function:</p>
+      <p><span id="eq:eq2"><span class="math display">\[f(x) = a_1(W_1x + b_1) = \frac{1}{1+e^{-0.4x_1-x_2+0.3}}.\qquad(2)\]</span></span></p>
+      <p>We can visualize this function as a 3d height plot, shown below in figure 3. Since the output values are constrained to the [0, 1] interval by the sigmoid function, we can also render the same plot as a pixel intensity image — this is basically a bird’s eye view in which values close to 1 appear white, values close to 0 appear black, and values between provide a gradient of grays.</p>
+      <div class="figure">
+      <p class="caption">Figure 3: On the left is the sigmoid function <span class="math inline">\(\sigma(x)\)</span> defined by (1). In the middle is a 3d heightmap of the single-layer, one-output neural network defined by (2). On the right is the overhead view of this same function.</p>
+      <img src="images/gray_sigmoid.png" alt="Figure 3: On the left is the sigmoid function \sigma(x) defined by (1). In the middle is a 3d heightmap of the single-layer, one-output neural network defined by (2). On the right is the overhead view of this same function." id="fig:fig3" />
+      </div>
+      <p>Here we see a single output value because our weight matrix <span class="math inline">\(W_1\)</span> had a single row. A layer can have multiple outputs, corresponding to multiple rows in its weight matrix, and a correspondingly sized bias vector (eg, <span class="math inline">\(W_1\)</span> and <span class="math inline">\(b_1\)</span>). Before the activation function is applied, each output can be seen as either a flat hyperplane (viewed as a heightmap), or as a linear color gradient (viewed as pixel intensities). After the activation, the outputs become nonlinear. If the activation function is <span class="math inline">\(\sigma(x)\)</span> or <span class="math inline">\(\tanh(x)\)</span>, then the outputs are mapped into a bounded interval; you might say that the hyperplanes have been flattened so that the ends become flat, and there is a section of curvature in the middle.</p>
+      <h1 id="the-second-layer"><span class="header-section-number">2</span> The Second Layer</h1>
+      <p>Let’s dig a bit deeper into the rabbit hole and see what the next layer can do. Suppose the neural network has a single 1-dimensional input, and that it uses a <span class="math inline">\(\tanh()\)</span> activation function. Then the output of the first layer is a series of similarly-shaped curves at different scales and locations (curves like this are often called <em>s-curves</em>); these are at left in the figure below. If we add together scaled version of these (in other words, if we take a <em>linear combination</em> of these), then we get a curve that, in a sense, has access to as many inflection points (intuitively, “turning points”) as it has inputs. An example is in the middle of the figure below. The final output of the second layer is the result of applying the activation function to this linear combination. The right side of the figure shows <span class="math inline">\(\tanh()\)</span> applied to the middle of the figure.</p>
+      <div class="figure">
+      <p class="caption">Figure 4: Left: three different <span class="math inline">\(\tanh()\)</span> curves, each with its own weight and bias term. Middle: A linear combination of those three curves. Right: <span class="math inline">\(\tanh()\)</span> applied to the curve in the middle.</p>
+      <img src="images/scurves@2x.png" alt="Figure 4: Left: three different \tanh() curves, each with its own weight and bias term. Middle: A linear combination of those three curves. Right: \tanh() applied to the curve in the middle." id="fig:fig4" />
+      </div>
+      <p>If we have more than a single input variable, then the outputs of the first layer look like those in figure 3 (for a <span class="math inline">\(\tanh()\)</span> or <span class="math inline">\(\sigma()\)</span> activation function), and the linear combinations of these can be more interesting since the inflection points turn into inflection <em>lines</em> (or <em>hyperplanes</em> in higher dimensions). The figure below is analogous to figure 4 just above; the change is that we now have two input variables instead of one.</p>
+      <div class="figure">
+      <p class="caption">Figure 5: Each of the three sigmoid-based surfaces on the left is a single output value of the first layer of a neural network. The middle surface is a linear combination of these three values that has also been passed through a final <span class="math inline">\(\tanh()\)</span> activation function. The right image is an overhead view of the middle plot.</p>
+      <img src="images/3d_scurves@2x.png" alt="Figure 5: Each of the three sigmoid-based surfaces on the left is a single output value of the first layer of a neural network. The middle surface is a linear combination of these three values that has also been passed through a final \tanh() activation function. The right image is an overhead view of the middle plot." id="fig:fig5" />
+      </div>
+      <p>If we have three different output values in the range [0, 1], then we can visualize all three at once by interpreting them as independent red, green, and blue channels, like so:</p>
+      <div class="figure">
+      <p class="caption">Figure 6: We can simultaneously render three different 2d plots by rending then as red, green, and blue intensities respectively. This is an example using simple sigmoid curves.</p>
+      <img src="images/rgb_added@2x.png" alt="Figure 6: We can simultaneously render three different 2d plots by rending then as red, green, and blue intensities respectively. This is an example using simple sigmoid curves." id="fig:fig6" />
+      </div>
+      <p>The original figures in this article (figure 1 and figure 2) use this technique to render all 3 output values of a neural network in a single image.</p>
+      <p>To wrap up, here are typical one-layer networks:</p>
+      <div class="figure">
+      <p class="caption">Figure 7: Several example one-layer networks.</p>
+      <img src="images/typical1layers@2x.png" alt="Figure 7: Several example one-layer networks." id="fig:fig7" />
+      </div>
+      <p>Below are typical two-layer networks. Each of the following networks has 10 hidden units in its first layer.</p>
+      <div class="figure">
+      <p class="caption">Figure 8: Several example two-layer networks.</p>
+      <img src="images/typical2layers@2x.png" alt="Figure 8: Several example two-layer networks." id="fig:fig8" />
+      </div>
+      <p>The weights in all of those have been randomly chosen, and I’ll mention the probability distribution used for them in a few moments.</p>
+      <h1 id="the-deep-part-of-deep-learning"><span class="header-section-number">3</span> The Deep Part of Deep Learning</h1>
+      <p>This section visualizes how networks change as we add more layers to them.</p>
+      <p>The word <em>deep</em> in <em>deep learning</em> refers to the fact that many of today’s more sophisticated neural networks tend to have many layers. Continuing naturally in our progression from 1- to 2-layer networks, what do networks with 3 or nore layers look like?</p>
+      <p>Here’s a progression:</p>
+      <div class="figure">
+      <p class="caption">Figure 9: Each column is a network with the same number of layers. Images in the left column have 1 layer each; those in the right column have 10 layers. Within each row, the images show the output of successive layers of the <em>same</em> network. In other words, each image is a single layer added to the image to its left.</p>
+      <img src="images/inc_depth@2x.png" alt="Figure 9: Each column is a network with the same number of layers. Images in the left column have 1 layer each; those in the right column have 10 layers. Within each row, the images show the output of successive layers of the same network. In other words, each image is a single layer added to the image to its left." id="fig:fig9" />
+      </div>
+      <p>In the figure above, each row shows the output of successive layers of a feedforward neural network with random weights. The iages in the first column are from the first layer; those in the second column are from the second layer; and so on. To phrase things intuitively, I’d say that deeper networks can capture a greater level of complexity in terms of behavior.</p>
+      <h1 id="activation-functions"><span class="header-section-number">4</span> Activation Functions</h1>
+      <p>So far we’ve looked at sigmoidal activation functions — <span class="math inline">\(\sigma()\)</span> and <span class="math inline">\(\tanh().\)</span> Another popular choice is <span class="math inline">\(\text{relu}(x) = \max(x, 0).\)</span></p>
+      <div class="figure">
+      <p class="caption">Figure 10: The function <span class="math inline">\(\text{relu}(x) = \max(x, 0).\)</span></p>
+      <img src="images/relu@2x.png" alt="Figure 10: The function \text{relu}(x) = \max(x, 0)." id="fig:fig10" />
+      </div>
+      <p>In machine learning folklore, it is said that relu-based networks train more quickly than the sigmoidals. This may be true because, for positive <span class="math inline">\(x\)</span> values, <span class="math inline">\(\text{relu}(x)\)</span> has a derivative far from zero, whereas both <span class="math inline">\(\tanh()\)</span> and <span class="math inline">\(\sigma()\)</span> have small derivatives for large <span class="math inline">\(x\)</span> values. Functions with small derivatives result in slower convergence via gradient descent, making <span class="math inline">\(\text{relu}()\)</span> the better choice from this perspective.</p>
+      <hr />
+      <h1 id="references"><span class="header-section-number">5</span> References</h1>
+    </div>
+  </body>
+</html>
