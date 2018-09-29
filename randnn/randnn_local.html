@@ -56,7 +56,7 @@
       <p>We can visualize this function as a 3d height plot, shown below in figure 3. Since the output values are constrained to the [0, 1] interval by the sigmoid function, we can also render the same plot as a pixel intensity image — this is basically a bird’s eye view in which values close to 1 appear white, values close to 0 appear black, and values between provide a gradient of grays.</p>
       <div class="figure">
       <p class="caption">Figure 3: On the left is the sigmoid function <span class="math inline">\(\sigma(x)\)</span> defined by (1). In the middle is a 3d heightmap of the single-layer, one-output neural network defined by (2). On the right is the overhead view of this same function.</p>
-      <img src="images/gray_sigmoid.png" alt="Figure 3: On the left is the sigmoid function \sigma(x) defined by (1). In the middle is a 3d heightmap of the single-layer, one-output neural network defined by (2). On the right is the overhead view of this same function." id="fig:fig3" />
+      <img src="images/gray_sigmoid@2x.png" alt="Figure 3: On the left is the sigmoid function \sigma(x) defined by (1). In the middle is a 3d heightmap of the single-layer, one-output neural network defined by (2). On the right is the overhead view of this same function." id="fig:fig3" />
       </div>
       <p>Here we see a single output value because our weight matrix <span class="math inline">\(W_1\)</span> had a single row. A layer can have multiple outputs, corresponding to multiple rows in its weight matrix, and a correspondingly sized bias vector (eg, <span class="math inline">\(W_1\)</span> and <span class="math inline">\(b_1\)</span>). Before the activation function is applied, each output can be seen as either a flat hyperplane (viewed as a heightmap), or as a linear color gradient (viewed as pixel intensities). After the activation, the outputs become nonlinear. If the activation function is <span class="math inline">\(\sigma(x)\)</span> or <span class="math inline">\(\tanh(x)\)</span>, then the outputs are mapped into a bounded interval; you might say that the hyperplanes have been flattened so that the ends become flat, and there is a section of curvature in the middle.</p>
       <h1 id="the-second-layer"><span class="header-section-number">2</span> The Second Layer</h1>
@@ -96,15 +96,45 @@
       <img src="images/inc_depth@2x.png" alt="Figure 9: Each column is a network with the same number of layers. Images in the left column have 1 layer each; those in the right column have 10 layers. Within each row, the images show the output of successive layers of the same network. In other words, each image is a single layer added to the image to its left." id="fig:fig9" />
       </div>
       <p>In the figure above, each row shows the output of successive layers of a feedforward neural network with random weights. The iages in the first column are from the first layer; those in the second column are from the second layer; and so on. To phrase things intuitively, I’d say that deeper networks can capture a greater level of complexity in terms of behavior.</p>
+      <p>Just for kicks, below is a deep dive on a single network. The final image consists of 18 layers. The hidden layers have 30 units each.</p>
+      <div class="figure">
+      <p class="caption">Figure 10: A focused look at one particular neural network. Read the images from left-to-right, then top-to-bottom. The top-left image shows outputs from the first layer alone. The bottomr-gith image shows outputs from the final, 18th layer.</p>
+      <img src="images/adding_layers@2x.png" alt="Figure 10: A focused look at one particular neural network. Read the images from left-to-right, then top-to-bottom. The top-left image shows outputs from the first layer alone. The bottomr-gith image shows outputs from the final, 18th layer." id="fig:fig10" />
+      </div>
+      <p>Here’s a close-up of the above network extended to 27 layers:</p>
+      <div class="figure">
+      <p class="caption">Figure 11: The network from figure 10 with 27 layers.</p>
+      <img src="images/27layers@2x.png" alt="Figure 11: The network from figure 10 with 27 layers." id="fig:fig11" />
+      </div>
+      <p>In terms of human-appreciable beauty, these graphs become fairly complex as we keep adding more layers. Here’s a glimpse of the same network extended to 40 layers:</p>
+      <div class="figure">
+      <p class="caption">Figure 12: The network from figure 10 extended to 40 layers.</p>
+      <img src="images/40layers@2x.png" alt="Figure 12: The network from figure 10 extended to 40 layers." id="fig:fig12" />
+      </div>
       <h1 id="activation-functions"><span class="header-section-number">4</span> Activation Functions</h1>
       <p>So far we’ve looked at sigmoidal activation functions — <span class="math inline">\(\sigma()\)</span> and <span class="math inline">\(\tanh().\)</span> Another popular choice is <span class="math inline">\(\text{relu}(x) = \max(x, 0).\)</span></p>
       <div class="figure">
-      <p class="caption">Figure 10: The function <span class="math inline">\(\text{relu}(x) = \max(x, 0).\)</span></p>
-      <img src="images/relu@2x.png" alt="Figure 10: The function \text{relu}(x) = \max(x, 0)." id="fig:fig10" />
+      <p class="caption">Figure 13: The function <span class="math inline">\(\text{relu}(x) = \max(x, 0).\)</span></p>
+      <img src="images/relu@2x.png" alt="Figure 13: The function \text{relu}(x) = \max(x, 0)." id="fig:fig13" />
       </div>
       <p>In machine learning folklore, it is said that relu-based networks train more quickly than the sigmoidals. This may be true because, for positive <span class="math inline">\(x\)</span> values, <span class="math inline">\(\text{relu}(x)\)</span> has a derivative far from zero, whereas both <span class="math inline">\(\tanh()\)</span> and <span class="math inline">\(\sigma()\)</span> have small derivatives for large <span class="math inline">\(x\)</span> values. Functions with small derivatives result in slower convergence via gradient descent, making <span class="math inline">\(\text{relu}()\)</span> the better choice from this perspective.</p>
+      <p>An interesting observation made by Ian Goodfellow (and perhaps by others earlier?) is that relu-based networks are <em>piecewise linear</em> functions, which means that we can partition the input space into distinct regions such that the network is a purely linear function in each region. In the pixel-intensity visualization, this translates to an image that is entirely a patchwork of linear gradients.</p>
+      <p>Let’s take a look at relu-based networks of varying depths. For comparison, the top row here is a <span class="math inline">\(\tanh()-\)</span>based network, similar to the networks above. The bottom row uses the <span class="math inline">\(\text{relu}()\)</span> activation function. Both networks use <span class="math inline">\(\sigma()\)</span> on their final layer in order to constrain the output values to the [0, 1] range.</p>
+      <div class="figure">
+      <p class="caption">Figure 14: Each row depicts a neural network at increasing depths. From left to right, each image has 5 more layers than the previous one. The top row uses tanh() activation functions; the bottom uses relu().</p>
+      <img src="images/tanh_vs_relu@2x.png" alt="Figure 14: Each row depicts a neural network at increasing depths. From left to right, each image has 5 more layers than the previous one. The top row uses tanh() activation functions; the bottom uses relu()." id="fig:fig14" />
+      </div>
+      <h1 id="neurons-per-layer"><span class="header-section-number">5</span> Neurons Per Layer</h1>
+      <p>In a layer like this:</p>
+      <p><span class="math display">\[y_3 = \tanh(W_3 y_2 + b_3),\]</span></p>
+      <p>the size (number of coordinates) of <span class="math inline">\(y_3\)</span> is referred to as either the number of <em>units</em> in the layer, the number of <em>neurons</em> in the layer, or simply the <em>size</em> of the layer. These are all synonyms.</p>
+      <p>As the size of a layer increases, it’s capable of learning more features for the next layer to utilize. Both <em>layer size</em> and <em>network depth</em> (number of layers) are hyperparameters that can increase the complexity of the network. It’s illuminating to visualize the trade-off we can get between the depth versus the width (layer size) of a network.</p>
+      <p>In the next figure, each column shows several networks with <em>about the same complexity</em>, as measured by the number of parameters. Networks at the top of the figure are deep but scant; their layers have 4 neurons each. Networks along the bottom row are wide but relatively shallow; they have only 4 layers each. The approximate number of parameters is shown at the bottom of each column.</p>
+      <p>[img]</p>
+      <p>{what is my take?}</p>
+      <h1 id="input-scale"><span class="header-section-number">6</span> Input Scale</h1>
       <hr />
-      <h1 id="references"><span class="header-section-number">5</span> References</h1>
+      <h1 id="references"><span class="header-section-number">7</span> References</h1>
     </div>
   </body>
 </html>

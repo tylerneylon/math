@@ -95,7 +95,7 @@ close to 0 appear black, and values between provide a gradient of grays.
 ![On the left is the sigmoid function $\sigma(x)$ defined by ([@eq:eq1]).
 In the middle is a 3d heightmap of the single-layer, one-output neural network
 defined by ([@eq:eq2]). On the right is the overhead view of this same function.
-](images/gray_sigmoid.png){#fig:fig3}
+](images/gray_sigmoid@2x.png){#fig:fig3}
 
 Here we see a single output value because our weight matrix $W_1$ had a
 single row. A layer can have multiple outputs, corresponding to multiple rows
@@ -194,12 +194,31 @@ are from the first layer; those in the second column are from the second layer;
 and so on. To phrase things intuitively, I'd say that deeper networks can
 capture a greater level of complexity in terms of behavior.
 
+Just for kicks, below is a deep dive on a single network. The final image
+consists of 18 layers. The hidden layers have 30 units each.
+
+![A focused look at one particular neural network. Read the images from
+left-to-right, then top-to-bottom. The top-left image shows outputs from the
+first layer alone. The bottomr-gith image shows outputs from the final, 18th
+layer.](images/adding_layers@2x.png){#fig:fig10}
+
+Here's a close-up of the above network extended to 27 layers:
+
+![The network from [@fig:fig10] with 27 layers.](images/27layers@2x.png){#fig:fig11}
+
+In terms of human-appreciable beauty, these graphs become fairly complex as we
+keep adding more layers. Here's a glimpse of the same network extended to 40
+layers:
+
+![The network from [@fig:fig10] extended to 40
+layers.](images/40layers@2x.png){#fig:fig12}
+
 # Activation Functions
 
 So far we've looked at sigmoidal activation functions --- $\sigma()$ and
 $\tanh().$ Another popular choice is $\text{relu}(x) = \max(x, 0).$
 
-![The function $\text{relu}(x) = \max(x, 0).$](images/relu@2x.png){#fig:fig10}
+![The function $\text{relu}(x) = \max(x, 0).$](images/relu@2x.png){#fig:fig13}
 
 In machine learning folklore, it is said that relu-based networks train more
 quickly than the sigmoidals. This may be true because, for positive $x$ values,
@@ -207,6 +226,55 @@ $\text{relu}(x)$ has a derivative far from zero, whereas both $\tanh()$ and
 $\sigma()$ have small derivatives for large $x$ values. Functions with small
 derivatives result in slower convergence via gradient descent, making
 $\text{relu}()$ the better choice from this perspective.
+
+An interesting observation made by Ian Goodfellow (and perhaps by others
+earlier?) is that relu-based networks are *piecewise linear* functions, which
+means that we can partition the input space into distinct regions such that the
+network is a purely linear function in each region. In the pixel-intensity
+visualization, this translates to an image that is entirely a patchwork of
+linear gradients.
+
+Let's take a look at relu-based networks of varying depths. For comparison, the
+top row here is a $\tanh()-$based network, similar to the networks above. The
+bottom row uses the $\text{relu}()$ activation function. Both networks use
+$\sigma()$ on their final layer in order to constrain the output values to the
+[0, 1] range.
+
+![
+Each row depicts a neural network at increasing depths.
+From left to right, each image has 5 more layers than the previous one.
+The top row uses tanh() activation functions; the bottom uses
+relu().
+](images/tanh_vs_relu@2x.png){#fig:fig14}
+
+# Neurons Per Layer
+
+In a layer like this:
+
+$$y_3 = \tanh(W_3 y_2 + b_3),$$
+
+the size (number of coordinates) of $y_3$ is referred to as either the number of
+*units* in the layer, the number of *neurons* in the layer, or simply the *size*
+of the layer. These are all synonyms.
+
+As the size of a layer increases, it's capable of learning more features for the
+next layer to utilize.
+Both *layer size* and *network depth* (number of layers) are hyperparameters
+that can increase the complexity of the network.
+It's illuminating to visualize the trade-off we can get between the depth versus
+the width (layer size) of a network.
+
+In the next figure, each column shows several networks with *about the same
+complexity*, as measured by the number of parameters. Networks at the top of the
+figure are deep but scant; their layers have 4 neurons each. Networks along the
+bottom row are wide but relatively shallow; they have only 4 layers each. The
+approximate number of parameters is shown at the bottom of each column.
+
+[img]
+
+{what is my take?}
+
+# Input Scale
 
 
 ---
