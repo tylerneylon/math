@@ -199,7 +199,7 @@ consists of 18 layers. The hidden layers have 30 units each.
 
 ![A focused look at one particular neural network. Read the images from
 left-to-right, then top-to-bottom. The top-left image shows outputs from the
-first layer alone. The bottomr-gith image shows outputs from the final, 18th
+first layer alone. The bottom-right image shows outputs from the final, 18th
 layer.](images/adding_layers@2x.png){#fig:fig10}
 
 Here's a close-up of the above network extended to 27 layers:
@@ -215,7 +215,7 @@ layers.](images/40layers@2x.png){#fig:fig12}
 
 # Activation Functions
 
-So far we've looked at sigmoidal activation functions --- $\sigma()$ and
+So far we've looked at two sigmoidal activation functions: $\sigma()$ and
 $\tanh().$ Another popular choice is $\text{relu}(x) = \max(x, 0).$
 
 ![The function $\text{relu}(x) = \max(x, 0).$](images/relu@2x.png){#fig:fig13}
@@ -260,21 +260,62 @@ of the layer. These are all synonyms.
 As the size of a layer increases, it's capable of learning more features for the
 next layer to utilize.
 Both *layer size* and *network depth* (number of layers) are hyperparameters
-that can increase the complexity of the network.
-It's illuminating to visualize the trade-off we can get between the depth versus
-the width (layer size) of a network.
+that can increase the complexity of the network. In [@fig:fig10], we saw a
+progression of a single network as its depth increased. Analogously, let's take
+a look at a network as its layer size increases, from 10 neurons per layer up
+through 400 neurons per layer:
 
-In the next figure, each column shows several networks with *about the same
-complexity*, as measured by the number of parameters. Networks at the top of the
-figure are deep but scant; their layers have 4 neurons each. Networks along the
-bottom row are wide but relatively shallow; they have only 4 layers each. The
-approximate number of parameters is shown at the bottom of each column.
+![
+Random neural networks with increasing layer sizes. Each network has exactly 14
+layers. From left-to-right, top-to-bottom, the networks have 10, 20, 40, 80,
+120, and 400 neurons per layer respectively.
+](images/inc_width@2x.png){#fig:fig15}
 
-[img]
+The final image, with 400 neurons per layer, looks a bit like static at this
+scale, which is the $x, y$ square $[-1, 1]^2.$ Here's a 30x zoom of this same
+network to show that it is indeed a continuous function, if a rather detailed
+one:
 
-{what is my take?}
+![A 30x zoom of the 400-neurons-per-layer network in the lower-right corner of
+[@fig:fig15].](images/400_neuron_zoom@2x.png){#fig:fig16}
+
+Comparing [@fig:fig10] (the effect of adding layers) to [@fig:fig15] (the effect
+of adding neurons per layer), I'd say that adding more layers to a
+network enables more complex *localized* behavior, whereas adding more neurons
+per
+layer enables more detailed *information throughout the entire model*.
+What I'm
+trying to capture is the difference between the uniformly splotchy texture of
+the 400-neurons-per-layer network in [@fig:fig15] versus the variety of both
+complex and relatively smooth regions that are present in the deep (40-layer)
+network in [@fig:fig12].
 
 # Input Scale
+
+It's generally a good idea to scale your data so that it's zero-centered and
+something close to normalized, such as having a standard deviation of 1. If we
+zoom into or out of a random neural network, we can get a sense for why this is
+useful. Let's revisit my favorite random network from this article, the one from
+[@fig:fig11]. Here is that same network as seen in the $[-2.6, 2.6]^2$ square
+in the $x, y-$plane:
+
+![
+For convenience, the same network we saw earlier in [@fig:fig11].
+](images/fig17@2x.png){#fig:fig17}
+
+Next is a series of images starting with a wide view of the $[-40, 40]^2$
+square in the upper-left. Each subsequent image is at about twice the zoom level
+of the previous. The middle image is at about the same scale as the figure
+above.
+
+![
+The network from [@fig:fig17] shown at a number of different scales.
+The top-left image shows the square $[-40, 40]^2$ in the $x,y-$plane.
+Each subsequent image, read left-to-right, top-to-bottom, is at about
+twice the detail (so the second images shows the square $[-20, 20]^2$).
+The center of each image is the point $(0, 0).$
+](images/fig18@2x.png){#fig:fig18}
+
 
 
 ---

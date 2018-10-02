@@ -98,8 +98,8 @@
       <p>In the figure above, each row shows the output of successive layers of a feedforward neural network with random weights. The iages in the first column are from the first layer; those in the second column are from the second layer; and so on. To phrase things intuitively, I’d say that deeper networks can capture a greater level of complexity in terms of behavior.</p>
       <p>Just for kicks, below is a deep dive on a single network. The final image consists of 18 layers. The hidden layers have 30 units each.</p>
       <div class="figure">
-      <p class="caption">Figure 10: A focused look at one particular neural network. Read the images from left-to-right, then top-to-bottom. The top-left image shows outputs from the first layer alone. The bottomr-gith image shows outputs from the final, 18th layer.</p>
-      <img src="images/adding_layers@2x.png" alt="Figure 10: A focused look at one particular neural network. Read the images from left-to-right, then top-to-bottom. The top-left image shows outputs from the first layer alone. The bottomr-gith image shows outputs from the final, 18th layer." id="fig:fig10" />
+      <p class="caption">Figure 10: A focused look at one particular neural network. Read the images from left-to-right, then top-to-bottom. The top-left image shows outputs from the first layer alone. The bottom-right image shows outputs from the final, 18th layer.</p>
+      <img src="images/adding_layers@2x.png" alt="Figure 10: A focused look at one particular neural network. Read the images from left-to-right, then top-to-bottom. The top-left image shows outputs from the first layer alone. The bottom-right image shows outputs from the final, 18th layer." id="fig:fig10" />
       </div>
       <p>Here’s a close-up of the above network extended to 27 layers:</p>
       <div class="figure">
@@ -112,7 +112,7 @@
       <img src="images/40layers@2x.png" alt="Figure 12: The network from figure 10 extended to 40 layers." id="fig:fig12" />
       </div>
       <h1 id="activation-functions"><span class="header-section-number">4</span> Activation Functions</h1>
-      <p>So far we’ve looked at sigmoidal activation functions — <span class="math inline">\(\sigma()\)</span> and <span class="math inline">\(\tanh().\)</span> Another popular choice is <span class="math inline">\(\text{relu}(x) = \max(x, 0).\)</span></p>
+      <p>So far we’ve looked at two sigmoidal activation functions: <span class="math inline">\(\sigma()\)</span> and <span class="math inline">\(\tanh().\)</span> Another popular choice is <span class="math inline">\(\text{relu}(x) = \max(x, 0).\)</span></p>
       <div class="figure">
       <p class="caption">Figure 13: The function <span class="math inline">\(\text{relu}(x) = \max(x, 0).\)</span></p>
       <img src="images/relu@2x.png" alt="Figure 13: The function \text{relu}(x) = \max(x, 0)." id="fig:fig13" />
@@ -128,11 +128,28 @@
       <p>In a layer like this:</p>
       <p><span class="math display">\[y_3 = \tanh(W_3 y_2 + b_3),\]</span></p>
       <p>the size (number of coordinates) of <span class="math inline">\(y_3\)</span> is referred to as either the number of <em>units</em> in the layer, the number of <em>neurons</em> in the layer, or simply the <em>size</em> of the layer. These are all synonyms.</p>
-      <p>As the size of a layer increases, it’s capable of learning more features for the next layer to utilize. Both <em>layer size</em> and <em>network depth</em> (number of layers) are hyperparameters that can increase the complexity of the network. It’s illuminating to visualize the trade-off we can get between the depth versus the width (layer size) of a network.</p>
-      <p>In the next figure, each column shows several networks with <em>about the same complexity</em>, as measured by the number of parameters. Networks at the top of the figure are deep but scant; their layers have 4 neurons each. Networks along the bottom row are wide but relatively shallow; they have only 4 layers each. The approximate number of parameters is shown at the bottom of each column.</p>
-      <p>[img]</p>
-      <p>{what is my take?}</p>
+      <p>As the size of a layer increases, it’s capable of learning more features for the next layer to utilize. Both <em>layer size</em> and <em>network depth</em> (number of layers) are hyperparameters that can increase the complexity of the network. In figure 10, we saw a progression of a single network as its depth increased. Analogously, let’s take a look at a network as its layer size increases, from 10 neurons per layer up through 400 neurons per layer:</p>
+      <div class="figure">
+      <p class="caption">Figure 15: Random neural networks with increasing layer sizes. Each network has exactly 14 layers. From left-to-right, top-to-bottom, the networks have 10, 20, 40, 80, 120, and 400 neurons per layer respectively.</p>
+      <img src="images/inc_width@2x.png" alt="Figure 15: Random neural networks with increasing layer sizes. Each network has exactly 14 layers. From left-to-right, top-to-bottom, the networks have 10, 20, 40, 80, 120, and 400 neurons per layer respectively." id="fig:fig15" />
+      </div>
+      <p>The final image, with 400 neurons per layer, looks a bit like static at this scale, which is the <span class="math inline">\(x, y\)</span> square <span class="math inline">\([-1, 1]^2.\)</span> Here’s a 30x zoom of this same network to show that it is indeed a continuous function, if a rather detailed one:</p>
+      <div class="figure">
+      <p class="caption">Figure 16: A 30x zoom of the 400-neurons-per-layer network in the lower-right corner of figure 15.</p>
+      <img src="images/400_neuron_zoom@2x.png" alt="Figure 16: A 30x zoom of the 400-neurons-per-layer network in the lower-right corner of figure 15." id="fig:fig16" />
+      </div>
+      <p>Comparing figure 10 (the effect of adding layers) to figure 15 (the effect of adding neurons per layer), I’d say that adding more layers to a network enables more complex <em>localized</em> behavior, whereas adding more neurons per layer enables more detailed <em>information throughout the entire model</em>. What I’m trying to capture is the difference between the uniformly splotchy texture of the 400-neurons-per-layer network in figure 15 versus the variety of both complex and relatively smooth regions that are present in the deep (40-layer) network in figure 12.</p>
       <h1 id="input-scale"><span class="header-section-number">6</span> Input Scale</h1>
+      <p>It’s generally a good idea to scale your data so that it’s zero-centered and something close to normalized, such as having a standard deviation of 1. If we zoom into or out of a random neural network, we can get a sense for why this is useful. Let’s revisit my favorite random network from this article, the one from figure 11. Here is that same network as seen in the <span class="math inline">\([-2.6, 2.6]^2\)</span> square in the <span class="math inline">\(x, y-\)</span>plane:</p>
+      <div class="figure">
+      <p class="caption">Figure 17: For convenience, the same network we saw earlier in figure 11.</p>
+      <img src="images/fig17@2x.png" alt="Figure 17: For convenience, the same network we saw earlier in figure 11." id="fig:fig17" />
+      </div>
+      <p>Next is a series of images starting with a wide view of the <span class="math inline">\([-40, 40]^2\)</span> square in the upper-left. Each subsequent image is at about twice the zoom level of the previous. The middle image is at about the same scale as the figure above.</p>
+      <div class="figure">
+      <p class="caption">Figure 18: The network from figure 17 shown at a number of different scales. The top-left image shows the square <span class="math inline">\([-40, 40]^2\)</span> in the <span class="math inline">\(x,y-\)</span>plane. Each subsequent image, read left-to-right, top-to-bottom, is at about twice the detail (so the second images shows the square <span class="math inline">\([-20, 20]^2\)</span>). The center of each image is the point <span class="math inline">\((0, 0).\)</span></p>
+      <img src="images/fig18@2x.png" alt="Figure 18: The network from figure 17 shown at a number of different scales. The top-left image shows the square [-40, 40]^2 in the x,y-plane. Each subsequent image, read left-to-right, top-to-bottom, is at about twice the detail (so the second images shows the square [-20, 20]^2). The center of each image is the point (0, 0)." id="fig:fig18" />
+      </div>
       <hr />
       <h1 id="references"><span class="header-section-number">7</span> References</h1>
     </div>
