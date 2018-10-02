@@ -316,6 +316,40 @@ twice the detail (so the second images shows the square $[-20, 20]^2$).
 The center of each image is the point $(0, 0).$
 ](images/fig18@2x.png){#fig:fig18}
 
+If input data to our network extended over a wide numerical range, or if it were
+far from zero-centered, then the top-left image above would be the most
+relevant, and we can see that the behavior of the network is essentially
+*radial*
+(meaning that it forms a star-like pattern where the distance from center is not
+an important parameter);
+in other words, the image appears to be constrained to a certain kind of
+behavior that may not fit the data.
+
+On the other hand, the bottom-right image is also less than ideal because it
+presents a relatively smooth, low-detail surface which is likely to make
+training slower than it could be given stronger network gradients.
+
+*(The next paragraph is slightly mathy and can be skipped if you're not here for
+proofs.)*
+
+There is a way to see why a zoomed-out random network has a radial
+pattern. As obverved above, relu-based networks are truly piecewise linear, and
+in fact tanh()-based networks (like those in [@fig:fig18]) are very close to
+piecewise linear in the sense that tanh() can be closely approximated with a
+very small number of linear pieces (this is also due to an observation by Ian
+Goodfellow). From this perspective, the domain of each individual layer can be
+partitioned
+into [*convex*](https://en.wikipedia.org/wiki/Convex_set) regions on which the
+layer, as a function, is linear. The composition (that is, the application of
+layer after layer) of these functions maintains this property: the domain of
+multiple layers can
+still be partitioned into *convex* regions of linearity. Moreover, there are
+only ever finitely-many such regions. So the overall network domain, as a
+partition of linear-behavior regions, has finitely many convex pieces. Thus the
+pieces that are unbounded must necessarily form a star-like, or radial pattern
+similar to that in the top-left image of [@fig:fig18].
+
+
 
 
 ---
