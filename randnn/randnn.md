@@ -230,7 +230,8 @@ $\text{relu}()$ the better choice from this perspective.
 An interesting observation made by Ian Goodfellow (and perhaps by others
 earlier?) is that relu-based networks are *piecewise linear* functions, which
 means that we can partition the input space into distinct regions such that the
-network is a purely linear function in each region. In the pixel-intensity
+network is a purely linear function in each region [@goodfellow2017cs231n].
+In the pixel-intensity
 visualization, this translates to an image that is entirely a patchwork of
 linear gradients.
 
@@ -391,8 +392,7 @@ The network from [@fig:fig19] with weights gradually scaled up from the range
 There are useful initialization methods such as He
 or [Glorot](http://deepdish.io/2015/02/24/network-initialization/)
 (aka Xavier) initialization that make it easier to find the sweet spot
-on this spectrum.
-XXX add paper references
+on this spectrum [@he2015delving], [@glorot2010understanding].
 These methods use expressions like $1/\sqrt{n},$ where $n$ is the number of
 inputs to a layer. I'll provide a quick bit of intuition behind why that
 particular expression is a useful barometer for the scale of your random
