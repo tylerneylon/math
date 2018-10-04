@@ -386,8 +386,11 @@ The network from [@fig:fig19] with weights gradually scaled up from the range
 [-0.4, 0.4] to the range [-0.8, 0.8].
 ](images/weight_scale.gif){#fig:fig20}
 
+## Some Math Behind Random Weights
+
 There are useful initialization methods such as He
-or Glorot (aka Xavier) initialization that make it easier to find the sweet spot
+or [Glorot](http://deepdish.io/2015/02/24/network-initialization/)
+(aka Xavier) initialization that make it easier to find the sweet spot
 on this spectrum.
 XXX add paper references
 These methods use expressions like $1/\sqrt{n},$ where $n$ is the number of
@@ -405,22 +408,37 @@ $$y = Wx.$$
 
 Suppose each term $w_{ij}$ in matrix $W$ is chosen independently with mean 0 and
 standard deviation $\sigma.$ Since we are thinking in terms of many layers,
-one of the key dangers is that the outputs of the later layers may either
-explode (have values approaching $\infty$), or vanish (have values approaching
-0). Mathematically, we can fight back by encouraging the output of a layer to
+one of the key dangers is that the outputs of subsequent layers may either
+explode (each layer's output is significantly larger than the previous output),
+or vanish (each layer's output is significantly smaller than the previous).
+Mathematically, we can fight back by encouraging the output of a layer to
 have a similar scale to its input. In other words, we would like to encourage
 something like this:
 
-$$||y|| \approx ||x||.$$
+$$||y|| \approx ||x||.$$ {#eq:eq3}
 
----
+If you're familiar with expected values and variances, then we can use those
+ideas to calculate the expected value of $||y||^2$ relative to the value of
+$||x||^2.$ In the following equations, I'll write $w_i$ for the $i^\text{th}$
+row of matrix $W:$
 
 $$E[||y||^2] = \sum_i E[y_i^2] = \sum_i \text{Var}[y_i]$$
 
 $$ = \sum_{i,j} \text{Var}[w_{ij}x_j] = \sum_{i,j} x_j^2\text{Var}[w_{ij}] $$
 
-$$ = \sum_{i,j} x_j^2\sigma^2 = n\sigma^2||x||.$$
+$$ = \sum_{i,j} x_j^2\sigma^2 = n\sigma^2||x||^2.$$
 
+In other words, $E[||y||^2] = n\sigma^2 ||x||^2.$$
+Since we can choose the standard deviation of our weights $\sigma,$ we can set
+
+$$\sigma = \frac{1}{\sqrt{n}},$$
+
+and we'll arrive at $E[||y||^2] = ||x||^2,$ which nicely matches our original
+goal ([@eq:eq3]). This is not the exact reasoning used to justify He or Glorot
+initialization, but it does provide a first look at how the weight scales affect
+the global behavior of the network as a whole.
+
+# Notes
 
 ---
 
