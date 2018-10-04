@@ -349,7 +349,77 @@ partition of linear-behavior regions, has finitely many convex pieces. Thus the
 pieces that are unbounded must necessarily form a star-like, or radial pattern
 similar to that in the top-left image of [@fig:fig18].
 
+# Scale of Random Weights
 
+The last hyperparameter I'll visualize is the scale of the random weights. There
+are different methods of choosing random weights, such as using a Gaussian
+distribution or a uniform distribution.
+For simplicity, all the networks in this past use
+uniformly random weights, although in practice normals are also great.
+
+The table of images below shows random networks with increasing random weight
+scales from left-to-right, top-to-bottom. All the other hyperparameters (such as
+number of layers or layer size) are held constant. Each network has 27 layers
+and 30 neurons each. The top-left network has random weights in the range
+[-0.5, 0.5];
+the bottom-right uses the range [-1, 1].
+
+![
+Each image shows essentially the same network,
+except that the scale of the random weights
+increases geometrically from the range [-0.5, 0.5] at the top-left to 
+[-1.0, 1.0] at the bottom-right.
+](images/fig19@2x.png){#fig:fig19}
+
+Although the high-weight-scale images in the lower row may *look* interesting,
+they're not ideal for training because they are starting from an assumption of a
+very complex behavior of the data. Any actual patterns in the data are likely to
+be far from this rather specific and arbitrary starting point.
+
+Below is an animation of the same network evolution shown in the image grid
+above. The animation provides a stronger sense of the infusion of detail as the
+weights scale up from the range $[-0.4, 0.4]$ at the start of the animation
+to $[-0.8, 0.8]$ at the end.
+
+![
+The network from [@fig:fig19] with weights gradually scaled up from the range
+[-0.4, 0.4] to the range [-0.8, 0.8].
+](images/weight_scale.gif){#fig:fig20}
+
+There are useful initialization methods such as He
+or Glorot (aka Xavier) initialization that make it easier to find the sweet spot
+on this spectrum.
+XXX add paper references
+These methods use expressions like $1/\sqrt{n},$ where $n$ is the number of
+inputs to a layer. I'll provide a quick bit of intuition behind why that
+particular expression is a useful barometer for the scale of your random
+weights.
+
+I'll provide a quick mathematical look at a single layer without a bias term or
+an activation function. Because of these simplifications, actual network
+behavior is more complex, but this brief line of thinking will show you the kind
+of thought behind choosing a good initialization scale. Our simplified layer is
+a straightforward matrix multiplication:
+
+$$y = Wx.$$
+
+Suppose each term $w_{ij}$ in matrix $W$ is chosen independently with mean 0 and
+standard deviation $\sigma.$ Since we are thinking in terms of many layers,
+one of the key dangers is that the outputs of the later layers may either
+explode (have values approaching $\infty$), or vanish (have values approaching
+0). Mathematically, we can fight back by encouraging the output of a layer to
+have a similar scale to its input. In other words, we would like to encourage
+something like this:
+
+$$||y|| \approx ||x||.$$
+
+---
+
+$$E[||y||^2] = \sum_i E[y_i^2] = \sum_i \text{Var}[y_i]$$
+
+$$ = \sum_{i,j} \text{Var}[w_{ij}x_j] = \sum_{i,j} x_j^2\text{Var}[w_{ij}] $$
+
+$$ = \sum_{i,j} x_j^2\sigma^2 = n\sigma^2||x||.$$
 
 
 ---

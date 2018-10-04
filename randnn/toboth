@@ -17,7 +17,7 @@ mv ${TMP} ${name}.html
 #open ${name}.html
 
 # Make a local-only version of the html for the author to work with.
-sed 's_https://cdn.mathjax.org/mathjax/latest_'${HOME}/Dropbox/Documents/code/MathJax_ ${name}.html > ${name}_local.html
+sed 's@https://cdnjs.cloudflare.com[^'\'']*@'${HOME}/work/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML@ ${name}.html > ${name}_local.html
 #open ${name}_local.html
 
 exit
