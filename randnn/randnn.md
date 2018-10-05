@@ -415,25 +415,24 @@ Mathematically, we can fight back by encouraging the output of a layer to
 have a similar scale to its input. In other words, we would like to encourage
 something like this:
 
-$$||y|| \approx ||x||.$$ {#eq:eq3}
+$$\|y\| \approx \|x\|.$$ {#eq:eq3}
 
 If you're familiar with expected values and variances, then we can use those
-ideas to calculate the expected value of $||y||^2$ relative to the value of
-$||x||^2.$ In the following equations, I'll write $w_i$ for the $i^\text{th}$
-row of matrix $W:$
+ideas to calculate the expected value of $\|y\|^2$ relative to the value of
+$\|x\|^2:$
 
-$$E[||y||^2] = \sum_i E[y_i^2] = \sum_i \text{Var}[y_i]$$
+$$E[\|y\|^2] = \sum_i E\left[y_i^2\right] = \sum_i \text{Var}[y_i]$$
 
 $$ = \sum_{i,j} \text{Var}[w_{ij}x_j] = \sum_{i,j} x_j^2\text{Var}[w_{ij}] $$
 
-$$ = \sum_{i,j} x_j^2\sigma^2 = n\sigma^2||x||^2.$$
+$$ = \sum_{i,j} x_j^2\sigma^2 = n\sigma^2\|x\|^2.$$
 
-In other words, $E[||y||^2] = n\sigma^2 ||x||^2.$$
+In other words, $E[\|y\|^2] = n\sigma^2 \|x\|^2.$
 Since we can choose the standard deviation of our weights $\sigma,$ we can set
 
 $$\sigma = \frac{1}{\sqrt{n}},$$
 
-and we'll arrive at $E[||y||^2] = ||x||^2,$ which nicely matches our original
+and we'll arrive at $E[\|y\|^2] = \|x\|^2,$ which nicely matches our original
 goal ([@eq:eq3]). This is not the exact reasoning used to justify He or Glorot
 initialization, but it does provide a first look at how the weight scales affect
 the global behavior of the network as a whole.
