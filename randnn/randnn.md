@@ -439,6 +439,12 @@ the global behavior of the network as a whole.
 
 # Notes
 
+XXX
+
+* About the shadertoy renderer.
+* Link to the notebook to generate the images.
+* How figure 2 was generated.
+
 ---
 
 # References

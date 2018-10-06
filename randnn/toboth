@@ -16,6 +16,10 @@ cat ${name}.html | awk '{if(x) { print $0; print x; x = "" } else if (/<img/) { 
 mv ${TMP} ${name}.html
 #open ${name}.html
 
+# Execute shadertoy patch.
+cp ${name}{,_gif}.html
+patch -s ${name}.html shadertoy.patch
+
 # Make a local-only version of the html for the author to work with.
 sed 's@https://cdnjs.cloudflare.com[^'\'']*@'${HOME}/work/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML@ ${name}.html > ${name}_local.html
 #open ${name}_local.html

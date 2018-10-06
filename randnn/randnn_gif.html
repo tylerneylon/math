@@ -10,7 +10,7 @@
           ['AMSarray',null,true,true,'rcl','0em .4em']; 
       }); 
 	</script>
-    <script src='/Users/tylerneylon/work/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
     <link rel="stylesheet" href="tufte-edited.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -30,19 +30,8 @@
       <p>Why not be even more ambitious and throw in a few more dimensions? Here’s an animated cross-sectional view of another random network:</p>
       <div class="figure">
       <p class="caption">Figure 2: The 7-dimensional graph of a random feedforward neural network.</p>
-        <iframe style="width:100%;height:244px"
-            src="https://www.shadertoy.com/embed/XltBR4?paused=false&gui=false" frameborder="0"></iframe>
-        <p style="width:100%;font-size:1.2em;text-align:center;margin-top:5px">
-        <i>[If this animation isn't working for you, try the
-            <a href="randnn_gif.html">animated gif instead</a>.]</i>
-        </p>
+      <img src="images/randnn_animated.gif" alt="Figure 2: The 7-dimensional graph of a random feedforward neural network." id="fig:fig2" />
       </div>
-
-
-
-      <div class="figure">
-      </div>
-
       <p>These are graphs of a specific type of model called a <em>feedforward neural network</em>, also known as a <em>multilayer perceptron</em>. In this post, I’ll show you how this kind of network is built out of simpler mathematical pieces. I’ll also visually show how many of the hyperparameter values for these models affect their behavior. Hyperparameters are values like the number of layers, layer size, or the distribution used to set the initial weights.</p>
       <p>Figure 1 above shows a mathematical function that accepts two inputs as <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> coordinates, and provides three outputs as red, green, and blue intensities for a given pixel. If I were to define such a function in Python, it would look a bit like this:</p>
       <pre><code>def neural_net(x, y):

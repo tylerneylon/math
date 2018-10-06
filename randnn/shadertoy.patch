@@ -1,0 +1,16 @@
+33c33,43
+<       <img src="images/randnn_animated.gif" alt="Figure 2: The 7-dimensional graph of a random feedforward neural network." id="fig:fig2" />
+---
+>         <iframe style="width:100%;height:244px"
+>             src="https://www.shadertoy.com/embed/XltBR4?paused=false&gui=false" frameborder="0"></iframe>
+>         <p style="width:100%;font-size:1.2em;text-align:center;margin-top:5px">
+>         <i>[If this animation isn't working for you, try the
+>             <a href="randnn_gif.html">animated gif instead</a>.]</i>
+>         </p>
+>       </div>
+> 
+> 
+> 
+>       <div class="figure">
+34a45
+> 
