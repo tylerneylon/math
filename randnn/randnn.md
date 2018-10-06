@@ -204,14 +204,14 @@ layer.](images/adding_layers@2x.png){#fig:fig10}
 
 Here's a close-up of the above network extended to 27 layers:
 
-![The network from [@fig:fig10] with 27 layers.](images/27layers@2x.png){#fig:fig11}
+![The network from [@fig:fig10] with 27 layers.](images/fig11@2x.png){#fig:fig11}
 
 In terms of human-appreciable beauty, these graphs become fairly complex as we
 keep adding more layers. Here's a glimpse of the same network extended to 40
 layers:
 
 ![The network from [@fig:fig10] extended to 40
-layers.](images/40layers@2x.png){#fig:fig12}
+layers.](images/fig12@2x.png){#fig:fig12}
 
 # Activation Functions
 
