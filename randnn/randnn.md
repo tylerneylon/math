@@ -439,6 +439,16 @@ the global behavior of the network as a whole.
 
 ---
 
+***Heya!** I hope you enjoyed my article. As you can see, I love machine learning.
+If you'd like to work together on a machine learning project, I'd love to hear
+from you. My company, Unbox Research, has a small team of talented ML engineers.
+We specialize in helping content platforms improve their data understanding and
+leverage, which translates to a lot of algorithmic text and image comprehension
+as well as driving user engagement through discovery or personalization.
+I'm [tyler@unboxresearch.com](mailto:tyler@unboxresearch.com).*
+
+---
+
 # Notes on the Images
 
 This section describes how to recreate all of the images in this post.
