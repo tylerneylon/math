@@ -461,10 +461,10 @@ live-editable code [on Shadertoy](https://www.shadertoy.com/view/MtdBz4).
 There are two versions of figure 2 because I don't think all browsers
 correctly display the live-rendered version, which uses WebGL via
 Shadertoy. You can experiment with the live-rendered version in real-time
-[on Shadertoy](https://www.shadertoy.com/view/XltBR4).
-The animated gif uses different parameters that can find
+[at this Shadertoy page](https://www.shadertoy.com/view/XltBR4).
+The animated gif uses different parameters that you can find
+[at this other Shadertoy page](https://www.shadertoy.com/view/lldBz4).
 
-The live-animated version of figure 2 can be
 
 XXX
 
