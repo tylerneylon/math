@@ -15,11 +15,13 @@
 \providecommand{\flexspace}{\;\;\smallscrskip{-0.3em}}
 
 This is an illustrated tour of neural networks in their primordial, untrained
-state. Neural networks are notoriously difficult beasts to understand, and my
-aim is to provide both a peek into the inherent beauty of this world, as well as
-to help you build a bit of intuition to help you shape your initial model ---
-specifically, by an informed choice of hyperparameters. I'll assume you know
-that neural networks are tools for machine learning, and that you have a little
+state. Neural networks are notoriously difficult beasts to understand.
+My aim is to provide a peek into the inherent beauty of this
+challenging world, and
+to build your intuition for how to set up neural networks through
+informed hyperparameter choices.
+I'll assume that you know
+neural networks are tools for machine learning, and that you have a little
 bit of a coding and math background, but I'll try to keep things friendly.
 
 A random neural network looks like this:
@@ -32,15 +34,17 @@ Here's an animated cross-sectional view of another random network:
 ![The 7-dimensional graph of a random feedforward neural network.](images/randnn_animated.gif){#fig:fig2}
 
 These are graphs of a specific type of model called a *feedforward neural
-network*, also known as a *multilayer perceptron*. In this post, I'll show you
+network*, also known as a *multilayer perceptron*. In this article, I'll show you
 how this kind of network is built out of simpler mathematical pieces. I'll also
 visually show how many of the hyperparameter values for these models affect
 their behavior. Hyperparameters are values like the number of layers, layer
-size, or the distribution used to set the initial weights.
+size, or the probability distribution used to set the initial weights.
 
-[@Fig:fig1] above shows a mathematical function that accepts two inputs as
-$x$ and $y$ coordinates, and provides three outputs as red, green, and blue
-intensities for a given pixel. If I were to define such a function in Python, it
+[@Fig:fig1] above is based on a mathematical function that computes a color for
+every pixel. This function accepts two inputs, which are the
+$x$ and $y$ coordinates for a pixel, and provides three outputs, which are the
+red, green, and blue
+intensities for that pixel. If I were to define such a function in Python, it
 would look a bit like this:
 
 ```
@@ -59,7 +63,7 @@ while the function receives previously-unseen input values for $x,$ and we think
 of the $x$ values as the data from which we predict the desired output.
 
 Feedforward neural networks have a particular form. They're built with weight
-matrices $W_1, W_2, \ldots,$ bias vectors $b_1, b_2, \ldots,$ and activation
+matrices $W_1, W_2, \ldots,$ bias vectors $b_1, b_2, \ldots,$ and
 functions $a_1(), a_2(), \ldots.$ A three-layer feedforward network is built
 like so:
 
@@ -70,7 +74,11 @@ y_2 = a_2(W_2 y_1 + b_2) \\
 y_3 = a_3(W_3 y_2 + b_3) \\
 f(x, w) = y_3 \\
 \end{cases}
-$$
+$$ {#eq:eq0}
+
+The functions $a_i()$ are called *activation functions*. In practice, activation
+functions are very often chosen to be $\tanh(x),$ $\max(0, x),$ or
+variations on these.
 
 # A Single Layer
 
@@ -104,18 +112,22 @@ $b_1$).
 Before the activation function is applied, each output can be seen as either
 a flat hyperplane (viewed as a heightmap), or as a linear color gradient
 (viewed as
-pixel intensities). After the activation, the outputs become nonlinear. If
+pixel intensities). After the activation, the output surface becomes nonlinear.
+If
 the activation function is $\sigma(x)$ or $\tanh(x)$, then the outputs are
 mapped
 into a bounded interval; you might say that the hyperplanes have been flattened
-so that the ends become flat, and there is a section of curvature in the middle.
+so that the ends become level, and there is a section of curvature in the middle.
 
 # The Second Layer
 
 Let’s dig a bit deeper into the rabbit hole and see what the next layer can do.
-Suppose the neural network has a single 1-dimensional input,
-and that it uses a $\tanh()$
-activation function. Then the output of the first layer is a series of
+
+We'll start by building up to [@fig:fig4], which shows how a 2-layer network
+might behave when it has only a single (1-dimensional) input and a single
+(also 1-dimensional) output.
+Our example network uses the $\tanh()$ activation function.
+The output of the first layer is a series of
 similarly-shaped curves at different scales and locations (curves like this
 are often called *s-curves*); these are at left in the figure below. If we add
 together scaled version of these (in other words, if we take a *linear
@@ -127,7 +139,11 @@ layer is the result of applying the activation function to this linear
 combination. The right side of the figure shows $\tanh()$ applied to the middle
 of the figure.
 
-![Left: three different $\tanh()$ curves, each with its own weight and bias
+![
+A visual explanation of a simple 2-layer neural network. This network has
+a 1-dimensional input and a 1-dimensional output.
+Left: three different color-coded $\tanh()$ curves,
+each with its own weight and bias
 term. Middle: A linear combination of those three curves. Right: $\tanh()$
 applied to the curve in the middle.](images/scurves@2x.png){#fig:fig4}
 
@@ -141,8 +157,8 @@ is that we now have two input variables instead of one.
 
 ![Each of the three sigmoid-based surfaces on the left is a single output value
 of the first layer of a neural network. The middle surface is a linear
-combination of these three values that has also been passed through a final
-$\tanh()$ activation function. The right image is an overhead view of the middle
+combination of these three values.
+The right image is an overhead view of the middle
 plot.](images/3d_scurves@2x.png){#fig:fig5}
 
 If we have three different output values in the range [0, 1], then we can
@@ -177,25 +193,28 @@ This section visualizes how networks change as we add more layers to them.
 
 The word *deep* in *deep learning* refers to the fact that many of today's more
 sophisticated neural networks tend to have many layers. Continuing naturally in
-our progression from 1- to 2-layer networks, what do networks with 3 or nore
+our progression from 1- to 2-layer networks, what do networks with 3 or more
 layers look like?
 
 Here's a progression:
 
-![Each column is a network with the same number of layers. Images in the left
+![
+Each column shows networks with the same number of layers. Images in the left
 column have 1 layer each; those in the right column have 10 layers. Within each
 row, the images show the output of successive layers of the *same* network. In
 other words, each image is a single layer added to the image to its left.
 ](images/inc_depth@2x.png){#fig:fig9}
 
 In the figure above, each row shows the output of successive layers of a
-feedforward neural network with random weights. The iages in the first column
+feedforward neural network with random weights. The images in the first column
 are from the first layer; those in the second column are from the second layer;
 and so on. To phrase things intuitively, I'd say that deeper networks can
 capture a greater level of complexity in terms of behavior.
 
 Just for kicks, below is a deep dive on a single network. The final image
-consists of 18 layers. The hidden layers have 30 units each.
+consists of 18 layers. The hidden layers have 30 units each; in the language
+of definition ([@eq:eq0]), this means that each
+intermediate $y_i$ vector has 30 coordinates.
 
 ![A focused look at one particular neural network. Read the images from
 left-to-right, then top-to-bottom. The top-left image shows outputs from the
@@ -269,12 +288,13 @@ through 400 neurons per layer:
 ![
 Random neural networks with increasing layer sizes. Each network has exactly 14
 layers. From left-to-right, top-to-bottom, the networks have 10, 20, 40, 80,
-120, and 400 neurons per layer respectively.
+120, and 400 neurons per layer, respectively.
 ](images/inc_width@2x.png){#fig:fig15}
 
-The final image, with 400 neurons per layer, looks a bit like static at this
+The final image, with 400 neurons per layer, looks a bit like exploding static
+at this
 scale, which is the $x, y$ square $[-1, 1]^2.$ Here's a 30x zoom of this same
-network to show that it is indeed a continuous function, if a rather detailed
+network to show that it is indeed a continuous function, if a rather motley
 one:
 
 ![A 30x zoom of the 400-neurons-per-layer network in the lower-right corner of
@@ -334,12 +354,12 @@ training slower than it could be given stronger network gradients.
 proofs.)*
 
 There is a way to see why a zoomed-out random network has a radial
-pattern. As obverved above, relu-based networks are truly piecewise linear, and
+pattern. As observed above, relu-based networks are truly piecewise linear, and
 in fact tanh()-based networks (like those in [@fig:fig18]) are very close to
 piecewise linear in the sense that tanh() can be closely approximated with a
-very small number of linear pieces (this is also due to an observation by Ian
-Goodfellow). From this perspective, the domain of each individual layer can be
-partitioned
+very small number of linear pieces (I learned this from the same lecture by
+Ian Goodfellow). From this perspective, the domain of each individual layer can
+be partitioned
 into [*convex*](https://en.wikipedia.org/wiki/Convex_set) regions on which the
 layer, as a function, is linear. The composition (that is, the application of
 layer after layer) of these functions maintains this property: the domain of
@@ -355,7 +375,7 @@ similar to that in the top-left image of [@fig:fig18].
 The last hyperparameter I'll visualize is the scale of the random weights. There
 are different methods of choosing random weights, such as using a Gaussian
 distribution or a uniform distribution.
-For simplicity, all the networks in this past use
+For simplicity, all the networks in this article use
 uniformly random weights, although in practice normals are also great.
 
 The table of images below shows random networks with increasing random weight
@@ -373,8 +393,9 @@ increases geometrically from the range [-0.5, 0.5] at the top-left to
 ](images/fig19@2x.png){#fig:fig19}
 
 Although the high-weight-scale images in the lower row may *look* interesting,
-they're not ideal for training because they are starting from an assumption of a
-very complex behavior of the data. Any actual patterns in the data are likely to
+they're not ideal for training because they are starting with an assumption that
+the data exhibits highly complex behavior.
+Any actual patterns in the data are likely to
 be far from this rather specific and arbitrary starting point.
 
 Below is an animation of the same network evolution shown in the image grid
@@ -389,7 +410,8 @@ The network from [@fig:fig19] with weights gradually scaled up from the range
 
 ## Some Math Behind Random Weights
 
-There are useful initialization methods such as He
+There are some useful techniques for choosing your initial random weights
+such as He
 or [Glorot](http://deepdish.io/2015/02/24/network-initialization/)
 (aka Xavier) initialization that make it easier to find the sweet spot
 on this spectrum [@he2015delving], [@glorot2010understanding].
@@ -398,16 +420,17 @@ inputs to a layer. I'll provide a quick bit of intuition behind why that
 particular expression is a useful barometer for the scale of your random
 weights.
 
-I'll provide a quick mathematical look at a single layer without a bias term or
-an activation function. Because of these simplifications, actual network
-behavior is more complex, but this brief line of thinking will show you the kind
+Let's build this intuition by looking at a single layer without a bias term or
+an activation function. These simplifications mean that we would have to do more
+follow-up work to achieve a fully justified approach,
+but this brief line of thinking will show you the kind
 of thought behind choosing a good initialization scale. Our simplified layer is
 a straightforward matrix multiplication:
 
 $$y = Wx.$$
 
 Suppose each term $w_{ij}$ in matrix $W$ is chosen independently with mean 0 and
-standard deviation $\sigma.$ Since we are thinking in terms of many layers,
+standard deviation $\sigma.$ Since the full network can have many layers,
 one of the key dangers is that the outputs of subsequent layers may either
 explode (each layer's output is significantly larger than the previous output),
 or vanish (each layer's output is significantly smaller than the previous).
@@ -421,18 +444,19 @@ If you're familiar with expected values and variances, then we can use those
 ideas to calculate the expected value of $\|y\|^2$ relative to the value of
 $\|x\|^2:$
 
-$$E[\|y\|^2] = \sum_i E\left[y_i^2\right] = \sum_i \text{Var}[y_i]$$
+$$E\big[\|y\|^2\big] = \sum_i E\big[y_i^2\big] = \sum_i \text{Var}[y_i]$$
 
-$$ = \sum_{i,j} \text{Var}[w_{ij}x_j] = \sum_{i,j} x_j^2\text{Var}[w_{ij}] $$
+$$ = \sum_{i,\,j} \text{Var}[w_{ij}x_j] = \sum_{i,\,j} x_j^2\text{Var}[w_{ij}]$$
 
-$$ = \sum_{i,j} x_j^2\sigma^2 = n\sigma^2\|x\|^2.$$
+$$ = \sum_{i,\,j} x_j^2\sigma^2 = n\sigma^2\|x\|^2.$$
 
-In other words, $E[\|y\|^2] = n\sigma^2 \|x\|^2.$
+In other words, $E\big[\|y\|^2\big] = n\sigma^2 \|x\|^2.$
 Since we can choose the standard deviation of our weights $\sigma,$ we can set
 
 $$\sigma = \frac{1}{\sqrt{n}},$$
 
-and we'll arrive at $E[\|y\|^2] = \|x\|^2,$ which nicely matches our original
+and we'll arrive at $E\big[\|y\|^2\big] = \|x\|^2,$ which nicely matches our
+original
 goal ([@eq:eq3]). This is not the exact reasoning used to justify He or Glorot
 initialization, but it does provide a first look at how the weight scales affect
 the global behavior of the network as a whole.
@@ -442,16 +466,20 @@ the global behavior of the network as a whole.
 ***Heya!** I hope you enjoyed my article. As you can see, I love machine learning.
 If you'd like to work together on a machine learning project, I'd love to hear
 from you. My company, Unbox Research, has a small team of talented ML engineers.
-We specialize in helping content platforms improve their data understanding and
-leverage, which translates to a lot of algorithmic text and image comprehension
+We specialize in helping content platforms make more intelligent use of their
+data,
+which translates to algorithmic text and image comprehension
 as well as driving user engagement through discovery or personalization.
 I'm [tyler@unboxresearch.com](mailto:tyler@unboxresearch.com).*
+
+*(I'm also teaching a course on TensorFlow in New York in Jan 2019!
+[Register here.](http://unboxresearch.com/tf101))*
 
 ---
 
 # Notes on the Images
 
-This section describes how to recreate all of the images in this post.
+This section describes how to recreate all of the images in this article.
 If you like these images, I encourage you to render and play with them
 for yourself --- they're surprisingly delightful.
 As I experimented, I felt as if I was exploring a new world.
@@ -459,23 +487,24 @@ As I experimented, I felt as if I was exploring a new world.
 ## Figures Created with Python
 
 All of the neural network images after figure 2, excluding the heightmaps,
-were created in
+were created with
 [this Jupyter notebook](https://github.com/tylerneylon/math/blob/master/randnn/notebook/randnn_images.ipynb).
 
 ## Figures Created with Grapher
 
 The line graphs and 3d heightmap graphs were generated with Grapher.
-Those images were created with the Grapher files in
+The corresponding Grapher files can be found in
 [this directory on GitHub](https://github.com/tylerneylon/math/tree/master/randnn/grapher).
 
 ## Figures Created with Shadertoy
 
 Figure 1 is a screenshot of a WebGL-renderable random neural network with
-live-editable code [on Shadertoy](https://www.shadertoy.com/view/MtdBz4).
+the live-editable code
+[at this Shadertoy page](https://www.shadertoy.com/view/MtdBz4).
 
 There are two versions of figure 2 because I don't think all browsers
-correctly display the live-rendered version, which uses WebGL via
-Shadertoy. You can experiment with the live-rendered version in real-time
+correctly display the live-rendered version, which uses WebGL.
+You can experiment with the live-rendered version in real-time
 [at this Shadertoy page](https://www.shadertoy.com/view/XltBR4).
 The animated gif uses different parameters that you can find
 [at this other Shadertoy page](https://www.shadertoy.com/view/lldBz4).
