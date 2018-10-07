@@ -437,7 +437,34 @@ goal ([@eq:eq3]). This is not the exact reasoning used to justify He or Glorot
 initialization, but it does provide a first look at how the weight scales affect
 the global behavior of the network as a whole.
 
-# Notes
+---
+
+# Notes on the Images
+
+This section describes how to recreate all of the images in this post.
+If you like these images, I encourage you to render and play with them
+for yourself because they're surprisingly delightful.
+As I experimented, I felt as if I was exploring a new world.
+
+The images in this post were created either programmatically or with the
+Grapher app on macOS. The code-based images were created in either
+[Shadertoy](https://www.shadertoy.com/)
+or via Python with numpy as the rendering system and Pillow as the png encoder.
+
+## Figure 1
+
+Figure 1 is a screenshot of a WebGL-renderable random neural network with
+live-editable code [on Shadertoy](https://www.shadertoy.com/view/MtdBz4).
+
+## Figure 2
+
+There are two versions of figure 2 because I don't think all browsers
+correctly display the live-rendered version, which uses WebGL via
+Shadertoy. You can experiment with the live-rendered version in real-time
+[on Shadertoy](https://www.shadertoy.com/view/XltBR4).
+The animated gif uses different parameters that can find
+
+The live-animated version of figure 2 can be
 
 XXX
 
