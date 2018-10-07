@@ -443,20 +443,25 @@ the global behavior of the network as a whole.
 
 This section describes how to recreate all of the images in this post.
 If you like these images, I encourage you to render and play with them
-for yourself because they're surprisingly delightful.
+for yourself --- they're surprisingly delightful.
 As I experimented, I felt as if I was exploring a new world.
 
-The images in this post were created either programmatically or with the
-Grapher app on macOS. The code-based images were created in either
-[Shadertoy](https://www.shadertoy.com/)
-or via Python with numpy as the rendering system and Pillow as the png encoder.
+## Figures Created with Python
 
-## Figure 1
+All of the neural network images after figure 2, excluding the heightmaps,
+were created in
+[this Jupyter notebook](https://github.com/tylerneylon/math/blob/master/randnn/notebook/randnn_images.ipynb).
+
+## Figures Created with Grapher
+
+The line graphs and 3d heightmap graphs were generated with Grapher.
+Those images were created with the Grapher files in
+[this directory on GitHub](https://github.com/tylerneylon/math/tree/master/randnn/grapher).
+
+## Figures Created with Shadertoy
 
 Figure 1 is a screenshot of a WebGL-renderable random neural network with
 live-editable code [on Shadertoy](https://www.shadertoy.com/view/MtdBz4).
-
-## Figure 2
 
 There are two versions of figure 2 because I don't think all browsers
 correctly display the live-rendered version, which uses WebGL via
@@ -464,12 +469,6 @@ Shadertoy. You can experiment with the live-rendered version in real-time
 [at this Shadertoy page](https://www.shadertoy.com/view/XltBR4).
 The animated gif uses different parameters that you can find
 [at this other Shadertoy page](https://www.shadertoy.com/view/lldBz4).
-
-
-XXX
-
-* Link to the notebook to generate the images.
-* How figure 2 was generated.
 
 ---
 
