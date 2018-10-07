@@ -246,7 +246,7 @@ Each row depicts a neural network at increasing depths.
 From left to right, each image has 5 more layers than the previous one.
 The top row uses tanh() activation functions; the bottom uses
 relu().
-](images/tanh_vs_relu@2x.png){#fig:fig14}
+](images/fig14@2x.png){#fig:fig14}
 
 # Neurons Per Layer
 
@@ -441,7 +441,6 @@ the global behavior of the network as a whole.
 
 XXX
 
-* About the shadertoy renderer.
 * Link to the notebook to generate the images.
 * How figure 2 was generated.
 
