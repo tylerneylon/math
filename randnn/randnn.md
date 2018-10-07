@@ -1,6 +1,6 @@
 % A Visual Exploration of Random Neural Networks
 % Tyler Neylon
-% 533.2018
+% 551.2018
 
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\Z}{\mathbb{Z}}
