@@ -14,13 +14,14 @@
 \providecommand{\flexquad}{\quad\smallscrskip{-0.8em}}
 \providecommand{\flexspace}{\;\;\smallscrskip{-0.3em}}
 
-This is an illustrated tour of neural networks in their primordial, untrained
+This article is an illustrated tour of neural networks in their primordial,
+untrained
 state. Neural networks are notoriously difficult beasts to understand.
 My aim is to provide a peek into the inherent beauty of this
 challenging world, and
 to build your intuition for how to set up neural networks through
 informed hyperparameter choices.
-I'll assume that you know
+I assume that you know
 neural networks are tools for machine learning, and that you have a little
 bit of a coding and math background, but I'll try to keep things friendly.
 
@@ -34,18 +35,18 @@ Here's an animated cross-sectional view of another random network:
 ![The 7-dimensional graph of a random feedforward neural network.](images/randnn_animated.gif){#fig:fig2}
 
 These are graphs of a specific type of model called a *feedforward neural
-network*, also known as a *multilayer perceptron*. In this article, I'll show you
+network*, also known as a *multilayer perceptron*. In this article, I'll explain
 how this kind of network is built out of simpler mathematical pieces. I'll also
 visually show how many of the hyperparameter values for these models affect
 their behavior. Hyperparameters are values like the number of layers, layer
-size, or the probability distribution used to set the initial weights.
+size, and the probability distribution used to set the initial weights.
 
 [@Fig:fig1] above is based on a mathematical function that computes a color for
 every pixel. This function accepts two inputs, which are the
 $x$ and $y$ coordinates for a pixel, and provides three outputs, which are the
 red, green, and blue
 intensities for that pixel. If I were to define such a function in Python, it
-would look a bit like this:
+would look like this:
 
 ```
 def neural_net(x, y):
@@ -94,14 +95,14 @@ relatively simple function:
 
 $$f(x) = a_1(W_1x + b_1) = \frac{1}{1+e^{-0.4x_1-x_2+0.3}}.$$ {#eq:eq2}
 
-We can visualize this function as a 3d height plot, shown below in [@fig:fig3].
+We can visualize this function as a 3D height plot, shown below in [@fig:fig3].
 Since the output values are constrained to the [0, 1] interval by the sigmoid
-function, we can also render the same plot as a pixel intensity image --- this
-is basically a bird's eye view in which values close to 1 appear white, values
+function, we can also render the same plot as a pixel intensity image ---
+basically a bird's eye view in which values close to 1 appear white, values
 close to 0 appear black, and values between provide a gradient of grays.
 
 ![On the left is the sigmoid function $\sigma(x)$ defined by ([@eq:eq1]).
-In the middle is a 3d heightmap of the single-layer, one-output neural network
+In the middle is a 3D heightmap of the single-layer, one-output neural network
 defined by ([@eq:eq2]). On the right is the overhead view of this same function.
 ](images/gray_sigmoid@2x.png){#fig:fig3}
 
@@ -110,7 +111,7 @@ single row. A layer can have multiple outputs, corresponding to multiple rows
 in its weight matrix, and a correspondingly sized bias vector (eg, $W_1$ and
 $b_1$).
 Before the activation function is applied, each output can be seen as either
-a flat hyperplane (viewed as a heightmap), or as a linear color gradient
+a flat hyperplane (viewed as a heightmap) or as a linear color gradient
 (viewed as
 pixel intensities). After the activation, the output surface becomes nonlinear.
 If
@@ -123,7 +124,8 @@ so that the ends become level, and there is a section of curvature in the middle
 
 Let’s dig a bit deeper into the rabbit hole and see what the next layer can do.
 
-We'll start by building up to [@fig:fig4], which shows how a 2-layer network
+We'll start by building up to [@fig:fig4] below,
+which shows how a 2-layer network
 might behave when it has only a single (1-dimensional) input and a single
 (also 1-dimensional) output.
 Our example network uses the $\tanh()$ activation function.
@@ -136,8 +138,9 @@ curve that, in a sense, has access to as many
 inflection points (intuitively, “turning points”) as it has inputs. An
 example is in the middle of the figure below. The final output of the second
 layer is the result of applying the activation function to this linear
-combination. The right side of the figure shows $\tanh()$ applied to the middle
-of the figure.
+combination.
+The right-hand image in the figure shows $\tanh()$ applied to the curve
+shown in the middle of the figure.
 
 ![
 A visual explanation of a simple 2-layer neural network. This network has
@@ -166,7 +169,7 @@ visualize all three at once by interpreting them as independent red, green,
 and blue channels, like so:
 
 ![
-We can simultaneously render three different 2d plots by rending then as red,
+We can simultaneously render three different 2D plots by rending then as red,
 green, and blue intensities respectively. This is an example using simple
 sigmoid curves.
 ](images/rgb_added@2x.png){#fig:fig6}
@@ -463,7 +466,7 @@ the global behavior of the network as a whole.
 
 ---
 
-***Heya!** I hope you enjoyed my article. As you can see, I love machine learning.
+***Hi!** I hope you enjoyed my article. As you can see, I love machine learning.
 If you'd like to work together on a machine learning project, I'd love to hear
 from you. My company, Unbox Research, has a small team of talented ML engineers.
 We specialize in helping content platforms make more intelligent use of their
@@ -479,10 +482,11 @@ I'm [tyler@unboxresearch.com](mailto:tyler@unboxresearch.com).*
 
 # Notes on the Images
 
-This section describes how to recreate all of the images in this article.
-If you like these images, I encourage you to render and play with them
+If you like the images in this article,
+I encourage you to render and play with them
 for yourself --- they're surprisingly delightful.
 As I experimented, I felt as if I was exploring a new world.
+This section explains how I created them.
 
 ## Figures Created with Python
 
@@ -492,7 +496,7 @@ were created with
 
 ## Figures Created with Grapher
 
-The line graphs and 3d heightmap graphs were generated with Grapher.
+The line graphs and 3D heightmap graphs were generated with Grapher.
 The corresponding Grapher files can be found in
 [this directory on GitHub](https://github.com/tylerneylon/math/tree/master/randnn/grapher).
 
