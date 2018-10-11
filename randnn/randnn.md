@@ -351,59 +351,60 @@ in other words, the image appears to be constrained to a certain kind of
 behavior that may not fit the data.
 
 On the other hand, the bottom-right image is also less than ideal because it
-presents a relatively smooth, low-detail surface which is likely to make
+presents a relatively smooth, low-detail surface that's likely to make
 training slower than it could be given stronger network gradients.
 
-*(The next paragraph is slightly mathy and can be skipped if you're not here for
-proofs.)*
+*(The next paragraph is slightly mathy --- you can skip it if you're not here
+for proofs.)*
 
 There is a way to see why a zoomed-out random network has a radial
 pattern. As observed above, relu-based networks are truly piecewise linear, and
 in fact tanh()-based networks (like those in [@fig:fig18]) are very close to
 piecewise linear in the sense that tanh() can be closely approximated with a
-very small number of linear pieces (I learned this from the same lecture by
-Ian Goodfellow). From this perspective, the domain of each individual layer can
-be partitioned
+very small number of linear pieces (I learned this from
+Ian Goodfellow [@goodfellow2017cs231n]). From this perspective, the domain of
+each individual layer can be partitioned
 into [*convex*](https://en.wikipedia.org/wiki/Convex_set) regions on which the
 layer, as a function, is linear. The composition (that is, the application of
 layer after layer) of these functions maintains this property: the domain of
 multiple layers can
-still be partitioned into *convex* regions of linearity. Moreover, there are
+still be partitioned into convex regions of linearity. Moreover, there are
 only ever finitely-many such regions. So the overall network domain, as a
 partition of linear-behavior regions, has finitely many convex pieces. Thus the
 pieces that are unbounded must necessarily form a star-like, or radial pattern
-similar to that in the top-left image of [@fig:fig18].
+similar to that of the top-left image in [@fig:fig18].
 
 # Scale of Random Weights
 
-The last hyperparameter I'll visualize is the scale of the random weights. There
-are different methods of choosing random weights, such as using a Gaussian
-distribution or a uniform distribution.
+The last hyperparameter I'll visualize for you is the scale of the random
+weights. There are different methods of choosing random weights, such as using a
+Gaussian distribution or a uniform distribution.
 For simplicity, all the networks in this article use
 uniformly random weights, although in practice normals are also great.
 
-The table of images below shows random networks with increasing random weight
-scales from left-to-right, top-to-bottom. All the other hyperparameters (such as
-number of layers or layer size) are held constant. Each network has 27 layers
+The image grid
+below shows random networks with increasing random weight
+scales from left to right, top to bottom. All the other hyperparameters (such as
+number of layers and layer size) are held constant. Each network has 27 layers
 and 30 neurons each. The top-left network has random weights in the range
 [-0.5, 0.5];
-the bottom-right uses the range [-1, 1].
+the bottom-right network uses the range [-1, 1].
 
 ![
 Each image shows essentially the same network,
 except that the scale of the random weights
-increases geometrically from the range [-0.5, 0.5] at the top-left to 
-[-1.0, 1.0] at the bottom-right.
+increases geometrically from the range [-0.5, 0.5] at the top left to 
+[-1.0, 1.0] at the bottom right.
 ](images/fig19@2x.png){#fig:fig19}
 
-Although the high-weight-scale images in the lower row may *look* interesting,
+Although the high-weight-scale images in the bottom row may *look* interesting,
 they're not ideal for training because they are starting with an assumption that
 the data exhibits highly complex behavior.
 Any actual patterns in the data are likely to
 be far from this rather specific and arbitrary starting point.
 
 Below is an animation of the same network evolution shown in the image grid
-above. The animation provides a stronger sense of the infusion of detail as the
+above. This animation provides a stronger sense of the infusion of detail as the
 weights scale up from the range $[-0.4, 0.4]$ at the start of the animation
 to $[-0.8, 0.8]$ at the end.
 
@@ -420,7 +421,7 @@ or [Glorot](http://deepdish.io/2015/02/24/network-initialization/)
 (aka Xavier) initialization that make it easier to find the sweet spot
 on this spectrum [@he2015delving], [@glorot2010understanding].
 These methods use expressions like $1/\sqrt{n},$ where $n$ is the number of
-inputs to a layer. I'll provide a quick bit of intuition behind why that
+inputs to a layer. I'll provide a quick bit of intuition as to why that
 particular expression is a useful barometer for the scale of your random
 weights.
 
@@ -436,7 +437,7 @@ $$y = Wx.$$
 Suppose each term $w_{ij}$ in matrix $W$ is chosen independently with mean 0 and
 standard deviation $\sigma.$ Since the full network can have many layers,
 one of the key dangers is that the outputs of subsequent layers may either
-explode (each layer's output is significantly larger than the previous output),
+explode (each layer's output is significantly larger than the previous output)
 or vanish (each layer's output is significantly smaller than the previous).
 Mathematically, we can fight back by encouraging the output of a layer to
 have a similar scale to its input. In other words, we would like to encourage
@@ -509,7 +510,7 @@ the live-editable code
 
 There are two versions of figure 2 because I don't think all browsers
 correctly display the live-rendered version, which uses WebGL.
-You can experiment with the live-rendered version in real-time
+You can experiment with the live-rendered version in real time
 [at this Shadertoy page](https://www.shadertoy.com/view/XltBR4).
 The animated gif uses different parameters that you can find
 [at this other Shadertoy page](https://www.shadertoy.com/view/lldBz4).
