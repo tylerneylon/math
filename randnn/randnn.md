@@ -170,13 +170,13 @@ and blue channels, like so:
 
 ![
 We can simultaneously render three different 2D plots by rending then as red,
-green, and blue intensities respectively. This is an example using simple
+green, and blue intensities, respectively. This is an example using simple
 sigmoid curves.
 ](images/rgb_added@2x.png){#fig:fig6}
 
 The original figures in this article ([@fig:fig1] and [@fig:fig2])
-use this technique to render all 3 output values of a neural network in a single
-image.
+use this technique to render all three output values of a neural network in a
+single image.
 
 To wrap up, here are typical one-layer networks:
 
@@ -195,7 +195,7 @@ probability distribution used for them in a few moments.
 This section visualizes how networks change as we add more layers to them.
 
 The word *deep* in *deep learning* refers to the fact that many of today's more
-sophisticated neural networks tend to have many layers. Continuing naturally in
+sophisticated neural networks tend to have many layers. Building on
 our progression from 1- to 2-layer networks, what do networks with 3 or more
 layers look like?
 
@@ -220,7 +220,7 @@ of definition ([@eq:eq0]), this means that each
 intermediate $y_i$ vector has 30 coordinates.
 
 ![A focused look at one particular neural network. Read the images from
-left-to-right, then top-to-bottom. The top-left image shows outputs from the
+left to right, then top to bottom. The top-left image shows outputs from the
 first layer alone. The bottom-right image shows outputs from the final, 18th
 layer.](images/adding_layers@2x.png){#fig:fig10}
 
@@ -250,7 +250,7 @@ derivatives result in slower convergence via gradient descent, making
 $\text{relu}()$ the better choice from this perspective.
 
 An interesting observation made by Ian Goodfellow (and perhaps by others
-earlier?) is that relu-based networks are *piecewise linear* functions, which
+before him) is that relu-based networks are *piecewise linear* functions, which
 means that we can partition the input space into distinct regions such that the
 network is a purely linear function in each region [@goodfellow2017cs231n].
 In the pixel-intensity
@@ -258,14 +258,15 @@ visualization, this translates to an image that is entirely a patchwork of
 linear gradients.
 
 Let's take a look at relu-based networks of varying depths. For comparison, the
-top row here is a $\tanh()-$based network, similar to the networks above. The
+top row in the next figure is a $\tanh()-$based network, similar to the networks
+above. The
 bottom row uses the $\text{relu}()$ activation function. Both networks use
 $\sigma()$ on their final layer in order to constrain the output values to the
 [0, 1] range.
 
 ![
 Each row depicts a neural network at increasing depths.
-From left to right, each image has 5 more layers than the previous one.
+From left to right, each image has five more layers than the previous one.
 The top row uses tanh() activation functions; the bottom uses
 relu().
 ](images/fig14@2x.png){#fig:fig14}
@@ -290,12 +291,12 @@ through 400 neurons per layer:
 
 ![
 Random neural networks with increasing layer sizes. Each network has exactly 14
-layers. From left-to-right, top-to-bottom, the networks have 10, 20, 40, 80,
+layers. From left to right, top to bottom, the networks have 10, 20, 40, 80,
 120, and 400 neurons per layer, respectively.
 ](images/inc_width@2x.png){#fig:fig15}
 
-The final image, with 400 neurons per layer, looks a bit like exploding static
-at this
+The final image above, with 400 neurons per layer,
+looks a bit like exploding static at this
 scale, which is the $x, y$ square $[-1, 1]^2.$ Here's a 30x zoom of this same
 network to show that it is indeed a continuous function, if a rather motley
 one:
@@ -335,7 +336,7 @@ above.
 ![
 The network from [@fig:fig17] shown at a number of different scales.
 The top-left image shows the square $[-40, 40]^2$ in the $x,y-$plane.
-Each subsequent image, read left-to-right, top-to-bottom, is at about
+Each subsequent image, read left to right, top to bottom, is at about
 twice the detail (so the second images shows the square $[-20, 20]^2$).
 The center of each image is the point $(0, 0).$
 ](images/fig18@2x.png){#fig:fig18}

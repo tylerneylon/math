@@ -88,10 +88,10 @@
       </div>
       <p>If we have three different output values in the range [0, 1], then we can visualize all three at once by interpreting them as independent red, green, and blue channels, like so:</p>
       <div class="figure">
-      <p class="caption">Figure 6: We can simultaneously render three different 2D plots by rending then as red, green, and blue intensities respectively. This is an example using simple sigmoid curves.</p>
-      <img src="images/rgb_added@2x.png" alt="Figure 6: We can simultaneously render three different 2D plots by rending then as red, green, and blue intensities respectively. This is an example using simple sigmoid curves." id="fig:fig6" />
+      <p class="caption">Figure 6: We can simultaneously render three different 2D plots by rending then as red, green, and blue intensities, respectively. This is an example using simple sigmoid curves.</p>
+      <img src="images/rgb_added@2x.png" alt="Figure 6: We can simultaneously render three different 2D plots by rending then as red, green, and blue intensities, respectively. This is an example using simple sigmoid curves." id="fig:fig6" />
       </div>
-      <p>The original figures in this article (figure 1 and figure 2) use this technique to render all 3 output values of a neural network in a single image.</p>
+      <p>The original figures in this article (figure 1 and figure 2) use this technique to render all three output values of a neural network in a single image.</p>
       <p>To wrap up, here are typical one-layer networks:</p>
       <div class="figure">
       <p class="caption">Figure 7: Several example one-layer networks.</p>
@@ -105,7 +105,7 @@
       <p>The weights in all of those have been randomly chosen, and I’ll mention the probability distribution used for them in a few moments.</p>
       <h1 id="the-deep-part-of-deep-learning"><span class="header-section-number">3</span> The Deep Part of Deep Learning</h1>
       <p>This section visualizes how networks change as we add more layers to them.</p>
-      <p>The word <em>deep</em> in <em>deep learning</em> refers to the fact that many of today’s more sophisticated neural networks tend to have many layers. Continuing naturally in our progression from 1- to 2-layer networks, what do networks with 3 or more layers look like?</p>
+      <p>The word <em>deep</em> in <em>deep learning</em> refers to the fact that many of today’s more sophisticated neural networks tend to have many layers. Building on our progression from 1- to 2-layer networks, what do networks with 3 or more layers look like?</p>
       <p>Here’s a progression:</p>
       <div class="figure">
       <p class="caption">Figure 9: Each column shows networks with the same number of layers. Images in the left column have 1 layer each; those in the right column have 10 layers. Within each row, the images show the output of successive layers of the <em>same</em> network. In other words, each image is a single layer added to the image to its left.</p>
@@ -114,8 +114,8 @@
       <p>In the figure above, each row shows the output of successive layers of a feedforward neural network with random weights. The images in the first column are from the first layer; those in the second column are from the second layer; and so on. To phrase things intuitively, I’d say that deeper networks can capture a greater level of complexity in terms of behavior.</p>
       <p>Just for kicks, below is a deep dive on a single network. The final image consists of 18 layers. The hidden layers have 30 units each; in the language of definition (1), this means that each intermediate <span class="math inline">\(y_i\)</span> vector has 30 coordinates.</p>
       <div class="figure">
-      <p class="caption">Figure 10: A focused look at one particular neural network. Read the images from left-to-right, then top-to-bottom. The top-left image shows outputs from the first layer alone. The bottom-right image shows outputs from the final, 18th layer.</p>
-      <img src="images/adding_layers@2x.png" alt="Figure 10: A focused look at one particular neural network. Read the images from left-to-right, then top-to-bottom. The top-left image shows outputs from the first layer alone. The bottom-right image shows outputs from the final, 18th layer." id="fig:fig10" />
+      <p class="caption">Figure 10: A focused look at one particular neural network. Read the images from left to right, then top to bottom. The top-left image shows outputs from the first layer alone. The bottom-right image shows outputs from the final, 18th layer.</p>
+      <img src="images/adding_layers@2x.png" alt="Figure 10: A focused look at one particular neural network. Read the images from left to right, then top to bottom. The top-left image shows outputs from the first layer alone. The bottom-right image shows outputs from the final, 18th layer." id="fig:fig10" />
       </div>
       <p>Here’s a close-up of the above network extended to 27 layers:</p>
       <div class="figure">
@@ -134,11 +134,11 @@
       <img src="images/relu@2x.png" alt="Figure 13: The function \text{relu}(x) = \max(x, 0)." id="fig:fig13" />
       </div>
       <p>In machine learning folklore, it is said that relu-based networks train more quickly than the sigmoidals. This may be true because, for positive <span class="math inline">\(x\)</span> values, <span class="math inline">\(\text{relu}(x)\)</span> has a derivative far from zero, whereas both <span class="math inline">\(\tanh()\)</span> and <span class="math inline">\(\sigma()\)</span> have small derivatives for large <span class="math inline">\(x\)</span> values. Functions with small derivatives result in slower convergence via gradient descent, making <span class="math inline">\(\text{relu}()\)</span> the better choice from this perspective.</p>
-      <p>An interesting observation made by Ian Goodfellow (and perhaps by others earlier?) is that relu-based networks are <em>piecewise linear</em> functions, which means that we can partition the input space into distinct regions such that the network is a purely linear function in each region <span class="citation">(Goodfellow 2017)</span>. In the pixel-intensity visualization, this translates to an image that is entirely a patchwork of linear gradients.</p>
-      <p>Let’s take a look at relu-based networks of varying depths. For comparison, the top row here is a <span class="math inline">\(\tanh()-\)</span>based network, similar to the networks above. The bottom row uses the <span class="math inline">\(\text{relu}()\)</span> activation function. Both networks use <span class="math inline">\(\sigma()\)</span> on their final layer in order to constrain the output values to the [0, 1] range.</p>
+      <p>An interesting observation made by Ian Goodfellow (and perhaps by others before him) is that relu-based networks are <em>piecewise linear</em> functions, which means that we can partition the input space into distinct regions such that the network is a purely linear function in each region <span class="citation">(Goodfellow 2017)</span>. In the pixel-intensity visualization, this translates to an image that is entirely a patchwork of linear gradients.</p>
+      <p>Let’s take a look at relu-based networks of varying depths. For comparison, the top row in the next figure is a <span class="math inline">\(\tanh()-\)</span>based network, similar to the networks above. The bottom row uses the <span class="math inline">\(\text{relu}()\)</span> activation function. Both networks use <span class="math inline">\(\sigma()\)</span> on their final layer in order to constrain the output values to the [0, 1] range.</p>
       <div class="figure">
-      <p class="caption">Figure 14: Each row depicts a neural network at increasing depths. From left to right, each image has 5 more layers than the previous one. The top row uses tanh() activation functions; the bottom uses relu().</p>
-      <img src="images/fig14@2x.png" alt="Figure 14: Each row depicts a neural network at increasing depths. From left to right, each image has 5 more layers than the previous one. The top row uses tanh() activation functions; the bottom uses relu()." id="fig:fig14" />
+      <p class="caption">Figure 14: Each row depicts a neural network at increasing depths. From left to right, each image has five more layers than the previous one. The top row uses tanh() activation functions; the bottom uses relu().</p>
+      <img src="images/fig14@2x.png" alt="Figure 14: Each row depicts a neural network at increasing depths. From left to right, each image has five more layers than the previous one. The top row uses tanh() activation functions; the bottom uses relu()." id="fig:fig14" />
       </div>
       <h1 id="neurons-per-layer"><span class="header-section-number">5</span> Neurons Per Layer</h1>
       <p>In a layer like this:</p>
@@ -146,10 +146,10 @@
       <p>the size (number of coordinates) of <span class="math inline">\(y_3\)</span> is referred to as either the number of <em>units</em> in the layer, the number of <em>neurons</em> in the layer, or simply the <em>size</em> of the layer. These are all synonyms.</p>
       <p>As the size of a layer increases, it’s capable of learning more features for the next layer to utilize. Both <em>layer size</em> and <em>network depth</em> (number of layers) are hyperparameters that can increase the complexity of the network. In figure 10, we saw a progression of a single network as its depth increased. Analogously, let’s take a look at a network as its layer size increases, from 10 neurons per layer up through 400 neurons per layer:</p>
       <div class="figure">
-      <p class="caption">Figure 15: Random neural networks with increasing layer sizes. Each network has exactly 14 layers. From left-to-right, top-to-bottom, the networks have 10, 20, 40, 80, 120, and 400 neurons per layer, respectively.</p>
-      <img src="images/inc_width@2x.png" alt="Figure 15: Random neural networks with increasing layer sizes. Each network has exactly 14 layers. From left-to-right, top-to-bottom, the networks have 10, 20, 40, 80, 120, and 400 neurons per layer, respectively." id="fig:fig15" />
+      <p class="caption">Figure 15: Random neural networks with increasing layer sizes. Each network has exactly 14 layers. From left to right, top to bottom, the networks have 10, 20, 40, 80, 120, and 400 neurons per layer, respectively.</p>
+      <img src="images/inc_width@2x.png" alt="Figure 15: Random neural networks with increasing layer sizes. Each network has exactly 14 layers. From left to right, top to bottom, the networks have 10, 20, 40, 80, 120, and 400 neurons per layer, respectively." id="fig:fig15" />
       </div>
-      <p>The final image, with 400 neurons per layer, looks a bit like exploding static at this scale, which is the <span class="math inline">\(x, y\)</span> square <span class="math inline">\([-1, 1]^2.\)</span> Here’s a 30x zoom of this same network to show that it is indeed a continuous function, if a rather motley one:</p>
+      <p>The final image above, with 400 neurons per layer, looks a bit like exploding static at this scale, which is the <span class="math inline">\(x, y\)</span> square <span class="math inline">\([-1, 1]^2.\)</span> Here’s a 30x zoom of this same network to show that it is indeed a continuous function, if a rather motley one:</p>
       <div class="figure">
       <p class="caption">Figure 16: A 30x zoom of the 400-neurons-per-layer network in the lower-right corner of figure 15.</p>
       <img src="images/400_neuron_zoom@2x.png" alt="Figure 16: A 30x zoom of the 400-neurons-per-layer network in the lower-right corner of figure 15." id="fig:fig16" />
@@ -163,8 +163,8 @@
       </div>
       <p>Next is a series of images starting with a wide view of the <span class="math inline">\([-40, 40]^2\)</span> square in the upper-left. Each subsequent image is at about twice the zoom level of the previous. The middle image is at about the same scale as the figure above.</p>
       <div class="figure">
-      <p class="caption">Figure 18: The network from figure 17 shown at a number of different scales. The top-left image shows the square <span class="math inline">\([-40, 40]^2\)</span> in the <span class="math inline">\(x,y-\)</span>plane. Each subsequent image, read left-to-right, top-to-bottom, is at about twice the detail (so the second images shows the square <span class="math inline">\([-20, 20]^2\)</span>). The center of each image is the point <span class="math inline">\((0, 0).\)</span></p>
-      <img src="images/fig18@2x.png" alt="Figure 18: The network from figure 17 shown at a number of different scales. The top-left image shows the square [-40, 40]^2 in the x,y-plane. Each subsequent image, read left-to-right, top-to-bottom, is at about twice the detail (so the second images shows the square [-20, 20]^2). The center of each image is the point (0, 0)." id="fig:fig18" />
+      <p class="caption">Figure 18: The network from figure 17 shown at a number of different scales. The top-left image shows the square <span class="math inline">\([-40, 40]^2\)</span> in the <span class="math inline">\(x,y-\)</span>plane. Each subsequent image, read left to right, top to bottom, is at about twice the detail (so the second images shows the square <span class="math inline">\([-20, 20]^2\)</span>). The center of each image is the point <span class="math inline">\((0, 0).\)</span></p>
+      <img src="images/fig18@2x.png" alt="Figure 18: The network from figure 17 shown at a number of different scales. The top-left image shows the square [-40, 40]^2 in the x,y-plane. Each subsequent image, read left to right, top to bottom, is at about twice the detail (so the second images shows the square [-20, 20]^2). The center of each image is the point (0, 0)." id="fig:fig18" />
       </div>
       <p>If input data to our network extended over a wide numerical range, or if it were far from zero-centered, then the top-left image above would be the most relevant, and we can see that the behavior of the network is essentially <em>radial</em> (meaning that it forms a star-like pattern where the distance from center is not an important parameter); in other words, the image appears to be constrained to a certain kind of behavior that may not fit the data.</p>
       <p>On the other hand, the bottom-right image is also less than ideal because it presents a relatively smooth, low-detail surface which is likely to make training slower than it could be given stronger network gradients.</p>
