@@ -185,17 +185,21 @@
       <p>In other words, <span class="math inline">\(E\big[\|y\|^2\big] = n\sigma^2 \|x\|^2.\)</span> Since we can choose the standard deviation of our weights <span class="math inline">\(\sigma,\)</span> we can set</p>
       <p><span class="math display">\[\sigma = \frac{1}{\sqrt{n}},\]</span></p>
       <p>and we’ll arrive at <span class="math inline">\(E\big[\|y\|^2\big] = \|x\|^2,\)</span> which nicely matches our original goal (4). This is not the exact reasoning used to justify He or Glorot initialization, but it does provide a first look at how the weight scales affect the global behavior of the network as a whole.</p>
+      <h1 id="a-simple-equation"><span class="header-section-number">8</span> A Simple Equation</h1>
+      <p>When I was a kid, I discovered the world of fractals. I was fascinated. I dove into that world head-first, and in a way I’ve never really left it behind. Back then it was the best way I knew to share with others the beauty I see in so much of mathematics.</p>
+      <p>When I first showed random neural network images to my friends, they weren’t that impressed. I think it’s because I saw these images in the light of their mathematical simplicity — the surprisingly fun sworls of color, the curious dance between baroque and smear — all that from randomness and the simple setup of equation (1). Not only the simplicity, but the sense of discovery that comes with the best of these images, as they live in their own tiny oasis of life in hyperparameter space.</p>
+      <p>I hope this article has effectively communicated not only a conceptual appreciation for good hyperparameter choices, but a sense of the delightful behavior these objects exhibit. This is a rare case where we can see with our own eyes the elegant structure that rewards a mind willing to diligently explore the challenging landscape of mathematics.</p>
       <hr />
       <p><em><strong>Hi!</strong> I hope you enjoyed my article. As you can see, I love machine learning. If you’d like to work together on a machine learning project, I’d love to hear from you. My company, Unbox Research, has a small team of talented ML engineers. We specialize in helping content platforms make more intelligent use of their data, which translates to algorithmic text and image comprehension as well as driving user engagement through discovery or personalization. I’m <a href="mailto:tyler@unboxresearch.com">tyler@unboxresearch.com</a>.</em></p>
       <p><em>(I’m also teaching a course on TensorFlow in New York in Jan 2019! <a href="http://unboxresearch.com/tf101">Register here.</a>)</em></p>
       <hr />
-      <h1 id="notes-on-the-images"><span class="header-section-number">8</span> Notes on the Images</h1>
+      <h1 id="notes-on-the-images"><span class="header-section-number">9</span> Notes on the Images</h1>
       <p>If you like the images in this article, I encourage you to render and play with them for yourself — they’re surprisingly delightful. As I experimented, I felt as if I was exploring a new world. This section explains how I created them.</p>
-      <h2 id="figures-created-with-python"><span class="header-section-number">8.1</span> Figures Created with Python</h2>
+      <h2 id="figures-created-with-python"><span class="header-section-number">9.1</span> Figures Created with Python</h2>
       <p>All of the neural network images after figure 2, excluding the heightmaps, were created with <a href="https://github.com/tylerneylon/math/blob/master/randnn/notebook/randnn_images.ipynb">this Jupyter notebook</a>.</p>
-      <h2 id="figures-created-with-grapher"><span class="header-section-number">8.2</span> Figures Created with Grapher</h2>
+      <h2 id="figures-created-with-grapher"><span class="header-section-number">9.2</span> Figures Created with Grapher</h2>
       <p>The line graphs and 3D heightmap graphs were generated with Grapher. The corresponding Grapher files can be found in <a href="https://github.com/tylerneylon/math/tree/master/randnn/grapher">this directory on GitHub</a>.</p>
-      <h2 id="figures-created-with-shadertoy"><span class="header-section-number">8.3</span> Figures Created with Shadertoy</h2>
+      <h2 id="figures-created-with-shadertoy"><span class="header-section-number">9.3</span> Figures Created with Shadertoy</h2>
       <p>Figure 1 is a screenshot of a WebGL-renderable random neural network with the live-editable code <a href="https://www.shadertoy.com/view/MtdBz4">at this Shadertoy page</a>.</p>
       <p>There are two versions of figure 2 because I don’t think all browsers correctly display the live-rendered version, which uses WebGL. You can experiment with the live-rendered version in real time <a href="https://www.shadertoy.com/view/XltBR4">at this Shadertoy page</a>. The animated gif uses different parameters that you can find <a href="https://www.shadertoy.com/view/lldBz4">at this other Shadertoy page</a>.</p>
       <hr />

@@ -466,6 +466,28 @@ goal ([@eq:eq3]). This is not the exact reasoning used to justify He or Glorot
 initialization, but it does provide a first look at how the weight scales affect
 the global behavior of the network as a whole.
 
+# A Simple Equation
+
+When I was a kid, I discovered the world of fractals. I was fascinated. I dove
+into that world head-first, and in a way I've never really left it behind. Back
+then it was the best way I knew to share with others the beauty I see in so
+much of mathematics.
+
+When I first showed random neural network images to my friends, they weren't
+that impressed. I think it's because I saw these images in the light of their
+mathematical simplicity — the surprisingly fun sworls of color, the curious
+dance between baroque and smear — all that from randomness and the simple setup
+of equation ([@eq:eq0]).
+Not only the simplicity, but the sense of discovery that comes
+with the best of these images, as they live in their own tiny oasis of life in
+hyperparameter space.
+
+I hope this article has effectively communicated not only a conceptual
+appreciation for good hyperparameter choices, but a sense of the delightful
+behavior these objects exhibit. This is a rare case where we can see with our
+own eyes the elegant structure that rewards a mind willing to diligently
+explore the challenging landscape of mathematics.
+
 ---
 
 ***Hi!** I hope you enjoyed my article. As you can see, I love machine learning.
