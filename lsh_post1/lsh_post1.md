@@ -564,4 +564,19 @@ good at quickly finding nearby sets as well as nearby strings
 
 ---
 
+***Hi!** I hope you enjoyed my article. As you can see, I love building systems
+that get the most out of data.
+If you'd like to work together on a machine learning project, I'd love to hear
+from you. My company, Unbox Research, has a small team of talented ML engineers.
+We specialize in helping content platforms make more intelligent use of their
+data,
+which translates to algorithmic text and image comprehension
+as well as driving user engagement through discovery or personalization.
+I'm [tyler@unboxresearch.com](mailto:tyler@unboxresearch.com).*
+
+*(I'm also teaching a course on TensorFlow in New York in Jan 2019!
+[Register here.](http://unboxresearch.com/tf101))*
+
+---
+
 # References
