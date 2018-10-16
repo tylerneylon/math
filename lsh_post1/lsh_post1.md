@@ -572,10 +572,7 @@ We specialize in helping content platforms make more intelligent use of their
 data,
 which translates to algorithmic text and image comprehension
 as well as driving user engagement through discovery or personalization.
-I'm [tyler@unboxresearch.com](mailto:tyler@unboxresearch.com).*
-
-*(I'm also teaching a course on TensorFlow in New York in Jan 2019!
-[Register here.](http://unboxresearch.com/tf101))*
+Email me at [tyler@unboxresearch.com](mailto:tyler@unboxresearch.com).*
 
 ---
 
