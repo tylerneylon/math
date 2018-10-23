@@ -468,25 +468,25 @@ the global behavior of the network as a whole.
 
 # A Simple Equation
 
-When I was a kid, I discovered the world of fractals. I was fascinated. I dove
-into that world head-first, and in a way I've never really left it behind. Back
-then it was the best way I knew to share with others the beauty I see in so
-much of mathematics.
+As a kid in the '90s, I encountered a fractal-rendering program named
+[Fractint](https://en.wikipedia.org/wiki/Fractint). It was a window
+into a new world --- a world that is literally infinite in detail. Behind
+many fractals lie surprisingly simple equations. I dove into that world of
+explorable math head-first, and in a way I've never really left it.
+Before that point I already knew math was cool, but fractal images
+enabled me to easily share the beauty I saw in equations.
 
-When I first showed random neural network images to my friends, they weren't
-that impressed. I think it's because I saw these images in the light of their
-mathematical simplicity — the surprisingly fun sworls of color, the curious
-dance between baroque and smear — all that from randomness and the simple setup
-of equation ([@eq:eq0]).
-Not only the simplicity, but the sense of discovery that comes
-with the best of these images, as they live in their own tiny oasis of life in
-hyperparameter space.
+When I first showed random neural network images to a few friends, they
+weren't that impressed. I suspect it's because the mathematical elegance
+of these images isn't obvious in the pixels alone. The beauty is deeper:
+beneath these whorls of color that dance between baroque and
+impressionistic sits a bedrock of simplicity.
 
-I hope this article has effectively communicated not only a conceptual
-appreciation for good hyperparameter choices, but a sense of the delightful
-behavior these objects exhibit. This is a rare case where we can see with our
-own eyes the elegant structure that rewards a mind willing to diligently
-explore the challenging landscape of mathematics.
+This simplicity lives in a tiny oasis of finely-tuned values, nestled in the
+vast landscape of all possible hyperparameters. The power of neural networks
+does not come for free --- it is something earned by an informed appreciation
+for the shape, scope, and size of the networks you use. The rewards for this
+appreciation are great, both aesthetically and functionally.
 
 ---
 
