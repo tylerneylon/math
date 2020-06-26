@@ -34,7 +34,7 @@
 
       var lightStyle = {stroke: '#eee', fill: 'transparent', 'stroke-width': 3}
       var darkStyle = {stroke: '#666', fill: 'transparent', 'stroke-width': 1}
-      var fillStyle = {stroke: '#666', fill: '#ccc', 'stroke-width': 1}
+      var fillStyle = {stroke: '#666', fill: '#ddd', 'stroke-width': 1}
 
       if (!assert) {
         function assert(condition, message) {
@@ -344,6 +344,39 @@
         return {h: color.h, s: (0.5 * color.s), l: (0.6 * color.l)}
       }
 
+      function dot(x, y, r) {
+        if (r === null) { r = 3 } 
+        var circle = add(
+          'circle',
+          {stroke: '#666', fill: '#888', 'stroke-width': 1}
+        )
+        addAttributes(circle, {cx: x, cy: y, r: r})
+        return circle
+      }
+
+      function triGrid(x, y, angle, sideLen, gridCount) {
+
+        var gridLen = sideLen / gridCount
+
+        var x1 = Math.cos(angle)
+        var y1 = -Math.sin(angle)
+
+        var x2 = Math.cos(angle + Math.PI / 3)
+        var y2 = -Math.sin(angle + Math.PI / 3)
+
+        var r = gridCount < 8 ? 4 : 2.5
+        if (gridCount > 8) { r = 1.5 }
+
+        for (var i = 0; i <= gridCount; i++) {
+          for (var j = 0; i + j <= gridCount; j++) {
+            var x0 = x + i * x1 * gridLen + j * x2 * gridLen
+            var y0 = y + i * y1 * gridLen + j * y2 * gridLen
+            dot(x0, y0, r)
+          }
+        }
+
+      }
+
       function triangle(x, y, angle, sideLen, style) {
         var pts = []
 
@@ -378,12 +411,14 @@
 
       // --- Draw a series of equilateral triangles.
 
-      var x = 100
-      var y = 300
-      for (var i = 0; i < 6; i++) {
-        if (i === 3) { y += 300; x = 100 }
-        triangle(x, y, 0, 200)
-        x += 300
+      if (false) {
+        var x = 100
+        var y = 300
+        for (var i = 0; i < 6; i++) {
+          if (i === 3) { y += 300; x = 100 }
+          triangle(x, y, 0, 200)
+          x += 300
+        }
       }
 
       // --- Draw a slightly larger hexagon.
@@ -391,86 +426,11 @@
       var sixtyDegrees = Math.PI / 3
       var y = 900
       for (var i = 0; i < 6; i++) {
-          triangle(300, y, i * sixtyDegrees, 210, fillStyle)
+        triangle(300, y, i * sixtyDegrees, 210, lightStyle)
       }
-
-
-
-      if (false) {
-
-      // --- Setup graph 1: left addend.
-
-      xOffset = xMargin
-      yOffset = 0
-
-      frame1 = equalizeAxes(frame1)
-      drawAxes(frame1)
-
-      var poly = shapeBelowFn1AboveFn2(frame1, leftAddend, just0)
-      addAttributes(poly, {fill: colorStr(fill1)})
-
-      poly = drawFn(frame1, leftAddend)
-      addAttributes(poly, {stroke: colorStr(darken(fill1))})
-
-
-
-      // --- Setup graph 2: right addend.
-
-      yOffset = h1 + vSkip
-
-      drawAxes(frame1)
-
-      poly = shapeBelowFn1AboveFn2(frame1, rightAddend, just0)
-      addAttributes(poly, {fill: colorStr(fill2)})
-
-      poly = drawFn(frame1, rightAddend)
-      addAttributes(poly, {stroke: colorStr(darken(fill2))})
-
-
-
-      // --- Setup graph 3: sum.
-
-      xSize = w2
-      ySize = h2
-
-      xOffset = xSizeOrig - w2 - xMargin
-      yOffset = (h1 + vSkip) / 2
-
-      // Don't equalize axes on frame2 before now, as we just changed xSize and
-      // ySize.
-      frame2 = equalizeAxes(frame2)
-      drawAxes(frame2)
-
-      poly = shapeBelowFn1AboveFn2(frame2, leftAddend, just0)
-      addAttributes(poly, {fill: colorStr(fill1), stroke: 'transparent'})
-
-      poly = drawFn(frame2, leftAddend)
-      addAttributes(poly, {stroke: '#fff'})
-
-      poly = shapeBelowFn1AboveFn2(frame2, sumFn, leftAddend)
-      addAttributes(poly, {fill: colorStr(fill2), stroke: 'transparent'})
-
-      drawFn(frame2, sumFn)
-
-
-      // --- The + and = characters.
-
-      var yText = h1 + vSkip / 2 + 15
-
-      var text = add('text', lightStyle)
-      addAttributes(text, {x: (w1 / 2 + xMargin - 20), y: yText,
-                           fill: '#ddd', stroke: 'transparent'})
-      addAttributes(text, {'font-size': '64px'})
-      text.innerHTML = '+'
-
-      var text = add('text', lightStyle)
-      addAttributes(text, {x: (xSizeOrig - w2 + w1) / 2 - 20, y: yText,
-                           fill: '#ddd', stroke: 'transparent'})
-      addAttributes(text, {'font-size': '64px'})
-      text.innerHTML = '='
-
+      for (var i = 0; i < 6; i++) {
+        triGrid(300, y, i * sixtyDegrees, 210, 16)
       }
-
     </script>
   </body>
 </html>
