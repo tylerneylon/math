@@ -59,13 +59,41 @@ function addDot(pt) {
     return draw.circle(pt, dotStyle);
 }
 
-// TODO HERE Make this function actually work.
 // For each perm p in S_n (for the given n), call cb(perm_str), where
 // perm_str is the string for perm'n p; eg "1432".
+//
+// This is algorithm L from Knuth's section 7.2.1.2.
+// It provides all permutations in lexicographic order.
 function forAllPerms(n, cb) {
-    var tmp = ["123", "132", "213", "231", "312", "321"];
-    for (var i = 0; i < tmp.length; i++) {
-        cb(tmp[i]);
+
+    console.assert(n >= 3, 'This permutation iterator assumes n >= 3.');
+
+    let perm = [];
+    for (let i = 1; i <= n; i++) {
+        perm.push(i.toString());
+    }
+
+    while (true) {
+
+        cb(perm.join(''));
+
+        // Find the rightmost j with perm[j] < perm[j + 1].
+        let j = n - 2;
+        while (j >= 0 && perm[j] > perm[j + 1]) j--;
+        if (j == -1) return;
+
+        // Find the rightmost k with perm[k] > perm[j].
+        let k = n - 1;
+        while (perm[k] < perm[j]) k--;
+
+        // Swap perm[j] and perm[k]. This makes perm[j] a tiny bit bigger.
+        let tmp = perm[j];
+        perm[j] = perm[k];
+        perm[k] = tmp;
+
+        // Reverse perm[j + 1] .. perm[n - 1].
+        let newEnd = perm.slice(j + 1).reverse();
+        perm = perm.slice(0, j + 1).concat(newEnd);
     }
 }
 

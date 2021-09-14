@@ -6,3 +6,4 @@
 .DS_Store
 Session.vim
 .ipynb_checkpoints/
+__pycache__/
