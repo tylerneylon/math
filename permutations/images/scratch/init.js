@@ -1,6 +1,6 @@
-/* img1.js
+/* init.js
  *
- * Draw G_3 using random points in a circle.
+ * Simplify drawing startup.
  *
  */
 
@@ -16,7 +16,7 @@ import * as random from './random.js';
 // ______________________________________________________________________
 // Globals and constants
 
-var xSize = 1000, ySize = 1000;
+var xSize = 750, ySize = 750;
 
 var xMid = xSize / 2;
 var yMid = ySize / 2;
@@ -27,10 +27,9 @@ var toCanvasScale = canvasSize / 2.0;
 
 
 // ______________________________________________________________________
-// Main
+// Public functions
 
-window.addEventListener('DOMContentLoaded', (event) => {
-
+export function setup() {
     // Set up graphic components.
     const svg = document.getElementById('svg');
     draw.addAttributes(svg, {width: xSize, height: ySize});
@@ -41,15 +40,4 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     // Set a deterministic seed so the image is reproducible.
     random.seed(6);
-
-    // For debugging: Draw the unit circle's circumference.
-    var lightStyle = {
-        stroke: '#f4f4f4',
-        fill: 'transparent',
-        'stroke-width': 2
-    };
-    draw.circle({x: 0, y: 0}, 1, lightStyle);
-
-    // Draw G_3.
-    perm.drawGn(3);
-});
+}
