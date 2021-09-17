@@ -211,6 +211,7 @@ export function circle(center, radius, style, parent) {
 
     // We might receive a style without a radius.
     if (typeof radius === 'object') {
+        parent = style;
         style = radius;
         radius = undefined;
     } else if (style === undefined) {
@@ -254,5 +255,7 @@ export function text(leftBaseline, str, style, parent) {
     var t = add('text', style, parent);
     t.innerHTML = str;
     addAttributes(t, {x: leftBaseline.x, y: leftBaseline.y});
+    // addAttributes(t, {style: 'font-family: sans-serif'});  // XXX
+    // addAttributes(t, {fontFamily: 'Arial'});  // XXX
     return t;
 }

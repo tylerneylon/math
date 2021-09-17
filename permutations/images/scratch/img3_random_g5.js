@@ -1,6 +1,6 @@
-/* img1_random_g3.js
+/* img3_random_g5.js
  *
- * Draw G_3 using random points in a circle.
+ * Draw G_5 using random points in a circle.
  *
  */
 
@@ -18,6 +18,6 @@ import * as perm   from './perm.js';
 window.addEventListener('DOMContentLoaded', (event) => {
 
     init.setup();
-    perm.drawRandomGn(3);  // Draw G_3.
+    perm.drawRandomGn(5);  // Draw G_5.
 
 });
