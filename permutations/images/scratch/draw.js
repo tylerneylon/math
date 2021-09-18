@@ -149,10 +149,11 @@ export function add(eltName, attr, parent) {
 }
 
 export function addAttributes(elt, attr) {
-  for (var key in attr) {
-    elt.setAttribute(key, attr[key]);
-  }
-  return elt;
+    for (var key in attr) {
+        // console.log('Setting attribute:', elt, key, attr[key]);  // XXX
+        elt.setAttribute(key, attr[key]);
+    }
+    return elt;
 }
 
 export function addAtEnd(elt, parent) {

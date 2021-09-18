@@ -17,7 +17,7 @@ import * as random from './random.js';
 
 var styleScale = 1.0;
 var edgeStyle = {
-    stroke: '#aaa',
+    stroke: '#ddd',
     fill: 'transparent',
     'stroke-width': 1.5 * styleScale
 };
@@ -26,14 +26,14 @@ var textOutlineStyle = {
     fill: 'transparent',
     'stroke-width': 10 * styleScale,
     visibility: 'hidden',
-    style: {'font-family': 'sans-serif'}
+    style: 'font-family: sans-serif'
 }
 var textStyle = {
     stroke: 'transparent',
-    fill: '#777',
+    fill: '#ddd',
     'stroke-width': 10 * styleScale,
     visibility: 'hidden',
-    style: {'font-family': 'sans-serif'}
+    style: 'font-family: sans-serif'
 }
 let dotStyle = {
     stroke: 'transparent',
@@ -41,10 +41,9 @@ let dotStyle = {
     r: 3 * styleScale
 };
 
-
-var mainHighlightColor = '#00f';
-var edgeHighlightColor = '#44a';
-var nborHighlightColor = '#559';
+var mainHighlightColor = '#07f';
+var edgeHighlightColor = '#37a';
+var nborHighlightColor = '#00f';
 
 
 // ______________________________________________________________________
@@ -64,15 +63,48 @@ function addDot(pt, outlineGroup, frontGroup) {
         r: 7 * styleScale
     };
 
-    draw.circle(pt, outlineStyle, outlineGroup);
-    return draw.circle(pt, dotStyle, frontGroup);
+    let outline = draw.circle(pt, outlineStyle, outlineGroup);
+    let hitDot  = draw.circle(pt, outlineStyle, frontGroup);
+    draw.addAttributes(hitDot, {fill: 'transparent'});
+    let circle  = draw.circle(pt, dotStyle, frontGroup);
+    return [outline, hitDot, circle];
 }
 
+// Ensure that elt[prop] exists; if not, create it as an empty array.
+// Push newItem onto the end of that array.
 function addToPropArray(elt, prop, newItem) {
     if (!elt.hasOwnProperty(prop)) {
         elt[prop] = [];
     }
     elt[prop].push(newItem);
+}
+
+function setLabelVisibility(pt, visibility) {
+    for (let textElt of pt.textElts) {
+        textElt.setAttribute('visibility', visibility);
+    }
+}
+
+// This returns a handler that updates graph colors based on `colors`.
+// This is designed for use in mouseover and mouseout events.
+function getGraphColorer(ptMap, pt, colors) {
+    let circle = pt.elt;
+    return function () {
+        circle.setAttribute('fill', colors.mainDotColor);
+        setLabelVisibility(pt, colors.textVisibility);
+        pt.textElts[1].setAttribute('fill', colors.labelColor);
+        for (let edgeElt of pt.edgeElts) {
+            let edgeGroup = edgeElt.parentElement;
+            edgeElt.remove();
+            edgeGroup.append(edgeElt);
+            edgeElt.setAttribute('stroke', colors.edgeColor);
+        }
+        for (let edge of pt.edges) {
+            let nborElt = ptMap[edge[2]].elt;
+            nborElt.setAttribute('fill', colors.nborColor);
+            setLabelVisibility(ptMap[edge[2]], colors.textVisibility);
+        }
+    };
 }
 
 // For each perm p in S_n (for the given n), call cb(perm_str), where
@@ -103,9 +135,7 @@ function forAllPerms(n, cb) {
         while (perm[k] < perm[j]) k--;
 
         // Swap perm[j] and perm[k]. This makes perm[j] a tiny bit bigger.
-        let tmp = perm[j];
-        perm[j] = perm[k];
-        perm[k] = tmp;
+        [perm[j], perm[k]] = [perm[k], perm[j]];
 
         // Reverse perm[j + 1] .. perm[n - 1].
         let newEnd = perm.slice(j + 1).reverse();
@@ -154,16 +184,6 @@ function addPtMapEdges(n, ptMap) {
 
 export function drawRandomGn(n) {
 
-    // XXX
-    //
-    // Plan:
-    // 
-    // * Associate with each dot (foreground circle) the list of adjacent edges
-    //   as well as the list of neighboring points.
-    // * On mouseover, highlight this point, nbors, adjacent edges, and show
-    //   labels for all these points.
-    //
-
     // Come up with a map from strings like "1432" to an {x, y} point in the
     // unit circle around the origin.
     let ptMap = makeRandomPtMap(n);
@@ -174,17 +194,6 @@ export function drawRandomGn(n) {
     // The returned array `edges` is an array of
     // [fromPt, toPt, fromPerm, toPerm] values without redundancy.
     let edges = addPtMapEdges(n, ptMap);
-
-    // XXX
-    if (false) {
-        console.log('\n');
-        console.log('edges:');
-        console.log(edges);
-
-        console.log('\n');
-        console.log('ptMap:');
-        console.log(ptMap);
-    }
 
     // Prepare the group elements.
     let edgeGroup    = draw.add('g');
@@ -206,36 +215,36 @@ export function drawRandomGn(n) {
     for (const [perm, pt] of Object.entries(ptMap)) {
         let eps = 0.01
         let leftBaseline = draw.translate(pt, {x: eps, y: -eps});
-        pt.textElts = [];
-        pt.textElts.push(
-            draw.text(leftBaseline, perm, textOutlineStyle, outlineGroup)
-        );
-        pt.textElts.push(
+        pt.textElts = [
+            draw.text(leftBaseline, perm, textOutlineStyle, outlineGroup),
             draw.text(leftBaseline, perm, textStyle, frontGroup)
-        );
+        ];
     }
     // Draw the points.
+    let highlightColors = {
+        mainDotColor: mainHighlightColor,
+        labelColor:   mainHighlightColor,
+        edgeColor:    edgeHighlightColor,
+        nborColor:    nborHighlightColor,
+        textVisibility: 'visible'
+    };
+    let unhighlightColors = {
+        mainDotColor: dotStyle.fill,
+        labelColor:   textStyle.fill,
+        edgeColor:    edgeStyle.stroke,
+        nborColor:    dotStyle.fill,
+        textVisibility: 'hidden'
+    };
     for (const [perm, pt] of Object.entries(ptMap)) {
-        let circle = addDot(pt, outlineGroup, frontGroup);
-        circle.addEventListener('mouseover', function (event) {
-            circle.setAttribute('fill', mainHighlightColor);
-            for (let textElt of pt.textElts) {
-                textElt.setAttribute('visibility', 'visible');
-            }
-            pt.textElts[1].setAttribute('fill', mainHighlightColor);
-            for (let edgeElt of pt.edgeElts) {
-                edgeElt.setAttribute('stroke', edgeHighlightColor);
-            }
-        });
-        circle.addEventListener('mouseout', function (event) {
-            circle.setAttribute('fill', dotStyle.fill);
-            for (let textElt of pt.textElts) {
-                textElt.setAttribute('visibility', 'hidden');
-            }
-            for (let edgeElt of pt.edgeElts) {
-                edgeElt.setAttribute('stroke', edgeStyle.stroke);
-            }
-        });
+        let [outline, hitDot, circle] = addDot(pt, outlineGroup, frontGroup);
+        pt.elt = circle;
+
+        let highlighter = getGraphColorer(ptMap, pt, highlightColors);
+        let unhighlighter = getGraphColorer(ptMap, pt, unhighlightColors);
+        for (let elt of [hitDot, circle]) {
+            elt.addEventListener('mouseover', highlighter);
+            elt.addEventListener('mouseout', unhighlighter);
+        }
     }
 }
 
