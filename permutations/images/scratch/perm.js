@@ -182,12 +182,7 @@ function addPtMapEdges(n, ptMap) {
     return edges;
 }
 
-export function drawRandomGn(n) {
-
-    // Come up with a map from strings like "1432" to an {x, y} point in the
-    // unit circle around the origin.
-    let ptMap = makeRandomPtMap(n);
-
+function drawGraphWithPtMap(ptMap, n) {
     // Add 'edges' to each point value in ptMap. Each `edges` value is a list of
     // [from, to, dest]; each of `from` and `to` is an {x, y} point. `dest` is
     // the permutation string of the other side of the edge.
@@ -246,5 +241,39 @@ export function drawRandomGn(n) {
             elt.addEventListener('mouseout', unhighlighter);
         }
     }
+
+}
+
+function factorial(n) {
+    let value = 1;
+    for (let i = 2; i <= n; i++) value *= i;
+    return value;
+}
+
+// Render G_n in the unit coordinate square [-w,w]^2, w=0.8.
+export function drawBipartiteGn(n) {
+
+    let w = 0.8;  // The size of the subsquare we use for rendering.
+
+    // Determine the number of points per column.
+    let k = factorial(n) / 2;
+    console.log('k', k);  // XXX
+
+    let ptMap = {};
+    let [x, y] = [-w, -w];
+    let dy = 2 * w / (k - 1);
+    forAllPerms(n, function (perm_str) {
+        ptMap[perm_str] = {x, y};
+        x *= -1;
+        if (x < 0) y += dy;
+    });
+    drawGraphWithPtMap(ptMap, n);
+}
+
+export function drawRandomGn(n) {
+    // Come up with a map from strings like "1432" to an {x, y} point in the
+    // unit circle around the origin.
+    let ptMap = makeRandomPtMap(n);
+    drawGraphWithPtMap(ptMap, n);
 }
 
