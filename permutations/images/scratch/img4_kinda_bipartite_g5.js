@@ -23,6 +23,7 @@ import * as perm   from './perm.js';
 window.addEventListener('DOMContentLoaded', (event) => {
 
     init.setup();
-    perm.drawBipartiteGn(5);  // Draw G_5.
+    let useLexOrdering = true;
+    perm.drawBipartiteGn(5, useLexOrdering);  // Draw G_5.
 
 });

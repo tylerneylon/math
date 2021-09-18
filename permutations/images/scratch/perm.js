@@ -15,35 +15,35 @@ import * as random from './random.js';
 // ______________________________________________________________________
 // Globals and constants
 
-var styleScale = 1.0;
-var edgeStyle = {
+export let styleScale = 1.0;
+export let edgeStyle = {
     stroke: '#ddd',
     fill: 'transparent',
     'stroke-width': 1.5 * styleScale
 };
-var textOutlineStyle = {
+let textOutlineStyle = {
     stroke: 'white',
     fill: 'transparent',
     'stroke-width': 10 * styleScale,
     visibility: 'hidden',
     style: 'font-family: sans-serif'
 }
-var textStyle = {
+let textStyle = {
     stroke: 'transparent',
     fill: '#ddd',
     'stroke-width': 10 * styleScale,
     visibility: 'hidden',
     style: 'font-family: sans-serif'
 }
-let dotStyle = {
+export let dotStyle = {
     stroke: 'transparent',
     fill:   '#888',
     r: 3 * styleScale
 };
 
-var mainHighlightColor = '#07f';
-var edgeHighlightColor = '#37a';
-var nborHighlightColor = '#00f';
+let mainHighlightColor = '#07f';
+let edgeHighlightColor = '#37a';
+let nborHighlightColor = '#00f';
 
 
 // ______________________________________________________________________
@@ -112,7 +112,7 @@ function getGraphColorer(ptMap, pt, colors) {
 //
 // This is algorithm L from Knuth's section 7.2.1.2.
 // It provides all permutations in lexicographic order.
-function forAllPerms(n, cb) {
+function forAllPermsLex(n, cb) {
 
     console.assert(n >= 3, 'This permutation iterator assumes n >= 3.');
 
@@ -143,6 +143,50 @@ function forAllPerms(n, cb) {
     }
 }
 
+// For each perm p in S_n (for the given n), call cb(perm_str), where
+// perm_str is the string for perm'n p; eg "1432".
+//
+// This is algorithm P from Knuth's section 7.2.1.2, also known as the "plain
+// changes" algorithm.
+// It provides all permutations, always using a single transposition to go from
+// one permutation to the next.
+function forAllPermsPlain(n, cb) {
+
+    console.assert(n >= 3, 'This permutation iterator assumes n >= 3.');
+
+    let c    = Array(n).fill(0);
+    let sign = Array(n).fill(1);
+
+    let perm = [];
+    for (let i = 1; i <= n; i++) {
+        perm.push(i.toString());
+    }
+
+    while (true) {
+
+        cb(perm.join(''));
+
+        let j = n - 1;
+        let s = 0;
+        let q = 0;
+
+        while (true) {
+            q = c[j] + sign[j];
+            if (q > j) {
+                if (j === 1) return;
+                s++;
+            }
+            if (0 <= q && q <= j) break;
+            sign[j] *= -1;
+            j--;
+        }
+
+        let [a, b] = [j - c[j] + s, j - q + s];  // We'll swap these indexes.
+        [perm[a], perm[b]] = [perm[b], perm[a]];
+        c[j] = q;
+    }
+}
+
 // For each transposition t in S_n, call cb(t). Each t is denoted as a
 // string starting with "t", such as "t23".
 function forAllTranspositions(n, cb) {
@@ -159,7 +203,7 @@ function applyTransposition(perm, t) {
 
 function makeRandomPtMap(n) {
     var ptMap = {};
-    forAllPerms(n, function (perm_str) {
+    forAllPermsLex(n, function (perm_str) {
         ptMap[perm_str] = random.ptInCircle();
     });
     return ptMap;
@@ -250,18 +294,24 @@ function factorial(n) {
     return value;
 }
 
-// Render G_n in the unit coordinate square [-w,w]^2, w=0.8.
-export function drawBipartiteGn(n) {
+// Render G_n in the rectangle from [-a,-b] to [a, b].
+export function drawBipartiteGn(n, useLexOrdering) {
 
-    let w = 0.8;  // The size of the subsquare we use for rendering.
+    if (useLexOrdering === undefined) {
+        useLexOrdering = false;
+    }
+    let forAllPerms = useLexOrdering ? forAllPermsLex : forAllPermsPlain;
+
+    // Set the size of the subsquare we use for rendering.
+    let a = 0.5;
+    let b = 0.8;
 
     // Determine the number of points per column.
     let k = factorial(n) / 2;
-    console.log('k', k);  // XXX
 
     let ptMap = {};
-    let [x, y] = [-w, -w];
-    let dy = 2 * w / (k - 1);
+    let [x, y] = [-a, -b];
+    let dy = 2 * b / (k - 1);
     forAllPerms(n, function (perm_str) {
         ptMap[perm_str] = {x, y};
         x *= -1;
