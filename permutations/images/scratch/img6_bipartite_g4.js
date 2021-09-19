@@ -1,4 +1,4 @@
-/* img6_kinda_bipartite_g4.js
+/* img6_bipartite_g4.js
  *
  * Draw G_4 as a bipartite graph.
  *

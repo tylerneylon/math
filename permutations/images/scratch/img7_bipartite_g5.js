@@ -1,4 +1,4 @@
-/* img7_kinda_bipartite_g5.js
+/* img7_bipartite_g5.js
  *
  * Draw G_5 as a bipartite graph.
  *

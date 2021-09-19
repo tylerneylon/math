@@ -312,8 +312,8 @@ export function drawBipartiteGn(n, useLexOrdering) {
     let ptMap = {};
     let [x, y] = [-a, -b];
     let dy = 2 * b / (k - 1);
-    forAllPerms(n, function (perm_str) {
-        ptMap[perm_str] = {x, y};
+    forAllPerms(n, function (permStr) {
+        ptMap[permStr] = {x, y};
         x *= -1;
         if (x < 0) y += dy;
     });
@@ -324,6 +324,31 @@ export function drawRandomGn(n) {
     // Come up with a map from strings like "1432" to an {x, y} point in the
     // unit circle around the origin.
     let ptMap = makeRandomPtMap(n);
+    drawGraphWithPtMap(ptMap, n);
+}
+
+export function drawCircularGn(n, useLexOrdering) {
+
+    let radius = 0.8;
+
+    if (useLexOrdering === undefined) {
+        useLexOrdering = false;
+    }
+
+    let forAllPerms = useLexOrdering ? forAllPermsLex : forAllPermsPlain;
+
+    let numPts = factorial(n);
+    let angleDelta = 2 * Math.PI / numPts;
+    let ptMap = {};
+    let angle = 0.0;
+    forAllPerms(n, function (permStr) {
+        ptMap[permStr] = {
+            x: radius * Math.cos(angle),
+            y: radius * Math.sin(angle)
+        };
+        angle += angleDelta;
+    });
+
     drawGraphWithPtMap(ptMap, n);
 }
 
