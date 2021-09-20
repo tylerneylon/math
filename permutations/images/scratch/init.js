@@ -17,6 +17,7 @@ import * as random from './random.js';
 // Globals and constants
 
 var xSize = 750, ySize = 750;
+// var xSize = 7500, ySize = 7500;
 
 var xMid = xSize / 2;
 var yMid = ySize / 2;

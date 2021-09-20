@@ -30,6 +30,10 @@
       .btn-group button:hover {
         background-color: #3e8e41;
       }
+
+      .btn-group .btn-active {
+        background-color: blue;
+      }
     </style>
   </head>
   <body style="background-color:#eee">
@@ -41,17 +45,18 @@
     <br />
     n:
     <div class="btn-group">
-      <button id="n3">3</button>
+      <button id="n3" class="btn-active">3</button>
       <button id="n4">4</button>
       <button id="n5">5</button>
       <button id="n6">6</button>
+      <button id="n7">7</button>
     </div>
 
     <br />
     layout:
     <div class="btn-group">
       <button id="lex">lexicographic</button>
-      <button id="plain">plain changes</button>
+      <button id="plain" class="btn-active">plain changes</button>
     </div>
 
     <script type="module" src="img8_circular.js"></script>

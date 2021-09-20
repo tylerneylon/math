@@ -37,7 +37,11 @@ function refreshGraph() {
         defaultStyles.dotRadius = perm.dotStyle.r;
     }
 
-    if (n > 5) {
+    if (n === 7) {
+      perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.02;
+      perm.edgeStyle.stroke = '#bbb';
+      perm.dotStyle.r = defaultStyles.dotRadius * 0.1;
+    } else if (n === 6) {
       perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.2;
       perm.edgeStyle.stroke = '#bbb';
       perm.dotStyle.r = defaultStyles.dotRadius * 0.7;
@@ -51,27 +55,45 @@ function refreshGraph() {
 }
 
 function setupButtons() {
-    let nIds = ['n3', 'n4', 'n5', 'n6'];
+    let nIds = ['n3', 'n4', 'n5', 'n6', 'n7'];
     for (let i = 0; i < nIds.length; i++) {
         let nId = nIds[i];
         let button = document.getElementById(nId);
         button.onclick = function () {
-            console.log('Re-render for n=', i + 3);
+            for (let otherId of nIds) {
+                document.getElementById(otherId).classList.remove('btn-active');
+            }
+            button.classList.add('btn-active');
             n = i + 3;
             refreshGraph();
         };
     }
+    let [lexBtn, plainBtn] = [
+        document.getElementById('lex'),
+        document.getElementById('plain')
+    ];
+    lexBtn.onclick = function () {
+        plainBtn.classList.remove('btn-active');
+        lexBtn.classList.add('btn-active');
+        useLexOrdering = true;
+        refreshGraph();
+    };
+    plainBtn.onclick = function () {
+        lexBtn.classList.remove('btn-active');
+        plainBtn.classList.add('btn-active');
+        useLexOrdering = false;
+        refreshGraph();
+    };
 }
 
 
 // ______________________________________________________________________
 // Main
 
-// TODO HERE
+// FUTURE
 //
-// * Make the layout buttons functional.
-// * Try to make the style (eg edge weights) look decent for all n.
-// * Clearly show with buttons what is active.
+// * Render the node labels in a dot-specific fashion so that they're always
+//   outside the circle (lowering overlap with nodes and edges).
 //
 
 window.addEventListener('DOMContentLoaded', (event) => {
