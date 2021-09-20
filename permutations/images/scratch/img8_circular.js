@@ -17,6 +17,7 @@ import * as perm   from './perm.js';
 
 let useLexOrdering = false;
 let n = 3;
+let defaultStyles = null;
 
 
 // ______________________________________________________________________
@@ -29,10 +30,21 @@ function refreshGraph() {
     const svg = document.getElementById('svg');
     svg.replaceChildren();
 
+    if (defaultStyles === null) {
+        defaultStyles = {};
+        defaultStyles.edgeWidth = perm.edgeStyle['stroke-width'];
+        defaultStyles.edgeStroke = perm.edgeStyle.stroke;
+        defaultStyles.dotRadius = perm.dotStyle.r;
+    }
+
     if (n > 5) {
-      perm.edgeStyle['stroke-width'] *= 0.2;
+      perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.2;
       perm.edgeStyle.stroke = '#bbb';
-      perm.dotStyle.r *= 0.7;
+      perm.dotStyle.r = defaultStyles.dotRadius * 0.7;
+    } else {
+      perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth;
+      perm.edgeStyle.stroke = defaultStyles.edgeStroke;
+      perm.dotStyle.r = defaultStyles.dotRadius;
     }
 
     perm.drawCircularGn(n, useLexOrdering);
@@ -57,7 +69,6 @@ function setupButtons() {
 
 // TODO HERE
 //
-// * Make the style consistent for each given n.
 // * Make the layout buttons functional.
 // * Try to make the style (eg edge weights) look decent for all n.
 // * Clearly show with buttons what is active.
