@@ -288,6 +288,35 @@ function drawGraphWithPtMap(ptMap, n) {
 
 }
 
+// Convert a permutation string like "21453" into a cycle string like
+// "(12)(345)".
+export function getCycleStr(permStr) {
+    // Permutations are historically 1-indexed (their first element is 1), so I
+    // will ignore index 0 for the arrays in this function.
+    let perm = ('0' + permStr).split('').map(x => parseInt(x));
+    let n = permStr.length;
+    let cycles = [];
+    let isDone = Array(n + 1).fill(false);
+    for (let i = 1; i <= n; i++) {
+        if (isDone[i]) continue;
+        let cycle = [i];
+        let j = i;
+        while (true) {
+            isDone[j] = true;
+            if (perm[j] === cycle[0]) {
+                if (cycle.length > 1) cycles.push(cycle);
+                break;
+            } else {
+                cycle.push(perm[j]);
+                j = perm[j];
+            }
+        }
+    }
+    let s = cycles.map(c => `(${c.join('')})`).join('');
+    if (s === '') s = 'e';  // Treat the identity as a special case.
+    return s;
+}
+
 function factorial(n) {
     let value = 1;
     for (let i = 2; i <= n; i++) value *= i;
