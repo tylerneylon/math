@@ -87,7 +87,7 @@ function setupButtons() {
         };
     }
 
-    let orderIds  = ['lex', 'plain'];
+    let orderIds  = ['lex', 'plain', 'random'];
     let orderElts = getButtons(orderIds);
     for (let i = 0; i < orderIds.length; i++) {
         let button = orderElts[i];

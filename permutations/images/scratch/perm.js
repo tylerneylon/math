@@ -187,6 +187,32 @@ function forAllPermsPlain(n, cb) {
     }
 }
 
+// This is a Fisher-Yates shuffle; I got the code from here:
+// https://stackoverflow.com/a/12646864/3561
+function shuffleArray(array) {
+    random.seed(3);
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = random.int(i + 1);  // An int in the range [0, i].
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+// For each perm p in S_n (for the given n), call cb(perm_str), where
+// perm_str is the string for perm'n p; eg "1432".
+//
+// This uses algorithm P (plain changes) behind the scenes, and then applies a
+// shuffle.
+function forAllPermsRandom(n, cb) {
+
+    console.assert(n >= 3, 'This permutation iterator assumes n >= 3.');
+
+    let perms = [];
+    forAllPermsPlain(n, function (perm) { perms.push(perm); });
+    shuffleArray(perms);
+
+    for (let perm of perms) cb(perm);
+}
+
 // For each transposition t in S_n, call cb(t). Each t is denoted as a
 // string starting with "t", such as "t23".
 function forAllTranspositions(n, cb) {
@@ -369,6 +395,8 @@ export function drawCircularGn(n, orderingType) {
         forAllPerms = forAllPermsPlain;
     } else if (orderingType === 'lex') {
         forAllPerms = forAllPermsLex;
+    } else if (orderingType === 'random') {
+        forAllPerms = forAllPermsRandom;
     }
 
     let numPts = factorial(n);
