@@ -356,15 +356,20 @@ export function drawRandomGn(n) {
     drawGraphWithPtMap(ptMap, n);
 }
 
-export function drawCircularGn(n, useLexOrdering) {
+export function drawCircularGn(n, orderingType) {
 
     let radius = 0.8;
 
-    if (useLexOrdering === undefined) {
-        useLexOrdering = false;
+    if (orderingType === undefined) {
+        orderingType = 'plain';
     }
 
-    let forAllPerms = useLexOrdering ? forAllPermsLex : forAllPermsPlain;
+    let forAllPerms = null;
+    if (orderingType === 'plain') {
+        forAllPerms = forAllPermsPlain;
+    } else if (orderingType === 'lex') {
+        forAllPerms = forAllPermsLex;
+    }
 
     let numPts = factorial(n);
     let angleDelta = 2 * Math.PI / numPts;

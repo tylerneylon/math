@@ -15,7 +15,7 @@ import * as perm   from './perm.js';
 // ______________________________________________________________________
 // Globals
 
-let useLexOrdering = false;
+let orderingType = 'plain';
 let n = 3;
 let defaultStyles = null;
 
@@ -23,7 +23,7 @@ let defaultStyles = null;
 // ______________________________________________________________________
 // Functions
 
-// This uses the globals `n` and useLexOrdering to determine how to render
+// This uses the globals `n` and orderingType to determine how to render
 // the graph.
 function refreshGraph() {
 
@@ -51,39 +51,52 @@ function refreshGraph() {
       perm.dotStyle.r = defaultStyles.dotRadius;
     }
 
-    perm.drawCircularGn(n, useLexOrdering);
+    perm.drawCircularGn(n, orderingType);
+}
+
+// A helper function for button groups.
+// Get a list of elements given a list of ids.
+function getButtons(buttonIds) {
+    let buttonElts = [];
+    for (let id of buttonIds) {
+        buttonElts.push(document.getElementById(id));
+    }
+    return buttonElts;
+}
+
+// A helper function for button groups.
+// Add the class 'btn-active' to buttonElt, while ensuring that class is absent
+// from the other elements in groupElts.
+function activateOneInGroup(buttonElt, groupElts) {
+    for (let elt of groupElts) {
+        elt.classList.remove('btn-active');
+    }
+    buttonElt.classList.add('btn-active');
 }
 
 function setupButtons() {
+
     let nIds = ['n3', 'n4', 'n5', 'n6', 'n7'];
-    for (let i = 0; i < nIds.length; i++) {
-        let nId = nIds[i];
-        let button = document.getElementById(nId);
+    let nElts = getButtons(nIds);
+    for (let i = 0; i < nElts.length; i++) {
+        let button = nElts[i];
         button.onclick = function () {
-            for (let otherId of nIds) {
-                document.getElementById(otherId).classList.remove('btn-active');
-            }
-            button.classList.add('btn-active');
+            activateOneInGroup(button, nElts);
             n = i + 3;
             refreshGraph();
         };
     }
-    let [lexBtn, plainBtn] = [
-        document.getElementById('lex'),
-        document.getElementById('plain')
-    ];
-    lexBtn.onclick = function () {
-        plainBtn.classList.remove('btn-active');
-        lexBtn.classList.add('btn-active');
-        useLexOrdering = true;
-        refreshGraph();
-    };
-    plainBtn.onclick = function () {
-        lexBtn.classList.remove('btn-active');
-        plainBtn.classList.add('btn-active');
-        useLexOrdering = false;
-        refreshGraph();
-    };
+
+    let orderIds  = ['lex', 'plain'];
+    let orderElts = getButtons(orderIds);
+    for (let i = 0; i < orderIds.length; i++) {
+        let button = orderElts[i];
+        button.onclick = function () {
+            activateOneInGroup(button, orderElts);
+            orderingType = orderIds[i];
+            refreshGraph();
+        };
+    }
 }
 
 
@@ -101,5 +114,5 @@ window.addEventListener('DOMContentLoaded', (event) => {
     init.setup();
     setupButtons();
 
-    perm.drawCircularGn(n, useLexOrdering);
+    perm.drawCircularGn(n, orderingType);
 });
