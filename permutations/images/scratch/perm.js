@@ -366,7 +366,21 @@ function factorial(n) {
 }
 
 // Render G_n is an n-partite graph in the rectangle from [-a, -b] to [a, b].
-export function drawNPartiteGn(n) {
+export function drawNPartiteGn(n, orderingType) {
+
+    if (orderingType === undefined) {
+        orderingType = 'plain';
+    }
+
+    let forAllPerms = null;
+    if (orderingType === 'plain') {
+        forAllPerms = forAllPermsPlain;
+    } else if (orderingType === 'lex') {
+        forAllPerms = forAllPermsLex;
+    } else if (orderingType === 'random') {
+        forAllPerms = forAllPermsRandom;
+    }
+
     let a = 0.8;
     let b = 0.8;
 
@@ -374,7 +388,7 @@ export function drawNPartiteGn(n) {
     for (let i = 0; i < n; i++) columns.push([]);
 
     let ptMap = {};
-    forAllPermsLex(n, function (permStr) {
+    forAllPerms(n, function (permStr) {
         let m = getMagnitude(permStr);
         columns[m].push(permStr);
     });
