@@ -314,9 +314,9 @@ function drawGraphWithPtMap(ptMap, n) {
 
 }
 
-// Convert a permutation string like "21453" into a cycle string like
-// "(12)(345)".
-export function getCycleStr(permStr) {
+// Convert a permutation string like "21453" into cycles as arrays like
+// [[1, 2], [3, 4, 5]]; this corresponds to "(12)(345)".
+export function getCycleArray(permStr) {
     // Permutations are historically 1-indexed (their first element is 1), so I
     // will ignore index 0 for the arrays in this function.
     let perm = ('0' + permStr).split('').map(x => parseInt(x));
@@ -338,9 +338,25 @@ export function getCycleStr(permStr) {
             }
         }
     }
+    return cycles;
+}
+
+// Convert a permutation string like "21453" into a cycle string like
+// "(12)(345)".
+export function getCycleStr(permStr) {
+    let cycles = getCycleArray(permStr);
     let s = cycles.map(c => `(${c.join('')})`).join('');
     if (s === '') s = 'e';  // Treat the identity as a special case.
     return s;
+}
+
+export function getMagnitude(permStr) {
+    let cycles = getCycleArray(permStr);
+    let magnitude = 0;
+    for (let i = 0; i < cycles.length; i++) {
+        magnitude += cycles[i].length - 1;
+    }
+    return magnitude;
 }
 
 function factorial(n) {
@@ -349,7 +365,40 @@ function factorial(n) {
     return value;
 }
 
-// Render G_n in the rectangle from [-a,-b] to [a, b].
+// Render G_n is an n-partite graph in the rectangle from [-a, -b] to [a, b].
+export function drawNPartiteGn(n) {
+    let a = 0.8;
+    let b = 0.8;
+
+    let columns = [];
+    for (let i = 0; i < n; i++) columns.push([]);
+
+    let ptMap = {};
+    forAllPermsLex(n, function (permStr) {
+        let m = getMagnitude(permStr);
+        columns[m].push(permStr);
+    });
+
+    let x = -a;
+    let dx = 2 * a / (n - 1);
+    for (let column of columns) {
+        let y = 0;
+        let dy = 0;
+        if (column.length > 1) {
+            // -b is the top.
+            y = -b;
+            dy = 2 * b / (column.length - 1);
+        }
+        for (let permStr of column) {
+            ptMap[permStr] = {x, y};
+            y += dy;
+        }
+        x += dx;
+    }
+    drawGraphWithPtMap(ptMap, n);
+}
+
+// Render G_n as a bipartitle graph in the rectangle from [-a,-b] to [a, b].
 export function drawBipartiteGn(n, useLexOrdering) {
 
     if (useLexOrdering === undefined) {

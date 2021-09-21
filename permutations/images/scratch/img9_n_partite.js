@@ -16,6 +16,7 @@ import * as perm   from './perm.js';
 // ______________________________________________________________________
 // Globals
 
+let orderingType = 'lex';
 let n = 3;
 let defaultStyles = null;
 
@@ -50,8 +51,7 @@ function refreshGraph() {
       perm.dotStyle.r = defaultStyles.dotRadius;
     }
 
-    // XXX
-    // perm.drawCircularGn(n, useLexOrdering);
+    perm.drawNPartiteGn(n);
 }
 
 function setupButtons() {
@@ -79,6 +79,5 @@ window.addEventListener('DOMContentLoaded', (event) => {
     init.setup();
     setupButtons();
 
-    // XXX
-    // perm.drawCircularGn(n, useLexOrdering);
+    refreshGraph();
 });
