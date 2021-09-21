@@ -37,10 +37,19 @@ function refreshGraph() {
         defaultStyles.dotRadius = perm.dotStyle.r;
     }
 
+    // TODO HERE
+    // See if I can dynamically size the edges so that G_7 looks good.
+    // In particular, I think the current edge width works well for the final
+    // layer but that early layers look bad right now because the edges there
+    // are too light.
+    //
+    // Maybe the edges in G_5 should be thinner, too. Right now the middle of
+    // the dense layers is gray mush.
+
     if (n === 7) {
       perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.02;
-      perm.edgeStyle.stroke = '#bbb';
-      perm.dotStyle.r = defaultStyles.dotRadius * 0.1;
+      perm.edgeStyle.stroke = '#888';
+      perm.dotStyle.r = defaultStyles.dotRadius * 0.7;
     } else if (n === 6) {
       perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.2;
       perm.edgeStyle.stroke = '#bbb';

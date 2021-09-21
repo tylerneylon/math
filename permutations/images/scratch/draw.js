@@ -8,7 +8,7 @@
 // ______________________________________________________________________
 // Internal globals.
 
-var ctx = {};
+export var ctx = {};
 ctx.addToParent = addAtStart;
 ctx.toCanvasScale = 1.0;
 ctx.origin = {x: 0, y: 0}

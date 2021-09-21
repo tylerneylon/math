@@ -63,10 +63,16 @@ function addDot(pt, outlineGroup, frontGroup) {
         r: 7 * styleScale
     };
 
+    let thisDotStyle = Object.assign({}, dotStyle);
+    if (pt.hasOwnProperty('maxUnitRadius')) {
+        let maxCanvasRadius = pt.maxUnitRadius * draw.ctx.toCanvasScale;
+        thisDotStyle.r = Math.min(maxCanvasRadius, thisDotStyle.r);
+    }
+
     let outline = draw.circle(pt, outlineStyle, outlineGroup);
     let hitDot  = draw.circle(pt, outlineStyle, frontGroup);
     draw.addAttributes(hitDot, {fill: 'transparent'});
-    let circle  = draw.circle(pt, dotStyle, frontGroup);
+    let circle  = draw.circle(pt, thisDotStyle, frontGroup);
     return [outline, hitDot, circle];
 }
 
@@ -271,11 +277,6 @@ function drawGraphWithPtMap(ptMap, n) {
         addToPropArray(ptMap[edge[2]], 'edgeElts', line);
         addToPropArray(ptMap[edge[3]], 'edgeElts', line);
     }
-    if (false) {
-        for (const [perm, pt] of Object.entries(ptMap)) {
-
-        }
-    }
     // Draw point labels.
     for (const [perm, pt] of Object.entries(ptMap)) {
         let eps = 0.01
@@ -398,13 +399,15 @@ export function drawNPartiteGn(n, orderingType) {
     for (let column of columns) {
         let y = 0;
         let dy = 0;
+        // This is multiplied down a little to give us some buffer between pts.
+        let maxUnitRadius = b / column.length * 0.7;
         if (column.length > 1) {
             // -b is the top.
             y = -b;
             dy = 2 * b / (column.length - 1);
         }
         for (let permStr of column) {
-            ptMap[permStr] = {x, y};
+            ptMap[permStr] = {x, y, maxUnitRadius};
             y += dy;
         }
         x += dx;
