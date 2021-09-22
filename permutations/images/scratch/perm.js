@@ -106,9 +106,9 @@ function getGraphColorer(ptMap, pt, colors) {
             edgeElt.setAttribute('stroke', colors.edgeColor);
         }
         for (let edge of pt.edges) {
-            let nborElt = ptMap[edge[2]].elt;
+            let nborElt = ptMap[edge.dest].elt;
             nborElt.setAttribute('fill', colors.nborColor);
-            setLabelVisibility(ptMap[edge[2]], colors.textVisibility);
+            setLabelVisibility(ptMap[edge.dest], colors.textVisibility);
         }
     };
 }
@@ -246,12 +246,15 @@ function addPtMapEdges(n, ptMap) {
     forAllTranspositions(n, function(t) {
         for (let p1 of Object.keys(ptMap)) {
             let p2 = applyTransposition(p1, t);
-            // TODO Do I actually use this `edges` array?
-            addToPropArray(ptMap[p1], 'edges', [ptMap[p1], ptMap[p2], p2]);
+            addToPropArray(
+                ptMap[p1],
+                'edges',
+                {from: ptMap[p1], to: ptMap[p2], dest: p2}
+            );
             if (p1 < p2) {
                 let from = ptMap[p1];
                 let to   = ptMap[p2];
-                edges.push([from, to, p1, p2]);
+                edges.push({from, to, p1, p2});
             }
         }
     });
@@ -273,9 +276,9 @@ function drawGraphWithPtMap(ptMap, n) {
 
     // Draw the edges.
     for (let edge of edges) {
-        let line = draw.line(edge[0], edge[1], edgeStyle, edgeGroup);
-        addToPropArray(ptMap[edge[2]], 'edgeElts', line);
-        addToPropArray(ptMap[edge[3]], 'edgeElts', line);
+        let line = draw.line(edge.from, edge.to, edgeStyle, edgeGroup);
+        addToPropArray(ptMap[edge.p1], 'edgeElts', line);
+        addToPropArray(ptMap[edge.p2], 'edgeElts', line);
     }
     // Draw point labels.
     for (const [perm, pt] of Object.entries(ptMap)) {

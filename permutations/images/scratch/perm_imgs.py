@@ -26,7 +26,7 @@ import shotglass
 def get_index_html():
 
     body_list = ['<html><body><ul>']
-    for fname in glob('*.html'):
+    for fname in sorted(glob('*.html')):
         body_list.append(f'\n<li><a href="{fname}">{fname}</a></li>')
     body_list.append('\n</ul></body></html>')
 
