@@ -41,6 +41,9 @@ export let dotStyle = {
     r: 3 * styleScale
 };
 
+// edgeWeighting can be 'default' or 'boldNearE'.
+export let renderCtx = { edgeWeighting: 'default' };
+
 let mainHighlightColor = '#07f';
 let edgeHighlightColor = '#37a';
 let nborHighlightColor = '#00f';
@@ -254,7 +257,13 @@ function addPtMapEdges(n, ptMap) {
             if (p1 < p2) {
                 let from = ptMap[p1];
                 let to   = ptMap[p2];
-                edges.push({from, to, p1, p2});
+                let edge = {from, to, p1, p2};
+                if (renderCtx.edgeWeighting === 'boldNearE') {
+                    let minM = Math.min(getMagnitude(p1), getMagnitude(p2));
+                    if (minM === 0) edge.weightScale = 10.0;
+                    if (minM === 1) edge.weightScale = 5.0;
+                }
+                edges.push(edge);
             }
         }
     });
@@ -276,7 +285,13 @@ function drawGraphWithPtMap(ptMap, n) {
 
     // Draw the edges.
     for (let edge of edges) {
-        let line = draw.line(edge.from, edge.to, edgeStyle, edgeGroup);
+        let thisStyle = edgeStyle;
+        if (renderCtx.edgeWeighting !== 'default' &&
+                edge.hasOwnProperty('weightScale')) {
+            thisStyle = Object.assign({}, edgeStyle);
+            thisStyle['stroke-width'] *= edge.weightScale;
+        }
+        let line = draw.line(edge.from, edge.to, thisStyle, edgeGroup);
         addToPropArray(ptMap[edge.p1], 'edgeElts', line);
         addToPropArray(ptMap[edge.p2], 'edgeElts', line);
     }

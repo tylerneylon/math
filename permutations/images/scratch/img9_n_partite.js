@@ -47,17 +47,25 @@ function refreshGraph() {
     // the dense layers is gray mush.
 
     if (n === 7) {
-      perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.02;
-      perm.edgeStyle.stroke = '#888';
-      perm.dotStyle.r = defaultStyles.dotRadius * 0.7;
+        perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.02;
+        perm.edgeStyle.stroke = '#888';
+        perm.dotStyle.r = defaultStyles.dotRadius * 0.7;
+        perm.renderCtx.edgeWeighting = 'boldNearE';
     } else if (n === 6) {
-      perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.2;
-      perm.edgeStyle.stroke = '#bbb';
-      perm.dotStyle.r = defaultStyles.dotRadius * 0.7;
+        perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.2;
+        perm.edgeStyle.stroke = '#bbb';
+        perm.dotStyle.r = defaultStyles.dotRadius * 0.7;
+        perm.renderCtx.edgeWeighting = 'default';
+    } else if (n === 5) {
+        perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.4;
+        perm.edgeStyle.stroke = defaultStyles.edgeStroke;
+        perm.dotStyle.r = defaultStyles.dotRadius;
+        perm.renderCtx.edgeWeighting = 'default';
     } else {
-      perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth;
-      perm.edgeStyle.stroke = defaultStyles.edgeStroke;
-      perm.dotStyle.r = defaultStyles.dotRadius;
+        perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth;
+        perm.edgeStyle.stroke = defaultStyles.edgeStroke;
+        perm.dotStyle.r = defaultStyles.dotRadius;
+        perm.renderCtx.edgeWeighting = 'default';
     }
 
     perm.drawNPartiteGn(n, orderingType);
