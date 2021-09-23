@@ -1,4 +1,4 @@
-/* img4_kinda_bipartite_g5.js
+/* img04_kinda_bipartite_g5.js
  *
  * Draw G_5 as a kind-of bipartite graph.
  * This is an interesting fluke where I've organized the points as if

@@ -1,4 +1,4 @@
-/* img5_bipartite_g3.js
+/* img05_bipartite_g3.js
  *
  * Draw G_3 as a bipartite graph.
  *

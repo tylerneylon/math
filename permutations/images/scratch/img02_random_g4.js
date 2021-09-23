@@ -1,6 +1,6 @@
-/* img7_bipartite_g5.js
+/* img02_random_g4.js
  *
- * Draw G_5 as a bipartite graph.
+ * Draw G_4 using random points in a circle.
  *
  */
 
@@ -18,11 +18,6 @@ import * as perm   from './perm.js';
 window.addEventListener('DOMContentLoaded', (event) => {
 
     init.setup();
-
-    perm.edgeStyle['stroke-width'] *= 0.3;
-    perm.edgeStyle.stroke = '#bbb';
-    perm.dotStyle.r *= 0.7;
-
-    perm.drawBipartiteGn(5);  // Draw G_5.
+    perm.drawRandomGn(4);  // Draw G_4.
 
 });

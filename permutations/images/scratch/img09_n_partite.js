@@ -1,6 +1,7 @@
-/* img8_circular.js
+/* img09_n_partite.js
  *
- * Support different renderings of G_n for a few values of n.
+ * Render G_n with e on the left, and then, one column per magnitude to the
+ * right of that.
  *
  */
 
@@ -15,7 +16,7 @@ import * as perm   from './perm.js';
 // ______________________________________________________________________
 // Globals
 
-let orderingType = 'plain';
+let orderingType = 'lex';
 let n = 3;
 let defaultStyles = null;
 
@@ -23,8 +24,7 @@ let defaultStyles = null;
 // ______________________________________________________________________
 // Functions
 
-// This uses the globals `n` and orderingType to determine how to render
-// the graph.
+// This uses the global `n` to determine how to render the graph.
 function refreshGraph() {
 
     const svg = document.getElementById('svg');
@@ -37,21 +37,38 @@ function refreshGraph() {
         defaultStyles.dotRadius = perm.dotStyle.r;
     }
 
+    // TODO HERE
+    // See if I can dynamically size the edges so that G_7 looks good.
+    // In particular, I think the current edge width works well for the final
+    // layer but that early layers look bad right now because the edges there
+    // are too light.
+    //
+    // Maybe the edges in G_5 should be thinner, too. Right now the middle of
+    // the dense layers is gray mush.
+
     if (n === 7) {
-      perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.02;
-      perm.edgeStyle.stroke = '#bbb';
-      perm.dotStyle.r = defaultStyles.dotRadius * 0.1;
+        perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.02;
+        perm.edgeStyle.stroke = '#888';
+        perm.dotStyle.r = defaultStyles.dotRadius * 0.7;
+        perm.renderCtx.edgeWeighting = 'boldNearE';
     } else if (n === 6) {
-      perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.2;
-      perm.edgeStyle.stroke = '#bbb';
-      perm.dotStyle.r = defaultStyles.dotRadius * 0.7;
+        perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.2;
+        perm.edgeStyle.stroke = '#bbb';
+        perm.dotStyle.r = defaultStyles.dotRadius * 0.7;
+        perm.renderCtx.edgeWeighting = 'default';
+    } else if (n === 5) {
+        perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.4;
+        perm.edgeStyle.stroke = defaultStyles.edgeStroke;
+        perm.dotStyle.r = defaultStyles.dotRadius;
+        perm.renderCtx.edgeWeighting = 'default';
     } else {
-      perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth;
-      perm.edgeStyle.stroke = defaultStyles.edgeStroke;
-      perm.dotStyle.r = defaultStyles.dotRadius;
+        perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth;
+        perm.edgeStyle.stroke = defaultStyles.edgeStroke;
+        perm.dotStyle.r = defaultStyles.dotRadius;
+        perm.renderCtx.edgeWeighting = 'default';
     }
 
-    perm.drawCircularGn(n, orderingType);
+    perm.drawNPartiteGn(n, orderingType);
 }
 
 // A helper function for button groups.
@@ -103,16 +120,10 @@ function setupButtons() {
 // ______________________________________________________________________
 // Main
 
-// FUTURE
-//
-// * Render the node labels in a dot-specific fashion so that they're always
-//   outside the circle (lowering overlap with nodes and edges).
-//
-
 window.addEventListener('DOMContentLoaded', (event) => {
 
     init.setup();
     setupButtons();
 
-    perm.drawCircularGn(n, orderingType);
+    refreshGraph();
 });
