@@ -1,4 +1,4 @@
-/* img2_random_g3.js
+/* img2_random_g4.js
  *
  * Draw G_4 using random points in a circle.
  *
