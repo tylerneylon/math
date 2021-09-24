@@ -459,6 +459,87 @@ export function drawBipartiteGn(n, useLexOrdering) {
     drawGraphWithPtMap(ptMap, n);
 }
 
+// TODO Use this function everywhere that it makes sense to.
+function getPermIterator(orderingType) {
+    if (orderingType === undefined) return forAllPermsPlain;
+    if (orderingType === 'plain')   return forAllPermsPlain;
+    if (orderingType === 'lex')     return forAllPermsLex;
+    if (orderingType === 'random')  return forAllPermsRandom;
+}
+
+// Given the number of small circles we want to fit inside a unit circle
+// (and in a ring just inside the circumference), this returns the radius
+// of each smaller circle.
+function findSmallRadius(n) {
+    return 1 / (1 + 1 / Math.sin(Math.PI / n))
+}
+
+// Call cb(pt) for n points distributed evenly around the circumference of the
+// given circle. A circle is a {cx, cy, r} object.
+function forCirclePts(circle, n, cb) {
+    let angle = 0;
+    for (let i = 0; i < n; i++) {
+        let x = circle.cx + circle.r * Math.cos(angle);
+        let y = circle.cy + circle.r * Math.sin(angle);
+        cb({x, y});
+        angle += 2 * Math.PI / n;
+    }
+}
+
+// This returns a ptMap of G_n within the given circle.
+function placeRecursivePtsInCircle(n, circle, orderingType) {
+
+    console.assert(n >= 3, 'placeRecursivePtsInCircle assumes n >= 3.');
+
+    let forAllPerms = getPermIterator(orderingType);
+    let ptMap = {};
+
+    if (n === 3) {
+        let perms = [];
+        forAllPerms(n, function (permStr) { perms.push(permStr); });
+
+        let nPts = 6;
+        let i = 0;
+        forCirclePts(circle, nPts, function (pt) {
+            ptMap[perms[i]] = pt;
+            i++;
+        });
+        return ptMap;
+    }
+
+    // Handle the case n > 3 recursively.
+    let r = circle.r * findSmallRadius(Math.max(9, 2 * n));
+    let R = circle.r - r;
+    let i = 1;
+    forCirclePts({cx: circle.cx, cy: circle.cy, r: R}, n, function (center) {
+        let smallCircle = {cx: center.x, cy: center.y, r};
+        let circlePtMap = placeRecursivePtsInCircle(
+            n - 1,
+            smallCircle,
+            orderingType
+        );
+        for (let permStr in circlePtMap) {
+            let p = n.toString() + permStr;
+            p = applyTransposition(p, 't' + n + i);
+            ptMap[p] = circlePtMap[permStr];
+        }
+        i++;
+    });
+    return ptMap;
+}
+
+export function drawRecursiveGn(n, orderingType) {
+
+    let radius = 0.8;
+
+    let ptMap = placeRecursivePtsInCircle(
+        n,
+        {cx: 0, cy: 0, r: radius},
+        orderingType
+    );
+    drawGraphWithPtMap(ptMap, n);
+}
+
 export function drawRandomGn(n) {
     // Come up with a map from strings like "1432" to an {x, y} point in the
     // unit circle around the origin.
