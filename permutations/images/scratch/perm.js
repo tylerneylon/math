@@ -476,21 +476,29 @@ function findSmallRadius(n) {
 
 // Call cb(pt) for n points distributed evenly around the circumference of the
 // given circle. A circle is a {cx, cy, r} object.
-function forCirclePts(circle, n, angle, cb) {
+function forCirclePts(circle, n, angle, direction, cb) {
     for (let i = 0; i < n; i++) {
         let x = circle.cx + circle.r * Math.cos(angle);
         let y = circle.cy + circle.r * Math.sin(angle);
         cb({x, y});
-        angle += 2 * Math.PI / n;
+        angle += direction * 2 * Math.PI / n;
     }
 }
 
 // This returns a ptMap of G_n within the given circle.
-function placeRecursivePtsInCircle(n, circle, orderingType, angle) {
+function placeRecursivePtsInCircle(n, circle, orderingType, angle, beWeird) {
+
+    if (beWeird === undefined) beWeird = false;
 
     console.assert(n >= 3, 'placeRecursivePtsInCircle assumes n >= 3.');
 
     if (angle === undefined) angle = 0;
+
+    let angleDirection = 1;
+    if (beWeird) {
+        angle += Math.PI;
+        angleDirection = -1;
+    }
 
     let forAllPerms = getPermIterator(orderingType);
     let ptMap = {};
@@ -501,7 +509,7 @@ function placeRecursivePtsInCircle(n, circle, orderingType, angle) {
 
         let nPts = 6;
         let i = 0;
-        forCirclePts(circle, nPts, angle, function (pt) {
+        forCirclePts(circle, nPts, angle, angleDirection, function (pt) {
             ptMap[perms[i]] = pt;
             i++;
         });
@@ -512,20 +520,57 @@ function placeRecursivePtsInCircle(n, circle, orderingType, angle) {
     let r = circle.r * findSmallRadius(Math.max(9, 2 * n));
     let R = circle.r - r;
     let i = 1;
+
+    // XXX
+    console.log('angleDirection', angleDirection);
+
     forCirclePts(
             {cx: circle.cx, cy: circle.cy, r: R},
             n,
             angle,
+            angleDirection,
             function (center) {
+
+        console.log('Starting i', i);  // XXX
+
         let smallCircle = {cx: center.x, cy: center.y, r};
+        let beWeird = (true && n === 4 && (i === 1 || i === 3));
+        console.log('Making recursive call with beWeird =', beWeird);  // XXX
+        let angle = 2 * Math.PI / 3 * (i - 1);
+        if (n === 4 & i === 3) angle = 2 * Math.PI / 3;
         let circlePtMap = placeRecursivePtsInCircle(
             n - 1,
             smallCircle,
             orderingType,
-            2 * Math.PI / 3 * (i - 1)
+            // 2 * Math.PI / 3 * (i - 1),
+            angle,
+            beWeird
         );
-        for (let permStr in circlePtMap) {
 
+        // Ad-hoc modification: XXX Add more explanation here.
+        if (false && n === 4 && (i === 1 || i === 3)) {
+
+            // XXX
+            console.log('i', i, 'circlePtMap:');
+            console.log(circlePtMap);
+
+            let keys = Object.keys(circlePtMap);
+            let values = Object.values(circlePtMap);
+            let newPtMap = {};
+            let k = 3;
+            for (let j = 0; j < keys.length; j++) {
+                newPtMap[keys[k]] = values[j];
+                k--;
+                if (k < 0) k = 5;
+            }
+            circlePtMap = newPtMap;
+
+            // XXX
+            console.log('Updated circlePtMap:');
+            console.log(circlePtMap);
+        }
+
+        for (let permStr in circlePtMap) {
             let p = null;
             if (false) {
                 p = n.toString() + permStr;
@@ -538,6 +583,9 @@ function placeRecursivePtsInCircle(n, circle, orderingType, angle) {
                 }
                 p = i.toString() + p.join('');
             }
+
+            console.log(p);  // XXX
+
             ptMap[p] = circlePtMap[permStr];
         }
         i++;
