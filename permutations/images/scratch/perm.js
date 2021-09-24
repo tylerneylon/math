@@ -476,8 +476,7 @@ function findSmallRadius(n) {
 
 // Call cb(pt) for n points distributed evenly around the circumference of the
 // given circle. A circle is a {cx, cy, r} object.
-function forCirclePts(circle, n, cb) {
-    let angle = 0;
+function forCirclePts(circle, n, angle, cb) {
     for (let i = 0; i < n; i++) {
         let x = circle.cx + circle.r * Math.cos(angle);
         let y = circle.cy + circle.r * Math.sin(angle);
@@ -487,9 +486,11 @@ function forCirclePts(circle, n, cb) {
 }
 
 // This returns a ptMap of G_n within the given circle.
-function placeRecursivePtsInCircle(n, circle, orderingType) {
+function placeRecursivePtsInCircle(n, circle, orderingType, angle) {
 
     console.assert(n >= 3, 'placeRecursivePtsInCircle assumes n >= 3.');
+
+    if (angle === undefined) angle = 0;
 
     let forAllPerms = getPermIterator(orderingType);
     let ptMap = {};
@@ -500,7 +501,7 @@ function placeRecursivePtsInCircle(n, circle, orderingType) {
 
         let nPts = 6;
         let i = 0;
-        forCirclePts(circle, nPts, function (pt) {
+        forCirclePts(circle, nPts, angle, function (pt) {
             ptMap[perms[i]] = pt;
             i++;
         });
@@ -511,16 +512,32 @@ function placeRecursivePtsInCircle(n, circle, orderingType) {
     let r = circle.r * findSmallRadius(Math.max(9, 2 * n));
     let R = circle.r - r;
     let i = 1;
-    forCirclePts({cx: circle.cx, cy: circle.cy, r: R}, n, function (center) {
+    forCirclePts(
+            {cx: circle.cx, cy: circle.cy, r: R},
+            n,
+            angle,
+            function (center) {
         let smallCircle = {cx: center.x, cy: center.y, r};
         let circlePtMap = placeRecursivePtsInCircle(
             n - 1,
             smallCircle,
-            orderingType
+            orderingType,
+            2 * Math.PI / 3 * (i - 1)
         );
         for (let permStr in circlePtMap) {
-            let p = n.toString() + permStr;
-            p = applyTransposition(p, 't' + n + i);
+
+            let p = null;
+            if (false) {
+                p = n.toString() + permStr;
+                p = applyTransposition(p, 't' + n + i);
+            } else {
+                p = permStr.split('');
+                for (let j = 0; j < p.length; j++) {
+                    let elt = parseInt(p[j]);
+                    if (elt >= i) p[j] = elt + 1;
+                }
+                p = i.toString() + p.join('');
+            }
             ptMap[p] = circlePtMap[permStr];
         }
         i++;
