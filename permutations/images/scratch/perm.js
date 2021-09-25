@@ -498,7 +498,7 @@ function placeRecursivePtsInCircle(n, circle, orderingType, angle) {
     }
 
     // Handle the case n > 3 recursively.
-    let r = circle.r * findSmallRadius(Math.max(9, 2 * n));
+    let r = circle.r * findSmallRadius(n + 3);
     let R = circle.r - r;
     let i = 1;
 

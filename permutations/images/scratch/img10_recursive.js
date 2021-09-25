@@ -17,7 +17,7 @@ import * as perm   from './perm.js';
 // Globals
 
 let orderingType = 'plain';
-let n = 3;
+let n = 4;
 let defaultStyles = null;
 
 
