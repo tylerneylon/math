@@ -387,18 +387,7 @@ function factorial(n) {
 // Render G_n is an n-partite graph in the rectangle from [-a, -b] to [a, b].
 export function drawNPartiteGn(n, orderingType) {
 
-    if (orderingType === undefined) {
-        orderingType = 'plain';
-    }
-
-    let forAllPerms = null;
-    if (orderingType === 'plain') {
-        forAllPerms = forAllPermsPlain;
-    } else if (orderingType === 'lex') {
-        forAllPerms = forAllPermsLex;
-    } else if (orderingType === 'random') {
-        forAllPerms = forAllPermsRandom;
-    }
+    let forAllPerms = getPermIterator(orderingType);
 
     let a = 0.8;
     let b = 0.8;
@@ -571,18 +560,7 @@ export function drawCircularGn(n, orderingType) {
 
     let radius = 0.8;
 
-    if (orderingType === undefined) {
-        orderingType = 'plain';
-    }
-
-    let forAllPerms = null;
-    if (orderingType === 'plain') {
-        forAllPerms = forAllPermsPlain;
-    } else if (orderingType === 'lex') {
-        forAllPerms = forAllPermsLex;
-    } else if (orderingType === 'random') {
-        forAllPerms = forAllPermsRandom;
-    }
+    let forAllPerms = getPermIterator(orderingType);
 
     let numPts = factorial(n);
     let angleDelta = 2 * Math.PI / numPts;
