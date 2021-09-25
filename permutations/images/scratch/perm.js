@@ -41,11 +41,11 @@ export let dotStyle = {
     r: 3 * styleScale
 };
 
-// edgeWeighting can be 'default' or 'boldNearE'.
+// edgeWeighting can be 'default', 'boldNearE', or 'recursive'.
 export let renderCtx = { edgeWeighting: 'default' };
 
 let mainHighlightColor = '#07f';
-let edgeHighlightColor = '#37a';
+let edgeHighlightColor = '#1ac';
 let nborHighlightColor = '#00f';
 
 
@@ -71,6 +71,8 @@ function addDot(pt, outlineGroup, frontGroup) {
         let maxCanvasRadius = pt.maxUnitRadius * draw.ctx.toCanvasScale;
         thisDotStyle.r = Math.min(maxCanvasRadius, thisDotStyle.r);
     }
+
+    outlineStyle.r = (7 / 3) * thisDotStyle.r;
 
     let outline = draw.circle(pt, outlineStyle, outlineGroup);
     let hitDot  = draw.circle(pt, outlineStyle, frontGroup);
@@ -106,7 +108,11 @@ function getGraphColorer(ptMap, pt, colors) {
             let edgeGroup = edgeElt.parentElement;
             edgeElt.remove();
             edgeGroup.append(edgeElt);
-            edgeElt.setAttribute('stroke', colors.edgeColor);
+            if (colors.textVisibility === 'visible') {
+                edgeElt.setAttribute('stroke', colors.edgeColor);
+            } else {
+                edgeElt.setAttribute('stroke', edgeElt.baseColor);
+            }
         }
         for (let edge of pt.edges) {
             let nborElt = ptMap[edge.dest].elt;
@@ -244,6 +250,12 @@ function makeRandomPtMap(n) {
     return ptMap;
 }
 
+function getCommonPrefixLen(s1, s2) {
+    let i = 0;
+    while (i <= s1.length && s1[i] === s2[i]) i++;
+    return i;
+}
+
 function addPtMapEdges(n, ptMap) {
     var edges = [];
     forAllTranspositions(n, function(t) {
@@ -263,6 +275,14 @@ function addPtMapEdges(n, ptMap) {
                     if (minM === 0) edge.weightScale = 10.0;
                     if (minM === 1) edge.weightScale = 5.0;
                 }
+                if (renderCtx.edgeWeighting === 'recursive') {
+                    // k is in the range [0, n-2].
+                    // Edges with higher k values are more bold.
+                    let k = getCommonPrefixLen(p1, p2);
+                    edge.weightScale = 1.6 ** k;
+                    edge.strokeScale = 1.8 ** -k;
+                    edge.groupNum = k;
+                }
                 edges.push(edge);
             }
         }
@@ -279,6 +299,12 @@ function drawGraphWithPtMap(ptMap, n) {
     let edges = addPtMapEdges(n, ptMap);
 
     // Prepare the group elements.
+    let edgeGroups = [];
+    if (renderCtx.edgeWeighting === 'recursive') {
+        for (let i = 0; i < n; i++) {
+            edgeGroups.push(draw.add('g'));
+        }
+    }
     let edgeGroup    = draw.add('g');
     let outlineGroup = draw.add('g');
     let frontGroup   = draw.add('g');
@@ -286,12 +312,24 @@ function drawGraphWithPtMap(ptMap, n) {
     // Draw the edges.
     for (let edge of edges) {
         let thisStyle = edgeStyle;
-        if (renderCtx.edgeWeighting !== 'default' &&
-                edge.hasOwnProperty('weightScale')) {
+        if (renderCtx.edgeWeighting !== 'default') {
             thisStyle = Object.assign({}, edgeStyle);
-            thisStyle['stroke-width'] *= edge.weightScale;
+            if (edge.hasOwnProperty('weightScale')) {
+                thisStyle['stroke-width'] *= edge.weightScale;
+            }
+            if (edge.hasOwnProperty('strokeScale') && edge.strokeScale !== 1) {
+                // This assumes the stroke is a hex-style shade of gray.
+                let s = parseInt(thisStyle.stroke.slice(-2), 16);
+                s = Math.ceil(s * edge.strokeScale);
+                thisStyle.stroke = 'rgb(' + [s, s, s].join(',') + ')';
+            }
         }
-        let line = draw.line(edge.from, edge.to, thisStyle, edgeGroup);
+        let group = edgeGroup;
+        if (renderCtx.edgeWeighting === 'recursive') {
+            group = edgeGroups[edge.groupNum];
+        }
+        let line = draw.line(edge.from, edge.to, thisStyle, group);
+        line.baseColor = thisStyle.stroke;
         addToPropArray(ptMap[edge.p1], 'edgeElts', line);
         addToPropArray(ptMap[edge.p2], 'edgeElts', line);
     }
@@ -448,7 +486,6 @@ export function drawBipartiteGn(n, useLexOrdering) {
     drawGraphWithPtMap(ptMap, n);
 }
 
-// TODO Use this function everywhere that it makes sense to.
 function getPermIterator(orderingType) {
     if (orderingType === undefined) return forAllPermsPlain;
     if (orderingType === 'plain')   return forAllPermsPlain;
@@ -509,11 +546,13 @@ function placeRecursivePtsInCircle(n, circle, orderingType, angle) {
             function (center) {
 
         let smallCircle = {cx: center.x, cy: center.y, r};
+        let angle = 0;
+        if (n === 4) angle = 2 * Math.PI / 3 * (i - 1);
         let circlePtMap = placeRecursivePtsInCircle(
             n - 1,
             smallCircle,
             orderingType,
-            2 * Math.PI / 3 * (i - 1)
+            angle
         );
 
         for (let permStr in circlePtMap) {
