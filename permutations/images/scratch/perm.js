@@ -40,6 +40,11 @@ export let dotStyle = {
     fill:   '#888',
     r: 3 * styleScale
 };
+export let outlineStyle = {
+    stroke: 'transparent',
+    fill:   'white',
+    r: 6 * styleScale
+};
 
 // edgeWeighting can be 'default', 'boldNearE', or 'recursive'.
 export let renderCtx = { edgeWeighting: 'default' };
@@ -60,20 +65,11 @@ let nborHighlightColor = '#00f';
 
 function addDot(pt, outlineGroup, frontGroup) {
 
-    let outlineStyle = {
-        stroke: 'transparent',
-        fill:   'white',
-        r: 7 * styleScale
-    };
-
     let thisDotStyle = Object.assign({}, dotStyle);
     if (pt.hasOwnProperty('maxUnitRadius')) {
         let maxCanvasRadius = pt.maxUnitRadius * draw.ctx.toCanvasScale;
         thisDotStyle.r = Math.min(maxCanvasRadius, thisDotStyle.r);
     }
-
-    outlineStyle.r = (7 / 3) * thisDotStyle.r;
-
     let outline = draw.circle(pt, outlineStyle, outlineGroup);
     let hitDot  = draw.circle(pt, outlineStyle, frontGroup);
     draw.addAttributes(hitDot, {fill: 'transparent'});
@@ -280,7 +276,7 @@ function addPtMapEdges(n, ptMap) {
                     // Edges with higher k values are more bold.
                     let k = getCommonPrefixLen(p1, p2);
                     edge.weightScale = 1.6 ** k;
-                    edge.strokeScale = 1.8 ** -k;
+                    edge.strokeScale = 1.6 ** -k;
                     edge.groupNum = k;
                 }
                 edges.push(edge);

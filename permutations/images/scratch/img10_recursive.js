@@ -35,26 +35,31 @@ function refreshGraph() {
         defaultStyles.edgeWidth = perm.edgeStyle['stroke-width'];
         defaultStyles.edgeStroke = perm.edgeStyle.stroke;
         defaultStyles.dotRadius = perm.dotStyle.r;
+        defaultStyles.dotOutlineRadius = perm.outlineStyle.r;
 
         perm.renderCtx.edgeWeighting = 'recursive';
     }
 
     if (n === 7) {
         perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.02;
-        perm.edgeStyle.stroke = '#888';
-        perm.dotStyle.r = defaultStyles.dotRadius * 0.7;
+        perm.edgeStyle.stroke = '#aaa';
+        perm.dotStyle.r     = defaultStyles.dotRadius * 0.2;
+        perm.outlineStyle.r = defaultStyles.dotRadius * 0.4;
     } else if (n === 6) {
         perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.2;
-        perm.edgeStyle.stroke = '#bbb';
-        perm.dotStyle.r = defaultStyles.dotRadius * 0.7;
+        // perm.edgeStyle.stroke = '#bbb';
+        perm.dotStyle.r     = defaultStyles.dotRadius * 0.4;
+        perm.outlineStyle.r = defaultStyles.dotRadius * 0.6;
     } else if (n === 5) {
         perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.4;
         perm.edgeStyle.stroke = defaultStyles.edgeStroke;
-        perm.dotStyle.r = defaultStyles.dotRadius * 0.7;
+        perm.dotStyle.r     = defaultStyles.dotRadius * 0.7;
+        perm.outlineStyle.r = defaultStyles.dotRadius * 1.1;
     } else {
         perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth;
         perm.edgeStyle.stroke = defaultStyles.edgeStroke;
-        perm.dotStyle.r = defaultStyles.dotRadius;
+        perm.dotStyle.r     = defaultStyles.dotRadius;
+        perm.outlineStyle.r = defaultStyles.dotOutlineRadius;
     }
 
     perm.drawRecursiveGn(n, orderingType);
