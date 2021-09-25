@@ -46,8 +46,12 @@ export let outlineStyle = {
     r: 6 * styleScale
 };
 
-// edgeWeighting can be 'default', 'boldNearE', or 'recursive'.
-export let renderCtx = { edgeWeighting: 'default' };
+export let renderCtx = {
+    // edgeWeighting can be 'default', 'boldNearE', or 'recursive'.
+    edgeWeighting: 'default',
+    // labelStyle can be 'all' or 'mainOnly'
+    labelStyle: 'all'
+};
 
 let mainHighlightColor = '#07f';
 let edgeHighlightColor = '#1ac';
@@ -113,7 +117,9 @@ function getGraphColorer(ptMap, pt, colors) {
         for (let edge of pt.edges) {
             let nborElt = ptMap[edge.dest].elt;
             nborElt.setAttribute('fill', colors.nborColor);
-            setLabelVisibility(ptMap[edge.dest], colors.textVisibility);
+            if (renderCtx.labelStyle === 'all') {
+                setLabelVisibility(ptMap[edge.dest], colors.textVisibility);
+            }
         }
     };
 }
