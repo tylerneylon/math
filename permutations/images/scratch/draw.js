@@ -232,6 +232,12 @@ export function circle(center, radius, style, parent) {
     return circle;
 }
 
+export function setCenter(circle, center) {
+    center = mapToCanvasPt(center);
+    circle.setAttribute('cx', center.x);
+    circle.setAttribute('cy', center.y);
+}
+
 export function line(from, to, style, parent) {
 
     if (style === undefined) { style = lightStyle }
