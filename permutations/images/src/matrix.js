@@ -91,3 +91,23 @@ export function getColumn(A, i) {
     for (let j = 0; j < A.length; j++) col.push([A[j][i]]);
     return col;
 }
+
+export function rotateAroundX(angle) {
+    let A = eye(4);
+    let [c, s] = [Math.cos(angle), Math.sin(angle)];
+    A[1][1] =  c;
+    A[1][2] = -s;
+    A[2][1] =  s;
+    A[2][2] =  c;
+    return A;
+}
+
+export function rotateAroundY(angle) {
+    let A = eye(4);
+    let [c, s] = [Math.cos(angle), Math.sin(angle)];
+    A[0][0] =  c;
+    A[0][2] = -s;
+    A[2][0] =  s;
+    A[2][2] =  c;
+    return A;
+}

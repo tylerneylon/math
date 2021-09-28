@@ -17,7 +17,8 @@ import * as space  from './space.js';
 // ______________________________________________________________________
 // Globals
 
-let angle  = 0;
+let xAngle = 0;
+let yAngle = 0;
 let circle = null;
 let R      = 0.8;
 let lastTs = null;
@@ -33,15 +34,21 @@ let circleStyle = {
 
 function drawFrame(ts) {
 
-    let rotationsPerSec = 0.5;
+    let xRotationsPerSec = 0.1;
+    let yRotationsPerSec = 0.25;
 
-    if (circle === null) {
-        let r = 0.1;
-        circle = draw.circle({x: R, y: 0}, r, circleStyle);
-    } else {
-        angle += rotationsPerSec * 2 * Math.PI * (ts - lastTs) / 1000;
-        let center = {x: R * Math.cos(angle), y: R * Math.sin(angle)};
-        draw.setCenter(circle, center);
+    if (lastTs !== null) {
+        xAngle += xRotationsPerSec * 2 * Math.PI * (ts - lastTs) / 1000;
+        yAngle += yRotationsPerSec * 2 * Math.PI * (ts - lastTs) / 1000;
+
+        let t1 = matrix.rotateAroundX(xAngle);
+        let t2 = matrix.rotateAroundY(yAngle);
+        let t3 = matrix.eye(4);
+        t3[2][3] = 3;
+        // Apply t1, then t2, then t3.
+        let t = matrix.mult(t3, matrix.mult(t2, t1));
+
+        space.setTransform(t);
     }
 
     lastTs = ts;
@@ -83,4 +90,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // for (let i = 0; i < 3; i++) t[i][3] = 3;
 
     space.setTransform(t);
+
+    window.requestAnimationFrame(drawFrame);
 });
