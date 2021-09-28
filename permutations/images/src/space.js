@@ -5,6 +5,11 @@
  */
 
 
+// TODO
+//  * Refactor so that there is less code redundancy across
+//    initial dot/line placement and setting a new transform.
+//
+
 // ______________________________________________________________________
 // Imports
 
@@ -16,9 +21,13 @@ import * as matrix from './matrix.js';
 // Globals.
 
 export var ctx = {};
+
 // ctx.pts will be a matrix; each column is an affine point.
 ctx.pts = [[], [], [], []];
 ctx.dots = [];  // This will contain DOM svg circles, one per point.
+
+ctx.lines = [];  // This will contain {from, to, elt} objects.
+
 ctx.transform = matrix.eye(4);
 
 export let dotStyle = {
@@ -27,23 +36,41 @@ export let dotStyle = {
     r: 3
 };
 
+export let lineStyle = {
+    stroke: '#888',
+    fill:   'transparent'
+};
+
 let eyeZ = 0.001;
 
 
 // ______________________________________________________________________
 // Internal functions.
 
-function updateDots() {
+function getXYArray(pts) {
     // Transform all points.
     let p = matrix.mult(ctx.transform, ctx.pts);
 
     // Apply perspective.
+    let xyArray = [];
     for (let i = 0; i < p[0].length; i++) {
         let [x, y, z] = [p[0][i], p[1][i], p[2][i]];
-        x /= z;
-        y /= z;
-        draw.setCenter(ctx.dots[i], {x, y});
-        ctx.dots[i].hidden = z < eyeZ;
+        xyArray.push({x: x / z, y: y / z, isVisible: z >= eyeZ});
+    }
+    return xyArray;
+}
+
+function updatePoints() {
+
+    let xys = getXYArray(ctx.pts);
+
+    for (let i = 0; i < xys.length; i++) {
+        draw.setCenter(ctx.dots[i], xys[i]);
+        ctx.dots[i].hidden = !xys[i].isVisible;
+    }
+
+    for (let line of ctx.lines) {
+        draw.moveLine(line.elt, xys[line.from], xys[line.to]);
     }
 }
 
@@ -97,8 +124,19 @@ export function addPoints(pts) {
     addAnyNewDots();
 }
 
+// This expects `lines` to be an array of [from, to] arrays, where `from` and
+// `to` are indexes into the `pts` array.
+export function addLines(lines) {
+    for (let line of lines) {
+        let fromPt = getXYArray(matrix.getColumn(ctx.pts, line[0]))[0];
+        let toPt   = getXYArray(matrix.getColumn(ctx.pts, line[1]))[0];
+        let elt = draw.line(fromPt, toPt, lineStyle);
+        ctx.lines.push({from: line[0], to: line[1], elt});
+    }
+}
+
 export function setTransform(t) {
     ctx.transform = t;
-    updateDots();
+    updatePoints();
 }
 

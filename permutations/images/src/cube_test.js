@@ -26,6 +26,8 @@ let circleStyle = {
     fill:   '#888'
 };
 
+let zDist = 4;
+
 
 // ______________________________________________________________________
 // Functions
@@ -42,7 +44,7 @@ function drawFrame(ts) {
         let t1 = matrix.rotateAroundX(xAngle);
         let t2 = matrix.rotateAroundY(yAngle);
         let t3 = matrix.eye(4);
-        t3[2][3] = 3;
+        t3[2][3] = zDist;
         // Apply t1, then t2, then t3.
         let t = matrix.mult(t3, matrix.mult(t2, t1));
 
@@ -69,19 +71,29 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // These will be the corners of the [-a, a]^3 cube.
     let a = 0.8;
     let pts = [];
+    let idx = 0;
+    let [xStack, yStack] = [[], []];
+    let lines = [];
     for (let x = -1; x < 2; x += 2) {
         for (let y = -1; y < 2; y += 2) {
             for (let z = -1; z < 2; z += 2) {
+                if (x === -1) xStack.push(idx);
+                if (y === -1) yStack.push(idx);
                 pts.push([a * x, a * y, a * z]);
+                if (x === 1) lines.push([xStack.shift(), idx]);
+                if (y === 1) lines.push([yStack.shift(), idx]);
+                if (z === 1) lines.push([idx - 1, idx]);
+                idx++;
             }
         }
     }
 
     space.addPoints(pts);
+    space.addLines(lines);
 
     // Add to the z value of all points.
     let t = matrix.eye(4);
-    t[2][3] = 3;
+    t[2][3] = zDist;
     space.setTransform(t);
 
     window.requestAnimationFrame(drawFrame);

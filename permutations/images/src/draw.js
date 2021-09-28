@@ -254,6 +254,17 @@ export function line(from, to, style, parent) {
     return line;
 }
 
+export function moveLine(line, from, to) {
+    from = mapToCanvasPt(from);
+    to   = mapToCanvasPt(to);
+    addAttributes(line, {
+        x1: from.x,
+        y1: from.y,
+        x2: to.x,
+        y2: to.y
+    });
+}
+
 export function text(leftBaseline, str, style, parent) {
 
     if (style === undefined) { style = lightStyle }
