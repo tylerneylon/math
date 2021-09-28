@@ -75,9 +75,6 @@ function appendPoint(pt) {
 
 function addAnyNewDots() {
     for (let i = ctx.dots.length; i < ctx.pts[0].length; i++) {
-        // XXX
-        console.log('Considering column:');
-        console.log(matrix.pr(matrix.getColumn(ctx.pts, i)));
         let pt = calculateDrawPt(matrix.getColumn(ctx.pts, i));
         let elt = draw.circle(pt, dotStyle);
         ctx.dots.push(elt);

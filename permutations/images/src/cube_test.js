@@ -19,8 +19,6 @@ import * as space  from './space.js';
 
 let xAngle = 0;
 let yAngle = 0;
-let circle = null;
-let R      = 0.8;
 let lastTs = null;
 
 let circleStyle = {
@@ -79,16 +77,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
-    // XXX
-    console.log('pts', pts);
-
     space.addPoints(pts);
 
     // Add to the z value of all points.
     let t = matrix.eye(4);
     t[2][3] = 3;
-    // for (let i = 0; i < 3; i++) t[i][3] = 3;
-
     space.setTransform(t);
 
     window.requestAnimationFrame(drawFrame);
