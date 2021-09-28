@@ -68,3 +68,18 @@ export function stringify(A, precision) {
 
     return sArr.join('\n');
 }
+
+// Return the n x n identity matrix.
+export function eye(n) {
+    let A = Array(n);
+    for (let i = 0; i < n; i++) {
+        A[i] = Array(n).fill(0);
+        A[i][i] = 1;
+    }
+    return A;
+}
+
+// This is a convenience function.
+export function pr(A) {
+    console.log(stringify(A));
+}
