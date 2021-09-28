@@ -83,3 +83,11 @@ export function eye(n) {
 export function pr(A) {
     console.log(stringify(A));
 }
+
+// Returns A^(i) as a column vector.
+// Columns are 0-indexed.
+export function getColumn(A, i) {
+    let col = [];
+    for (let j = 0; j < A.length; j++) col.push([A[j][i]]);
+    return col;
+}
