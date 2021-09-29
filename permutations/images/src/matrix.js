@@ -13,6 +13,12 @@
 
 
 // ______________________________________________________________________
+// Imports
+
+import * as random from './random.js';
+
+
+// ______________________________________________________________________
 // Public functions.
 
 export function mult(A, B) {
@@ -55,8 +61,9 @@ export function stringify(A, precision) {
     }
 
     // Determine the max width per column.
+    let getLen = x => typeof x === 'string' ? x.length : x;
     let colWidths = Astr.reduce(
-        (r1, r2) => r1.map((elt, i) => Math.max(elt.length, r2[i].length))
+        (r1, r2) => r1.map((elt, i) => Math.max(getLen(elt), r2[i].length))
     );
 
     // Pad each number string to the appropriate widths and join.
@@ -90,6 +97,38 @@ export function getColumn(A, i) {
     let col = [];
     for (let j = 0; j < A.length; j++) col.push([A[j][i]]);
     return col;
+}
+
+// Return an m x n matrix with random normal values.
+// This uses the `random` library so that values can be
+// reproduced deterministically.
+export function rand(m, n) {
+    let A = Array(m);
+    for (let i = 0; i < m; i++) {
+        A[i] = Array(n);
+        for (let j = 0; j < n; j++) {
+            A[i][j] = random.normal();
+        }
+    }
+    return A;
+}
+
+// Return a new matrix which is the transpose of A.
+export function transpose(A) {
+    let [m, n] = [A.length, A[0].length];  // A is m x n.
+    let At = Array(n);
+    for (let i = 0; i < n; i++) {
+        At[i] = Array(m);
+        for (let j = 0; j < m; j++) {
+            At[i][j] = A[j][i];
+        }
+    }
+    return At;
+}
+
+// Calculate and return matrices Q, R so that Q is unitary and R
+// is upper-right triangular.
+export function qr(A) {
 }
 
 export function rotateAroundX(angle) {

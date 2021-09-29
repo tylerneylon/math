@@ -47,6 +47,17 @@ export function int(belowThis) {
     return result >= 0 ? result : result + belowThis;
 }
 
+export function normal() {
+    // We'll use the Box-Muller transform and throw away (!) one
+    // of the values. Hey, it's practical. See:
+    // https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform
+    let u1 = real();
+    let u2 = real();
+    let theta = 2 * Math.PI * u2;
+    return Math.sqrt(-2 * Math.log(u1)) * Math.cos(theta);
+    // We're effectively throwing away the sin variant of the above.
+}
+
 export function ptInCircle(radius = 1) {
     var x = radius, y = radius
     while (x * x + y * y > radius * radius) {
