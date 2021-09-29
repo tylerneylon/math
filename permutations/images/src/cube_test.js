@@ -19,6 +19,7 @@ import * as space  from './space.js';
 
 let xAngle = 0;
 let yAngle = 0;
+let zAngle = 0;
 let lastTs = null;
 
 let circleStyle = {
@@ -36,17 +37,20 @@ function drawFrame(ts) {
 
     let xRotationsPerSec = 0.1;
     let yRotationsPerSec = 0.25;
+    let zRotationsPerSec = 0.0;
 
     if (lastTs !== null) {
         xAngle += xRotationsPerSec * 2 * Math.PI * (ts - lastTs) / 1000;
         yAngle += yRotationsPerSec * 2 * Math.PI * (ts - lastTs) / 1000;
+        zAngle += zRotationsPerSec * 2 * Math.PI * (ts - lastTs) / 1000;
 
         let t1 = matrix.rotateAroundX(xAngle);
         let t2 = matrix.rotateAroundY(yAngle);
-        let t3 = matrix.eye(4);
-        t3[2][3] = zDist;
-        // Apply t1, then t2, then t3.
-        let t = matrix.mult(t3, matrix.mult(t2, t1));
+        let t3 = matrix.rotateAroundZ(zAngle);
+        let t4 = matrix.eye(4);
+        t4[2][3] = zDist;
+        // Apply t1, then t2, then t3.  // XXX
+        let t = matrix.mult(t4, matrix.mult(t3, matrix.mult(t2, t1)));
 
         space.setTransform(t);
     }

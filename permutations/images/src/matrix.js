@@ -111,3 +111,13 @@ export function rotateAroundY(angle) {
     A[2][2] =  c;
     return A;
 }
+
+export function rotateAroundZ(angle) {
+    let A = eye(4);
+    let [c, s] = [Math.cos(angle), Math.sin(angle)];
+    A[0][0] =  c;
+    A[0][1] = -s;
+    A[1][0] =  s;
+    A[1][1] =  c;
+    return A;
+}
