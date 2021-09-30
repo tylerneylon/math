@@ -76,6 +76,19 @@ export function stringify(A, precision) {
     return sArr.join('\n');
 }
 
+// Return a deep copy of matrix A.
+export function copy(A) {
+    let [m, n] = [A.length, A[0].length];
+    let B = Array(m);
+    for (let i = 0; i < m; i++) {
+        B[i] = Array(n);
+        for (let j = 0; j < n; j++) {
+            B[i][j] = A[i][j];
+        }
+    }
+    return B;
+}
+
 // Return the n x n identity matrix.
 export function eye(n) {
     let A = Array(n);
@@ -128,7 +141,29 @@ export function transpose(A) {
 
 // Calculate and return matrices Q, R so that Q is unitary and R
 // is upper-right triangular.
+// For now I'm assuming A is square. In the future I may ease up
+// that assumption.
 export function qr(A) {
+
+    console.assert(A.length === A[0].length, 'I expected a square matrix!');
+    let n = A.length;
+
+    // It's a bit simpler to work with rows, so we'll start with A^T,
+    // transform that into Q^T, and then return Q at the end.
+    let Qt = transpose(A);
+    let R  = eye(n);
+
+    for (let i = 0; i < n; i++) {
+        let m = Math.sqrt(Qt[i].map(x => x**2).reduce((a, b) => a + b));
+        R[i][i] = m;
+        Qt[i] = Qt[i].map(x => x / m);
+        for (let j = i + 1; j < n; j++) {
+            R[i][j] = mult([Qt[i]], transpose([Qt[j]]))[0][0];
+            Qt[j] = Qt[j].map((x, k) => x - R[i][j] * Qt[i][k]);
+        }
+    }
+
+    return [transpose(Qt), R];
 }
 
 export function rotateAroundX(angle) {
@@ -159,4 +194,44 @@ export function rotateAroundZ(angle) {
     A[1][0] =  s;
     A[1][1] =  c;
     return A;
+}
+
+
+// ______________________________________________________________________
+// Tests
+
+function isclose(a, b) {
+    return Math.abs(a - b) < 0.0001;
+}
+
+export function test() {
+
+    // We'll check the QR decomposition of a random matrix.
+    let A = rand(4, 4);
+
+    let [Q, R] = qr(A);
+
+    // Check that Q*R = A.
+    let QR = mult(Q, R);
+    for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 4; j++) {
+            console.assert(isclose(QR[i][j], A[i][j]));
+        }
+    }
+
+    // Check that Q is unitary.
+    let QtQ = mult(transpose(Q), Q);
+    let I   = eye(4);
+    for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 4; j++) {
+            console.assert(isclose(QtQ[i][j], I[i][j]));
+        }
+    }
+
+    // Check that R is upper-right.
+    for (let i = 1; i < 4; i++) {
+        for (let j = 0; j < i; j++) {
+            console.assert(R[i][j] === 0);
+        }
+    }
 }
