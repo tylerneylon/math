@@ -38,7 +38,8 @@ export let dotStyle = {
 
 export let lineStyle = {
     stroke: '#888',
-    fill:   'transparent'
+    fill:   'transparent',
+    'stroke-width': 0.3
 };
 
 let eyeZ = 0.001;

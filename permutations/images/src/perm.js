@@ -9,6 +9,7 @@
 // Imports
 
 import * as draw   from './draw.js';
+import * as matrix from './matrix.js';
 import * as random from './random.js';
 
 
@@ -616,5 +617,55 @@ export function drawCircularGn(n, orderingType) {
     });
 
     drawGraphWithPtMap(ptMap, n);
+}
+
+export function getG4PointsIn3D() {
+
+    // Set up P, whose columns are 4d points of S_4
+    let Pt = [];  // This will be a matrix whose rows are 4-permutations.
+    forAllPermsLex(4, function (permStr) {
+        let p = permStr.split('').map(x => parseInt(x));
+        p = p.map(x => x - 2.5);  // Center around 0.
+        Pt.push(p);
+    });
+    let P = matrix.transpose(Pt);
+
+    // Set up matrix S, which will allow us to project P into 3d.
+    let At = matrix.eye(4);
+    At[0] = [1, 1, 1, 1];  // We'll find a basis orthogonal to this.
+    let A = matrix.transpose(At);
+    let [Q, R] = matrix.qr(A);
+    let Qt = matrix.transpose(Q);
+    let S = Qt.slice(1);
+
+    return matrix.transpose(matrix.mult(S, P));
+}
+
+// This returns an array of [fromIndex, toIndex] arrays, one for each edge in
+// G_n where the nodes, 0-indexed, are listed in lexicographic order.
+export function getEdgeIndexesLex(n) {
+
+    // List all permutations.
+    let perms = [];
+    forAllPermsLex(n, function (permStr) {
+        perms.push(permStr);
+    });
+
+    // Make a reverse index.
+    let indexOfPerm = {};
+    for (let i = 0; i < perms.length; i++) indexOfPerm[perms[i]] = i;
+
+    // Put together the result array of edges.
+    let edges = [];
+    forAllTranspositions(n, function(t) {
+        for (let i = 0; i < perms.length; i++) {
+            let p1 = perms[i];
+            let p2 = applyTransposition(p1, t);
+            if (p1 > p2) continue;
+            edges.push([i, indexOfPerm[p2]]);
+        }
+    });
+
+    return edges;
 }
 
