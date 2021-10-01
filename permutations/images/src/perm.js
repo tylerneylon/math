@@ -641,7 +641,7 @@ export function getG4PointsIn3D() {
     return matrix.transpose(matrix.mult(S, P));
 }
 
-// This returns an array of [fromIndex, toIndex] arrays, one for each edge in
+// This returns an array of {from, to} objects, one for each edge in
 // G_n where the nodes, 0-indexed, are listed in lexicographic order.
 export function getEdgeIndexesLex(n) {
 
@@ -662,7 +662,7 @@ export function getEdgeIndexesLex(n) {
             let p1 = perms[i];
             let p2 = applyTransposition(p1, t);
             if (p1 > p2) continue;
-            edges.push([i, indexOfPerm[p2]]);
+            edges.push({from: i, to: indexOfPerm[p2]});
         }
     });
 

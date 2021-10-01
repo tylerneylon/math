@@ -84,9 +84,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 if (x === -1) xStack.push(idx);
                 if (y === -1) yStack.push(idx);
                 pts.push([a * x, a * y, a * z]);
-                if (x === 1) lines.push([xStack.shift(), idx]);
-                if (y === 1) lines.push([yStack.shift(), idx]);
-                if (z === 1) lines.push([idx - 1, idx]);
+                if (x === 1) lines.push({from: xStack.shift(), to: idx});
+                if (y === 1) lines.push({from: yStack.shift(), to: idx});
+                if (z === 1) lines.push({from: idx - 1, to: idx});
                 idx++;
             }
         }

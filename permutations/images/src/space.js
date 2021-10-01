@@ -126,14 +126,15 @@ export function addPoints(pts) {
     addAnyNewDots();
 }
 
-// This expects `lines` to be an array of [from, to] arrays, where `from` and
-// `to` are indexes into the `pts` array.
+// This expects `lines` to be an array of {from, to} objects, where `from` and
+// `to` are indexes into the `pts` array. Each line object may also have an
+// optional `style` key, which indicates the style overrides for that line.
 export function addLines(lines) {
     for (let line of lines) {
-        let fromPt = getXYArray(matrix.getColumn(ctx.pts, line[0]))[0];
-        let toPt   = getXYArray(matrix.getColumn(ctx.pts, line[1]))[0];
-        let elt = draw.line(fromPt, toPt, lineStyle);
-        ctx.lines.push({from: line[0], to: line[1], elt});
+        let fromPt = getXYArray(matrix.getColumn(ctx.pts, line.from))[0];
+        let toPt   = getXYArray(matrix.getColumn(ctx.pts, line.to))[0];
+        line.elt   = draw.line(fromPt, toPt, lineStyle);
+        ctx.lines.push(line);
     }
 }
 
