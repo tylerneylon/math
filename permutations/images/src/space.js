@@ -39,13 +39,9 @@ export let dotStyle = {
     r: 3
 };
 
-// XXX
-// TODO
-// Make outlines optional. For now I'm making them invisible.
 export let outlineStyle = {
     stroke: 'transparent',
-    //fill:   '#fff',
-    fill:   'transparent',  // XXX
+    fill:   '#fff',
     r: 5
 };
 
