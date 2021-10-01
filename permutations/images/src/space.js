@@ -44,6 +44,10 @@ export let lineStyle = {
 
 let eyeZ = 0.001;
 
+// Groups.
+let dotGroup  = null;
+let edgeGroup = null;
+
 
 // ______________________________________________________________________
 // Internal functions.
@@ -102,10 +106,17 @@ function appendPoint(pt) {
     ctx.pts[3].push(1);
 }
 
+function ensureGroupsExist() {
+    if (dotGroup !== null) return;
+    edgeGroup = draw.add('g');
+    dotGroup  = draw.add('g');
+}
+
 function addAnyNewDots() {
+    ensureGroupsExist();
     for (let i = ctx.dots.length; i < ctx.pts[0].length; i++) {
         let pt = calculateDrawPt(matrix.getColumn(ctx.pts, i));
-        let elt = draw.circle(pt, dotStyle);
+        let elt = draw.circle(pt, dotStyle, dotGroup);
         ctx.dots.push(elt);
         if (!pt.isVisible) {
             elt.hidden = true;
@@ -130,11 +141,12 @@ export function addPoints(pts) {
 // `to` are indexes into the `pts` array. Each line object may also have an
 // optional `style` key, which indicates the style overrides for that line.
 export function addLines(lines) {
+    ensureGroupsExist();
     for (let line of lines) {
         let fromPt = getXYArray(matrix.getColumn(ctx.pts, line.from))[0];
         let toPt   = getXYArray(matrix.getColumn(ctx.pts, line.to))[0];
         let style  = Object.assign({}, lineStyle, line.style);
-        line.elt   = draw.line(fromPt, toPt, style);
+        line.elt   = draw.line(fromPt, toPt, style, edgeGroup);
         ctx.lines.push(line);
     }
 }
