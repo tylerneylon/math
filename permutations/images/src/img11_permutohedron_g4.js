@@ -75,7 +75,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let lines = perm.getEdgeIndexesLex(4);
 
     space.addPoints(pts);
-    space.addLines(lines);
+    let doBackoff = true;
+    space.addLines(lines, doBackoff);
 
     // Add to the z value of all points.
     let t = matrix.eye(4);
