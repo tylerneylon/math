@@ -56,7 +56,7 @@ function getXYArray(pts) {
     let xyArray = [];
     for (let i = 0; i < p[0].length; i++) {
         let [x, y, z] = [p[0][i], p[1][i], p[2][i]];
-        xyArray.push({x: x / z, y: y / z, isVisible: z >= eyeZ});
+        xyArray.push({x: x / z, y: y / z, z, isVisible: z >= eyeZ});
     }
     return xyArray;
 }
@@ -66,7 +66,8 @@ function updatePoints() {
     let xys = getXYArray(ctx.pts);
 
     for (let i = 0; i < xys.length; i++) {
-        draw.setCenter(ctx.dots[i], xys[i]);
+        let r = 0.02 / xys[i].z;
+        draw.moveCircle(ctx.dots[i], xys[i], r);
         ctx.dots[i].hidden = !xys[i].isVisible;
     }
 

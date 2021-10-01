@@ -42,7 +42,7 @@ function drawFrame(ts) {
     } else {
         angle += rotationsPerSec * 2 * Math.PI * (ts - lastTs) / 1000;
         let center = {x: R * Math.cos(angle), y: R * Math.sin(angle)};
-        draw.setCenter(circle, center);
+        draw.moveCircle(circle, center);
     }
 
     lastTs = ts;
