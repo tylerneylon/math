@@ -133,7 +133,8 @@ export function addLines(lines) {
     for (let line of lines) {
         let fromPt = getXYArray(matrix.getColumn(ctx.pts, line.from))[0];
         let toPt   = getXYArray(matrix.getColumn(ctx.pts, line.to))[0];
-        line.elt   = draw.line(fromPt, toPt, lineStyle);
+        let style  = Object.assign({}, lineStyle, line.style);
+        line.elt   = draw.line(fromPt, toPt, style);
         ctx.lines.push(line);
     }
 }

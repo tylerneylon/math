@@ -662,7 +662,12 @@ export function getEdgeIndexesLex(n) {
             let p1 = perms[i];
             let p2 = applyTransposition(p1, t);
             if (p1 > p2) continue;
-            edges.push({from: i, to: indexOfPerm[p2]});
+            let line = {from: i, to: indexOfPerm[p2]};
+            let delta = Math.abs(parseInt(t[1]) - parseInt(t[2]));
+            if (delta === 1) line.style = {'stroke-width': 1};
+            if (delta === 3) line.style = {stroke: '#ddd'};
+
+            edges.push(line);
         }
     });
 
