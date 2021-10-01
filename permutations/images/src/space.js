@@ -104,9 +104,9 @@ function updatePoints() {
                 (to.x - from.x) / 2,
                 (to.y - from.y) / 2
             ];
-            let C = 0.8;
-            from = {x: cx - hdx * C, y: cx - hdy * C};
-            to   = {x: cx + hdx * C, y: cx + hdy * C};
+            let C = 0.95;
+            from = {x: cx - hdx * C, y: cy - hdy * C};
+            to   = {x: cx + hdx * C, y: cy + hdy * C};
         }
         draw.moveLine(line.elt, from, to);
     }
