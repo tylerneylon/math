@@ -35,9 +35,11 @@ let zDist = 4;
 
 function drawFrame(ts) {
 
-    let xRotationsPerSec = 0.01;
-    let yRotationsPerSec = 0.05;
-    let zRotationsPerSec = 0.0;
+    let speed = 1;
+
+    let xRotationsPerSec = speed * 0.01;
+    let yRotationsPerSec = speed * 0.05;
+    let zRotationsPerSec = speed * 0.0;
 
     if (lastTs !== null) {
         xAngle += xRotationsPerSec * 2 * Math.PI * (ts - lastTs) / 1000;

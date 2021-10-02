@@ -55,6 +55,7 @@ export let lineStyle = {
 let eyeZ = 0.001;
 
 // Groups.
+let mainGroup    = null;
 let dotGroup     = null;
 let outlineGroup = null;
 let edgeGroup    = null;
@@ -106,6 +107,44 @@ function updatePoints() {
         }
         draw.moveLine(line.elt, from, to);
     }
+    orderEltsByZ(xys);
+}
+
+function orderEltsByZ(xys) {
+    let items = [];
+    for (let i = 0; i < xys.length; i++) {
+        let item = {
+            z: xys[i].z,
+            elt: ctx.dots[i],
+            outline: ctx.outlines[i],
+            deps: []
+        };
+        item.elt.remove();
+        item.outline.remove();
+        items.push(item);
+    }
+    for (let line of ctx.lines) {
+        let item = {
+            z: (xys[line.from].z + xys[line.to].z) * 0.5,
+            elt: line.elt
+        };
+        item.elt.remove();
+        items[line.from].deps.push(line.elt);
+        items[line.to].deps.push(line.elt);
+    }
+    // Sort from high z to low z.
+    // We do it this way because we want the highest-z element to be farthest
+    // back, aka first, in the child list of the mainGroup svg parent.
+    // First children are rendered to appear behind later children.
+    items.sort((item1, item2) => item2.z - item1.z);
+    for (let item of items) {
+        // Add any dependencies, eg lines adjacent to a dot.
+        for (let dep of item.deps) {
+            if (!dep.parentElement) mainGroup.appendChild(dep);
+        }
+        if (item.outline) mainGroup.appendChild(item.outline);
+        mainGroup.appendChild(item.elt);
+    }
 }
 
 // This expects `pt` to be a 4d column vector.
@@ -139,6 +178,7 @@ function ensureGroupsExist() {
     edgeGroup    = draw.add('g');
     outlineGroup = draw.add('g');
     dotGroup     = draw.add('g');
+    mainGroup    = draw.add('g');
 }
 
 function addAnyNewDots() {
