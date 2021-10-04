@@ -73,11 +73,17 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     init.setup();
 
-    let pts = perm.getG4PointsIn3D();
+    let pts   = perm.getG4PointsIn3D();
     let lines = perm.getEdgeIndexesLex(4);
+    let faces = perm.getG4FacesIn3D();
+
+    // XXX
+    console.log('faces:');
+    console.log(faces);
 
     space.addPoints(pts);
     space.addLines(lines);
+    space.addFaces(faces);
 
     // Add to the z value of all points.
     let t = matrix.eye(4);

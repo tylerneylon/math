@@ -15,6 +15,7 @@
 
 import * as draw   from './draw.js';
 import * as matrix from './matrix.js';
+import * as vector from './vector.js';
 
 
 // ______________________________________________________________________
@@ -31,6 +32,14 @@ ctx.doBackoff = false;
 
 ctx.lines = [];  // This will contain {from, to, elt} objects.
 
+ctx.faces = [];  // This will contain [pt1, pt2, .., ptn, 'style'] arrays.
+ctx.normals = [[], [], [], []];  // This will be a matrix of face normals.
+ctx.faceCenters = [];
+
+// XXX
+ctx.normalLinePts = [[], [], [], []];
+ctx.normalLines = [];
+
 ctx.transform = matrix.eye(4);
 
 export let dotStyle = {
@@ -45,11 +54,16 @@ export let outlineStyle = {
     r: 5
 };
 
-
 export let lineStyle = {
     stroke: '#888',
     fill:   'transparent',
     'stroke-width': 0.3
+};
+
+export let normalLineStyle = {
+    stroke: '#f00',
+    fill:   'transparent',
+    'stroke-width': 1
 };
 
 let eyeZ = 0.001;
@@ -66,7 +80,7 @@ let edgeGroup    = null;
 
 function getXYArray(pts) {
     // Transform all points.
-    let p = matrix.mult(ctx.transform, ctx.pts);
+    let p = matrix.mult(ctx.transform, pts);
 
     // Apply perspective.
     let xyArray = [];
@@ -107,7 +121,23 @@ function updatePoints() {
         }
         draw.moveLine(line.elt, from, to);
     }
+
     orderEltsByZ(xys);
+
+    // XXX
+    xys = getXYArray(ctx.normalLinePts);
+    for (let i = 0; i < xys.length; i += 2) {
+        let line = ctx.normalLines[i / 2];
+        if (line === null) {
+            ctx.normalLines[i / 2] = draw.line(
+                xys[i],
+                xys[i + 1],
+                normalLineStyle
+            );
+        } else {
+            draw.moveLine(line, xys[i], xys[i + 1]);
+        }
+    }
 }
 
 function orderEltsByZ(xys) {
@@ -196,6 +226,72 @@ function addAnyNewDots() {
     }
 }
 
+function addAnyNewNormals() {
+    for (let i = ctx.normals[0].length; i < ctx.faces.length; i++) {
+
+        let face = ctx.faces[i];
+        let P = matrix.transpose(ctx.pts);
+
+        console.assert(face.length > 2, 'Faces need at least 3 points.');
+
+        // Find the center of the face (for debugging).
+        let S = Array(4).fill(0);
+        for (let j = 0; j < face.length; j++) {
+            S = S.map((x, i) => x + P[face[j]][i]);
+        }
+        S = S.map(x => x / face.length);
+        ctx.faceCenters.push(S);
+
+        // XXX
+        console.log('Calculated face center:');
+        console.log(S);
+
+        // Find the normal direction.
+        let a = vector.sub(P[face[1]], P[face[0]]);  // a = p1 - p0.
+        let b = vector.sub(P[face[2]], P[face[0]]);  // b = p2 - p0.
+        let n = vector.unit(vector.cross(a, b));     // n = unit(a x b).
+
+        // Choose the sign of n so that it points away from the origin.
+        // This assumes the overall shape is convex, and that the origin is on
+        // the interior of the shape.
+        let sign = Math.sign(vector.dot(n, S));
+        n = n.map(x => x * sign);
+
+        n.push(0);  // Make n a length-4 vector.
+        for (let j = 0; j < 4; j++) ctx.normals[j].push(n[j]);
+
+        // XXX
+        console.log('Calculated face normal:');
+        console.log(n);
+
+        console.log('_____________________');
+        console.log('Help with a sanity check:');
+        console.log('p0:');
+        console.log(P[face[0]]);
+        console.log('p1:');
+        console.log(P[face[1]]);
+        console.log('p1 - p0 (a):');
+        console.log(a);
+        console.log('a . n:');
+        console.log(vector.dot(a, n));
+        console.log('b . n:');
+        console.log(vector.dot(b, n));
+
+        // XXX
+        // Add data to visually render normal lines.
+        // This is intended as temporary debug code.
+        for (let j = 0; j < 4; j++) {
+            ctx.normalLinePts[j].push(S[j]);
+            ctx.normalLinePts[j].push(S[j] + 0.1 * n[j]);
+            ctx.normalLines.push(null);
+        }
+
+        // Confirm that the points are essentially planar.
+        // TODO
+
+    }
+}
+
 
 // ______________________________________________________________________
 // Public functions.
@@ -222,6 +318,18 @@ export function addLines(lines, doBackoff) {
         line.elt   = draw.line(fromPt, toPt, style, edgeGroup);
         ctx.lines.push(line);
     }
+}
+
+// This expects each face to be an array of indexes into `pts`.
+// Each face is expected to live in a plane, and it's expected that the points
+// are convex and listed counterclockwise.
+export function addFaces(faces) {
+    ctx.faces.push(...faces);
+
+    // XXX
+    // debugger;
+
+    addAnyNewNormals();
 }
 
 export function setTransform(t) {
