@@ -100,8 +100,8 @@ export function eye(n) {
 }
 
 // This is a convenience function.
-export function pr(A) {
-    console.log(stringify(A));
+export function pr(A, precision) {
+    console.log(stringify(A, precision));
 }
 
 // Returns A^(i) as a column vector.

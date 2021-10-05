@@ -35,6 +35,7 @@ ctx.lines = [];  // This will contain {from, to, elt} objects.
 ctx.faces = [];  // This will contain [pt1, pt2, .., ptn, 'style'] arrays.
 ctx.normals = [[], [], [], []];  // This will be a matrix of face normals.
 ctx.faceCenters = [];
+ctx.facePolygons = [];
 
 // XXX
 ctx.normalLinePts = [[], [], [], []];
@@ -63,6 +64,12 @@ export let lineStyle = {
 export let normalLineStyle = {
     stroke: '#f00',
     fill:   'transparent',
+    'stroke-width': 1
+};
+
+export let facePolyStyle = {
+    stroke: 'transparent',
+    fill:   '#fff8',
     'stroke-width': 1
 };
 
@@ -123,6 +130,15 @@ function updatePoints() {
     }
 
     orderEltsByZ(xys);
+
+    // XXX
+    for (let i = 0; i < /* 2 */ ctx.faces.length; i++) {
+        let face = ctx.faces[i];
+        // console.log(`i = ${i}`, 'face:', face);  // XXX
+        let faceXYs = [];
+        for (let j = 0; j < face.length; j++) faceXYs.push(xys[face[j]]);
+        draw.movePolygon(ctx.facePolygons[i], faceXYs);
+    }
 
     // XXX
     xys = getXYArray(ctx.normalLinePts);
@@ -235,16 +251,16 @@ function addAnyNewNormals() {
         console.assert(face.length > 2, 'Faces need at least 3 points.');
 
         // Find the center of the face (for debugging).
-        let S = Array(4).fill(0);
+        let center = Array(4).fill(0);
         for (let j = 0; j < face.length; j++) {
-            S = S.map((x, i) => x + P[face[j]][i]);
+            center = center.map((x, i) => x + P[face[j]][i]);
         }
-        S = S.map(x => x / face.length);
-        ctx.faceCenters.push(S);
+        center = center.map(x => x / face.length);
+        ctx.faceCenters.push(center);
 
         // XXX
         console.log('Calculated face center:');
-        console.log(S);
+        console.log(center);
 
         // Find the normal direction.
         let a = vector.sub(P[face[1]], P[face[0]]);  // a = p1 - p0.
@@ -254,7 +270,7 @@ function addAnyNewNormals() {
         // Choose the sign of n so that it points away from the origin.
         // This assumes the overall shape is convex, and that the origin is on
         // the interior of the shape.
-        let sign = Math.sign(vector.dot(n, S));
+        let sign = Math.sign(vector.dot(n, center));
         n = n.map(x => x * sign);
 
         n.push(0);  // Make n a length-4 vector.
@@ -281,10 +297,45 @@ function addAnyNewNormals() {
         // Add data to visually render normal lines.
         // This is intended as temporary debug code.
         for (let j = 0; j < 4; j++) {
-            ctx.normalLinePts[j].push(S[j]);
-            ctx.normalLinePts[j].push(S[j] + 0.1 * n[j]);
+            ctx.normalLinePts[j].push(center[j]);
+            ctx.normalLinePts[j].push(center[j] + 0.1 * n[j]);
             ctx.normalLines.push(null);
         }
+
+        // Change coordinates so we can:
+        //  (a) Ensure the points are essentially planar, and
+        //  (b) sort them by angle around their center.
+        // This works as intended whenever the points form a convex shape.
+        let S = matrix.rand(3, 3);
+        for (let j = 0; j < 3; j++) S[0][j] = n[j];
+        let Q = matrix.transpose(matrix.qr(matrix.transpose(S))[0]);
+        // Build the matrix faceP whose columns are the (3d) points in `face`.
+        let faceP = [];
+        for (let j = 0; j < face.length; j++) faceP.push(P[face[j]]);
+        faceP = matrix.transpose(faceP).slice(0, 3);
+        // let faceP = [[], [], []];
+        // for (let j = 0; j < face.length; j++) {
+        //     for (let k = 0; k < 3; k++) faceP[k].push(P[k][face[j]]);
+        // }
+        console.log('faceP:'); matrix.pr(faceP);
+        let T = matrix.mult(Q, faceP);
+        console.log('T:'); matrix.pr(T, 9);
+        // Confirm that the points are essentially planar.
+        let [hi, lo] = [Math.max(...T[0]), Math.min(...T[0])];
+        console.assert(hi - lo < 0.001, 'Expected face points to be planar.');
+        let angles = [];
+        for (let j = 0; j < face.length; j++) {
+            angles.push({
+                angle: Math.atan2(T[2][j], T[1][j]),
+                index: face[j]
+            });
+        }
+        // debugger;
+        angles.sort((a, b) => b.angle - a.angle);
+        ctx.faces[i] = [];
+        for (let item of angles) ctx.faces[i].push(item.index);
+
+        ctx.facePolygons.push(draw.polygon([], facePolyStyle));
 
         // Confirm that the points are essentially planar.
         // TODO

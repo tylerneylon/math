@@ -268,6 +268,32 @@ export function moveLine(line, from, to) {
     });
 }
 
+// This expects `pts` to be an array of {x, y} points.
+// The polygon will be closed for you; do not provide the initial point again.
+export function polygon(pts, style, parent) {
+
+    if (style === undefined) { style = lightStyle }
+
+    let ptStrs = [];
+    for (let pt of pts) {
+        let canvasPt = mapToCanvasPt(pt);
+        ptStrs.push(`${canvasPt.x},${canvasPt.y}`);
+    }
+    let polygonElt = add('polygon', style, parent);
+    addAttributes(polygonElt, {points: ptStrs.join(' ')});
+    return polygonElt;
+}
+
+export function movePolygon(polygonElt, pts) {
+
+    let ptStrs = [];
+    for (let pt of pts) {
+        let canvasPt = mapToCanvasPt(pt);
+        ptStrs.push(`${canvasPt.x},${canvasPt.y}`);
+    }
+    addAttributes(polygonElt, {points: ptStrs.join(' ')});
+}
+
 export function text(leftBaseline, str, style, parent) {
 
     if (style === undefined) { style = lightStyle }
