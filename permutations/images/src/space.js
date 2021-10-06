@@ -212,6 +212,15 @@ function orderElts(xys) {
         if (pt.outline) mainGroup.appendChild(pt.outline);
         mainGroup.appendChild(pt.elt);
     }
+
+    // 4. Draw any remaining interior lines.
+    for (let line of ctx.lines) {
+        if (!line.isInterior || line.elt.parentElement) continue;
+        mainGroup.appendChild(line.elt);
+    }
+
+    // 5. Draw all visible faces.
+    for (let polygon of ctx.facePolygons) mainGroup.appendChild(polygon);
 }
 
 function orderEltsByZ(xys) {
