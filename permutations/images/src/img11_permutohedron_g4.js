@@ -27,7 +27,7 @@ let circleStyle = {
     fill:   '#888'
 };
 
-let zDist = 4;
+let zDist = 8;
 
 
 // ______________________________________________________________________
@@ -35,7 +35,7 @@ let zDist = 4;
 
 function drawFrame(ts) {
 
-    let speed = 1;
+    let speed = 1;  // XXX
 
     let xRotationsPerSec = speed * 0.01;
     let yRotationsPerSec = speed * 0.05;
@@ -81,6 +81,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     console.log('faces:');
     console.log(faces);
 
+    space.ctx.zoom = 3;
     space.addPoints(pts);
     space.addLines(lines);
     space.addFaces(faces);

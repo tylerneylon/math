@@ -37,11 +37,16 @@ ctx.normals = [[], [], [], []];  // This will be a matrix of face normals.
 ctx.faceCenters = [];
 ctx.facePolygons = [];
 
-// XXX
+// This is an off-by-defualt, debug-helping feature.
+// When `ctx.doDrawNormalLines` is set to `true`, this will draw small red lines
+// along the normals of all faces.
+ctx.doDrawNormalLines = false;
 ctx.normalLinePts = [[], [], [], []];
 ctx.normalLines = [];
 
 ctx.transform = matrix.eye(4);
+
+ctx.zoom = 1;
 
 export let dotStyle = {
     stroke: 'transparent',
@@ -69,7 +74,9 @@ export let normalLineStyle = {
 
 export let facePolyStyle = {
     stroke: 'transparent',
-    fill:   '#fff8',
+    // XXX
+    fill:   '#aaf8',
+    // fill:   'transparent',  // XXX
     'stroke-width': 1
 };
 
@@ -85,7 +92,10 @@ let edgeGroup    = null;
 // ______________________________________________________________________
 // Internal functions.
 
-function getXYArray(pts) {
+function getXYArray(pts, doPerspective) {
+
+    if (doPerspective === undefined) doPerspective = true;
+
     // Transform all points.
     let p = matrix.mult(ctx.transform, pts);
 
@@ -93,7 +103,9 @@ function getXYArray(pts) {
     let xyArray = [];
     for (let i = 0; i < p[0].length; i++) {
         let [x, y, z] = [p[0][i], p[1][i], p[2][i]];
-        xyArray.push({x: x / z, y: y / z, z, isVisible: z >= eyeZ});
+        let w = 1;
+        if (doPerspective) w = z / ctx.zoom;
+        xyArray.push({x: x / w, y: y / w, z, isVisible: z >= eyeZ});
     }
     return xyArray;
 }
@@ -129,19 +141,31 @@ function updatePoints() {
         draw.moveLine(line.elt, from, to);
     }
 
-    orderEltsByZ(xys);
-
     // XXX
+    let normalXYs = getXYArray(ctx.normals, false);  // false for doPerspective
+    let lineXYs = getXYArray(ctx.normalLinePts, false);
+    console.assert(normalXYs.length === ctx.faces.length);
+    // let iValues = [1, 9, 12];
+    // for (let i of iValues) {
     for (let i = 0; i < /* 2 */ ctx.faces.length; i++) {
         let face = ctx.faces[i];
-        // console.log(`i = ${i}`, 'face:', face);  // XXX
         let faceXYs = [];
         for (let j = 0; j < face.length; j++) faceXYs.push(xys[face[j]]);
         draw.movePolygon(ctx.facePolygons[i], faceXYs);
+        let isHidden = vector.dot(
+            [normalXYs[i].x, normalXYs[i].y, normalXYs[i].z],
+            [lineXYs[2 * i].x, lineXYs[2 * i].y, lineXYs[2 * i].z]
+        ) > 0;
+        ctx.facePolygons[i].setAttribute('display', isHidden ? 'none' : 'hi');
     }
 
-    // XXX
-    xys = getXYArray(ctx.normalLinePts);
+    orderEltsByZ(xys);
+
+    if (ctx.doDrawNormalLines) drawNormalLines();
+}
+
+function drawNormalLines() {
+    let xys = getXYArray(ctx.normalLinePts);
     for (let i = 0; i < xys.length; i += 2) {
         let line = ctx.normalLines[i / 2];
         if (line === null) {
@@ -177,6 +201,14 @@ function orderEltsByZ(xys) {
         item.elt.remove();
         items[line.from].deps.push(line.elt);
         items[line.to].deps.push(line.elt);
+    }
+    for (let i = 0; i < ctx.faces.length; i++) {
+        let face = ctx.faces[i];
+        let elt = ctx.facePolygons[i];
+        elt.remove();
+        for (let facePt of face) {
+            items[facePt].deps.unshift(elt);
+        }
     }
     // Sort from high z to low z.
     // We do it this way because we want the highest-z element to be farthest
