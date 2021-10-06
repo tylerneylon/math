@@ -46,6 +46,8 @@ ctx.transform = matrix.eye(4);
 
 ctx.zoom = 1;
 
+let lightDir = vector.unit([-1, -1, -2]);
+
 export let dotStyle = {
     stroke: 'transparent',
     fill:   '#888',
@@ -146,7 +148,21 @@ function updatePoints() {
             [lineXYs[2 * i].x, lineXYs[2 * i].y, lineXYs[2 * i].z]
         ) > 0;
         for (let line of face.lines) line.isForeground = !isHidden;
-        ctx.facePolygons[i].setAttribute('display', isHidden ? 'none' : 'hi');
+        let polygon = ctx.facePolygons[i];
+        polygon.setAttribute('display', isHidden ? 'none' : 'hi');
+
+        // Adjust alpha and color a bit for a little more 3d effect.
+        let towardLight = vector.dot(
+            [normalXYs[i].x, normalXYs[i].y, normalXYs[i].z],
+            lightDir
+        );
+        // let ell = Math.floor(towardLight * 45) + 210;
+        let ell = Math.floor(towardLight * 40) + 215;
+        let alpha = (towardLight ** 2) * 0.3 + 0.4;  // Between 0.4 and 0.8.
+        //let alpha = (towardLight ** 2);
+        //let alpha = 0.6;
+        polygon.setAttribute('fill', `rgba(${ell}, ${ell}, ${ell}, ${alpha})`);
+
         if (!isHidden) {
             for (let j of face) xys[j].isForeground = true;
         }
