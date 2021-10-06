@@ -126,13 +126,9 @@ function updatePoints() {
         draw.moveLine(line.elt, from, to);
     }
 
-    // XXX
-    let normalXYs = getXYArray(ctx.normals, false);  // false for doPerspective
-    let lineXYs = getXYArray(ctx.normalLinePts, false);
-    console.assert(normalXYs.length === ctx.faces.length);
-    // let iValues = [1, 9, 12];
-    // for (let i of iValues) {
-    for (let i = 0; i < /* 2 */ ctx.faces.length; i++) {
+    let normalXYs = getXYArray(ctx.normals, false);  // doPerspective = false
+    let lineXYs   = getXYArray(ctx.normalLinePts, false);
+    for (let i = 0; i < ctx.faces.length; i++) {
         let face = ctx.faces[i];
         let faceXYs = [];
         for (let j = 0; j < face.length; j++) faceXYs.push(xys[face[j]]);
