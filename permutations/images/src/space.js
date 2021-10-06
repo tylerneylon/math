@@ -113,8 +113,8 @@ function updatePoints() {
     let xys = getXYArray(ctx.pts);
 
     for (let i = 0; i < xys.length; i++) {
-        let r = 0.02 / xys[i].z;
-        let outlineR = 0.04 / xys[i].z;
+        let r = 0.04 / xys[i].z;
+        let outlineR = 2 * r;
         draw.moveCircle(ctx.dots[i], xys[i], r);
         draw.moveCircle(ctx.outlines[i], xys[i], outlineR);
         ctx.dots[i].hidden = !xys[i].isVisible;
@@ -151,8 +151,8 @@ function updatePoints() {
     }
 
     // XXX
-    // orderElts(xys);
-    orderEltsByZ(xys);
+    orderElts(xys);
+    // orderEltsByZ(xys);
 
     if (ctx.doDrawNormalLines) drawNormalLines();
 }
@@ -177,10 +177,41 @@ function orderElts(xys) {
 
     // 1. Remove all SVG elements so we can re-insert in a new order.
     for (let dot     of ctx.dots)         dot.remove();
-    for (let line    of ctx.lines)        line.remove();
+    for (let outline of ctx.outlines)     outline.remove();
+    for (let line    of ctx.lines)        line.elt.remove();
     for (let polygon of ctx.facePolygons) polygon.remove();
 
-    // 2. Draw background points and their adjacent edges.
+    // 2. Prepare a list of z-ordered points linked with adjacent edges.
+    let pts = [];
+    for (let i = 0; i < xys.length; i++) {
+        pts.push({
+            z: xys[i].z,
+            elt: ctx.dots[i],
+            outline: ctx.outlines[i],
+            deps: [],
+            isForeground: xys[i].isForeground
+        });
+    }
+    for (let line of ctx.lines) {
+        pts[line.from].deps.push(line.elt);
+        pts[line.to].deps.push(line.elt);
+    }
+    // Sort from high z to low z.
+    // We do it this way because we want the highest-z element to be farthest
+    // back, aka first, in the child list of the mainGroup svg parent.
+    // First children are rendered to appear behind later children.
+    pts.sort((item1, item2) => item2.z - item1.z);
+
+    // 3. Draw background points and their adjacent edges.
+    for (let pt of pts) {
+        if (pt.isForeground) continue;
+        // Add any dependencies, eg lines adjacent to a dot.
+        for (let dep of pt.deps) {
+            if (!dep.parentElement) mainGroup.appendChild(dep);
+        }
+        if (pt.outline) mainGroup.appendChild(pt.outline);
+        mainGroup.appendChild(pt.elt);
+    }
 }
 
 function orderEltsByZ(xys) {
