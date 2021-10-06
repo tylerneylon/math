@@ -657,6 +657,7 @@ export function getEdgeIndexesLex(n) {
 
     // Put together the result array of edges.
     let edges = [];
+    let lineTypes = {1: 'edge', 2: 'face', 3: 'internal'};
     forAllTranspositions(n, function(t) {
         for (let i = 0; i < perms.length; i++) {
             let p1 = perms[i];
@@ -665,8 +666,8 @@ export function getEdgeIndexesLex(n) {
             let line = {from: i, to: indexOfPerm[p2]};
             let delta = Math.abs(parseInt(t[1]) - parseInt(t[2]));
             if (delta === 1) line.style = {'stroke-width': 1};
-            if (delta === 3) line.style = {stroke: '#ddd'};
-            line.isInternal = (delta === 3);
+            if (delta === 3) line.style = {stroke: '#888'};
+            line.type = lineTypes[delta];  // edge, face, or internal
 
             edges.push(line);
         }

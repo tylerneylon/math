@@ -59,7 +59,7 @@ export let outlineStyle = {
 };
 
 export let lineStyle = {
-    stroke: '#888',
+    stroke: '#444',
     fill:   'transparent',
     'stroke-width': 0.3
 };
@@ -73,7 +73,8 @@ export let normalLineStyle = {
 export let facePolyStyle = {
     stroke: 'transparent',
     // XXX
-    fill:   '#aaf8',
+    // fill:   '#aaf8',
+    fill:   '#fffa',
     // fill:   'transparent',  // XXX
     'stroke-width': 1
 };
@@ -144,6 +145,7 @@ function updatePoints() {
             [normalXYs[i].x, normalXYs[i].y, normalXYs[i].z],
             [lineXYs[2 * i].x, lineXYs[2 * i].y, lineXYs[2 * i].z]
         ) > 0;
+        for (let line of face.lines) line.isForeground = !isHidden;
         ctx.facePolygons[i].setAttribute('display', isHidden ? 'none' : 'hi');
         if (!isHidden) {
             for (let j of face) xys[j].isForeground = true;
@@ -215,12 +217,29 @@ function orderElts(xys) {
 
     // 4. Draw any remaining interior lines.
     for (let line of ctx.lines) {
-        if (!line.isInterior || line.elt.parentElement) continue;
-        mainGroup.appendChild(line.elt);
+        // Case A: Internal lines not yet rendered.
+        if (line.type === 'internal' && !line.elt.parentElement) {
+            mainGroup.appendChild(line.elt);
+        }
+        // Case B: Background face lines not yet rendered.
+        if (line.type === 'face' && !line.isForeground) {
+            mainGroup.appendChild(line.elt);
+        }
     }
 
     // 5. Draw all visible faces.
     for (let polygon of ctx.facePolygons) mainGroup.appendChild(polygon);
+
+    // 6. Draw all remaining points and edges.
+    for (let pt of pts) {
+        if (pt.elt.parentElement) continue;
+        // Add any dependencies, eg lines adjacent to a dot.
+        for (let dep of pt.deps) {
+            if (!dep.parentElement) mainGroup.appendChild(dep);
+        }
+        if (pt.outline) mainGroup.appendChild(pt.outline);
+        mainGroup.appendChild(pt.elt);
+    }
 }
 
 function orderEltsByZ(xys) {
@@ -325,6 +344,15 @@ function addAnyNewNormals() {
 
         console.assert(face.length > 2, 'Faces need at least 3 points.');
 
+        // Link the face to lines on it (face lines, not edge lines).
+        face.lines = [];
+        for (let line of ctx.lines) {
+            if (line.type !== 'face') continue;
+            if (face.includes(line.from) && face.includes(line.to)) {
+                face.lines.push(line);
+            }
+        }
+
         // Find the center of the face (for debugging).
         let center = Array(4).fill(0);
         for (let j = 0; j < face.length; j++) {
@@ -407,9 +435,7 @@ function addAnyNewNormals() {
         }
         // debugger;
         angles.sort((a, b) => b.angle - a.angle);
-        ctx.faces[i] = [];
-        for (let item of angles) ctx.faces[i].push(item.index);
-
+        for (let j = 0; j < angles.length; j++) face[j] = angles[j].index;
         ctx.facePolygons.push(draw.polygon([], facePolyStyle));
 
         // Confirm that the points are essentially planar.
