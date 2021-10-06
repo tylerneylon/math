@@ -28,8 +28,6 @@ ctx.pts = [[], [], [], []];
 ctx.dots = [];  // This will contain DOM svg circles, one per point.
 ctx.outlines = [];
 
-ctx.doBackoff = false;
-
 ctx.lines = [];  // This will contain {from, to, elt} objects.
 
 ctx.faces = [];  // This will contain [pt1, pt2, .., ptn, 'style'] arrays.
@@ -125,19 +123,6 @@ function updatePoints() {
 
     for (let line of ctx.lines) {
         let [from, to] = [xys[line.from], xys[line.to]];
-        if (ctx.doBackoff) {
-            let [cx, cy] = [
-                (to.x + from.x) / 2,
-                (to.y + from.y) / 2
-            ];
-            let [hdx, hdy] = [  // "hd" is "half delta"
-                (to.x - from.x) / 2,
-                (to.y - from.y) / 2
-            ];
-            let C = 0.95;
-            from = {x: cx - hdx * C, y: cy - hdy * C};
-            to   = {x: cx + hdx * C, y: cy + hdy * C};
-        }
         draw.moveLine(line.elt, from, to);
     }
 
@@ -391,9 +376,8 @@ export function addPoints(pts) {
 // This expects `lines` to be an array of {from, to} objects, where `from` and
 // `to` are indexes into the `pts` array. Each line object may also have an
 // optional `style` key, which indicates the style overrides for that line.
-export function addLines(lines, doBackoff) {
+export function addLines(lines) {
     ensureGroupsExist();
-    if (doBackoff) ctx.doBackoff = true;
     for (let line of lines) {
         let fromPt = getXYArray(matrix.getColumn(ctx.pts, line.from))[0];
         let toPt   = getXYArray(matrix.getColumn(ctx.pts, line.to))[0];
