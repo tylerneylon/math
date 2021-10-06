@@ -126,6 +126,13 @@ function updatePoints() {
         draw.moveLine(line.elt, from, to);
     }
 
+    // At the same time that face polygons are updated, we also (a) determine
+    // which ones are visible, and (b) determine which points are in the
+    // background, meaning that all adjacent faces are pointing away.
+
+    // Mark all points as background; we'll move some to foreground below.
+    for (let xy of xys) xy.isForeground = false;
+
     let normalXYs = getXYArray(ctx.normals, false);  // doPerspective = false
     let lineXYs   = getXYArray(ctx.normalLinePts, false);
     for (let i = 0; i < ctx.faces.length; i++) {
@@ -138,8 +145,13 @@ function updatePoints() {
             [lineXYs[2 * i].x, lineXYs[2 * i].y, lineXYs[2 * i].z]
         ) > 0;
         ctx.facePolygons[i].setAttribute('display', isHidden ? 'none' : 'hi');
+        if (!isHidden) {
+            for (let j of face) xys[j].isForeground = true;
+        }
     }
 
+    // XXX
+    // orderElts(xys);
     orderEltsByZ(xys);
 
     if (ctx.doDrawNormalLines) drawNormalLines();
@@ -159,6 +171,16 @@ function drawNormalLines() {
             draw.moveLine(line, xys[i], xys[i + 1]);
         }
     }
+}
+
+function orderElts(xys) {
+
+    // 1. Remove all SVG elements so we can re-insert in a new order.
+    for (let dot     of ctx.dots)         dot.remove();
+    for (let line    of ctx.lines)        line.remove();
+    for (let polygon of ctx.facePolygons) polygon.remove();
+
+    // 2. Draw background points and their adjacent edges.
 }
 
 function orderEltsByZ(xys) {
