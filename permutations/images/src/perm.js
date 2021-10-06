@@ -666,6 +666,7 @@ export function getEdgeIndexesLex(n) {
             let delta = Math.abs(parseInt(t[1]) - parseInt(t[2]));
             if (delta === 1) line.style = {'stroke-width': 1};
             if (delta === 3) line.style = {stroke: '#ddd'};
+            line.isInternal = (delta === 3);
 
             edges.push(line);
         }
