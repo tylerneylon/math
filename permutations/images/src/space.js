@@ -46,6 +46,13 @@ ctx.transform = matrix.eye(4);
 
 ctx.zoom = 1;
 
+// When this is null, there is no fading when rendering.
+// When this is an array [a, b], with a < b, then points and lines
+// beyond distnace b are white, points closer than a are at full darkness (which
+// depends on their original style), and points between a and b interpolate
+// between these.
+ctx.fadeRange = null;
+
 let lightDir = vector.unit([-1, -1, -2]);
 
 export let dotStyle = {
@@ -120,12 +127,21 @@ function updatePoints() {
         let outlineR = 2 * r;
         draw.moveCircle(ctx.dots[i], xys[i], r);
         draw.moveCircle(ctx.outlines[i], xys[i], outlineR);
+        if (ctx.fadeRange) {
+            let color = getFadeColor(ctx.dots[i].baseColor, xys[i].z);
+            ctx.dots[i].setAttribute('fill', color);
+        }
         ctx.dots[i].hidden = !xys[i].isVisible;
         ctx.outlines[i].hidden = !xys[i].isVisible;
     }
 
     for (let line of ctx.lines) {
         let [from, to] = [xys[line.from], xys[line.to]];
+        if (ctx.fadeRange) {
+            let avgZ  = (xys[line.from].z + xys[line.to].z) / 2;
+            let color = getFadeColor(line.baseColor, avgZ);
+            line.elt.setAttribute('stroke', color);
+        }
         draw.moveLine(line.elt, from, to);
     }
 
@@ -173,6 +189,45 @@ function updatePoints() {
     // orderEltsByZ(xys);
 
     if (ctx.doDrawNormalLines) drawNormalLines();
+}
+
+// This applies ctx.fadeRange to stdBaseColor, using z, to arrive a color that
+// is a fade from stdBaseColor down to white. The returned value is a color
+// string that can be assigned, eg, to a `stroke` or `fill` style attribute.
+function getFadeColor(stdBaseColor, z) {
+    if (ctx.fadeRange === null) return getColorStr(stdBaseColor);
+    let [a, b] = ctx.fadeRange;
+    if (z < a) return getColorStr(stdBaseColor);
+    if (z > b) return '#fff';
+    let w = 1 - (z - a) / (b - a);
+    let c = stdBaseColor;
+    return getColorStr([
+        c[0] * w + (1 - w),
+        c[1] * w + (1 - w),
+        c[2] * w + (1 - w)
+    ]);
+}
+
+// Derive an [r, g, b] array from a color string. The values of r, g, and b are
+// each in the range [0, 1]. This expects that the color string has no alpha
+// value.
+function getStdColor(colorStr) {
+    console.assert(colorStr[0] === '#');
+    let color = [];
+    let nDigits = (colorStr.length === 7 ? 2 : 1);
+    for (let i = 0; i < 3; i++) {
+        let channelStr = colorStr.substr(1 + nDigits * i, nDigits);
+        if (nDigits === 1) channelStr = channelStr + channelStr;
+        color.push(parseInt(channelStr, 16) / 255);
+    }
+    return color;
+}
+
+// This converts a standard color array to a color string. A standard color
+// array has [r, g, b] which each value in the range [0, 1].
+function getColorStr(c) {
+    const hex = d => Math.ceil(d * 255).toString(16).padStart(2, '0')
+    return '#' + c.map(hex).join('');
 }
 
 function drawNormalLines() {
@@ -258,51 +313,6 @@ function orderElts(xys) {
     }
 }
 
-function orderEltsByZ(xys) {
-    let items = [];
-    for (let i = 0; i < xys.length; i++) {
-        let item = {
-            z: xys[i].z,
-            elt: ctx.dots[i],
-            outline: ctx.outlines[i],
-            deps: []
-        };
-        item.elt.remove();
-        item.outline.remove();
-        items.push(item);
-    }
-    for (let line of ctx.lines) {
-        let item = {
-            z: (xys[line.from].z + xys[line.to].z) * 0.5,
-            elt: line.elt
-        };
-        item.elt.remove();
-        items[line.from].deps.push(line.elt);
-        items[line.to].deps.push(line.elt);
-    }
-    for (let i = 0; i < ctx.faces.length; i++) {
-        let face = ctx.faces[i];
-        let elt = ctx.facePolygons[i];
-        elt.remove();
-        for (let facePt of face) {
-            items[facePt].deps.unshift(elt);
-        }
-    }
-    // Sort from high z to low z.
-    // We do it this way because we want the highest-z element to be farthest
-    // back, aka first, in the child list of the mainGroup svg parent.
-    // First children are rendered to appear behind later children.
-    items.sort((item1, item2) => item2.z - item1.z);
-    for (let item of items) {
-        // Add any dependencies, eg lines adjacent to a dot.
-        for (let dep of item.deps) {
-            if (!dep.parentElement) mainGroup.appendChild(dep);
-        }
-        if (item.outline) mainGroup.appendChild(item.outline);
-        mainGroup.appendChild(item.elt);
-    }
-}
-
 // This expects `pt` to be a 4d column vector.
 function calculateDrawPt(pt) {
 
@@ -343,6 +353,7 @@ function addAnyNewDots() {
         let pt = calculateDrawPt(matrix.getColumn(ctx.pts, i));
         let elt        = draw.circle(pt, dotStyle, dotGroup);
         let outlineElt = draw.circle(pt, outlineStyle, outlineGroup);
+        elt.baseColor  = getStdColor(dotStyle.fill);
         ctx.dots.push(elt);
         ctx.outlines.push(outlineElt);
         if (!pt.isVisible) {
@@ -483,6 +494,7 @@ export function addLines(lines) {
         let toPt   = getXYArray(matrix.getColumn(ctx.pts, line.to))[0];
         let style  = Object.assign({}, lineStyle, line.style);
         line.elt   = draw.line(fromPt, toPt, style, edgeGroup);
+        line.baseColor = getStdColor(style.stroke);
         ctx.lines.push(line);
     }
 }

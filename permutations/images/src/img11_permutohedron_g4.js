@@ -77,9 +77,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let lines = perm.getEdgeIndexesLex(4);
     let faces = perm.getG4FacesIn3D();
 
-    // XXX
-    console.log('faces:');
-    console.log(faces);
+    // Add a small degree of fading for the farther-back points and lines.
+    space.ctx.fadeRange = [6, 16];
 
     space.ctx.zoom = 3;
     space.addPoints(pts);
