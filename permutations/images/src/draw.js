@@ -150,7 +150,6 @@ export function add(eltName, attr, parent) {
 
 export function addAttributes(elt, attr) {
     for (var key in attr) {
-        // console.log('Setting attribute:', elt, key, attr[key]);  // XXX
         elt.setAttribute(key, attr[key]);
     }
     return elt;
@@ -302,7 +301,9 @@ export function text(leftBaseline, str, style, parent) {
     var t = add('text', style, parent);
     t.innerHTML = str;
     addAttributes(t, {x: leftBaseline.x, y: leftBaseline.y});
-    // addAttributes(t, {style: 'font-family: sans-serif'});  // XXX
-    // addAttributes(t, {fontFamily: 'Arial'});  // XXX
+    if (false) {
+        // I'll leave this here for reference.
+        addAttributes(t, {style: 'font-family: sans-serif'});
+    }
     return t;
 }

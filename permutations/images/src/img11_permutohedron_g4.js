@@ -35,7 +35,7 @@ let zDist = 8;
 
 function drawFrame(ts) {
 
-    let speed = 1;  // XXX
+    let speed = 1;
 
     let xRotationsPerSec = speed * 0.01;
     let yRotationsPerSec = speed * 0.05;
@@ -51,7 +51,6 @@ function drawFrame(ts) {
         let t3 = matrix.rotateAroundZ(zAngle);
         let t4 = matrix.eye(4);
         t4[2][3] = zDist;
-        // Apply t1, then t2, then t3.  // XXX
         let t = matrix.mult(t4, matrix.mult(t3, matrix.mult(t2, t1)));
 
         space.setTransform(t);

@@ -676,7 +676,6 @@ export function getEdgeIndexesLex(n) {
     return edges;
 }
 
-// XXX in progress
 // This returns an array of [pt1, pt2, ...] arrays, one for each face of the
 // permutohedron of G_4. The 'points' are indexes into the list of vertices when
 // the vertices are ordered lexicographically.
@@ -687,11 +686,6 @@ export function getG4FacesIn3D() {
     forAllPermsLex(4, function (permStr) {
         perms.push(permStr);
     });
-
-    // XXX Do we need indexOfPerm?
-    // Make a reverse index.
-    let indexOfPerm = {};
-    for (let i = 0; i < perms.length; i++) indexOfPerm[perms[i]] = i;
 
     // Put together the result array of faces.
     // This will map 'X:Y' to an array of point indexes for that face.

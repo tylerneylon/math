@@ -81,10 +81,7 @@ export let normalLineStyle = {
 
 export let facePolyStyle = {
     stroke: 'transparent',
-    // XXX
-    // fill:   '#aaf8',
     fill:   '#fffa',
-    // fill:   'transparent',  // XXX
     'stroke-width': 1
 };
 
@@ -184,9 +181,7 @@ function updatePoints() {
         }
     }
 
-    // XXX
     orderElts(xys);
-    // orderEltsByZ(xys);
 
     if (ctx.doDrawNormalLines) drawNormalLines();
 }
@@ -388,10 +383,6 @@ function addAnyNewNormals() {
         center = center.map(x => x / face.length);
         ctx.faceCenters.push(center);
 
-        // XXX
-        console.log('Calculated face center:');
-        console.log(center);
-
         // Find the normal direction.
         let a = vector.sub(P[face[1]], P[face[0]]);  // a = p1 - p0.
         let b = vector.sub(P[face[2]], P[face[0]]);  // b = p2 - p0.
@@ -406,26 +397,8 @@ function addAnyNewNormals() {
         n.push(0);  // Make n a length-4 vector.
         for (let j = 0; j < 4; j++) ctx.normals[j].push(n[j]);
 
-        // XXX
-        console.log('Calculated face normal:');
-        console.log(n);
-
-        console.log('_____________________');
-        console.log('Help with a sanity check:');
-        console.log('p0:');
-        console.log(P[face[0]]);
-        console.log('p1:');
-        console.log(P[face[1]]);
-        console.log('p1 - p0 (a):');
-        console.log(a);
-        console.log('a . n:');
-        console.log(vector.dot(a, n));
-        console.log('b . n:');
-        console.log(vector.dot(b, n));
-
-        // XXX
         // Add data to visually render normal lines.
-        // This is intended as temporary debug code.
+        // Normal line rendering depends on ctx.doDrawNormalLines.
         for (let j = 0; j < 4; j++) {
             ctx.normalLinePts[j].push(center[j]);
             ctx.normalLinePts[j].push(center[j] + 0.1 * n[j]);
@@ -443,13 +416,7 @@ function addAnyNewNormals() {
         let faceP = [];
         for (let j = 0; j < face.length; j++) faceP.push(P[face[j]]);
         faceP = matrix.transpose(faceP).slice(0, 3);
-        // let faceP = [[], [], []];
-        // for (let j = 0; j < face.length; j++) {
-        //     for (let k = 0; k < 3; k++) faceP[k].push(P[k][face[j]]);
-        // }
-        console.log('faceP:'); matrix.pr(faceP);
         let T = matrix.mult(Q, faceP);
-        console.log('T:'); matrix.pr(T, 9);
         // Confirm that the points are essentially planar.
         let [hi, lo] = [Math.max(...T[0]), Math.min(...T[0])];
         console.assert(hi - lo < 0.001, 'Expected face points to be planar.');
@@ -460,14 +427,19 @@ function addAnyNewNormals() {
                 index: face[j]
             });
         }
-        // debugger;
         angles.sort((a, b) => b.angle - a.angle);
         for (let j = 0; j < angles.length; j++) face[j] = angles[j].index;
         ctx.facePolygons.push(draw.polygon([], facePolyStyle));
 
-        // Confirm that the points are essentially planar.
-        // TODO
-
+        // TODO Move mouse event setup to its own function.
+        let polygon = ctx.facePolygons[ctx.facePolygons.length - 1];
+        polygon.addEventListener('mouseover', function () {
+            polygon.setAttribute('stroke', '#0af');
+            polygon.setAttribute('stroke-width', '4');
+        });
+        polygon.addEventListener('mouseout', function () {
+            polygon.setAttribute('stroke', 'transparent');
+        });
     }
 }
 
@@ -494,6 +466,7 @@ export function addLines(lines) {
         let toPt   = getXYArray(matrix.getColumn(ctx.pts, line.to))[0];
         let style  = Object.assign({}, lineStyle, line.style);
         line.elt   = draw.line(fromPt, toPt, style, edgeGroup);
+        line.elt.setAttribute('pointer-events', 'none');
         line.baseColor = getStdColor(style.stroke);
         ctx.lines.push(line);
     }
@@ -504,10 +477,6 @@ export function addLines(lines) {
 // are convex and listed counterclockwise.
 export function addFaces(faces) {
     ctx.faces.push(...faces);
-
-    // XXX
-    // debugger;
-
     addAnyNewNormals();
 }
 
