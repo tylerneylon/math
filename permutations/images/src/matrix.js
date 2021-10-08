@@ -61,9 +61,9 @@ export function stringify(A, precision) {
     }
 
     // Determine the max width per column.
-    let getLen = x => typeof x === 'string' ? x.length : x;
-    let colWidths = Astr.reduce(
-        (r1, r2) => r1.map((elt, i) => Math.max(getLen(elt), r2[i].length))
+    let lenArray = Astr.map(row => row.map(x => x.length));
+    let colWidths = lenArray.reduce(
+        (r1, r2) => r1.map((elt, i) => Math.max(elt, r2[i]))
     );
 
     // Pad each number string to the appropriate widths and join.
