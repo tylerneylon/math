@@ -73,6 +73,9 @@ ctx.fadeRange = null;
 
 let lightDir = vector.unit([-1, -1, -2]);
 
+let highlightedFaceElt = null;
+let highlightColor = '#0af';
+
 export let dotStyle = {
     stroke: 'transparent',
     fill:   '#888',
@@ -453,12 +456,18 @@ function addAnyNewNormals() {
 
         // TODO Move mouse event setup to its own function.
         let polygon = ctx.facePolygons[ctx.facePolygons.length - 1];
+        polygon.setAttribute('stroke-width', '4');
         polygon.addEventListener('mouseover', function () {
-            polygon.setAttribute('stroke', '#0af');
-            polygon.setAttribute('stroke-width', '4');
+            highlightedFaceElt = polygon;
+            if (ctx.mode !== 'dragging') {
+                polygon.setAttribute('stroke', '#0af');
+            }
         });
         polygon.addEventListener('mouseout', function () {
             polygon.setAttribute('stroke', 'transparent');
+            if (highlightedFaceElt === polygon) {
+                highlightedFaceElt = null;
+            }
         });
     }
 }
@@ -473,11 +482,13 @@ function setupFrame(ts) {
 
     let timeDeltaSeconds = (ts - lastTs) / 1000;
     lastTs = ts;
-    let angle = ctx.rotationsPerSec * 2 * Math.PI * timeDeltaSeconds;
 
-    let t = matrix.rotateAroundX(ctx.rotationSign * angle);
-    t = matrix.mult(ctx.angleMatInv, t, ctx.angleMat);
-    ctx.rotateMat = matrix.mult(t, ctx.rotateMat);
+    if (ctx.mode === 'spinning') {
+        let angle = ctx.rotationsPerSec * 2 * Math.PI * timeDeltaSeconds;
+        let t = matrix.rotateAroundX(ctx.rotationSign * angle);
+        t = matrix.mult(ctx.angleMatInv, t, ctx.angleMat);
+        ctx.rotateMat = matrix.mult(t, ctx.rotateMat);
+    }
     setTransform(matrix.mult(ctx.transMat, ctx.rotateMat));
 }
 
@@ -526,21 +537,37 @@ export function setTransform(t) {
 // XXX Clean up this function.
 export function makeDraggable() {
     draw.ctx.svg.addEventListener('mousedown', e => {
-        console.log('mousedown');
-        ctx.mode = 'dragging';
         ctx.mousePt = [e.offsetX, e.offsetY];
+        if (highlightedFaceElt) {
+            highlightedFaceElt.setAttribute('stroke', 'transparent');
+        }
     });
     draw.ctx.svg.addEventListener('mouseup', e => {
-        console.log('mouseup');
-        ctx.mode = 'spinning';
+        if (highlightedFaceElt) {
+            highlightedFaceElt.setAttribute('stroke', highlightColor);
+        }
+    });
+    draw.ctx.svg.addEventListener('click', e => {
+        let fromTo = {
+            spinning: 'paused',
+            dragging: 'paused',
+            paused:   'spinning'
+        };
+        ctx.mode = fromTo[ctx.mode];
     });
     draw.ctx.svg.addEventListener('mousemove', e => {
-        console.log('mousemove', e.offsetX, e.offsetY);
-        if (ctx.mode === 'spinning' || (e.buttons & 1 === 0)) return;
+        if ((e.buttons & 1) === 0) {
+            if (ctx.mode === 'dragging') ctx.mode = 'paused';
+            return;
+        }
+        ctx.mode = 'dragging';
         let delta = vector.sub([e.offsetX, e.offsetY], ctx.mousePt);
-        console.log('delta:');
-        matrix.pr([delta]);
         ctx.mousePt = [e.offsetX, e.offsetY];
+
+        let scale = draw.ctx.toCanvasScale;
+        let t = matrix.rotateAroundY(delta[0] / scale);
+        t = matrix.mult(matrix.rotateAroundX(delta[1] / scale), t);
+        ctx.rotateMat = matrix.mult(t, ctx.rotateMat);
     });
 }
 
