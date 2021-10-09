@@ -17,52 +17,12 @@ import * as space  from './space.js';
 // ______________________________________________________________________
 // Globals
 
-let xAngle = 0;
-let yAngle = 0;
-let zAngle = 0;
-let lastTs = null;
-
 let circleStyle = {
     stroke: 'transparent',
     fill:   '#888'
 };
 
 let zDist = 8;
-
-
-// ______________________________________________________________________
-// Functions
-
-function drawFrame(ts) {
-
-    let speed = 1;
-
-    let xRotationsPerSec = speed * 0.01;
-    let yRotationsPerSec = speed * 0.05;
-    let zRotationsPerSec = speed * 0.0;
-
-    if (lastTs !== null) {
-        xAngle += xRotationsPerSec * 2 * Math.PI * (ts - lastTs) / 1000;
-        yAngle += yRotationsPerSec * 2 * Math.PI * (ts - lastTs) / 1000;
-        zAngle += zRotationsPerSec * 2 * Math.PI * (ts - lastTs) / 1000;
-
-        let t1 = matrix.rotateAroundX(xAngle);
-        let t2 = matrix.rotateAroundY(yAngle);
-        let t3 = matrix.rotateAroundZ(zAngle);
-        let t4 = matrix.eye(4);
-        t4[2][3] = zDist;
-        let t = matrix.mult(t4, matrix.mult(t3, matrix.mult(t2, t1)));
-
-        space.setTransform(t);
-    }
-
-    lastTs = ts;
-    window.requestAnimationFrame(drawFrame);
-}
-
-function animateCircle() {
-    window.requestAnimationFrame(drawFrame);
-}
 
 
 // ______________________________________________________________________
@@ -84,10 +44,17 @@ window.addEventListener('DOMContentLoaded', (event) => {
     space.addLines(lines);
     space.addFaces(faces);
 
+    space.makeDraggable();
+
     // Add to the z value of all points.
     let t = matrix.eye(4);
     t[2][3] = zDist;
     space.setTransform(t);
 
-    window.requestAnimationFrame(drawFrame);
+    space.ctx.rotationsPerSec = 0.05;
+    space.ctx.rotationSign = -1;
+    space.setZDist(zDist);
+    space.rotateAround([0.3, -1, 0.5]);
+
+    space.animate();
 });

@@ -23,6 +23,24 @@ import * as vector from './vector.js';
 
 export var ctx = {};
 
+let lastTs = null;  // This is the last-seen timestamp; it's used to animate.
+
+ctx.mode = 'spinning';  // This can also be 'dragging'.
+ctx.rotateMat = matrix.eye(4);
+ctx.transMat  = matrix.eye(4);
+
+// This determines the axis of rotation.
+// By default, the object rotates around the x-axis.
+// You can make the shape rotate around the unit vector v by providing here
+// a unitary matrix M so that M * v = the x-axis (1, 0, 0).
+// Use space.setAngleMat() so the inverse is set for you.
+// You can also use space.rotateAround(v) to compute and set these.
+ctx.angleMat    = matrix.eye(4);
+ctx.angleMatInv = matrix.eye(4);  // This must be the inverse of ctx.angleMat.
+
+ctx.rotationsPerSec = 1;
+ctx.rotationSign = 1;
+
 // ctx.pts will be a matrix; each column is an affine point.
 ctx.pts = [[], [], [], []];
 ctx.dots = [];  // This will contain DOM svg circles, one per point.
@@ -174,6 +192,8 @@ function updatePoints() {
         let alpha = (towardLight ** 2) * 0.3 + 0.4;  // Between 0.4 and 0.8.
         //let alpha = (towardLight ** 2);
         //let alpha = 0.6;
+        // alpha = 0.8;  // XXX
+        // ell = Math.floor(towardLight * 150) + 105;
         polygon.setAttribute('fill', `rgba(${ell}, ${ell}, ${ell}, ${alpha})`);
 
         if (!isHidden) {
@@ -443,6 +463,24 @@ function addAnyNewNormals() {
     }
 }
 
+function setupFrame(ts) {
+    window.requestAnimationFrame(setupFrame);
+
+    if (lastTs === null) {
+        lastTs = ts;
+        return;
+    }
+
+    let timeDeltaSeconds = (ts - lastTs) / 1000;
+    lastTs = ts;
+    let angle = ctx.rotationsPerSec * 2 * Math.PI * timeDeltaSeconds;
+
+    let t = matrix.rotateAroundX(ctx.rotationSign * angle);
+    t = matrix.mult(ctx.angleMatInv, t, ctx.angleMat);
+    ctx.rotateMat = matrix.mult(t, ctx.rotateMat);
+    setTransform(matrix.mult(ctx.transMat, ctx.rotateMat));
+}
+
 
 // ______________________________________________________________________
 // Public functions.
@@ -483,5 +521,57 @@ export function addFaces(faces) {
 export function setTransform(t) {
     ctx.transform = t;
     updatePoints();
+}
+
+// XXX Clean up this function.
+export function makeDraggable() {
+    draw.ctx.svg.addEventListener('mousedown', e => {
+        console.log('mousedown');
+        ctx.mode = 'dragging';
+        ctx.mousePt = [e.offsetX, e.offsetY];
+    });
+    draw.ctx.svg.addEventListener('mouseup', e => {
+        console.log('mouseup');
+        ctx.mode = 'spinning';
+    });
+    draw.ctx.svg.addEventListener('mousemove', e => {
+        console.log('mousemove', e.offsetX, e.offsetY);
+        if (ctx.mode === 'spinning' || (e.buttons & 1 === 0)) return;
+        let delta = vector.sub([e.offsetX, e.offsetY], ctx.mousePt);
+        console.log('delta:');
+        matrix.pr([delta]);
+        ctx.mousePt = [e.offsetX, e.offsetY];
+    });
+}
+
+// TODO Eventually support auto-setting ctx.fadeRange from this.
+//      To do so, we can calculate the min and max distance from the origin to
+//      any of the points.
+export function setZDist(zDist) {
+    ctx.transMat = matrix.eye(4);
+    ctx.transMat[2][3] = zDist;
+}
+
+export function setAngleMat(angleMat) {
+    ctx.angleMat    = angleMat;
+    ctx.angleMatInv = matrix.transpose(angleMat);
+}
+
+export function rotateAround(v) {
+    let M = matrix.rand(3, 3);
+    M[0] = vector.unit(v);
+    let [Q, R] = matrix.qr(matrix.transpose(M));
+    let U = matrix.eye(4);
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+            U[i][j] = Q[i][j];
+        }
+    }
+    ctx.angleMat    = matrix.transpose(U);
+    ctx.angleMatInv = U;
+}
+
+export function animate() {
+    window.requestAnimationFrame(setupFrame);
 }
 
