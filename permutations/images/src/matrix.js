@@ -19,9 +19,9 @@ import * as random from './random.js';
 
 
 // ______________________________________________________________________
-// Public functions.
+// Internal functions.
 
-export function mult(A, B) {
+export function mult2(A, B) {
 
     // A is m x n. B is n x p.
 
@@ -43,6 +43,14 @@ export function mult(A, B) {
     }
 
     return C;
+}
+
+
+// ______________________________________________________________________
+// Public functions.
+
+export function mult(...args) {
+    return args.reduce(mult2);
 }
 
 // Return a human-friendly string for matrix A.
