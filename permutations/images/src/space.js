@@ -48,6 +48,7 @@ ctx.outlines = [];
 
 ctx.lines = [];  // This will contain {from, to, elt} objects.
 
+ctx.doDrawFaces = true;
 ctx.faces = [];  // This will contain [pt1, pt2, .., ptn, 'style'] arrays.
 ctx.normals = [[], [], [], []];  // This will be a matrix of face normals.
 ctx.faceCenters = [];
@@ -181,6 +182,7 @@ function updatePoints() {
             [normalXYs[i].x, normalXYs[i].y, normalXYs[i].z],
             [lineXYs[2 * i].x, lineXYs[2 * i].y, lineXYs[2 * i].z]
         ) > 0;
+        if (!ctx.doDrawFaces) isHidden = true;
         for (let line of face.lines) line.isForeground = !isHidden;
         let polygon = ctx.facePolygons[i];
         polygon.setAttribute('display', isHidden ? 'none' : 'hi');
