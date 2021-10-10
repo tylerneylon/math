@@ -32,11 +32,21 @@ let zDist = 8;
 
 function setupButtons() {
     let facesShowElt = document.getElementById('faces-show');
+    let facesHideElt = document.getElementById('faces-hide');
     facesShowElt.classList.add('underline');
     facesShowElt.classList.add('hover-button');
+    facesShowElt.addEventListener('mouseover', e => {
+        space.ctx.doDrawFaces = true;
+        facesHideElt.classList.remove('underline');
+        facesShowElt.classList.add('underline');
+    });
 
-    let facesHideElt = document.getElementById('faces-hide');
     facesHideElt.classList.add('hover-button');
+    facesHideElt.addEventListener('mouseover', e => {
+        space.ctx.doDrawFaces = false;
+        facesShowElt.classList.remove('underline');
+        facesHideElt.classList.add('underline');
+    });
 }
 
 // ______________________________________________________________________
@@ -53,7 +63,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let faces = perm.getG4FacesIn3D();
 
     // Add a small degree of fading for the farther-back points and lines.
-    space.ctx.fadeRange = [6, 16];
+    space.ctx.fadeRange = [6, 12];
 
     space.ctx.zoom = 2.5;
     space.addPoints(pts);
