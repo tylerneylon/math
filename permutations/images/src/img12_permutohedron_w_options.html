@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style type="text/css">
+      .main-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        position: absolute;
+        top: 10px;
+        bottom: 10px;
+        width: 100%;
+      }
+      .underline {
+        text-decoration: underline;
+      }
+      .hover-button {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body style="background-color:#fff">
+    <div class="main-container">
+      <svg width="10" height="10" version="1.1"
+           style="background-color:#fff"
+           id="svg" xmlns="http://www.w3.org/2000/svg">
+      </svg>
+      <div>
+        <b>Cross-sections:</b>
+        <span>&pi;<sub>1</sub></span>
+        <span>&pi;<sub>2</sub></span>
+        <span>&pi;<sub>3</sub></span>
+        <span>&pi;<sub>4</sub></span>
+
+        &nbsp;
+        &nbsp;
+        &nbsp;
+        &nbsp;
+
+        <b>Edge-types:</b>
+        (i j) : |i - j| =
+        <span>1</span>
+        <span>2</span>
+        <span>3</span>
+
+        &nbsp;
+        &nbsp;
+        &nbsp;
+        &nbsp;
+
+        <b>Faces:</b>
+        <span id="faces-show">show</span>
+        <span id="faces-hide">hide</span>
+
+      </div>
+      <div>a permutohedron</div>
+    </div>
+    <script type="module" src="img12_permutohedron_w_options.js"></script>
+  </body>
+</html>
