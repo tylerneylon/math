@@ -84,11 +84,14 @@ function addDot(pt, outlineGroup, frontGroup) {
 
 // Ensure that elt[prop] exists; if not, create it as an empty array.
 // Push newItem onto the end of that array.
-function addToPropArray(elt, prop, newItem) {
-    if (!elt.hasOwnProperty(prop)) {
-        elt[prop] = [];
-    }
+function push(elt, prop, newItem) {
+    if (!elt.hasOwnProperty(prop)) elt[prop] = [];
     elt[prop].push(newItem);
+}
+
+function set(elt, prop, key, value) {
+    if (!elt.hasOwnProperty(prop)) elt[prop] = {};
+    elt[prop][key] = value;
 }
 
 function setLabelVisibility(pt, visibility) {
@@ -264,7 +267,7 @@ function addPtMapEdges(n, ptMap) {
     forAllTranspositions(n, function(t) {
         for (let p1 of Object.keys(ptMap)) {
             let p2 = applyTransposition(p1, t);
-            addToPropArray(
+            push(
                 ptMap[p1],
                 'edges',
                 {from: ptMap[p1], to: ptMap[p2], dest: p2}
@@ -333,8 +336,8 @@ function drawGraphWithPtMap(ptMap, n) {
         }
         let line = draw.line(edge.from, edge.to, thisStyle, group);
         line.baseColor = thisStyle.stroke;
-        addToPropArray(ptMap[edge.p1], 'edgeElts', line);
-        addToPropArray(ptMap[edge.p2], 'edgeElts', line);
+        push(ptMap[edge.p1], 'edgeElts', line);
+        push(ptMap[edge.p2], 'edgeElts', line);
     }
     // Draw point labels.
     for (const [perm, pt] of Object.entries(ptMap)) {
@@ -641,8 +644,12 @@ export function getG4PointsIn3D() {
     return matrix.transpose(matrix.mult(S, P));
 }
 
-// This returns an array of {from, to} objects, one for each edge in
+// Returns [edges, slices], described next:
+// `edges` is an array of {from, to} objects, one for each edge in
 // G_n where the nodes, 0-indexed, are listed in lexicographic order.
+// `slices` has slices[sliceName] = {lineIdx: colorIdx} for sliceName values
+// like '0' for p_1 = constant or '0,2' for pi_1+pi_3 = constant; the constant
+// value is reflected in `colorIdx`.
 export function getEdgeIndexesLex(n) {
 
     // List all permutations.
@@ -664,6 +671,9 @@ export function getEdgeIndexesLex(n) {
             let p2 = applyTransposition(p1, t);
             if (p1 > p2) continue;
             let line = {from: i, to: indexOfPerm[p2]};
+            line.p1 = p1;
+            line.p2 = p2;
+            line.t  = t;
             let delta = Math.abs(parseInt(t[1]) - parseInt(t[2]));
             if (delta === 1) line.style = {'stroke-width': 1};
             if (delta === 3) line.style = {stroke: '#888'};
@@ -673,7 +683,33 @@ export function getEdgeIndexesLex(n) {
         }
     });
 
-    return edges;
+    // Build up the slice index.
+    // We'll have slices[sliceName] = {lineIdx: colorIdx}.
+    let slices = {};
+    for (let i = 0; i < edges.length; i++) {
+        let line = edges[i];
+        let [p1, p2] = [line.p1, line.p2];
+
+        // Look for pi_i = constant slices.
+        for (let j = 0; j < 4; j++) {
+            if (p1[j] !== p2[j]) continue;
+            set(slices, j, i, parseInt(p1[j]) - 1);
+        }
+
+        // Look for p_0 + p_i = constant slices.
+        for (let j = 1; j < 4; j++) {
+            let q1 = p1.split('').map(x => parseInt(x));
+            let q2 = p2.split('').map(x => parseInt(x));
+            if (q1[0] + q1[j] !== q2[0] + q2[j]) continue;
+            set(slices, `0,${j}`, i, q1[0] + q1[j] - 3);
+        }
+
+        // Enable line coloring based on |i-j| for the edge (i j).
+        let m = Math.abs(parseInt(line.t[1]) - parseInt(line.t[2]));
+        set(slices, `m${m}`, i, m);
+    }
+
+    return [edges, slices];
 }
 
 // This returns an array of [pt1, pt2, ...] arrays, one for each face of the
@@ -695,14 +731,14 @@ export function getG4FacesIn3D() {
     for (let i = 0; i < perms.length; i++) {
         let a, b;
         for (let j = 0; j < 4; j++ ) {
-            if (perms[i][j] === '1') addToPropArray(faces, `${j}:1`, i);
-            if (perms[i][j] === '4') addToPropArray(faces, `${j}:4`, i);
+            if (perms[i][j] === '1') push(faces, `${j}:1`, i);
+            if (perms[i][j] === '4') push(faces, `${j}:4`, i);
 
             if (perms[i][j] === '1') a = j;
             if (perms[i][j] === '2') b = j;
         }
         if (b < a) [a, b] = [b, a];
-        addToPropArray(faces, `${a}${b}:3`, i);
+        push(faces, `${a}${b}:3`, i);
     }
 
     return Object.values(faces);

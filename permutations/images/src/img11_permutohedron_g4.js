@@ -32,9 +32,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     init.setup();
 
-    let pts   = perm.getG4PointsIn3D();
-    let lines = perm.getEdgeIndexesLex(4);
-    let faces = perm.getG4FacesIn3D();
+    let pts             = perm.getG4PointsIn3D();
+    let [lines, slices] = perm.getEdgeIndexesLex(4);
+    let faces           = perm.getG4FacesIn3D();
 
     // Add a small degree of fading for the farther-back points and lines.
     space.ctx.fadeRange = [6, 16];
