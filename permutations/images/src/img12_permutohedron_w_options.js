@@ -30,7 +30,40 @@ let zDist = 8;
 // ______________________________________________________________________
 // Functions
 
+// Set up an array of button elements (in buttonElts). Each button receives a
+// mouseover handler which (a) underlines the hovered-over element,
+// un-underlines the other elements, and (b) calls `handler` with the item in
+// paramObjs with the same index as the hovered-over button element.
+// The first button element is treated as the "default on" button.
+function initButtonGroup(buttonElts, paramObjs, handler) {
+    console.assert(buttonElts.length === paramObjs.length);
+    for (let i = 0; i < buttonElts.length; i++) {
+        let buttonElt = buttonElts[i];
+        buttonElt.classList.add('hover-button');
+        buttonElt.addEventListener('mouseover', e => {
+            for (let b of buttonElts) {
+                if (b === buttonElt) {
+                    b.classList.add('underline');
+                } else {
+                    b.classList.remove('underline');
+                }
+            }
+            handler(paramObjs[i]);
+        });
+    }
+
+    // Underline the default button.
+    buttonElts[0].classList.add('underline');
+}
+
 function setupButtons() {
+
+    let buttonIds = [
+        'none', '0', '1', '2', '3', '0,1', '0,2', '0,3', 'm1', 'm2', 'm3'
+    ];
+    let buttonElts = buttonIds.map(x => document.getElementById('edges-' + x));
+    initButtonGroup(buttonElts, buttonIds, console.log);
+
     let facesShowElt = document.getElementById('faces-show');
     let facesHideElt = document.getElementById('faces-hide');
     facesShowElt.classList.add('underline');
@@ -48,6 +81,7 @@ function setupButtons() {
         facesHideElt.classList.add('underline');
     });
 }
+
 
 // ______________________________________________________________________
 // Main
