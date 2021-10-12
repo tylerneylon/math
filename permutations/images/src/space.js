@@ -627,6 +627,7 @@ export function highlightEdges(sliceName) {
         let w = line.coreWidth;
         if (sliceName !== 'none') {
             w *= (i in slice) ? 5 : 0.5;
+            if (i in slice) w = Math.max(w, 2);
         }
         line.elt.setAttribute('stroke-width', w);
     }
