@@ -72,6 +72,18 @@ ctx.zoom = 1;
 // between these.
 ctx.fadeRange = null;
 
+// Slice information; may remain empty all day if unused.
+ctx.slices = {};
+
+ctx.edgeHighlightColors = [
+    '#f00',
+    '#f80',
+    '#ff0',
+    '#0f0',
+    '#0ff',
+    '#00f'
+].map(getStdColor).map(x => x.map(y => y * 0.8));
+
 let lightDir = vector.unit([-1, -1, -2]);
 
 let highlightedFaceElt = null;
@@ -510,7 +522,7 @@ export function addPoints(pts) {
 // This expects `lines` to be an array of {from, to} objects, where `from` and
 // `to` are indexes into the `pts` array. Each line object may also have an
 // optional `style` key, which indicates the style overrides for that line.
-export function addLines(lines) {
+export function addLines(lines, slices) {
     ensureGroupsExist();
     for (let line of lines) {
         let fromPt = getXYArray(matrix.getColumn(ctx.pts, line.from))[0];
@@ -519,8 +531,11 @@ export function addLines(lines) {
         line.elt   = draw.line(fromPt, toPt, style, edgeGroup);
         line.elt.setAttribute('pointer-events', 'none');
         line.baseColor = getStdColor(style.stroke);
+        line.coreColor = line.baseColor;  // Save to undo edge highlights.
+        line.coreWidth = style['stroke-width'];
         ctx.lines.push(line);
     }
+    ctx.slices = slices;  // If no edges are highlighted, undefined is ok.
 }
 
 // This expects each face to be an array of indexes into `pts`.
@@ -598,6 +613,23 @@ export function rotateAround(v) {
     }
     ctx.angleMat    = matrix.transpose(U);
     ctx.angleMatInv = U;
+}
+
+export function highlightEdges(sliceName) {
+    let slice = ctx.slices[sliceName] || {};
+    for (let i = 0; i < ctx.lines.length; i++) {
+        let line = ctx.lines[i];
+        if (i in slice) {
+            line.baseColor = ctx.edgeHighlightColors[slice[i]];
+        } else {
+            line.baseColor = line.coreColor;
+        }
+        let w = line.coreWidth;
+        if (sliceName !== 'none') {
+            w *= (i in slice) ? 5 : 0.5;
+        }
+        line.elt.setAttribute('stroke-width', w);
+    }
 }
 
 export function animate() {

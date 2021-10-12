@@ -30,6 +30,10 @@ let zDist = 8;
 // ______________________________________________________________________
 // Functions
 
+function highlightEdges(sliceName) {
+    space.highlightEdges(sliceName);
+}
+
 // Set up an array of button elements (in buttonElts). Each button receives a
 // mouseover handler which (a) underlines the hovered-over element,
 // un-underlines the other elements, and (b) calls `handler` with the item in
@@ -62,7 +66,7 @@ function setupButtons() {
         'none', '0', '1', '2', '3', '0,1', '0,2', '0,3', 'm1', 'm2', 'm3'
     ];
     let buttonElts = buttonIds.map(x => document.getElementById('edges-' + x));
-    initButtonGroup(buttonElts, buttonIds, console.log);
+    initButtonGroup(buttonElts, buttonIds, highlightEdges);
 
     let facesShowElt = document.getElementById('faces-show');
     let facesHideElt = document.getElementById('faces-hide');
@@ -101,7 +105,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     space.ctx.zoom = 2.5;
     space.addPoints(pts);
-    space.addLines(lines);
+    space.addLines(lines, slices);
     space.addFaces(faces);
 
     space.makeDraggable();
