@@ -622,14 +622,20 @@ export function drawCircularGn(n, orderingType) {
     drawGraphWithPtMap(ptMap, n);
 }
 
+// Returns [pts, labels]. `pts` is a list of 3d points (length-3 arrays), each
+// of which represents one point of G_4. `labels` is an array of strings, each
+// the label of its corresponding point; eg '1234' corresponds to the 3d
+// projection of the 4d point (1, 2, 3, 4).
 export function getG4PointsIn3D() {
 
     // Set up P, whose columns are 4d points of S_4
     let Pt = [];  // This will be a matrix whose rows are 4-permutations.
+    let labels = [];
     forAllPermsLex(4, function (permStr) {
         let p = permStr.split('').map(x => parseInt(x));
         p = p.map(x => x - 2.5);  // Center around 0.
         Pt.push(p);
+        labels.push(permStr);
     });
     let P = matrix.transpose(Pt);
 
@@ -641,7 +647,8 @@ export function getG4PointsIn3D() {
     let Qt = matrix.transpose(Q);
     let S = Qt.slice(1);
 
-    return matrix.transpose(matrix.mult(S, P));
+    let pts = matrix.transpose(matrix.mult(S, P));
+    return [pts, labels];
 }
 
 // Returns [edges, slices], described next:

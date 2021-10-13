@@ -96,7 +96,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     init.setup(size);
     setupButtons();
 
-    let pts             = perm.getG4PointsIn3D();
+    let [pts, labels]   = perm.getG4PointsIn3D();
     let [lines, slices] = perm.getEdgeIndexesLex(4);
     let faces           = perm.getG4FacesIn3D();
 
