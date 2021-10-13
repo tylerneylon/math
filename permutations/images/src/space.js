@@ -208,7 +208,6 @@ function updatePoints() {
             [normalXYs[i].x, normalXYs[i].y, normalXYs[i].z],
             [lineXYs[2 * i].x, lineXYs[2 * i].y, lineXYs[2 * i].z]
         ) > 0;
-        if (!ctx.doDrawFaces) isHidden = true;
         for (let line of face.lines) line.isForeground = !isHidden;
         let polygon = ctx.facePolygons[i];
         polygon.setAttribute('display', isHidden ? 'none' : 'hi');
@@ -218,13 +217,9 @@ function updatePoints() {
             [normalXYs[i].x, normalXYs[i].y, normalXYs[i].z],
             lightDir
         );
-        // let ell = Math.floor(towardLight * 45) + 210;
         let ell = Math.floor(towardLight * 40) + 215;
-        let alpha = (towardLight ** 2) * 0.3 + 0.4;  // Between 0.4 and 0.8.
-        //let alpha = (towardLight ** 2);
-        //let alpha = 0.6;
-        // alpha = 0.8;  // XXX
-        // ell = Math.floor(towardLight * 150) + 105;
+        let alpha = (towardLight ** 2) * 0.3 + 0.4;  // Between 0.4 and 0.7.
+        if (!ctx.doDrawFaces) alpha = 0;
         polygon.setAttribute('fill', `rgba(${ell}, ${ell}, ${ell}, ${alpha})`);
 
         if (!isHidden) {
