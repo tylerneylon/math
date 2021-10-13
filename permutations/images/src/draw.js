@@ -307,3 +307,8 @@ export function text(leftBaseline, str, style, parent) {
     }
     return t;
 }
+
+export function moveText(textElt, xy) {
+    xy = mapToCanvasPt(xy);
+    addAttributes(textElt, xy);
+}

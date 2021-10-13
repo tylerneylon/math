@@ -87,7 +87,7 @@ ctx.edgeHighlightColors = [
 let lightDir = vector.unit([-1, -1, -2]);
 
 let highlightedFaceElt = null;
-let highlightColor = '#0af';
+let highlightedFaceIndex = -1;
 
 export let dotStyle = {
     stroke: 'transparent',
@@ -119,6 +119,13 @@ export let facePolyStyle = {
     'stroke-width': 1
 };
 
+export let textStyle = {
+    stroke: 'transparent',
+    fill: '#ddd',
+    style: 'font-family: sans-serif',
+    'pointer-events': 'none'
+}
+
 let eyeZ = 0.001;
 
 // Groups.
@@ -149,14 +156,22 @@ function getXYArray(pts, doPerspective) {
     return xyArray;
 }
 
+function updateLabelForDot(dot, xy) {
+    let offset = 0.01;
+    draw.moveText(dot.label, {x: xy.x + offset, y: xy.y + offset});
+}
+
 function updatePoints() {
 
     let xys = getXYArray(ctx.pts);
+    // We may use the lineXYs early to help place labels around dots.
+    let lineXYs = getXYArray(ctx.normalLinePts, false);
 
     for (let i = 0; i < xys.length; i++) {
         let r = 0.04 / xys[i].z;
         let outlineR = 2 * r;
         draw.moveCircle(ctx.dots[i], xys[i], r);
+        if (ctx.dots[i].label) updateLabelForDot(ctx.dots[i], xys[i]);
         draw.moveCircle(ctx.outlines[i], xys[i], outlineR);
         if (ctx.fadeRange) {
             let color = getFadeColor(ctx.dots[i].baseColor, xys[i].z);
@@ -184,7 +199,6 @@ function updatePoints() {
     for (let xy of xys) xy.isForeground = false;
 
     let normalXYs = getXYArray(ctx.normals, false);  // doPerspective = false
-    let lineXYs   = getXYArray(ctx.normalLinePts, false);
     for (let i = 0; i < ctx.faces.length; i++) {
         let face = ctx.faces[i];
         let faceXYs = [];
@@ -473,13 +487,17 @@ function addAnyNewNormals() {
         polygon.setAttribute('stroke-width', '4');
         polygon.addEventListener('mouseover', function () {
             highlightedFaceElt = polygon;
+            highlightedFaceIndex = i;
             if (ctx.mode !== 'dragging') {
-                polygon.setAttribute('stroke', '#0af');
+                // XXX and below
+                // TODO Also send in an awayFrom value.
+                toggleFaceLabels(i, true);  // true -> doShow
             }
         });
         polygon.addEventListener('mouseout', function () {
             polygon.setAttribute('stroke', 'transparent');
             if (highlightedFaceElt === polygon) {
+                toggleFaceLabels(i, false);  // false -> doShow
                 highlightedFaceElt = null;
             }
         });
@@ -504,6 +522,20 @@ function setupFrame(ts) {
         ctx.rotateMat = matrix.mult(t, ctx.rotateMat);
     }
     setTransform(matrix.mult(ctx.transMat, ctx.rotateMat));
+}
+
+function toggleFaceLabels(faceIdx, doShow, awayFrom) {
+    for (let i of ctx.faces[faceIdx]) {
+        let dot = ctx.dots[i];
+        dot.showLabel = true;
+        dot.awayFrom  = awayFrom;
+        if (doShow) {
+            dot.label = draw.text({x: 0, y: 0}, 'hi', textStyle);
+        } else if (dot.label) {
+            dot.label.remove();
+            delete dot.label;
+        }
+    }
 }
 
 
@@ -556,12 +588,12 @@ export function makeDraggable() {
     draw.ctx.svg.addEventListener('mousedown', e => {
         ctx.mousePt = [e.offsetX, e.offsetY];
         if (highlightedFaceElt) {
-            highlightedFaceElt.setAttribute('stroke', 'transparent');
+            toggleFaceLabels(highlightedFaceIndex, false);
         }
     });
     draw.ctx.svg.addEventListener('mouseup', e => {
         if (highlightedFaceElt) {
-            highlightedFaceElt.setAttribute('stroke', highlightColor);
+            toggleFaceLabels(highlightedFaceIndex, true);
         }
     });
     draw.ctx.svg.addEventListener('click', e => {
