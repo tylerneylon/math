@@ -520,12 +520,16 @@ function setupFrame(ts) {
 }
 
 function toggleFaceLabels(faceIdx, doShow, awayFrom) {
+
+    if (!ctx.labels) return;
+
     for (let i of ctx.faces[faceIdx]) {
         let dot = ctx.dots[i];
         dot.showLabel = true;
         dot.awayFrom  = awayFrom;
         if (doShow) {
-            dot.label = draw.text({x: 0, y: 0}, 'hi', textStyle);
+            let label = ctx.labels[i];
+            dot.label = draw.text({x: 0, y: 0}, label, textStyle);
         } else if (dot.label) {
             dot.label.remove();
             delete dot.label;
@@ -539,11 +543,12 @@ function toggleFaceLabels(faceIdx, doShow, awayFrom) {
 
 // This expects `pts` to be an array of 3d points, with each point being an
 // array of 3 numbers.
-export function addPoints(pts) {
+export function addPoints(pts, labels) {
     for (let pt of pts) {
         appendPoint(pt);
     }
     addAnyNewDots();
+    if (labels) ctx.labels = labels;
 }
 
 // This expects `lines` to be an array of {from, to} objects, where `from` and

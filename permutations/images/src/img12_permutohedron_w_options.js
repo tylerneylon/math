@@ -104,7 +104,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     space.ctx.fadeRange = [6, 12];
 
     space.ctx.zoom = 2.5;
-    space.addPoints(pts);
+    space.addPoints(pts, labels);
     space.addLines(lines, slices);
     space.addFaces(faces);
 
