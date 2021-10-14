@@ -121,10 +121,16 @@ export let facePolyStyle = {
 
 export let textStyle = {
     stroke: 'transparent',
-    fill: '#ddd',
+    fill: '#666',
     style: 'font-family: sans-serif',
     'pointer-events': 'none'
 }
+
+export let whiteStyle = {
+    stroke: 'transparent',
+    fill:   '#fff',
+    'pointer-events': 'none'
+};
 
 let eyeZ = 0.001;
 
@@ -158,7 +164,10 @@ function getXYArray(pts, doPerspective) {
 
 function updateLabelForDot(dot, xy) {
     let offset = 0.01;
-    draw.moveText(dot.label, {x: xy.x + offset, y: xy.y + offset});
+    let c = draw.ctx.toCanvasScale;
+
+    let s = `translate(${c * xy.x}, ${c * xy.y})`;
+    dot.label.setAttribute('transform', `translate(${c * xy.x}, ${c * xy.y})`);
 }
 
 function updatePoints() {
@@ -529,7 +538,26 @@ function toggleFaceLabels(faceIdx, doShow, awayFrom) {
         dot.awayFrom  = awayFrom;
         if (doShow) {
             let label = ctx.labels[i];
-            dot.label = draw.text({x: 0, y: 0}, label, textStyle);
+            dot.label = draw.add('g');
+            let r = draw.rect({x: 0, y: 0}, whiteStyle, dot.label);
+            let t = draw.text({x: 0, y: 0}, label, textStyle, dot.label);
+
+            // Adjust the background rectangle.
+            let padding = 5;
+            r.setAttribute('rx', padding);
+            let box = t.getBBox();
+            let wText = box.width;
+            let hText = box.height - 5;
+            r.setAttribute('width',  wText + 2 * padding);
+            r.setAttribute('height', hText + 2 * padding);
+            r.setAttribute(
+                'x',
+                parseInt(r.getAttribute('x')) - padding
+            );
+            r.setAttribute(
+                'y',
+                parseInt(r.getAttribute('y')) - hText - padding
+            );
         } else if (dot.label) {
             dot.label.remove();
             delete dot.label;

@@ -293,6 +293,15 @@ export function movePolygon(polygonElt, pts) {
     addAttributes(polygonElt, {points: ptStrs.join(' ')});
 }
 
+export function rect(xy, style, parent) {
+
+    if (style === undefined) { style = lightStyle }
+
+    let rectElt = add('rect', style, parent);
+    addAttributes(rectElt, mapToCanvasPt(xy));
+    return rectElt;
+}
+
 export function text(leftBaseline, str, style, parent) {
 
     if (style === undefined) { style = lightStyle }
