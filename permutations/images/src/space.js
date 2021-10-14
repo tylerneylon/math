@@ -528,6 +528,11 @@ function setupFrame(ts) {
     setTransform(matrix.mult(ctx.transMat, ctx.rotateMat));
 }
 
+function moveElt(elt, dx, dy) {
+    elt.setAttribute('x', parseInt(elt.getAttribute('x')) + dx);
+    elt.setAttribute('y', parseInt(elt.getAttribute('y')) + dy);
+}
+
 function toggleFaceLabels(faceIdx, doShow, awayFrom) {
 
     if (!ctx.labels) return;
@@ -547,17 +552,15 @@ function toggleFaceLabels(faceIdx, doShow, awayFrom) {
             r.setAttribute('rx', padding);
             let box = t.getBBox();
             let wText = box.width;
-            let hText = box.height - 5;
+            let hText = box.height - 6;
             r.setAttribute('width',  wText + 2 * padding);
             r.setAttribute('height', hText + 2 * padding);
-            r.setAttribute(
-                'x',
-                parseInt(r.getAttribute('x')) - padding
-            );
-            r.setAttribute(
-                'y',
-                parseInt(r.getAttribute('y')) - hText - padding
-            );
+            // Place the rect's anchor point at the bottom-left of the text box.
+            moveElt(r, -padding, -(hText + padding));
+
+            // Adjust the anchor point to be in the middle of the text box.
+            moveElt(r, -wText / 2, hText / 2);
+            moveElt(t, -wText / 2, hText / 2);
         } else if (dot.label) {
             dot.label.remove();
             delete dot.label;
