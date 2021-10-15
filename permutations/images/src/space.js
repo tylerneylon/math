@@ -500,8 +500,9 @@ function addAnyNewNormals() {
         });
         polygon.addEventListener('mouseout', function () {
             polygon.setAttribute('stroke', 'transparent');
-            if (highlightedFaceElt === polygon) {
-                toggleFaceLabels(i, false);  // false -> doShow
+            if (highlightedFaceElt) {
+                // false -> doShow
+                toggleFaceLabels(highlightedFaceIndex, false);
                 highlightedFaceElt = null;
             }
         });
