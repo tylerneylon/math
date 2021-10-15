@@ -536,7 +536,47 @@ function moveElt(elt, dx, dy) {
 
 function toggleFaceLabels(faceIdx, doShow, awayFrom) {
 
-    if (!ctx.labels) return;
+    // XXX
+    // I'm writing this to try to catch a bug.
+    function checknolabels() {
+        if (doShow === true) return;
+        let dotsSeen = {};
+        for (let i = 0; i < ctx.dots.length; i++) {
+            let dot = ctx.dots[i];
+            if (dot.label) dotsSeen[i] = true;
+        }
+        if (Object.keys(dotsSeen).length === 0) return;
+        console.log('Poop!!! I see a label when there should be none.');
+
+        // Try to determine which face had the issue.
+        let okFaces = {};  // We'll build up a list of good faces (most of em).
+        for (let i = 0; i < ctx.faces.length; i++) {
+            let face = ctx.faces[i];
+            for (let j of face) {
+                if (!(j in dotsSeen)) okFaces[i] = true;
+            }
+        }
+
+        let okFacesKeys = Object.keys(okFaces);
+        if (okFacesKeys.length !== (ctx.faces.length - 1)) {
+            console.log('Bummer, face detection failed.');
+        } else {
+            let badFace = -1;
+            for (let i = 0; i < ctx.faces.length; i++) {
+                if (!(i in okFaces)) badFace = i;
+            }
+            console.log(`The face that still has labels is ${badFace}.`);
+        }
+        console.log(`I was called with faceIdx=${faceIdx}, doShow=${doShow}.`);
+        console.log(`highlightedFaceIndex=${highlightedFaceIndex}.`);
+
+        debugger;
+    }
+
+    // XXX
+    if (!ctx.labels) { return; }
+
+    if (doShow) checknolabels();
 
     for (let i of ctx.faces[faceIdx]) {
         let dot = ctx.dots[i];
@@ -567,6 +607,8 @@ function toggleFaceLabels(faceIdx, doShow, awayFrom) {
             delete dot.label;
         }
     }
+
+    if (!doShow) checknolabels();
 }
 
 
@@ -629,12 +671,14 @@ export function makeDraggable() {
         }
     });
     draw.ctx.svg.addEventListener('click', e => {
+        console.log(`Click noticed on svg. Start mode: ${ctx.mode}.`);  // XXX
         let fromTo = {
             spinning: 'paused',
             dragging: 'paused',
             paused:   'spinning'
         };
         ctx.mode = fromTo[ctx.mode];
+        console.log(`End mode: ${ctx.mode}.`);  // XXX
     });
     draw.ctx.svg.addEventListener('mousemove', e => {
         if ((e.buttons & 1) === 0) {
