@@ -25,6 +25,8 @@ export var ctx = {};
 
 let lastTs = null;  // This is the last-seen timestamp; it's used to animate.
 
+let doDebugEvents = true;
+
 ctx.mode = 'spinning';  // This can also be 'dragging'.
 ctx.rotateMat = matrix.eye(4);
 ctx.transMat  = matrix.eye(4);
@@ -88,6 +90,7 @@ let lightDir = vector.unit([-1, -1, -2]);
 
 let highlightedFaceElt = null;
 let highlightedFaceIndex = -1;
+let lastHighlightedFaceIndex = -1;
 
 export let dotStyle = {
     stroke: 'transparent',
@@ -143,6 +146,12 @@ let edgeGroup    = null;
 
 // ______________________________________________________________________
 // Internal functions.
+
+function logEvent(e) {
+    if (!doDebugEvents) return;
+    console.log(`${e.type} on ${e.target}`);
+    // console.log(e.type);  // XXX
+}
 
 function getXYArray(pts, doPerspective) {
 
@@ -489,16 +498,17 @@ function addAnyNewNormals() {
         // TODO Move mouse event setup to its own function.
         let polygon = ctx.facePolygons[ctx.facePolygons.length - 1];
         polygon.setAttribute('stroke-width', '4');
-        polygon.addEventListener('mouseover', function () {
+        polygon.addEventListener('mouseover', e => {
+            logEvent(e);
             highlightedFaceElt = polygon;
-            highlightedFaceIndex = i;
             if (ctx.mode !== 'dragging') {
                 // XXX and below
                 // TODO Also send in an awayFrom value.
                 toggleFaceLabels(i, true);  // true -> doShow
             }
         });
-        polygon.addEventListener('mouseout', function () {
+        polygon.addEventListener('mouseout', e => {
+            logEvent(e);
             polygon.setAttribute('stroke', 'transparent');
             if (highlightedFaceElt) {
                 // false -> doShow
@@ -536,10 +546,14 @@ function moveElt(elt, dx, dy) {
 
 function toggleFaceLabels(faceIdx, doShow, awayFrom) {
 
+    if (faceIdx === -1) return;
+
+    console.log(`toggleFaceLabels(${faceIdx}, ${doShow})`);
+
     // XXX
     // I'm writing this to try to catch a bug.
     function checknolabels() {
-        if (doShow === true) return;
+        return;
         let dotsSeen = {};
         for (let i = 0; i < ctx.dots.length; i++) {
             let dot = ctx.dots[i];
@@ -576,7 +590,13 @@ function toggleFaceLabels(faceIdx, doShow, awayFrom) {
     // XXX
     if (!ctx.labels) { return; }
 
-    if (doShow) checknolabels();
+    // if (doShow) checknolabels();
+
+    // They're allowed to toggle labels on more than once, we just do nothing if
+    // the labels are already on.
+    if (doShow) {
+        if (highlightedFaceElt && highlightedFaceIndex === faceIdx) return;
+    }
 
     for (let i of ctx.faces[faceIdx]) {
         let dot = ctx.dots[i];
@@ -607,6 +627,8 @@ function toggleFaceLabels(faceIdx, doShow, awayFrom) {
             delete dot.label;
         }
     }
+    highlightedFaceIndex = doShow ? faceIdx : -1;
+    if (doShow) lastHighlightedFaceIndex = faceIdx;
 
     if (!doShow) checknolabels();
 }
@@ -660,17 +682,20 @@ export function setTransform(t) {
 // XXX Clean up this function.
 export function makeDraggable() {
     draw.ctx.svg.addEventListener('mousedown', e => {
+        logEvent(e);
         ctx.mousePt = [e.offsetX, e.offsetY];
         if (highlightedFaceElt) {
             toggleFaceLabels(highlightedFaceIndex, false);
         }
     });
     draw.ctx.svg.addEventListener('mouseup', e => {
+        logEvent(e);
         if (highlightedFaceElt) {
-            toggleFaceLabels(highlightedFaceIndex, true);
+            toggleFaceLabels(lastHighlightedFaceIndex, true);
         }
     });
     draw.ctx.svg.addEventListener('click', e => {
+        logEvent(e);
         console.log(`Click noticed on svg. Start mode: ${ctx.mode}.`);  // XXX
         let fromTo = {
             spinning: 'paused',
@@ -681,6 +706,7 @@ export function makeDraggable() {
         console.log(`End mode: ${ctx.mode}.`);  // XXX
     });
     draw.ctx.svg.addEventListener('mousemove', e => {
+        logEvent(e);
         if ((e.buttons & 1) === 0) {
             if (ctx.mode === 'dragging') ctx.mode = 'paused';
             return;
