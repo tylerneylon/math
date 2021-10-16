@@ -6,6 +6,9 @@
 
 
 // TODO
+//  * For the mouseup event, I think it's currently too sensitive to movements.
+//    I'd like to modify the didDrag boolean to only count relatively large
+//    total movement. Use the sum of absolute values of all deltas.
 //  * Refactor so that there is less code redundancy across
 //    initial dot/line placement and setting a new transform.
 //  * Ensure initial render is consistent with follow-ups.
@@ -25,9 +28,14 @@ export var ctx = {};
 
 let lastTs = null;  // This is the last-seen timestamp; it's used to animate.
 
+let mousedownTs = null;
+let didDrag = false;
+
 let doDebugEvents = true;
 
+let preClickMode = 'spinning';
 ctx.mode = 'spinning';  // This can also be 'dragging'.
+
 ctx.rotateMat = matrix.eye(4);
 ctx.transMat  = matrix.eye(4);
 
@@ -683,7 +691,19 @@ export function setTransform(t) {
 export function makeDraggable() {
     draw.ctx.svg.addEventListener('mousedown', e => {
         logEvent(e);
+
+        // XXX
+        console.log(e);
+
+        mousedownTs = e.timeStamp;
+        didDrag = false;
+
+        // XXX
+        console.log(`Recorded mousedown ts ${mousedownTs}.`);
+
         ctx.mousePt = [e.offsetX, e.offsetY];
+        preClickMode = ctx.mode;
+        ctx.mode = 'dragging';
         if (highlightedFaceElt) {
             toggleFaceLabels(highlightedFaceIndex, false);
         }
@@ -693,17 +713,28 @@ export function makeDraggable() {
         if (highlightedFaceElt) {
             toggleFaceLabels(lastHighlightedFaceIndex, true);
         }
-    });
-    draw.ctx.svg.addEventListener('click', e => {
-        logEvent(e);
-        console.log(`Click noticed on svg. Start mode: ${ctx.mode}.`);  // XXX
+
+        // If this was a long click, we don't treat it as a click.
+        // However, if a long click had zero movement, we still count it.
+        if (e.timeStamp - mousedownTs > 500 || didDrag) {
+            let d = e.timeStamp - mousedownTs;
+            ctx.mode = 'paused';
+            console.log(`Click was long (${d} ms), so I'll ignore it.`);
+            return;
+        }
+
+        console.log(`Click noticed on svg. Start mode: ${preClickMode}.`);  // XXX
         let fromTo = {
             spinning: 'paused',
             dragging: 'paused',
             paused:   'spinning'
         };
-        ctx.mode = fromTo[ctx.mode];
+        ctx.mode = fromTo[preClickMode];
         console.log(`End mode: ${ctx.mode}.`);  // XXX
+    });
+    draw.ctx.svg.addEventListener('click', e => {
+        logEvent(e);
+
     });
     draw.ctx.svg.addEventListener('mousemove', e => {
         logEvent(e);
@@ -714,6 +745,7 @@ export function makeDraggable() {
         ctx.mode = 'dragging';
         let delta = vector.sub([e.offsetX, e.offsetY], ctx.mousePt);
         ctx.mousePt = [e.offsetX, e.offsetY];
+        didDrag = true;
 
         let scale = draw.ctx.toCanvasScale;
         let t = matrix.rotateAroundY(delta[0] / scale);
