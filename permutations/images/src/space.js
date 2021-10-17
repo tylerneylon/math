@@ -514,6 +514,7 @@ function addAnyNewNormals() {
         polygon.addEventListener('mouseover', e => {
             logEvent(e);
             highlightedFaceElt = polygon;
+            lastHighlightedFaceIndex = i;
             if (ctx.mode !== 'dragging') {
                 // XXX and below
                 // TODO Also send in an awayFrom value.
