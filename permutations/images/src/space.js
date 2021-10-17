@@ -86,12 +86,12 @@ ctx.fadeRange = null;
 ctx.slices = {};
 
 ctx.edgeHighlightColors = [
-    '#f00',
-    '#f80',
-    '#ff0',
-    '#0f0',
-    '#0ff',
-    '#00f'
+    '#d44',
+    '#d84',
+    '#dd4',
+    '#4d4',
+    '#4dd',
+    '#44d'
 ].map(getStdColor).map(x => x.map(y => y * 0.8));
 
 let lightDir = vector.unit([-1, -1, -2]);
