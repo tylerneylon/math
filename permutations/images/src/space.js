@@ -29,7 +29,7 @@ export var ctx = {};
 let lastTs = null;  // This is the last-seen timestamp; it's used to animate.
 
 let mousedownTs = null;
-let didDrag = false;
+let xDrag = 0, yDrag = 0;
 
 let doDebugEvents = true;
 
@@ -155,10 +155,15 @@ let edgeGroup    = null;
 // ______________________________________________________________________
 // Internal functions.
 
+function didDrag() {
+    let motion = xDrag + yDrag;
+    console.log(`didDrag(): motion=${motion}.`);
+    return motion > 5;
+}
+
 function logEvent(e) {
     if (!doDebugEvents) return;
     console.log(`${e.type} on ${e.target}`);
-    // console.log(e.type);  // XXX
 }
 
 function getXYArray(pts, doPerspective) {
@@ -555,50 +560,7 @@ function moveElt(elt, dx, dy) {
 function toggleFaceLabels(faceIdx, doShow, awayFrom) {
 
     if (faceIdx === -1) return;
-
-    console.log(`toggleFaceLabels(${faceIdx}, ${doShow})`);
-
-    // XXX
-    // I'm writing this to try to catch a bug.
-    function checknolabels() {
-        return;
-        let dotsSeen = {};
-        for (let i = 0; i < ctx.dots.length; i++) {
-            let dot = ctx.dots[i];
-            if (dot.label) dotsSeen[i] = true;
-        }
-        if (Object.keys(dotsSeen).length === 0) return;
-        console.log('Poop!!! I see a label when there should be none.');
-
-        // Try to determine which face had the issue.
-        let okFaces = {};  // We'll build up a list of good faces (most of em).
-        for (let i = 0; i < ctx.faces.length; i++) {
-            let face = ctx.faces[i];
-            for (let j of face) {
-                if (!(j in dotsSeen)) okFaces[i] = true;
-            }
-        }
-
-        let okFacesKeys = Object.keys(okFaces);
-        if (okFacesKeys.length !== (ctx.faces.length - 1)) {
-            console.log('Bummer, face detection failed.');
-        } else {
-            let badFace = -1;
-            for (let i = 0; i < ctx.faces.length; i++) {
-                if (!(i in okFaces)) badFace = i;
-            }
-            console.log(`The face that still has labels is ${badFace}.`);
-        }
-        console.log(`I was called with faceIdx=${faceIdx}, doShow=${doShow}.`);
-        console.log(`highlightedFaceIndex=${highlightedFaceIndex}.`);
-
-        debugger;
-    }
-
-    // XXX
-    if (!ctx.labels) { return; }
-
-    // if (doShow) checknolabels();
+    if (!ctx.labels) return;
 
     // They're allowed to toggle labels on more than once, we just do nothing if
     // the labels are already on.
@@ -637,8 +599,6 @@ function toggleFaceLabels(faceIdx, doShow, awayFrom) {
     }
     highlightedFaceIndex = doShow ? faceIdx : -1;
     if (doShow) lastHighlightedFaceIndex = faceIdx;
-
-    if (!doShow) checknolabels();
 }
 
 
@@ -692,14 +652,9 @@ export function makeDraggable() {
     draw.ctx.svg.addEventListener('mousedown', e => {
         logEvent(e);
 
-        // XXX
-        console.log(e);
-
         mousedownTs = e.timeStamp;
-        didDrag = false;
-
-        // XXX
-        console.log(`Recorded mousedown ts ${mousedownTs}.`);
+        xDrag = 0;
+        yDrag = 0;
 
         ctx.mousePt = [e.offsetX, e.offsetY];
         preClickMode = ctx.mode;
@@ -716,21 +671,23 @@ export function makeDraggable() {
 
         // If this was a long click, we don't treat it as a click.
         // However, if a long click had zero movement, we still count it.
-        if (e.timeStamp - mousedownTs > 500 || didDrag) {
+        if (e.timeStamp - mousedownTs > 500 || didDrag()) {
             let d = e.timeStamp - mousedownTs;
             ctx.mode = 'paused';
-            console.log(`Click was long (${d} ms), so I'll ignore it.`);
+            if (e.timeStamp - mousedownTs > 500) {
+                console.log(`Ignoring click: long (${d} ms).`);
+            } else {
+                console.log(`Ignoring click: didDrag.`);
+            }
             return;
         }
 
-        console.log(`Click noticed on svg. Start mode: ${preClickMode}.`);  // XXX
         let fromTo = {
             spinning: 'paused',
             dragging: 'paused',
             paused:   'spinning'
         };
         ctx.mode = fromTo[preClickMode];
-        console.log(`End mode: ${ctx.mode}.`);  // XXX
     });
     draw.ctx.svg.addEventListener('click', e => {
         logEvent(e);
@@ -745,7 +702,8 @@ export function makeDraggable() {
         ctx.mode = 'dragging';
         let delta = vector.sub([e.offsetX, e.offsetY], ctx.mousePt);
         ctx.mousePt = [e.offsetX, e.offsetY];
-        didDrag = true;
+        xDrag += Math.abs(delta[0]);
+        yDrag += Math.abs(delta[1]);
 
         let scale = draw.ctx.toCanvasScale;
         let t = matrix.rotateAroundY(delta[0] / scale);
