@@ -6,9 +6,6 @@
 
 
 // TODO
-//  * For the mouseup event, I think it's currently too sensitive to movements.
-//    I'd like to modify the didDrag boolean to only count relatively large
-//    total movement. Use the sum of absolute values of all deltas.
 //  * Refactor so that there is less code redundancy across
 //    initial dot/line placement and setting a new transform.
 //  * Ensure initial render is consistent with follow-ups.
