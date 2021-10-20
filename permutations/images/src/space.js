@@ -142,6 +142,18 @@ export let whiteStyle = {
     'pointer-events': 'none'
 };
 
+export let blueStyle = {
+    stroke: 'transparent',
+    fill:   '#00f',
+    'pointer-events': 'none'
+};
+
+export let redStyle = {
+    stroke: 'transparent',
+    fill:   '#f00',
+    'pointer-events': 'none'
+};
+
 let eyeZ = 0.001;
 
 // Groups.
@@ -273,8 +285,11 @@ function renderCircle() {
     // XXX
     // Debug prints here.
 
-    // Find four corners around the circle. We want the near pair of corners to
-    // have the same z coordinate, and the same for the far pair.
+    // 1. Find four corners around the circle. We want the near pair of corners
+    // to have the same z coordinate, and the same for the far pair.
+
+    // 1.a. Find a basis for the plane of the circle. This will be the rows
+    //      of T. T[0] = n; T[1] is orth to z and to n.
     let n = getXYArray(matrix.transpose([ctx.circle.normal]), false)[0];
     console.log(`n: ${n}`);
     let A = matrix.rand(3, 3);
@@ -284,9 +299,37 @@ function renderCircle() {
     A[1][2] = 0;
     A = matrix.transpose(A);
     let [Q, R] = matrix.qr(A);
+    let T = matrix.transpose(Q);
+    // Ensure T[2] points away from the eye (positive z).
+    if (T[2][2] < 0) T[2] = T[2].map(x => -x);
 
-    console.log('Q:');
-    matrix.pr(Q);
+    console.log('T:');
+    matrix.pr(T);
+
+    // 1.b. Find the four corners of the surrounding square.
+    let c = getXYArray(matrix.transpose([ctx.circle.center]), false)[0];
+    c = [c.x, c.y, c.z];
+    let r = ctx.circle.radius;
+    console.log(`c: ${c}`);
+    let [T1, T2] = [vector.scale(T[1], r), vector.scale(T[2], r)];
+    let nearMid = vector.sub(c, T2);
+    let [near1, near2] = [vector.sub(nearMid, T1), vector.add(nearMid, T1)];
+    let farMid = vector.add(c, T2);
+    let [far1, far2] = [vector.sub(farMid, T1), vector.add(farMid, T1)];
+
+    // 2. Apply the perspective transform to all coordinates.
+    for (let pt of [c, near1, near2, far1, far2]) {
+        pt[0] /= (pt[2] / ctx.zoom);
+        pt[1] /= (pt[2] / ctx.zoom);
+    }
+
+    // XXX
+    // Render the corners.
+    let dotRadius = 0.01;
+    draw.circle({x: near1[0], y: near1[1]}, dotRadius, blueStyle);
+    draw.circle({x: near2[0], y: near2[1]}, dotRadius, blueStyle);
+    draw.circle({x: far1[0], y: far1[1]}, dotRadius, redStyle);
+    draw.circle({x: far2[0], y: far2[1]}, dotRadius, redStyle);
 }
 
 // This applies ctx.fadeRange to stdBaseColor, using z, to arrive a color that
@@ -670,9 +713,16 @@ export function addFaces(faces) {
 }
 
 export function addCircle(center, r, normal) {
+
     let c = {};
+
     c.normal = vector.unit(normal);
     c.normal.push(0);  // Make it a 4d vector for easier transformation.
+
+    c.center = center.slice();
+    c.center.push(1);  // Make it a 4d vector.
+
+    c.radius = r;
 
     // TODO Put more stuff here.
 

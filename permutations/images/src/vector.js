@@ -9,8 +9,16 @@
 // ______________________________________________________________________
 // Public functions
 
+export function add(a, b) {
+    return a.map((x, i) => x + b[i]);
+}
+
 export function sub(a, b) {
     return a.map((x, i) => x - b[i]);
+}
+
+export function scale(a, s) {
+    return a.map(x => x * s);
 }
 
 export function cross(a, b) {
