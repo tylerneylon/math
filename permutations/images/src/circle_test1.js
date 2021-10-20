@@ -66,6 +66,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
     space.addPoints(pts);
     space.addLines(lines);
 
+    // Add the circle.
+    // This circle will be just around one face of the cube.
+    // Send in center, radius, normal.
+    // The normal does not have to be a unit vector when sent in.
+    let r = Math.sqrt(2) + 0.01;
+    space.addCircle([-1, 0, 0], r, [1, 0, 0]);
+
     // Add to the z value of all points.
     let t = matrix.eye(4);
     t[2][3] = zDist;

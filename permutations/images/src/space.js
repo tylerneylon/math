@@ -68,6 +68,8 @@ ctx.doDrawNormalLines = false;
 ctx.normalLinePts = [[], [], [], []];
 ctx.normalLines = [];
 
+ctx.circle = null;
+
 ctx.transform = matrix.eye(4);
 
 ctx.zoom = 1;
@@ -258,6 +260,33 @@ function updatePoints() {
     orderElts(xys);
 
     if (ctx.doDrawNormalLines) drawNormalLines();
+
+    // XXX I will need to integrate this with the z order of things.
+    renderCircle();
+}
+
+// Add the circle if there is one. For now, this will be rendered on top of
+// everything else.
+function renderCircle() {
+    if (!ctx.circle) return;
+
+    // XXX
+    // Debug prints here.
+
+    // Find four corners around the circle. We want the near pair of corners to
+    // have the same z coordinate, and the same for the far pair.
+    let n = getXYArray(matrix.transpose([ctx.circle.normal]), false)[0];
+    console.log(`n: ${n}`);
+    let A = matrix.rand(3, 3);
+    A[0] = [n.x, n.y, n.z];
+    A[1][0] =  n.y;
+    A[1][1] = -n.x;
+    A[1][2] = 0;
+    A = matrix.transpose(A);
+    let [Q, R] = matrix.qr(A);
+
+    console.log('Q:');
+    matrix.pr(Q);
 }
 
 // This applies ctx.fadeRange to stdBaseColor, using z, to arrive a color that
@@ -640,13 +669,24 @@ export function addFaces(faces) {
     addAnyNewNormals();
 }
 
+export function addCircle(center, r, normal) {
+    let c = {};
+    c.normal = vector.unit(normal);
+    c.normal.push(0);  // Make it a 4d vector for easier transformation.
+
+    // TODO Put more stuff here.
+
+    ctx.circle = c;
+}
+
+// XXX Delete this version if unused.
 // Add an outlined circle in 3d space.
 // For now, this can only display certain circles, not an arbitrary one.
 // `center` is an array with [x, y, z] coordinates of the sphere.
 // `r` is the radius of the sphere.
 // `x0` is the slice of the sphere to show.
 // This renders the intersection of the plane x=x0 with the given sphere.
-export function addCircle(center, r, x0) {
+export function addCircleOld(center, r, x0) {
 
     // Find the intrinsic radius and center of the circle; that is, without need
     // to keep in mind the given sphere.

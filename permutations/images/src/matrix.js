@@ -162,11 +162,14 @@ export function qr(A) {
     let R  = eye(n);
 
     for (let i = 0; i < n; i++) {
+        // m = ||QT_i||; QT_i = the ith row of QT.
         let m = Math.sqrt(Qt[i].map(x => x**2).reduce((a, b) => a + b));
         R[i][i] = m;
-        Qt[i] = Qt[i].map(x => x / m);
+        Qt[i] = Qt[i].map(x => x / m);  // Normalize QT_i.
         for (let j = i + 1; j < n; j++) {
+            // R_ij = <QT_i, QT_j>.
             R[i][j] = mult([Qt[i]], transpose([Qt[j]]))[0][0];
+            // Project QT_j so that it is orthogonal to QT_i.
             Qt[j] = Qt[j].map((x, k) => x - R[i][j] * Qt[i][k]);
         }
     }
