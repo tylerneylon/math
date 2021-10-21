@@ -350,6 +350,48 @@ function renderCircle() {
     draw.circle({x: c[0], y: c[1]}, dotRadius, redStyle);
     draw.circle({x: t[0], y: t[1]}, dotRadius, redStyle);
 
+    // Translate and rotate everything over for easier analysis.
+    for (let pt of [t, c, near1, near2, far1, far2, sc]) {
+        pt[0] -= sc[0];
+        pt[1] -= sc[1];
+    }
+    [n1, n2] = [{x: near1[0], y: near1[1]}, {x: near2[0], y: near2[1]}];
+    [f1, f2] = [{x: far1[0], y: far1[1]}, {x: far2[0], y: far2[1]}];
+    draw.line(n1, n2, lineStyle);
+    draw.line(n2, f2, lineStyle);
+    draw.line(f2, f1, lineStyle);
+    draw.line(f1, n1, lineStyle);
+    draw.circle(n1, dotRadius, blueStyle);
+    draw.circle(n2, dotRadius, blueStyle);
+    draw.circle(f1, dotRadius, redStyle);
+    draw.circle(f2, dotRadius, redStyle);
+    draw.circle({x: sc[0], y: sc[1]}, dotRadius, blueStyle);
+    draw.circle({x: c[0], y: c[1]}, dotRadius, redStyle);
+    draw.circle({x: t[0], y: t[1]}, dotRadius, redStyle);
+    // Find the angle so we can counter-rotate.
+    let nearDir = vector.sub(near2, near1);
+    let angle = Math.atan2(nearDir[1], nearDir[0]);
+    console.log(`angle = ${angle}`);
+    let P = matrix.transpose(
+        [t, c, near1, near2, far1, far2, sc].map(x => x.slice(0, 2))
+    );
+    A = matrix.rotateXY(-angle);
+    [t, c, near1, near2, far1, far2, sc] = matrix.transpose(matrix.mult(A, P));
+    [n1, n2] = [{x: near1[0], y: near1[1]}, {x: near2[0], y: near2[1]}];
+    [f1, f2] = [{x: far1[0], y: far1[1]}, {x: far2[0], y: far2[1]}];
+    draw.line(n1, n2, lineStyle);
+    draw.line(n2, f2, lineStyle);
+    draw.line(f2, f1, lineStyle);
+    draw.line(f1, n1, lineStyle);
+    draw.circle(n1, dotRadius, blueStyle);
+    draw.circle(n2, dotRadius, blueStyle);
+    draw.circle(f1, dotRadius, redStyle);
+    draw.circle(f2, dotRadius, redStyle);
+    draw.circle({x: sc[0], y: sc[1]}, dotRadius, blueStyle);
+    draw.circle({x: c[0], y: c[1]}, dotRadius, redStyle);
+    draw.circle({x: t[0], y: t[1]}, dotRadius, redStyle);
+
+
 }
 
 // This applies ctx.fadeRange to stdBaseColor, using z, to arrive a color that

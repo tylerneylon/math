@@ -71,7 +71,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // Send in center, radius, normal.
     // The normal does not have to be a unit vector when sent in.
     let r = Math.sqrt(2) + 0.01;
-    space.addCircle([-1, 0, 0], r, [1, 0, 0]);
+    space.addCircle([-1, 0, 0], r, [1, 0.4, 0.3]);
 
     // Add to the z value of all points.
     let t = matrix.eye(4);

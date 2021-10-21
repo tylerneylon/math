@@ -177,6 +177,16 @@ export function qr(A) {
     return [transpose(Qt), R];
 }
 
+export function rotateXY(angle) {
+    let A = eye(2);
+    let [c, s] = [Math.cos(angle), Math.sin(angle)];
+    A[0][0] =  c;
+    A[0][1] = -s;
+    A[1][0] =  s;
+    A[1][1] =  c;
+    return A;
+}
+
 export function rotateAroundX(angle) {
     let A = eye(4);
     let [c, s] = [Math.cos(angle), Math.sin(angle)];
