@@ -316,20 +316,40 @@ function renderCircle() {
     let [near1, near2] = [vector.sub(nearMid, T1), vector.add(nearMid, T1)];
     let farMid = vector.add(c, T2);
     let [far1, far2] = [vector.sub(farMid, T1), vector.add(farMid, T1)];
+    // It's useful to also find a side-tangent point t right now.
+    let t = vector.scale(vector.add(near1, far1), 0.5);
 
     // 2. Apply the perspective transform to all coordinates.
-    for (let pt of [c, near1, near2, far1, far2]) {
+    for (let pt of [t, c, near1, near2, far1, far2]) {
         pt[0] /= (pt[2] / ctx.zoom);
         pt[1] /= (pt[2] / ctx.zoom);
     }
 
     // XXX
     // Render the corners.
-    let dotRadius = 0.01;
-    draw.circle({x: near1[0], y: near1[1]}, dotRadius, blueStyle);
-    draw.circle({x: near2[0], y: near2[1]}, dotRadius, blueStyle);
-    draw.circle({x: far1[0], y: far1[1]}, dotRadius, redStyle);
-    draw.circle({x: far2[0], y: far2[1]}, dotRadius, redStyle);
+    let dotRadius = 0.005;
+    let [n1, n2] = [{x: near1[0], y: near1[1]}, {x: near2[0], y: near2[1]}];
+    let [f1, f2] = [{x: far1[0], y: far1[1]}, {x: far2[0], y: far2[1]}];
+
+    draw.line(n1, n2, lineStyle);
+    draw.line(n2, f2, lineStyle);
+    draw.line(f2, f1, lineStyle);
+    draw.line(f1, n1, lineStyle);
+
+    draw.circle(n1, dotRadius, blueStyle);
+    draw.circle(n2, dotRadius, blueStyle);
+    draw.circle(f1, dotRadius, redStyle);
+    draw.circle(f2, dotRadius, redStyle);
+
+    // Find the screen center.
+    let corners = [near1, near2, far1, far2].map(x => x.slice(0, 2));
+    console.log(`corners: ${corners}`);
+    let sc = corners.reduce(vector.add).map(x => x / 4);
+    console.log(`sc: ${sc}`);
+    draw.circle({x: sc[0], y: sc[1]}, dotRadius, blueStyle);
+    draw.circle({x: c[0], y: c[1]}, dotRadius, redStyle);
+    draw.circle({x: t[0], y: t[1]}, dotRadius, redStyle);
+
 }
 
 // This applies ctx.fadeRange to stdBaseColor, using z, to arrive a color that
