@@ -177,6 +177,39 @@ export function qr(A) {
     return [transpose(Qt), R];
 }
 
+// Find x: Ax = b. This assumes A is square and that there is a solution.
+// This expects b to be a column vector (a matrix with one column).
+export function solve(A, b) {
+    let n = A.length;
+    console.assert(A[0].length === n);
+    console.assert(b.length === n);
+
+    let [Q, R] = qr(A);
+
+    // XXX
+    let cond = 1.0;
+    for (let i = 0; i < n; i++) {
+        cond *= R[i][i];
+    }
+    console.log(`cond = ${cond}`);
+
+    let v = mult(transpose(Q), b);
+    for (let i = n - 1; i >= 0; i--) {
+        v[i] /= R[i][i];
+        for (let j = i - 1; j >= 0; j--) {
+            v[j] -= R[j][i] * v[i];
+        }
+    }
+    v = transpose([v]);
+
+    // XXX
+    // Let's have a sanity check.
+    let t = mult(A, v);
+    for (let i = 0; i < n; i++) console.assert(isclose(t[i], b[i]));
+
+    return v;
+}
+
 export function rotateXY(angle) {
     let A = eye(2);
     let [c, s] = [Math.cos(angle), Math.sin(angle)];
@@ -185,6 +218,12 @@ export function rotateXY(angle) {
     A[1][0] =  s;
     A[1][1] =  c;
     return A;
+}
+
+export function invert2x2(m) {
+    let d = m[0][0] * m[1][1] - m[1][0] * m[0][1];
+    console.assert(Math.abs(d) > 0.0001);
+    return [[m[1][1] / d, -m[0][1] / d], [-m[1][0] / d, m[0][0] / d]];
 }
 
 export function rotateAroundX(angle) {

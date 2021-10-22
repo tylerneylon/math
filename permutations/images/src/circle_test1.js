@@ -62,7 +62,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // Add a small degree of fading for the farther-back points and lines.
     space.ctx.fadeRange = [6, 15];
 
-    space.ctx.zoom = 3;
+    space.ctx.zoom = 1.8;
     space.addPoints(pts);
     space.addLines(lines);
 
@@ -70,8 +70,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // This circle will be just around one face of the cube.
     // Send in center, radius, normal.
     // The normal does not have to be a unit vector when sent in.
-    let r = Math.sqrt(2) + 0.01;
-    space.addCircle([-2, -1, 0], r, [1, 5, 0]);
+    let r = Math.sqrt(2) + 0.2;
+    space.addCircle([-1, 0, 0], r, [1, 1, 1]);
 
     // Add to the z value of all points.
     let t = matrix.eye(4);

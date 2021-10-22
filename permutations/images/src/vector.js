@@ -17,6 +17,10 @@ export function sub(a, b) {
     return a.map((x, i) => x - b[i]);
 }
 
+export function midpoint(a, b) {
+    return a.map((x, i) => (x + b[i]) / 2);
+}
+
 export function scale(a, s) {
     return a.map(x => x * s);
 }
