@@ -316,11 +316,12 @@ function renderCircle() {
     let [near1, near2] = [vector.sub(nearMid, T1), vector.add(nearMid, T1)];
     let farMid = vector.add(c, T2);
     let [far1, far2] = [vector.sub(farMid, T1), vector.add(farMid, T1)];
-    // It's useful to also find a side-tangent point t right now.
-    let t = vector.scale(vector.add(near1, far1), 0.5);
+    // It's useful to also find a side-tangent point t1 right now.
+    let t1 = vector.scale(vector.add(near1, far1), 0.5);
+    let t2 = vector.scale(vector.add(near2, far2), 0.5);
 
     // 2. Apply the perspective transform to all coordinates.
-    for (let pt of [t, c, near1, near2, far1, far2]) {
+    for (let pt of [t1, t2, c, near1, near2, far1, far2]) {
         pt[0] /= (pt[2] / ctx.zoom);
         pt[1] /= (pt[2] / ctx.zoom);
     }
@@ -348,10 +349,11 @@ function renderCircle() {
     console.log(`sc: ${sc}`);
     draw.circle({x: sc[0], y: sc[1]}, dotRadius, blueStyle);
     draw.circle({x: c[0], y: c[1]}, dotRadius, redStyle);
-    draw.circle({x: t[0], y: t[1]}, dotRadius, redStyle);
+    draw.circle({x: t1[0], y: t1[1]}, dotRadius, redStyle);
+    draw.circle({x: t2[0], y: t2[1]}, dotRadius, redStyle);
 
     // Translate and rotate everything over for easier analysis.
-    for (let pt of [t, c, near1, near2, far1, far2, sc]) {
+    for (let pt of [t1, t2, c, near1, near2, far1, far2, sc]) {
         pt[0] -= sc[0];
         pt[1] -= sc[1];
     }
@@ -367,16 +369,17 @@ function renderCircle() {
     draw.circle(f2, dotRadius, redStyle);
     draw.circle({x: sc[0], y: sc[1]}, dotRadius, blueStyle);
     draw.circle({x: c[0], y: c[1]}, dotRadius, redStyle);
-    draw.circle({x: t[0], y: t[1]}, dotRadius, redStyle);
+    draw.circle({x: t1[0], y: t1[1]}, dotRadius, redStyle);
+    draw.circle({x: t2[0], y: t2[1]}, dotRadius, redStyle);
     // Find the angle so we can counter-rotate.
     let nearDir = vector.sub(near2, near1);
     let angle = Math.atan2(nearDir[1], nearDir[0]);
     console.log(`angle = ${angle}`);
     let P = matrix.transpose(
-        [t, c, near1, near2, far1, far2, sc].map(x => x.slice(0, 2))
+        [t1, t2, c, near1, near2, far1, far2, sc].map(x => x.slice(0, 2))
     );
     A = matrix.rotateXY(-angle);
-    [t, c, near1, near2, far1, far2, sc] = matrix.transpose(matrix.mult(A, P));
+    [t1, t2, c, near1, near2, far1, far2, sc] = matrix.transpose(matrix.mult(A, P));
     [n1, n2] = [{x: near1[0], y: near1[1]}, {x: near2[0], y: near2[1]}];
     [f1, f2] = [{x: far1[0], y: far1[1]}, {x: far2[0], y: far2[1]}];
     draw.line(n1, n2, lineStyle);
@@ -389,9 +392,50 @@ function renderCircle() {
     draw.circle(f2, dotRadius, redStyle);
     draw.circle({x: sc[0], y: sc[1]}, dotRadius, blueStyle);
     draw.circle({x: c[0], y: c[1]}, dotRadius, redStyle);
-    draw.circle({x: t[0], y: t[1]}, dotRadius, redStyle);
+    draw.circle({x: t1[0], y: t1[1]}, dotRadius, redStyle);
+    draw.circle({x: t2[0], y: t2[1]}, dotRadius, redStyle);
 
+    // Find a and b, as in (x/a)^2 + (y/b)^2 = 1.
+    let b  = Math.abs(near1[1]);
+    let cy = 0;
+    let d1 = Math.sqrt(1 - (t1[1] / b) ** 2);
+    let d2 = Math.sqrt(1 - (t2[1] / b) ** 2);
+    let a  = Math.abs(t1[0] - t2[0]) / (d1 + d2);
+    let cx = a * d1 - Math.abs(t1[0]);
 
+    console.log(`a = ${a}`);
+    console.log(`b = ${b}`);
+
+    let dctx = draw.ctx;
+
+    // Find canvas-based coordinates.
+    cx = dctx.origin.x + cx * dctx.toCanvasScale;
+    cy = dctx.origin.y;
+    let rx = a * dctx.toCanvasScale;
+    let ry = b * dctx.toCanvasScale;
+    let start = [cx - rx, cy];
+    let end   = [cx + rx, cy];
+
+    let path = draw.add('path', lineStyle);
+    draw.addAttributes(path, {
+        d: `M ${start[0]} ${start[1]}` +
+           `A ${rx} ${ry} 0 0 0 ${end[0]} ${end[1]}`
+    });
+    path = draw.add('path', lineStyle);
+    draw.addAttributes(path, {
+        d: `M ${start[0]} ${start[1]}` +
+           `A ${rx} ${ry} 0 0 1 ${end[0]} ${end[1]}`
+    });
+
+    if (false) {
+        let ellipse = draw.add('ellipse', lineStyle);
+        draw.addAttributes(ellipse, {
+            cx: dctx.origin.x,
+            cy: dctx.origin.y,
+            rx: a * dctx.toCanvasScale,
+            ry: b * dctx.toCanvasScale,
+        });
+    }
 }
 
 // This applies ctx.fadeRange to stdBaseColor, using z, to arrive a color that
