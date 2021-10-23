@@ -55,7 +55,10 @@ function animateCircle() {
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    init.setup();
+    let size = 380;
+    let svg1 = init.setup(size, size, 'svg1');
+    let svg2 = init.setup(size, size, 'svg2');
+    draw.ctx.svg = svg1;
 
     let [pts, labels]   = perm.getG4PointsIn3D();
     let [lines, slices] = perm.getEdgeIndexesLex(4);
@@ -63,7 +66,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // Add a small degree of fading for the farther-back points and lines.
     space.ctx.fadeRange = [6, 15];
 
-    space.ctx.zoom = 3;
+    space.ctx.zoom = 1;
     space.addPoints(pts);
     space.addLines(lines);
 

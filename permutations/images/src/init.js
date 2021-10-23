@@ -30,7 +30,9 @@ var toCanvasScale = canvasSize / 2.0;
 // ______________________________________________________________________
 // Public functions
 
-export function setup(w, h) {
+export function setup(w, h, svgId) {
+
+    if (svgId === undefined) svgId = 'svg';
 
     if (h === undefined) h = w;
 
@@ -40,7 +42,7 @@ export function setup(w, h) {
     }
 
     // Set up graphic components.
-    const svg = document.getElementById('svg');
+    const svg = document.getElementById(svgId);
     draw.addAttributes(svg, {width: w, height: h});
     draw.setSVG(svg);
     draw.drawInFront();
@@ -49,4 +51,6 @@ export function setup(w, h) {
 
     // Set a deterministic seed so the image is reproducible.
     random.seed(6);
+
+    return svg;
 }
