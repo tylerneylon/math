@@ -808,35 +808,6 @@ export function setCircle(center, r, normal) {
     ctx.circle = c;
 }
 
-// XXX Delete this version if unused.
-// Add an outlined circle in 3d space.
-// For now, this can only display certain circles, not an arbitrary one.
-// `center` is an array with [x, y, z] coordinates of the sphere.
-// `r` is the radius of the sphere.
-// `x0` is the slice of the sphere to show.
-// This renders the intersection of the plane x=x0 with the given sphere.
-export function setCircleOld(center, r, x0) {
-
-    // Find the intrinsic radius and center of the circle; that is, without need
-    // to keep in mind the given sphere.
-    // The sphere is: (x-cx)^2 + (y-cy)^2 + (z-cz)^2 = r^2.
-    // Sliced with x=x0: (y-cy)^2 + (z-cz)^2 = r^2 - (x0-cx)^2.
-    // The center is (x0, cy, cz); the radius is sqrt(r^2 - (x0-cx)^2).
-    let [cx, cy, cz] = [x0, center[1], center[2]];
-    r = Math.sqrt(r ** 2 - (x0 - center[0]) ** 2);
-
-    // Now I'm following some math derived from here:
-    // https://www.math.utah.edu/~treiberg/Perspect/Perspect.htm
-    // I've had to slightly modify things for this slightly different case.
-    // I'm also using this:
-    // https://math.stackexchange.com/a/2096862/10785
-    let h = cy * cx / (cy ** 2 - r ** 2);
-
-    // TODO HERE
-    // I'd like to re-work out the equations on paper to make sure I'm doing
-    // this the way that I want to.
-}
-
 export function setTransform(t) {
     ctx.transform = t;
     updatePoints();

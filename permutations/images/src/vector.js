@@ -33,6 +33,10 @@ export function cross(a, b) {
     ];
 }
 
+export function len(v) {
+    return Math.sqrt(v.map(x => x * x).reduce((a, b) => a + b));
+}
+
 export function unit(v) {
     // Len = ||v||_2.
     let len = Math.sqrt(v.map(x => x * x).reduce((a, b) => a + b));
