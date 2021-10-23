@@ -15,23 +15,22 @@ import * as init   from './init.js';
 import * as matrix from './matrix.js';
 import * as perm   from './perm.js';
 import * as space  from './space.js';
+import * as vector from './vector.js';
 
 
 // ______________________________________________________________________
 // Globals
 
-// XXX needed?
-let xAngle = 0;
-let yAngle = 0;
-let zAngle = 0;
 let lastTs = null;
+let totalSeconds = 0;
+let zDist = 8;
+let R = 0;
 
 let circleStyle = {
-    stroke: 'transparent',
-    fill:   '#888'
+    stroke: '#88a',
+    fill:   'transparent',
+    'stroke-width': 8
 };
-
-let zDist = 8;
 
 
 // ______________________________________________________________________
@@ -39,13 +38,21 @@ let zDist = 8;
 
 function drawFrame(ts) {
 
-    // XXX
-    return;
+    if (lastTs !== null) {
+        let t = Math.sin(totalSeconds * 1.1);
+        let x = R * t;
 
-    window.requestAnimationFrame(drawFrame);
-}
+        space.setCircle(
+            [x, 0, 0],
+            Math.sqrt(R * R - x * x),
+            [1, 0, 0],
+            circleStyle
+        );
+        space.updatePoints();
+    }
+    totalSeconds += (ts - lastTs) / 1000;
+    lastTs = ts;
 
-function animateCircle() {
     window.requestAnimationFrame(drawFrame);
 }
 
@@ -62,6 +69,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     let [pts, labels]   = perm.getG4PointsIn3D();
     let [lines, slices] = perm.getEdgeIndexesLex(4);
+    R = vector.len(pts[0]);
 
     // Add a small degree of fading for the farther-back points and lines.
     space.ctx.fadeRange = [6, 15];
@@ -74,4 +82,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let t = matrix.eye(4);
     t[2][3] = zDist;
     space.setTransform(t);
+
+    window.requestAnimationFrame(drawFrame);
 });

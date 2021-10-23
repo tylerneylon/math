@@ -388,10 +388,9 @@ function renderCircle() {
     [start, end] = [start, end].map(
         x => vector.add(vector.scale(x, dctx.toCanvasScale), orig)
     );
-    let path = draw.add('path', lineStyle);
     let degrees = theta / Math.PI * 180;
     for (let i = 0; i <= 1; i++) {
-        let path = draw.add('path', thickLineStyle);
+        let path = draw.add('path', ctx.circle.style);
         let j = isNearOnLeft ? 0 : 1;
         if (isNearOnLeft ^ (i === 1)) {
             draw.drawBehind();
@@ -787,7 +786,9 @@ export function addFaces(faces) {
     addAnyNewNormals();
 }
 
-export function setCircle(center, r, normal) {
+export function setCircle(center, r, normal, style) {
+
+    if (style === undefined) style = thickLineStyle;
 
     let c = {};
 
@@ -800,7 +801,7 @@ export function setCircle(center, r, normal) {
     c.radius = r;
     c.paths = [];
 
-    // TODO Put more stuff here.
+    c.style = style;
 
     if (ctx.circle) {
         for (let path of ctx.circle.paths) path.remove();
