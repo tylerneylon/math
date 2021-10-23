@@ -787,7 +787,7 @@ export function addFaces(faces) {
     addAnyNewNormals();
 }
 
-export function addCircle(center, r, normal) {
+export function setCircle(center, r, normal) {
 
     let c = {};
 
@@ -815,7 +815,7 @@ export function addCircle(center, r, normal) {
 // `r` is the radius of the sphere.
 // `x0` is the slice of the sphere to show.
 // This renders the intersection of the plane x=x0 with the given sphere.
-export function addCircleOld(center, r, x0) {
+export function setCircleOld(center, r, x0) {
 
     // Find the intrinsic radius and center of the circle; that is, without need
     // to keep in mind the given sphere.

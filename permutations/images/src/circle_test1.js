@@ -52,12 +52,12 @@ function drawFrame(ts) {
         let t = Math.sin(totalSeconds * 1.1);
         let x = R * t;
 
-        space.addCircle([x, 0, 0], Math.sqrt(3 - x * x), [1, 0, 0]);
+        space.setCircle([x, 0, 0], Math.sqrt(3 - x * x), [1, 0, 0]);
 
         /*
         angle += rotationsPerSec * 2 * Math.PI * (ts - lastTs) / 1000;
         let [c, s] = [Math.cos(angle), Math.sin(angle)];
-        space.addCircle([-1, 0, 0], r, [c, s, 0]);
+        space.setCircle([-1, 0, 0], r, [c, s, 0]);
         */
 
         space.updatePoints();
@@ -89,7 +89,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // This circle will be just around one face of the cube.
     // Send in center, radius, normal.
     // The normal does not have to be a unit vector when sent in.
-    space.addCircle([-1, 0, 0], r, [1, 0, 0]);
+    space.setCircle([-1, 0, 0], r, [1, 0, 0]);
 
     // Add to the z value of all points.
     let t = matrix.eye(4);
