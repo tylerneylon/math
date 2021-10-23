@@ -15,6 +15,7 @@ import * as init   from './init.js';
 import * as matrix from './matrix.js';
 import * as perm   from './perm.js';
 import * as space  from './space.js';
+import * as util   from './util.js';
 import * as vector from './vector.js';
 
 
@@ -67,13 +68,15 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let svg2 = init.setup(size, size, 'svg2');
     draw.ctx.svg = svg1;
 
+    // ____________________________________________________________
+    // Set up svg1 with the scanning circle.
+
     let [pts, labels]   = perm.getG4PointsIn3D();
     let [lines, slices] = perm.getEdgeIndexesLex(4);
     R = vector.len(pts[0]);
 
     // Add a small degree of fading for the farther-back points and lines.
     space.ctx.fadeRange = [6, 15];
-
     space.ctx.zoom = 1;
     space.addPoints(pts);
     space.addLines(lines);
@@ -82,6 +85,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let t = matrix.eye(4);
     t[2][3] = zDist;
     space.setTransform(t);
+
+    // ____________________________________________________________
+    // Set up svg2 with the exploded permutohedron graph.
+
+    util.explode3DPoints(pts, labels);
 
     window.requestAnimationFrame(drawFrame);
 });

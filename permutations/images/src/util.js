@@ -46,3 +46,18 @@ export function getCubePtsLinesFaces() {
 
     return [pts, lines, faces];
 }
+
+// This expects `pts` to be a list of xyz arrays, and labels to be a
+// corresponding list of strings. Conceptually, this scans from left to right --
+// meaning from low x values to high x values -- and transforms each slice of
+// the input points into a projection in 2d. Low x values correspond to small
+// radii, while high x values to large.
+export function explode3DPoints(pts, labels) {
+    let p = pts.slice();  // Make a copy so we can re-order.
+    p.forEach((x, i) => x.label = labels[i]);
+
+    // Sort the points with increasing x values.
+    p.sort((a, b) => a[0] - b[0]);
+
+    console.log(p);
+}
