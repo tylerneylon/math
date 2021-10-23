@@ -117,6 +117,12 @@ export let lineStyle = {
     'stroke-width': 0.3
 };
 
+export let thickLineStyle = {
+    stroke: '#444',
+    fill:   'transparent',
+    'stroke-width': 8
+};
+
 export let normalLineStyle = {
     stroke: '#f00',
     fill:   'transparent',
@@ -215,7 +221,8 @@ function updateLabelForDot(dot, xy) {
     dot.label.setAttribute('transform', `translate(${c * xy.x}, ${c * xy.y})`);
 }
 
-function updatePoints() {
+// XXX Move to public?
+export function updatePoints() {
 
     let xys = getXYArray(ctx.pts);
     // We may use the lineXYs early to help place labels around dots.
@@ -294,6 +301,9 @@ function updatePoints() {
 function renderCircle() {
     if (!ctx.circle) return;
 
+    for (let path of ctx.circle.paths) path.remove();
+    ctx.circle.paths = [];
+
     // XXX
     // Debug prints here.
 
@@ -303,7 +313,6 @@ function renderCircle() {
     // 1.a. Find a basis for the plane of the circle. This will be the rows
     //      of T. T[0] = n; T[1] is orth to z and to n.
     let n = getXYArray(matrix.transpose([ctx.circle.normal]), false)[0];
-    console.log(`n: ${n}`);
     let matA = matrix.rand(3, 3);
     matA[0] = [n.x, n.y, n.z];
     matA[1][0] =  n.y;
@@ -315,19 +324,17 @@ function renderCircle() {
     // Ensure T[2] points away from the eye (positive z).
     if (T[2][2] < 0) T[2] = T[2].map(x => -x);
 
-    console.log('T:');
-    matrix.pr(T);
-
     // 1.b. Find the four corners of the surrounding square.
     let c = getXYArray(matrix.transpose([ctx.circle.center]), false)[0];
     c = [c.x, c.y, c.z];
     let r = ctx.circle.radius;
-    console.log(`c: ${c}`);
     let [T1, T2] = [vector.scale(T[1], r), vector.scale(T[2], r)];
     let nearMid = vector.sub(c, T2);
     let [near1, near2] = [vector.sub(nearMid, T1), vector.add(nearMid, T1)];
     let farMid = vector.add(c, T2);
     let [far1, far2] = [vector.sub(farMid, T1), vector.add(farMid, T1)];
+
+    let isNearOnLeft = (nearMid[0] / nearMid[2]) < (farMid[0] / farMid[2]);
 
     // Find some tangent points.
     // I'm following the lettering used here:
@@ -358,31 +365,14 @@ function renderCircle() {
     let dotRadius = 0.005;
     let C2 = mid(nearMid, farMid);
 
-    draw.line(xy(near1), xy(near2), lineStyle);
-    draw.line(xy(near2), xy(far2),  lineStyle);
-    draw.line(xy(far2),  xy(far1),  lineStyle);
-    draw.line(xy(far1),  xy(near1), lineStyle);
-
-    draw.circle(xy(near1), dotRadius, blueStyle);
-    draw.circle(xy(near2), dotRadius, blueStyle);
-    draw.circle(xy(far1),  dotRadius, redStyle);
-    draw.circle(xy(far2),  dotRadius, redStyle);
-
-    draw.circle(xy(A), dotRadius, redStyle);
-    draw.circle(xy(B), dotRadius, redStyle);
-    draw.circle(xy(D), dotRadius, redStyle);
-
-    draw.circle(xy(M), dotRadius, redStyle);
-    draw.circle(xy(F), dotRadius, redStyle);
-
     // Find the intersection of VM with EF; this is the center of the ellipse
     // on the screen.
     let VMdir = vector.sub(M, V)
     let EFdir = vector.sub(F, E);
-    let C = findLineIsect(E, EFdir, V, VMdir);
+    // let C = findLineIsect(E, EFdir, V, VMdir);
 
-    draw.circle(xy(C), dotRadius, greenStyle);
-    draw.circle(xy(C2), dotRadius, greenStyle);
+    // draw.circle(xy(C), dotRadius, greenStyle);
+    // draw.circle(xy(C2), dotRadius, greenStyle);
 
     // Offset the tangent points and find an eqn for them.
     let [t1, t2, t3, t4] = [A, B, D, farMid];
@@ -391,11 +381,7 @@ function renderCircle() {
     let matB = [t1, t2, t3].map(
         x => [x[0] ** 2, x[0] * x[1], x[1] ** 2]
     );
-    console.log('matB:');
-    matrix.pr(matB);
     let w = matrix.solve(matB, matrix.transpose([[1, 1, 1]]));
-    console.log('w:');
-    matrix.pr(w);
 
     // XXX
     // Sanity check: Do the parameters in w appear to work for all tangent pts?
@@ -403,54 +389,46 @@ function renderCircle() {
     for (let i in ts) {
         let t = ts[i];
         let val = w[0] * t[0] ** 2 + w[1] * t[0] * t[1] + w[2] * t[1] ** 2;
-        console.log(`For i=${i}, quadratic value=${val}.`);
     }
 
-    console.log(`w: ${w}`);
 
     let tanTwoTheta = w[1] / (w[0] - w[2]);
     let theta = Math.atan(tanTwoTheta) / 2;
-
-    console.log(`theta: ${theta}`);
-    console.log(`theta/pi: ${theta / Math.PI}`);
 
     let [co, si] = [Math.cos(theta), Math.sin(theta)];
 
     // XXX
     // Sanity check: Draw a little line to help indicate the direction of theta.
+    /*
     let scale = 0.1;
     draw.line(
         xy(C2),
         xy(vector.add(C2, [scale * co, scale * si])),
         lineStyle
     );
-
-    console.log('Here are the tangent points before being rotated:');
-    for (let t of ts) console.log(t);
+    */
 
     // I've changed the sign of si in here to invoke a reverse rotation.
     [t1, t2, t3, t4] = [t1, t2, t3, t4].map(
         x => [co * x[0] + si * x[1], -si * x[0] + co * x[1]]
     );
 
-    console.log('Here are the tangent points after being rotated:');
-    for (let t of [t1, t2, t3, t4]) {
-        console.log(t);
-        draw.circle(xy(t), dotRadius, yellowStyle);
-    }
-
     let matC = [t1, t2].map(
         x => [x[0] ** 2, x[1] ** 2]
     );
-    console.log('matC:');
-    matrix.pr(matC);
     w = matrix.solve(matC, matrix.transpose([[1, 1]]));
-    console.log(`w=${w}`);
 
     let [a, b] = [1 / Math.sqrt(w[0]), 1 / Math.sqrt(w[1])];
 
-    let start = vector.sub(C2, vector.scale([co, si], a));
-    let end   = vector.add(C2, vector.scale([co, si], a));
+    let offset = null;
+    if (a > b) {
+        offset = vector.scale([co, si], a);
+    } else {
+        offset = vector.scale([-si, co], b);
+    }
+
+    let start = vector.sub(C2, offset);
+    let end   = vector.add(C2, offset);
     let dctx = draw.ctx;
     let orig = [dctx.origin.x, dctx.origin.y];
     [start, end] = [start, end].map(
@@ -464,18 +442,21 @@ function renderCircle() {
 
     let path = draw.add('path', lineStyle);
     let degrees = theta / Math.PI * 180;
-    console.log(`theta / pi = ${theta / Math.PI}`);
-    console.log(`degrees = ${degrees}`);
     for (let i = 0; i <= 1; i++) {
-        let path = draw.add('path', lineStyle);
+        let path = draw.add('path', thickLineStyle);
+        let j = isNearOnLeft ? 0 : 1;
+        if (isNearOnLeft ^ (i === 1)) {
+            draw.drawBehind();
+        } else {
+            draw.drawInFront();
+        }
         let attrib = {
             d: `M ${start[0]} ${start[1]} ` +
                `A ${a} ${b} ${degrees} 0 ${i} ${end[0]} ${end[1]}`
         };
         draw.addAttributes(path, attrib);
+        ctx.circle.paths.push(path);
     }
-
-
 }
 
 
@@ -886,9 +867,13 @@ export function addCircle(center, r, normal) {
     c.center.push(1);  // Make it a 4d vector.
 
     c.radius = r;
+    c.paths = [];
 
     // TODO Put more stuff here.
 
+    if (ctx.circle) {
+        for (let path of ctx.circle.paths) path.remove();
+    }
     ctx.circle = c;
 }
 

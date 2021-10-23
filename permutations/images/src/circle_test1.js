@@ -25,6 +25,11 @@ let xAngle = 0;
 let yAngle = 0;
 let zAngle = 0;
 let lastTs = null;
+let angle = 0;
+let R = Math.sqrt(3);
+let r = Math.sqrt(2) + 0.2;
+let iter = 0;
+let totalSeconds = 0;
 
 let circleStyle = {
     stroke: 'transparent',
@@ -39,13 +44,27 @@ let zDist = 8;
 
 function drawFrame(ts) {
 
-    // XXX
-    return;
+    let rotationsPerSec = 0.1;
 
-    window.requestAnimationFrame(drawFrame);
-}
+    iter++;
 
-function animateCircle() {
+    if (lastTs !== null) {
+        let t = Math.sin(totalSeconds * 1.1);
+        let x = R * t;
+
+        space.addCircle([x, 0, 0], Math.sqrt(3 - x * x), [1, 0, 0]);
+
+        /*
+        angle += rotationsPerSec * 2 * Math.PI * (ts - lastTs) / 1000;
+        let [c, s] = [Math.cos(angle), Math.sin(angle)];
+        space.addCircle([-1, 0, 0], r, [c, s, 0]);
+        */
+
+        space.updatePoints();
+    }
+    totalSeconds += (ts - lastTs) / 1000;
+    lastTs = ts;
+
     window.requestAnimationFrame(drawFrame);
 }
 
@@ -70,11 +89,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // This circle will be just around one face of the cube.
     // Send in center, radius, normal.
     // The normal does not have to be a unit vector when sent in.
-    let r = Math.sqrt(2) + 0.2;
-    space.addCircle([-1, 0, 0], r, [1, 1, 1]);
+    space.addCircle([-1, 0, 0], r, [1, 0, 0]);
 
     // Add to the z value of all points.
     let t = matrix.eye(4);
     t[2][3] = zDist;
     space.setTransform(t);
+
+    window.requestAnimationFrame(drawFrame);
 });

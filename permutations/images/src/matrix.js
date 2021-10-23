@@ -186,12 +186,15 @@ export function solve(A, b) {
 
     let [Q, R] = qr(A);
 
-    // XXX
-    let cond = 1.0;
-    for (let i = 0; i < n; i++) {
-        cond *= R[i][i];
+    // If needed, here is code to check the determinant of A.
+    // If it's low, the result here is unreliable.
+    if (false) {
+        let cond = 1.0;
+        for (let i = 0; i < n; i++) {
+            cond *= R[i][i];
+        }
+        console.log(`cond = ${cond}`);
     }
-    console.log(`cond = ${cond}`);
 
     let v = mult(transpose(Q), b);
     for (let i = n - 1; i >= 0; i--) {
