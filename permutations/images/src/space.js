@@ -304,9 +304,6 @@ function renderCircle() {
     for (let path of ctx.circle.paths) path.remove();
     ctx.circle.paths = [];
 
-    // XXX
-    // Debug prints here.
-
     // 1. Find four corners around the circle. We want the near pair of corners
     // to have the same z coordinate, and the same for the far pair.
 
@@ -333,113 +330,64 @@ function renderCircle() {
     let [near1, near2] = [vector.sub(nearMid, T1), vector.add(nearMid, T1)];
     let farMid = vector.add(c, T2);
     let [far1, far2] = [vector.sub(farMid, T1), vector.add(farMid, T1)];
-
     let isNearOnLeft = (nearMid[0] / nearMid[2]) < (farMid[0] / farMid[2]);
 
-    // Find some tangent points.
-    // I'm following the lettering used here:
-    // https://math.stackexchange.com/a/2210480/10785
+    // Track some key tangent points.
     let mid = vector.midpoint;
-    let V = near1.slice(0);
-    let E = near2.slice(0);
-    let A = mid(near1, near2);
-    let B = mid(near1, far1);
-    let D = mid(near2, far2);
-
-    let M = mid(A, B);
-    let F = mid(A, D);
-
-    // 2. Apply the perspective transform to all coordinates.
-    for (let pt of [nearMid, farMid, A, B, D, E, F, M, V, c, near1, near2, far1, far2]) {
+    let [t1, t2, t3, t4] = [
+        nearMid, mid(near1, far1), mid(near2, far2), farMid
+    ];
+    // Apply the perspective transform to all coordinates.
+    for (let pt of [t1, t2, t3, t4]) {
         pt[0] /= (pt[2] / ctx.zoom);
         pt[1] /= (pt[2] / ctx.zoom);
         pt.length = 2;
     }
-
-    function xy(arrayPt) {
-        return {x: arrayPt[0], y: arrayPt[1]}
-    }
-
-    // XXX
-    // Render the corners.
-    let dotRadius = 0.005;
-    let C2 = mid(nearMid, farMid);
-
-    // Find the intersection of VM with EF; this is the center of the ellipse
-    // on the screen.
-    let VMdir = vector.sub(M, V)
-    let EFdir = vector.sub(F, E);
-    // let C = findLineIsect(E, EFdir, V, VMdir);
-
-    // draw.circle(xy(C), dotRadius, greenStyle);
-    // draw.circle(xy(C2), dotRadius, greenStyle);
+    let C = mid(t1, t4);  // This is the screen-based center of the ellipse.
 
     // Offset the tangent points and find an eqn for them.
-    let [t1, t2, t3, t4] = [A, B, D, farMid];
-    // let C3 = C.map((x, i) => x * 0.1 + C2[i] * 0.9);
-    [t1, t2, t3, t4] = [t1, t2, t3, t4].map(x => vector.sub(x, C2));
+    // We'll find a weight vector w:
+    //   w[0] * x^2 + w[1] * xy + w[2] * y^2 = 1.
+    // For all points (x, y) on the ellipse.
+    // We've dropped the x and y terms by first finding the center pt C.
+    [t1, t2, t3, t4] = [t1, t2, t3, t4].map(x => vector.sub(x, C));
     let matB = [t1, t2, t3].map(
         x => [x[0] ** 2, x[0] * x[1], x[1] ** 2]
     );
     let w = matrix.solve(matB, matrix.transpose([[1, 1, 1]]));
-
-    // XXX
-    // Sanity check: Do the parameters in w appear to work for all tangent pts?
-    let ts = [t1, t2, t3, t4];
-    for (let i in ts) {
-        let t = ts[i];
-        let val = w[0] * t[0] ** 2 + w[1] * t[0] * t[1] + w[2] * t[1] ** 2;
-    }
-
-
     let tanTwoTheta = w[1] / (w[0] - w[2]);
     let theta = Math.atan(tanTwoTheta) / 2;
-
     let [co, si] = [Math.cos(theta), Math.sin(theta)];
 
-    // XXX
-    // Sanity check: Draw a little line to help indicate the direction of theta.
-    /*
-    let scale = 0.1;
-    draw.line(
-        xy(C2),
-        xy(vector.add(C2, [scale * co, scale * si])),
-        lineStyle
-    );
-    */
-
+    // Un-rotate the tangent points so we can solve a simpler equation.
     // I've changed the sign of si in here to invoke a reverse rotation.
     [t1, t2, t3, t4] = [t1, t2, t3, t4].map(
         x => [co * x[0] + si * x[1], -si * x[0] + co * x[1]]
     );
-
     let matC = [t1, t2].map(
         x => [x[0] ** 2, x[1] ** 2]
     );
     w = matrix.solve(matC, matrix.transpose([[1, 1]]));
-
     let [a, b] = [1 / Math.sqrt(w[0]), 1 / Math.sqrt(w[1])];
+    // Now (u/a)^2 + (v/b)^2 = 1, where
+    // (u, v) are the coordinates (x, y) rotated by theta:
+    //   u = cosT * x - sinT * y
+    //   v = sinT * x + cosT * y
 
+    // Find start, end screen coordinates.
     let offset = null;
     if (a > b) {
         offset = vector.scale([co, si], a);
     } else {
         offset = vector.scale([-si, co], b);
     }
-
-    let start = vector.sub(C2, offset);
-    let end   = vector.add(C2, offset);
+    let start = vector.sub(C, offset);
+    let end   = vector.add(C, offset);
     let dctx = draw.ctx;
     let orig = [dctx.origin.x, dctx.origin.y];
     [start, end] = [start, end].map(
         x => vector.add(vector.scale(x, dctx.toCanvasScale), orig)
     );
-    /*
-    [start, end] = [start, end].map(
-        x => x.map(Math.floor)
-    );
-    */
-
     let path = draw.add('path', lineStyle);
     let degrees = theta / Math.PI * 180;
     for (let i = 0; i <= 1; i++) {
@@ -457,23 +405,6 @@ function renderCircle() {
         draw.addAttributes(path, attrib);
         ctx.circle.paths.push(path);
     }
-}
-
-
-// XXX Should this live in vector.js?
-function findLineIsect(from1, dir1, from2, dir2) {
-
-    // The problem is: from1 + t * dir1 = from2 + u * dir2; restate this as:
-    // q = A * tu
-    //     q  = from1 - from2
-    //     A  = (-dir1 dir2); as columns
-    //     tu = a column vector with entries t and u
-
-    let q = matrix.transpose([vector.sub(from1, from2)]);  // q = from1 - from2
-    let A = matrix.transpose([dir1.map(x => -x), dir2]);   // A = (-dir1 dir2)
-    let tu = matrix.mult(matrix.invert2x2(A), q);
-
-    return vector.add(from1, vector.scale(dir1, tu[0]));
 }
 
 // This applies ctx.fadeRange to stdBaseColor, using z, to arrive a color that
