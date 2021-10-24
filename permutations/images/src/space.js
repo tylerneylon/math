@@ -430,8 +430,9 @@ function orderElts(xys) {
 
     // 4. Draw any remaining interior lines.
     for (let line of ctx.lines) {
+        if (line.elt.parentElement) continue;
         // Case A: Internal lines not yet rendered.
-        if (line.type === 'internal' && !line.elt.parentElement) {
+        if (line.type === 'internal') {
             mainGroup.appendChild(line.elt);
         }
         // Case B: Background face lines not yet rendered.

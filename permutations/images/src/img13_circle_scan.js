@@ -92,6 +92,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
     space.addPoints(pts);
     space.addLines(lines);
 
+    if (false) {
+        space.ctx.rotationsPerSec = 0.01;
+        space.animate();
+    }
+
     // Add to the z value of all points.
     let t = matrix.eye(4);
     t[2][3] = zDist;
