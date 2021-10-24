@@ -322,9 +322,10 @@ function renderCircle() {
         } else {
             draw.drawInFront();
         }
+        let xFix = (i === 0 ? 1 : 0);
         let attrib = {
-            d: `M ${start[0]} ${start[1]} ` +
-               `A ${a} ${b} ${degrees} 0 ${i} ${end[0]} ${end[1]}`
+            d: `M ${start[0] + xFix} ${start[1]} ` +
+               `A ${a} ${b} ${degrees} 0 ${i} ${end[0] + xFix} ${end[1]}`
         };
         draw.addAttributes(path, attrib);
         ctx.circle.paths.push(path);

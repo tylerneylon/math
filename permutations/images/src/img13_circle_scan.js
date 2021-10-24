@@ -29,6 +29,9 @@ let totalSeconds = 0;
 let zDist = 8;
 let R = 0;
 
+let frameNum = 0;
+let showEveryNthFrame = 1;
+
 let circleStyle = {
     stroke: '#88a',
     fill:   'transparent',
@@ -41,9 +44,10 @@ let circleStyle = {
 
 function drawFrame(ts) {
 
-    let speed = 0.1;
+    let speed = 1.0;
+    let doShow = (frameNum % showEveryNthFrame === 0);
 
-    if (lastTs !== null) {
+    if (lastTs !== null && doShow) {
         let t = Math.sin(totalSeconds * speed);
         let x = R * t;
 
@@ -58,6 +62,7 @@ function drawFrame(ts) {
     }
     totalSeconds += (ts - lastTs) / 1000;
     lastTs = ts;
+    frameNum++;
 
     window.requestAnimationFrame(drawFrame);
 }
