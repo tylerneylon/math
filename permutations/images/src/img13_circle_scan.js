@@ -88,6 +88,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // Add a small degree of fading for the farther-back points and lines.
     space.ctx.fadeRange = [6, 15];
     space.ctx.zoom = 3.0;
+    space.ctx.dotSize = 0.08;
     space.addPoints(pts);
     space.addLines(lines);
 
@@ -95,6 +96,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let t = matrix.eye(4);
     t[2][3] = zDist;
     space.setTransform(t);
+    space.setZDist(zDist);
 
     // ____________________________________________________________
     // Set up svg2 with the exploded permutohedron graph.

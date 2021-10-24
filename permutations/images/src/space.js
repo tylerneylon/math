@@ -52,6 +52,7 @@ ctx.rotationSign = 1;
 ctx.pts = [[], [], [], []];
 ctx.dots = [];  // This will contain DOM svg circles, one per point.
 ctx.outlines = [];
+ctx.dotSize = 0.06;
 
 ctx.lines = [];  // This will contain {from, to, elt} objects.
 
@@ -862,7 +863,7 @@ export function updatePoints() {
     let lineXYs = getXYArray(ctx.normalLinePts, false);
 
     for (let i = 0; i < xys.length; i++) {
-        let r = 0.04 / xys[i].z;
+        let r = ctx.dotSize / xys[i].z;
         let outlineR = 2 * r;
         draw.moveCircle(ctx.dots[i], xys[i], r);
         if (ctx.dots[i].label) updateLabelForDot(ctx.dots[i], xys[i]);
