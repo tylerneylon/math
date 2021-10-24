@@ -40,6 +40,8 @@ export function setup(w, h, svgId) {
         w = xSize;
         h = ySize;
     }
+    canvasSize = Math.min(w, h);
+    toCanvasScale = canvasSize / 2.0;
 
     // Set up graphic components.
     const svg = document.getElementById(svgId);

@@ -12,6 +12,7 @@ export var ctx = {};
 ctx.addToParent = addAtStart;
 ctx.toCanvasScale = 1.0;
 ctx.origin = {x: 0, y: 0}
+ctx.doDebugPrint = false;
 var ctxStack = [ctx];
 
 var defs = null;
@@ -38,6 +39,14 @@ export function mapToCanvasPt(pt) {
     };
 }
 
+
+// ______________________________________________________________________
+// Debug functions.
+
+function log(msg) {
+    if (!ctx.doDebugPrint) return;
+    console.log(msg);
+}
 
 // ______________________________________________________________________
 // Functions that work with 2d points.
@@ -218,6 +227,8 @@ export function circle(center, radius, style, parent) {
         style = defaultStyle;
     }
 
+    log(`circle(center=${center}, radius=${radius}, style=${style})`);
+
     var circle = add('circle', style, parent);
     var center = mapToCanvasPt(center);
 
@@ -296,6 +307,8 @@ export function movePolygon(polygonElt, pts) {
 export function rect(xy, style, parent) {
 
     if (style === undefined) { style = lightStyle }
+
+    log(`rect(xy=${xy}, style=${style})`);
 
     let rectElt = add('rect', style, parent);
     addAttributes(rectElt, mapToCanvasPt(xy));

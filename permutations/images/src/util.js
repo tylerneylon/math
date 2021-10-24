@@ -52,12 +52,25 @@ export function getCubePtsLinesFaces() {
 // meaning from low x values to high x values -- and transforms each slice of
 // the input points into a projection in 2d. Low x values correspond to small
 // radii, while high x values to large.
-export function explode3DPoints(pts, labels) {
+export function explode3DPoints(pts, labels, minR, maxR) {
     let p = pts.slice();  // Make a copy so we can re-order.
     p.forEach((x, i) => x.label = labels[i]);
 
     // Sort the points with increasing x values.
     p.sort((a, b) => a[0] - b[0]);
 
+    let [minX, maxX] = [p[0][0], p[p.length - 1][0]];
+    let findR = x => minR + (maxR - minR) * (x - minX) / (maxX - minX);
+
+    let newP = [];
+    for (let pt of p) {
+        let len = Math.sqrt(pt[1] * pt[1] + pt[2] * pt[2]);
+        let r = findR(pt[0]);
+        let newPt = [pt[1] / len * r, pt[2] / len * r];
+        newPt.label = pt.label;
+        newP.push(newPt);
+    }
     console.log(p);
+    console.log(newP);
+    return newP;
 }

@@ -22,6 +22,9 @@ import * as vector from './vector.js';
 // ______________________________________________________________________
 // Globals
 
+let svg1 = null;
+let svg2 = null;
+
 let lastTs = null;
 let totalSeconds = 0;
 let zDist = 8;
@@ -39,10 +42,13 @@ let circleStyle = {
 
 function drawFrame(ts) {
 
+    let speed = 0.1;
+
     if (lastTs !== null) {
-        let t = Math.sin(totalSeconds * 1.1);
+        let t = Math.sin(totalSeconds * speed);
         let x = R * t;
 
+        draw.ctx.svg = svg1;
         space.setCircle(
             [x, 0, 0],
             Math.sqrt(R * R - x * x),
@@ -63,9 +69,9 @@ function drawFrame(ts) {
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    let size = 380;
-    let svg1 = init.setup(size, size, 'svg1');
-    let svg2 = init.setup(size, size, 'svg2');
+    let size = 500;
+    svg1 = init.setup(size, size, 'svg1');
+    svg2 = init.setup(size, size, 'svg2');
     draw.ctx.svg = svg1;
 
     // ____________________________________________________________
@@ -77,7 +83,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     // Add a small degree of fading for the farther-back points and lines.
     space.ctx.fadeRange = [6, 15];
-    space.ctx.zoom = 1;
+    space.ctx.zoom = 3.0;
     space.addPoints(pts);
     space.addLines(lines);
 
@@ -89,7 +95,16 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // ____________________________________________________________
     // Set up svg2 with the exploded permutohedron graph.
 
-    util.explode3DPoints(pts, labels);
+    // debugger;  // XXX
+    let pts2d = util.explode3DPoints(pts, labels, 0.1, 0.9);
+    let ptMap = {};
+    for (let pt of pts2d) {
+        ptMap[pt.label] = {x: pt[0], y: pt[1]};
+    }
+    draw.ctx.svg = svg2;
+    draw.ctx.doDebugPrint = true;
+    perm.drawGraphWithPtMap(ptMap, 4);
+    draw.ctx.doDebugPrint = false;
 
     window.requestAnimationFrame(drawFrame);
 });

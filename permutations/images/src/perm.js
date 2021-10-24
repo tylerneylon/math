@@ -296,13 +296,16 @@ function addPtMapEdges(n, ptMap) {
     return edges;
 }
 
-function drawGraphWithPtMap(ptMap, n) {
+// XXX Move to public functions?
+export function drawGraphWithPtMap(ptMap, n) {
     // Add 'edges' to each point value in ptMap. Each `edges` value is a list of
     // [from, to, dest]; each of `from` and `to` is an {x, y} point. `dest` is
     // the permutation string of the other side of the edge.
     // The returned array `edges` is an array of
     // [fromPt, toPt, fromPerm, toPerm] values without redundancy.
     let edges = addPtMapEdges(n, ptMap);
+
+    // debugger;  // XXX
 
     // Prepare the group elements.
     let edgeGroups = [];
