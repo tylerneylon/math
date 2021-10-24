@@ -221,81 +221,6 @@ function updateLabelForDot(dot, xy) {
     dot.label.setAttribute('transform', `translate(${c * xy.x}, ${c * xy.y})`);
 }
 
-// XXX Move to public?
-export function updatePoints() {
-
-    let xys = getXYArray(ctx.pts);
-    // We may use the lineXYs early to help place labels around dots.
-    let lineXYs = getXYArray(ctx.normalLinePts, false);
-
-    for (let i = 0; i < xys.length; i++) {
-        let r = 0.04 / xys[i].z;
-        let outlineR = 2 * r;
-        draw.moveCircle(ctx.dots[i], xys[i], r);
-        if (ctx.dots[i].label) updateLabelForDot(ctx.dots[i], xys[i]);
-        draw.moveCircle(ctx.outlines[i], xys[i], outlineR);
-        if (ctx.fadeRange) {
-            let color = getFadeColor(ctx.dots[i].baseColor, xys[i].z);
-            ctx.dots[i].setAttribute('fill', color);
-        }
-        ctx.dots[i].hidden = !xys[i].isVisible;
-        ctx.outlines[i].hidden = !xys[i].isVisible;
-    }
-
-    for (let line of ctx.lines) {
-        let [from, to] = [xys[line.from], xys[line.to]];
-        if (ctx.fadeRange) {
-            let avgZ  = (xys[line.from].z + xys[line.to].z) / 2;
-            let color = getFadeColor(line.baseColor, avgZ);
-            line.elt.setAttribute('stroke', color);
-        }
-        draw.moveLine(line.elt, from, to);
-    }
-
-    // At the same time that face polygons are updated, we also (a) determine
-    // which ones are visible, and (b) determine which points are in the
-    // background, meaning that all adjacent faces are pointing away.
-
-    // Mark all points as background; we'll move some to foreground below.
-    for (let xy of xys) xy.isForeground = false;
-
-    let normalXYs = getXYArray(ctx.normals, false);  // doPerspective = false
-    for (let i = 0; i < ctx.faces.length; i++) {
-        let face = ctx.faces[i];
-        let faceXYs = [];
-        for (let j = 0; j < face.length; j++) faceXYs.push(xys[face[j]]);
-        draw.movePolygon(ctx.facePolygons[i], faceXYs);
-        let isHidden = vector.dot(
-            [normalXYs[i].x, normalXYs[i].y, normalXYs[i].z],
-            [lineXYs[2 * i].x, lineXYs[2 * i].y, lineXYs[2 * i].z]
-        ) > 0;
-        for (let line of face.lines) line.isForeground = !isHidden;
-        let polygon = ctx.facePolygons[i];
-        polygon.setAttribute('display', isHidden ? 'none' : 'hi');
-
-        // Adjust alpha and color a bit for a little more 3d effect.
-        let towardLight = vector.dot(
-            [normalXYs[i].x, normalXYs[i].y, normalXYs[i].z],
-            lightDir
-        );
-        let ell = Math.floor(towardLight * 40) + 215;
-        let alpha = (towardLight ** 2) * 0.3 + 0.4;  // Between 0.4 and 0.7.
-        if (!ctx.doDrawFaces) alpha = 0;
-        polygon.setAttribute('fill', `rgba(${ell}, ${ell}, ${ell}, ${alpha})`);
-
-        if (!isHidden) {
-            for (let j of face) xys[j].isForeground = true;
-        }
-    }
-
-    orderElts(xys);
-
-    if (ctx.doDrawNormalLines) drawNormalLines();
-
-    // XXX I will need to integrate this with the z order of things.
-    renderCircle();
-}
-
 // Add the circle if there is one. For now, this will be rendered on top of
 // everything else.
 function renderCircle() {
@@ -926,5 +851,80 @@ export function highlightEdges(sliceName) {
 
 export function animate() {
     window.requestAnimationFrame(setupFrame);
+}
+
+// XXX Move to public?
+export function updatePoints() {
+
+    let xys = getXYArray(ctx.pts);
+    // We may use the lineXYs early to help place labels around dots.
+    let lineXYs = getXYArray(ctx.normalLinePts, false);
+
+    for (let i = 0; i < xys.length; i++) {
+        let r = 0.04 / xys[i].z;
+        let outlineR = 2 * r;
+        draw.moveCircle(ctx.dots[i], xys[i], r);
+        if (ctx.dots[i].label) updateLabelForDot(ctx.dots[i], xys[i]);
+        draw.moveCircle(ctx.outlines[i], xys[i], outlineR);
+        if (ctx.fadeRange) {
+            let color = getFadeColor(ctx.dots[i].baseColor, xys[i].z);
+            ctx.dots[i].setAttribute('fill', color);
+        }
+        ctx.dots[i].hidden = !xys[i].isVisible;
+        ctx.outlines[i].hidden = !xys[i].isVisible;
+    }
+
+    for (let line of ctx.lines) {
+        let [from, to] = [xys[line.from], xys[line.to]];
+        if (ctx.fadeRange) {
+            let avgZ  = (xys[line.from].z + xys[line.to].z) / 2;
+            let color = getFadeColor(line.baseColor, avgZ);
+            line.elt.setAttribute('stroke', color);
+        }
+        draw.moveLine(line.elt, from, to);
+    }
+
+    // At the same time that face polygons are updated, we also (a) determine
+    // which ones are visible, and (b) determine which points are in the
+    // background, meaning that all adjacent faces are pointing away.
+
+    // Mark all points as background; we'll move some to foreground below.
+    for (let xy of xys) xy.isForeground = false;
+
+    let normalXYs = getXYArray(ctx.normals, false);  // doPerspective = false
+    for (let i = 0; i < ctx.faces.length; i++) {
+        let face = ctx.faces[i];
+        let faceXYs = [];
+        for (let j = 0; j < face.length; j++) faceXYs.push(xys[face[j]]);
+        draw.movePolygon(ctx.facePolygons[i], faceXYs);
+        let isHidden = vector.dot(
+            [normalXYs[i].x, normalXYs[i].y, normalXYs[i].z],
+            [lineXYs[2 * i].x, lineXYs[2 * i].y, lineXYs[2 * i].z]
+        ) > 0;
+        for (let line of face.lines) line.isForeground = !isHidden;
+        let polygon = ctx.facePolygons[i];
+        polygon.setAttribute('display', isHidden ? 'none' : 'hi');
+
+        // Adjust alpha and color a bit for a little more 3d effect.
+        let towardLight = vector.dot(
+            [normalXYs[i].x, normalXYs[i].y, normalXYs[i].z],
+            lightDir
+        );
+        let ell = Math.floor(towardLight * 40) + 215;
+        let alpha = (towardLight ** 2) * 0.3 + 0.4;  // Between 0.4 and 0.7.
+        if (!ctx.doDrawFaces) alpha = 0;
+        polygon.setAttribute('fill', `rgba(${ell}, ${ell}, ${ell}, ${alpha})`);
+
+        if (!isHidden) {
+            for (let j of face) xys[j].isForeground = true;
+        }
+    }
+
+    orderElts(xys);
+
+    if (ctx.doDrawNormalLines) drawNormalLines();
+
+    // XXX I will need to integrate this with the z order of things.
+    renderCircle();
 }
 

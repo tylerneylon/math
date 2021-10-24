@@ -205,10 +205,12 @@ export function solve(A, b) {
     }
     v = transpose([v]);
 
-    // XXX
-    // Let's have a sanity check.
-    let t = mult(A, v);
-    for (let i = 0; i < n; i++) console.assert(isclose(t[i], b[i]));
+    // Turn this on to help debug if needed.
+    if (false) {
+        // Let's have a sanity check.
+        let t = mult(A, v);
+        for (let i = 0; i < n; i++) console.assert(isclose(t[i], b[i]));
+    }
 
     return v;
 }

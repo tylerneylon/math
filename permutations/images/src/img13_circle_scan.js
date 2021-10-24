@@ -9,7 +9,6 @@
 // ______________________________________________________________________
 // Imports
 
-// XXX needed?
 import * as draw   from './draw.js';
 import * as init   from './init.js';
 import * as matrix from './matrix.js';
@@ -95,16 +94,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // ____________________________________________________________
     // Set up svg2 with the exploded permutohedron graph.
 
-    // debugger;  // XXX
     let pts2d = util.explode3DPoints(pts, labels, 0.1, 0.9);
     let ptMap = {};
     for (let pt of pts2d) {
         ptMap[pt.label] = {x: pt[0], y: pt[1]};
     }
     draw.ctx.svg = svg2;
-    draw.ctx.doDebugPrint = true;
     perm.drawGraphWithPtMap(ptMap, 4);
-    draw.ctx.doDebugPrint = false;
 
     window.requestAnimationFrame(drawFrame);
 });

@@ -60,13 +60,113 @@ let nborHighlightColor = '#00f';
 
 
 // ______________________________________________________________________
-// Begin G_n specific code.
+// Internal utility functions
+
+function factorial(n) {
+    let value = 1;
+    for (let i = 2; i <= n; i++) value *= i;
+    return value;
+}
+
+// Given the number of small circles we want to fit inside a unit circle
+// (and in a ring just inside the circumference), this returns the radius
+// of each smaller circle.
+function findSmallRadius(n) {
+    return 1 / (1 + 1 / Math.sin(Math.PI / n))
+}
+
+// Call cb(pt) for n points distributed evenly around the circumference of the
+// given circle. A circle is a {cx, cy, r} object.
+function forCirclePts(circle, n, angle, cb) {
+    for (let i = 0; i < n; i++) {
+        let x = circle.cx + circle.r * Math.cos(angle);
+        let y = circle.cy + circle.r * Math.sin(angle);
+        cb({x, y});
+        angle += 2 * Math.PI / n;
+    }
+}
+
+
+// ______________________________________________________________________
+// Internal G_n specific code
 //
 // A permutation string is a string of the form "1432".
 // I'm assuming the max n I'll work with in practice is 9.
 // A transposition string is of the form "t34", meaning to swap 3 and 4.
 // I include the t to help with debugging; it makes the string's intended
 // meaning more immediately obvious to mere humans.
+
+function getPermIterator(orderingType) {
+    if (orderingType === undefined) return forAllPermsPlain;
+    if (orderingType === 'plain')   return forAllPermsPlain;
+    if (orderingType === 'lex')     return forAllPermsLex;
+    if (orderingType === 'random')  return forAllPermsRandom;
+}
+
+// This returns a ptMap of G_n within the given circle.
+function placeRecursivePtsInCircle(n, circle, orderingType, angle) {
+
+    console.assert(n >= 3, 'placeRecursivePtsInCircle assumes n >= 3.');
+
+    if (angle === undefined) angle = 0;
+
+    let forAllPerms = getPermIterator(orderingType);
+    let ptMap = {};
+
+    if (n === 3) {
+        let perms = [];
+        forAllPerms(n, function (permStr) { perms.push(permStr); });
+
+        let nPts = 6;
+        let i = 0;
+        forCirclePts(circle, nPts, angle, function (pt) {
+            ptMap[perms[i]] = pt;
+            i++;
+        });
+        return ptMap;
+    }
+
+    // Handle the case n > 3 recursively.
+    let r = circle.r * findSmallRadius(n + 3);
+    let R = circle.r - r;
+    let i = 1;
+
+    forCirclePts(
+            {cx: circle.cx, cy: circle.cy, r: R},
+            n,
+            angle,
+            function (center) {
+
+        let smallCircle = {cx: center.x, cy: center.y, r};
+        let angle = 0;
+        if (n === 4) angle = 2 * Math.PI / 3 * (i - 1);
+        let circlePtMap = placeRecursivePtsInCircle(
+            n - 1,
+            smallCircle,
+            orderingType,
+            angle
+        );
+
+        for (let permStr in circlePtMap) {
+            let p = null;
+            if (false) {
+                p = n.toString() + permStr;
+                p = applyTransposition(p, 't' + n + i);
+            } else {
+                p = permStr.split('');
+                for (let j = 0; j < p.length; j++) {
+                    let elt = parseInt(p[j]);
+                    if (elt >= i) p[j] = elt + 1;
+                }
+                p = i.toString() + p.join('');
+            }
+
+            ptMap[p] = circlePtMap[permStr];
+        }
+        i++;
+    });
+    return ptMap;
+}
 
 function addDot(pt, outlineGroup, frontGroup) {
 
@@ -296,7 +396,10 @@ function addPtMapEdges(n, ptMap) {
     return edges;
 }
 
-// XXX Move to public functions?
+
+// ______________________________________________________________________
+// Public functions
+
 export function drawGraphWithPtMap(ptMap, n) {
     // Add 'edges' to each point value in ptMap. Each `edges` value is a list of
     // [from, to, dest]; each of `from` and `to` is an {x, y} point. `dest` is
@@ -304,8 +407,6 @@ export function drawGraphWithPtMap(ptMap, n) {
     // The returned array `edges` is an array of
     // [fromPt, toPt, fromPerm, toPerm] values without redundancy.
     let edges = addPtMapEdges(n, ptMap);
-
-    // debugger;  // XXX
 
     // Prepare the group elements.
     let edgeGroups = [];
@@ -425,12 +526,6 @@ export function getMagnitude(permStr) {
     return magnitude;
 }
 
-function factorial(n) {
-    let value = 1;
-    for (let i = 2; i <= n; i++) value *= i;
-    return value;
-}
-
 // Render G_n is an n-partite graph in the rectangle from [-a, -b] to [a, b].
 export function drawNPartiteGn(n, orderingType) {
 
@@ -493,96 +588,6 @@ export function drawBipartiteGn(n, useLexOrdering) {
         if (x < 0) y += dy;
     });
     drawGraphWithPtMap(ptMap, n);
-}
-
-function getPermIterator(orderingType) {
-    if (orderingType === undefined) return forAllPermsPlain;
-    if (orderingType === 'plain')   return forAllPermsPlain;
-    if (orderingType === 'lex')     return forAllPermsLex;
-    if (orderingType === 'random')  return forAllPermsRandom;
-}
-
-// Given the number of small circles we want to fit inside a unit circle
-// (and in a ring just inside the circumference), this returns the radius
-// of each smaller circle.
-function findSmallRadius(n) {
-    return 1 / (1 + 1 / Math.sin(Math.PI / n))
-}
-
-// Call cb(pt) for n points distributed evenly around the circumference of the
-// given circle. A circle is a {cx, cy, r} object.
-function forCirclePts(circle, n, angle, cb) {
-    for (let i = 0; i < n; i++) {
-        let x = circle.cx + circle.r * Math.cos(angle);
-        let y = circle.cy + circle.r * Math.sin(angle);
-        cb({x, y});
-        angle += 2 * Math.PI / n;
-    }
-}
-
-// This returns a ptMap of G_n within the given circle.
-function placeRecursivePtsInCircle(n, circle, orderingType, angle) {
-
-    console.assert(n >= 3, 'placeRecursivePtsInCircle assumes n >= 3.');
-
-    if (angle === undefined) angle = 0;
-
-    let forAllPerms = getPermIterator(orderingType);
-    let ptMap = {};
-
-    if (n === 3) {
-        let perms = [];
-        forAllPerms(n, function (permStr) { perms.push(permStr); });
-
-        let nPts = 6;
-        let i = 0;
-        forCirclePts(circle, nPts, angle, function (pt) {
-            ptMap[perms[i]] = pt;
-            i++;
-        });
-        return ptMap;
-    }
-
-    // Handle the case n > 3 recursively.
-    let r = circle.r * findSmallRadius(n + 3);
-    let R = circle.r - r;
-    let i = 1;
-
-    forCirclePts(
-            {cx: circle.cx, cy: circle.cy, r: R},
-            n,
-            angle,
-            function (center) {
-
-        let smallCircle = {cx: center.x, cy: center.y, r};
-        let angle = 0;
-        if (n === 4) angle = 2 * Math.PI / 3 * (i - 1);
-        let circlePtMap = placeRecursivePtsInCircle(
-            n - 1,
-            smallCircle,
-            orderingType,
-            angle
-        );
-
-        for (let permStr in circlePtMap) {
-            let p = null;
-            if (false) {
-                p = n.toString() + permStr;
-                p = applyTransposition(p, 't' + n + i);
-            } else {
-                p = permStr.split('');
-                for (let j = 0; j < p.length; j++) {
-                    let elt = parseInt(p[j]);
-                    if (elt >= i) p[j] = elt + 1;
-                }
-                p = i.toString() + p.join('');
-            }
-
-            ptMap[p] = circlePtMap[permStr];
-        }
-        i++;
-    });
-    return ptMap;
 }
 
 export function drawRecursiveGn(n, orderingType) {

@@ -227,7 +227,8 @@ export function circle(center, radius, style, parent) {
         style = defaultStyle;
     }
 
-    log(`circle(center=${center}, radius=${radius}, style=${style})`);
+    let centerStr = `(${center.x}, ${center.y})`;
+    log(`circle(center=${centerStr}, radius=${radius}, style=${style})`);
 
     var circle = add('circle', style, parent);
     var center = mapToCanvasPt(center);
@@ -284,6 +285,8 @@ export function polygon(pts, style, parent) {
 
     if (style === undefined) { style = lightStyle }
 
+    log(`polygon(pts=${pts}, style=${style})`);
+
     let ptStrs = [];
     for (let pt of pts) {
         let canvasPt = mapToCanvasPt(pt);
@@ -318,6 +321,8 @@ export function rect(xy, style, parent) {
 export function text(leftBaseline, str, style, parent) {
 
     if (style === undefined) { style = lightStyle }
+
+    log(`text(leftBaseline=${leftBaseline}, str=${str}, style=${style})`);
 
     leftBaseline = mapToCanvasPt(leftBaseline);
     var t = add('text', style, parent);

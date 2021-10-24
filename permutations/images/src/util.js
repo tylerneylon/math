@@ -70,7 +70,5 @@ export function explode3DPoints(pts, labels, minR, maxR) {
         newPt.label = pt.label;
         newP.push(newPt);
     }
-    console.log(p);
-    console.log(newP);
     return newP;
 }
