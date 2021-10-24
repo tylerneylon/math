@@ -103,7 +103,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // Add a small degree of fading for the farther-back points and lines.
     space.ctx.fadeRange = [6, 12];
 
-    space.ctx.zoom = 2.5;
+    space.ctx.zoom = Math.PI;
     space.addPoints(pts, labels);
     space.addLines(lines, slices);
     space.addFaces(faces);

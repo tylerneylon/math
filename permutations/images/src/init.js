@@ -17,14 +17,6 @@ import * as random from './random.js';
 // Globals and constants
 
 var xSize = 750, ySize = 750;
-// var xSize = 7500, ySize = 7500;
-
-var xMid = xSize / 2;
-var yMid = ySize / 2;
-var canvasSize = Math.min(xSize, ySize);
-// If we multiply logical units * toCanvasScale, then we map from [-1, 1]^2
-// into a square that just fits, centered, in the canvas.
-var toCanvasScale = canvasSize / 2.0;
 
 
 // ______________________________________________________________________
@@ -40,8 +32,10 @@ export function setup(w, h, svgId) {
         w = xSize;
         h = ySize;
     }
-    canvasSize = Math.min(w, h);
-    toCanvasScale = canvasSize / 2.0;
+    // If we multiply logical units * toCanvasScale, then we map from [-1, 1]^2
+    // into a square that just fits, centered, in the canvas.
+    let canvasSize = Math.min(w, h);
+    let toCanvasScale = canvasSize / 2.0;
 
     // Set up graphic components.
     const svg = document.getElementById(svgId);
