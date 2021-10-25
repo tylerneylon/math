@@ -32,6 +32,11 @@ let R = 0;
 let frameNum = 0;
 let showEveryNthFrame = 1;
 
+// Scanning 2d circle parameters.
+let circleElt = null;
+let [rMin, rMax] = [0.1, 0.9];
+let [xMin, xMax] = [null, null];  // These will be based on pts below.
+
 let circleStyle = {
     stroke: '#88a',
     fill:   'transparent',
@@ -59,6 +64,11 @@ function drawFrame(ts) {
             circleStyle
         );
         space.updatePoints();
+
+        draw.ctx.svg = svg2;
+        let r = rMin + (rMax - rMin) * (x - xMin) / (xMax - xMin);
+        r = Math.max(0.001, r);  // Ensure r >= 0.
+        draw.moveCircle(circleElt, {x: 0, y: 0}, r);
     }
     totalSeconds += (ts - lastTs) / 1000;
     lastTs = ts;
@@ -73,7 +83,8 @@ function drawFrame(ts) {
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    let size = 500;
+    // I'm currently designing things to look good at size 500x500 per svg.
+    let size = 380;  // 500;
     svg1 = init.setup(size, size, 'svg1');
     svg2 = init.setup(size, size, 'svg2');
     draw.ctx.svg = svg1;
@@ -93,6 +104,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     space.addLines(lines);
 
     if (false) {
+        // space.makeDraggable();
         space.ctx.rotationsPerSec = 0.01;
         space.animate();
     }
@@ -106,13 +118,17 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // ____________________________________________________________
     // Set up svg2 with the exploded permutohedron graph.
 
-    let pts2d = util.explode3DPoints(pts, labels, 0.1, 0.9);
+    let xValues = pts.map(x => x[0]);
+    [xMin, xMax] = [Math.min(...xValues), Math.max(...xValues)];
+    let pts2d = util.explode3DPoints(pts, labels, rMin, rMax);
     let ptMap = {};
     for (let pt of pts2d) {
         ptMap[pt.label] = {x: pt[0], y: pt[1]};
     }
     draw.ctx.svg = svg2;
     perm.drawGraphWithPtMap(ptMap, 4);
+    circleElt = draw.circle({x: 0, y: 0}, rMin, circleStyle);
+    draw.addAttributes(circleElt, {'pointer-events': 'none'});
 
     window.requestAnimationFrame(drawFrame);
 });
