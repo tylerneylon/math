@@ -26,7 +26,7 @@ let svg2 = null;
 
 let lastTs = null;
 let totalSeconds = 0;
-let zDist = 8;
+let zDist = 4.8;
 let R = 0;
 
 let frameNum = 0;
@@ -86,9 +86,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
     R = vector.len(pts[0]);
 
     // Add a small degree of fading for the farther-back points and lines.
-    space.ctx.fadeRange = [6, 15];
-    space.ctx.zoom = 3.0;
-    space.ctx.dotSize = 0.08;
+    space.ctx.fadeRange = [2, 8.5];
+    space.ctx.zoom = 1.6;
+    space.ctx.dotSize = 0.035;
     space.addPoints(pts);
     space.addLines(lines);
 
