@@ -99,6 +99,13 @@ function drawFrame(ts) {
     lastTs = ts;
     frameNum++;
 
+    // Leaving this here as this allows us to turn on a little animation in svg1
+    // if we want to. This reveals a current weakness in space.js, which is that
+    // it assumes draw's context remains the same for the sake of its animation
+    // frame handler.
+    draw.ctx.svg = svg1;
+    draw.setScale(size * 0.5);
+
     window.requestAnimationFrame(drawFrame);
 }
 
