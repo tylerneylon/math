@@ -50,25 +50,29 @@ let circleStyle = {
 function drawFrame(ts) {
 
     let speed = 1.0;
+    let pause = 1.0;
     let doShow = (frameNum % showEveryNthFrame === 0);
 
     if (lastTs !== null && doShow) {
-        let t = Math.sin(totalSeconds * speed);
-        let x = R * t;
+        let w = (totalSeconds * speed) % (Math.PI + pause);
+        if (w <= Math.PI) {
+            let t = -Math.cos(w);
+            let x = R * t;
 
-        draw.ctx.svg = svg1;
-        space.setCircle(
-            [x, 0, 0],
-            Math.sqrt(R * R - x * x),
-            [1, 0, 0],
-            circleStyle
-        );
-        space.updatePoints();
+            draw.ctx.svg = svg1;
+            space.setCircle(
+                [x, 0, 0],
+                Math.sqrt(R * R - x * x),
+                [1, 0, 0],
+                circleStyle
+            );
+            space.updatePoints();
 
-        draw.ctx.svg = svg2;
-        let r = rMin + (rMax - rMin) * (x - xMin) / (xMax - xMin);
-        r = Math.max(0.001, r);  // Ensure r >= 0.
-        draw.moveCircle(circleElt, {x: 0, y: 0}, r);
+            draw.ctx.svg = svg2;
+            let r = rMin + (rMax - rMin) * (x - xMin) / (xMax - xMin);
+            r = Math.max(0.001, r);  // Ensure r >= 0.
+            draw.moveCircle(circleElt, {x: 0, y: 0}, r);
+        }
     }
     totalSeconds += (ts - lastTs) / 1000;
     lastTs = ts;

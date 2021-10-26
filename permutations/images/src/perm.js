@@ -379,7 +379,7 @@ function addPtMapEdges(n, ptMap) {
                 if (renderCtx.edgeWeighting === 'boldNearE') {
                     let minM = Math.min(getMagnitude(p1), getMagnitude(p2));
                     if (minM === 0) edge.weightScale = 10.0;
-                    if (minM === 1) edge.weightScale = 5.0;
+                    if (minM === 1) edge.weightScale =  5.0;
                 }
                 if (renderCtx.edgeWeighting === 'recursive') {
                     // k is in the range [0, n-2].
