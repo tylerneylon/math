@@ -22,7 +22,7 @@ import * as vector from './vector.js';
 // Globals
 
 // I'm currently designing things to look good at size 500x500 per svg.
-let size = 380;  // 500;
+let size = 500;
 
 let svg1 = null;
 let svg2 = null;
@@ -43,8 +43,10 @@ let [xMin, xMax] = [null, null];  // These will be based on pts below.
 let pts2d  = null;
 let dots2d = null;
 
+let pause = 1.0;
+
 let circleStyle = {
-    stroke: '#88a',
+    stroke: '#66a',
     fill:   'transparent',
     'stroke-width': 8
 };
@@ -55,8 +57,7 @@ let circleStyle = {
 
 function drawFrame(ts) {
 
-    let speed = 1.0;
-    let pause = 1.0;
+    let speed = 0.8;
     let doShow = (frameNum % showEveryNthFrame === 0);
 
     if (lastTs !== null && doShow) {
@@ -70,12 +71,6 @@ function drawFrame(ts) {
 
         draw.ctx.svg = svg1;
         draw.setScale(size * 0.5);
-        let sc = space.ctx;
-        let pts = matrix.transpose(sc.pts);
-        for (let i = 0; i < pts.length; i++) {
-            // XXX add t, x, r, w, whatever I need here.
-            updateDot(pts[i], sc.dots[i]);
-        }
         if (doMoveCircle) {
             space.setCircle(
                 [x, 0, 0],
@@ -85,11 +80,16 @@ function drawFrame(ts) {
             );
             space.updatePoints();
         }
+        let sc = space.ctx;
+        let pts = matrix.transpose(sc.pts);
+        for (let i = 0; i < pts.length; i++) {
+            updateDot(pts[i], sc.dots[i], w, x);
+        }
 
         draw.ctx.svg = svg2;
         draw.setScale(size * 0.47);
         for (let i = 0; i < dots2d.length; i++) {
-            updateDot(pts2d[i], dots2d[i]);
+            updateDot(pts2d[i], dots2d[i], w, x);
         }
         if (doMoveCircle) {
             draw.moveCircle(circleElt, {x: 0, y: 0}, r);
@@ -102,16 +102,39 @@ function drawFrame(ts) {
     window.requestAnimationFrame(drawFrame);
 }
 
-function updateDot(pt, dot) {
+function updateDot(pt, dot, w, x) {
+
+    let maxHighlight = 0.8;
+    let k = maxHighlight / pause;
+    let ptHighlight = 0;
+    let highlightColor = [0.1, 0.3, 1];
+    let highlightRadius = 10;
+
+    let wx = 0;
     if (pt.length === 2) {
         let ptR = vector.len(pt);
+        x = xMin + (xMax - xMin) * (ptR - rMin) / (rMax - rMin);
+        let t = x / R;
+        wx = Math.acos(-t);
     } else {
+        let t = pt[0] / R;
+        wx = Math.acos(-t);
     }
+    if (w >= wx) {
+        ptHighlight = maxHighlight - (w - wx) * k;
+    }
+    ptHighlight = Math.max(0, ptHighlight);
+    let [a, b] = [1 - ptHighlight, ptHighlight];
+    let color = dot.coreFill.map((x, i) => a * x + b * highlightColor[i]);
+    dot.setAttribute('fill', util.getColorStr(color));
+    let radius = a * dot.coreRadius + b * highlightRadius;
+    dot.setAttribute('r', radius);
 }
 
 function ensureCoreFill(dots) {
     for (let dot of dots) {
         dot.coreFill = util.getStdColor(dot.getAttribute('fill'));
+        dot.coreRadius = dot.getAttribute('r');
     }
 }
 
