@@ -11,6 +11,7 @@
 import * as draw   from './draw.js';
 import * as matrix from './matrix.js';
 import * as random from './random.js';
+import * as util   from './util.js';
 
 
 // ______________________________________________________________________
@@ -396,14 +397,6 @@ function addPtMapEdges(n, ptMap) {
     return edges;
 }
 
-// XXX There are two copies of this. Fix that.
-// This converts a standard color array to a color string. A standard color
-// array has [r, g, b] which each value in the range [0, 1].
-function getColorStr(c) {
-    const hex = d => Math.ceil(d * 255).toString(16).padStart(2, '0')
-    return '#' + c.map(hex).join('');
-}
-
 
 // ______________________________________________________________________
 // Public functions
@@ -439,7 +432,7 @@ export function drawGraphWithPtMap(ptMap, n, edgeStyles) {
         if (edgeStyles) {
             thisStyle['stroke-width'] = edgeStyles[i].coreWidth;
             thisStyle.baseColor = edgeStyles[i].coreColor;
-            thisStyle.stroke = getColorStr(thisStyle.baseColor);
+            thisStyle.stroke = util.getColorStr(thisStyle.baseColor);
         } else if (renderCtx.edgeWeighting !== 'default') {
             thisStyle = Object.assign({}, edgeStyle);
             if (edge.hasOwnProperty('weightScale')) {

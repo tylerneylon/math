@@ -103,6 +103,16 @@ function drawFrame(ts) {
 }
 
 function updateDot(pt, dot) {
+    if (pt.length === 2) {
+        let ptR = vector.len(pt);
+    } else {
+    }
+}
+
+function ensureCoreFill(dots) {
+    for (let dot of dots) {
+        dot.coreFill = util.getStdColor(dot.getAttribute('fill'));
+    }
 }
 
 
@@ -140,6 +150,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     t[2][3] = zDist;
     space.setTransform(t);
     space.setZDist(zDist);
+    ensureCoreFill(space.ctx.dots);
 
     // ____________________________________________________________
     // Set up svg2 with the exploded permutohedron graph.
@@ -155,6 +166,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     draw.setScale(size * 0.47);
     perm.renderCtx.labelStyle = 'mainOnly';
     [pts2d, dots2d] = perm.drawGraphWithPtMap(ptMap, 4, lines);
+    ensureCoreFill(dots2d);
     circleElt = draw.circle({x: 0, y: 0}, rMin, circleStyle);
     draw.addAttributes(circleElt, {'pointer-events': 'none'});
 

@@ -72,3 +72,25 @@ export function explode3DPoints(pts, labels, minR, maxR) {
     }
     return newP;
 }
+
+// Derive an [r, g, b] array from a color string. The values of r, g, and b are
+// each in the range [0, 1]. This expects that the color string has no alpha
+// value.
+export function getStdColor(colorStr) {
+    console.assert(colorStr[0] === '#');
+    let color = [];
+    let nDigits = (colorStr.length === 7 ? 2 : 1);
+    for (let i = 0; i < 3; i++) {
+        let channelStr = colorStr.substr(1 + nDigits * i, nDigits);
+        if (nDigits === 1) channelStr = channelStr + channelStr;
+        color.push(parseInt(channelStr, 16) / 255);
+    }
+    return color;
+}
+
+// This converts a standard color array to a color string. A standard color
+// array has [r, g, b] which each value in the range [0, 1].
+export function getColorStr(c) {
+    const hex = d => Math.ceil(d * 255).toString(16).padStart(2, '0')
+    return '#' + c.map(hex).join('');
+}

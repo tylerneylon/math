@@ -15,6 +15,7 @@
 
 import * as draw   from './draw.js';
 import * as matrix from './matrix.js';
+import * as util   from './util.js';
 import * as vector from './vector.js';
 
 
@@ -92,7 +93,7 @@ ctx.edgeHighlightColors = [
     '#4d4',
     '#4dd',
     '#44d'
-].map(getStdColor).map(x => x.map(y => y * 0.8));
+].map(util.getStdColor).map(x => x.map(y => y * 0.8));
 
 let lightDir = vector.unit([-1, -1, -2]);
 
@@ -337,40 +338,17 @@ function renderCircle() {
 // is a fade from stdBaseColor down to white. The returned value is a color
 // string that can be assigned, eg, to a `stroke` or `fill` style attribute.
 function getFadeColor(stdBaseColor, z) {
-    if (ctx.fadeRange === null) return getColorStr(stdBaseColor);
+    if (ctx.fadeRange === null) return util.getColorStr(stdBaseColor);
     let [a, b] = ctx.fadeRange;
-    if (z < a) return getColorStr(stdBaseColor);
+    if (z < a) return util.getColorStr(stdBaseColor);
     if (z > b) return '#fff';
     let w = 1 - (z - a) / (b - a);
     let c = stdBaseColor;
-    return getColorStr([
+    return util.getColorStr([
         c[0] * w + (1 - w),
         c[1] * w + (1 - w),
         c[2] * w + (1 - w)
     ]);
-}
-
-// Derive an [r, g, b] array from a color string. The values of r, g, and b are
-// each in the range [0, 1]. This expects that the color string has no alpha
-// value.
-function getStdColor(colorStr) {
-    console.assert(colorStr[0] === '#');
-    let color = [];
-    let nDigits = (colorStr.length === 7 ? 2 : 1);
-    for (let i = 0; i < 3; i++) {
-        let channelStr = colorStr.substr(1 + nDigits * i, nDigits);
-        if (nDigits === 1) channelStr = channelStr + channelStr;
-        color.push(parseInt(channelStr, 16) / 255);
-    }
-    return color;
-}
-
-// XXX Maybe these color fns belong in a separate file.
-// This converts a standard color array to a color string. A standard color
-// array has [r, g, b] which each value in the range [0, 1].
-function getColorStr(c) {
-    const hex = d => Math.ceil(d * 255).toString(16).padStart(2, '0')
-    return '#' + c.map(hex).join('');
 }
 
 function drawNormalLines() {
@@ -497,7 +475,7 @@ function addAnyNewDots() {
         let pt = calculateDrawPt(matrix.getColumn(ctx.pts, i));
         let elt        = draw.circle(pt, dotStyle, dotGroup);
         let outlineElt = draw.circle(pt, outlineStyle, outlineGroup);
-        elt.baseColor  = getStdColor(dotStyle.fill);
+        elt.baseColor  = util.getStdColor(dotStyle.fill);
         ctx.dots.push(elt);
         ctx.outlines.push(outlineElt);
         if (!pt.isVisible) {
@@ -699,7 +677,7 @@ export function addLines(lines, slices) {
         let style  = Object.assign({}, lineStyle, line.style);
         line.elt   = draw.line(fromPt, toPt, style, edgeGroup);
         line.elt.setAttribute('pointer-events', 'none');
-        line.baseColor = getStdColor(style.stroke);
+        line.baseColor = util.getStdColor(style.stroke);
         line.coreColor = line.baseColor;  // Save to undo edge highlights.
         line.coreWidth = style['stroke-width'];
         ctx.lines.push(line);
