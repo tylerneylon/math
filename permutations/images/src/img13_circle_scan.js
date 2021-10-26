@@ -21,6 +21,9 @@ import * as vector from './vector.js';
 // ______________________________________________________________________
 // Globals
 
+// I'm currently designing things to look good at size 500x500 per svg.
+let size = 380;  // 500;
+
 let svg1 = null;
 let svg2 = null;
 
@@ -60,6 +63,7 @@ function drawFrame(ts) {
             let x = R * t;
 
             draw.ctx.svg = svg1;
+            draw.setScale(size * 0.5);
             space.setCircle(
                 [x, 0, 0],
                 Math.sqrt(R * R - x * x),
@@ -69,6 +73,7 @@ function drawFrame(ts) {
             space.updatePoints();
 
             draw.ctx.svg = svg2;
+            draw.setScale(size * 0.47);
             let r = rMin + (rMax - rMin) * (x - xMin) / (xMax - xMin);
             r = Math.max(0.001, r);  // Ensure r >= 0.
             draw.moveCircle(circleElt, {x: 0, y: 0}, r);
@@ -87,8 +92,6 @@ function drawFrame(ts) {
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    // I'm currently designing things to look good at size 500x500 per svg.
-    let size = 380;  // 500;
     svg1 = init.setup(size, size, 'svg1');
     svg2 = init.setup(size, size, 'svg2');
     draw.ctx.svg = svg1;
@@ -130,6 +133,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         ptMap[pt.label] = {x: pt[0], y: pt[1]};
     }
     draw.ctx.svg = svg2;
+    draw.setScale(size * 0.47);
     perm.renderCtx.labelStyle = 'mainOnly';
     perm.drawGraphWithPtMap(ptMap, 4, lines);
     circleElt = draw.circle({x: 0, y: 0}, rMin, circleStyle);
