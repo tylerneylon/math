@@ -127,7 +127,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
     draw.ctx.svg = svg2;
     perm.renderCtx.labelStyle = 'mainOnly';
-    perm.drawGraphWithPtMap(ptMap, 4);
+    perm.drawGraphWithPtMap(ptMap, 4, lines);
     circleElt = draw.circle({x: 0, y: 0}, rMin, circleStyle);
     draw.addAttributes(circleElt, {'pointer-events': 'none'});
 

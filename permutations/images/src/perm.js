@@ -396,11 +396,19 @@ function addPtMapEdges(n, ptMap) {
     return edges;
 }
 
+// XXX There are two copies of this. Fix that.
+// This converts a standard color array to a color string. A standard color
+// array has [r, g, b] which each value in the range [0, 1].
+function getColorStr(c) {
+    const hex = d => Math.ceil(d * 255).toString(16).padStart(2, '0')
+    return '#' + c.map(hex).join('');
+}
+
 
 // ______________________________________________________________________
 // Public functions
 
-export function drawGraphWithPtMap(ptMap, n) {
+export function drawGraphWithPtMap(ptMap, n, edgeStyles) {
     // Add 'edges' to each point value in ptMap. Each `edges` value is a list of
     // [from, to, dest]; each of `from` and `to` is an {x, y} point. `dest` is
     // the permutation string of the other side of the edge.
@@ -420,9 +428,14 @@ export function drawGraphWithPtMap(ptMap, n) {
     let frontGroup   = draw.add('g');
 
     // Draw the edges.
-    for (let edge of edges) {
+    for (let i = 0; i < edges.length; i++) {
+        let edge = edges[i];
         let thisStyle = edgeStyle;
-        if (renderCtx.edgeWeighting !== 'default') {
+        if (edgeStyles) {
+            thisStyle['stroke-width'] = edgeStyles[i].coreWidth;
+            thisStyle.baseColor = edgeStyles[i].coreColor;
+            thisStyle.stroke = getColorStr(thisStyle.baseColor);
+        } else if (renderCtx.edgeWeighting !== 'default') {
             thisStyle = Object.assign({}, edgeStyle);
             if (edge.hasOwnProperty('weightScale')) {
                 thisStyle['stroke-width'] *= edge.weightScale;

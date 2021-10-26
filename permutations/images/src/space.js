@@ -365,6 +365,7 @@ function getStdColor(colorStr) {
     return color;
 }
 
+// XXX Maybe these color fns belong in a separate file.
 // This converts a standard color array to a color string. A standard color
 // array has [r, g, b] which each value in the range [0, 1].
 function getColorStr(c) {
