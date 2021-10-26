@@ -408,6 +408,11 @@ function getColorStr(c) {
 // ______________________________________________________________________
 // Public functions
 
+// This accepts a point map ptMap, the n for which G_n we're working with,
+// and optionally a list of line styles edgeStyles. It draws G_n in 2d based on
+// the (x, y) coordinates specified for each permutation in ptMap.
+// This returns `dots`, an array of `circle` svg elements, one for each node in
+// the rendered graph.
 export function drawGraphWithPtMap(ptMap, n, edgeStyles) {
     // Add 'edges' to each point value in ptMap. Each `edges` value is a list of
     // [from, to, dest]; each of `from` and `to` is an {x, y} point. `dest` is
@@ -480,9 +485,13 @@ export function drawGraphWithPtMap(ptMap, n, edgeStyles) {
         nborColor:    dotStyle.fill,
         textVisibility: 'hidden'
     };
+    let pts  = [];
+    let dots = [];
     for (const [perm, pt] of Object.entries(ptMap)) {
         let [outline, hitDot, circle] = addDot(pt, outlineGroup, frontGroup);
         pt.elt = circle;
+        pts.push([pt.x, pt.y]);
+        dots.push(circle);
 
         let highlighter = getGraphColorer(ptMap, pt, highlightColors);
         let unhighlighter = getGraphColorer(ptMap, pt, unhighlightColors);
@@ -492,6 +501,7 @@ export function drawGraphWithPtMap(ptMap, n, edgeStyles) {
         }
     }
 
+    return [pts, dots];
 }
 
 // Convert a permutation string like "21453" into cycles as arrays like

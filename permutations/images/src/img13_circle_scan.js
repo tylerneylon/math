@@ -40,6 +40,9 @@ let circleElt = null;
 let [rMin, rMax] = [0.1, 0.9];
 let [xMin, xMax] = [null, null];  // These will be based on pts below.
 
+let pts2d  = null;
+let dots2d = null;
+
 let circleStyle = {
     stroke: '#88a',
     fill:   'transparent',
@@ -58,12 +61,22 @@ function drawFrame(ts) {
 
     if (lastTs !== null && doShow) {
         let w = (totalSeconds * speed) % (Math.PI + pause);
-        if (w <= Math.PI) {
-            let t = -Math.cos(w);
-            let x = R * t;
+        let doMoveCircle = (w < Math.PI);
 
-            draw.ctx.svg = svg1;
-            draw.setScale(size * 0.5);
+        let t = -Math.cos(w);
+        let x = R * t;
+        let r = rMin + (rMax - rMin) * (x - xMin) / (xMax - xMin);
+        r = Math.max(0.001, r);  // Ensure r >= 0.
+
+        draw.ctx.svg = svg1;
+        draw.setScale(size * 0.5);
+        let sc = space.ctx;
+        let pts = matrix.transpose(sc.pts);
+        for (let i = 0; i < pts.length; i++) {
+            // XXX add t, x, r, w, whatever I need here.
+            updateDot(pts[i], sc.dots[i]);
+        }
+        if (doMoveCircle) {
             space.setCircle(
                 [x, 0, 0],
                 Math.sqrt(R * R - x * x),
@@ -71,11 +84,14 @@ function drawFrame(ts) {
                 circleStyle
             );
             space.updatePoints();
+        }
 
-            draw.ctx.svg = svg2;
-            draw.setScale(size * 0.47);
-            let r = rMin + (rMax - rMin) * (x - xMin) / (xMax - xMin);
-            r = Math.max(0.001, r);  // Ensure r >= 0.
+        draw.ctx.svg = svg2;
+        draw.setScale(size * 0.47);
+        for (let i = 0; i < dots2d.length; i++) {
+            updateDot(pts2d[i], dots2d[i]);
+        }
+        if (doMoveCircle) {
             draw.moveCircle(circleElt, {x: 0, y: 0}, r);
         }
     }
@@ -84,6 +100,9 @@ function drawFrame(ts) {
     frameNum++;
 
     window.requestAnimationFrame(drawFrame);
+}
+
+function updateDot(pt, dot) {
 }
 
 
@@ -127,7 +146,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     let xValues = pts.map(x => x[0]);
     [xMin, xMax] = [Math.min(...xValues), Math.max(...xValues)];
-    let pts2d = util.explode3DPoints(pts, labels, rMin, rMax);
+    pts2d = util.explode3DPoints(pts, labels, rMin, rMax);
     let ptMap = {};
     for (let pt of pts2d) {
         ptMap[pt.label] = {x: pt[0], y: pt[1]};
@@ -135,7 +154,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     draw.ctx.svg = svg2;
     draw.setScale(size * 0.47);
     perm.renderCtx.labelStyle = 'mainOnly';
-    perm.drawGraphWithPtMap(ptMap, 4, lines);
+    [pts2d, dots2d] = perm.drawGraphWithPtMap(ptMap, 4, lines);
     circleElt = draw.circle({x: 0, y: 0}, rMin, circleStyle);
     draw.addAttributes(circleElt, {'pointer-events': 'none'});
 
