@@ -673,7 +673,12 @@ export function getG4PointsIn3D(method='default', randSeed) {
     let P = matrix.transpose(Pt);
 
     // Set up matrix S, which will allow us to project P into 3d.
-    let At = matrix.eye(4);
+    let At = null;
+    if (method === 'default') At = matrix.eye(4);
+    if (method === 'random') {
+        if (randSeed !== undefined) random.seed(randSeed);
+        At = matrix.rand(4, 4);
+    }
     At[0] = [1, 1, 1, 1];  // We'll find a basis orthogonal to this.
     // XXX
     // At[1] = [0, 1, 1, 0];
