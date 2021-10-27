@@ -1,7 +1,8 @@
-/* img13_circle_scan.js
+/* img16_g4_scan4.js
  *
- * Render an animated circle that goes around the
- * G_4 permutahedron.
+ * A variant of ing13 that shows a square-first scan.
+ * This time I've added a little rotation as the scan proceeds so that we can
+ * see all of the edges (they do not overlap) in the exploded view.
  *
  */
 
@@ -28,7 +29,7 @@ let svg1 = null;
 let svg2 = null;
 
 let svg1Scale = 0.5;
-let svg2Scale = 0.47;
+let svg2Scale = 0.55;
 
 let lastTs = null;
 let totalSeconds = 0;
@@ -161,7 +162,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // ____________________________________________________________
     // Set up svg1 with the scanning circle.
 
-    let [pts, labels]   = perm.getG4PointsIn3D();
+    let [pts, labels]   = perm.getG4PointsIn3D([0, 1, 1, 0]);
     let [lines, slices] = perm.getEdgeIndexesLex(4);
     R = vector.len(pts[0]);
 
@@ -190,7 +191,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     let xValues = pts.map(x => x[0]);
     [xMin, xMax] = [Math.min(...xValues), Math.max(...xValues)];
-    pts2d = util.explode3DPoints(pts, labels, rMin, rMax);
+    let [aMin, aMax] = [Math.PI / 4, Math.PI / 2];
+    pts2d = util.explode3DPoints(pts, labels, rMin, rMax, aMin, aMax);
     let ptMap = {};
     for (let pt of pts2d) {
         ptMap[pt.label] = {x: pt[0], y: pt[1]};

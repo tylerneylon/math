@@ -53,28 +53,31 @@ export function getCubePtsLinesFaces() {
 // meaning from low x values to high x values -- and transforms each slice of
 // the input points into a projection in 2d. Low x values correspond to small
 // radii, while high x values to large.
-export function explode3DPoints(pts, labels, minR, maxR) {
+//
+// If both aMin and aMax are provided, then the points are rotated by an angle
+// `a` that increases from aMin to aMax as x proceeds from xMin to xMax.
+export function explode3DPoints(pts, labels, rMin, rMax, aMin, aMax) {
     let p = pts.slice();  // Make a copy so we can re-order.
     p.forEach((x, i) => x.label = labels[i]);
 
     // Sort the points with increasing x values.
     p.sort((a, b) => a[0] - b[0]);
 
-    let [minX, maxX] = [p[0][0], p[p.length - 1][0]];
-    let findR = x => minR + (maxR - minR) * (x - minX) / (maxX - minX);
-
-    let [aMin, aMax] = [Math.PI / 4, Math.PI / 2];
-    let findA = x => aMin + (aMax - aMin) * (x - minX) / (maxX - minX);
+    let [xMin, xMax] = [p[0][0], p[p.length - 1][0]];
+    let findR = x => rMin + (rMax - rMin) * (x - xMin) / (xMax - xMin);
+    let findA = x => aMin + (aMax - aMin) * (x - xMin) / (xMax - xMin);
 
     let newP = [];
     for (let pt of p) {
         let len = Math.sqrt(pt[1] * pt[1] + pt[2] * pt[2]);
         let r = findR(pt[0]);
-        let a = findA(pt[0]);
         let newPt = [pt[1] / len * r, pt[2] / len * r];
-        // XXX
-        if (false) {
-            newPt = matrix.transpose(matrix.mult(matrix.rotateXY(a), matrix.transpose([newPt])))[0];
+        if (aMin !== undefined && aMax !== undefined) {
+            let a = findA(pt[0]);
+            newPt = matrix.transpose(matrix.mult(
+                matrix.rotateXY(a),
+                matrix.transpose([newPt])
+            ))[0];
         }
         newPt.label = pt.label;
         newP.push(newPt);

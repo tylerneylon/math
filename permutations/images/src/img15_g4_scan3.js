@@ -1,7 +1,6 @@
-/* img13_circle_scan.js
+/* img15_g4_scan3.js
  *
- * Render an animated circle that goes around the
- * G_4 permutahedron.
+ * A variant of ing13 that shows a square-first scan.
  *
  */
 
@@ -29,6 +28,7 @@ let svg2 = null;
 
 let svg1Scale = 0.5;
 let svg2Scale = 0.47;
+// XXX 0.55
 
 let lastTs = null;
 let totalSeconds = 0;
@@ -161,7 +161,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // ____________________________________________________________
     // Set up svg1 with the scanning circle.
 
-    let [pts, labels]   = perm.getG4PointsIn3D();
+    let [pts, labels]   = perm.getG4PointsIn3D([0, 1, 1, 0]);
     let [lines, slices] = perm.getEdgeIndexesLex(4);
     R = vector.len(pts[0]);
 
