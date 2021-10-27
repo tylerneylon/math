@@ -404,9 +404,13 @@ function addPtMapEdges(n, ptMap) {
 // This accepts a point map ptMap, the n for which G_n we're working with,
 // and optionally a list of line styles edgeStyles. It draws G_n in 2d based on
 // the (x, y) coordinates specified for each permutation in ptMap.
-// This returns `dots`, an array of `circle` svg elements, one for each node in
-// the rendered graph.
+// This returns [pts, dots, outlines, lines].
+//     `pts` is an array of xy arrays, one for each node in the rendered graph.
+//     `dots` is an array of `circle` svg elements, one for each node.
+//     `outlines` is the array of white background circle svg elements.
+//     `lines` is an array of svg line elements.
 export function drawGraphWithPtMap(ptMap, n, edgeStyles) {
+
     // Add 'edges' to each point value in ptMap. Each `edges` value is a list of
     // [from, to, dest]; each of `from` and `to` is an {x, y} point. `dest` is
     // the permutation string of the other side of the edge.
@@ -426,6 +430,7 @@ export function drawGraphWithPtMap(ptMap, n, edgeStyles) {
     let frontGroup   = draw.add('g');
 
     // Draw the edges.
+    let lines = [];
     for (let i = 0; i < edges.length; i++) {
         let edge = edges[i];
         let thisStyle = edgeStyle;
@@ -451,8 +456,11 @@ export function drawGraphWithPtMap(ptMap, n, edgeStyles) {
         }
         let line = draw.line(edge.from, edge.to, thisStyle, group);
         line.baseColor = thisStyle.stroke;
+        line.fromIndex = edge.from.i;
+        line.toIndex   = edge.to.i;
         push(ptMap[edge.p1], 'edgeElts', line);
         push(ptMap[edge.p2], 'edgeElts', line);
+        lines.push(line);
     }
     // Draw point labels.
     for (const [perm, pt] of Object.entries(ptMap)) {
@@ -478,13 +486,17 @@ export function drawGraphWithPtMap(ptMap, n, edgeStyles) {
         nborColor:    dotStyle.fill,
         textVisibility: 'hidden'
     };
-    let pts  = [];
-    let dots = [];
+    let pts      = [];
+    let dots     = [];
+    let outlines = [];
+    let entries  = [];
     for (const [perm, pt] of Object.entries(ptMap)) {
+        console.log(`Processing ${perm} with point ${pt.x}, ${pt.y}.`);
         let [outline, hitDot, circle] = addDot(pt, outlineGroup, frontGroup);
         pt.elt = circle;
         pts.push([pt.x, pt.y]);
         dots.push(circle);
+        outlines.push(outline);
 
         let highlighter = getGraphColorer(ptMap, pt, highlightColors);
         let unhighlighter = getGraphColorer(ptMap, pt, unhighlightColors);
@@ -494,7 +506,7 @@ export function drawGraphWithPtMap(ptMap, n, edgeStyles) {
         }
     }
 
-    return [pts, dots];
+    return [pts, dots, outlines, lines];
 }
 
 // Convert a permutation string like "21453" into cycles as arrays like

@@ -29,7 +29,7 @@ let lastTs = null;  // This is the last-seen timestamp; it's used to animate.
 let mousedownTs = null;
 let xDrag = 0, yDrag = 0;
 
-let doDebugEvents = true;
+let doDebugEvents = false;
 
 let preClickMode = 'spinning';
 ctx.mode = 'spinning';  // This can also be 'dragging'.
@@ -197,12 +197,14 @@ function logEvent(e) {
     console.log(`${e.type} on ${e.target}`);
 }
 
-function getXYArray(pts, doPerspective) {
+function getXYArray(pts, doPerspective, doRotate) {
 
+    if (doRotate === undefined) doRotate = true;
     if (doPerspective === undefined) doPerspective = true;
 
     // Transform all points.
-    let p = matrix.mult(ctx.transform, pts);
+    let T = (doRotate ? ctx.transform : ctx.transMat);
+    let p = matrix.mult(T, pts);
 
     // Apply perspective.
     let xyArray = [];
@@ -236,7 +238,7 @@ function renderCircle() {
 
     // 1.a. Find a basis for the plane of the circle. This will be the rows
     //      of T. T[0] = n; T[1] is orth to z and to n.
-    let n = getXYArray(matrix.transpose([ctx.circle.normal]), false)[0];
+    let n = getXYArray(matrix.transpose([ctx.circle.normal]), false, false)[0];
     let matA = matrix.rand(3, 3);
     matA[0] = [n.x, n.y, n.z];
     matA[1][0] =  n.y;
@@ -249,7 +251,7 @@ function renderCircle() {
     if (T[2][2] < 0) T[2] = T[2].map(x => -x);
 
     // 1.b. Find the four corners of the surrounding square.
-    let c = getXYArray(matrix.transpose([ctx.circle.center]), false)[0];
+    let c = getXYArray(matrix.transpose([ctx.circle.center]), false, false)[0];
     c = [c.x, c.y, c.z];
     let r = ctx.circle.radius;
     let [T1, T2] = [vector.scale(T[1], r), vector.scale(T[2], r)];
@@ -344,11 +346,12 @@ function getFadeColor(stdBaseColor, z) {
     if (z > b) return '#fff';
     let w = 1 - (z - a) / (b - a);
     let c = stdBaseColor;
-    return util.getColorStr([
+    let stdColor = [
         c[0] * w + (1 - w),
         c[1] * w + (1 - w),
         c[2] * w + (1 - w)
-    ]);
+    ];
+    return [util.getColorStr(stdColor), stdColor];
 }
 
 function drawNormalLines() {
@@ -835,7 +838,6 @@ export function animate() {
     window.requestAnimationFrame(setupFrame);
 }
 
-// XXX Move to public?
 export function updatePoints() {
 
     let xys = getXYArray(ctx.pts);
@@ -846,11 +848,13 @@ export function updatePoints() {
         let r = ctx.dotSize / xys[i].z;
         let outlineR = 2 * r;
         draw.moveCircle(ctx.dots[i], xys[i], r);
+        ctx.dots[i].coreRadius = r * draw.ctx.toCanvasScale;
         if (ctx.dots[i].label) updateLabelForDot(ctx.dots[i], xys[i]);
         draw.moveCircle(ctx.outlines[i], xys[i], outlineR);
         if (ctx.fadeRange) {
-            let color = getFadeColor(ctx.dots[i].baseColor, xys[i].z);
+            let [color, sColor] = getFadeColor(ctx.dots[i].baseColor, xys[i].z);
             ctx.dots[i].setAttribute('fill', color);
+            ctx.dots[i].coreFill = sColor;
         }
         ctx.dots[i].hidden = !xys[i].isVisible;
         ctx.outlines[i].hidden = !xys[i].isVisible;
@@ -860,7 +864,7 @@ export function updatePoints() {
         let [from, to] = [xys[line.from], xys[line.to]];
         if (ctx.fadeRange) {
             let avgZ  = (xys[line.from].z + xys[line.to].z) / 2;
-            let color = getFadeColor(line.baseColor, avgZ);
+            let [color, sColor] = getFadeColor(line.baseColor, avgZ);
             line.elt.setAttribute('stroke', color);
         }
         draw.moveLine(line.elt, from, to);

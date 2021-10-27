@@ -60,10 +60,8 @@ export function explode3DPoints(pts, labels, rMin, rMax, aMin, aMax) {
     let p = pts.slice();  // Make a copy so we can re-order.
     p.forEach((x, i) => x.label = labels[i]);
 
-    // Sort the points with increasing x values.
-    p.sort((a, b) => a[0] - b[0]);
-
-    let [xMin, xMax] = [p[0][0], p[p.length - 1][0]];
+    let xMin = Math.min(...p.map(x => x[0]));
+    let xMax = Math.max(...p.map(x => x[0]));
     let findR = x => rMin + (rMax - rMin) * (x - xMin) / (xMax - xMin);
     let findA = x => aMin + (aMax - aMin) * (x - xMin) / (xMax - xMin);
 
