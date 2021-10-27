@@ -28,7 +28,6 @@ let svg2 = null;
 
 let svg1Scale = 0.5;
 let svg2Scale = 0.47;
-// XXX 0.55
 
 let lastTs = null;
 let totalSeconds = 0;
