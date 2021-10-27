@@ -650,7 +650,16 @@ export function drawCircularGn(n, orderingType) {
 // of which represents one point of G_4. `labels` is an array of strings, each
 // the label of its corresponding point; eg '1234' corresponds to the 3d
 // projection of the 4d point (1, 2, 3, 4).
-export function getG4PointsIn3D() {
+//
+// The optional parameter `method` offers choices in how the projection from 4d
+// down to 3d is done. This essentially results in a different rotational
+// position of the final points. Providing no value or 'default' gives a natural
+// projection which attempts to match the pre-existing axes. Providing 'random'
+// will use a random projection (still orthogonal, so the shape is the same,
+// just rotated); in this case randSeed is also used. Finally, you can send in a
+// row (an array of length 4), and that 4d direction will be mapped, as closely
+// as possible, to the x-axis.
+export function getG4PointsIn3D(method='default', randSeed) {
 
     // Set up P, whose columns are 4d points of S_4
     let Pt = [];  // This will be a matrix whose rows are 4-permutations.
@@ -666,6 +675,9 @@ export function getG4PointsIn3D() {
     // Set up matrix S, which will allow us to project P into 3d.
     let At = matrix.eye(4);
     At[0] = [1, 1, 1, 1];  // We'll find a basis orthogonal to this.
+    // XXX
+    // At[1] = [0, 1, 1, 0];
+    // At[2] = [1, 0, 1, 0];
     let A = matrix.transpose(At);
     let [Q, R] = matrix.qr(A);
     let Qt = matrix.transpose(Q);

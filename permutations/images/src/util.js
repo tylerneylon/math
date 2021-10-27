@@ -4,6 +4,7 @@
  *
  */
 
+import * as matrix from './matrix.js';
 
 // ______________________________________________________________________
 // Public functions
@@ -62,11 +63,19 @@ export function explode3DPoints(pts, labels, minR, maxR) {
     let [minX, maxX] = [p[0][0], p[p.length - 1][0]];
     let findR = x => minR + (maxR - minR) * (x - minX) / (maxX - minX);
 
+    let [aMin, aMax] = [Math.PI / 4, Math.PI / 2];
+    let findA = x => aMin + (aMax - aMin) * (x - minX) / (maxX - minX);
+
     let newP = [];
     for (let pt of p) {
         let len = Math.sqrt(pt[1] * pt[1] + pt[2] * pt[2]);
         let r = findR(pt[0]);
+        let a = findA(pt[0]);
         let newPt = [pt[1] / len * r, pt[2] / len * r];
+        // XXX
+        if (false) {
+            newPt = matrix.transpose(matrix.mult(matrix.rotateXY(a), matrix.transpose([newPt])))[0];
+        }
         newPt.label = pt.label;
         newP.push(newPt);
     }

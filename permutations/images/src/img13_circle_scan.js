@@ -27,6 +27,10 @@ let size = 500;
 let svg1 = null;
 let svg2 = null;
 
+let svg1Scale = 0.5;
+let svg2Scale = 0.47;
+// XXX 0.55
+
 let lastTs = null;
 let totalSeconds = 0;
 let zDist = 4.8;
@@ -70,7 +74,7 @@ function drawFrame(ts) {
         r = Math.max(0.001, r);  // Ensure r >= 0.
 
         draw.ctx.svg = svg1;
-        draw.setScale(size * 0.5);
+        draw.setScale(size * svg1Scale);
         if (doMoveCircle) {
             space.setCircle(
                 [x, 0, 0],
@@ -87,7 +91,7 @@ function drawFrame(ts) {
         }
 
         draw.ctx.svg = svg2;
-        draw.setScale(size * 0.47);
+        draw.setScale(size * svg2Scale);
         for (let i = 0; i < dots2d.length; i++) {
             updateDot(pts2d[i], dots2d[i], w, x);
         }
@@ -104,7 +108,7 @@ function drawFrame(ts) {
     // it assumes draw's context remains the same for the sake of its animation
     // frame handler.
     draw.ctx.svg = svg1;
-    draw.setScale(size * 0.5);
+    draw.setScale(size * svg1Scale);
 
     window.requestAnimationFrame(drawFrame);
 }
@@ -193,7 +197,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         ptMap[pt.label] = {x: pt[0], y: pt[1]};
     }
     draw.ctx.svg = svg2;
-    draw.setScale(size * 0.47);
+    draw.setScale(size * svg2Scale);
     perm.renderCtx.labelStyle = 'mainOnly';
     [pts2d, dots2d] = perm.drawGraphWithPtMap(ptMap, 4, lines);
     ensureCoreFill(dots2d);
