@@ -7,6 +7,21 @@
 import * as matrix from './matrix.js';
 
 // ______________________________________________________________________
+// Public globals
+
+// This is a global input to getColorStr(). I'm using this pattern to reduce
+// memory allocations.
+export let ctx = {};
+ctx.stdColor = [0, 0, 0];
+
+
+// ______________________________________________________________________
+// Internal globals and functions
+
+const hex = d => Math.ceil(d * 255).toString(16).padStart(2, '0');
+
+
+// ______________________________________________________________________
 // Public functions
 
 // Ensure that elt[prop] exists; if not, create it as an empty array.
@@ -101,6 +116,6 @@ export function getStdColor(colorStr) {
 // This converts a standard color array to a color string. A standard color
 // array has [r, g, b] which each value in the range [0, 1].
 export function getColorStr(c) {
-    const hex = d => Math.ceil(d * 255).toString(16).padStart(2, '0')
-    return '#' + c.map(hex).join('');
+    if (c !== undefined) return '#' + c.map(hex).join('');
+    return '#' + ctx.stdColor.map(hex).join('');
 }

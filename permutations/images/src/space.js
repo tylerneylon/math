@@ -339,19 +339,28 @@ function renderCircle() {
 // This applies ctx.fadeRange to stdBaseColor, using z, to arrive a color that
 // is a fade from stdBaseColor down to white. The returned value is a color
 // string that can be assigned, eg, to a `stroke` or `fill` style attribute.
-function getFadeColor(stdBaseColor, z) {
-    if (ctx.fadeRange === null) return util.getColorStr(stdBaseColor);
+function getFadeColor(stdBaseColor, z, retObj) {
+    for (let i in stdBaseColor) util.ctx.stdColor[i] = stdBaseColor[i];
+    if (ctx.fadeRange === null) {
+        return util.getColorStr();
+    }
     let [a, b] = ctx.fadeRange;
-    if (z < a) return util.getColorStr(stdBaseColor);
+    if (z < a) return util.getColorStr();
     if (z > b) return '#fff';
     let w = 1 - (z - a) / (b - a);
     let c = stdBaseColor;
-    let stdColor = [
+    util.ctx.stdColor = [
         c[0] * w + (1 - w),
         c[1] * w + (1 - w),
         c[2] * w + (1 - w)
     ];
-    return [util.getColorStr(stdColor), stdColor];
+    if (retObj) {
+        if (!retObj.coreFill) retObj.coreFill = [];
+        for (let i of util.ctx.stdColor) {
+            retObj.coreFill[i] = util.ctx.stdColor[i];
+        }
+    }
+    return util.getColorStr();
 }
 
 function drawNormalLines() {
@@ -845,18 +854,18 @@ export function updatePoints() {
     let lineXYs = getXYArray(ctx.normalLinePts, false);
 
     for (let i = 0; i < xys.length; i++) {
+        let dot = ctx.dots[i];
         let r = ctx.dotSize / xys[i].z;
         let outlineR = 2 * r;
-        draw.moveCircle(ctx.dots[i], xys[i], r);
-        ctx.dots[i].coreRadius = r * draw.ctx.toCanvasScale;
-        if (ctx.dots[i].label) updateLabelForDot(ctx.dots[i], xys[i]);
+        draw.moveCircle(dot, xys[i], r);
+        dot.coreRadius = r * draw.ctx.toCanvasScale;
+        if (dot.label) updateLabelForDot(dot, xys[i]);
         draw.moveCircle(ctx.outlines[i], xys[i], outlineR);
         if (ctx.fadeRange) {
-            let [color, sColor] = getFadeColor(ctx.dots[i].baseColor, xys[i].z);
-            ctx.dots[i].setAttribute('fill', color);
-            ctx.dots[i].coreFill = sColor;
+            let color = getFadeColor(dot.baseColor, xys[i].z, dot);
+            dot.setAttribute('fill', color);
         }
-        ctx.dots[i].hidden = !xys[i].isVisible;
+        dot.hidden = !xys[i].isVisible;
         ctx.outlines[i].hidden = !xys[i].isVisible;
     }
 
@@ -864,7 +873,7 @@ export function updatePoints() {
         let [from, to] = [xys[line.from], xys[line.to]];
         if (ctx.fadeRange) {
             let avgZ  = (xys[line.from].z + xys[line.to].z) / 2;
-            let [color, sColor] = getFadeColor(line.baseColor, avgZ);
+            let color = getFadeColor(line.baseColor, avgZ);
             line.elt.setAttribute('stroke', color);
         }
         draw.moveLine(line.elt, from, to);

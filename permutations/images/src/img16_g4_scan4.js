@@ -136,8 +136,10 @@ function updateDot(pt, dot, w, x) {
     }
     ptHighlight = Math.max(0, ptHighlight);
     let [a, b] = [1 - ptHighlight, ptHighlight];
-    let color = dot.coreFill.map((x, i) => a * x + b * highlightColor[i]);
-    dot.setAttribute('fill', util.getColorStr(color));
+    for (let i = 0; i < 3; i++) {
+        util.ctx.stdColor[i] = a * dot.coreFill[i] + b * highlightColor[i];
+    }
+    dot.setAttribute('fill', util.getColorStr());
     let radius = a * dot.coreRadius + b * highlightRadius;
     dot.setAttribute('r', radius);
 }
