@@ -71,7 +71,18 @@ export function getCubePtsLinesFaces() {
 //
 // If both aMin and aMax are provided, then the points are rotated by an angle
 // `a` that increases from aMin to aMax as x proceeds from xMin to xMax.
-export function explode3DPoints(pts, labels, rMin, rMax, aMin, aMax) {
+export function explode3DPoints(
+    pts,
+    labels,
+    rMin,
+    rMax,
+    aMin,
+    aMax,
+    doKeepCoords
+) {
+    // Support receiving doKeepCoords without aMin, aMax.
+    if (aMax === undefined) doKeepCoords = aMin;
+
     let xMin = Math.min(...pts.map(x => x[0]));
     let xMax = Math.max(...pts.map(x => x[0]));
     let findR = x => rMin + (rMax - rMin) * (x - xMin) / (xMax - xMin);
@@ -83,7 +94,12 @@ export function explode3DPoints(pts, labels, rMin, rMax, aMin, aMax) {
         pt.label = labels[i];
         let len = Math.sqrt(pt[1] * pt[1] + pt[2] * pt[2]);
         let r = findR(pt[0]);
-        let newPt = [pt[1] / len * r, pt[2] / len * r];
+        let newPt = null;
+        if (doKeepCoords) {
+            newPt = [pt[1] / len * r, pt[2] / len * r];
+        } else {
+            newPt = [-pt[2] / len * r, pt[1] / len * r];
+        }
         if (aMin !== undefined && aMax !== undefined) {
             let a = findA(pt[0]);
             newPt = matrix.transpose(matrix.mult(
