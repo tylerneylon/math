@@ -169,7 +169,7 @@ function placeRecursivePtsInCircle(n, circle, orderingType, angle) {
     return ptMap;
 }
 
-function addDot(pt, outlineGroup, frontGroup) {
+function addDot(pt, outlineGroup, frontGroup, excludeHitDot) {
 
     let thisDotStyle = Object.assign({}, dotStyle);
     if (pt.hasOwnProperty('maxUnitRadius')) {
@@ -177,8 +177,11 @@ function addDot(pt, outlineGroup, frontGroup) {
         thisDotStyle.r = Math.min(maxCanvasRadius, thisDotStyle.r);
     }
     let outline = draw.circle(pt, outlineStyle, outlineGroup);
-    let hitDot  = draw.circle(pt, outlineStyle, frontGroup);
-    draw.addAttributes(hitDot, {fill: 'transparent'});
+    let hitDot  = null;
+    if (!excludeHitDot) {
+        hitDot = draw.circle(pt, outlineStyle, frontGroup);
+        draw.addAttributes(hitDot, {fill: 'transparent'});
+    }
     let circle  = draw.circle(pt, thisDotStyle, frontGroup);
     return [outline, hitDot, circle];
 }
@@ -207,6 +210,7 @@ function getGraphColorer(ptMap, pt, colors) {
     let circle = pt.elt;
     return function () {
         circle.setAttribute('fill', colors.mainDotColor);
+        circle.coreFill = util.getStdColor(colors.mainDotColor);
         setLabelVisibility(pt, colors.textVisibility);
         pt.textElts[1].setAttribute('fill', colors.labelColor);
         for (let edgeElt of pt.edgeElts) {
@@ -222,6 +226,7 @@ function getGraphColorer(ptMap, pt, colors) {
         for (let edge of pt.edges) {
             let nborElt = ptMap[edge.dest].elt;
             nborElt.setAttribute('fill', colors.nborColor);
+            nborElt.coreFill = util.getStdColor(colors.nborColor);
             if (renderCtx.labelStyle === 'all') {
                 setLabelVisibility(ptMap[edge.dest], colors.textVisibility);
             }
@@ -404,12 +409,19 @@ function addPtMapEdges(n, ptMap) {
 // This accepts a point map ptMap, the n for which G_n we're working with,
 // and optionally a list of line styles edgeStyles. It draws G_n in 2d based on
 // the (x, y) coordinates specified for each permutation in ptMap.
-// This returns [pts, dots, outlines, lines].
+// If `excludeHitDots` is given, it controls whether or not hit dots are
+// created. The default is to include hit dots.
+//
+// This returns [pts, ptElts, lines].
 //     `pts` is an array of xy arrays, one for each node in the rendered graph.
-//     `dots` is an array of `circle` svg elements, one for each node.
-//     `outlines` is the array of white background circle svg elements.
+//     `ptElts` is an array of {dot, outline, textElts}, one for each point.
+//         A dot is a colorful svg circle.
+//         An outline is a white background svg circle.
+//         Each textElts value is an arry with two svg text elements; the label.
 //     `lines` is an array of svg line elements.
-export function drawGraphWithPtMap(ptMap, n, edgeStyles) {
+export function drawGraphWithPtMap(ptMap, n, edgeStyles, excludeHitDots) {
+
+    if (excludeHitDots === undefined) excludeHitDots = false;
 
     // Add 'edges' to each point value in ptMap. Each `edges` value is a list of
     // [from, to, dest]; each of `from` and `to` is an {x, y} point. `dest` is
@@ -462,15 +474,6 @@ export function drawGraphWithPtMap(ptMap, n, edgeStyles) {
         push(ptMap[edge.p2], 'edgeElts', line);
         lines.push(line);
     }
-    // Draw point labels.
-    for (const [perm, pt] of Object.entries(ptMap)) {
-        let eps = 0.01
-        let leftBaseline = draw.translate(pt, {x: eps, y: -eps});
-        pt.textElts = [
-            draw.text(leftBaseline, perm, textOutlineStyle, outlineGroup),
-            draw.text(leftBaseline, perm, textStyle, frontGroup)
-        ];
-    }
     // Draw the points.
     let highlightColors = {
         mainDotColor: mainHighlightColor,
@@ -487,26 +490,40 @@ export function drawGraphWithPtMap(ptMap, n, edgeStyles) {
         textVisibility: 'hidden'
     };
     let pts      = [];
-    let dots     = [];
-    let outlines = [];
+    let ptElts   = [];
     let entries  = [];
     for (const [perm, pt] of Object.entries(ptMap)) {
         console.log(`Processing ${perm} with point ${pt.x}, ${pt.y}.`);
-        let [outline, hitDot, circle] = addDot(pt, outlineGroup, frontGroup);
+        let [outline, hitDot, circle] = addDot(
+            pt,
+            outlineGroup,
+            frontGroup,
+            excludeHitDots
+        );
+
+        // Draw point labels.
+        let eps = 0.01
+        let leftBaseline = draw.translate(pt, {x: eps, y: -eps});
+        pt.textElts = [
+            draw.text(leftBaseline, perm, textOutlineStyle, outlineGroup),
+            draw.text(leftBaseline, perm, textStyle, frontGroup)
+        ];
+        pt.textElts.forEach(x => x.setAttribute('pointer-events', 'none'));
+
         pt.elt = circle;
         pts.push([pt.x, pt.y]);
-        dots.push(circle);
-        outlines.push(outline);
+        ptElts.push({dot: circle, outline, textElts: pt.textElts});
 
-        let highlighter = getGraphColorer(ptMap, pt, highlightColors);
+        let highlighter   = getGraphColorer(ptMap, pt, highlightColors);
         let unhighlighter = getGraphColorer(ptMap, pt, unhighlightColors);
         for (let elt of [hitDot, circle]) {
+            if (elt === null) continue;  // We may exclude hit dots.
             elt.addEventListener('mouseover', highlighter);
             elt.addEventListener('mouseout', unhighlighter);
         }
     }
 
-    return [pts, dots, outlines, lines];
+    return [pts, ptElts, lines];
 }
 
 // Convert a permutation string like "21453" into cycles as arrays like

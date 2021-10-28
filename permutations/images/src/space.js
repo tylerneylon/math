@@ -356,7 +356,7 @@ function getFadeColor(stdBaseColor, z, retObj) {
     ];
     if (retObj) {
         if (!retObj.coreFill) retObj.coreFill = [];
-        for (let i of util.ctx.stdColor) {
+        for (let i in util.ctx.stdColor) {
             retObj.coreFill[i] = util.ctx.stdColor[i];
         }
     }

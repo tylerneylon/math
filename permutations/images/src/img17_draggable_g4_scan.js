@@ -47,8 +47,7 @@ let [xMin, xMax] = [null, null];  // These will be based on pts below.
 let pts3d       = null;
 let labels      = null;
 let pts2d       = null;
-let dots2d      = null;
-let outlines2d  = null;
+let pt2dElts    = null;
 let lines2d     = null;
 
 let pause = 1.0;
@@ -93,14 +92,14 @@ function drawFrame(ts) {
         for (let i = 0; i < pts3d.length; i++) {
             // The `null` here is for the outline; which is used for 2d plots
             // but not for 3d plots (since space.js owns those outlines).
-            updateDot(pts3d[i], space.ctx.dots[i], null, w, x);
+            updateDot(pts3d[i], space.ctx.dots[i], w, x);
         }
 
         draw.ctx.svg = svg2;
         draw.setScale(size * svg2Scale);
         pts2d = util.explode3DPoints(pts3d, labels, rMin, rMax);
-        for (let i = 0; i < dots2d.length; i++) {
-            updateDot(pts2d[i], dots2d[i], outlines2d[i], w, x);
+        for (let i = 0; i < pts2d.length; i++) {
+            updateDot(pts2d[i], pt2dElts[i], w, x);
         }
         for (let line of lines2d) {
             let from = xy(pts2d[line.fromIndex]);
@@ -125,13 +124,15 @@ function drawFrame(ts) {
     window.requestAnimationFrame(drawFrame);
 }
 
-function updateDot(pt, dot, outline, w, x) {
+function updateDot(pt, elt, w, x) {
 
     let maxHighlight = 0.8;
     let k = maxHighlight / pause;
     let ptHighlight = 0;
     let highlightColor = [0.1, 0.3, 1];
     let highlightRadius = 10;
+
+    let dot = (pt.length === 2 ? elt.dot : elt);
 
     let wx = 0;
     if (pt.length === 2) {
@@ -155,7 +156,11 @@ function updateDot(pt, dot, outline, w, x) {
     let radius = a * dot.coreRadius + b * highlightRadius;
     if (pt.length === 2) {
         draw.moveCircle(dot, {x: pt[0], y: pt[1]});
-        draw.moveCircle(outline, {x: pt[0], y: pt[1]});
+        draw.moveCircle(elt.outline, {x: pt[0], y: pt[1]});
+        for (let textElt of elt.textElts) {
+            let eps = 0.01;
+            draw.moveText(textElt, {x: pt[0] + eps, y: pt[1] - eps});
+        }
     }
     dot.setAttribute('r', radius);
 }
@@ -165,9 +170,17 @@ function xy(arrayPt) {
 }
 
 function ensureCoreFill(dots) {
-    for (let dot of dots) {
-        dot.coreFill = util.getStdColor(dot.getAttribute('fill'));
-        dot.coreRadius = dot.getAttribute('r');
+    if (dots === undefined) {
+        for (let elts of pt2dElts) {
+            let dot = elts.dot;
+            dot.coreFill = util.getStdColor(dot.getAttribute('fill'));
+            dot.coreRadius = dot.getAttribute('r');
+        }
+    } else {
+        for (let dot of dots) {
+            dot.coreFill = util.getStdColor(dot.getAttribute('fill'));
+            dot.coreRadius = dot.getAttribute('r');
+        }
     }
 }
 
@@ -199,6 +212,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         space.makeDraggable();
         space.ctx.rotationsPerSec = 0.01;
         space.ctx.mode = 'paused';
+        space.rotateAround([0.3, -1, 0.5]);
         space.animate();
     }
 
@@ -227,12 +241,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
     perm.renderCtx.labelStyle = 'mainOnly';
     console.log('labels:');
     console.log(labels);
-    [pts2d, dots2d, outlines2d, lines2d] = perm.drawGraphWithPtMap(
-        ptMap,
-        4,
-        lines
-    );
-    ensureCoreFill(dots2d);
+    // The `true` here means to exclude hit dots.
+    // It's more trouble than I'd like to move the hit dots with all else.
+    [pts2d, pt2dElts, lines2d] = perm.drawGraphWithPtMap(ptMap, 4, lines, true);
+    ensureCoreFill();
     circleElt = draw.circle({x: 0, y: 0}, rMin, circleStyle);
     draw.addAttributes(circleElt, {'pointer-events': 'none'});
 
