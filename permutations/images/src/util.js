@@ -72,16 +72,15 @@ export function getCubePtsLinesFaces() {
 // If both aMin and aMax are provided, then the points are rotated by an angle
 // `a` that increases from aMin to aMax as x proceeds from xMin to xMax.
 export function explode3DPoints(pts, labels, rMin, rMax, aMin, aMax) {
-    let p = pts.slice();  // Make a copy so we can re-order.
-    p.forEach((x, i) => x.label = labels[i]);
-
-    let xMin = Math.min(...p.map(x => x[0]));
-    let xMax = Math.max(...p.map(x => x[0]));
+    let xMin = Math.min(...pts.map(x => x[0]));
+    let xMax = Math.max(...pts.map(x => x[0]));
     let findR = x => rMin + (rMax - rMin) * (x - xMin) / (xMax - xMin);
     let findA = x => aMin + (aMax - aMin) * (x - xMin) / (xMax - xMin);
 
     let newP = [];
-    for (let pt of p) {
+    for (let i in pts) {
+        let pt = pts[i];
+        pt.label = labels[i];
         let len = Math.sqrt(pt[1] * pt[1] + pt[2] * pt[2]);
         let r = findR(pt[0]);
         let newPt = [pt[1] / len * r, pt[2] / len * r];
