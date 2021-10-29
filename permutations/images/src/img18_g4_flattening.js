@@ -37,6 +37,8 @@ let startPts  = null;
 let endPts    = null;
 let transMat  = null;
 
+let slider = document.getElementById('slider');
+
 
 // ______________________________________________________________________
 // Functions
@@ -57,6 +59,7 @@ function drawFrame(ts) {
     totalSeconds += (ts - lastTs) / 1000;
     lastTs = ts;
 
+    slider.value = b;
     b = b ** 0.8;  // At first rotate quickly, then slow down.
     let T = matrix.mult(transMat, matrix.rotateAroundY(b * Math.PI / 2));
     space.setTransform(T);
