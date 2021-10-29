@@ -21,8 +21,6 @@ import * as vector from './vector.js';
 // ______________________________________________________________________
 // Globals
 
-// XXX Are all of these needed?
-
 // I'm currently designing things to look good at size 500x500 per svg.
 let size = 500;
 
@@ -32,12 +30,13 @@ let zDist = 4.8;
 
 let [rMin, rMax] = [0.1, 0.9];
 
-let selfAnimTime = 10.0;
+let selfAnimTime = 9.0;
 let startPts  = null;
 let endPts    = null;
 let transMat  = null;
 
 let slider = document.getElementById('slider');
+let mode = 'selfAnim';  // Can also be 'userAnim'.
 
 
 // ______________________________________________________________________
@@ -48,7 +47,11 @@ function drawFrame(ts) {
 
     let b = 0;
     if (lastTs !== null) {
-        b = Math.min(1, totalSeconds / selfAnimTime);
+        if (mode === 'selfAnim') {
+            b = Math.min(1, totalSeconds / selfAnimTime);
+        } else {
+            b = parseFloat(slider.value);
+        }
         let a = 1 - b;
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < space.ctx.pts[0].length; j++) {
@@ -56,7 +59,9 @@ function drawFrame(ts) {
             }
         }
     }
-    totalSeconds += (ts - lastTs) / 1000;
+    if (mode === 'selfAnim') {
+        totalSeconds += (ts - lastTs) / 1000;
+    }
     lastTs = ts;
 
     slider.value = b;
@@ -71,7 +76,7 @@ function drawFrame(ts) {
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    init.setup(size, size);
+    let svg = init.setup(size, size);
 
     let [pts, labels]   = perm.getG4PointsIn3D();
     let [lines, slices] = perm.getEdgeIndexesLex(4);
@@ -98,4 +103,17 @@ window.addEventListener('DOMContentLoaded', (event) => {
     endPts = pts2d.map(x => [0, x[0] / rMax * R, x[1] / rMax * R]);
 
     window.requestAnimationFrame(drawFrame);
+
+    // Set up the slider and respond to clicks on the graph area.
+    slider.addEventListener('mousedown', (event) => {
+        mode = 'userAnim';
+    });
+    svg.addEventListener('click', (event) => {
+        if (mode === 'selfAnim') {
+            mode = 'userAnim';
+        } else {
+            mode = 'selfAnim';
+            totalSeconds = parseFloat(slider.value) * selfAnimTime;
+        }
+    });
 });
