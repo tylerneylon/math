@@ -23,7 +23,7 @@ let circleStyle = {
     fill:   '#888'
 };
 
-let zDist = 16;
+let zDist = 7;
 
 
 // ______________________________________________________________________
@@ -41,12 +41,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // let faces           = perm.getG4FacesIn3D();
 
     // Add a small degree of fading for the farther-back points and lines.
-    // space.ctx.fadeRange = [6, 16];
+    space.ctx.fadeRange = [0, 11];
 
     // XXX tmp
     // for (let i in pts) pts[i] = pts[i].slice(0, 3);
 
-    let pts3d = util.explodeNDPoints(pts4d, labels, 0.1, 1.0);
+    let pts3d = util.explodeNDPoints(pts4d, labels, 0.1, 2.0);
 
     space.ctx.zoom = 3;
     space.addPoints(pts3d);
@@ -60,6 +60,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     t[2][3] = zDist;
     space.setTransform(t);
 
+    space.ctx.dotSize = 0.04;
     space.ctx.rotationsPerSec = 0.05;
     space.ctx.rotationSign = -1;
     space.setZDist(zDist);
