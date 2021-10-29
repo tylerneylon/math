@@ -5,6 +5,7 @@
  */
 
 import * as matrix from './matrix.js';
+import * as vector from './vector.js';
 
 // ______________________________________________________________________
 // Public globals
@@ -107,6 +108,27 @@ export function explode3DPoints(
                 matrix.transpose([newPt])
             ))[0];
         }
+        newPt.label = pt.label;
+        newP.push(newPt);
+    }
+    return newP;
+}
+
+export function explodeNDPoints(pts, labels, rMin, rMax) {
+
+    let xMin = Math.min(...pts.map(x => x[0]));
+    let xMax = Math.max(...pts.map(x => x[0]));
+    let findR = x => rMin + (rMax - rMin) * (x - xMin) / (xMax - xMin);
+    let findA = x => aMin + (aMax - aMin) * (x - xMin) / (xMax - xMin);
+
+    let newP = [];
+    for (let i in pts) {
+        let pt = pts[i];
+        pt.label = labels[i];
+        let q = pt.slice(1);
+        let len = vector.len(q);
+        let r = findR(pt[0]);
+        let newPt = q.map(x => x / len * r);
         newPt.label = pt.label;
         newP.push(newPt);
     }

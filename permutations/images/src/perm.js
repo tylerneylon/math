@@ -722,6 +722,42 @@ export function getG4PointsIn3D(method='default', randSeed) {
     return [pts, labels];
 }
 
+// This is the n-dimensional version of getG4PointsIn3D().
+export function getGNPointsLessOne(n, method='default', randSeed) {
+
+    // Set up P, whose columns are n-dim'l points of S_n
+    let Pt = [];  // This will be a matrix whose rows are 4-permutations.
+    let labels = [];
+    let midVal = (1 + n) / 2;
+    forAllPermsLex(n, function (permStr) {
+        let p = permStr.split('').map(x => parseInt(x));
+        p = p.map(x => x - midVal);  // Center around 0.
+        Pt.push(p);
+        labels.push(permStr);
+    });
+    let P = matrix.transpose(Pt);
+
+    // Set up matrix S, which will allow us to project P into 3d.
+    let At = null;
+    if (method === 'default') At = matrix.eye(n);
+    else if (method === 'random') {
+        if (randSeed !== undefined) random.seed(randSeed);
+        At = matrix.rand(n, n);
+    } else {
+        console.assert(typeof method === 'object');
+        At = matrix.eye(n);
+        At[1] = method;
+    }
+    At[0] = Array(n).fill(1);  // We'll find a basis orthogonal to this.
+    let A = matrix.transpose(At);
+    let [Q, R] = matrix.qr(A);
+    let Qt = matrix.transpose(Q);
+    let S = Qt.slice(1);
+
+    let pts = matrix.transpose(matrix.mult(S, P));
+    return [pts, labels];
+}
+
 // Returns [edges, slices], described next:
 // `edges` is an array of {from, to} objects, one for each edge in
 // G_n where the nodes, 0-indexed, are listed in lexicographic order.
