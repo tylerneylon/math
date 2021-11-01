@@ -34,6 +34,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     init.setup();
 
     let [pts4d, labels] = perm.getGNPointsLessOne(5);
+    // I noticed that #444 looks decent for G_5 and go transparent for G'_5.
+    let [lines, slices] = perm.getEdgeIndexesLex(5, 'transparent');
 
     // XXX
     // let [pts, labels]   = perm.getG4PointsIn3D();
@@ -46,11 +48,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // XXX tmp
     // for (let i in pts) pts[i] = pts[i].slice(0, 3);
 
-    let pts3d = util.explodeNDPoints(pts4d, labels, 0.1, 2.0);
+    let pts3d = util.explodeNDPoints(pts4d, labels, 0.7, 2.0);
 
     space.ctx.zoom = 3;
     space.addPoints(pts3d);
-    // space.addLines(lines);
+    space.addLines(lines);
     // space.addFaces(faces);
 
     space.makeDraggable();
@@ -60,7 +62,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     t[2][3] = zDist;
     space.setTransform(t);
 
-    space.ctx.dotSize = 0.04;
+    space.ctx.dotSize = 0.035;
     space.ctx.rotationsPerSec = 0.05;
     space.ctx.rotationSign = -1;
     space.setZDist(zDist);

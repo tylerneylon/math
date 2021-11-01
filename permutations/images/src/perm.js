@@ -764,7 +764,9 @@ export function getGNPointsLessOne(n, method='default', randSeed) {
 // `slices` has slices[sliceName] = {lineIdx: colorIdx} for sliceName values
 // like '0' for p_1 = constant or '0,2' for pi_1+pi_3 = constant; the constant
 // value is reflected in `colorIdx`.
-export function getEdgeIndexesLex(n) {
+export function getEdgeIndexesLex(n, lightEdgeColor) {
+
+    if (lightEdgeColor === undefined) lightEdgeColor = '#888';
 
     // List all permutations.
     let perms = [];
@@ -790,7 +792,10 @@ export function getEdgeIndexesLex(n) {
             line.t  = t;
             let delta = Math.abs(parseInt(t[1]) - parseInt(t[2]));
             if (delta === 1) line.style = {'stroke-width': 1};
-            if (delta === 3) line.style = {stroke: '#888'};
+            if (lightEdgeColor === 'transparent' && delta === 2) {
+                line.style = {stroke: 'transparent'};
+            }
+            if (delta > 2) line.style = {stroke: lightEdgeColor};
             line.type = lineTypes[delta];  // edge, face, or internal
 
             edges.push(line);
