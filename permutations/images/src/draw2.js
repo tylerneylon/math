@@ -57,25 +57,13 @@ function addAtStart(elt, parent) {
 // ______________________________________________________________________
 // Class definitions
 
-class SVGArtist {
+class Artist {
     constructor(elt) {
         this.elt = elt;
         this.toCanvasScale = 1;
         this.origin = [0, 0];
         this.width  = parseInt(elt.getAttribute('width'));
         this.height = parseInt(elt.getAttribute('height'));
-        this.svgNS  = elt.namespaceURI;
-        this.addToParent = addAtEnd;
-    }
-
-    // Internal helper functions
-
-    add(eltName, attr, parent) {
-        if (parent === undefined) { parent = this.elt; }
-        var elt = document.createElementNS(this.svgNS, eltName);
-        this.addToParent(elt, parent);
-        if (attr) addAttributes(elt, attr);
-        return elt;
     }
 
     // Public interface
@@ -137,7 +125,81 @@ class SVGArtist {
     }
 }
 
-class CanvasArtist {
+class SVGArtist extends Artist {
+    constructor(elt) {
+        super(elt);
+        this.svgNS  = elt.namespaceURI;
+        this.addToParent = addAtEnd;
+    }
+
+    // Internal helper functions
+
+    add(eltName, attr, parent) {
+        if (parent === undefined) { parent = this.elt; }
+        var elt = document.createElementNS(this.svgNS, eltName);
+        this.addToParent(elt, parent);
+        if (attr) addAttributes(elt, attr);
+        return elt;
+    }
+
+    // Public interface
+
+}
+
+class CanvasItem {
+    constructor(itemType) {
+        this.type = itemType;
+        this.attrs = {};
+    }
+
+    setAttribute(key, value) {
+        this.attrs[key] = value;
+        console.log(`[${this.type} Setting ${key} -> ${value}`);
+    }
+
+    render(ctx) {
+        if (this.type === 'circle') {
+            for (let key of ['cx', 'cy', 'r']) {
+                console.assert(key in this.attrs);
+            }
+            let [cx, cy, r] = [this.attrs.cx, this.attrs.cy, this.attrs.r];
+            ctx.beginPath();
+            ctx.ellipse(cx, cy, r, r, 0, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+    }
+}
+
+class CanvasArtist extends Artist {
+    constructor(elt) {
+        super(elt)
+        // `items` is the array of CanvasItem instances to be rendered, in the
+        // order we will render them (so the last one appears on top).
+        this.items = [];
+        this.addMode = 'atEnd';
+        this.ctx = elt.getContext('2d');
+
+        // XXX
+        this.ctx.lineWidth = 3;
+    }
+
+    // Internal helper functions
+
+    add(eltName, attr, parent) {
+        if (parent === undefined) { parent = this.elt; }
+        var item = new CanvasItem(eltName);
+        // XXX Eventually support other add modes. (this.addMode)
+        //     And other parents!
+        this.items.push(item);
+        if (attr) addAttributes(item, attr);
+        return item;
+    }
+
+    // Public interface
+
+    render() {
+        for (let item of this.items) item.render(this.ctx);
+    }
 }
 
 
@@ -149,7 +211,8 @@ export function inId(id, w, h) {
 
     let classes = {'svg': SVGArtist, 'canvas': CanvasArtist};
 
-    console.assert(elt.tagName.toLowerCase() in classes);
+    let tagName = elt.tagName.toLowerCase();
+    console.assert(tagName in classes);
 
     if (w) {
         if (h === undefined) h = w;
@@ -157,6 +220,5 @@ export function inId(id, w, h) {
         elt.setAttribute('height', h);
     }
 
-    // XXX
-    return new SVGArtist(elt);
+    return new classes[tagName](elt);
 }

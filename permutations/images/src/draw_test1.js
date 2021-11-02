@@ -17,15 +17,27 @@ import * as draw2  from './draw2.js';
 
 
 // ______________________________________________________________________
-// Main
+// Functions
 
-window.addEventListener('DOMContentLoaded', (event) => {
-
+function setupEltWithId(id) {
     let size = 400;
 
-    let artist = draw2.inId('svg', 400);
+    let artist = draw2.inId(id, 400);
     artist.setCoordLimits(-1, 1);
     artist.addCircle({x: 0, y: 0}, 0.1);
     artist.addCircle({x: 0.4, y: 0}, 0.1);
     artist.addCircle({x: 0, y: 0.5}, 0.1);
+
+    return artist;
+}
+
+
+// ______________________________________________________________________
+// Main
+
+window.addEventListener('DOMContentLoaded', (event) => {
+    let svgArtist    = setupEltWithId('svg');
+    let canvasArtist = setupEltWithId('canvas');
+
+    canvasArtist.render();
 });
