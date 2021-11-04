@@ -64,6 +64,7 @@ class Artist {
         this.origin = [0, 0];
         this.width  = parseInt(elt.getAttribute('width'));
         this.height = parseInt(elt.getAttribute('height'));
+        this.ratio = 1;
     }
 
     // Public interface
@@ -82,8 +83,10 @@ class Artist {
         //     we'll default letterbox to make their frame fit, but their
         //     content will not fill the container element. We can provide a
         //     warning in this case.
-        this.toCanvasScale = this.width / (xMax - xMin);
-        if (Math.abs(this.toCanvasScale - this.height / (yMax - yMin)) > eps) {
+        let xScale = this.width / (xMax - xMin) * this.ratio;
+        let yScale = this.height / (yMax - yMin) * this.ratio;
+        this.toCanvasScale = xScale;
+        if (Math.abs(xScale - yScale) > eps) {
             console.log('!!: Inconsistent aspect ratio in setCoordLimits().');
         }
         this.origin[0] = -this.toCanvasScale / xMin;
@@ -154,10 +157,22 @@ class CanvasItem {
 
     setAttribute(key, value) {
         this.attrs[key] = value;
-        console.log(`[${this.type} Setting ${key} -> ${value}`);
+        console.log(`[${this.type}]: setting ${key} -> ${value}`);
     }
 
-    render(ctx) {
+    render(ctx, artist) {
+
+        if ('stroke-width' in this.attrs) {
+            let width = this.attrs['stroke-width'];
+            if (artist && artist.ratio) width *= artist.ratio;
+            ctx.lineWidth = width;
+        }
+
+        // Stroke color.
+        if ('stroke' in this.attrs) {
+            ctx.strokeStyle = this.attrs.stroke;
+        }
+
         if (this.type === 'circle') {
             for (let key of ['cx', 'cy', 'r']) {
                 console.assert(key in this.attrs);
@@ -179,8 +194,15 @@ class CanvasArtist extends Artist {
         this.addMode = 'atEnd';
         this.ctx = elt.getContext('2d');
 
-        // XXX
-        this.ctx.lineWidth = 3;
+        // Adjust for a possible retina display.
+        this.ratio = window.devicePixelRatio || 1;
+
+        if (this.ratio !== 1) {
+            elt.style.width  = elt.width  + 'px';
+            elt.style.height = elt.height + 'px';
+            elt.width  *= this.ratio;
+            elt.height *= this.ratio;
+        }
     }
 
     // Internal helper functions
@@ -198,7 +220,7 @@ class CanvasArtist extends Artist {
     // Public interface
 
     render() {
-        for (let item of this.items) item.render(this.ctx);
+        for (let item of this.items) item.render(this.ctx, this);
     }
 }
 
