@@ -64,7 +64,9 @@ class Artist {
         this.origin = [0, 0];
         this.width  = parseInt(elt.getAttribute('width'));
         this.height = parseInt(elt.getAttribute('height'));
-        this.ratio = 1;
+        // The context is mainly used for canvas elements, but it's useful here
+        // to have a single place for the pixel ratio.
+        this.ctx = {ratio: 1};
     }
 
     // Public interface
@@ -83,8 +85,8 @@ class Artist {
         //     we'll default letterbox to make their frame fit, but their
         //     content will not fill the container element. We can provide a
         //     warning in this case.
-        let xScale = this.width / (xMax - xMin) * this.ratio;
-        let yScale = this.height / (yMax - yMin) * this.ratio;
+        let xScale = this.width / (xMax - xMin) * this.ctx.ratio;
+        let yScale = this.height / (yMax - yMin) * this.ctx.ratio;
         this.toCanvasScale = xScale;
         if (Math.abs(xScale - yScale) > eps) {
             console.log('!!: Inconsistent aspect ratio in setCoordLimits().');
@@ -160,11 +162,11 @@ class CanvasItem {
         console.log(`[${this.type}]: setting ${key} -> ${value}`);
     }
 
-    render(ctx, artist) {
+    render(ctx) {
 
         if ('stroke-width' in this.attrs) {
             let width = this.attrs['stroke-width'];
-            if (artist && artist.ratio) width *= artist.ratio;
+            if (ctx.ratio) width *= ctx.ratio;
             ctx.lineWidth = width;
         }
 
@@ -195,13 +197,14 @@ class CanvasArtist extends Artist {
         this.ctx = elt.getContext('2d');
 
         // Adjust for a possible retina display.
-        this.ratio = window.devicePixelRatio || 1;
+        let ratio = window.devicePixelRatio || 1;
+        this.ctx.ratio = ratio;
 
-        if (this.ratio !== 1) {
+        if (ratio !== 1) {
             elt.style.width  = elt.width  + 'px';
             elt.style.height = elt.height + 'px';
-            elt.width  *= this.ratio;
-            elt.height *= this.ratio;
+            elt.width  *= ratio;
+            elt.height *= ratio;
         }
     }
 
