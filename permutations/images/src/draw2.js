@@ -7,6 +7,17 @@
  */
 
 
+/* XXX TEMP planning
+ *
+ *  [x] Be able to addLine()
+ *  [ ] Be able to addAttributes()
+ *  [ ] Support fill without stroke
+ *  [ ] Support stroke without fill
+ *  [ ] Support fill and stroke
+ *  [ ] Switch everything over to xy arrays from xy objects.
+ *
+ */
+
 // ______________________________________________________________________
 // Internal globals
 
@@ -128,6 +139,21 @@ class Artist {
         }
         return circle;
     }
+
+    addLine(from, to, style, parent) {
+        if (style === undefined) style = lineStyle;
+        log(`line(from=${from}, to=${to}, style=${style})`);
+        var line = this.add('line', style, parent);
+        from = this.mapToCanvasPt(from);
+        to = this.mapToCanvasPt(to);
+        addAttributes(line, {
+            x1: from.x,
+            y1: from.y,
+            x2: to.x,
+            y2: to.y
+        });
+        return line;
+    }
 }
 
 class SVGArtist extends Artist {
@@ -182,6 +208,22 @@ class CanvasItem {
             let [cx, cy, r] = [this.attrs.cx, this.attrs.cy, this.attrs.r];
             ctx.beginPath();
             ctx.ellipse(cx, cy, r, r, 0, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+
+        if (this.type === 'line') {
+            for (let key of ['x1', 'y1', 'x2', 'y2']) {
+                console.assert(key in this.attrs);
+            }
+            let [x1, y1, x2, y2] = [
+                this.attrs.x1,
+                this.attrs.y1,
+                this.attrs.x2,
+                this.attrs.y2
+            ]
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
             ctx.stroke();
         }
     }

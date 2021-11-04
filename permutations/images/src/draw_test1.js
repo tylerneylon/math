@@ -28,6 +28,8 @@ function setupEltWithId(id) {
     artist.addCircle({x: 0.4, y: 0}, 0.1);
     artist.addCircle({x: 0, y: 0.5}, 0.1);
 
+    artist.addLine({x: -0.8, y: -0.8}, {x: -0.8, y: -0.4});
+
     return artist;
 }
 
