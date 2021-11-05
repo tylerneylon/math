@@ -1,0 +1,33 @@
+.btn-group {
+  display: inline-block;
+}
+
+.btn-group button {
+  background-color: #04AA6D;
+  border: 1px solid green;
+  color: white;
+  padding: 2px 4px;
+  cursor: pointer;
+  float: left;
+}
+
+.btn-group button:not(:last-child) {
+  border-right: none;
+}
+
+/* Clear floats (clearfix hack) */
+.btn-group:after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+/* Add a background color on hover */
+.btn-group button:hover {
+  background-color: #3e8e41;
+}
+
+.btn-group .btn-active {
+  background-color: blue;
+}
+
