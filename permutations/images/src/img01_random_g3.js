@@ -20,7 +20,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     init.setup();
 
     // XXX Work in progress.
-    init.setupButtons(['svgButton', 'canvasButton'], console.log);
+    init.enableContainerSwitcher();
 
     perm.drawRandomGn(3);  // Draw G_3.
 

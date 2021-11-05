@@ -9,6 +9,7 @@
 // Imports
 
 import * as draw   from './draw.js';
+import * as draw2  from './draw2.js';
 import * as perm   from './perm.js';
 import * as random from './random.js';
 
@@ -16,7 +17,8 @@ import * as random from './random.js';
 // ______________________________________________________________________
 // Globals and constants
 
-var xSize = 750, ySize = 750;
+let xSize = 750, ySize = 750;
+let containerType = 'svg';  // Could also be 'canvas'.
 
 
 // ______________________________________________________________________
@@ -61,9 +63,36 @@ export function setupButtons(ids, handler) {
     }
 }
 
-export function setup(w, h, svgId) {
+// This assumes the existence of a button group with ids svgButton and
+// canvasButton.
+export function enableContainerSwitcher() {
 
-    if (svgId === undefined) svgId = 'svg';
+    function buttonHandler(to) {
+
+        let containerTypes = ['svg', 'canvas'];
+        let from = containerTypes.indexOf(containerType);
+        if (from === to) return;
+
+        let oldElt = document.getElementById(containerType);
+        let w = parseInt(oldElt.getAttribute('width'));
+        let h = parseInt(oldElt.getAttribute('height'));
+
+        let newType = containerTypes[to];
+        let newElt = document.createElement(newType);
+        newElt.id = newType;
+        oldElt.replaceWith(newElt);
+        containerType = newType;
+
+        setup(w, h, containerType);
+    }
+
+    setupButtons(['svgButton', 'canvasButton'], buttonHandler);
+
+}
+
+export function setup(w, h, containerId) {
+
+    if (containerId === undefined) containerId = 'svg';
 
     if (h === undefined) h = w;
 
@@ -77,9 +106,9 @@ export function setup(w, h, svgId) {
     let toCanvasScale = canvasSize / 2.0;
 
     // Set up graphic components.
-    const svg = document.getElementById(svgId);
-    draw.addAttributes(svg, {width: w, height: h});
-    draw.setSVG(svg);
+    const container = document.getElementById(containerId);
+    draw.addAttributes(container, {width: w, height: h});
+    draw.setSVG(container);
     draw.drawInFront();
     draw.setOrigin({x: w / 2, y: h / 2});
     draw.setScale(toCanvasScale);
@@ -87,5 +116,9 @@ export function setup(w, h, svgId) {
     // Set a deterministic seed so the image is reproducible.
     random.seed(6);
 
-    return svg;
+    return container;
+}
+
+// XXX TODO Eventually have this one completely replace setup().
+export function setup2(w, h, containerId) {
 }
