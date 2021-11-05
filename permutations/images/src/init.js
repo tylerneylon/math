@@ -20,7 +20,46 @@ var xSize = 750, ySize = 750;
 
 
 // ______________________________________________________________________
+// Internal functions
+
+// A helper function for button groups.
+// Get a list of elements given a list of ids.
+function getButtons(buttonIds) {
+    let buttonElts = [];
+    for (let id of buttonIds) {
+        buttonElts.push(document.getElementById(id));
+    }
+    return buttonElts;
+}
+
+// A helper function for button groups.
+// Add the class 'btn-active' to buttonElt, while ensuring that class is absent
+// from the other elements in groupElts.
+function activateOneInGroup(buttonElt, groupElts) {
+    for (let elt of groupElts) {
+        elt.classList.remove('btn-active');
+    }
+    buttonElt.classList.add('btn-active');
+}
+
+
+// ______________________________________________________________________
 // Public functions
+
+// This sets up click handlers for the buttons listed in the array `ids`.
+// The click handler for the ith (0-indexed) button will first modify the style
+// of the button group to show which is active, and then call `handler` with
+// the value i.
+export function setupButtons(ids, handler) {
+    let buttons = getButtons(ids);
+    for (let i = 0; i < ids.length; i++) {
+        let button = buttons[i];
+        button.onclick = function () {
+            activateOneInGroup(button, buttons);
+            handler(i);
+        };
+    }
+}
 
 export function setup(w, h, svgId) {
 

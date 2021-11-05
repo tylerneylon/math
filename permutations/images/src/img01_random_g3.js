@@ -18,6 +18,10 @@ import * as perm   from './perm.js';
 window.addEventListener('DOMContentLoaded', (event) => {
 
     init.setup();
+
+    // XXX Work in progress.
+    init.setupButtons(['svgButton', 'canvasButton'], console.log);
+
     perm.drawRandomGn(3);  // Draw G_3.
 
 });
