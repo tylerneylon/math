@@ -17,7 +17,7 @@ import * as perm   from './perm.js';
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    init.setup();
+    init.setup2();
 
     // XXX Work in progress.
     init.enableContainerSwitcher();

@@ -45,13 +45,6 @@ function log(msg) {
 // ______________________________________________________________________
 // SVG helper functions
 
-function addAttributes(elt, attr) {
-    for (var key in attr) {
-        elt.setAttribute(key, attr[key]);
-    }
-    return elt;
-}
-
 function addAtEnd(elt, parent) {
     parent.appendChild(elt);
 }
@@ -104,6 +97,13 @@ class Artist {
         }
         this.origin[0] = -this.toCanvasScale / xMin;
         this.origin[1] = -this.toCanvasScale / yMin;
+    }
+
+    setSize(w, h) {
+        if (h === undefined) h = w;
+        console.assert(typeof w === 'number');
+        this.elt.setAttribute('width', w);
+        this.elt.setAttribute('height', h);
     }
 
     mapToCanvasPt(pt) {
@@ -288,4 +288,12 @@ export function inId(id, w, h) {
     }
 
     return new classes[tagName](elt);
+}
+
+// XXX Could I effectively add this to all drawable items as a method?
+export function addAttributes(elt, attr) {
+    for (var key in attr) {
+        elt.setAttribute(key, attr[key]);
+    }
+    return elt;
 }

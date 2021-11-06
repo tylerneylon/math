@@ -83,7 +83,7 @@ export function enableContainerSwitcher() {
         oldElt.replaceWith(newElt);
         containerType = newType;
 
-        setup(w, h, containerType);
+        setup2(w, h, containerType);
     }
 
     setupButtons(['svgButton', 'canvasButton'], buttonHandler);
@@ -121,4 +121,28 @@ export function setup(w, h, containerId) {
 
 // XXX TODO Eventually have this one completely replace setup().
 export function setup2(w, h, containerId) {
+
+    if (containerId === undefined) containerId = 'svg';
+
+    if (h === undefined) h = w;
+
+    if (w === undefined) {
+        w = xSize;
+        h = ySize;
+    }
+    // If we multiply logical units * toCanvasScale, then we map from [-1, 1]^2
+    // into a square that just fits, centered, in the canvas.
+    let canvasSize = Math.min(w, h);
+    let toCanvasScale = canvasSize / 2.0;
+
+    // Set up graphic components.
+
+    const artist = draw2.inId(containerId);
+    artist.setSize(w, h);
+    artist.setCoordLimits(-1, 1);
+
+    // Set a deterministic seed so the image is reproducible.
+    random.seed(6);
+
+    return artist;
 }
