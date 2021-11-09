@@ -24,7 +24,14 @@
 let eps = 0.00001;  // Used to check for mostly-equality.
 
 // Set this temporarily to true to help debug drawing.
-let doDebugPrint = false;
+let doDebugPrint = true;
+let logNum = 0;
+let logBreakpoint = null;
+
+let fillStyle = {
+    stroke: 'transparent',
+    fill:   '#222'
+};
 
 let lineStyle = {
     stroke: '#444',
@@ -38,7 +45,26 @@ let lineStyle = {
 
 function log(msg) {
     if (!doDebugPrint) return;
-    console.log(msg);
+    console.log(`${logNum}: ${msg}`);
+    if (logNum === logBreakpoint) debugger;
+    logNum++;
+}
+
+function st(obj) {
+    if (typeof obj === 'number') return obj.toFixed(2);
+    if (typeof obj === 'object') {
+        let items = [];
+        for (const [key, value] of Object.entries(obj)) {
+            let keyStr = /^[A-Za-z_]\w*$/.test(key) ? key : `"${key}"`;
+            items.push(`"${keyStr}": "${st(value)}"`);
+        }
+        return `{${items.join(', ')}}`;
+    }
+    return obj;
+}
+
+function xyst(obj) {
+    return `{x: ${st(obj.x)}, y: ${st(obj.y)}}`;
 }
 
 
@@ -83,12 +109,12 @@ class Artist {
         console.assert(xMin !== undefined && xMax !== undefined);
         if (yMin === undefined) yMin = xMin;
         if (yMax === undefined) yMax = xMax;
-        // XXX For now this assumes the user has provided a valid aspect ratio.
-        //     I plan to _not_ support separate toCanvasScaleX and
-        //     toCanvasScaleY values. In the future, if an aspect ratio is off,
-        //     we'll default letterbox to make their frame fit, but their
-        //     content will not fill the container element. We can provide a
-        //     warning in this case.
+        // TODO For now this assumes the user has provided a valid aspect ratio.
+        //      I plan to _not_ support separate toCanvasScaleX and
+        //      toCanvasScaleY values. In the future, if an aspect ratio is off,
+        //      we'll default letterbox to make their frame fit, but their
+        //      content will not fill the container element. We can provide a
+        //      warning in this case.
         let xScale = this.width / (xMax - xMin) * this.ctx.ratio;
         let yScale = this.height / (yMax - yMin) * this.ctx.ratio;
         this.toCanvasScale = xScale;
@@ -103,7 +129,9 @@ class Artist {
         if (h === undefined) h = w;
         console.assert(typeof w === 'number');
         this.elt.setAttribute('width', w);
+        this.width = w;
         this.elt.setAttribute('height', h);
+        this.height = h;
     }
 
     mapToCanvasPt(pt) {
@@ -113,6 +141,9 @@ class Artist {
         };
     }
 
+    // If a radius is provided, then it's interpreted in unit coordinates;
+    // however, if only a style-with-radius (`r`) is provided, then that value
+    // is interpreted as a measure in pixels.
     addCircle(center, radius, style, parent) {
         // We might receive a style without a radius.
         if (typeof radius === 'object') {
@@ -123,8 +154,8 @@ class Artist {
             style = lineStyle;
         }
 
-        let centerStr = `(${center.x}, ${center.y})`;
-        log(`circle(center=${centerStr}, radius=${radius}, style=${style})`);
+        log(`circle(center=${xyst(center)}, radius=${radius}, ` +
+            `style=${st(style)})`);
 
         var circle = this.add('circle', style, parent);
         var center = this.mapToCanvasPt(center);
@@ -136,14 +167,17 @@ class Artist {
         });
         if (radius !== undefined) {
             addAttributes(circle, { r: radius * this.toCanvasScale });
+        } else if (style.r) {
+            addAttributes(circle, {r: style.r});
         }
+
         return circle;
     }
 
     addLine(from, to, style, parent) {
         if (style === undefined) style = lineStyle;
-        log(`line(from=${from}, to=${to}, style=${style})`);
-        var line = this.add('line', style, parent);
+        log(`line(from=${xyst(from)}, to=${xyst(to)}, style=${st(style)})`);
+        let line = this.add('line', style, parent);
         from = this.mapToCanvasPt(from);
         to = this.mapToCanvasPt(to);
         addAttributes(line, {
@@ -153,6 +187,22 @@ class Artist {
             y2: to.y
         });
         return line;
+    }
+
+    addText(leftBaseline, str, style, parent) {
+        if (style === undefined) style = fillStyle;
+        log(`text(leftBaseline=${xyst(leftBaseline)}, str=${str}, ` +
+            `style=${st(style)})`);
+        let text = this.add('text', style, parent);
+
+        leftBaseline = this.mapToCanvasPt(leftBaseline);
+        text.innerHTML = str;
+        addAttributes(text, leftBaseline);
+        if (false) {
+            // I'll leave this here for reference.
+            addAttributes(text, {style: 'font-family: sans-serif'});
+        }
+        return text;
     }
 }
 
@@ -181,11 +231,16 @@ class CanvasItem {
     constructor(itemType) {
         this.type = itemType;
         this.attrs = {};
+        this.items = [];  // This is used by the 'g' type.
     }
 
     setAttribute(key, value) {
         this.attrs[key] = value;
         console.log(`[${this.type}]: setting ${key} -> ${value}`);
+    }
+
+    addEventListener(eventName, handler) {
+        log(`Ignoring event listener for ${eventName} on canvas ${this.type}.`);
     }
 
     render(ctx) {
@@ -226,6 +281,10 @@ class CanvasItem {
             ctx.lineTo(x2, y2);
             ctx.stroke();
         }
+
+        if (this.type === 'g') {
+            for (let item of this.items) item.render(ctx);
+        }
     }
 }
 
@@ -253,11 +312,10 @@ class CanvasArtist extends Artist {
     // Internal helper functions
 
     add(eltName, attr, parent) {
-        if (parent === undefined) { parent = this.elt; }
+        if (parent === undefined) { parent = this; }
         var item = new CanvasItem(eltName);
-        // XXX Eventually support other add modes. (this.addMode)
-        //     And other parents!
-        this.items.push(item);
+        // TODO Eventually support other add modes. (this.addMode)
+        parent.items.push(item);
         if (attr) addAttributes(item, attr);
         return item;
     }
@@ -290,10 +348,20 @@ export function inId(id, w, h) {
     return new classes[tagName](elt);
 }
 
-// XXX Could I effectively add this to all drawable items as a method?
+// TODO Could I effectively add this to all drawable items as a method?
 export function addAttributes(elt, attr) {
     for (var key in attr) {
         elt.setAttribute(key, attr[key]);
     }
     return elt;
+}
+
+// Point movement functions
+
+// This returns the result (the inputs are left unchanged).
+export function translate(pt, by) {
+    return {
+        x: pt.x + by.x,
+        y: pt.y + by.y
+    }
 }

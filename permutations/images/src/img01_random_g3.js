@@ -9,7 +9,7 @@
 // Imports
 
 import * as init   from './init.js';
-import * as perm   from './perm.js';
+import * as perm2  from './perm2.js';
 
 
 // ______________________________________________________________________
@@ -17,11 +17,10 @@ import * as perm   from './perm.js';
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    init.setup2();
+    let artist = init.setup2();
 
     // XXX Work in progress.
     init.enableContainerSwitcher();
 
-    perm.drawRandomGn(3);  // Draw G_3.
-
+    perm2.drawRandomGn(artist, 3);  // Draw G_3.
 });
