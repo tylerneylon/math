@@ -122,6 +122,12 @@ export function setup(w, h, containerId) {
 // XXX TODO Eventually have this one completely replace setup().
 export function setup2(w, h, containerId) {
 
+    // Support that we only receive containerId as an input.
+    if (typeof w === 'string') {
+        containerId = w;
+        w = undefined;
+    }
+
     if (containerId === undefined) containerId = 'svg';
 
     if (h === undefined) h = w;

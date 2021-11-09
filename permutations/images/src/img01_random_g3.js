@@ -17,10 +17,12 @@ import * as perm2  from './perm2.js';
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    let artist = init.setup2();
+    let artist = init.setup2('canvas');
 
     // XXX Work in progress.
     init.enableContainerSwitcher();
 
     perm2.drawRandomGn(artist, 3);  // Draw G_3.
+
+    artist.render();
 });

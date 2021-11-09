@@ -94,8 +94,10 @@ class Artist {
         this.origin = [0, 0];
         this.width  = parseInt(elt.getAttribute('width'));
         this.height = parseInt(elt.getAttribute('height'));
-        // The context is mainly used for canvas elements, but it's useful here
-        // to have a single place for the pixel ratio.
+
+        // The pixel ratio is only really needed by canvas elements, since svg
+        // containers automatically handle this. However, it's useful to have a
+        // universally available number here.
         this.ctx = {ratio: 1};
     }
 
@@ -128,10 +130,13 @@ class Artist {
     setSize(w, h) {
         if (h === undefined) h = w;
         console.assert(typeof w === 'number');
-        this.elt.setAttribute('width', w);
         this.width = w;
-        this.elt.setAttribute('height', h);
+        this.elt.style.width  = w  + 'px';
         this.height = h;
+        this.elt.style.height = h + 'px';
+
+        this.elt.setAttribute('width',  2 * w);
+        this.elt.setAttribute('height', 2 * h);
     }
 
     mapToCanvasPt(pt) {
@@ -204,6 +209,10 @@ class Artist {
         }
         return text;
     }
+
+    // This is a no-op for an SVG container, but does cricitcal work for a
+    // canvas container.
+    render() {}
 }
 
 class SVGArtist extends Artist {
@@ -261,9 +270,15 @@ class CanvasItem {
                 console.assert(key in this.attrs);
             }
             let [cx, cy, r] = [this.attrs.cx, this.attrs.cy, this.attrs.r];
+            r *= ctx.ratio;
             ctx.beginPath();
             ctx.ellipse(cx, cy, r, r, 0, 0, Math.PI * 2);
-            ctx.stroke();
+            if ([undefined, 'transparent'].includes(this.attrs.stroke)) {
+                ctx.fillStyle = this.attrs.fill;
+                ctx.fill();
+            } else {
+                ctx.stroke();
+            }
         }
 
         if (this.type === 'line') {
@@ -279,6 +294,7 @@ class CanvasItem {
             ctx.beginPath();
             ctx.moveTo(x1, y1);
             ctx.lineTo(x2, y2);
+            ctx.lineWidth = this.attrs['stroke-width'] * ctx.ratio;
             ctx.stroke();
         }
 
@@ -301,7 +317,7 @@ class CanvasArtist extends Artist {
         let ratio = window.devicePixelRatio || 1;
         this.ctx.ratio = ratio;
 
-        if (ratio !== 1) {
+        if (this.ctx.ratio !== 1) {
             elt.style.width  = elt.width  + 'px';
             elt.style.height = elt.height + 'px';
             elt.width  *= ratio;
@@ -333,6 +349,7 @@ class CanvasArtist extends Artist {
 
 export function inId(id, w, h) {
     let elt = document.getElementById(id);
+    console.assert(elt, `Sadly, I don't see an element with id "${id}"`);
 
     let classes = {'svg': SVGArtist, 'canvas': CanvasArtist};
 
