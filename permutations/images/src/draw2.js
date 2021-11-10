@@ -125,6 +125,8 @@ class Artist {
         }
         this.origin[0] = -this.toCanvasScale / xMin;
         this.origin[1] = -this.toCanvasScale / yMin;
+        log(`Setting toCanvasScale=${this.toCanvasScale}; ` +
+            `origin=${this.origin}`);
     }
 
     setSize(w, h) {
@@ -135,8 +137,8 @@ class Artist {
         this.height = h;
         this.elt.style.height = h + 'px';
 
-        this.elt.setAttribute('width',  2 * w);
-        this.elt.setAttribute('height', 2 * h);
+        this.elt.setAttribute('width',  this.ctx.ratio * w);
+        this.elt.setAttribute('height', this.ctx.ratio * h);
     }
 
     mapToCanvasPt(pt) {
@@ -315,6 +317,7 @@ class CanvasArtist extends Artist {
 
         // Adjust for a possible retina display.
         let ratio = window.devicePixelRatio || 1;
+        log(`Setting ratio to ${ratio}`);
         this.ctx.ratio = ratio;
 
         if (this.ctx.ratio !== 1) {
