@@ -16,13 +16,8 @@ import * as perm2  from './perm2.js';
 // Main
 
 window.addEventListener('DOMContentLoaded', (event) => {
-
-    let artist = init.setup2('canvas');
-
-    // XXX Work in progress.
-    init.enableContainerSwitcher();
-
-    perm2.drawRandomGn(artist, 3);  // Draw G_3.
-
-    artist.render();
+    init.enableContainerSwitcher((artist) => {
+        perm2.drawRandomGn(artist, 3);  // Draw G_3.
+        artist.render();
+    });
 });

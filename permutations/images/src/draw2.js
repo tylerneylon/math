@@ -136,6 +136,8 @@ class Artist {
         this.elt.style.width  = w  + 'px';
         this.height = h;
         this.elt.style.height = h + 'px';
+        this.elt.setAttribute('width',  w);
+        this.elt.setAttribute('height', h);
 
         this.elt.setAttribute('width',  this.ctx.ratio * w);
         this.elt.setAttribute('height', this.ctx.ratio * h);

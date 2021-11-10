@@ -65,7 +65,7 @@ export function setupButtons(ids, handler) {
 
 // This assumes the existence of a button group with ids svgButton and
 // canvasButton.
-export function enableContainerSwitcher() {
+export function enableContainerSwitcher(setupWithArtist) {
 
     function buttonHandler(to) {
 
@@ -74,20 +74,36 @@ export function enableContainerSwitcher() {
         if (from === to) return;
 
         let oldElt = document.getElementById(containerType);
-        let w = parseInt(oldElt.getAttribute('width'));
-        let h = parseInt(oldElt.getAttribute('height'));
+        let w = parseInt(oldElt.style.width);
+        let h = parseInt(oldElt.style.height);
 
         let newType = containerTypes[to];
-        let newElt = document.createElement(newType);
+
+        let newElt = null;
+        if (newType === 'canvas') newElt = document.createElement(newType);
+        if (newType === 'svg') {
+            let ns = 'http://www.w3.org/2000/svg';
+            newElt = document.createElementNS(ns, 'svg');
+        }
+
+        newElt.style.backgroundColor = '#fff';
         newElt.id = newType;
         oldElt.replaceWith(newElt);
         containerType = newType;
 
-        setup2(w, h, containerType);
+        if (newType === 'svg') {
+            newElt.setAttribute('version', '1.1');
+            newElt.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+        }
+
+        let artist = setup2(w, h, containerType);
+        setupWithArtist(artist);
     }
 
     setupButtons(['svgButton', 'canvasButton'], buttonHandler);
 
+    let artist = setup2();
+    setupWithArtist(artist);
 }
 
 export function setup(w, h, containerId) {
