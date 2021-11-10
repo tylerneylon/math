@@ -63,6 +63,34 @@ export function setupButtons(ids, handler) {
     }
 }
 
+export function addContainerSwitcher(setupWithArtist) {
+    let doc  = document;
+    let body = doc.body;
+    let make = doc.createElement.bind(doc);
+
+    body.appendChild(make('br'));
+
+    let span = make('span');
+    span.innerHTML = 'container: ';
+    body.appendChild(span);
+
+    let div = make('div');
+    div.classList.add('btn-group');
+    let b1  = make('button');
+    b1.innerHTML = 'svg';
+    b1.id = 'svgButton';
+    b1.classList.add('btn-active');
+    div.appendChild(b1);
+    let b2 = make('button');
+    b2.innerHTML = 'canvas';
+    b2.id = 'canvasButton';
+    div.appendChild(b2);
+
+    body.appendChild(div);
+
+    enableContainerSwitcher(setupWithArtist);
+}
+
 // This assumes the existence of a button group with ids svgButton and
 // canvasButton.
 export function enableContainerSwitcher(setupWithArtist) {

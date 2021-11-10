@@ -16,7 +16,7 @@ import * as perm2  from './perm2.js';
 // Main
 
 window.addEventListener('DOMContentLoaded', (event) => {
-    init.enableContainerSwitcher((artist) => {
+    init.addContainerSwitcher((artist) => {
         perm2.drawRandomGn(artist, 3);  // Draw G_3.
         artist.render();
     });
