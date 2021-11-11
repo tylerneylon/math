@@ -501,7 +501,8 @@ export function drawGraphWithPtMap(
     let ptElts   = [];
     let entries  = [];
     for (const [perm, pt] of Object.entries(ptMap)) {
-        console.log(`Processing ${perm} with point ${pt.x}, ${pt.y}.`);
+        // Uncomment the next line to help debug this function.
+        // console.log(`Processing ${perm} with point ${pt.x}, ${pt.y}.`);
         let [outline, hitDot, circle] = addDot(
             artist,
             pt,
@@ -581,7 +582,7 @@ export function getMagnitude(permStr) {
 }
 
 // Render G_n is an n-partite graph in the rectangle from [-a, -b] to [a, b].
-export function drawNPartiteGn(n, orderingType) {
+export function drawNPartiteGn(artist, n, orderingType) {
 
     let forAllPerms = getPermIterator(orderingType);
 
@@ -615,7 +616,7 @@ export function drawNPartiteGn(n, orderingType) {
         }
         x += dx;
     }
-    drawGraphWithPtMap(ptMap, n);
+    drawGraphWithPtMap(artist, ptMap, n);
 }
 
 // Render G_n as a bipartitle graph in the rectangle from [-a,-b] to [a, b].

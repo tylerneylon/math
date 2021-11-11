@@ -10,7 +10,7 @@
 // Imports
 
 import * as init   from './init.js';
-import * as perm   from './perm.js';
+import * as perm2  from './perm2.js';
 
 
 // ______________________________________________________________________
@@ -19,47 +19,54 @@ import * as perm   from './perm.js';
 let orderingType = 'lex';
 let n = 3;
 let defaultStyles = null;
+let _artist = null;
 
 
 // ______________________________________________________________________
 // Functions
 
 // This uses the global `n` to determine how to render the graph.
-function refreshGraph() {
+function refreshGraph(artist) {
 
-    const svg = document.getElementById('svg');
-    svg.replaceChildren();
+    if (artist === undefined) {
+        artist = _artist;
+    } else {
+        _artist = artist;
+    }
+
+    artist.clear();
 
     if (defaultStyles === null) {
         defaultStyles = {};
-        defaultStyles.edgeWidth = perm.edgeStyle['stroke-width'];
-        defaultStyles.edgeStroke = perm.edgeStyle.stroke;
-        defaultStyles.dotRadius = perm.dotStyle.r;
+        defaultStyles.edgeWidth = perm2.edgeStyle['stroke-width'];
+        defaultStyles.edgeStroke = perm2.edgeStyle.stroke;
+        defaultStyles.dotRadius = perm2.dotStyle.r;
     }
 
     if (n === 7) {
-        perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.02;
-        perm.edgeStyle.stroke = '#888';
-        perm.dotStyle.r = defaultStyles.dotRadius * 0.7;
-        perm.renderCtx.edgeWeighting = 'boldNearE';
+        perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.02;
+        perm2.edgeStyle.stroke = '#888';
+        perm2.dotStyle.r = defaultStyles.dotRadius * 0.7;
+        perm2.renderCtx.edgeWeighting = 'boldNearE';
     } else if (n === 6) {
-        perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.1;
-        perm.edgeStyle.stroke = '#bbb';
-        perm.dotStyle.r = defaultStyles.dotRadius * 0.7;
-        perm.renderCtx.edgeWeighting = 'default';
+        perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.1;
+        perm2.edgeStyle.stroke = '#bbb';
+        perm2.dotStyle.r = defaultStyles.dotRadius * 0.7;
+        perm2.renderCtx.edgeWeighting = 'default';
     } else if (n === 5) {
-        perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.4;
-        perm.edgeStyle.stroke = defaultStyles.edgeStroke;
-        perm.dotStyle.r = defaultStyles.dotRadius;
-        perm.renderCtx.edgeWeighting = 'default';
+        perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.4;
+        perm2.edgeStyle.stroke = defaultStyles.edgeStroke;
+        perm2.dotStyle.r = defaultStyles.dotRadius;
+        perm2.renderCtx.edgeWeighting = 'default';
     } else {
-        perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth;
-        perm.edgeStyle.stroke = defaultStyles.edgeStroke;
-        perm.dotStyle.r = defaultStyles.dotRadius;
-        perm.renderCtx.edgeWeighting = 'default';
+        perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth;
+        perm2.edgeStyle.stroke = defaultStyles.edgeStroke;
+        perm2.dotStyle.r = defaultStyles.dotRadius;
+        perm2.renderCtx.edgeWeighting = 'default';
     }
 
-    perm.drawNPartiteGn(n, orderingType);
+    perm2.drawNPartiteGn(artist, n, orderingType);
+    artist.render();
 }
 
 // A helper function for button groups.
@@ -112,9 +119,6 @@ function setupButtons() {
 // Main
 
 window.addEventListener('DOMContentLoaded', (event) => {
-
-    init.setup();
     setupButtons();
-
-    refreshGraph();
+    init.addContainerSwitcher(refreshGraph);
 });
