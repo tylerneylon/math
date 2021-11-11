@@ -240,6 +240,9 @@ class SVGArtist extends Artist {
 
     // Public interface
 
+    clear() {
+        this.elt.replaceChildren();
+    }
 }
 
 class CanvasItem {
@@ -346,11 +349,17 @@ class CanvasArtist extends Artist {
 
     render() {
         let start = Date.now();
+        this.ctx.fillStyle = '#fff';
+        this.ctx.fillRect(0, 0, this.elt.width, this.elt.height);
         for (let item of this.items) item.render(this.ctx, this);
         let duration = Date.now() - start;
         if (doDebugPrint || doTimingPring) {
             console.log(`render() call took ${duration}ms.`);
         }
+    }
+
+    clear() {
+        this.items = [];
     }
 }
 

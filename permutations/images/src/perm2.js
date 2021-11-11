@@ -663,7 +663,7 @@ export function drawRandomGn(artist, n) {
     drawGraphWithPtMap(artist, ptMap, n);
 }
 
-export function drawCircularGn(n, orderingType) {
+export function drawCircularGn(artist, n, orderingType) {
 
     let radius = 0.8;
 
@@ -681,7 +681,7 @@ export function drawCircularGn(n, orderingType) {
         angle += angleDelta;
     });
 
-    drawGraphWithPtMap(ptMap, n);
+    drawGraphWithPtMap(artist, ptMap, n);
 }
 
 // Returns [pts, labels]. `pts` is a list of 3d points (length-3 arrays), each
