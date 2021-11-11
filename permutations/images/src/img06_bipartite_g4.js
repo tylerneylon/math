@@ -9,7 +9,7 @@
 // Imports
 
 import * as init   from './init.js';
-import * as perm   from './perm.js';
+import * as perm2  from './perm2.js';
 
 
 // ______________________________________________________________________
@@ -17,7 +17,9 @@ import * as perm   from './perm.js';
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    init.setup();
-    perm.drawBipartiteGn(4);  // Draw G_4.
+    init.addContainerSwitcher((artist) => {
+        perm2.drawBipartiteGn(artist, 4);  // Draw G_4.
+        artist.render();
+    });
 
 });

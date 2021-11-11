@@ -18,7 +18,6 @@ import * as perm2  from './perm2.js';
 window.addEventListener('DOMContentLoaded', (event) => {
 
     init.addContainerSwitcher((artist) => {
-        let useLexOrdering = true;
         perm2.drawBipartiteGn(artist, 3);  // Draw G_3.
         artist.render();
     });
