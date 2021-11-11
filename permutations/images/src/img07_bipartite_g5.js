@@ -9,7 +9,7 @@
 // Imports
 
 import * as init   from './init.js';
-import * as perm   from './perm.js';
+import * as perm2  from './perm2.js';
 
 
 // ______________________________________________________________________
@@ -17,12 +17,13 @@ import * as perm   from './perm.js';
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    init.setup();
+    perm2.edgeStyle['stroke-width'] *= 0.3;
+    perm2.edgeStyle.stroke = '#bbb';
+    perm2.dotStyle.r *= 0.7;
 
-    perm.edgeStyle['stroke-width'] *= 0.3;
-    perm.edgeStyle.stroke = '#bbb';
-    perm.dotStyle.r *= 0.7;
-
-    perm.drawBipartiteGn(5);  // Draw G_5.
+    init.addContainerSwitcher((artist) => {
+        perm2.drawBipartiteGn(artist, 5);  // Draw G_5.
+        artist.render();
+    });
 
 });
