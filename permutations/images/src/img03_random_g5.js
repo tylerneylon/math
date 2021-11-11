@@ -9,15 +9,15 @@
 // Imports
 
 import * as init   from './init.js';
-import * as perm   from './perm.js';
+import * as perm2  from './perm2.js';
 
 
 // ______________________________________________________________________
 // Main
 
 window.addEventListener('DOMContentLoaded', (event) => {
-
-    init.setup();
-    perm.drawRandomGn(5);  // Draw G_5.
-
+    init.addContainerSwitcher((artist) => {
+        perm2.drawRandomGn(artist, 5);  // Draw G_5.
+        artist.render();
+    });
 });
