@@ -24,7 +24,9 @@
 let eps = 0.00001;  // Used to check for mostly-equality.
 
 // Set this temporarily to true to help debug drawing.
-let doDebugPrint = true;
+let doDebugPrint  = false;
+let doTimingPring = true;
+
 let logNum = 0;
 let logBreakpoint = null;
 
@@ -249,7 +251,6 @@ class CanvasItem {
 
     setAttribute(key, value) {
         this.attrs[key] = value;
-        console.log(`[${this.type}]: setting ${key} -> ${value}`);
     }
 
     addEventListener(eventName, handler) {
@@ -344,7 +345,12 @@ class CanvasArtist extends Artist {
     // Public interface
 
     render() {
+        let start = Date.now();
         for (let item of this.items) item.render(this.ctx, this);
+        let duration = Date.now() - start;
+        if (doDebugPrint || doTimingPring) {
+            console.log(`render() call took ${duration}ms.`);
+        }
     }
 }
 

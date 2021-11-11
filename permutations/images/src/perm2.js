@@ -619,7 +619,7 @@ export function drawNPartiteGn(n, orderingType) {
 }
 
 // Render G_n as a bipartitle graph in the rectangle from [-a,-b] to [a, b].
-export function drawBipartiteGn(n, useLexOrdering) {
+export function drawBipartiteGn(artist, n, useLexOrdering) {
 
     if (useLexOrdering === undefined) {
         useLexOrdering = false;
@@ -641,7 +641,7 @@ export function drawBipartiteGn(n, useLexOrdering) {
         x *= -1;
         if (x < 0) y += dy;
     });
-    drawGraphWithPtMap(ptMap, n);
+    drawGraphWithPtMap(artist, ptMap, n);
 }
 
 export function drawRecursiveGn(n, orderingType) {

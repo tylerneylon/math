@@ -14,7 +14,7 @@
 // Imports
 
 import * as init   from './init.js';
-import * as perm   from './perm.js';
+import * as perm2  from './perm2.js';
 
 
 // ______________________________________________________________________
@@ -22,8 +22,10 @@ import * as perm   from './perm.js';
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    init.setup();
-    let useLexOrdering = true;
-    perm.drawBipartiteGn(5, useLexOrdering);  // Draw G_5.
+    init.addContainerSwitcher((artist) => {
+        let useLexOrdering = true;
+        perm2.drawBipartiteGn(artist, 5, useLexOrdering);  // Draw G_5.
+        artist.render();
+    });
 
 });
