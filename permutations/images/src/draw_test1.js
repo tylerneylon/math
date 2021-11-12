@@ -36,6 +36,10 @@ function setupEltWithId(id) {
         [-0.4, -0.5]
     ], {'fill': '#666'});
 
+    // Sanity check movePolygon().
+    let polygon = artist.addPolygon([[0.5, -0.9], [0.4, -0.9], [0.6, -0.8]]);
+    artist.movePolygon(polygon, [[0.5, -0.4], [0.4, -0.4], [0.6, -0.2]]);
+
     return artist;
 }
 

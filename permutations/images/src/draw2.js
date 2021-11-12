@@ -274,19 +274,12 @@ class Artist {
 
     // This expects `pts` to be an array of {x, y} points. The polygon will be
     // closed for you; do not provide the initial point again.
+    // (This can accept either {x, y} points or array points.)
     addPolygon(pts, style, parent) {
         if (style === undefined) style = fillStyle;
         log(`polygon(pts=${st(pts)}, style=${st(style)})`);
         let polygon = this.add('polygon', style, parent);
-        let ptStrs  = [];
-        let ptArray = [];
-        for (let pt of pts) {
-            let canvasPt = this.mapToCanvasPt({x: pt[0], y: pt[1]});
-            ptStrs.push(`${canvasPt.x},${canvasPt.y}`);
-            ptArray.push([canvasPt.x, canvasPt.y]);
-        }
-        addAttributes(polygon, {points: ptStrs.join(' ')});
-        addAttributes(polygon, {ptArray});
+        this.movePolygon(polygon, pts);
         return polygon;
     }
 
@@ -294,9 +287,10 @@ class Artist {
         let ptStrs  = [];
         let ptArray = [];
         for (let pt of pts) {
-            let canvasPt = this.mapToCanvasPt(pt);
+            let p = (typeof pt.x === 'undefined' ? {x: pt[0], y: pt[1]} : pt);
+            let canvasPt = this.mapToCanvasPt(p);
             ptStrs.push(`${canvasPt.x},${canvasPt.y}`);
-            ptArray.push(canvasPt);
+            ptArray.push([canvasPt.x, canvasPt.y]);
         }
         addAttributes(polygon, {points: ptStrs.join(' ')});
         addAttributes(polygon, {ptArray});
