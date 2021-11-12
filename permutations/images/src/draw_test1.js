@@ -30,6 +30,12 @@ function setupEltWithId(id) {
 
     artist.addLine({x: -0.8, y: -0.8}, {x: -0.8, y: -0.4});
 
+    artist.addPolygon([
+        [-0.6, -0.6],
+        [-0.6, -0.4],
+        [-0.4, -0.5]
+    ], {'fill': '#666'});
+
     return artist;
 }
 

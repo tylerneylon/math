@@ -59,6 +59,9 @@ function log(msg) {
 
 function st(obj) {
     if (typeof obj === 'number') return obj.toFixed(2);
+    if (Array.isArray(obj)) {
+        return `[${obj.map(st).join(', ')}]`;
+    }
     if (typeof obj === 'object') {
         let items = [];
         for (const [key, value] of Object.entries(obj)) {
@@ -278,9 +281,9 @@ class Artist {
         let ptStrs  = [];
         let ptArray = [];
         for (let pt of pts) {
-            let canvasPt = this.mapToCanvasPt(pt);
+            let canvasPt = this.mapToCanvasPt({x: pt[0], y: pt[1]});
             ptStrs.push(`${canvasPt.x},${canvasPt.y}`);
-            ptArray.push(canvasPt);
+            ptArray.push([canvasPt.x, canvasPt.y]);
         }
         addAttributes(polygon, {points: ptStrs.join(' ')});
         addAttributes(polygon, {ptArray});
