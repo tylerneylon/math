@@ -68,11 +68,14 @@ export function addContainerSwitcher(setupWithArtist) {
     let body = doc.body;
     let make = doc.createElement.bind(doc);
 
-    body.appendChild(make('br'));
+    let main = doc.getElementById('main');
+    if (!main) main = body;
+
+    main.appendChild(make('br'));
 
     let span = make('span');
     span.innerHTML = 'container: ';
-    body.appendChild(span);
+    main.appendChild(span);
 
     let div = make('div');
     div.classList.add('btn-group');
@@ -86,7 +89,7 @@ export function addContainerSwitcher(setupWithArtist) {
     b2.id = 'canvasButton';
     div.appendChild(b2);
 
-    body.appendChild(div);
+    main.appendChild(div);
 
     enableContainerSwitcher(setupWithArtist);
 }

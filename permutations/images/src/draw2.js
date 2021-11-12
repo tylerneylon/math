@@ -10,6 +10,11 @@
 /* XXX TEMP planning
  *
  *  [x] Be able to addLine()
+ *  [ ] Look at the transform property when rendering to canvas.
+ *      For now, I only need to support the "translate(x, y)" format.
+ *      And only on group elements.
+ *  [ ] On polygons, respect the "display" attribute (canvas).
+ *
  *  [ ] Be able to addAttributes()
  *  [ ] Support fill without stroke
  *  [ ] Support stroke without fill
@@ -25,7 +30,7 @@ let eps = 0.00001;  // Used to check for mostly-equality.
 
 // Set this temporarily to true to help debug drawing.
 let doDebugPrint  = false;
-let doTimingPring = true;
+let doTimingPring = false;
 
 let logNum = 0;
 let logBreakpoint = null;
@@ -83,6 +88,25 @@ function addAtStart(elt, parent) {
     } else {
         parent.insertBefore(elt, parent.firstElementChild);
     }
+}
+
+
+// ______________________________________________________________________
+// Canvas helper functions
+
+// This is from here:
+// https://stackoverflow.com/a/7838871/3561
+CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+    if (w < 2 * r) r = w / 2;
+    if (h < 2 * r) r = h / 2;
+    this.beginPath();
+    this.moveTo(x + r, y);
+    this.arcTo(x + w, y,     x + w, y + h, r);
+    this.arcTo(x + w, y + h, x,     y + h, r);
+    this.arcTo(x,     y + h, x,     y,     r);
+    this.arcTo(x,     y,     x + w, y,     r);
+    this.closePath();
+    return this;
 }
 
 
@@ -185,6 +209,15 @@ class Artist {
         return circle;
     }
 
+    moveCircle(circle, center, radius) {
+        center = this.mapToCanvasPt(center);
+        circle.setAttribute('cx', center.x);
+        circle.setAttribute('cy', center.y);
+        if (radius !== undefined) {
+            circle.setAttribute('r', radius * this.toCanvasScale);
+        }
+    }
+
     addLine(from, to, style, parent) {
         if (style === undefined) style = lineStyle;
         log(`line(from=${xyst(from)}, to=${xyst(to)}, style=${st(style)})`);
@@ -200,11 +233,31 @@ class Artist {
         return line;
     }
 
+    moveLine(line, from, to) {
+        from = this.mapToCanvasPt(from);
+        to   = this.mapToCanvasPt(to);
+        addAttributes(line, {
+            x1: from.x,
+            y1: from.y,
+            x2: to.x,
+            y2: to.y
+        });
+    }
+
+    addRect(xy, style, parent) {
+        if (style === undefined) style = fillStyle;
+        log(`rect(xy=${xyst(xy)}, style=${st(style)})`);
+        let rect = add('rect', style, parent);
+        addAttributes(rect, this.mapToCanvasPt(xy));
+        return rect;
+    }
+
     addText(leftBaseline, str, style, parent) {
         if (style === undefined) style = fillStyle;
         log(`text(leftBaseline=${xyst(leftBaseline)}, str=${str}, ` +
             `style=${st(style)})`);
         let text = this.add('text', style, parent);
+        text.ctx = this.ctx;  // This is needed for text.getBBox().
 
         leftBaseline = this.mapToCanvasPt(leftBaseline);
         text.innerHTML = str;
@@ -214,6 +267,36 @@ class Artist {
             addAttributes(text, {style: 'font-family: sans-serif'});
         }
         return text;
+    }
+
+    // This expects `pts` to be an array of {x, y} points. The polygon will be
+    // closed for you; do not provide the initial point again.
+    addPolygon(pts, style, parent) {
+        if (style === undefined) style = fillStyle;
+        log(`polygon(pts=${st(pts)}, style=${st(style)})`);
+        let polygon = this.add('polygon', style, parent);
+        let ptStrs  = [];
+        let ptArray = [];
+        for (let pt of pts) {
+            let canvasPt = this.mapToCanvasPt(pt);
+            ptStrs.push(`${canvasPt.x},${canvasPt.y}`);
+            ptArray.push(canvasPt);
+        }
+        addAttributes(polygon, {points: ptStrs.join(' ')});
+        addAttributes(polygon, {ptArray});
+        return polygon;
+    }
+
+    movePolygon(polygon, pts) {
+        let ptStrs  = [];
+        let ptArray = [];
+        for (let pt of pts) {
+            let canvasPt = this.mapToCanvasPt(pt);
+            ptStrs.push(`${canvasPt.x},${canvasPt.y}`);
+            ptArray.push(canvasPt);
+        }
+        addAttributes(polygon, {points: ptStrs.join(' ')});
+        addAttributes(polygon, {ptArray});
     }
 
     // This is a no-op for an SVG container, but does cricitcal work for a
@@ -249,7 +332,6 @@ class CanvasItem {
     constructor(itemType) {
         this.type = itemType;
         this.attrs = {};
-        this.items = [];  // This is used by the 'g' type.
     }
 
     setAttribute(key, value) {
@@ -258,6 +340,13 @@ class CanvasItem {
 
     addEventListener(eventName, handler) {
         log(`Ignoring event listener for ${eventName} on canvas ${this.type}.`);
+    }
+
+    remove() {
+        if (this.parentElement === undefined) return;
+        let i = this.parentElement.items.indexOf(this);
+        this.parentElement.items.splice(i, 1);
+        this.parentElement = undefined;
     }
 
     render(ctx) {
@@ -306,9 +395,66 @@ class CanvasItem {
             ctx.stroke();
         }
 
-        if (this.type === 'g') {
-            for (let item of this.items) item.render(ctx);
+        if (this.type === 'polygon') {
+            console.assert('ptArray' in this.attrs);
+            let p = this.attrs.ptArray;
+            ctx.beginPath();
+            ctx.moveTo(p[0][0], p[0][1]);
+            for (let i = 1; i < p.length; i++) ctx.lineTo(p[i][0], p[i][1]);
+            ctx.lineTo(p[0][0], p[0][1]);
+            if ([undefined, 'transparent'].includes(this.attrs.stroke)) {
+                ctx.fillStyle = this.attrs.fill;
+                ctx.fill();
+            } else {
+                ctx.stroke();
+            }
+            // TODO Factor out the stroke/fill part of rendering.
         }
+
+        if (this.type === 'rect') {
+            for (let key of ['x', 'y', 'width', 'height']) {
+                console.assert(key in this.attrs);
+            }
+            let [x, y, width, height] = [
+                this.attrs.x,
+                this.attrs.y,
+                this.attrs.width,
+                this.attrs.height
+            ]
+            // For now we only support non-rounded corners or a single radius.
+            let rx = this.attrs.rx;
+            ctx.fillStyle = this.attrs.fill;
+            if (rx === 0 || rx === undefined) {
+                ctx.fillRect(x, y, width, height);
+            } else {
+                ctx.roundRect(x, y, width, height, rx).fill();
+            }
+        }
+    }
+}
+
+class CanvasGroup extends CanvasItem {
+    constructor(itemType) {
+        super(itemType);
+        this.items = [];
+    }
+
+    appendChild(child) {
+        this.items.push(child);
+        child.parentElement = this;
+    }
+
+    render(ctx) {
+        for (let item of this.items) item.render(ctx);
+    }
+
+    getBBox() {
+        console.assert(this.itemType === 'text');
+        let metrics = this.ctx.measureText(this.innerHTML);
+        let width  = metrics.width;
+        let height = metrics.fontBoundingBoxAscent -
+                     metrics.fontBoundingBoxDescent;
+        return {width, height};
     }
 }
 
@@ -338,9 +484,11 @@ class CanvasArtist extends Artist {
 
     add(eltName, attr, parent) {
         if (parent === undefined) { parent = this; }
-        var item = new CanvasItem(eltName);
+        let Item = (eltName === 'g' ? CanvasGroup : CanvasItem);
+        var item = new Item(eltName);
         // TODO Eventually support other add modes. (this.addMode)
         parent.items.push(item);
+        item.parentElement = parent;
         if (attr) addAttributes(item, attr);
         return item;
     }
@@ -360,6 +508,11 @@ class CanvasArtist extends Artist {
 
     clear() {
         this.items = [];
+    }
+
+    appendChild(child) {
+        this.items.push(child);
+        child.parentElement = this;
     }
 }
 

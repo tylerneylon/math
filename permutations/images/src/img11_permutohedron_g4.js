@@ -10,8 +10,8 @@
 
 import * as init   from './init.js';
 import * as matrix from './matrix.js';
-import * as perm   from './perm.js';
-import * as space  from './space.js';
+import * as perm2  from './perm2.js';
+import * as space2 from './space2.js';
 
 
 // ______________________________________________________________________
@@ -30,31 +30,38 @@ let zDist = 8;
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    init.setup();
+    let [pts, labels]   = perm2.getG4PointsIn3D();
+    let [lines, slices] = perm2.getEdgeIndexesLex(4);
+    let faces           = perm2.getG4FacesIn3D();
 
-    let [pts, labels]   = perm.getG4PointsIn3D();
-    let [lines, slices] = perm.getEdgeIndexesLex(4);
-    let faces           = perm.getG4FacesIn3D();
+    init.addContainerSwitcher((artist) => {
 
-    // Add a small degree of fading for the farther-back points and lines.
-    space.ctx.fadeRange = [6, 16];
+        space2.reset();
 
-    space.ctx.zoom = 3;
-    space.addPoints(pts);
-    space.addLines(lines);
-    space.addFaces(faces);
+        // Add a small degree of fading for the farther-back points and lines.
+        space2.ctx.fadeRange = [6, 16];
 
-    space.makeDraggable();
+        space2.setArtist(artist);
+        space2.ctx.zoom = 3;
+        space2.addPoints(pts);
+        space2.addLines(lines);
 
-    // Add to the z value of all points.
-    let t = matrix.eye(4);
-    t[2][3] = zDist;
-    space.setTransform(t);
+        // XXX Put this back in, and below.
+        // space2.addFaces(faces);
 
-    space.ctx.rotationsPerSec = 0.05;
-    space.ctx.rotationSign = -1;
-    space.setZDist(zDist);
-    space.rotateAround([0.3, -1, 0.5]);
+        // space2.makeDraggable();  // XXX Not yet converted.
 
-    space.animate();
+        // Add to the z value of all points.
+        let t = matrix.eye(4);
+        t[2][3] = zDist;
+        space2.setTransform(t);
+
+        space2.ctx.rotationsPerSec = 0.05;
+        space2.ctx.rotationSign = -1;
+        space2.setZDist(zDist);
+        space2.rotateAround([0.3, -1, 0.5]);
+
+        space2.animate();
+    });
+
 });
