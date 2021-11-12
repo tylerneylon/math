@@ -143,8 +143,8 @@ class Artist {
         //      we'll default letterbox to make their frame fit, but their
         //      content will not fill the container element. We can provide a
         //      warning in this case.
-        let xScale = this.width / (xMax - xMin) * this.ctx.ratio;
-        let yScale = this.height / (yMax - yMin) * this.ctx.ratio;
+        let xScale = this.width / (xMax - xMin);
+        let yScale = this.height / (yMax - yMin);
         this.toCanvasScale = xScale;
         if (Math.abs(xScale - yScale) > eps) {
             console.log('!!: Inconsistent aspect ratio in setCoordLimits().');
@@ -349,6 +349,14 @@ class CanvasItem {
         this.parentElement = undefined;
     }
 
+    // This is useful for render().
+    #getAttrs(ctx, keys) {
+        for (let key of keys) console.assert(key in this.attrs);
+        let values = [];
+        for (let key of keys) values.push(this.attrs[key] * ctx.ratio);
+        return values;
+    }
+
     render(ctx) {
 
         if ('stroke-width' in this.attrs) {
@@ -363,11 +371,7 @@ class CanvasItem {
         }
 
         if (this.type === 'circle') {
-            for (let key of ['cx', 'cy', 'r']) {
-                console.assert(key in this.attrs);
-            }
-            let [cx, cy, r] = [this.attrs.cx, this.attrs.cy, this.attrs.r];
-            r *= ctx.ratio;
+            let [cx, cy, r] = this.#getAttrs(ctx, ['cx', 'cy', 'r']);
             ctx.beginPath();
             ctx.ellipse(cx, cy, r, r, 0, 0, Math.PI * 2);
             if ([undefined, 'transparent'].includes(this.attrs.stroke)) {
@@ -379,15 +383,10 @@ class CanvasItem {
         }
 
         if (this.type === 'line') {
-            for (let key of ['x1', 'y1', 'x2', 'y2']) {
-                console.assert(key in this.attrs);
-            }
-            let [x1, y1, x2, y2] = [
-                this.attrs.x1,
-                this.attrs.y1,
-                this.attrs.x2,
-                this.attrs.y2
-            ]
+            let [x1, y1, x2, y2] = this.#getAttrs(
+                ctx,
+                ['x1', 'y1', 'x2', 'y2']
+            );
             ctx.beginPath();
             ctx.moveTo(x1, y1);
             ctx.lineTo(x2, y2);
@@ -398,6 +397,7 @@ class CanvasItem {
         if (this.type === 'polygon') {
             console.assert('ptArray' in this.attrs);
             let p = this.attrs.ptArray;
+            p = p.map(x => [x[0] * ctx.ratio, x[1] * ctx.ratio]);
             ctx.beginPath();
             ctx.moveTo(p[0][0], p[0][1]);
             for (let i = 1; i < p.length; i++) ctx.lineTo(p[i][0], p[i][1]);
@@ -412,21 +412,17 @@ class CanvasItem {
         }
 
         if (this.type === 'rect') {
-            for (let key of ['x', 'y', 'width', 'height']) {
-                console.assert(key in this.attrs);
-            }
-            let [x, y, width, height] = [
-                this.attrs.x,
-                this.attrs.y,
-                this.attrs.width,
-                this.attrs.height
-            ]
+            let [x, y, width, height] = this.#getAttrs(
+                ctx,
+                ['x', 'y', 'width', 'height']
+            );
             // For now we only support non-rounded corners or a single radius.
             let rx = this.attrs.rx;
             ctx.fillStyle = this.attrs.fill;
             if (rx === 0 || rx === undefined) {
                 ctx.fillRect(x, y, width, height);
             } else {
+                rx *= ctx.ratio;
                 ctx.roundRect(x, y, width, height, rx).fill();
             }
         }
