@@ -47,7 +47,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         space2.addLines(lines);
 
         // XXX Put this back in, and below.
-        // space2.addFaces(faces);
+        space2.addFaces(faces);
 
         // space2.makeDraggable();  // XXX Not yet converted.
 

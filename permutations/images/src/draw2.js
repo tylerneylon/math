@@ -13,7 +13,7 @@
  *  [ ] Look at the transform property when rendering to canvas.
  *      For now, I only need to support the "translate(x, y)" format.
  *      And only on group elements.
- *  [ ] On polygons, respect the "display" attribute (canvas).
+ *  [x] On polygons, respect the "display" attribute (canvas).
  *
  *  [ ] Be able to addAttributes()
  *  [ ] Support fill without stroke
@@ -392,6 +392,7 @@ class CanvasItem {
         }
 
         if (this.type === 'polygon') {
+            if (this.attrs.display === 'none') return;
             console.assert('ptArray' in this.attrs);
             let p = this.attrs.ptArray;
             p = p.map(x => [x[0] * ctx.ratio, x[1] * ctx.ratio]);
