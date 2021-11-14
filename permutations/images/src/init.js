@@ -73,9 +73,11 @@ export function addContainerSwitcher(size, setupWithArtist) {
 
     main.appendChild(make('br'));
 
+    let bigDiv = make('div');
+
     let span = make('span');
     span.innerHTML = 'container: ';
-    main.appendChild(span);
+    bigDiv.appendChild(span);
 
     let div = make('div');
     div.classList.add('btn-group');
@@ -88,10 +90,11 @@ export function addContainerSwitcher(size, setupWithArtist) {
     b2.innerHTML = 'canvas';
     b2.id = 'canvasButton';
     div.appendChild(b2);
+    bigDiv.appendChild(div);
 
-    main.appendChild(div);
+    main.appendChild(bigDiv);
 
-    enableContainerSwitcher(setupWithArtist);
+    enableContainerSwitcher(size, setupWithArtist);
 }
 
 // This assumes the existence of a button group with ids svgButton and
