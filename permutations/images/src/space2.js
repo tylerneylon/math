@@ -758,10 +758,11 @@ export function setTransform(t) {
     updatePoints();
 }
 
-// XXX CONVERT
+// CONVERTED
 // XXX Clean up this function.
 export function makeDraggable() {
-    draw2.ctx.svg.addEventListener('mousedown', e => {
+    console.assert(artist !== null);
+    artist.elt.addEventListener('mousedown', e => {
         logEvent(e);
 
         mousedownTs = e.timeStamp;
@@ -775,7 +776,7 @@ export function makeDraggable() {
             toggleFaceLabels(highlightedFaceIndex, false);
         }
     });
-    draw2.ctx.svg.addEventListener('mouseup', e => {
+    artist.elt.addEventListener('mouseup', e => {
         logEvent(e);
         if (highlightedFaceElt) {
             toggleFaceLabels(lastHighlightedFaceIndex, true);
@@ -801,11 +802,11 @@ export function makeDraggable() {
         };
         ctx.mode = fromTo[preClickMode];
     });
-    draw2.ctx.svg.addEventListener('click', e => {
+    artist.elt.addEventListener('click', e => {
         logEvent(e);
 
     });
-    draw2.ctx.svg.addEventListener('mousemove', e => {
+    artist.elt.addEventListener('mousemove', e => {
         logEvent(e);
         if ((e.buttons & 1) === 0) {
             if (ctx.mode === 'dragging') ctx.mode = 'paused';
@@ -817,7 +818,7 @@ export function makeDraggable() {
         xDrag += Math.abs(delta[0]);
         yDrag += Math.abs(delta[1]);
 
-        let scale = draw2.ctx.toCanvasScale;
+        let scale = artist.toCanvasScale;
         let t = matrix.rotateAroundY(delta[0] / scale);
         t = matrix.mult(matrix.rotateAroundX(delta[1] / scale), t);
         ctx.rotateMat = matrix.mult(t, ctx.rotateMat);

@@ -46,10 +46,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
         space2.addPoints(pts);
         space2.addLines(lines);
 
-        // XXX Put this back in, and below.
         space2.addFaces(faces);
 
-        // space2.makeDraggable();  // XXX Not yet converted.
+        space2.makeDraggable();
 
         // Add to the z value of all points.
         let t = matrix.eye(4);
