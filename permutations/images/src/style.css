@@ -33,10 +33,31 @@
 
 .centering {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-around;
   align-items: center;
   position: absolute;
   top: 10px;
   bottom: 10px;
   width: 100%;
+}
+
+.row {
+  display: flex;
+}
+
+.row-section {
+  margin-right: 20px;
+}
+
+.row-section:last-child {
+  margin-right: 0;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.hover-button {
+  cursor: pointer;
 }
