@@ -63,7 +63,7 @@ export function setupButtons(ids, handler) {
     }
 }
 
-export function addContainerSwitcher(setupWithArtist) {
+export function addContainerSwitcher(size, setupWithArtist) {
     let doc  = document;
     let body = doc.body;
     let make = doc.createElement.bind(doc);
@@ -96,7 +96,14 @@ export function addContainerSwitcher(setupWithArtist) {
 
 // This assumes the existence of a button group with ids svgButton and
 // canvasButton.
-export function enableContainerSwitcher(setupWithArtist) {
+export function enableContainerSwitcher(size, setupWithArtist) {
+
+    // We should always receive setupWithArtist, though we may not always
+    // receive `size`.
+    if (typeof size === 'function') {
+        setupWithArtist = size;
+        size = undefined;
+    }
 
     function buttonHandler(to) {
 
@@ -133,7 +140,7 @@ export function enableContainerSwitcher(setupWithArtist) {
 
     setupButtons(['svgButton', 'canvasButton'], buttonHandler);
 
-    let artist = setup2();
+    let artist = setup2(size);
     setupWithArtist(artist);
 }
 

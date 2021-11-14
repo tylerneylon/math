@@ -250,7 +250,7 @@ class Artist {
     addRect(xy, style, parent) {
         if (style === undefined) style = fillStyle;
         log(`rect(xy=${xyst(xy)}, style=${st(style)})`);
-        let rect = add('rect', style, parent);
+        let rect = this.add('rect', style, parent);
         addAttributes(rect, this.mapToCanvasPt(xy));
         return rect;
     }
