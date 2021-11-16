@@ -23,6 +23,13 @@
  *
  */
 
+
+// ______________________________________________________________________
+// Imports
+
+import * as util from './util.js';
+
+
 // ______________________________________________________________________
 // Internal globals
 
@@ -279,6 +286,7 @@ class Artist {
         if (style === undefined) style = fillStyle;
         log(`polygon(pts=${st(pts)}, style=${st(style)})`);
         let polygon = this.add('polygon', style, parent);
+        polygon.artist = this;
         this.movePolygon(polygon, pts);
         return polygon;
     }
@@ -294,6 +302,17 @@ class Artist {
         }
         addAttributes(polygon, {points: ptStrs.join(' ')});
         addAttributes(polygon, {ptArray});
+
+        // Set up our path.
+        let path = new Path2D();
+        if (pts.length > 0) {
+            let ratio = this.ctx.ratio;
+            let p = ptArray.map(x => [x[0] * ratio, x[1] * ratio]);
+            path.moveTo(p[0][0], p[0][1]);
+            for (let i = 1; i < p.length; i++) path.lineTo(p[i][0], p[i][1]);
+            path.closePath();
+        }
+        polygon.path = path;
     }
 
     // This is a no-op for an SVG container, but does cricitcal work for a
@@ -326,17 +345,29 @@ class SVGArtist extends Artist {
 }
 
 class CanvasItem {
-    constructor(itemType) {
-        this.type = itemType;
-        this.attrs = {};
+    constructor(itemType, artist) {
+        this.type   = itemType;
+        this.attrs  = {};
+        this.artist = artist;
+        this.listeners = {};
     }
 
     setAttribute(key, value) {
         this.attrs[key] = value;
     }
 
+    getAttribute(key) {
+        return this.attrs[key];
+    }
+
     addEventListener(eventName, handler) {
-        log(`Ignoring event listener for ${eventName} on canvas ${this.type}.`);
+        if (this.itemType !== 'polygon' ||
+            (!['mouseover', 'mouseout'].includes(eventName))) {
+            let [name, type] = [eventName, this.type];
+            log(`Ignoring event listener for ${name} on canvas ${type}.`);
+        }
+        this.artist.addItemListener(this, eventName, handler);
+        util.push(this.listeners, eventName, handler);
     }
 
     remove() {
@@ -354,7 +385,41 @@ class CanvasItem {
         return values;
     }
 
-    render(ctx) {
+    dispatch(event) {
+        // XXX
+        let t = this.type;
+        console.log(`Event ${event.type} received by CanvasItem (${t}).`);
+
+        if (this.attrs.display === 'none') return;
+
+        let eventListeners = this.listeners[event.type];
+        if (!eventListeners) return;
+        for (let listener of eventListeners) listener(event);
+    }
+
+    isPointInside(ctx, x, y) {
+        console.assert(this.path !== undefined);
+        return ctx.isPointInPath(this.path, x, y);
+    }
+
+    getBBox() {
+        console.assert(this.type === 'text');
+        let metrics = this.ctx.measureText(this.innerHTML);
+        let width  = metrics.width;
+        let height = metrics.fontBoundingBoxAscent -
+                     metrics.fontBoundingBoxDescent;
+        return {width, height};
+    }
+
+    render(ctx, dx, dy) {
+
+        if (dx === undefined) {
+            dx = 0;
+            dy = 0;
+        } else if (ctx.ratio) {
+            dx *= ctx.ratio;
+            dy *= ctx.ratio;
+        }
 
         if ('stroke-width' in this.attrs) {
             let width = this.attrs['stroke-width'];
@@ -393,18 +458,11 @@ class CanvasItem {
 
         if (this.type === 'polygon') {
             if (this.attrs.display === 'none') return;
-            console.assert('ptArray' in this.attrs);
-            let p = this.attrs.ptArray;
-            p = p.map(x => [x[0] * ctx.ratio, x[1] * ctx.ratio]);
-            ctx.beginPath();
-            ctx.moveTo(p[0][0], p[0][1]);
-            for (let i = 1; i < p.length; i++) ctx.lineTo(p[i][0], p[i][1]);
-            ctx.lineTo(p[0][0], p[0][1]);
             if ([undefined, 'transparent'].includes(this.attrs.stroke)) {
                 ctx.fillStyle = this.attrs.fill;
-                ctx.fill();
+                ctx.fill(this.path);
             } else {
-                ctx.stroke();
+                ctx.stroke(this.path);
             }
             // TODO Factor out the stroke/fill part of rendering.
         }
@@ -414,6 +472,8 @@ class CanvasItem {
                 ctx,
                 ['x', 'y', 'width', 'height']
             );
+            x += dx;
+            y += dy;
             // For now we only support non-rounded corners or a single radius.
             let rx = this.attrs.rx;
             ctx.fillStyle = this.attrs.fill;
@@ -439,16 +499,12 @@ class CanvasGroup extends CanvasItem {
     }
 
     render(ctx) {
-        for (let item of this.items) item.render(ctx);
-    }
-
-    getBBox() {
-        console.assert(this.itemType === 'text');
-        let metrics = this.ctx.measureText(this.innerHTML);
-        let width  = metrics.width;
-        let height = metrics.fontBoundingBoxAscent -
-                     metrics.fontBoundingBoxDescent;
-        return {width, height};
+        let [dx, dy] = [0, 0];
+        if (this.attrs.transform) {
+            let t = this.attrs.transform;
+            [dx, dy] = t.match(/[0-9\.-]+/g).map(x => parseFloat(x));
+        }
+        for (let item of this.items) item.render(ctx, dx, dy);
     }
 }
 
@@ -472,6 +528,12 @@ class CanvasArtist extends Artist {
             elt.width  *= ratio;
             elt.height *= ratio;
         }
+
+        // XXX
+        // this.listeners[eventName] = [item1, item2, ...]
+        // Each item in that array is listening for that eventName.
+        this.listeners = {};
+        this.listeningPolygons = [];
     }
 
     // Internal helper functions
@@ -487,6 +549,61 @@ class CanvasArtist extends Artist {
         return item;
     }
 
+    mousemoved(event) {
+        let [x, y] = [event.offsetX, event.offsetY];
+        let [newOverItem, overEvent] = [null, null];
+
+        // console.log(`mousemove: (${x}, ${y})`);
+        for (let item of this.listeningPolygons) {
+            let r = this.ctx.ratio;
+            let newState = item.isPointInside(this.ctx, r * x, r * y);
+            if (item.isMouseOver === newState) continue;
+            let doDispatch = (item.isMouseOver !== null);
+            item.isMouseOver = newState;
+            const event = new Event(newState ? 'mouseover' : 'mouseout');
+
+            if (!doDispatch) continue;
+            // Defer a mouseover event until after a possible mouseout event.
+            if (event.type === 'mouseover') {
+                newOverItem = item;
+                overEvent = event;
+            } else {
+                item.dispatch(event);
+            }
+        }
+        if (newOverItem) {
+            newOverItem.dispatch(overEvent);
+        }
+
+        // TODO HERE Refactor to have a combined list of mouseover,mouseout
+        //           listeners. For each one, have a last state which is at
+        //           first null, and then either true (is in) or false. When it
+        //           changes boolean value, we fire the respective event to the
+        //           item. This affects how the constructor and
+        //           addItemListener() operate.
+    }
+
+    // Interface for use by items
+
+    addItemListener(item, eventName, handler) {
+
+        // XXX TODO Move the next clause out into a private #ensureMethod.
+
+        // The canvas listener is not set up by default, as in some cases it may
+        // not be needed at all.
+        if (!this.listenerIsSetup) {
+            this.elt.addEventListener('mousemove', this.mousemoved.bind(this));
+            this.listenerIsSetup = true;
+        }
+        if (!this.listeningPolygons.includes(item)) {
+            this.listeningPolygons.push(item);
+        }
+        item.isMouseOver = null;
+        // XXX Finish any setup here (or none?)
+        // util.push(this.listeners, eventName, item);
+        // XXX Consider not importing util.
+    }
+
     // Public interface
 
     render() {
@@ -495,9 +612,7 @@ class CanvasArtist extends Artist {
         this.ctx.fillRect(0, 0, this.elt.width, this.elt.height);
         for (let item of this.items) item.render(this.ctx, this);
         let duration = Date.now() - start;
-        if (doDebugPrint || doTimingPring) {
-            console.log(`render() call took ${duration}ms.`);
-        }
+        if (doTimingPring) console.log(`render() call took ${duration}ms.`);
     }
 
     clear() {

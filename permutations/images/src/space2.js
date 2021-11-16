@@ -33,7 +33,7 @@ let xDrag = 0, yDrag = 0;
 let doDebugEvents = false;
 
 let preClickMode = 'spinning';
-ctx.mode = 'spinning';  // This can also be 'dragging'.
+ctx.mode = 'spinning';  // This can also be 'dragging' or 'paused'.
 
 ctx.rotateMat = matrix.eye(4);
 ctx.transMat  = matrix.eye(4);
@@ -149,7 +149,7 @@ export let textStyle = {
 
 export let whiteStyle = {
     stroke: 'transparent',
-    fill:   '#fff',
+    fill:   '#4ff',  // XXX
     'pointer-events': 'none'
 };
 
@@ -642,6 +642,9 @@ function moveElt(elt, dx, dy) {
 // CONVERTED pending moveElt
 function toggleFaceLabels(faceIdx, doShow, awayFrom) {
 
+    // XXX
+    console.log(`toggleFaceLabels(faceIdx=${faceIdx}, doShow=${doShow})`);
+
     if (faceIdx === -1) return;
     if (!ctx.labels) return;
 
@@ -968,7 +971,10 @@ export function reset() {
     mousedownTs = null;
     preClickMode = 'spinning';
 
+    // XXX
     ctx.mode = 'spinning';
+    ctx.mode = 'paused';
+
     ctx.rotateMat   = matrix.eye(4);
     ctx.transMat    = matrix.eye(4);
     ctx.angleMat    = matrix.eye(4);
