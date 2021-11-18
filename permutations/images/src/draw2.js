@@ -27,7 +27,8 @@
 // ______________________________________________________________________
 // Imports
 
-import * as util from './util.js';
+import * as util       from './util.js';
+import * as dispatcher from './dispatcher.js';
 
 
 // ______________________________________________________________________
@@ -313,6 +314,7 @@ class Artist {
             path.closePath();
         }
         polygon.path = path;
+        if (this.dispatcher) this.dispatcher.itemChanged(polygon);
     }
 
     // This is a no-op for an SVG container, but does cricitcal work for a
@@ -354,6 +356,9 @@ class CanvasItem {
 
     setAttribute(key, value) {
         this.attrs[key] = value;
+        if (key === 'display' && this.dispatcher) {
+            this.dispatcher.itemChanged(this);
+        }
     }
 
     getAttribute(key) {
@@ -361,13 +366,11 @@ class CanvasItem {
     }
 
     addEventListener(eventName, handler) {
-        if (this.itemType !== 'polygon' ||
-            (!['mouseover', 'mouseout'].includes(eventName))) {
-            let [name, type] = [eventName, this.type];
-            log(`Ignoring event listener for ${name} on canvas ${type}.`);
-        }
-        this.artist.addItemListener(this, eventName, handler);
-        util.push(this.listeners, eventName, handler);
+        this.artist.dispatcher.addItemListener(this, eventName, handler);
+    }
+
+    addDispatcher(dispatcher) {
+        this.dispatcher = dispatcher;
     }
 
     remove() {
@@ -385,20 +388,9 @@ class CanvasItem {
         return values;
     }
 
-    dispatch(event) {
-        // XXX
-        let t = this.type;
-        console.log(`Event ${event.type} received by CanvasItem (${t}).`);
-
-        if (this.attrs.display === 'none') return;
-
-        let eventListeners = this.listeners[event.type];
-        if (!eventListeners) return;
-        for (let listener of eventListeners) listener(event);
-    }
-
     isPointInside(ctx, x, y) {
         console.assert(this.path !== undefined);
+        if (this.attrs.display === 'none') return false;
         return ctx.isPointInPath(this.path, x, y);
     }
 
@@ -528,15 +520,17 @@ class CanvasArtist extends Artist {
             elt.width  *= ratio;
             elt.height *= ratio;
         }
-
-        // XXX
-        // this.listeners[eventName] = [item1, item2, ...]
-        // Each item in that array is listening for that eventName.
-        this.listeners = {};
-        this.listeningPolygons = [];
+        this._dispatcher = null;
     }
 
     // Internal helper functions
+
+    get dispatcher() {
+        if (this._dispatcher === null) {
+            this._dispatcher = new dispatcher.Dispatcher(this.elt);
+        }
+        return this._dispatcher;
+    }
 
     add(eltName, attr, parent) {
         if (parent === undefined) { parent = this; }
@@ -547,61 +541,6 @@ class CanvasArtist extends Artist {
         item.parentElement = parent;
         if (attr) addAttributes(item, attr);
         return item;
-    }
-
-    mousemoved(event) {
-        let [x, y] = [event.offsetX, event.offsetY];
-        let [newOverItem, overEvent] = [null, null];
-
-        // console.log(`mousemove: (${x}, ${y})`);
-        for (let item of this.listeningPolygons) {
-            let r = this.ctx.ratio;
-            let newState = item.isPointInside(this.ctx, r * x, r * y);
-            if (item.isMouseOver === newState) continue;
-            let doDispatch = (item.isMouseOver !== null);
-            item.isMouseOver = newState;
-            const event = new Event(newState ? 'mouseover' : 'mouseout');
-
-            if (!doDispatch) continue;
-            // Defer a mouseover event until after a possible mouseout event.
-            if (event.type === 'mouseover') {
-                newOverItem = item;
-                overEvent = event;
-            } else {
-                item.dispatch(event);
-            }
-        }
-        if (newOverItem) {
-            newOverItem.dispatch(overEvent);
-        }
-
-        // TODO HERE Refactor to have a combined list of mouseover,mouseout
-        //           listeners. For each one, have a last state which is at
-        //           first null, and then either true (is in) or false. When it
-        //           changes boolean value, we fire the respective event to the
-        //           item. This affects how the constructor and
-        //           addItemListener() operate.
-    }
-
-    // Interface for use by items
-
-    addItemListener(item, eventName, handler) {
-
-        // XXX TODO Move the next clause out into a private #ensureMethod.
-
-        // The canvas listener is not set up by default, as in some cases it may
-        // not be needed at all.
-        if (!this.listenerIsSetup) {
-            this.elt.addEventListener('mousemove', this.mousemoved.bind(this));
-            this.listenerIsSetup = true;
-        }
-        if (!this.listeningPolygons.includes(item)) {
-            this.listeningPolygons.push(item);
-        }
-        item.isMouseOver = null;
-        // XXX Finish any setup here (or none?)
-        // util.push(this.listeners, eventName, item);
-        // XXX Consider not importing util.
     }
 
     // Public interface

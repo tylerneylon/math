@@ -39,7 +39,7 @@ import * as util from './util.js';
 // ______________________________________________________________________
 // Class definitions
 
-class Dispatcher {
+export class Dispatcher {
     constructor(elt) {
 
         // For now, this code assumes the passed in element is a canvas.
@@ -52,8 +52,8 @@ class Dispatcher {
         this.ctx = elt.getContext('2d');
         this.mouseOverIndex = null;
 
-        this.elt.addEventListener('mousemove', this.#mousemove.bind(this));
-        this.elt.addEventListener('mouseout', this.#mouseout.bind(this));
+        elt.addEventListener('mousemove', this.#mousemove.bind(this));
+        elt.addEventListener('mouseout', this.#mouseout.bind(this));
 
         this.x = null;
         this.y = null;
@@ -63,13 +63,13 @@ class Dispatcher {
         const [x, y] = [this.x, this.y];
         if (x === null) return;
 
-        for (let i in this.items) {
+        for (let i = 0; i < this.items.length; i++) {
             const item = this.items[i];
             const r    = this.ctx.ratio;
             const isIn = item.isPointInside(this.ctx, r * x, r * y);
 
             if (isIn) {
-                if (this.mouseOverIndex !== item) {
+                if (this.mouseOverIndex !== i) {
                     if (this.mouseOverIndex !== null) {
                         this.#send(this.mouseOverIndex, 'mouseout');
                     }
@@ -78,7 +78,7 @@ class Dispatcher {
                 }
                 break;
             } else if (this.mouseOverIndex === i) {
-                this.#send(this.items[this.mouseOverIndex], 'mouseout');
+                this.#send(this.mouseOverIndex, 'mouseout');
                 this.mouseOverIndex = null;
             }
         }
@@ -99,7 +99,9 @@ class Dispatcher {
         const listeners = this.listeners[idx][eventName];
         if (!listeners) return;
         const event = new Event(eventName);
-        for (const handler of listeners) handler(event);
+        for (const handler of listeners) {
+            setTimeout(handler, 0, event);
+        }
     }
 
     addItemListener(item, eventName, handler) {
