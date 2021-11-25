@@ -388,6 +388,14 @@ class CanvasItem {
         return values;
     }
 
+    #getFontString(ctx) {
+        const fontName = this.attrs['font-family'] || 'sans-serif';
+        const sizeStr  = this.attrs['font-size'] || '16px';
+        const fontSize = parseFloat(sizeStr) * ctx.ratio;
+        const fontUnit = sizeStr.match(/[A-Za-z]+/)[0];
+        return `${fontSize}${fontUnit} ${fontName}`;
+    }
+
     isPointInside(ctx, x, y) {
         console.assert(this.path !== undefined);
         if (this.attrs.display === 'none') return false;
@@ -396,10 +404,14 @@ class CanvasItem {
 
     getBBox() {
         console.assert(this.type === 'text');
+        this.ctx.font = this.#getFontString(this.ctx);
         let metrics = this.ctx.measureText(this.innerHTML);
         let width  = metrics.width;
-        let height = metrics.fontBoundingBoxAscent -
+        let height = metrics.fontBoundingBoxAscent +
                      metrics.fontBoundingBoxDescent;
+        let r = this.ctx.ratio;
+        width  /= r;
+        height /= r;
         return {width, height};
     }
 
@@ -476,6 +488,16 @@ class CanvasItem {
                 ctx.roundRect(x, y, width, height, rx).fill();
             }
         }
+
+        if (this.type === 'text') {
+            let [x, y] = this.#getAttrs(ctx, ['x', 'y']);
+            ctx.font = this.#getFontString(ctx);
+            x += dx;
+            y += dy;
+            ctx.fillStyle = this.attrs.fill || '#000';
+            ctx.fillText(this.innerHTML, x, y);
+        }
+
     }
 }
 

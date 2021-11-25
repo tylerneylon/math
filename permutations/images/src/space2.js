@@ -143,13 +143,14 @@ export let facePolyStyle = {
 export let textStyle = {
     stroke: 'transparent',
     fill: '#666',
-    style: 'font-family: sans-serif',
+    'font-family': 'sans-serif',
+    'font-size': '16px',
     'pointer-events': 'none'
 }
 
 export let whiteStyle = {
     stroke: 'transparent',
-    fill:   '#4ff',  // XXX
+    fill:   '#fff',
     'pointer-events': 'none'
 };
 
@@ -641,9 +642,6 @@ function moveElt(elt, dx, dy) {
 
 // CONVERTED pending moveElt
 function toggleFaceLabels(faceIdx, doShow, awayFrom) {
-
-    // XXX
-    console.log(`toggleFaceLabels(faceIdx=${faceIdx}, doShow=${doShow})`);
 
     if (faceIdx === -1) return;
     if (!ctx.labels) return;
