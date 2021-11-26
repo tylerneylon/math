@@ -968,10 +968,7 @@ export function reset() {
     lastTs = null;
     mousedownTs = null;
     preClickMode = 'spinning';
-
-    // XXX
     ctx.mode = 'spinning';
-    ctx.mode = 'paused';
 
     ctx.rotateMat   = matrix.eye(4);
     ctx.transMat    = matrix.eye(4);
