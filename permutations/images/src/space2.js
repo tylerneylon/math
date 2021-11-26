@@ -595,8 +595,6 @@ function addAnyNewNormals() {
             highlightedFaceElt = polygon;
             lastHighlightedFaceIndex = i;
             if (ctx.mode !== 'dragging') {
-                // XXX and below
-                // TODO Also send in an awayFrom value.
                 toggleFaceLabels(i, true);  // true -> doShow
             }
         });
@@ -760,7 +758,6 @@ export function setTransform(t) {
 }
 
 // CONVERTED
-// XXX Clean up this function.
 export function makeDraggable() {
     console.assert(artist !== null);
     artist.elt.addEventListener('mousedown', e => {
@@ -786,13 +783,7 @@ export function makeDraggable() {
         // If this was a long click, we don't treat it as a click.
         // However, if a long click had zero movement, we still count it.
         if (e.timeStamp - mousedownTs > 500 || didDrag()) {
-            let d = e.timeStamp - mousedownTs;
             ctx.mode = 'paused';
-            if (e.timeStamp - mousedownTs > 500) {
-                console.log(`Ignoring click: long (${d} ms).`);
-            } else {
-                console.log(`Ignoring click: didDrag.`);
-            }
             return;
         }
 
@@ -802,10 +793,6 @@ export function makeDraggable() {
             paused:   'spinning'
         };
         ctx.mode = fromTo[preClickMode];
-    });
-    artist.elt.addEventListener('click', e => {
-        logEvent(e);
-
     });
     artist.elt.addEventListener('mousemove', e => {
         logEvent(e);

@@ -7,18 +7,8 @@
  */
 
 
-/* XXX TEMP planning
+/* Planning
  *
- *  [x] Be able to addLine()
- *  [ ] Look at the transform property when rendering to canvas.
- *      For now, I only need to support the "translate(x, y)" format.
- *      And only on group elements.
- *  [x] On polygons, respect the "display" attribute (canvas).
- *
- *  [ ] Be able to addAttributes()
- *  [ ] Support fill without stroke
- *  [ ] Support stroke without fill
- *  [ ] Support fill and stroke
  *  [ ] Switch everything over to xy arrays from xy objects.
  *
  */
@@ -206,7 +196,7 @@ class Artist {
         var circle = this.add('circle', style, parent);
         var center = this.mapToCanvasPt(center);
 
-        // XXX TODO Switch from {x, y} to [x, y].
+        // TODO Switch from {x, y} to [x, y].
         addAttributes(circle, {
             cx: center.x,
             cy: center.y
