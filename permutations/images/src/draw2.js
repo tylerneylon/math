@@ -194,6 +194,11 @@ class Artist {
             `style=${st(style)})`);
 
         var circle = this.add('circle', style, parent);
+        if (style.r) addAttributes(circle, {r: style.r});
+        this.moveCircle(circle, center, radius);
+
+        // -------------------------------------------------------------------
+
         var center = this.mapToCanvasPt(center);
 
         // TODO Switch from {x, y} to [x, y].
@@ -206,6 +211,8 @@ class Artist {
         } else if (style.r) {
             addAttributes(circle, {r: style.r});
         }
+
+        // -------------------------------------------------------------------
 
         return circle;
     }
@@ -277,14 +284,13 @@ class Artist {
         if (style === undefined) style = fillStyle;
         log(`polygon(pts=${st(pts)}, style=${st(style)})`);
         let polygon = this.add('polygon', style, parent);
-        polygon.artist = this;
         this.movePolygon(polygon, pts);
         return polygon;
     }
 
-    movePolygon(polygon, pts) {
+    movePolygon(polygon, pts, ptArray) {
         let ptStrs  = [];
-        let ptArray = [];
+        ptArray = ptArray || [];
         for (let pt of pts) {
             let p = (typeof pt.x === 'undefined' ? {x: pt[0], y: pt[1]} : pt);
             let canvasPt = this.mapToCanvasPt(p);
@@ -293,18 +299,6 @@ class Artist {
         }
         addAttributes(polygon, {points: ptStrs.join(' ')});
         addAttributes(polygon, {ptArray});
-
-        // Set up our path.
-        let path = new Path2D();
-        if (pts.length > 0) {
-            let ratio = this.ctx.ratio;
-            let p = ptArray.map(x => [x[0] * ratio, x[1] * ratio]);
-            path.moveTo(p[0][0], p[0][1]);
-            for (let i = 1; i < p.length; i++) path.lineTo(p[i][0], p[i][1]);
-            path.closePath();
-        }
-        polygon.path = path;
-        if (this.dispatcher) this.dispatcher.itemChanged(polygon);
     }
 
     // This is a no-op for an SVG container, but does cricitcal work for a
@@ -342,6 +336,16 @@ class CanvasItem {
         this.attrs  = {};
         this.artist = artist;
         this.listeners = {};
+
+        // A note about this.dispatcher:
+        // - An Item by default does not have any attached event listeners, so
+        //   it does not need a dispatcher to send messages to.
+        // - An item gets its own dispatcher (this.dispatcher) only when an
+        //   event listener wants updates, such as mouse{out,over}. Only in that
+        //   case do we pass on itemChanged() messages. It is expected that the
+        //   dispatcher calls addDispatcher().
+        // - Any item may receive addEventListener(), in which case we use the
+        //   general dispatcher associated with the artist.
     }
 
     setAttribute(key, value) {
@@ -497,6 +501,10 @@ class CanvasGroup extends CanvasItem {
         this.items = [];
     }
 
+    append(...children) {
+        for (const kiddo of children) this.appendChild(kiddo);
+    }
+
     appendChild(child) {
         this.items.push(child);
         child.parentElement = this;
@@ -532,6 +540,7 @@ class CanvasArtist extends Artist {
             elt.width  *= ratio;
             elt.height *= ratio;
         }
+        this.needsRender = false;
         this._dispatcher = null;
     }
 
@@ -548,31 +557,76 @@ class CanvasArtist extends Artist {
         if (parent === undefined) { parent = this; }
         let Item = (eltName === 'g' ? CanvasGroup : CanvasItem);
         var item = new Item(eltName);
+        item.artist = this;
         // TODO Eventually support other add modes. (this.addMode)
         parent.items.push(item);
         item.parentElement = parent;
         if (attr) addAttributes(item, attr);
+        if (item.attrs.display !== 'none') this.needsRender = true;
         return item;
     }
 
     // Public interface
+
+    moveCircle(circle, center, radius) {
+        super.moveCircle(circle, center, radius);
+        let path  = new Path2D();
+        let ratio = this.ctx.ratio;
+        let r = circle.getAttribute('r') * ratio
+        path.arc(center.x * ratio, center.y * ratio, r, 0, 2 * Math.PI);
+        circle.path = path;
+        // XXX I think right now my dispatcher system is inefficient, because
+        // isPointInside() can only possibly change values when 'display'
+        // changes or when the path changes. So it _should_ be triggered here
+        // (only for canvas items), but not anywhere else (except the 'display'
+        // change).
+        if (this.dispatcher) this.dispatcher.itemChanged(circle);
+        if (circle.attrs.display !== 'none') this.needsRender = true;
+    }
+
+    moveLine(line, from, to) {
+        super.moveLine(line, from, to);
+        if (line.attrs.display !== 'none') this.needsRender = true;
+    }
+
+    movePolygon(polygon, pts) {
+        const ptArray = [];
+        super.movePolygon(polygon, pts, ptArray);
+
+        // Set up our path.
+        let path = new Path2D();
+        if (pts.length > 0) {
+            let ratio = this.ctx.ratio;
+            let p = ptArray.map(x => [x[0] * ratio, x[1] * ratio]);
+            path.moveTo(p[0][0], p[0][1]);
+            for (let i = 1; i < p.length; i++) path.lineTo(p[i][0], p[i][1]);
+            path.closePath();
+        }
+        polygon.path = path;
+        if (this.dispatcher) this.dispatcher.itemChanged(polygon);
+
+        if (polygon.attrs.display !== 'none') this.needsRender = true;
+    }
 
     render() {
         let start = Date.now();
         this.ctx.fillStyle = '#fff';
         this.ctx.fillRect(0, 0, this.elt.width, this.elt.height);
         for (let item of this.items) item.render(this.ctx, this);
+        this.needsRender = false;
         let duration = Date.now() - start;
         if (doTimingPring) console.log(`render() call took ${duration}ms.`);
     }
 
     clear() {
         this.items = [];
+        this.needsRender = false;
     }
 
     appendChild(child) {
         this.items.push(child);
         child.parentElement = this;
+        this.needsRender = true;
     }
 }
 

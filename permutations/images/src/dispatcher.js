@@ -37,6 +37,23 @@ import * as util from './util.js';
 
 
 // ______________________________________________________________________
+// Internal globals
+
+let doDebugPrint = true;
+let logNum = 0;
+
+
+// ______________________________________________________________________
+// Debugging functions
+
+function log(msg) {
+    if (!doDebugPrint) return;
+    console.log(`${logNum}: ${msg}`);
+    logNum++;
+}
+
+
+// ______________________________________________________________________
 // Class definitions
 
 export class Dispatcher {
@@ -97,6 +114,8 @@ export class Dispatcher {
 
     #send(idx, eventName) {
         const listeners = this.listeners[idx][eventName];
+        const numL = listeners.length;
+        log(`Sending ${eventName} to index ${idx} with ${numL} listeners.`);
         if (!listeners) return;
         const event = new Event(eventName);
         for (const handler of listeners) {

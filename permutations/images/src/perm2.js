@@ -529,7 +529,7 @@ export function drawGraphWithPtMap(
         for (let elt of [hitDot, circle]) {
             if (elt === null) continue;  // We may exclude hit dots.
             elt.addEventListener('mouseover', highlighter);
-            elt.addEventListener('mouseout', unhighlighter);
+            elt.addEventListener('mouseout',  unhighlighter);
         }
     }
 
