@@ -39,7 +39,7 @@ import * as util from './util.js';
 // ______________________________________________________________________
 // Internal globals
 
-let doDebugPrint = true;
+let doDebugPrint = false;
 let logNum = 0;
 
 

@@ -301,8 +301,10 @@ class Artist {
         addAttributes(polygon, {ptArray});
     }
 
-    // This is a no-op for an SVG container, but does critical work for a
-    // canvas container.
+    // The next two functions are no-ops for an SVG container, but do useful
+    // things for a canvas.
+
+    autorender() {}
     render() {}
 }
 
@@ -353,6 +355,7 @@ class CanvasItem {
         if (key === 'display' && this.dispatcher) {
             this.dispatcher.itemChanged(this);
         }
+        this.artist.needsRender = true;
     }
 
     getAttribute(key) {
@@ -430,6 +433,8 @@ class CanvasItem {
             ctx.strokeStyle = this.attrs.stroke;
         }
 
+        if (this.attrs.visibility === 'hidden') return;
+
         if (this.type === 'circle') {
             let [cx, cy, r] = this.#getAttrs(ctx, ['cx', 'cy', 'r']);
             ctx.beginPath();
@@ -488,8 +493,15 @@ class CanvasItem {
             ctx.font = this.#getFontString(ctx);
             x += dx;
             y += dy;
+            let stroke = this.attrs.stroke;
+            let drawText = null;
+            if (stroke && stroke !== 'transparent') {
+                drawText = ctx.strokeText.bind(ctx);
+            } else {
+                drawText = ctx.fillText.bind(ctx);
+            }
             ctx.fillStyle = this.attrs.fill || '#000';
-            ctx.fillText(this.innerHTML, x, y);
+            drawText(this.innerHTML, x, y);
         }
 
     }
@@ -540,6 +552,7 @@ class CanvasArtist extends Artist {
             elt.width  *= ratio;
             elt.height *= ratio;
         }
+        this.doAutorender  = false;
         this.needsRender = false;
         this._dispatcher = null;
     }
@@ -573,6 +586,7 @@ class CanvasArtist extends Artist {
         let path  = new Path2D();
         let ratio = this.ctx.ratio;
         let r = circle.getAttribute('r') * ratio
+        center = this.mapToCanvasPt(center);
         path.arc(center.x * ratio, center.y * ratio, r, 0, 2 * Math.PI);
         circle.path = path;
         // XXX I think right now my dispatcher system is inefficient, because
@@ -608,7 +622,17 @@ class CanvasArtist extends Artist {
         if (polygon.attrs.display !== 'none') this.needsRender = true;
     }
 
+    autorender() {
+        this.doAutorender = true;
+        window.requestAnimationFrame(this.render.bind(this));
+    }
+
     render() {
+        if (this.doAutorender) {
+            window.requestAnimationFrame(this.render.bind(this));
+        }
+
+        if (!this.needsRender) return;
         let start = Date.now();
         this.ctx.fillStyle = '#fff';
         this.ctx.fillRect(0, 0, this.elt.width, this.elt.height);
