@@ -18,6 +18,6 @@ import * as perm2  from './perm2.js';
 window.addEventListener('DOMContentLoaded', (event) => {
     init.addContainerSwitcher((artist) => {
         perm2.drawRandomGn(artist, 5);  // Draw G_5.
-        artist.render();
+        artist.autorender();
     });
 });

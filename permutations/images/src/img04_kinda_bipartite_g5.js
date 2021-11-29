@@ -25,7 +25,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     init.addContainerSwitcher((artist) => {
         let useLexOrdering = true;
         perm2.drawBipartiteGn(artist, 5, useLexOrdering);  // Draw G_5.
-        artist.render();
+        artist.autorender();
     });
 
 });
