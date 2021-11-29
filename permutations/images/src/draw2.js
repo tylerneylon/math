@@ -301,7 +301,7 @@ class Artist {
         addAttributes(polygon, {ptArray});
     }
 
-    // This is a no-op for an SVG container, but does cricitcal work for a
+    // This is a no-op for an SVG container, but does critical work for a
     // canvas container.
     render() {}
 }
