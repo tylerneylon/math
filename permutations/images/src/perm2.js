@@ -429,6 +429,11 @@ export function drawGraphWithPtMap(
     excludeHitDots
 ) {
 
+    if (edgeStyles !== undefined && !Array.isArray(edgeStyles)) {
+        // Assume we have been given excludeHitDots without edgeStyles.
+        excludeHitDots = edgeStyles;
+        edgeStyles = undefined;
+    }
     if (excludeHitDots === undefined) excludeHitDots = false;
 
     // Add 'edges' to each point value in ptMap. Each `edges` value is a list of
@@ -664,7 +669,7 @@ export function drawRandomGn(artist, n) {
     drawGraphWithPtMap(artist, ptMap, n);
 }
 
-export function drawCircularGn(artist, n, orderingType) {
+export function drawCircularGn(artist, n, orderingType, excludeHitDots) {
 
     let radius = 0.8;
 
@@ -682,7 +687,7 @@ export function drawCircularGn(artist, n, orderingType) {
         angle += angleDelta;
     });
 
-    drawGraphWithPtMap(artist, ptMap, n);
+    drawGraphWithPtMap(artist, ptMap, n, excludeHitDots);
 }
 
 // Returns [pts, labels]. `pts` is a list of 3d points (length-3 arrays), each

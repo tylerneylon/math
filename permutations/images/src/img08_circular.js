@@ -36,6 +36,8 @@ function refreshGraph(artist) {
 
     artist.clear();
 
+    let excludeHitDots = false;
+
     if (defaultStyles === null) {
         defaultStyles = {};
         defaultStyles.edgeWidth = perm2.edgeStyle['stroke-width'];
@@ -44,21 +46,22 @@ function refreshGraph(artist) {
     }
 
     if (n === 7) {
-      perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.02;
-      perm2.edgeStyle.stroke = '#bbb';
-      perm2.dotStyle.r = defaultStyles.dotRadius * 0.1;
+        perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.02;
+        perm2.edgeStyle.stroke = '#bbb';
+        perm2.dotStyle.r = defaultStyles.dotRadius * 0.1;
+        excludeHitDots = true;
     } else if (n === 6) {
-      perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.2;
-      perm2.edgeStyle.stroke = '#bbb';
-      perm2.dotStyle.r = defaultStyles.dotRadius * 0.7;
+        perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.2;
+        perm2.edgeStyle.stroke = '#bbb';
+        perm2.dotStyle.r = defaultStyles.dotRadius * 0.7;
     } else {
-      perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth;
-      perm2.edgeStyle.stroke = defaultStyles.edgeStroke;
-      perm2.dotStyle.r = defaultStyles.dotRadius;
+        perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth;
+        perm2.edgeStyle.stroke = defaultStyles.edgeStroke;
+        perm2.dotStyle.r = defaultStyles.dotRadius;
     }
 
-    perm2.drawCircularGn(artist, n, orderingType);
-    artist.render();
+    perm2.drawCircularGn(artist, n, orderingType, excludeHitDots);
+    artist.autorender();
 }
 
 // A helper function for button groups.

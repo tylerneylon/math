@@ -23,7 +23,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     init.addContainerSwitcher((artist) => {
         perm2.drawBipartiteGn(artist, 5);  // Draw G_5.
-        artist.render();
+        artist.autorender();
     });
 
 });

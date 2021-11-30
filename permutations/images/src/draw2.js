@@ -645,6 +645,7 @@ class CanvasArtist extends Artist {
     clear() {
         this.items = [];
         this.needsRender = false;
+        this._dispatcher = null;
     }
 
     appendChild(child) {
