@@ -425,15 +425,14 @@ export function drawGraphWithPtMap(
     artist,
     ptMap,
     n,
-    edgeStyles,
-    excludeHitDots
+    params  // Accepts edgeStyles, excludeHitDots, noListeners.
 ) {
 
-    if (edgeStyles !== undefined && !Array.isArray(edgeStyles)) {
-        // Assume we have been given excludeHitDots without edgeStyles.
-        excludeHitDots = edgeStyles;
-        edgeStyles = undefined;
-    }
+    if (params === undefined) params = {};
+    let edgeStyles     = params.edgeStyles;
+    let excludeHitDots = params.excludeHitDots;
+    let noListeners    = params.noListeners;
+
     if (excludeHitDots === undefined) excludeHitDots = false;
 
     // Add 'edges' to each point value in ptMap. Each `edges` value is a list of
@@ -529,6 +528,7 @@ export function drawGraphWithPtMap(
         pts.push([pt.x, pt.y]);
         ptElts.push({dot: circle, outline, textElts: pt.textElts});
 
+        if (noListeners) continue;
         let highlighter   = getGraphColorer(ptMap, pt, highlightColors);
         let unhighlighter = getGraphColorer(ptMap, pt, unhighlightColors);
         for (let elt of [hitDot, circle]) {
@@ -587,7 +587,16 @@ export function getMagnitude(permStr) {
 }
 
 // Render G_n is an n-partite graph in the rectangle from [-a, -b] to [a, b].
-export function drawNPartiteGn(artist, n, orderingType) {
+// The `params` objects can accept these optional values:
+//  * orderingType   in ['plain', 'lex', 'random']
+//  * excludeHitDots in [true, false] (default is false)
+//  * noListeners    in [true, false] (default is false)
+export function drawNPartiteGn(artist, n, params) {
+
+    if (params === undefined) params = {};
+    let orderingType   = params.orderingType;
+    let excludeHitDots = params.excludeHitDots;
+    let noListeners    = params.noListeners;
 
     let forAllPerms = getPermIterator(orderingType);
 
@@ -621,7 +630,7 @@ export function drawNPartiteGn(artist, n, orderingType) {
         }
         x += dx;
     }
-    drawGraphWithPtMap(artist, ptMap, n);
+    drawGraphWithPtMap(artist, ptMap, n, params);
 }
 
 // Render G_n as a bipartitle graph in the rectangle from [-a,-b] to [a, b].
@@ -669,7 +678,12 @@ export function drawRandomGn(artist, n) {
     drawGraphWithPtMap(artist, ptMap, n);
 }
 
-export function drawCircularGn(artist, n, orderingType, excludeHitDots) {
+export function drawCircularGn(artist, n, params) {
+
+    if (params === undefined) params = {};
+    let orderingType   = params.orderingType;
+    let excludeHitDots = params.excludeHitDots;
+    let noListeners    = params.noListeners;
 
     let radius = 0.8;
 
@@ -687,7 +701,7 @@ export function drawCircularGn(artist, n, orderingType, excludeHitDots) {
         angle += angleDelta;
     });
 
-    drawGraphWithPtMap(artist, ptMap, n, excludeHitDots);
+    drawGraphWithPtMap(artist, ptMap, n, params);
 }
 
 // Returns [pts, labels]. `pts` is a list of 3d points (length-3 arrays), each

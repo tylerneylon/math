@@ -36,6 +36,9 @@ function refreshGraph(artist) {
 
     artist.clear();
 
+    let excludeHitDots = false;
+    let noListeners    = false;
+
     if (defaultStyles === null) {
         defaultStyles = {};
         defaultStyles.edgeWidth = perm2.edgeStyle['stroke-width'];
@@ -43,11 +46,13 @@ function refreshGraph(artist) {
         defaultStyles.dotRadius = perm2.dotStyle.r;
     }
 
-    if (n === 7) {
+    if (n >= 7) {
         perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.02;
         perm2.edgeStyle.stroke = '#888';
         perm2.dotStyle.r = defaultStyles.dotRadius * 0.7;
         perm2.renderCtx.edgeWeighting = 'boldNearE';
+        excludeHitDots = true;
+        noListeners    = true;
     } else if (n === 6) {
         perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.1;
         perm2.edgeStyle.stroke = '#bbb';
@@ -65,8 +70,12 @@ function refreshGraph(artist) {
         perm2.renderCtx.edgeWeighting = 'default';
     }
 
-    perm2.drawNPartiteGn(artist, n, orderingType);
-    artist.render();
+    perm2.drawNPartiteGn(
+        artist,
+        n,
+        {orderingType, excludeHitDots, noListeners}
+    );
+    artist.autorender();
 }
 
 // A helper function for button groups.

@@ -37,6 +37,7 @@ function refreshGraph(artist) {
     artist.clear();
 
     let excludeHitDots = false;
+    let noListeners    = false;
 
     if (defaultStyles === null) {
         defaultStyles = {};
@@ -45,11 +46,19 @@ function refreshGraph(artist) {
         defaultStyles.dotRadius = perm2.dotStyle.r;
     }
 
-    if (n === 7) {
+    if (n >= 7) {
+        excludeHitDots = true;
+        noListeners = true;
+    }
+
+    if (n === 8) {
+        perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.001;
+        perm2.edgeStyle.stroke = '#555';
+        perm2.dotStyle.r = defaultStyles.dotRadius * 0.005;
+    } else if (n === 7) {
         perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.02;
         perm2.edgeStyle.stroke = '#bbb';
         perm2.dotStyle.r = defaultStyles.dotRadius * 0.1;
-        excludeHitDots = true;
     } else if (n === 6) {
         perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.2;
         perm2.edgeStyle.stroke = '#bbb';
@@ -60,7 +69,11 @@ function refreshGraph(artist) {
         perm2.dotStyle.r = defaultStyles.dotRadius;
     }
 
-    perm2.drawCircularGn(artist, n, orderingType, excludeHitDots);
+    perm2.drawCircularGn(
+        artist,
+        n,
+        {orderingType, excludeHitDots, noListeners}
+    );
     artist.autorender();
 }
 
@@ -86,7 +99,7 @@ function activateOneInGroup(buttonElt, groupElts) {
 
 function setupButtons() {
 
-    let nIds = ['n3', 'n4', 'n5', 'n6', 'n7'];
+    let nIds = ['n3', 'n4', 'n5', 'n6', 'n7', 'n8'];
     let nElts = getButtons(nIds);
     for (let i = 0; i < nElts.length; i++) {
         let button = nElts[i];
