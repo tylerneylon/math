@@ -36,6 +36,8 @@ function refreshGraph(artist) {
 
     artist.clear();
 
+    let noListeners    = false;
+
     if (defaultStyles === null) {
         defaultStyles = {};
         defaultStyles.edgeWidth = perm2.edgeStyle['stroke-width'];
@@ -52,6 +54,7 @@ function refreshGraph(artist) {
         perm2.dotStyle.r     = defaultStyles.dotRadius * 0.2;
         perm2.outlineStyle.r = defaultStyles.dotRadius * 0.4;
         perm2.renderCtx.labelStyle = 'mainOnly';
+        noListeners = true;
     } else if (n === 6) {
         perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.2;
         // perm2.edgeStyle.stroke = '#bbb';
@@ -72,8 +75,8 @@ function refreshGraph(artist) {
         perm2.renderCtx.labelStyle = 'all';
     }
 
-    perm2.drawRecursiveGn(artist, n, orderingType);
-    artist.render();
+    perm2.drawRecursiveGn(artist, n, {orderingType, noListeners});
+    artist.autorender();
 }
 
 // A helper function for button groups.
