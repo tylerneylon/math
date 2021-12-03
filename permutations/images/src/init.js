@@ -63,7 +63,7 @@ export function setupButtons(ids, handler) {
     }
 }
 
-export function addContainerSwitcher(size, setupWithArtist) {
+export function addContainerSwitcher(size, numContainers, setupWithArtist) {
     let doc  = document;
     let body = doc.body;
     let make = doc.createElement.bind(doc);
@@ -94,19 +94,28 @@ export function addContainerSwitcher(size, setupWithArtist) {
 
     main.appendChild(bigDiv);
 
-    enableContainerSwitcher(size, setupWithArtist);
+    enableContainerSwitcher(size, numContainers, setupWithArtist);
 }
 
 // This assumes the existence of a button group with ids svgButton and
 // canvasButton.
-export function enableContainerSwitcher(size, setupWithArtist) {
+// Both `size` and numContainers are optional BUT if you want to send in
+// numContainers, then you must also include size.
+export function enableContainerSwitcher(size, numContainers, setupWithArtist) {
 
-    // We should always receive setupWithArtist, though we may not always
-    // receive `size`.
-    if (typeof size === 'function') {
-        setupWithArtist = size;
-        size = undefined;
+    if (typeof numContainers === 'function') {  // We got (size, setup).
+        setupWithArtist = numContainers;
+        numContainers = undefined;
     }
+    if (typeof size === 'function') {  // Only receive setupWithArtist.
+        setupWithArtist = size;
+        size            = undefined;
+        numContainers   = undefined;
+    }
+    if (numContainers === undefined) numContainers = 1;
+
+    // Sanity check; avoid us interpreting a numContainers as a size.
+    console.assert(size > 3);
 
     function buttonHandler(to) {
 
@@ -114,37 +123,51 @@ export function enableContainerSwitcher(size, setupWithArtist) {
         let from = containerTypes.indexOf(containerType);
         if (from === to) return;
 
-        let oldElt = document.getElementById(containerType);
-        let w = parseInt(oldElt.style.width);
-        let h = parseInt(oldElt.style.height);
+        let artists = [];
 
-        let newType = containerTypes[to];
+        for (let i = 1; i <= numContainers; i++) {
 
-        let newElt = null;
-        if (newType === 'canvas') newElt = document.createElement(newType);
-        if (newType === 'svg') {
-            let ns = 'http://www.w3.org/2000/svg';
-            newElt = document.createElementNS(ns, 'svg');
+            let containerId = containerType;
+            if (numContainers > 1) containerId += i;
+            let oldElt = document.getElementById(containerId);
+            // let rect = oldElt.getBoundingClientRect();
+            const w = parseFloat(oldElt.style.width);
+            const h = parseFloat(oldElt.style.height);
+
+            let newType = containerTypes[to];
+
+            let newElt = null;
+            if (newType === 'canvas') newElt = document.createElement(newType);
+            if (newType === 'svg') {
+                let ns = 'http://www.w3.org/2000/svg';
+                newElt = document.createElementNS(ns, 'svg');
+            }
+
+            newElt.style.backgroundColor = '#fff';
+            let newId = newType;
+            if (numContainers > 1) newId += i;
+            newElt.id = newId;
+            oldElt.replaceWith(newElt);
+            containerType = newType;
+
+            if (newType === 'svg') {
+                newElt.setAttribute('version', '1.1');
+                newElt.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+            }
+
+            artists.push(setup2(w, h, newId));
         }
-
-        newElt.style.backgroundColor = '#fff';
-        newElt.id = newType;
-        oldElt.replaceWith(newElt);
-        containerType = newType;
-
-        if (newType === 'svg') {
-            newElt.setAttribute('version', '1.1');
-            newElt.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-        }
-
-        let artist = setup2(w, h, containerType);
-        setupWithArtist(artist);
+        setupWithArtist(...artists);
     }
 
     setupButtons(['svgButton', 'canvasButton'], buttonHandler);
 
-    let artist = setup2(size);
-    setupWithArtist(artist);
+    let artists = [];
+    for (let i = 1; i <= numContainers; i++) {
+        let containerId = (numContainers === 1 ? 'svg' : `svg${i}`);
+        artists.push(setup2(size, containerId));
+    }
+    setupWithArtist(...artists);
 }
 
 export function setup(w, h, containerId) {
@@ -179,20 +202,22 @@ export function setup(w, h, containerId) {
 // XXX TODO Eventually have this one completely replace setup().
 export function setup2(w, h, containerId) {
 
-    // Support that we only receive containerId as an input.
-    if (typeof w === 'string') {
+    // Accept different input combinations.
+    if (typeof w === 'string') {  // Support setup(containerId).
         containerId = w;
         w = undefined;
     }
-
+    if (typeof h === 'string') {  // Support setup(size, containerId).
+        containerId = h;
+        h = w;
+    }
     if (containerId === undefined) containerId = 'svg';
-
     if (h === undefined) h = w;
-
     if (w === undefined) {
         w = xSize;
         h = ySize;
     }
+
     // If we multiply logical units * toCanvasScale, then we map from [-1, 1]^2
     // into a square that just fits, centered, in the canvas.
     let canvasSize = Math.min(w, h);

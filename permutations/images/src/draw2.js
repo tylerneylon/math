@@ -77,22 +77,6 @@ function xyst(obj) {
 
 
 // ______________________________________________________________________
-// SVG helper functions
-
-function addAtEnd(elt, parent) {
-    parent.appendChild(elt);
-}
-
-function addAtStart(elt, parent) {
-    if (parent.firstElementChild === null) {
-        parent.appendChild(elt);
-    } else {
-        parent.insertBefore(elt, parent.firstElementChild);
-    }
-}
-
-
-// ______________________________________________________________________
 // Canvas helper functions
 
 // This is from here:
@@ -126,6 +110,8 @@ class Artist {
         // containers automatically handle this. However, it's useful to have a
         // universally available number here.
         this.ctx = {ratio: 1};
+
+        this.addMode = 'atEnd';  // Could be 'atStart'.
     }
 
     // Public interface
@@ -175,6 +161,14 @@ class Artist {
             x: pt.x * this.toCanvasScale + this.origin[0],
             y: pt.y * this.toCanvasScale + this.origin[1]
         };
+    }
+
+    drawInFront() {
+        this.addMode = 'atEnd';
+    }
+
+    drawBehind() {
+        this.addMode = 'atStart';
     }
 
     // If a radius is provided, then it's interpreted in unit coordinates;
@@ -312,7 +306,6 @@ class SVGArtist extends Artist {
     constructor(elt) {
         super(elt);
         this.svgNS  = elt.namespaceURI;
-        this.addToParent = addAtEnd;
     }
 
     // Internal helper functions
@@ -320,9 +313,26 @@ class SVGArtist extends Artist {
     add(eltName, attr, parent) {
         if (parent === undefined) { parent = this.elt; }
         var elt = document.createElementNS(this.svgNS, eltName);
-        this.addToParent(elt, parent);
+        this.#addToParent(elt, parent);
         if (attr) addAttributes(elt, attr);
         return elt;
+    }
+
+    #addToParent(elt, parent) {
+        if (this.addMode === 'atEnd') {
+            parent.appendChild(elt);
+            return;
+        }
+        if (this.addMode === 'atStart') {
+            if (parent.firstElementChild === null) {
+                parent.appendChild(elt);
+            } else {
+                parent.insertBefore(elt, parent.firstElementChild);
+            }
+            return;
+        }
+
+        console.assert(false);  // We shouldn't get here.
     }
 
     // Public interface
@@ -571,12 +581,24 @@ class CanvasArtist extends Artist {
         let Item = (eltName === 'g' ? CanvasGroup : CanvasItem);
         var item = new Item(eltName);
         item.artist = this;
-        // TODO Eventually support other add modes. (this.addMode)
-        parent.items.push(item);
-        item.parentElement = parent;
+        this.#addToParent(item, parent);
         if (attr) addAttributes(item, attr);
         if (item.attrs.display !== 'none') this.needsRender = true;
         return item;
+    }
+
+    #addToParent(item, parent) {
+        item.parentElement = parent;
+        if (this.addMode === 'atEnd') {
+            parent.items.push(item);
+            return;
+        }
+        if (this.addMode === 'atStart') {
+            parent.items.unshift(item);
+            return;
+        }
+
+        console.assert(false);  // We shouldn't get here.
     }
 
     // Public interface

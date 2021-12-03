@@ -239,6 +239,8 @@ function updateLabelForDot(dot, xy) {
 function renderCircle() {
     if (!ctx.circle) return;
 
+    console.assert(artist !== null);
+
     for (let path of ctx.circle.paths) path.remove();
     ctx.circle.paths = [];
 
@@ -321,25 +323,26 @@ function renderCircle() {
     }
     let start = vector.sub(C, offset);
     let end   = vector.add(C, offset);
-    let dctx = draw2.ctx;
-    let orig = [dctx.origin.x, dctx.origin.y];
+    let orig  = artist.origin;
     [start, end] = [start, end].map(
-        x => vector.add(vector.scale(x, dctx.toCanvasScale), orig)
+        x => vector.add(vector.scale(x, artist.toCanvasScale), orig)
     );
     let degrees = theta / Math.PI * 180;
     for (let i = 0; i <= 1; i++) {
-        let path = draw2.add('path', ctx.circle.style);
+        // TODO Replace with an svg+canvas-friendly way to draw elliptic arcs.
+        let path = artist.add('path', ctx.circle.style);
         let j = isNearOnLeft ? 0 : 1;
         if (isNearOnLeft ^ (i === 1)) {
-            draw2.drawBehind();
+            artist.drawBehind();
         } else {
-            draw2.drawInFront();
+            artist.drawInFront();
         }
         let xFix = (i === 0 ? 1 : 0);
         let attrib = {
             d: `M ${start[0] + xFix} ${start[1]} ` +
                `A ${a} ${b} ${degrees} 0 ${i} ${end[0] + xFix} ${end[1]}`
         };
+
         draw2.addAttributes(path, attrib);
         ctx.circle.paths.push(path);
     }
