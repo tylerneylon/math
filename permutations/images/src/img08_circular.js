@@ -51,10 +51,13 @@ function refreshGraph(artist) {
         noListeners = true;
     }
 
+    // On a regular (ratio=1) screen, zoom in at least 200% to view G_8.
+    // This is because Chrome's renderer does something funky with line widths
+    // that are too small. (400% is even better)
     if (n === 8) {
-        perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.001;
-        perm2.edgeStyle.stroke = '#555';
-        perm2.dotStyle.r = defaultStyles.dotRadius * 0.005;
+        perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.004;
+        perm2.edgeStyle.stroke = '#888';
+        perm2.dotStyle.r = defaultStyles.dotRadius * 0.006;
     } else if (n === 7) {
         perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.02;
         perm2.edgeStyle.stroke = '#bbb';
