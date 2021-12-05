@@ -123,6 +123,7 @@ export function enableContainerSwitcher(size, numContainers, setupWithArtist) {
         let from = containerTypes.indexOf(containerType);
         if (from === to) return;
 
+        let newType = containerTypes[to];
         let artists = [];
 
         for (let i = 1; i <= numContainers; i++) {
@@ -133,8 +134,6 @@ export function enableContainerSwitcher(size, numContainers, setupWithArtist) {
             // let rect = oldElt.getBoundingClientRect();
             const w = parseFloat(oldElt.style.width);
             const h = parseFloat(oldElt.style.height);
-
-            let newType = containerTypes[to];
 
             let newElt = null;
             if (newType === 'canvas') newElt = document.createElement(newType);
@@ -148,7 +147,6 @@ export function enableContainerSwitcher(size, numContainers, setupWithArtist) {
             if (numContainers > 1) newId += i;
             newElt.id = newId;
             oldElt.replaceWith(newElt);
-            containerType = newType;
 
             if (newType === 'svg') {
                 newElt.setAttribute('version', '1.1');
@@ -157,6 +155,7 @@ export function enableContainerSwitcher(size, numContainers, setupWithArtist) {
 
             artists.push(setup2(w, h, newId));
         }
+        containerType = newType;
         setupWithArtist(...artists);
     }
 

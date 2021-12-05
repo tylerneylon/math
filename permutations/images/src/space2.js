@@ -248,7 +248,7 @@ function renderCircle() {
     // to have the same z coordinate, and the same for the far pair.
 
     // 1.a. Find a basis for the plane of the circle. This will be the rows
-    //      of T. T[0] = n; T[1] is orth to z and to n.
+    //      of T. T[0] = n (normal); T[1] is orth to z and to n.
     let n = getXYArray(matrix.transpose([ctx.circle.normal]), false, false)[0];
     let matA = matrix.rand(3, 3);
     matA[0] = [n.x, n.y, n.z];

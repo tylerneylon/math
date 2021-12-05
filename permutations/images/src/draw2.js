@@ -136,8 +136,8 @@ class Artist {
         if (Math.abs(xScale - yScale) > eps) {
             console.log('!!: Inconsistent aspect ratio in setCoordLimits().');
         }
-        this.origin[0] = -this.toCanvasScale / xMin;
-        this.origin[1] = -this.toCanvasScale / yMin;
+        this.origin[0] = -this.toCanvasScale * xMin;
+        this.origin[1] = -this.toCanvasScale * yMin;
         log(`Setting toCanvasScale=${this.toCanvasScale}; ` +
             `origin=${this.origin}`);
     }
@@ -269,6 +269,11 @@ class Artist {
             addAttributes(text, {style: 'font-family: sans-serif'});
         }
         return text;
+    }
+
+    moveText(text, xy) {
+        xy = this.mapToCanvasPt(xy);
+        addAttributes(text, xy);
     }
 
     // This expects `pts` to be an array of {x, y} points. The polygon will be
@@ -453,7 +458,16 @@ class CanvasItem {
                 ctx.fillStyle = this.attrs.fill;
                 ctx.fill();
             } else {
-                ctx.stroke();
+                // Workaround for a rendering issue.
+                if (r < ctx.lineWidth / 2) {
+                    ctx.fillStyle = ctx.strokeStyle;
+                    ctx.beginPath();
+                    let r2 = r + ctx.lineWidth / 2;
+                    ctx.ellipse(cx, cy, r2, r2, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                } else {
+                    ctx.stroke();
+                }
             }
         }
 
