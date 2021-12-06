@@ -329,21 +329,16 @@ function renderCircle() {
     );
     let degrees = theta / Math.PI * 180;
     for (let i = 0; i <= 1; i++) {
-        // TODO Replace with an svg+canvas-friendly way to draw elliptic arcs.
-        let path = artist.add('path', ctx.circle.style);
-        let j = isNearOnLeft ? 0 : 1;
         if (isNearOnLeft ^ (i === 1)) {
-            artist.drawBehind();
-        } else {
             artist.drawInFront();
+        } else {
+            artist.drawBehind();
         }
+        let j = isNearOnLeft ? 0 : 1;
         let xFix = (i === 0 ? 1 : 0);
-        let attrib = {
-            d: `M ${start[0] + xFix} ${start[1]} ` +
-               `A ${a} ${b} ${degrees} 0 ${i} ${end[0] + xFix} ${end[1]}`
-        };
-
-        draw2.addAttributes(path, attrib);
+        const d = `M ${start[0] + xFix} ${start[1]} ` +
+                  `A ${a} ${b} ${degrees} 0 ${i} ${end[0] + xFix} ${end[1]}`
+        const path = artist.addPath(d, Object.assign({}, ctx.circle.style));
         ctx.circle.paths.push(path);
     }
 }

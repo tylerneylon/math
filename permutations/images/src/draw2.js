@@ -300,6 +300,15 @@ class Artist {
         addAttributes(polygon, {ptArray});
     }
 
+    // For now, this only expects a description string in SVG format:
+    // https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths
+    addPath(descStr, style, parent) {
+        if (style === undefined) style = lineStyle;
+        log(`path(descStr=${descStr}, style=${st(style)}`);
+        style.d = descStr;
+        return this.add('path', style, parent);
+    }
+
     // The next two functions are no-ops for an SVG container, but do useful
     // things for a canvas.
 
@@ -526,6 +535,20 @@ class CanvasItem {
             }
             ctx.fillStyle = this.attrs.fill || '#000';
             drawText(this.innerHTML, x, y);
+        }
+
+        if (this.type === 'path') {
+            if (!this.path) {
+                console.assert('d' in this.attrs);
+                const d = this.attrs.d;
+                this.path = new Path2D(d);
+            }
+            const oldLineWidth = ctx.lineWidth;
+            ctx.scale(ctx.ratio, ctx.ratio);
+            ctx.lineWidth /= ctx.ratio;
+            ctx.stroke(this.path);
+            ctx.resetTransform();
+            ctx.lineWidth = oldLineWidth;
         }
 
     }
