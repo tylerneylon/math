@@ -56,11 +56,14 @@ export function mult(...args) {
 // Return a human-friendly string for matrix A.
 // `precision` is an integer specifying the number of digits to show after the
 // decimal point. If not provided, `precision` is treated as 2.
-export function stringify(A, precision) {
+export function stringify(A, precision, prefix) {
 
-    if (precision === undefined) {
-        precision = 2;
+    if (typeof precision === 'string') {
+        prefix = precision;
+        precision = undefined;
     }
+    if (prefix === undefined) prefix = '';
+    if (precision === undefined) precision = 2;
 
     // Derive a matrix of strings.
     let Astr = [];
@@ -78,7 +81,7 @@ export function stringify(A, precision) {
     let sArr = [];  // This will be an array of lines to join.
     for (let i = 0; i < Astr.length; i++) {
         let row = Astr[i].map((elt, j) => elt.padStart(colWidths[j], ' '));
-        sArr.push(row.join(' '));
+        sArr.push(prefix + row.join(' '));
     }
 
     return sArr.join('\n');
@@ -108,8 +111,8 @@ export function eye(n) {
 }
 
 // This is a convenience function.
-export function pr(A, precision) {
-    console.log(stringify(A, precision));
+export function pr(A, precision, prefix) {
+    console.log(stringify(A, precision, prefix));
 }
 
 // Returns A^(i) as a column vector.

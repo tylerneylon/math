@@ -72,6 +72,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let t = matrix.eye(4);
     t[2][3] = zDist;
     space.setTransform(t);
+    // space2.setZDist(zDist);
 
     window.requestAnimationFrame(drawFrame);
 });
