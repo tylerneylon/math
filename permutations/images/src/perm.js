@@ -796,6 +796,8 @@ export function getEdgeIndexesLex(n, lightEdgeColor) {
                 line.style = {stroke: 'transparent'};
             }
             if (delta > 2) line.style = {stroke: lightEdgeColor};
+            // For downstream efficiency, simply omit transparent edges.
+            if (line.style && line.style.stroke === 'transparent') continue;
             line.type = lineTypes[delta];  // edge, face, or internal
 
             edges.push(line);

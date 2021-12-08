@@ -115,7 +115,7 @@ export function enableContainerSwitcher(size, numContainers, setupWithArtist) {
     if (numContainers === undefined) numContainers = 1;
 
     // Sanity check; avoid us interpreting a numContainers as a size.
-    console.assert(size > 3);
+    console.assert(size === undefined || size > 3);
 
     function buttonHandler(to) {
 
