@@ -21,14 +21,14 @@ import * as vector from './vector.js';
 // ______________________________________________________________________
 // Globals
 
-// I'm currently designing things to look good at size 500x500 per svg.
+// I'm currently designing things to look good at size 500x500 per container.
 let size = 500;
 
 let artist1 = null;
 let artist2 = null;
 
-let svg1Scale = 0.5;
-let svg2Scale = 0.95;
+let scale1 = 0.5;
+let scale2 = 0.95;
 
 let lastTs = null;
 let totalSeconds = 0;
@@ -197,7 +197,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         ensureCoreFill(space2.ctx.dots);
 
         // ____________________________________________________________
-        // Set up svg2 with the exploded permutohedron graph.
+        // Set up container 2 with the exploded permutohedron graph.
 
         let xValues = pts.map(x => x[0]);
         [xMin, xMax] = [Math.min(...xValues), Math.max(...xValues)];
@@ -207,8 +207,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             ptMap[pt.label] = {x: pt[0], y: pt[1]};
         }
 
-        // TODO Rename "svg{1,2}" things to not be svg-exclusive.
-        const a = 1.0 / svg2Scale;
+        const a = 1.0 / scale2;
         artist2.setCoordLimits(-a, a, -a, a);
         perm2.renderCtx.labelStyle = 'mainOnly';
 
