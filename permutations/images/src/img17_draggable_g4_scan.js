@@ -10,11 +10,11 @@
 // ______________________________________________________________________
 // Imports
 
-import * as draw   from './draw.js';
+import * as draw2  from './draw2.js';
 import * as init   from './init.js';
 import * as matrix from './matrix.js';
-import * as perm   from './perm.js';
-import * as space  from './space.js';
+import * as perm2  from './perm2.js';
+import * as space2 from './space2.js';
 import * as util   from './util.js';
 import * as vector from './vector.js';
 
@@ -25,11 +25,11 @@ import * as vector from './vector.js';
 // I'm currently designing things to look good at size 500x500 per svg.
 let size = 500;
 
-let svg1 = null;
-let svg2 = null;
+let artist1 = null;
+let artist2 = null;
 
-let svg1Scale = 0.5;
-let svg2Scale = 0.47;
+let scale1 = 0.5;
+let scale2 = 0.95;
 
 let lastTs = null;
 let totalSeconds = 0;
@@ -76,55 +76,47 @@ function drawFrame(ts) {
         let r = rMin + (rMax - rMin) * (x - xMin) / (xMax - xMin);
         r = Math.max(0.001, r);  // Ensure r >= 0.
 
-        draw.ctx.svg = svg1;
-        draw.setScale(size * svg1Scale);
         if (doMoveCircle) {
-            space.setCircle(
+            space2.setCircle(
                 [x, 0, 0],
                 Math.sqrt(R * R - x * x),
                 [1, 0, 0],
                 circleStyle
             );
-            space.updatePoints();
+            space2.updatePoints();
         }
-        pts3d = matrix.mult(space.ctx.rotateMat, space.ctx.pts);
+        pts3d = matrix.mult(space2.ctx.rotateMat, space2.ctx.pts);
         pts3d = matrix.transpose(pts3d).map(x => x.slice(0, 3));
         for (let i = 0; i < pts3d.length; i++) {
             // The `null` here is for the outline; which is used for 2d plots
-            // but not for 3d plots (since space.js owns those outlines).
-            updateDot(pts3d[i], space.ctx.dots[i], w, x);
+            // but not for 3d plots (since space2.js owns those outlines).
+            updateDot(artist1, pts3d[i], space2.ctx.dots[i], w, x);
         }
 
-        draw.ctx.svg = svg2;
-        draw.setScale(size * svg2Scale);
         pts2d = util.explode3DPoints(pts3d, labels, rMin, rMax);
         for (let i = 0; i < pts2d.length; i++) {
-            updateDot(pts2d[i], pt2dElts[i], w, x);
+            updateDot(artist2, pts2d[i], pt2dElts[i], w, x);
         }
         for (let line of lines2d) {
             let from = xy(pts2d[line.fromIndex]);
             let to   = xy(pts2d[line.toIndex]);
-            draw.moveLine(line, from, to);
+            artist2.moveLine(line, from, to);
         }
         if (doMoveCircle) {
-            draw.moveCircle(circleElt, {x: 0, y: 0}, r);
+            artist2.moveCircle(circleElt, {x: 0, y: 0}, r);
         }
+
+        artist1.render();
+        artist2.render();
     }
     totalSeconds += (ts - lastTs) / 1000;
     lastTs = ts;
     frameNum++;
 
-    // Leaving this here as this allows us to turn on a little animation in svg1
-    // if we want to. This reveals a current weakness in space.js, which is that
-    // it assumes draw's context remains the same for the sake of its animation
-    // frame handler.
-    draw.ctx.svg = svg1;
-    draw.setScale(size * svg1Scale);
-
     window.requestAnimationFrame(drawFrame);
 }
 
-function updateDot(pt, elt, w, x) {
+function updateDot(artist, pt, elt, w, x) {
 
     let maxHighlight = 0.8;
     let k = maxHighlight / pause;
@@ -155,11 +147,11 @@ function updateDot(pt, elt, w, x) {
     dot.setAttribute('fill', util.getColorStr());
     let radius = a * dot.coreRadius + b * highlightRadius;
     if (pt.length === 2) {
-        draw.moveCircle(dot, {x: pt[0], y: pt[1]});
-        draw.moveCircle(elt.outline, {x: pt[0], y: pt[1]});
+        artist.moveCircle(dot, {x: pt[0], y: pt[1]});
+        artist.moveCircle(elt.outline, {x: pt[0], y: pt[1]});
         for (let textElt of elt.textElts) {
             let eps = 0.01;
-            draw.moveText(textElt, {x: pt[0] + eps, y: pt[1] - eps});
+            artist.moveText(textElt, {x: pt[0] + eps, y: pt[1] - eps});
         }
     }
     dot.setAttribute('r', radius);
@@ -190,63 +182,74 @@ function ensureCoreFill(dots) {
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    svg1 = init.setup(size, size, 'svg1');
-    svg2 = init.setup(size, size, 'svg2');
-    draw.ctx.svg = svg1;
-
-    // ____________________________________________________________
-    // Set up svg1 with the scanning circle.
-
-    [pts3d, labels]   = perm.getG4PointsIn3D();
-    let [lines, slices] = perm.getEdgeIndexesLex(4);
+    [pts3d, labels]   = perm2.getG4PointsIn3D();
+    let [lines, slices] = perm2.getEdgeIndexesLex(4);
     R = vector.len(pts3d[0]);
 
-    // Add a small degree of fading for the farther-back points and lines.
-    space.ctx.fadeRange = [2, 8.5];
-    space.ctx.zoom = 1.6;
-    space.ctx.dotSize = 0.035;
-    space.addPoints(pts3d);
-    space.addLines(lines);
+    let numContainers = 2;
+    init.addContainerSwitcher(size, numContainers, (_artist1, _artist2) => {
 
-    if (true) {
-        space.makeDraggable();
-        space.ctx.rotationsPerSec = 0.01;
-        space.ctx.mode = 'paused';
-        space.rotateAround([0.3, -1, 0.5]);
-        space.animate();
-    }
+        artist1 = _artist1;
+        artist2 = _artist2;
 
-    // Add to the z value of all points.
-    let t = matrix.eye(4);
-    t[2][3] = zDist;
-    space.setTransform(t);
-    space.setZDist(zDist);
-    ensureCoreFill(space.ctx.dots);
+        // ____________________________________________________________
+        // Set up artist1 with the scanning circle.
 
-    // ____________________________________________________________
-    // Set up svg2 with the exploded permutohedron graph.
+        space2.reset();
 
-    let xValues = pts3d.map(x => x[0]);
-    [xMin, xMax] = [Math.min(...xValues), Math.max(...xValues)];
-    pts2d = util.explode3DPoints(pts3d, labels, rMin, rMax);
-    console.log('pts2d just after explosion:');
-    console.log(pts2d);
-    let ptMap = {};
-    for (let i in pts2d) {
-        let pt = pts2d[i];
-        ptMap[pt.label] = {x: pt[0], y: pt[1], i};
-    }
-    draw.ctx.svg = svg2;
-    draw.setScale(size * svg2Scale);
-    perm.renderCtx.labelStyle = 'mainOnly';
-    console.log('labels:');
-    console.log(labels);
-    // The `true` here means to exclude hit dots.
-    // It's more trouble than I'd like to move the hit dots with all else.
-    [pts2d, pt2dElts, lines2d] = perm.drawGraphWithPtMap(ptMap, 4, lines, true);
-    ensureCoreFill();
-    circleElt = draw.circle({x: 0, y: 0}, rMin, circleStyle);
-    draw.addAttributes(circleElt, {'pointer-events': 'none'});
+        space2.setArtist(artist1);
+        space2.ctx.fadeRange = [2, 8.5];
+        space2.ctx.zoom = 1.6;
+        space2.ctx.dotSize = 0.035;
+        space2.addPoints(pts3d);
+        space2.addLines(lines);
+
+        space2.makeDraggable();
+        space2.ctx.rotationsPerSec = 0.01;
+        space2.ctx.mode = 'paused';
+        space2.rotateAround([0.3, -1, 0.5]);
+        space2.animate();
+
+        // Add to the z value of all points.
+        let t = matrix.eye(4);
+        t[2][3] = zDist;
+        space2.setTransform(t);
+        space2.setZDist(zDist);
+        ensureCoreFill(space2.ctx.dots);
+
+        // ____________________________________________________________
+        // Set up artist2 with the exploded permutohedron graph.
+
+        let xValues = pts3d.map(x => x[0]);
+        [xMin, xMax] = [Math.min(...xValues), Math.max(...xValues)];
+        pts2d = util.explode3DPoints(pts3d, labels, rMin, rMax);
+        console.log('pts2d just after explosion:');
+        console.log(pts2d);
+        let ptMap = {};
+        for (let i in pts2d) {
+            let pt = pts2d[i];
+            ptMap[pt.label] = {x: pt[0], y: pt[1], i};
+        }
+
+        const a = 1.0 / scale2;
+        artist2.setCoordLimits(-a, a, -a, a);
+        perm2.renderCtx.labelStyle = 'mainOnly';
+
+        console.log('labels:');
+        console.log(labels);
+
+        // It's more trouble than I'd like to move the hit dots with all else.
+        const params = {edgeStyles: lines, excludeHitDots: true};
+        [pts2d, pt2dElts, lines2d] = perm2.drawGraphWithPtMap(
+            artist2,
+            ptMap,
+            4,
+            params
+        );
+        ensureCoreFill();
+        circleElt = artist2.addCircle({x: 0, y: 0}, rMin, circleStyle);
+        draw2.addAttributes(circleElt, {'pointer-events': 'none'});
+    });
 
     window.requestAnimationFrame(drawFrame);
 });
