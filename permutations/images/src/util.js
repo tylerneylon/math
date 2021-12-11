@@ -135,6 +135,23 @@ export function explodeNDPoints(pts, labels, rMin, rMax) {
     return newP;
 }
 
+// This first translates all the points (z, tail) -> (z + Z, tail) so that the
+// minimum z' (= z + Z) coordinate is 1. Then it replaces (z', tail) with
+// (tail / z'). It maps n-dimensional points to (n-1)-dimensional points.
+export function perspectiveProjectPoints(pts, labels) {
+    let zMin   = Math.min(...pts.map(x => x[0]));
+    let newPts = [];
+    for (let i in pts) {
+        const pt    = pts[i];
+        const tail  = pt.slice(1);
+        const z     = pt[0] - zMin + 1;
+        const newPt = tail.map(x => x / z);
+        newPt.label = labels[i];
+        newPts.push(newPt);
+    }
+    return newPts;
+}
+
 // Derive an [r, g, b] array from a color string. The values of r, g, and b are
 // each in the range [0, 1]. This expects that the color string has no alpha
 // value.
