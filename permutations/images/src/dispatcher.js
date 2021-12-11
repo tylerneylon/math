@@ -69,14 +69,14 @@ export class Dispatcher {
         this.ctx = elt.getContext('2d');
         this.mouseOverIndex = null;
 
-        elt.addEventListener('mousemove', this.#mousemove.bind(this));
-        elt.addEventListener('mouseout', this.#mouseout.bind(this));
+        elt.addEventListener('mousemove', this._mousemove.bind(this));
+        elt.addEventListener('mouseout', this._mouseout.bind(this));
 
         this.x = null;
         this.y = null;
     }
 
-    #update() {
+    _update() {
         const [x, y] = [this.x, this.y];
         if (x === null) return;
 
@@ -88,31 +88,31 @@ export class Dispatcher {
             if (isIn) {
                 if (this.mouseOverIndex !== i) {
                     if (this.mouseOverIndex !== null) {
-                        this.#send(this.mouseOverIndex, 'mouseout');
+                        this._send(this.mouseOverIndex, 'mouseout');
                     }
                     this.mouseOverIndex = i;
-                    this.#send(i, 'mouseover');
+                    this._send(i, 'mouseover');
                 }
                 break;
             } else if (this.mouseOverIndex === i) {
-                this.#send(this.mouseOverIndex, 'mouseout');
+                this._send(this.mouseOverIndex, 'mouseout');
                 this.mouseOverIndex = null;
             }
         }
     }
 
-    #mousemove(event) {
+    _mousemove(event) {
         [this.x, this.y] = [event.offsetX, event.offsetY];
-        this.#update();
+        this._update();
     }
 
-    #mouseout(event) {
+    _mouseout(event) {
         if (this.mouseOverIndex === null) return;
-        this.#send(this.mouseOverIndex, 'mouseout');
+        this._send(this.mouseOverIndex, 'mouseout');
         this.mouseOverIndex = null;
     }
 
-    #send(idx, eventName) {
+    _send(idx, eventName) {
         const listeners = this.listeners[idx][eventName];
         const numL = listeners.length;
         log(`Sending ${eventName} to index ${idx} with ${numL} listeners.`);
@@ -134,6 +134,6 @@ export class Dispatcher {
     }
 
     itemChanged(item) {
-        this.#update();
+        this._update();
     }
 }

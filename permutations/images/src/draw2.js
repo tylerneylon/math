@@ -327,12 +327,12 @@ class SVGArtist extends Artist {
     add(eltName, attr, parent) {
         if (parent === undefined) { parent = this.elt; }
         var elt = document.createElementNS(this.svgNS, eltName);
-        this.#addToParent(elt, parent);
+        this._addToParent(elt, parent);
         if (attr) addAttributes(elt, attr);
         return elt;
     }
 
-    #addToParent(elt, parent) {
+    _addToParent(elt, parent) {
         if (this.addMode === 'atEnd') {
             parent.appendChild(elt);
             return;
@@ -402,14 +402,14 @@ class CanvasItem {
     }
 
     // This is useful for render().
-    #getAttrs(ctx, keys) {
+    _getAttrs(ctx, keys) {
         for (let key of keys) console.assert(key in this.attrs);
         let values = [];
         for (let key of keys) values.push(this.attrs[key] * ctx.ratio);
         return values;
     }
 
-    #getFontString(ctx) {
+    _getFontString(ctx) {
         const fontName = this.attrs['font-family'] || 'sans-serif';
         const sizeStr  = this.attrs['font-size'] || '16px';
         const fontSize = parseFloat(sizeStr) * ctx.ratio;
@@ -425,7 +425,7 @@ class CanvasItem {
 
     getBBox() {
         console.assert(this.type === 'text');
-        this.ctx.font = this.#getFontString(this.ctx);
+        this.ctx.font = this._getFontString(this.ctx);
         let metrics = this.ctx.measureText(this.innerHTML);
         let width  = metrics.width;
         let height = metrics.fontBoundingBoxAscent +
@@ -460,7 +460,7 @@ class CanvasItem {
         if (this.attrs.visibility === 'hidden') return;
 
         if (this.type === 'circle') {
-            let [cx, cy, r] = this.#getAttrs(ctx, ['cx', 'cy', 'r']);
+            let [cx, cy, r] = this._getAttrs(ctx, ['cx', 'cy', 'r']);
             ctx.beginPath();
             ctx.ellipse(cx, cy, r, r, 0, 0, Math.PI * 2);
             if ([undefined, 'transparent'].includes(this.attrs.stroke)) {
@@ -481,7 +481,7 @@ class CanvasItem {
         }
 
         if (this.type === 'line') {
-            let [x1, y1, x2, y2] = this.#getAttrs(
+            let [x1, y1, x2, y2] = this._getAttrs(
                 ctx,
                 ['x1', 'y1', 'x2', 'y2']
             );
@@ -504,7 +504,7 @@ class CanvasItem {
         }
 
         if (this.type === 'rect') {
-            let [x, y, width, height] = this.#getAttrs(
+            let [x, y, width, height] = this._getAttrs(
                 ctx,
                 ['x', 'y', 'width', 'height']
             );
@@ -522,8 +522,8 @@ class CanvasItem {
         }
 
         if (this.type === 'text') {
-            let [x, y] = this.#getAttrs(ctx, ['x', 'y']);
-            ctx.font = this.#getFontString(ctx);
+            let [x, y] = this._getAttrs(ctx, ['x', 'y']);
+            ctx.font = this._getFontString(ctx);
             x += dx;
             y += dy;
             let stroke = this.attrs.stroke;
@@ -618,13 +618,13 @@ class CanvasArtist extends Artist {
         let Item = (eltName === 'g' ? CanvasGroup : CanvasItem);
         var item = new Item(eltName);
         item.artist = this;
-        this.#addToParent(item, parent);
+        this._addToParent(item, parent);
         if (attr) addAttributes(item, attr);
         if (item.attrs.display !== 'none') this.needsRender = true;
         return item;
     }
 
-    #addToParent(item, parent) {
+    _addToParent(item, parent) {
         item.parentElement = parent;
         if (this.addMode === 'atEnd') {
             parent.items.push(item);
