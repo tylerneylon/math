@@ -15,6 +15,7 @@ import * as matrix from './matrix.js';
 import * as perm2  from './perm2.js';
 import * as space2 from './space2.js';
 import * as util   from './util.js';
+import * as vector from './vector.js';
 
 
 // ______________________________________________________________________
@@ -25,7 +26,7 @@ let circleStyle = {
     fill:   '#888'
 };
 
-let zDist = 7;
+let zDist = 0.6;
 
 
 // ______________________________________________________________________
@@ -37,15 +38,29 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // I noticed that #444 looks decent for G_5 and go transparent for G'_5.
     let [lines, slices] = perm2.getEdgeIndexesLex(6, 'transparent');
 
+    // Reduce the line widths.
+    for (const line of lines) line.style['stroke-width'] = 0.7;
+
+    let pts4d = util.explodeNDPoints(pts5d, labels, 0.7, 2.0);
+    let pts3d = util.perspectiveProjectPoints(pts4d, labels, 10);
+
+    // For a nice fade, find the min and max point distances.
+    // Note that these will change a little with rotation.
+    let dists = [];
+    for (let p of pts3d) {
+        dists.push(vector.len(p));
+    }
+    let [minPtDist, maxPtDist] = [Math.min(...dists), Math.max(...dists)];
+
     init.addContainerSwitcher((artist) => {
 
         space2.reset();
         space2.setArtist(artist);
 
-        space2.ctx.fadeRange = [0, 11];
-
-        let pts4d = util.explodeNDPoints(pts5d, labels, 0.7, 2.0);
-        let pts3d = util.perspectiveProjectPoints(pts4d, labels);
+        space2.ctx.fadeRange = [
+            (minPtDist + zDist) * 0.8,
+            (maxPtDist + zDist) * 1.0
+        ];
 
         space2.ctx.zoom = 3;
         space2.addPoints(pts3d);

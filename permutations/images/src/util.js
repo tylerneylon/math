@@ -138,13 +138,14 @@ export function explodeNDPoints(pts, labels, rMin, rMax) {
 // This first translates all the points (z, tail) -> (z + Z, tail) so that the
 // minimum z' (= z + Z) coordinate is 1. Then it replaces (z', tail) with
 // (tail / z'). It maps n-dimensional points to (n-1)-dimensional points.
-export function perspectiveProjectPoints(pts, labels) {
+export function perspectiveProjectPoints(pts, labels, minZVal) {
+    if (minZVal === undefined) minZVal = 2;
     let zMin   = Math.min(...pts.map(x => x[0]));
     let newPts = [];
     for (let i in pts) {
         const pt    = pts[i];
         const tail  = pt.slice(1);
-        const z     = pt[0] - zMin + 1;
+        const z     = pt[0] - zMin + minZVal;
         const newPt = tail.map(x => x / z);
         newPt.label = labels[i];
         newPts.push(newPt);
