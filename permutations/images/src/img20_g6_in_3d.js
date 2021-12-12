@@ -56,6 +56,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
         space2.reset();
         space2.setArtist(artist);
+        space2.ctx.doDrawDots = false;
 
         space2.ctx.fadeRange = [
             (minPtDist + zDist) * 0.8,

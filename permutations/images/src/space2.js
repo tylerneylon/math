@@ -71,6 +71,8 @@ ctx.doDrawNormalLines = false;
 ctx.normalLinePts = [[], [], [], []];
 ctx.normalLines = [];
 
+ctx.doDrawDots = true;
+
 ctx.circle = null;
 
 ctx.transform = matrix.eye(4);
@@ -426,7 +428,7 @@ function orderElts(xys) {
             if (!dep.parentElement) mainGroup.appendChild(dep);
         }
         if (pt.outline) mainGroup.appendChild(pt.outline);
-        mainGroup.appendChild(pt.elt);
+        if (pt.elt) mainGroup.appendChild(pt.elt);
     }
 
     // 4. Draw any remaining interior lines.
@@ -447,7 +449,7 @@ function orderElts(xys) {
 
     // 6. Draw all remaining points and edges.
     for (let pt of pts) {
-        if (pt.elt.parentElement) continue;
+        if (!pt.elt || pt.elt.parentElement) continue;
         // Add any dependencies, eg lines adjacent to a dot.
         for (let dep of pt.deps) {
             if (!dep.parentElement) mainGroup.appendChild(dep);
@@ -497,6 +499,7 @@ function ensureGroupsExist() {
 // CONVERTED
 function addAnyNewDots() {
     ensureGroupsExist();
+    if (!ctx.doDrawDots) return;
     for (let i = ctx.dots.length; i < ctx.pts[0].length; i++) {
         let pt = calculateDrawPt(matrix.getColumn(ctx.pts, i));
         let elt        = artist.addCircle(pt, dotStyle, dotGroup);
@@ -874,20 +877,22 @@ export function updatePoints() {
     // We may use the lineXYs early to help place labels around dots.
     let lineXYs = getXYArray(ctx.normalLinePts, false);
 
-    for (let i = 0; i < xys.length; i++) {
-        let dot = ctx.dots[i];
-        let r = ctx.dotSize / xys[i].z;
-        let outlineR = 2 * r;
-        artist.moveCircle(dot, xys[i], r);
-        dot.coreRadius = r * artist.toCanvasScale;
-        if (dot.label) updateLabelForDot(dot, xys[i]);
-        artist.moveCircle(ctx.outlines[i], xys[i], outlineR);
-        if (ctx.fadeRange) {
-            let color = getFadeColor(dot.baseColor, xys[i].z, dot);
-            dot.setAttribute('fill', color);
+    if (ctx.doDrawDots) {
+        for (let i = 0; i < xys.length; i++) {
+            let dot = ctx.dots[i];
+            let r = ctx.dotSize / xys[i].z;
+            let outlineR = 2 * r;
+            artist.moveCircle(dot, xys[i], r);
+            dot.coreRadius = r * artist.toCanvasScale;
+            if (dot.label) updateLabelForDot(dot, xys[i]);
+            artist.moveCircle(ctx.outlines[i], xys[i], outlineR);
+            if (ctx.fadeRange) {
+                let color = getFadeColor(dot.baseColor, xys[i].z, dot);
+                dot.setAttribute('fill', color);
+            }
+            dot.hidden = !xys[i].isVisible;
+            ctx.outlines[i].hidden = !xys[i].isVisible;
         }
-        dot.hidden = !xys[i].isVisible;
-        ctx.outlines[i].hidden = !xys[i].isVisible;
     }
 
     for (let line of ctx.lines) {
