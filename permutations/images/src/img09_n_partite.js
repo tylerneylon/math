@@ -9,8 +9,8 @@
 // ______________________________________________________________________
 // Imports
 
-import * as init   from './init.js';
-import * as perm2  from './perm2.js';
+import * as init from './init.js';
+import * as perm from './perm.js';
 
 
 // ______________________________________________________________________
@@ -41,36 +41,36 @@ function refreshGraph(artist) {
 
     if (defaultStyles === null) {
         defaultStyles = {};
-        defaultStyles.edgeWidth = perm2.edgeStyle['stroke-width'];
-        defaultStyles.edgeStroke = perm2.edgeStyle.stroke;
-        defaultStyles.dotRadius = perm2.dotStyle.r;
+        defaultStyles.edgeWidth = perm.edgeStyle['stroke-width'];
+        defaultStyles.edgeStroke = perm.edgeStyle.stroke;
+        defaultStyles.dotRadius = perm.dotStyle.r;
     }
 
     if (n >= 7) {
-        perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.02;
-        perm2.edgeStyle.stroke = '#888';
-        perm2.dotStyle.r = defaultStyles.dotRadius * 0.7;
-        perm2.renderCtx.edgeWeighting = 'boldNearE';
+        perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.02;
+        perm.edgeStyle.stroke = '#888';
+        perm.dotStyle.r = defaultStyles.dotRadius * 0.7;
+        perm.renderCtx.edgeWeighting = 'boldNearE';
         excludeHitDots = true;
         noListeners    = true;
     } else if (n === 6) {
-        perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.1;
-        perm2.edgeStyle.stroke = '#bbb';
-        perm2.dotStyle.r = defaultStyles.dotRadius * 0.7;
-        perm2.renderCtx.edgeWeighting = 'default';
+        perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.1;
+        perm.edgeStyle.stroke = '#bbb';
+        perm.dotStyle.r = defaultStyles.dotRadius * 0.7;
+        perm.renderCtx.edgeWeighting = 'default';
     } else if (n === 5) {
-        perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.4;
-        perm2.edgeStyle.stroke = defaultStyles.edgeStroke;
-        perm2.dotStyle.r = defaultStyles.dotRadius;
-        perm2.renderCtx.edgeWeighting = 'default';
+        perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.4;
+        perm.edgeStyle.stroke = defaultStyles.edgeStroke;
+        perm.dotStyle.r = defaultStyles.dotRadius;
+        perm.renderCtx.edgeWeighting = 'default';
     } else {
-        perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth;
-        perm2.edgeStyle.stroke = defaultStyles.edgeStroke;
-        perm2.dotStyle.r = defaultStyles.dotRadius;
-        perm2.renderCtx.edgeWeighting = 'default';
+        perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth;
+        perm.edgeStyle.stroke = defaultStyles.edgeStroke;
+        perm.dotStyle.r = defaultStyles.dotRadius;
+        perm.renderCtx.edgeWeighting = 'default';
     }
 
-    perm2.drawNPartiteGn(
+    perm.drawNPartiteGn(
         artist,
         n,
         {orderingType, excludeHitDots, noListeners}

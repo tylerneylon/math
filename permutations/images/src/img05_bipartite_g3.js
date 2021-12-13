@@ -8,8 +8,8 @@
 // ______________________________________________________________________
 // Imports
 
-import * as init   from './init.js';
-import * as perm2  from './perm2.js';
+import * as init from './init.js';
+import * as perm from './perm.js';
 
 
 // ______________________________________________________________________
@@ -18,7 +18,7 @@ import * as perm2  from './perm2.js';
 window.addEventListener('DOMContentLoaded', (event) => {
 
     init.addContainerSwitcher((artist) => {
-        perm2.drawBipartiteGn(artist, 3);  // Draw G_3.
+        perm.drawBipartiteGn(artist, 3);  // Draw G_3.
         artist.autorender();
     });
 

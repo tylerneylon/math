@@ -8,8 +8,8 @@
 // ______________________________________________________________________
 // Imports
 
-import * as init   from './init.js';
-import * as perm2  from './perm2.js';
+import * as init from './init.js';
+import * as perm from './perm.js';
 
 
 // ______________________________________________________________________
@@ -17,12 +17,12 @@ import * as perm2  from './perm2.js';
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    perm2.edgeStyle['stroke-width'] *= 0.3;
-    perm2.edgeStyle.stroke = '#bbb';
-    perm2.dotStyle.r *= 0.7;
+    perm.edgeStyle['stroke-width'] *= 0.3;
+    perm.edgeStyle.stroke = '#bbb';
+    perm.dotStyle.r *= 0.7;
 
     init.addContainerSwitcher((artist) => {
-        perm2.drawBipartiteGn(artist, 5);  // Draw G_5.
+        perm.drawBipartiteGn(artist, 5);  // Draw G_5.
         artist.autorender();
     });
 

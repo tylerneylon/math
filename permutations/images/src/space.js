@@ -13,6 +13,7 @@
 // ______________________________________________________________________
 // Imports
 
+// XXX Do we need draw? Maybe we get everything from artist directly.
 import * as draw   from './draw.js';
 import * as matrix from './matrix.js';
 import * as util   from './util.js';
@@ -22,7 +23,7 @@ import * as vector from './vector.js';
 // ______________________________________________________________________
 // Globals.
 
-export var ctx = {};
+export let ctx = {};
 
 let lastTs = null;  // This is the last-seen timestamp; it's used to animate.
 
@@ -32,7 +33,7 @@ let xDrag = 0, yDrag = 0;
 let doDebugEvents = false;
 
 let preClickMode = 'spinning';
-ctx.mode = 'spinning';  // This can also be 'dragging'.
+ctx.mode = 'spinning';  // This can also be 'dragging' or 'paused'.
 
 ctx.rotateMat = matrix.eye(4);
 ctx.transMat  = matrix.eye(4);
@@ -70,6 +71,8 @@ ctx.doDrawNormalLines = false;
 ctx.normalLinePts = [[], [], [], []];
 ctx.normalLines = [];
 
+ctx.doDrawDots = true;
+
 ctx.circle = null;
 
 ctx.transform = matrix.eye(4);
@@ -100,6 +103,8 @@ let lightDir = vector.unit([-1, -1, -2]);
 let highlightedFaceElt = null;
 let highlightedFaceIndex = -1;
 let lastHighlightedFaceIndex = -1;
+
+let artist = null;
 
 export let dotStyle = {
     stroke: 'transparent',
@@ -140,7 +145,8 @@ export let facePolyStyle = {
 export let textStyle = {
     stroke: 'transparent',
     fill: '#666',
-    style: 'font-family: sans-serif',
+    'font-family': 'sans-serif',
+    'font-size': '16px',
     'pointer-events': 'none'
 }
 
@@ -186,17 +192,20 @@ let edgeGroup    = null;
 // ______________________________________________________________________
 // Internal functions.
 
+// CONVERTED
 function didDrag() {
     let motion = xDrag + yDrag;
     console.log(`didDrag(): motion=${motion}.`);
     return motion > 5;
 }
 
+// CONVERTED
 function logEvent(e) {
     if (!doDebugEvents) return;
     console.log(`${e.type} on ${e.target}`);
 }
 
+// CONVERTED
 function getXYArray(pts, doPerspective, doRotate) {
 
     if (doRotate === undefined) doRotate = true;
@@ -217,18 +226,22 @@ function getXYArray(pts, doPerspective, doRotate) {
     return xyArray;
 }
 
+// CONVERTED (pending support for translate in draw)
 function updateLabelForDot(dot, xy) {
     let offset = 0.01;
-    let c = draw.ctx.toCanvasScale;
+    let c = artist.toCanvasScale;
 
     let s = `translate(${c * xy.x}, ${c * xy.y})`;
     dot.label.setAttribute('transform', `translate(${c * xy.x}, ${c * xy.y})`);
 }
 
+// XXX CONVERT
 // Add the circle if there is one. For now, this will be rendered on top of
 // everything else.
 function renderCircle() {
     if (!ctx.circle) return;
+
+    console.assert(artist !== null);
 
     for (let path of ctx.circle.paths) path.remove();
     ctx.circle.paths = [];
@@ -237,7 +250,7 @@ function renderCircle() {
     // to have the same z coordinate, and the same for the far pair.
 
     // 1.a. Find a basis for the plane of the circle. This will be the rows
-    //      of T. T[0] = n; T[1] is orth to z and to n.
+    //      of T. T[0] = n (normal); T[1] is orth to z and to n.
     let n = getXYArray(matrix.transpose([ctx.circle.normal]), false, false)[0];
     let matA = matrix.rand(3, 3);
     matA[0] = [n.x, n.y, n.z];
@@ -312,30 +325,27 @@ function renderCircle() {
     }
     let start = vector.sub(C, offset);
     let end   = vector.add(C, offset);
-    let dctx = draw.ctx;
-    let orig = [dctx.origin.x, dctx.origin.y];
+    let orig  = artist.origin;
     [start, end] = [start, end].map(
-        x => vector.add(vector.scale(x, dctx.toCanvasScale), orig)
+        x => vector.add(vector.scale(x, artist.toCanvasScale), orig)
     );
     let degrees = theta / Math.PI * 180;
     for (let i = 0; i <= 1; i++) {
-        let path = draw.add('path', ctx.circle.style);
-        let j = isNearOnLeft ? 0 : 1;
         if (isNearOnLeft ^ (i === 1)) {
-            draw.drawBehind();
+            artist.drawInFront();
         } else {
-            draw.drawInFront();
+            artist.drawBehind();
         }
+        let j = isNearOnLeft ? 0 : 1;
         let xFix = (i === 0 ? 1 : 0);
-        let attrib = {
-            d: `M ${start[0] + xFix} ${start[1]} ` +
-               `A ${a} ${b} ${degrees} 0 ${i} ${end[0] + xFix} ${end[1]}`
-        };
-        draw.addAttributes(path, attrib);
+        const d = `M ${start[0] + xFix} ${start[1]} ` +
+                  `A ${a} ${b} ${degrees} 0 ${i} ${end[0] + xFix} ${end[1]}`
+        const path = artist.addPath(d, Object.assign({}, ctx.circle.style));
         ctx.circle.paths.push(path);
     }
 }
 
+// CONVERTED
 // This applies ctx.fadeRange to stdBaseColor, using z, to arrive a color that
 // is a fade from stdBaseColor down to white. The returned value is a color
 // string that can be assigned, eg, to a `stroke` or `fill` style attribute.
@@ -363,22 +373,24 @@ function getFadeColor(stdBaseColor, z, retObj) {
     return util.getColorStr();
 }
 
+// CONVERTED
 function drawNormalLines() {
     let xys = getXYArray(ctx.normalLinePts);
     for (let i = 0; i < xys.length; i += 2) {
         let line = ctx.normalLines[i / 2];
         if (line === null) {
-            ctx.normalLines[i / 2] = draw.line(
+            ctx.normalLines[i / 2] = artist.addLine(
                 xys[i],
                 xys[i + 1],
                 normalLineStyle
             );
         } else {
-            draw.moveLine(line, xys[i], xys[i + 1]);
+            artist.moveLine(line, xys[i], xys[i + 1]);
         }
     }
 }
 
+// CONVERTED
 function orderElts(xys) {
 
     // 1. Remove all SVG elements so we can re-insert in a new order.
@@ -416,7 +428,7 @@ function orderElts(xys) {
             if (!dep.parentElement) mainGroup.appendChild(dep);
         }
         if (pt.outline) mainGroup.appendChild(pt.outline);
-        mainGroup.appendChild(pt.elt);
+        if (pt.elt) mainGroup.appendChild(pt.elt);
     }
 
     // 4. Draw any remaining interior lines.
@@ -437,7 +449,7 @@ function orderElts(xys) {
 
     // 6. Draw all remaining points and edges.
     for (let pt of pts) {
-        if (pt.elt.parentElement) continue;
+        if (!pt.elt || pt.elt.parentElement) continue;
         // Add any dependencies, eg lines adjacent to a dot.
         for (let dep of pt.deps) {
             if (!dep.parentElement) mainGroup.appendChild(dep);
@@ -447,6 +459,7 @@ function orderElts(xys) {
     }
 }
 
+// CONVERTED
 // This expects `pt` to be a 4d column vector.
 function calculateDrawPt(pt) {
 
@@ -466,6 +479,7 @@ function calculateDrawPt(pt) {
     return {x, y, isVisible};
 }
 
+// CONVERTED
 function appendPoint(pt) {
     console.assert(pt.length === 3, 'Expected 3d points.');
 
@@ -473,20 +487,23 @@ function appendPoint(pt) {
     ctx.pts[3].push(1);
 }
 
+// CONVERTED
 function ensureGroupsExist() {
     if (dotGroup !== null) return;
-    edgeGroup    = draw.add('g');
-    outlineGroup = draw.add('g');
-    dotGroup     = draw.add('g');
-    mainGroup    = draw.add('g');
+    edgeGroup    = artist.add('g');
+    outlineGroup = artist.add('g');
+    dotGroup     = artist.add('g');
+    mainGroup    = artist.add('g');
 }
 
+// CONVERTED
 function addAnyNewDots() {
     ensureGroupsExist();
+    if (!ctx.doDrawDots) return;
     for (let i = ctx.dots.length; i < ctx.pts[0].length; i++) {
         let pt = calculateDrawPt(matrix.getColumn(ctx.pts, i));
-        let elt        = draw.circle(pt, dotStyle, dotGroup);
-        let outlineElt = draw.circle(pt, outlineStyle, outlineGroup);
+        let elt        = artist.addCircle(pt, dotStyle, dotGroup);
+        let outlineElt = artist.addCircle(pt, outlineStyle, outlineGroup);
         elt.baseColor  = util.getStdColor(dotStyle.fill);
         ctx.dots.push(elt);
         ctx.outlines.push(outlineElt);
@@ -497,6 +514,7 @@ function addAnyNewDots() {
     }
 }
 
+// CONVERTED
 function addAnyNewNormals() {
     for (let i = ctx.normals[0].length; i < ctx.faces.length; i++) {
 
@@ -568,7 +586,7 @@ function addAnyNewNormals() {
         }
         angles.sort((a, b) => b.angle - a.angle);
         for (let j = 0; j < angles.length; j++) face[j] = angles[j].index;
-        ctx.facePolygons.push(draw.polygon([], facePolyStyle));
+        ctx.facePolygons.push(artist.addPolygon([], facePolyStyle));
 
         // TODO Move mouse event setup to its own function.
         let polygon = ctx.facePolygons[ctx.facePolygons.length - 1];
@@ -578,8 +596,6 @@ function addAnyNewNormals() {
             highlightedFaceElt = polygon;
             lastHighlightedFaceIndex = i;
             if (ctx.mode !== 'dragging') {
-                // XXX and below
-                // TODO Also send in an awayFrom value.
                 toggleFaceLabels(i, true);  // true -> doShow
             }
         });
@@ -595,6 +611,7 @@ function addAnyNewNormals() {
     }
 }
 
+// CONVERTED (pending setTransform)
 function setupFrame(ts) {
     window.requestAnimationFrame(setupFrame);
 
@@ -613,13 +630,16 @@ function setupFrame(ts) {
         ctx.rotateMat = matrix.mult(t, ctx.rotateMat);
     }
     setTransform(matrix.mult(ctx.transMat, ctx.rotateMat));
+    artist.render();
 }
 
+// CONVERTED
 function moveElt(elt, dx, dy) {
     elt.setAttribute('x', parseInt(elt.getAttribute('x')) + dx);
     elt.setAttribute('y', parseInt(elt.getAttribute('y')) + dy);
 }
 
+// CONVERTED pending moveElt
 function toggleFaceLabels(faceIdx, doShow, awayFrom) {
 
     if (faceIdx === -1) return;
@@ -637,9 +657,9 @@ function toggleFaceLabels(faceIdx, doShow, awayFrom) {
         dot.awayFrom  = awayFrom;
         if (doShow) {
             let label = ctx.labels[i];
-            dot.label = draw.add('g');
-            let r = draw.rect({x: 0, y: 0}, whiteStyle, dot.label);
-            let t = draw.text({x: 0, y: 0}, label, textStyle, dot.label);
+            dot.label = artist.add('g');
+            let r = artist.addRect({x: 0, y: 0}, whiteStyle, dot.label);
+            let t = artist.addText({x: 0, y: 0}, label, textStyle, dot.label);
 
             // Adjust the background rectangle.
             let padding = 5;
@@ -668,9 +688,11 @@ function toggleFaceLabels(faceIdx, doShow, awayFrom) {
 // ______________________________________________________________________
 // Public functions.
 
+// CONVERTED
 // This expects `pts` to be an array of 3d points, with each point being an
 // array of 3 numbers.
 export function addPoints(pts, labels) {
+    console.assert(artist !== null);
     for (let pt of pts) {
         appendPoint(pt);
     }
@@ -678,6 +700,7 @@ export function addPoints(pts, labels) {
     if (labels) ctx.labels = labels;
 }
 
+// CONVERTED
 // This expects `lines` to be an array of {from, to} objects, where `from` and
 // `to` are indexes into the `pts` array. Each line object may also have an
 // optional `style` key, which indicates the style overrides for that line.
@@ -687,7 +710,7 @@ export function addLines(lines, slices) {
         let fromPt = getXYArray(matrix.getColumn(ctx.pts, line.from))[0];
         let toPt   = getXYArray(matrix.getColumn(ctx.pts, line.to))[0];
         let style  = Object.assign({}, lineStyle, line.style);
-        line.elt   = draw.line(fromPt, toPt, style, edgeGroup);
+        line.elt   = artist.addLine(fromPt, toPt, style, edgeGroup);
         line.elt.setAttribute('pointer-events', 'none');
         line.baseColor = util.getStdColor(style.stroke);
         line.coreColor = line.baseColor;  // Save to undo edge highlights.
@@ -697,6 +720,7 @@ export function addLines(lines, slices) {
     ctx.slices = slices;  // If no edges are highlighted, undefined is ok.
 }
 
+// CONVERTED
 // This expects each face to be an array of indexes into `pts`.
 // Each face is expected to live in a plane, and it's expected that the points
 // are convex and listed counterclockwise.
@@ -728,14 +752,16 @@ export function setCircle(center, r, normal, style) {
     ctx.circle = c;
 }
 
+// CONVERTED
 export function setTransform(t) {
     ctx.transform = t;
     updatePoints();
 }
 
-// XXX Clean up this function.
+// CONVERTED
 export function makeDraggable() {
-    draw.ctx.svg.addEventListener('mousedown', e => {
+    console.assert(artist !== null);
+    artist.elt.addEventListener('mousedown', e => {
         logEvent(e);
 
         mousedownTs = e.timeStamp;
@@ -749,7 +775,7 @@ export function makeDraggable() {
             toggleFaceLabels(highlightedFaceIndex, false);
         }
     });
-    draw.ctx.svg.addEventListener('mouseup', e => {
+    artist.elt.addEventListener('mouseup', e => {
         logEvent(e);
         if (highlightedFaceElt) {
             toggleFaceLabels(lastHighlightedFaceIndex, true);
@@ -758,13 +784,7 @@ export function makeDraggable() {
         // If this was a long click, we don't treat it as a click.
         // However, if a long click had zero movement, we still count it.
         if (e.timeStamp - mousedownTs > 500 || didDrag()) {
-            let d = e.timeStamp - mousedownTs;
             ctx.mode = 'paused';
-            if (e.timeStamp - mousedownTs > 500) {
-                console.log(`Ignoring click: long (${d} ms).`);
-            } else {
-                console.log(`Ignoring click: didDrag.`);
-            }
             return;
         }
 
@@ -775,11 +795,7 @@ export function makeDraggable() {
         };
         ctx.mode = fromTo[preClickMode];
     });
-    draw.ctx.svg.addEventListener('click', e => {
-        logEvent(e);
-
-    });
-    draw.ctx.svg.addEventListener('mousemove', e => {
+    artist.elt.addEventListener('mousemove', e => {
         logEvent(e);
         if ((e.buttons & 1) === 0) {
             if (ctx.mode === 'dragging') ctx.mode = 'paused';
@@ -791,13 +807,14 @@ export function makeDraggable() {
         xDrag += Math.abs(delta[0]);
         yDrag += Math.abs(delta[1]);
 
-        let scale = draw.ctx.toCanvasScale;
+        let scale = artist.toCanvasScale;
         let t = matrix.rotateAroundY(delta[0] / scale);
         t = matrix.mult(matrix.rotateAroundX(delta[1] / scale), t);
         ctx.rotateMat = matrix.mult(t, ctx.rotateMat);
     });
 }
 
+// CONVERTED
 // TODO Eventually support auto-setting ctx.fadeRange from this.
 //      To do so, we can calculate the min and max distance from the origin to
 //      any of the points.
@@ -806,11 +823,13 @@ export function setZDist(zDist) {
     ctx.transMat[2][3] = zDist;
 }
 
+// CONVERTED
 export function setAngleMat(angleMat) {
     ctx.angleMat    = angleMat;
     ctx.angleMatInv = matrix.transpose(angleMat);
 }
 
+// CONVERTED
 export function rotateAround(v) {
     let M = matrix.rand(3, 3);
     M[0] = vector.unit(v);
@@ -825,6 +844,7 @@ export function rotateAround(v) {
     ctx.angleMatInv = U;
 }
 
+// CONVERTED
 export function highlightEdges(sliceName) {
     let slice = ctx.slices[sliceName] || {};
     for (let i = 0; i < ctx.lines.length; i++) {
@@ -843,30 +863,36 @@ export function highlightEdges(sliceName) {
     }
 }
 
+// CONVERTED
 export function animate() {
     window.requestAnimationFrame(setupFrame);
 }
 
+// CONVERTED
 export function updatePoints() {
+
+    console.assert(artist !== null);
 
     let xys = getXYArray(ctx.pts);
     // We may use the lineXYs early to help place labels around dots.
     let lineXYs = getXYArray(ctx.normalLinePts, false);
 
-    for (let i = 0; i < xys.length; i++) {
-        let dot = ctx.dots[i];
-        let r = ctx.dotSize / xys[i].z;
-        let outlineR = 2 * r;
-        draw.moveCircle(dot, xys[i], r);
-        dot.coreRadius = r * draw.ctx.toCanvasScale;
-        if (dot.label) updateLabelForDot(dot, xys[i]);
-        draw.moveCircle(ctx.outlines[i], xys[i], outlineR);
-        if (ctx.fadeRange) {
-            let color = getFadeColor(dot.baseColor, xys[i].z, dot);
-            dot.setAttribute('fill', color);
+    if (ctx.doDrawDots) {
+        for (let i = 0; i < xys.length; i++) {
+            let dot = ctx.dots[i];
+            let r = ctx.dotSize / xys[i].z;
+            let outlineR = 2 * r;
+            artist.moveCircle(dot, xys[i], r);
+            dot.coreRadius = r * artist.toCanvasScale;
+            if (dot.label) updateLabelForDot(dot, xys[i]);
+            artist.moveCircle(ctx.outlines[i], xys[i], outlineR);
+            if (ctx.fadeRange) {
+                let color = getFadeColor(dot.baseColor, xys[i].z, dot);
+                dot.setAttribute('fill', color);
+            }
+            dot.hidden = !xys[i].isVisible;
+            ctx.outlines[i].hidden = !xys[i].isVisible;
         }
-        dot.hidden = !xys[i].isVisible;
-        ctx.outlines[i].hidden = !xys[i].isVisible;
     }
 
     for (let line of ctx.lines) {
@@ -876,7 +902,7 @@ export function updatePoints() {
             let color = getFadeColor(line.baseColor, avgZ);
             line.elt.setAttribute('stroke', color);
         }
-        draw.moveLine(line.elt, from, to);
+        artist.moveLine(line.elt, from, to);
     }
 
     // At the same time that face polygons are updated, we also (a) determine
@@ -891,7 +917,7 @@ export function updatePoints() {
         let face = ctx.faces[i];
         let faceXYs = [];
         for (let j = 0; j < face.length; j++) faceXYs.push(xys[face[j]]);
-        draw.movePolygon(ctx.facePolygons[i], faceXYs);
+        artist.movePolygon(ctx.facePolygons[i], faceXYs);
         let isHidden = vector.dot(
             [normalXYs[i].x, normalXYs[i].y, normalXYs[i].z],
             [lineXYs[2 * i].x, lineXYs[2 * i].y, lineXYs[2 * i].z]
@@ -921,5 +947,67 @@ export function updatePoints() {
 
     // XXX I will need to integrate this with the z order of things.
     renderCircle();
+}
+
+// CONVERTED
+export function setArtist(newArtist) {
+    artist = newArtist;
+}
+
+export function reset() {
+    lastTs = null;
+    mousedownTs = null;
+    preClickMode = 'spinning';
+    ctx.mode = 'spinning';
+
+    ctx.rotateMat   = matrix.eye(4);
+    ctx.transMat    = matrix.eye(4);
+    ctx.angleMat    = matrix.eye(4);
+    ctx.angleMatInv = matrix.eye(4);
+    ctx.rotationsPerSec = 1;
+    ctx.rotationSign = 1;
+
+    ctx.pts = [[], [], [], []];
+    ctx.dots = [];
+    ctx.outlines = [];
+    ctx.dotSize = 0.06;
+
+    ctx.lines = [];
+
+    ctx.doDrawFaces = true;
+    ctx.faces = [];
+    ctx.normals = [[], [], [], []];
+    ctx.faceCenters = [];
+    ctx.facePolygons = [];
+
+    ctx.doDrawNormalLines = false;
+    ctx.normalLinePts = [[], [], [], []];
+    ctx.normalLines = [];
+
+    ctx.circle = null;
+
+    ctx.transform = matrix.eye(4);
+
+    ctx.zoom = 1;
+
+    ctx.fadeRange = null;
+
+    ctx.slices = {};
+
+    lightDir = vector.unit([-1, -1, -2]);
+
+    highlightedFaceElt = null;
+    highlightedFaceIndex = -1;
+    lastHighlightedFaceIndex = -1;
+
+    artist = null;
+
+    eyeZ = 0.001;
+
+    // Groups.
+    mainGroup    = null;
+    dotGroup     = null;
+    outlineGroup = null;
+    edgeGroup    = null;
 }
 

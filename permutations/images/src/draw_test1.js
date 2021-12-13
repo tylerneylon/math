@@ -9,7 +9,7 @@
 // ______________________________________________________________________
 // Imports
 
-import * as draw2  from './draw2.js';
+import * as draw from './draw.js';
 
 
 // ______________________________________________________________________
@@ -22,7 +22,7 @@ import * as draw2  from './draw2.js';
 function setupEltWithId(id) {
     let size = 400;
 
-    let artist = draw2.inId(id, 400);
+    let artist = draw.inId(id, 400);
     artist.setCoordLimits(-1, 1);
     artist.addCircle({x: 0, y: 0}, 0.1);
     artist.addCircle({x: 0.4, y: 0}, 0.1);

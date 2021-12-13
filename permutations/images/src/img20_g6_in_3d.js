@@ -12,8 +12,8 @@
 
 import * as init   from './init.js';
 import * as matrix from './matrix.js';
-import * as perm2  from './perm2.js';
-import * as space2 from './space2.js';
+import * as perm   from './perm.js';
+import * as space  from './space.js';
 import * as util   from './util.js';
 import * as vector from './vector.js';
 
@@ -34,9 +34,9 @@ let zDist = 0.6;
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    let [pts5d, labels] = perm2.getGNPointsLessOne(6);
+    let [pts5d, labels] = perm.getGNPointsLessOne(6);
     // I noticed that #444 looks decent for G_5 and go transparent for G'_5.
-    let [lines, slices] = perm2.getEdgeIndexesLex(6, 'transparent');
+    let [lines, slices] = perm.getEdgeIndexesLex(6, 'transparent');
 
     // Reduce the line widths.
     for (const line of lines) line.style['stroke-width'] = 0.7;
@@ -54,33 +54,33 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     init.addContainerSwitcher((artist) => {
 
-        space2.reset();
-        space2.setArtist(artist);
-        space2.ctx.doDrawDots = false;
+        space.reset();
+        space.setArtist(artist);
+        space.ctx.doDrawDots = false;
 
-        space2.ctx.fadeRange = [
+        space.ctx.fadeRange = [
             (minPtDist + zDist) * 0.8,
             (maxPtDist + zDist) * 1.0
         ];
 
-        space2.ctx.zoom = 3;
-        space2.addPoints(pts3d);
-        space2.addLines(lines);
+        space.ctx.zoom = 3;
+        space.addPoints(pts3d);
+        space.addLines(lines);
 
-        space2.makeDraggable();
+        space.makeDraggable();
 
         // Add to the z value of all points.
         let t = matrix.eye(4);
         t[2][3] = zDist;
-        space2.setTransform(t);
+        space.setTransform(t);
 
-        space2.ctx.dotSize = 0;  // 0.02;
-        space2.ctx.rotationsPerSec = 0.05;
-        space2.ctx.rotationSign = -1;
-        space2.setZDist(zDist);
-        space2.rotateAround([0.3, -1, 0.5]);
+        space.ctx.dotSize = 0;  // 0.02;
+        space.ctx.rotationsPerSec = 0.05;
+        space.ctx.rotationSign = -1;
+        space.setZDist(zDist);
+        space.rotateAround([0.3, -1, 0.5]);
 
     });
 
-    space2.animate();
+    space.animate();
 });

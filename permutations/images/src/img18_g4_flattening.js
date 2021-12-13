@@ -12,8 +12,8 @@
 
 import * as init   from './init.js';
 import * as matrix from './matrix.js';
-import * as perm2  from './perm2.js';
-import * as space2 from './space2.js';
+import * as perm   from './perm.js';
+import * as space  from './space.js';
 import * as util   from './util.js';
 import * as vector from './vector.js';
 
@@ -56,8 +56,8 @@ function drawFrame(ts) {
         }
         let a = 1 - b;
         for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < space2.ctx.pts[0].length; j++) {
-                space2.ctx.pts[i][j] = a * startPts[j][i] + b * endPts[j][i];
+            for (let j = 0; j < space.ctx.pts[0].length; j++) {
+                space.ctx.pts[i][j] = a * startPts[j][i] + b * endPts[j][i];
             }
         }
     }
@@ -69,7 +69,7 @@ function drawFrame(ts) {
     slider.value = b;
     b = b ** 0.8;  // At first rotate quickly, then slow down.
     let T = matrix.mult(transMat, matrix.rotateAroundY(b * Math.PI / 2));
-    space2.setTransform(T);
+    space.setTransform(T);
     artist.render();
 }
 
@@ -79,27 +79,27 @@ function drawFrame(ts) {
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    let [pts, labels]   = perm2.getG4PointsIn3D();
-    let [lines, slices] = perm2.getEdgeIndexesLex(4);
+    let [pts, labels]   = perm.getG4PointsIn3D();
+    let [lines, slices] = perm.getEdgeIndexesLex(4);
     let R = vector.len(pts[0]);
 
     init.addContainerSwitcher((_artist) => {
 
         artist = _artist;
 
-        space2.reset();
+        space.reset();
 
-        space2.ctx.zoom = 1.6;
-        space2.ctx.dotSize = 0.035;
-        space2.setArtist(artist);
-        space2.addPoints(pts);
-        space2.addLines(lines);
+        space.ctx.zoom = 1.6;
+        space.ctx.dotSize = 0.035;
+        space.setArtist(artist);
+        space.addPoints(pts);
+        space.addLines(lines);
 
         // Add to the z value of all points.
         transMat = matrix.eye(4);
         transMat[2][3] = zDist;
-        space2.setTransform(transMat);
-        space2.setZDist(zDist);
+        space.setTransform(transMat);
+        space.setZDist(zDist);
 
         // Collect data toward the flattened version.
         // The `true` here is for doKeepCoords, since we're mapping in a simple

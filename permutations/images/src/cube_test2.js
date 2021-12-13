@@ -1,6 +1,6 @@
 /* cube_test2.js
  *
- * Render a rotating cube with space2.js.
+ * Render a rotating cube with space.js.
  *
  */
 
@@ -9,7 +9,7 @@
 // Imports
 
 import * as init   from './init.js';
-import * as space2 from './space2.js';
+import * as space  from './space.js';
 import * as util   from './util.js';
 
 
@@ -24,23 +24,23 @@ let zDist = 8;
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    space2.setArtist(init.setup2());
+    space.setArtist(init.setup2());
 
     let [pts, lines, faces] = util.getCubePtsLinesFaces();
 
     // Add a small degree of fading for the farther-back points and lines.
-    space2.ctx.fadeRange = [6, 16];
+    space.ctx.fadeRange = [6, 16];
 
-    space2.ctx.zoom = 3;
-    space2.addPoints(pts);
-    space2.addLines(lines);
-    space2.addFaces(faces);
+    space.ctx.zoom = 3;
+    space.addPoints(pts);
+    space.addLines(lines);
+    space.addFaces(faces);
 
-    space2.makeDraggable();
-    space2.ctx.rotationsPerSec = 0.05;
-    space2.ctx.rotationSign = -1;
-    space2.setZDist(zDist);
-    space2.rotateAround([0.3, -1, 0.5]);
+    space.makeDraggable();
+    space.ctx.rotationsPerSec = 0.05;
+    space.ctx.rotationSign = -1;
+    space.setZDist(zDist);
+    space.rotateAround([0.3, -1, 0.5]);
 
-    space2.animate();
+    space.animate();
 });

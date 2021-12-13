@@ -8,8 +8,8 @@
 // ______________________________________________________________________
 // Imports
 
-import * as init   from './init.js';
-import * as perm2  from './perm2.js';
+import * as init from './init.js';
+import * as perm from './perm.js';
 
 
 // ______________________________________________________________________
@@ -17,7 +17,7 @@ import * as perm2  from './perm2.js';
 
 window.addEventListener('DOMContentLoaded', (event) => {
     init.addContainerSwitcher((artist) => {
-        perm2.drawRandomGn(artist, 4);  // Draw G_4.
+        perm.drawRandomGn(artist, 4);  // Draw G_4.
         artist.autorender();
     });
 });

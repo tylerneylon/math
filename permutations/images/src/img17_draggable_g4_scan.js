@@ -10,11 +10,11 @@
 // ______________________________________________________________________
 // Imports
 
-import * as draw2  from './draw2.js';
+import * as draw   from './draw.js';
 import * as init   from './init.js';
 import * as matrix from './matrix.js';
-import * as perm2  from './perm2.js';
-import * as space2 from './space2.js';
+import * as perm   from './perm.js';
+import * as space  from './space.js';
 import * as util   from './util.js';
 import * as vector from './vector.js';
 
@@ -77,20 +77,20 @@ function drawFrame(ts) {
         r = Math.max(0.001, r);  // Ensure r >= 0.
 
         if (doMoveCircle) {
-            space2.setCircle(
+            space.setCircle(
                 [x, 0, 0],
                 Math.sqrt(R * R - x * x),
                 [1, 0, 0],
                 circleStyle
             );
-            space2.updatePoints();
+            space.updatePoints();
         }
-        pts3d = matrix.mult(space2.ctx.rotateMat, space2.ctx.pts);
+        pts3d = matrix.mult(space.ctx.rotateMat, space.ctx.pts);
         pts3d = matrix.transpose(pts3d).map(x => x.slice(0, 3));
         for (let i = 0; i < pts3d.length; i++) {
             // The `null` here is for the outline; which is used for 2d plots
-            // but not for 3d plots (since space2.js owns those outlines).
-            updateDot(artist1, pts3d[i], space2.ctx.dots[i], w, x);
+            // but not for 3d plots (since space.js owns those outlines).
+            updateDot(artist1, pts3d[i], space.ctx.dots[i], w, x);
         }
 
         pts2d = util.explode3DPoints(pts3d, labels, rMin, rMax);
@@ -182,8 +182,8 @@ function ensureCoreFill(dots) {
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    [pts3d, labels]   = perm2.getG4PointsIn3D();
-    let [lines, slices] = perm2.getEdgeIndexesLex(4);
+    [pts3d, labels]   = perm.getG4PointsIn3D();
+    let [lines, slices] = perm.getEdgeIndexesLex(4);
     R = vector.len(pts3d[0]);
 
     let numContainers = 2;
@@ -195,27 +195,27 @@ window.addEventListener('DOMContentLoaded', (event) => {
         // ____________________________________________________________
         // Set up artist1 with the scanning circle.
 
-        space2.reset();
+        space.reset();
 
-        space2.setArtist(artist1);
-        space2.ctx.fadeRange = [2, 8.5];
-        space2.ctx.zoom = 1.6;
-        space2.ctx.dotSize = 0.035;
-        space2.addPoints(pts3d);
-        space2.addLines(lines);
+        space.setArtist(artist1);
+        space.ctx.fadeRange = [2, 8.5];
+        space.ctx.zoom = 1.6;
+        space.ctx.dotSize = 0.035;
+        space.addPoints(pts3d);
+        space.addLines(lines);
 
-        space2.makeDraggable();
-        space2.ctx.rotationsPerSec = 0.01;
-        space2.ctx.mode = 'paused';
-        space2.rotateAround([0.3, -1, 0.5]);
-        space2.animate();
+        space.makeDraggable();
+        space.ctx.rotationsPerSec = 0.01;
+        space.ctx.mode = 'paused';
+        space.rotateAround([0.3, -1, 0.5]);
+        space.animate();
 
         // Add to the z value of all points.
         let t = matrix.eye(4);
         t[2][3] = zDist;
-        space2.setTransform(t);
-        space2.setZDist(zDist);
-        ensureCoreFill(space2.ctx.dots);
+        space.setTransform(t);
+        space.setZDist(zDist);
+        ensureCoreFill(space.ctx.dots);
 
         // ____________________________________________________________
         // Set up artist2 with the exploded permutohedron graph.
@@ -233,14 +233,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
         const a = 1.0 / scale2;
         artist2.setCoordLimits(-a, a, -a, a);
-        perm2.renderCtx.labelStyle = 'mainOnly';
+        perm.renderCtx.labelStyle = 'mainOnly';
 
         console.log('labels:');
         console.log(labels);
 
         // It's more trouble than I'd like to move the hit dots with all else.
         const params = {edgeStyles: lines, excludeHitDots: true};
-        [pts2d, pt2dElts, lines2d] = perm2.drawGraphWithPtMap(
+        [pts2d, pt2dElts, lines2d] = perm.drawGraphWithPtMap(
             artist2,
             ptMap,
             4,
@@ -248,7 +248,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         );
         ensureCoreFill();
         circleElt = artist2.addCircle({x: 0, y: 0}, rMin, circleStyle);
-        draw2.addAttributes(circleElt, {'pointer-events': 'none'});
+        draw.addAttributes(circleElt, {'pointer-events': 'none'});
     });
 
     window.requestAnimationFrame(drawFrame);

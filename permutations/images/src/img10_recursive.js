@@ -9,8 +9,8 @@
 // ______________________________________________________________________
 // Imports
 
-import * as init   from './init.js';
-import * as perm2  from './perm2.js';
+import * as init from './init.js';
+import * as perm from './perm.js';
 
 
 // ______________________________________________________________________
@@ -40,42 +40,42 @@ function refreshGraph(artist) {
 
     if (defaultStyles === null) {
         defaultStyles = {};
-        defaultStyles.edgeWidth = perm2.edgeStyle['stroke-width'];
-        defaultStyles.edgeStroke = perm2.edgeStyle.stroke;
-        defaultStyles.dotRadius = perm2.dotStyle.r;
-        defaultStyles.dotOutlineRadius = perm2.outlineStyle.r;
+        defaultStyles.edgeWidth = perm.edgeStyle['stroke-width'];
+        defaultStyles.edgeStroke = perm.edgeStyle.stroke;
+        defaultStyles.dotRadius = perm.dotStyle.r;
+        defaultStyles.dotOutlineRadius = perm.outlineStyle.r;
 
-        perm2.renderCtx.edgeWeighting = 'recursive';
+        perm.renderCtx.edgeWeighting = 'recursive';
     }
 
     if (n === 7) {
-        perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.02;
-        perm2.edgeStyle.stroke = '#aaa';
-        perm2.dotStyle.r     = defaultStyles.dotRadius * 0.2;
-        perm2.outlineStyle.r = defaultStyles.dotRadius * 0.4;
-        perm2.renderCtx.labelStyle = 'mainOnly';
+        perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.02;
+        perm.edgeStyle.stroke = '#aaa';
+        perm.dotStyle.r     = defaultStyles.dotRadius * 0.2;
+        perm.outlineStyle.r = defaultStyles.dotRadius * 0.4;
+        perm.renderCtx.labelStyle = 'mainOnly';
         noListeners = true;
     } else if (n === 6) {
-        perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.2;
-        // perm2.edgeStyle.stroke = '#bbb';
-        perm2.dotStyle.r     = defaultStyles.dotRadius * 0.4;
-        perm2.outlineStyle.r = defaultStyles.dotRadius * 0.6;
-        perm2.renderCtx.labelStyle = 'mainOnly';
+        perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.2;
+        // perm.edgeStyle.stroke = '#bbb';
+        perm.dotStyle.r     = defaultStyles.dotRadius * 0.4;
+        perm.outlineStyle.r = defaultStyles.dotRadius * 0.6;
+        perm.renderCtx.labelStyle = 'mainOnly';
     } else if (n === 5) {
-        perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.4;
-        perm2.edgeStyle.stroke = defaultStyles.edgeStroke;
-        perm2.dotStyle.r     = defaultStyles.dotRadius * 0.7;
-        perm2.outlineStyle.r = defaultStyles.dotRadius * 1.1;
-        perm2.renderCtx.labelStyle = 'mainOnly';
+        perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth * 0.4;
+        perm.edgeStyle.stroke = defaultStyles.edgeStroke;
+        perm.dotStyle.r     = defaultStyles.dotRadius * 0.7;
+        perm.outlineStyle.r = defaultStyles.dotRadius * 1.1;
+        perm.renderCtx.labelStyle = 'mainOnly';
     } else {
-        perm2.edgeStyle['stroke-width'] = defaultStyles.edgeWidth;
-        perm2.edgeStyle.stroke = defaultStyles.edgeStroke;
-        perm2.dotStyle.r     = defaultStyles.dotRadius;
-        perm2.outlineStyle.r = defaultStyles.dotOutlineRadius;
-        perm2.renderCtx.labelStyle = 'all';
+        perm.edgeStyle['stroke-width'] = defaultStyles.edgeWidth;
+        perm.edgeStyle.stroke = defaultStyles.edgeStroke;
+        perm.dotStyle.r     = defaultStyles.dotRadius;
+        perm.outlineStyle.r = defaultStyles.dotOutlineRadius;
+        perm.renderCtx.labelStyle = 'all';
     }
 
-    perm2.drawRecursiveGn(artist, n, {orderingType, noListeners});
+    perm.drawRecursiveGn(artist, n, {orderingType, noListeners});
     artist.autorender();
 }
 

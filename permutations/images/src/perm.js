@@ -2,6 +2,8 @@
  *
  * Functions to work with permutations.
  *
+ * XXX Eventually this will replace perm.js.
+ *
  */
 
 
@@ -169,20 +171,20 @@ function placeRecursivePtsInCircle(n, circle, orderingType, angle) {
     return ptMap;
 }
 
-function addDot(pt, outlineGroup, frontGroup, excludeHitDot) {
+function addDot(artist, pt, outlineGroup, frontGroup, excludeHitDot) {
 
     let thisDotStyle = Object.assign({}, dotStyle);
     if (pt.hasOwnProperty('maxUnitRadius')) {
-        let maxCanvasRadius = pt.maxUnitRadius * draw.ctx.toCanvasScale;
+        let maxCanvasRadius = pt.maxUnitRadius * artist.toCanvasScale;
         thisDotStyle.r = Math.min(maxCanvasRadius, thisDotStyle.r);
     }
-    let outline = draw.circle(pt, outlineStyle, outlineGroup);
+    let outline = artist.addCircle(pt, outlineStyle, outlineGroup);
     let hitDot  = null;
     if (!excludeHitDot) {
-        hitDot = draw.circle(pt, outlineStyle, frontGroup);
+        hitDot = artist.addCircle(pt, outlineStyle, frontGroup);
         draw.addAttributes(hitDot, {fill: 'transparent'});
     }
-    let circle  = draw.circle(pt, thisDotStyle, frontGroup);
+    let circle = artist.addCircle(pt, thisDotStyle, frontGroup);
     return [outline, hitDot, circle];
 }
 
@@ -419,7 +421,17 @@ function addPtMapEdges(n, ptMap) {
 //         An outline is a white background svg circle.
 //         Each textElts value is an arry with two svg text elements; the label.
 //     `lines` is an array of svg line elements.
-export function drawGraphWithPtMap(ptMap, n, edgeStyles, excludeHitDots) {
+export function drawGraphWithPtMap(
+    artist,
+    ptMap,
+    n,
+    params  // Accepts edgeStyles, excludeHitDots, noListeners.
+) {
+
+    if (params === undefined) params = {};
+    let edgeStyles     = params.edgeStyles;
+    let excludeHitDots = params.excludeHitDots;
+    let noListeners    = params.noListeners;
 
     if (excludeHitDots === undefined) excludeHitDots = false;
 
@@ -434,12 +446,12 @@ export function drawGraphWithPtMap(ptMap, n, edgeStyles, excludeHitDots) {
     let edgeGroups = [];
     if (renderCtx.edgeWeighting === 'recursive') {
         for (let i = 0; i < n; i++) {
-            edgeGroups.push(draw.add('g'));
+            edgeGroups.push(artist.add('g'));
         }
     }
-    let edgeGroup    = draw.add('g');
-    let outlineGroup = draw.add('g');
-    let frontGroup   = draw.add('g');
+    let edgeGroup    = artist.add('g');
+    let outlineGroup = artist.add('g');
+    let frontGroup   = artist.add('g');
 
     // Draw the edges.
     let lines = [];
@@ -466,7 +478,7 @@ export function drawGraphWithPtMap(ptMap, n, edgeStyles, excludeHitDots) {
         if (renderCtx.edgeWeighting === 'recursive') {
             group = edgeGroups[edge.groupNum];
         }
-        let line = draw.line(edge.from, edge.to, thisStyle, group);
+        let line = artist.addLine(edge.from, edge.to, thisStyle, group);
         line.baseColor = thisStyle.stroke;
         line.fromIndex = edge.from.i;
         line.toIndex   = edge.to.i;
@@ -493,8 +505,10 @@ export function drawGraphWithPtMap(ptMap, n, edgeStyles, excludeHitDots) {
     let ptElts   = [];
     let entries  = [];
     for (const [perm, pt] of Object.entries(ptMap)) {
-        console.log(`Processing ${perm} with point ${pt.x}, ${pt.y}.`);
+        // Uncomment the next line to help debug this function.
+        // console.log(`Processing ${perm} with point ${pt.x}, ${pt.y}.`);
         let [outline, hitDot, circle] = addDot(
+            artist,
             pt,
             outlineGroup,
             frontGroup,
@@ -505,8 +519,8 @@ export function drawGraphWithPtMap(ptMap, n, edgeStyles, excludeHitDots) {
         let eps = 0.01
         let leftBaseline = draw.translate(pt, {x: eps, y: -eps});
         pt.textElts = [
-            draw.text(leftBaseline, perm, textOutlineStyle, outlineGroup),
-            draw.text(leftBaseline, perm, textStyle, frontGroup)
+            artist.addText(leftBaseline, perm, textOutlineStyle, outlineGroup),
+            artist.addText(leftBaseline, perm, textStyle, frontGroup)
         ];
         pt.textElts.forEach(x => x.setAttribute('pointer-events', 'none'));
 
@@ -514,12 +528,13 @@ export function drawGraphWithPtMap(ptMap, n, edgeStyles, excludeHitDots) {
         pts.push([pt.x, pt.y]);
         ptElts.push({dot: circle, outline, textElts: pt.textElts});
 
+        if (noListeners) continue;
         let highlighter   = getGraphColorer(ptMap, pt, highlightColors);
         let unhighlighter = getGraphColorer(ptMap, pt, unhighlightColors);
         for (let elt of [hitDot, circle]) {
             if (elt === null) continue;  // We may exclude hit dots.
             elt.addEventListener('mouseover', highlighter);
-            elt.addEventListener('mouseout', unhighlighter);
+            elt.addEventListener('mouseout',  unhighlighter);
         }
     }
 
@@ -572,7 +587,16 @@ export function getMagnitude(permStr) {
 }
 
 // Render G_n is an n-partite graph in the rectangle from [-a, -b] to [a, b].
-export function drawNPartiteGn(n, orderingType) {
+// The `params` objects can accept these optional values:
+//  * orderingType   in ['plain', 'lex', 'random']
+//  * excludeHitDots in [true, false] (default is false)
+//  * noListeners    in [true, false] (default is false)
+export function drawNPartiteGn(artist, n, params) {
+
+    if (params === undefined) params = {};
+    let orderingType   = params.orderingType;
+    let excludeHitDots = params.excludeHitDots;
+    let noListeners    = params.noListeners;
 
     let forAllPerms = getPermIterator(orderingType);
 
@@ -606,11 +630,11 @@ export function drawNPartiteGn(n, orderingType) {
         }
         x += dx;
     }
-    drawGraphWithPtMap(ptMap, n);
+    drawGraphWithPtMap(artist, ptMap, n, params);
 }
 
 // Render G_n as a bipartitle graph in the rectangle from [-a,-b] to [a, b].
-export function drawBipartiteGn(n, useLexOrdering) {
+export function drawBipartiteGn(artist, n, useLexOrdering) {
 
     if (useLexOrdering === undefined) {
         useLexOrdering = false;
@@ -632,10 +656,13 @@ export function drawBipartiteGn(n, useLexOrdering) {
         x *= -1;
         if (x < 0) y += dy;
     });
-    drawGraphWithPtMap(ptMap, n);
+    drawGraphWithPtMap(artist, ptMap, n);
 }
 
-export function drawRecursiveGn(n, orderingType) {
+export function drawRecursiveGn(artist, n, params) {
+
+    if (params === undefined) params = {};
+    let orderingType   = params.orderingType;
 
     let radius = 0.8;
 
@@ -644,17 +671,22 @@ export function drawRecursiveGn(n, orderingType) {
         {cx: 0, cy: 0, r: radius},
         orderingType
     );
-    drawGraphWithPtMap(ptMap, n);
+    drawGraphWithPtMap(artist, ptMap, n, params);
 }
 
-export function drawRandomGn(n) {
+export function drawRandomGn(artist, n) {
     // Come up with a map from strings like "1432" to an {x, y} point in the
     // unit circle around the origin.
     let ptMap = makeRandomPtMap(n);
-    drawGraphWithPtMap(ptMap, n);
+    drawGraphWithPtMap(artist, ptMap, n);
 }
 
-export function drawCircularGn(n, orderingType) {
+export function drawCircularGn(artist, n, params) {
+
+    if (params === undefined) params = {};
+    let orderingType   = params.orderingType;
+    let excludeHitDots = params.excludeHitDots;
+    let noListeners    = params.noListeners;
 
     let radius = 0.8;
 
@@ -672,7 +704,7 @@ export function drawCircularGn(n, orderingType) {
         angle += angleDelta;
     });
 
-    drawGraphWithPtMap(ptMap, n);
+    drawGraphWithPtMap(artist, ptMap, n, params);
 }
 
 // Returns [pts, labels]. `pts` is a list of 3d points (length-3 arrays), each

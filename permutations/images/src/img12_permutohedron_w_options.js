@@ -12,8 +12,8 @@
 
 import * as init   from './init.js';
 import * as matrix from './matrix.js';
-import * as perm2  from './perm2.js';
-import * as space2 from './space2.js';
+import * as perm   from './perm.js';
+import * as space  from './space.js';
 
 
 // ______________________________________________________________________
@@ -31,7 +31,7 @@ let zDist = 8;
 // Functions
 
 function highlightEdges(sliceName) {
-    space2.highlightEdges(sliceName);
+    space.highlightEdges(sliceName);
 }
 
 // Set up an array of button elements (in buttonElts). Each button receives a
@@ -73,14 +73,14 @@ function setupButtons() {
     facesShowElt.classList.add('underline');
     facesShowElt.classList.add('hover-button');
     facesShowElt.addEventListener('mouseover', e => {
-        space2.ctx.doDrawFaces = true;
+        space.ctx.doDrawFaces = true;
         facesHideElt.classList.remove('underline');
         facesShowElt.classList.add('underline');
     });
 
     facesHideElt.classList.add('hover-button');
     facesHideElt.addEventListener('mouseover', e => {
-        space2.ctx.doDrawFaces = false;
+        space.ctx.doDrawFaces = false;
         facesShowElt.classList.remove('underline');
         facesHideElt.classList.add('underline');
     });
@@ -96,35 +96,35 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // init.setup(size);
     setupButtons();
 
-    let [pts, labels]   = perm2.getG4PointsIn3D();
-    let [lines, slices] = perm2.getEdgeIndexesLex(4);
-    let faces           = perm2.getG4FacesIn3D();
+    let [pts, labels]   = perm.getG4PointsIn3D();
+    let [lines, slices] = perm.getEdgeIndexesLex(4);
+    let faces           = perm.getG4FacesIn3D();
 
     init.addContainerSwitcher(size, (artist) => {
 
-        space2.reset();
+        space.reset();
 
         // Add a small degree of fading for the farther-back points and lines.
-        space2.ctx.fadeRange = [6, 12];
+        space.ctx.fadeRange = [6, 12];
 
-        space2.setArtist(artist);
-        space2.ctx.zoom = Math.PI;
-        space2.addPoints(pts, labels);
-        space2.addLines(lines, slices);
-        space2.addFaces(faces);
+        space.setArtist(artist);
+        space.ctx.zoom = Math.PI;
+        space.addPoints(pts, labels);
+        space.addLines(lines, slices);
+        space.addFaces(faces);
 
-        space2.makeDraggable();
+        space.makeDraggable();
 
         // Add to the z value of all points.
         let t = matrix.eye(4);
         t[2][3] = zDist;
-        space2.setTransform(t);
+        space.setTransform(t);
 
-        space2.ctx.rotationsPerSec = 0.05;
-        space2.ctx.rotationSign = -1;
-        space2.setZDist(zDist);
-        space2.rotateAround([0.3, -1, 0.5]);
+        space.ctx.rotationsPerSec = 0.05;
+        space.ctx.rotationSign = -1;
+        space.setZDist(zDist);
+        space.rotateAround([0.3, -1, 0.5]);
 
-        space2.animate();
+        space.animate();
     });
 });

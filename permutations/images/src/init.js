@@ -9,7 +9,6 @@
 // Imports
 
 import * as draw   from './draw.js';
-import * as draw2  from './draw2.js';
 import * as perm   from './perm.js';
 import * as random from './random.js';
 
@@ -169,35 +168,6 @@ export function enableContainerSwitcher(size, numContainers, setupWithArtist) {
     setupWithArtist(...artists);
 }
 
-export function setup(w, h, containerId) {
-
-    if (containerId === undefined) containerId = 'svg';
-
-    if (h === undefined) h = w;
-
-    if (w === undefined) {
-        w = xSize;
-        h = ySize;
-    }
-    // If we multiply logical units * toCanvasScale, then we map from [-1, 1]^2
-    // into a square that just fits, centered, in the canvas.
-    let canvasSize = Math.min(w, h);
-    let toCanvasScale = canvasSize / 2.0;
-
-    // Set up graphic components.
-    const container = document.getElementById(containerId);
-    draw.addAttributes(container, {width: w, height: h});
-    draw.setSVG(container);
-    draw.drawInFront();
-    draw.setOrigin({x: w / 2, y: h / 2});
-    draw.setScale(toCanvasScale);
-
-    // Set a deterministic seed so the image is reproducible.
-    random.seed(6);
-
-    return container;
-}
-
 // XXX TODO Eventually have this one completely replace setup().
 export function setup2(w, h, containerId) {
 
@@ -224,7 +194,7 @@ export function setup2(w, h, containerId) {
 
     // Set up graphic components.
 
-    const artist = draw2.inId(containerId);
+    const artist = draw.inId(containerId);
     artist.setSize(w, h);
     artist.setCoordLimits(-1, 1);
 

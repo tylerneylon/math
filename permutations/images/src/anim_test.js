@@ -11,8 +11,8 @@
 // ______________________________________________________________________
 // Imports
 
-import * as draw2  from './draw2.js';
-import * as init   from './init.js';
+import * as draw from './draw.js';
+import * as init from './init.js';
 
 
 // ______________________________________________________________________

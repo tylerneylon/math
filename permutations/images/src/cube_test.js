@@ -1,6 +1,6 @@
 /* cube_test.js
  *
- * A test for initial development of space2.js.
+ * A test for initial development of space.js.
  *
  */
 
@@ -10,7 +10,7 @@
 
 import * as init   from './init.js';
 import * as matrix from './matrix.js';
-import * as space2 from './space2.js';
+import * as space  from './space.js';
 
 
 // ______________________________________________________________________
@@ -50,7 +50,7 @@ function drawFrame(ts) {
         t4[2][3] = zDist;
         let t = matrix.mult(t4, matrix.mult(t3, matrix.mult(t2, t1)));
 
-        space2.setTransform(t);
+        space.setTransform(t);
     }
 
     lastTs = ts;
@@ -90,14 +90,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
-    space2.setArtist(artist);
-    space2.addPoints(pts);
-    space2.addLines(lines);
+    space.setArtist(artist);
+    space.addPoints(pts);
+    space.addLines(lines);
 
     // Add to the z value of all points.
     let t = matrix.eye(4);
     t[2][3] = zDist;
-    space2.setTransform(t);
+    space.setTransform(t);
 
     window.requestAnimationFrame(drawFrame);
 });
