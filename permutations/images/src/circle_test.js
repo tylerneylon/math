@@ -9,7 +9,7 @@
 // ______________________________________________________________________
 // Imports
 
-import * as draw   from './draw.js';
+import * as draw2  from './draw2.js';
 import * as init   from './init.js';
 
 
@@ -17,6 +17,7 @@ import * as init   from './init.js';
 // Globals
 
 let n = 4;
+let artist = null;
 
 
 // ______________________________________________________________________
@@ -45,7 +46,7 @@ function refreshCircles() {
         fill:   '#44f'
     };
 
-    draw.circle({x: 0, y: 0}, scale, bigCircleStyle);
+    artist.addCircle({x: 0, y: 0}, scale, bigCircleStyle);
 
     let angle = 0;
     let r = findSmallRadius(n);
@@ -53,7 +54,7 @@ function refreshCircles() {
     for (let i = 0; i < n; i++) {
         let x = scale * R * Math.cos(angle);
         let y = scale * R * Math.sin(angle);
-        draw.circle({x, y}, scale * r, smallCircleStyle);
+        artist.addCircle({x, y}, scale * r, smallCircleStyle);
         angle += (2 * Math.PI / n);
     }
 }
@@ -99,7 +100,7 @@ function setupButtons() {
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    init.setup();
+    artist = init.setup2();
     setupButtons();
 
     refreshCircles();
