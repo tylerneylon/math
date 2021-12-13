@@ -11,7 +11,7 @@
 // ______________________________________________________________________
 // Imports
 
-import * as draw   from './draw.js';
+import * as draw2  from './draw2.js';
 import * as init   from './init.js';
 
 
@@ -22,6 +22,7 @@ let angle  = 0;
 let circle = null;
 let R      = 0.8;
 let lastTs = null;
+let artist = null;
 
 let circleStyle = {
     stroke: 'transparent',
@@ -38,11 +39,11 @@ function drawFrame(ts) {
 
     if (circle === null) {
         let r = 0.1;
-        circle = draw.circle({x: R, y: 0}, r, circleStyle);
+        circle = artist.addCircle({x: R, y: 0}, r, circleStyle);
     } else {
         angle += rotationsPerSec * 2 * Math.PI * (ts - lastTs) / 1000;
         let center = {x: R * Math.cos(angle), y: R * Math.sin(angle)};
-        draw.moveCircle(circle, center);
+        artist.moveCircle(circle, center);
     }
 
     lastTs = ts;
@@ -59,7 +60,7 @@ function animateCircle() {
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    init.setup();
+    artist = init.setup2();
 
     animateCircle();
 });
