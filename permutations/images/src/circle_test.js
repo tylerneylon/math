@@ -9,7 +9,6 @@
 // ______________________________________________________________________
 // Imports
 
-import * as draw2  from './draw2.js';
 import * as init   from './init.js';
 
 
