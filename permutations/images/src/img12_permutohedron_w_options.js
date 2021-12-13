@@ -12,7 +12,7 @@
 
 import * as init   from './init.js';
 import * as matrix from './matrix.js';
-import * as perm   from './perm.js';
+import * as perm2  from './perm2.js';
 import * as space2 from './space2.js';
 
 
@@ -96,9 +96,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // init.setup(size);
     setupButtons();
 
-    let [pts, labels]   = perm.getG4PointsIn3D();
-    let [lines, slices] = perm.getEdgeIndexesLex(4);
-    let faces           = perm.getG4FacesIn3D();
+    let [pts, labels]   = perm2.getG4PointsIn3D();
+    let [lines, slices] = perm2.getEdgeIndexesLex(4);
+    let faces           = perm2.getG4FacesIn3D();
 
     init.addContainerSwitcher(size, (artist) => {
 
