@@ -72,7 +72,7 @@ function getFlattenedPermutohedron() {
 }
 
 function updateMainPtMapElts() {
-    let textOffset = {x: 0.01, y: -0.01};
+    let textOffset = {x: 0.015, y: -0.015};
     for (const pt of Object.values(mainPtMap)) {
         artist.moveCircle(pt.dotElt, pt);
         artist.moveCircle(pt.outlineElt, pt);
@@ -114,6 +114,14 @@ function drawFrame(ts) {
     artist.render();
 }
 
+function adjustFontSize() {
+    for (const pt of Object.values(mainPtMap)) {
+        for (const textElt of pt.textElts) {
+            textElt.setAttribute('font-size', '10pt');
+        }
+    }
+}
+
 
 // ______________________________________________________________________
 // Main
@@ -139,6 +147,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     mainPtMap = perm.getBipartiteGn(4);
     let params = {};  // XXX
     perm.drawGraphWithPtMap(artist, mainPtMap, 4, params);
+    adjustFontSize();
 
     window.requestAnimationFrame(drawFrame);
 
