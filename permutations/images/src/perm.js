@@ -669,18 +669,21 @@ export function drawBipartiteGn(artist, n, useLexOrdering) {
     drawGraphWithPtMap(artist, ptMap, n);
 }
 
-export function drawRecursiveGn(artist, n, params) {
-
+export function getRecursiveGn(n, params) {
     if (params === undefined) params = {};
     let orderingType   = params.orderingType;
 
     let radius = 0.8;
 
-    let ptMap = placeRecursivePtsInCircle(
+    return placeRecursivePtsInCircle(
         n,
         {cx: 0, cy: 0, r: radius},
         orderingType
     );
+}
+
+export function drawRecursiveGn(artist, n, params) {
+    const ptMap = getRecursiveGn(n, params);
     drawGraphWithPtMap(artist, ptMap, n, params);
 }
 
