@@ -10,6 +10,7 @@
 // Imports
 
 // TODO needed?
+import * as draw   from './draw.js';
 import * as init   from './init.js';
 import * as matrix from './matrix.js';
 import * as perm   from './perm.js';
@@ -20,7 +21,8 @@ import * as util   from './util.js';
 // ______________________________________________________________________
 // Globals
 
-const itemSize = 150;  // 300;
+const itemSize = 250;
+const xMargin  =  40;  // Add this space to both the left and right sides.
 
 const edgeStyle = {
     stroke: '#eee',
@@ -70,10 +72,14 @@ function getFlattenedPermutohedron() {
 }
 
 function updateMainPtMapElts() {
+    let textOffset = {x: 0.01, y: -0.01};
     for (const pt of Object.values(mainPtMap)) {
         artist.moveCircle(pt.dotElt, pt);
         artist.moveCircle(pt.outlineElt, pt);
         artist.moveCircle(pt.hitDotElt, pt);
+        let textBaseline = draw.translate(pt, textOffset);
+        artist.moveText(pt.textElts[0], textBaseline);
+        artist.moveText(pt.textElts[1], textBaseline);
         for (let i = 0; i < pt.edges.length; i++) {
             artist.moveLine(pt.edgeElts[i], pt.edges[i].from, pt.edges[i].to);
         }
@@ -116,8 +122,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     slider = document.getElementById('slider');
 
-    artist = init.setup(5 * itemSize, itemSize, 'canvas');
-    artist.setCoordLimits(0, 5, 0, 1);
+    artist = init.setup(5 * itemSize + 2 * xMargin, itemSize, 'canvas');
+    const unitMargin = xMargin / itemSize;
+    artist.setCoordLimits(-unitMargin, 5 + unitMargin, 0, 1);
 
     ptMaps.push(perm.getBipartiteGn(4));
     ptMaps.push(perm.getNPartiteGn(4));
