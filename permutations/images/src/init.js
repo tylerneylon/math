@@ -168,7 +168,6 @@ export function enableContainerSwitcher(size, numContainers, setupWithArtist) {
     setupWithArtist(...artists);
 }
 
-// XXX TODO Eventually have this one completely replace setup().
 export function setup(w, h, containerId) {
 
     // Accept different input combinations.
