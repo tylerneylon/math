@@ -28,6 +28,12 @@ const edgeStyle = {
     'stroke-width': 1.5
 };
 
+let slider = null;
+let artist = null;
+const ptMaps = [];
+let mainPtMap = null;
+let [pts, ptElts, lines] = [null, null, null];
+
 
 // ______________________________________________________________________
 // Functions
@@ -63,16 +69,51 @@ function getFlattenedPermutohedron() {
     return ptMap;
 }
 
+function updateMainPtMapElts() {
+    for (const pt of Object.values(mainPtMap)) {
+        artist.moveCircle(pt.dotElt, pt);
+        artist.moveCircle(pt.outlineElt, pt);
+        artist.moveCircle(pt.hitDotElt, pt);
+        for (let i = 0; i < pt.edges.length; i++) {
+            artist.moveLine(pt.edgeElts[i], pt.edges[i].from, pt.edges[i].to);
+        }
+    }
+}
+
+function drawFrame(ts) {
+    window.requestAnimationFrame(drawFrame);
+
+    let variant = parseFloat(slider.value);
+    let left  = Math.floor(variant);
+    let right = left + 1;
+    let leftWeight  = right - variant;   // eg variant = 1.1, leftWeight  = 0.9
+    let rightWeight = 1.0 - leftWeight;  // eg variant = 1.1, rightWeight = 0.1
+
+    for (const [permStr, xy] of Object.entries(mainPtMap)) {
+        // I'm phrasing things this way because we have the edge case where
+        // left = maxValue and rightWeight = 0, in which case we don't want to
+        // dereference the right map at all.
+        xy.x = leftWeight * ptMaps[left][permStr].x;
+        if (rightWeight) xy.x += rightWeight * ptMaps[right][permStr].x;
+        xy.y = leftWeight * ptMaps[left][permStr].y;
+        if (rightWeight) xy.y += rightWeight * ptMaps[right][permStr].y;
+    }
+
+    updateMainPtMapElts();
+    artist.render();
+}
+
 
 // ______________________________________________________________________
 // Main
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    const artist = init.setup(5 * itemSize, itemSize, 'canvas');
+    slider = document.getElementById('slider');
+
+    artist = init.setup(5 * itemSize, itemSize, 'canvas');
     artist.setCoordLimits(0, 5, 0, 1);
 
-    const ptMaps = [];
     ptMaps.push(perm.getBipartiteGn(4));
     ptMaps.push(perm.getNPartiteGn(4));
     ptMaps.push(perm.getCircularGn(4));
@@ -83,6 +124,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
         renderPtMap(artist, ptMaps[i]);
     }
 
-    artist.autorender();
+    mainPtMap = perm.getBipartiteGn(4);
+    let params = {};  // XXX
+    perm.drawGraphWithPtMap(artist, mainPtMap, 4, params);
 
+    window.requestAnimationFrame(drawFrame);
+
+    slider.style.width = 4 * itemSize + 'px';
 });

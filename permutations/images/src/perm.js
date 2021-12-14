@@ -524,7 +524,10 @@ export function drawGraphWithPtMap(
         ];
         pt.textElts.forEach(x => x.setAttribute('pointer-events', 'none'));
 
-        pt.elt = circle;
+        pt.elt        = circle;
+        pt.dotElt     = circle;
+        pt.outlineElt = outline;
+        pt.hitDotElt  = hitDot;
         pts.push([pt.x, pt.y]);
         ptElts.push({dot: circle, outline, textElts: pt.textElts});
 
