@@ -1,0 +1,12 @@
+  #
+  # dead_fn_check.txt
+  #
+  # Some bash notes on one way to heuristically find functions that are defined
+  # but never called. Might be useful for code cleanup, or writing tests.
+  #
+  ctags -x *.js | grep function > fn_names.txt
+  <fn_names.txt awk '{print $1}' > fn_names_only.txt
+  vim fn_names_only.txt
+  cat fn_names_only.txt | uniq > t
+  mv t fn_names_only.txt
+  for w in $(cat fn_names_only.txt); do if [ $(grep $w *.js | wc -l) -eq "1" ]; then echo $w; fi; done
