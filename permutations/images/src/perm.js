@@ -370,7 +370,11 @@ function getCommonPrefixLen(s1, s2) {
     return i;
 }
 
-function addPtMapEdges(n, ptMap) {
+
+// ______________________________________________________________________
+// Public functions
+
+export function addPtMapEdges(n, ptMap) {
     var edges = [];
     forAllTranspositions(n, function(t) {
         for (let p1 of Object.keys(ptMap)) {
@@ -403,10 +407,6 @@ function addPtMapEdges(n, ptMap) {
     });
     return edges;
 }
-
-
-// ______________________________________________________________________
-// Public functions
 
 // This accepts a point map ptMap, the n for which G_n we're working with,
 // and optionally a list of line styles edgeStyles. It draws G_n in 2d based on
@@ -586,17 +586,10 @@ export function getMagnitude(permStr) {
     return magnitude;
 }
 
-// Render G_n is an n-partite graph in the rectangle from [-a, -b] to [a, b].
-// The `params` objects can accept these optional values:
-//  * orderingType   in ['plain', 'lex', 'random']
-//  * excludeHitDots in [true, false] (default is false)
-//  * noListeners    in [true, false] (default is false)
-export function drawNPartiteGn(artist, n, params) {
-
+// Build G_n as an n-partite graph. See drawNPartiteGn() for docs.
+export function getNPartiteGn(n, params) {
     if (params === undefined) params = {};
     let orderingType   = params.orderingType;
-    let excludeHitDots = params.excludeHitDots;
-    let noListeners    = params.noListeners;
 
     let forAllPerms = getPermIterator(orderingType);
 
@@ -630,12 +623,22 @@ export function drawNPartiteGn(artist, n, params) {
         }
         x += dx;
     }
+    return ptMap;
+}
+
+// Render G_n as an n-partite graph in the rectangle from [-a, -b] to [a, b].
+// The `params` objects can accept these optional values:
+//  * orderingType   in ['plain', 'lex', 'random']
+//  * excludeHitDots in [true, false] (default is false)
+//  * noListeners    in [true, false] (default is false)
+export function drawNPartiteGn(artist, n, params) {
+    const ptMap = getNPartiteGn(n, params);
     drawGraphWithPtMap(artist, ptMap, n, params);
 }
 
-// Render G_n as a bipartitle graph in the rectangle from [-a,-b] to [a, b].
-export function drawBipartiteGn(artist, n, useLexOrdering) {
-
+// Build G_n as a bipartitle graph in the rectangle from [-a,-b] to [a, b].
+// Return it as a ptMap object.
+export function getBipartiteGn(n, useLexOrdering) {
     if (useLexOrdering === undefined) {
         useLexOrdering = false;
     }
@@ -656,6 +659,13 @@ export function drawBipartiteGn(artist, n, useLexOrdering) {
         x *= -1;
         if (x < 0) y += dy;
     });
+
+    return ptMap;
+}
+
+// Render G_n as a bipartitle graph in the rectangle from [-a,-b] to [a, b].
+export function drawBipartiteGn(artist, n, useLexOrdering) {
+    let ptMap = getBipartiteGn(n, useLexOrdering);
     drawGraphWithPtMap(artist, ptMap, n);
 }
 
@@ -681,12 +691,10 @@ export function drawRandomGn(artist, n) {
     drawGraphWithPtMap(artist, ptMap, n);
 }
 
-export function drawCircularGn(artist, n, params) {
+export function getCircularGn(n, params) {
 
     if (params === undefined) params = {};
     let orderingType   = params.orderingType;
-    let excludeHitDots = params.excludeHitDots;
-    let noListeners    = params.noListeners;
 
     let radius = 0.8;
 
@@ -704,6 +712,11 @@ export function drawCircularGn(artist, n, params) {
         angle += angleDelta;
     });
 
+    return ptMap;
+}
+
+export function drawCircularGn(artist, n, params) {
+    const ptMap = getCircularGn(n, params);
     drawGraphWithPtMap(artist, ptMap, n, params);
 }
 
