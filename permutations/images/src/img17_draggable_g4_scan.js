@@ -85,12 +85,12 @@ function drawFrame(ts) {
             );
             space.updatePoints();
         }
-        pts3d = matrix.mult(space.ctx.rotateMat, space.ctx.pts);
+        let sc = space.ctx;
+        space.setTransform(matrix.mult(sc.transMat, sc.rotateMat));
+        pts3d = matrix.mult(sc.rotateMat, sc.pts);
         pts3d = matrix.transpose(pts3d).map(x => x.slice(0, 3));
         for (let i = 0; i < pts3d.length; i++) {
-            // The `null` here is for the outline; which is used for 2d plots
-            // but not for 3d plots (since space.js owns those outlines).
-            updateDot(artist1, pts3d[i], space.ctx.dots[i], w, x);
+            updateDot(artist1, pts3d[i], sc.dots[i], w, x);
         }
 
         pts2d = util.explode3DPoints(pts3d, labels, rMin, rMax);
@@ -207,8 +207,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
         space.makeDraggable();
         space.ctx.rotationsPerSec = 0.01;
         space.ctx.mode = 'paused';
-        space.rotateAround([0.3, -1, 0.5]);
-        space.animate();
 
         // Add to the z value of all points.
         let t = matrix.eye(4);
