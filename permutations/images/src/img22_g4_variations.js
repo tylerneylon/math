@@ -20,12 +20,12 @@ import * as util   from './util.js';
 // ______________________________________________________________________
 // Globals
 
-const itemSize = 300;
+const itemSize = 150;  // 300;
 
 const edgeStyle = {
-    stroke: '#ddd',
+    stroke: '#eee',
     fill: 'transparent',
-    'stroke-width': 1.5
+    'stroke-width': 1
 };
 
 let slider = null;
@@ -82,6 +82,11 @@ function updateMainPtMapElts() {
 
 function drawFrame(ts) {
     window.requestAnimationFrame(drawFrame);
+
+    // Implement snap to integer values.
+    if (Math.abs(Math.round(slider.value) - slider.value) < 0.025) {
+        slider.value = Math.round(slider.value);
+    }
 
     let variant = parseFloat(slider.value);
     let left  = Math.floor(variant);
