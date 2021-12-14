@@ -49,7 +49,7 @@ function drawFrame(ts) {
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    const artist = init.setup2();
+    const artist = init.setup();
 
     let [pts, labels]   = perm.getG4PointsIn3D();
     let [lines, slices] = perm.getEdgeIndexesLex(4);

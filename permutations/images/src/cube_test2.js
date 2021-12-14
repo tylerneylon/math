@@ -24,7 +24,7 @@ let zDist = 8;
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    space.setArtist(init.setup2());
+    space.setArtist(init.setup());
 
     let [pts, lines, faces] = util.getCubePtsLinesFaces();
 

@@ -57,7 +57,7 @@ function drawFrame(ts) {
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    const artist = init.setup2();
+    const artist = init.setup();
 
     let [pts, lines, faces] = util.getCubePtsLinesFaces();
 

@@ -152,7 +152,7 @@ export function enableContainerSwitcher(size, numContainers, setupWithArtist) {
                 newElt.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
             }
 
-            artists.push(setup2(w, h, newId));
+            artists.push(setup(w, h, newId));
         }
         containerType = newType;
         setupWithArtist(...artists);
@@ -163,13 +163,13 @@ export function enableContainerSwitcher(size, numContainers, setupWithArtist) {
     let artists = [];
     for (let i = 1; i <= numContainers; i++) {
         let containerId = (numContainers === 1 ? 'svg' : `svg${i}`);
-        artists.push(setup2(size, containerId));
+        artists.push(setup(size, containerId));
     }
     setupWithArtist(...artists);
 }
 
 // XXX TODO Eventually have this one completely replace setup().
-export function setup2(w, h, containerId) {
+export function setup(w, h, containerId) {
 
     // Accept different input combinations.
     if (typeof w === 'string') {  // Support setup(containerId).

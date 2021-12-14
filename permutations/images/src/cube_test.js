@@ -67,7 +67,7 @@ function animateCircle() {
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    const artist = init.setup2();
+    const artist = init.setup();
 
     // Create an array of 3d points.
     // These will be the corners of the [-a, a]^3 cube.

@@ -60,7 +60,7 @@ function animateCircle() {
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    artist = init.setup2();
+    artist = init.setup();
 
     animateCircle();
 });

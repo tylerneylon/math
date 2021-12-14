@@ -73,7 +73,7 @@ function getCubePtsLinesFaces() {
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    space.setArtist(init.setup2());
+    space.setArtist(init.setup());
 
     let [pts, lines, faces] = getCubePtsLinesFaces();
 
