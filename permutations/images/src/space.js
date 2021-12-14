@@ -13,8 +13,6 @@
 // ______________________________________________________________________
 // Imports
 
-// XXX Do we need draw? Maybe we get everything from artist directly.
-import * as draw   from './draw.js';
 import * as matrix from './matrix.js';
 import * as util   from './util.js';
 import * as vector from './vector.js';
@@ -192,20 +190,17 @@ let edgeGroup    = null;
 // ______________________________________________________________________
 // Internal functions.
 
-// CONVERTED
 function didDrag() {
     let motion = xDrag + yDrag;
     console.log(`didDrag(): motion=${motion}.`);
     return motion > 5;
 }
 
-// CONVERTED
 function logEvent(e) {
     if (!doDebugEvents) return;
     console.log(`${e.type} on ${e.target}`);
 }
 
-// CONVERTED
 function getXYArray(pts, doPerspective, doRotate) {
 
     if (doRotate === undefined) doRotate = true;
@@ -226,7 +221,6 @@ function getXYArray(pts, doPerspective, doRotate) {
     return xyArray;
 }
 
-// CONVERTED (pending support for translate in draw)
 function updateLabelForDot(dot, xy) {
     let offset = 0.01;
     let c = artist.toCanvasScale;
@@ -235,7 +229,6 @@ function updateLabelForDot(dot, xy) {
     dot.label.setAttribute('transform', `translate(${c * xy.x}, ${c * xy.y})`);
 }
 
-// XXX CONVERT
 // Add the circle if there is one. For now, this will be rendered on top of
 // everything else.
 function renderCircle() {
@@ -345,7 +338,6 @@ function renderCircle() {
     }
 }
 
-// CONVERTED
 // This applies ctx.fadeRange to stdBaseColor, using z, to arrive a color that
 // is a fade from stdBaseColor down to white. The returned value is a color
 // string that can be assigned, eg, to a `stroke` or `fill` style attribute.
@@ -373,7 +365,6 @@ function getFadeColor(stdBaseColor, z, retObj) {
     return util.getColorStr();
 }
 
-// CONVERTED
 function drawNormalLines() {
     let xys = getXYArray(ctx.normalLinePts);
     for (let i = 0; i < xys.length; i += 2) {
@@ -390,7 +381,6 @@ function drawNormalLines() {
     }
 }
 
-// CONVERTED
 function orderElts(xys) {
 
     // 1. Remove all SVG elements so we can re-insert in a new order.
@@ -459,7 +449,6 @@ function orderElts(xys) {
     }
 }
 
-// CONVERTED
 // This expects `pt` to be a 4d column vector.
 function calculateDrawPt(pt) {
 
@@ -479,7 +468,6 @@ function calculateDrawPt(pt) {
     return {x, y, isVisible};
 }
 
-// CONVERTED
 function appendPoint(pt) {
     console.assert(pt.length === 3, 'Expected 3d points.');
 
@@ -487,7 +475,6 @@ function appendPoint(pt) {
     ctx.pts[3].push(1);
 }
 
-// CONVERTED
 function ensureGroupsExist() {
     if (dotGroup !== null) return;
     edgeGroup    = artist.add('g');
@@ -496,7 +483,6 @@ function ensureGroupsExist() {
     mainGroup    = artist.add('g');
 }
 
-// CONVERTED
 function addAnyNewDots() {
     ensureGroupsExist();
     if (!ctx.doDrawDots) return;
@@ -514,7 +500,6 @@ function addAnyNewDots() {
     }
 }
 
-// CONVERTED
 function addAnyNewNormals() {
     for (let i = ctx.normals[0].length; i < ctx.faces.length; i++) {
 
@@ -611,7 +596,6 @@ function addAnyNewNormals() {
     }
 }
 
-// CONVERTED (pending setTransform)
 function setupFrame(ts) {
     window.requestAnimationFrame(setupFrame);
 
@@ -633,13 +617,11 @@ function setupFrame(ts) {
     artist.render();
 }
 
-// CONVERTED
 function moveElt(elt, dx, dy) {
     elt.setAttribute('x', parseInt(elt.getAttribute('x')) + dx);
     elt.setAttribute('y', parseInt(elt.getAttribute('y')) + dy);
 }
 
-// CONVERTED pending moveElt
 function toggleFaceLabels(faceIdx, doShow, awayFrom) {
 
     if (faceIdx === -1) return;
@@ -688,7 +670,6 @@ function toggleFaceLabels(faceIdx, doShow, awayFrom) {
 // ______________________________________________________________________
 // Public functions.
 
-// CONVERTED
 // This expects `pts` to be an array of 3d points, with each point being an
 // array of 3 numbers.
 export function addPoints(pts, labels) {
@@ -700,7 +681,6 @@ export function addPoints(pts, labels) {
     if (labels) ctx.labels = labels;
 }
 
-// CONVERTED
 // This expects `lines` to be an array of {from, to} objects, where `from` and
 // `to` are indexes into the `pts` array. Each line object may also have an
 // optional `style` key, which indicates the style overrides for that line.
@@ -720,7 +700,6 @@ export function addLines(lines, slices) {
     ctx.slices = slices;  // If no edges are highlighted, undefined is ok.
 }
 
-// CONVERTED
 // This expects each face to be an array of indexes into `pts`.
 // Each face is expected to live in a plane, and it's expected that the points
 // are convex and listed counterclockwise.
@@ -752,13 +731,11 @@ export function setCircle(center, r, normal, style) {
     ctx.circle = c;
 }
 
-// CONVERTED
 export function setTransform(t) {
     ctx.transform = t;
     updatePoints();
 }
 
-// CONVERTED
 export function makeDraggable() {
     console.assert(artist !== null);
     artist.elt.addEventListener('mousedown', e => {
@@ -814,7 +791,6 @@ export function makeDraggable() {
     });
 }
 
-// CONVERTED
 // TODO Eventually support auto-setting ctx.fadeRange from this.
 //      To do so, we can calculate the min and max distance from the origin to
 //      any of the points.
@@ -823,13 +799,11 @@ export function setZDist(zDist) {
     ctx.transMat[2][3] = zDist;
 }
 
-// CONVERTED
 export function setAngleMat(angleMat) {
     ctx.angleMat    = angleMat;
     ctx.angleMatInv = matrix.transpose(angleMat);
 }
 
-// CONVERTED
 export function rotateAround(v) {
     let M = matrix.rand(3, 3);
     M[0] = vector.unit(v);
@@ -844,7 +818,6 @@ export function rotateAround(v) {
     ctx.angleMatInv = U;
 }
 
-// CONVERTED
 export function highlightEdges(sliceName) {
     let slice = ctx.slices[sliceName] || {};
     for (let i = 0; i < ctx.lines.length; i++) {
@@ -863,12 +836,10 @@ export function highlightEdges(sliceName) {
     }
 }
 
-// CONVERTED
 export function animate() {
     window.requestAnimationFrame(setupFrame);
 }
 
-// CONVERTED
 export function updatePoints() {
 
     console.assert(artist !== null);
@@ -949,7 +920,6 @@ export function updatePoints() {
     renderCircle();
 }
 
-// CONVERTED
 export function setArtist(newArtist) {
     artist = newArtist;
 }
