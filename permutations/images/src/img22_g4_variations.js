@@ -94,9 +94,16 @@ function updateGraphColoring() {
             const fromColor = edge.from.dotElt.baseColor;
             const   toColor = edge.to.dotElt.baseColor;
 
+            // Tone down the color a little.
+            let stdColor = util.getStdColor(fromColor);
+            let grayWeight = 0.5;
+            let colorWeight = 1 - grayWeight;
+            stdColor = stdColor.map(x => colorWeight * x + grayWeight * 0.86);
+            let color = util.getColorStr(stdColor);
+
             if (fromColor === toColor) {
-                edgeElt.baseColor = fromColor;
-                edgeElt.setAttribute('stroke', fromColor);
+                edgeElt.baseColor = color;
+                edgeElt.setAttribute('stroke', color);
             }
         }
     }
