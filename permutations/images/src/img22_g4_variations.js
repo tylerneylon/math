@@ -22,10 +22,12 @@ const itemSize = 250;
 const xMargin  =  40;  // Add this space to both the left and right sides.
 
 const edgeStyle = {
-    stroke: '#eee',
+    stroke: '#f0f0f0',
     fill: 'transparent',
     'stroke-width': 1
 };
+
+const mainGraphEdgeGray = '#ccc';
 
 let slider = null;
 let artist = null;
@@ -101,11 +103,11 @@ function updateGraphColoring() {
             let colorWeight = 1 - grayWeight;
             stdColor = stdColor.map(x => colorWeight * x + grayWeight * 0.86);
             let color = util.getColorStr(stdColor);
-
-            if (fromColor === toColor) {
-                edgeElt.baseColor = color;
-                edgeElt.setAttribute('stroke', color);
+            if (fromColor !== toColor) {
+                color = mainGraphEdgeGray;
             }
+            edgeElt.baseColor = color;
+            edgeElt.setAttribute('stroke', color);
         }
     }
 }
