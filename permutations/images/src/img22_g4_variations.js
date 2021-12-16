@@ -9,12 +9,9 @@
 // ______________________________________________________________________
 // Imports
 
-// TODO needed?
 import * as draw   from './draw.js';
 import * as init   from './init.js';
-import * as matrix from './matrix.js';
 import * as perm   from './perm.js';
-import * as space  from './space.js';
 import * as util   from './util.js';
 
 
