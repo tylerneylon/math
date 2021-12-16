@@ -2,8 +2,6 @@
  *
  * Functions to work with permutations.
  *
- * XXX Eventually this will replace perm.js.
- *
  */
 
 
