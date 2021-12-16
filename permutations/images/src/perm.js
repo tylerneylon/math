@@ -386,12 +386,12 @@ export function addPtMapEdges(n, ptMap) {
             push(
                 ptMap[p1],
                 'edges',
-                {from: ptMap[p1], to: ptMap[p2], dest: p2}
+                {from: ptMap[p1], to: ptMap[p2], dest: p2, transposition: t}
             );
             if (p1 < p2) {
                 let from = ptMap[p1];
                 let to   = ptMap[p2];
-                let edge = {from, to, p1, p2};
+                let edge = {from, to, p1, p2, transposition: t};
                 if (renderCtx.edgeWeighting === 'boldNearE') {
                     let minM = Math.min(getMagnitude(p1), getMagnitude(p2));
                     if (minM === 0) edge.weightScale = 10.0;
