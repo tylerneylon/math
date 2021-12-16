@@ -208,11 +208,15 @@ function setLabelVisibility(pt, visibility) {
 
 // This returns a handler that updates graph colors based on `colors`.
 // This is designed for use in mouseover and mouseout events.
-function getGraphColorer(ptMap, pt, colors) {
+function getGraphColorer(ptMap, pt, colors, useBaseColor) {
     let circle = pt.elt;
     return function () {
-        circle.setAttribute('fill', colors.mainDotColor);
-        circle.coreFill = util.getStdColor(colors.mainDotColor);
+        let mainDotColor = colors.mainDotColor;
+        if (useBaseColor) {  // Only use this when unhighlighting.
+            mainDotColor = circle.baseColor || mainDotColor;
+        }
+        circle.setAttribute('fill', mainDotColor);
+        circle.coreFill = util.getStdColor(mainDotColor);
         setLabelVisibility(pt, colors.textVisibility);
         pt.textElts[1].setAttribute('fill', colors.labelColor);
         for (let edgeElt of pt.edgeElts) {
@@ -227,8 +231,10 @@ function getGraphColorer(ptMap, pt, colors) {
         }
         for (let edge of pt.edges) {
             let nborElt = ptMap[edge.dest].elt;
-            nborElt.setAttribute('fill', colors.nborColor);
-            nborElt.coreFill = util.getStdColor(colors.nborColor);
+            let nborColor = colors.nborColor;
+            if (useBaseColor) nborColor = nborElt.baseColor || nborColor;
+            nborElt.setAttribute('fill', nborColor);
+            nborElt.coreFill = util.getStdColor(nborColor);
             if (renderCtx.labelStyle === 'all') {
                 setLabelVisibility(ptMap[edge.dest], colors.textVisibility);
             }
@@ -533,7 +539,8 @@ export function drawGraphWithPtMap(
 
         if (noListeners) continue;
         let highlighter   = getGraphColorer(ptMap, pt, highlightColors);
-        let unhighlighter = getGraphColorer(ptMap, pt, unhighlightColors);
+        // The `true` here is for useBaseColor.
+        let unhighlighter = getGraphColorer(ptMap, pt, unhighlightColors, true);
         for (let elt of [hitDot, circle]) {
             if (elt === null) continue;  // We may exclude hit dots.
             elt.addEventListener('mouseover', highlighter);

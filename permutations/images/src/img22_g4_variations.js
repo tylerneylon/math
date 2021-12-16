@@ -71,6 +71,37 @@ function getFlattenedPermutohedron() {
     return ptMap;
 }
 
+function updateGraphColoring() {
+    let colors = [
+        '#d44',
+        '#d84',
+        '#dd4',
+        '#4d4'
+    ];
+    for (const [permStr, pt] of Object.entries(mainPtMap)) {
+        let color = colors[parseInt(permStr.substr(0, 1)) - 1];
+        let m = perm.getMagnitude(permStr);
+        // let color = colors[m];
+        pt.dotElt.setAttribute('fill', color);
+        pt.dotElt.baseColor = color;
+    }
+    // This is a separate loop so we can depend on finalized node colors to help
+    // us color the edges.
+    for (const [permStr, pt] of Object.entries(mainPtMap)) {
+        for (let i = 0; i < pt.edgeElts.length; i++) {
+            const edge    = pt.edges[i];
+            const edgeElt = pt.edgeElts[i];
+            const fromColor = edge.from.dotElt.baseColor;
+            const   toColor = edge.to.dotElt.baseColor;
+
+            if (fromColor === toColor) {
+                edgeElt.baseColor = fromColor;
+                edgeElt.setAttribute('stroke', fromColor);
+            }
+        }
+    }
+}
+
 function updateMainPtMapElts() {
     let textOffset = {x: 0.015, y: -0.015};
     for (const pt of Object.values(mainPtMap)) {
@@ -148,6 +179,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let params = {};  // XXX
     perm.drawGraphWithPtMap(artist, mainPtMap, 4, params);
     adjustFontSize();
+    updateGraphColoring();
 
     window.requestAnimationFrame(drawFrame);
 
