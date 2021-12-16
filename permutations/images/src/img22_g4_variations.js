@@ -62,11 +62,15 @@ function renderPtMap(artist, ptMap) {
 
 function getFlattenedPermutohedron() {
     let [rMin, rMax] = [0.1, 0.9];
-    let [pts, labels] = perm.getG4PointsIn3D();
+    // I've chosen [0, -1, -1, -1] in order to keep the pi_1-based slices (which
+    // are highlighted with edge colors) as interlocking hexagons.
+    let [pts, labels] = perm.getG4PointsIn3D([0, -1, -1, -1]);
     let pts2d = util.explode3DPoints(pts, labels, rMin, rMax);
     let ptMap = {};
     for (const pt2d of pts2d) {
-        ptMap[pt2d.label] = {x: pt2d[0], y: pt2d[1]};
+        // I'm negating the points in order to try to achieve a slightly nicer
+        // transition from the recursive layout over to this one.
+        ptMap[pt2d.label] = {x: -pt2d[0], y: -pt2d[1]};
     }
     return ptMap;
 }
