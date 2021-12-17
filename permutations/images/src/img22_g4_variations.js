@@ -24,10 +24,10 @@ const xMargin  =  40;  // Add this space to both the left and right sides.
 const edgeStyle = {
     stroke: '#f0f0f0',
     fill: 'transparent',
-    'stroke-width': 1
+    'stroke-width': 0.8
 };
 
-const mainGraphEdgeGray = '#ccc';
+const mainGraphEdgeGray = '#ddd';
 
 let slider = null;
 let artist = null;
@@ -76,10 +76,10 @@ function getFlattenedPermutohedron() {
 
 function updateGraphColoring() {
     let colors = [
-        '#d44',
+        '#e55',
         '#d84',
-        '#dd4',
-        '#4d4'
+        '#aa0',
+        '#2a2'
     ];
     for (const [permStr, pt] of Object.entries(mainPtMap)) {
         let color = colors[parseInt(permStr.substr(0, 1)) - 1];
@@ -108,6 +108,7 @@ function updateGraphColoring() {
             }
             edgeElt.baseColor = color;
             edgeElt.setAttribute('stroke', color);
+            edgeElt.setAttribute('stroke-width', 1.2);
         }
     }
 }
