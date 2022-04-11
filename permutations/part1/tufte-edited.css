@@ -313,12 +313,24 @@ table {
     border-collapse: collapse;
 }
 
-tr {
+.table1 tr.odd:first-child {
     border-bottom: 1px solid #ddd;
 }
 
-tr:last-child {
-    border-bottom: 0;
+.table1 tr.odd:first-child>td {
+    padding: 10px 0;
+}
+
+.table1 tr.even:nth-child(2) {
+    border-bottom: 1px solid #ddd;
+}
+
+.table1 tr.even:nth-child(2)>td {
+    padding: 10px 0;
+}
+
+.table1 tr.odd:nth-child(3)>td {
+    padding-top: 10px;
 }
 
 li p { width: 100%; }
