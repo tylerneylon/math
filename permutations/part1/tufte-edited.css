@@ -309,6 +309,18 @@ img { max-width: 100%; }
 
 p, footer, table, div.table-wrapper-small, div.supertable-wrapper > p, div.booktabs-wrapper, hr { width: 55%; }
 
+table {
+    border-collapse: collapse;
+}
+
+tr {
+    border-bottom: 1px solid #ddd;
+}
+
+tr:last-child {
+    border-bottom: 0;
+}
+
 li p { width: 100%; }
 
 hr { margin: 0; }

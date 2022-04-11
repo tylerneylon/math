@@ -11,6 +11,13 @@ FLAGS="-s -M figPrefix=figure -M secPrefix="§" -M secPrefixTemplate="${spt}" -M
 # Make and the html file.
 pandoc --mathjax --template=template.html ${FLAGS} > ${name}.html
 
+# Make and open the pdf file.
+pandoc -t latex -o ${name}.tex -s ${FLAGS} --template=template.tex
+TMP=$(mktemp tmp_XXXX)
+sed 's|images/\(.*\)\.png|images/pdfs/\1.pdf|' ${name}.tex > ${TMP}
+mv ${TMP} ${name}.tex
+pdflatex ${name}.tex
+
 # XXX
 exit
 
