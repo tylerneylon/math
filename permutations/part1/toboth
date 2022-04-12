@@ -16,6 +16,8 @@ pandoc -t latex -o ${name}.tex -s ${FLAGS} --template=template.tex
 TMP=$(mktemp tmp_XXXX)
 sed 's|images/\(.*\)\.png|images/pdfs/\1.pdf|' ${name}.tex > ${TMP}
 mv ${TMP} ${name}.tex
+awk -f tex_edits.awk ${name}.tex > ${TMP}
+mv ${TMP} ${name}.tex
 pdflatex ${name}.tex
 
 # XXX

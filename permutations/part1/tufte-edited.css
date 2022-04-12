@@ -333,6 +333,10 @@ table {
     padding-top: 10px;
 }
 
+.table1 tr>td:first-child {
+    padding-right: 20px;
+}
+
 li p { width: 100%; }
 
 hr { margin: 0; }
