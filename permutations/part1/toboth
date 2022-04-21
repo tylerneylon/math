@@ -6,7 +6,7 @@ ept='$$i$$'
 spt='$$p$$$$i$$'
 
 name=perms1
-FLAGS="-s -M figPrefix=figure -M secPrefix="§" -M secPrefixTemplate="${spt}" -M eqnPrefixTemplate="${ept}" --filter pandoc-crossref -M eqnPrefix='' -M linkcolor=black --number-sections --bibliography=${name}.bib ${name}.md"
+FLAGS="-s -M figPrefix=figure -M secPrefix="§" -M secPrefixTemplate="${spt}" --filter pandoc-crossref -M eqnPrefix= -M linkcolor=black --number-sections --bibliography=${name}.bib ${name}.md"
 
 # Make and the html file.
 pandoc --mathjax --template=template.html ${FLAGS} > ${name}.html

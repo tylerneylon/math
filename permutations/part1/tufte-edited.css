@@ -313,6 +313,8 @@ table {
     border-collapse: collapse;
 }
 
+/* table1 */
+
 .table1 tr.odd:first-child {
     border-bottom: 1px solid #ddd;
 }
@@ -335,6 +337,13 @@ table {
 
 .table1 tr>td:first-child {
     padding-right: 20px;
+}
+
+/* table2 */
+
+.table2 table {
+    width: 350px;
+    font-size: initial;
 }
 
 li p { width: 100%; }

@@ -15,6 +15,7 @@ ways of ordering a set of distinct elements. In group theory, the group of
 permutations of size $n$ is denoted $S_n$. For example:
 
 <div class="table1">
+
 ------- ---------------------------
 $S_2$   $\tt 12 \quad 21$
 $S_3$   $\tt 123 \quad 132 \quad 213 \quad 231 \quad 312 \quad 321$
@@ -23,8 +24,8 @@ $S_4$   $\tt 1234 \quad 1243 \quad 1324 \quad 1342 \quad 1423 \quad 1432$
         $\tt 3124 \quad 3142 \quad 3214 \quad 3241 \quad 3412 \quad 3421$
         $\tt 4123 \quad 4132 \quad 4213 \quad 4231 \quad 4312 \quad 4321$
 ------- ---------------------------
-</div>
 
+</div>
 You can think of a single permutation as either a particular ordering of
 the integers 1 through $n$, or, equivalently, as a 1-1 and onto mapping
 $f:\{1,\ldots, n\}\to\{1,\ldots,n\}$.
@@ -62,7 +63,7 @@ This article covers the following independent observations about permutations:
   permutation $\pi$ that I call the *magnitude* $m(\pi)$ of the permutation.
 * I'll define the *cycle structure* $\cs(\pi)$ and show that
   $\cs(a \cdot b) = \cs(b \cdot a)$ for any two permutations $a, b$.
-* I'll show that the magnitude $m(\pi)$ acts like a norm on the group $S_n$,
+* I'll show that the magnitude $m(\cdot)$ acts like a norm on the group $S_n$,
   and that it can define a coherent distance function $\dist(\cdot, \cdot)$
   on $S_n$.
 * Finally, I'll look at a particular notation for permutations called
@@ -88,9 +89,46 @@ It's simple and traditional to think of a permutation as a bijection
 (a 1-1 and onto mapping) of the first $n$ integers --- for example,
 here's a permutation of the set $\{1, 2, \ldots, 8\}$ in string notation:
 
-[//]: # TODO HERE vvvvvv
-
 $$\pi = 15273648.$$ {#eq:eq1}
 
+Despite the possible confusion with the constant $\pi=3.141\ldots$, it's
+also traditional to use the variable $\pi$ for a permutation, as (clearly)
+$\pi$ stands for "$\pi$ermutation."
+
+There are many fun ways to denote or think about a particular permutation.
+For example, given $\pi$ as in ([-@eq:eq1]), we could think of it as the
+sequence $\pi_1=1$, $\pi_2=5$, $\ldots$, $\pi_8=8$.
+We could also think of it as a function $\pi:[n]\to[n]$, using
+$[n]$ to denote the integers $\{1, 2,\ldots, n\}$.
+
+This article uses a particular notation for permutations called
+*cycle notation*: the intuition for cycle notation is to write out
+a string of integers in $[n]$ with the interpretation
+that any consecutive pair $ij$ indicates that $i$ is mapped to $j$.
+Our permutation from [-@eq:eq1] looks like this in cycle notation:
+
+$$ \pi = (2 5 3)(4 7) $$
+
+because $\pi(2) = 5$, $\pi(5) = 3$, and $\pi(4) = 7$.
+Further, each sequence in parentheses *wraps around*;
+$\pi(3)=2$ and $\pi(7)=4$.
+Thus each parenthesized sequence is a *cycle*.
+It is understood that any omitted elements are mapped to themselves;
+since $\pi(1)=1$, we don't need to include $1$ in the cycle notation
+for $\pi$.
+
+Examples:
+
+<div class="table2">
+
+-            -                       -             -------------------
+For $n=5$,   $(1 3)$                 denotes       $\tt 32145$.
+For $n=5$,   $(2 3)(4 5)$            denotes       $\tt 13254$.
+For $n=8$,   $(1 5 2)(3 7)(4 8 6)$   denotes       $\tt 51782436$.
+-            -                       -             -------------------
+
+</div>
+
+[//]: # TODO HERE vvvvvv
 
 # References
