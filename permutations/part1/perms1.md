@@ -10,6 +10,13 @@
 \providecommand{\smallscr}[1]{\class{smallscr}{#1}}
 \providecommand{\smallscrskip}[1]{\class{smallscrskip}{\hskip #1}}
 
+% The following doesn't work outside of a LaTeX output because pandoc only
+% provides a bare bones macro replacement mechanism --- it doesn't really speak
+% TeX macro language itself. I'm leaving this here as a reminder since I had
+% to learn this lesson with some confusion. See here:
+% https://pandoc.org/MANUAL.html#latex-macros
+% \newcommand{\atest}{\count255=1\loop hi\ifnum\count255<10\advance\count255 by 1 \repeat}
+
 This is a collection of notes about permutations --- all the different
 ways of ordering a set of distinct elements. In group theory, the group of
 permutations of size $n$ is denoted $S_n$. For example:
@@ -107,7 +114,7 @@ a string of integers in $[n]$ with the interpretation
 that any consecutive pair $ij$ indicates that $i$ is mapped to $j$.
 Our permutation from [-@eq:eq1] looks like this in cycle notation:
 
-$$ \pi = (2 5 3)(4 7) $$
+$$ \pi = (2\;5\;3)(4\;7) $$
 
 because $\pi(2) = 5$, $\pi(5) = 3$, and $\pi(4) = 7$.
 Further, each sequence in parentheses *wraps around*;
@@ -121,13 +128,32 @@ Examples:
 
 <div class="table2">
 
--            -                       -             -------------------
-For $n=5$,   $(1 3)$                 denotes       $\tt 32145$.
-For $n=5$,   $(2 3)(4 5)$            denotes       $\tt 13254$.
-For $n=8$,   $(1 5 2)(3 7)(4 8 6)$   denotes       $\tt 51782436$.
--            -                       -             -------------------
+-            -                            -             -------------------
+For $n=5$,   $(1\;3)$                     denotes       $\tt 32145$.
+For $n=5$,   $(2\;3)(4\;5)$               denotes       $\tt 13254$.
+For $n=8$,   $(1\;5\;2)(3\;7)(4\;8\;6)$   denotes       $\tt 51782436$.
+-            -                            -             -------------------
 
 </div>
+
+You could write the same permutation many ways in cycle notation;
+for example:
+
+$$ \pi = (7\;4)(5\;3\;2) = (3\;2\;5)(7\;4) = (2\;5\;3)(4\;7). $$
+
+Among those choices, I cosider the last one to be standard because
+it's lexicographically first.
+
+# The Cut-Merge Operation
+
+Now I'll introduce an operation that acts naturally on the cycle
+notation of a permutation. Intuitively, a *merge* is an operation
+that combines two cycles by concatenating their cycle notation.
+When two elements --- say 3 and 5 --- are in different
+cycles, then I'll write $\pi * (3\;5)$ to
+mean "merge, in $\pi$, the cycles starting with 3 and 5."
+
+An example:
 
 [//]: # TODO HERE vvvvvv
 
