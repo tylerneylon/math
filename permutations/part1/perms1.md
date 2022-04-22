@@ -10,12 +10,12 @@
 \providecommand{\smallscr}[1]{\class{smallscr}{#1}}
 \providecommand{\smallscrskip}[1]{\class{smallscrskip}{\hskip #1}}
 
-% The following doesn't work outside of a LaTeX output because pandoc only
-% provides a bare bones macro replacement mechanism --- it doesn't really speak
-% TeX macro language itself. I'm leaving this here as a reminder since I had
-% to learn this lesson with some confusion. See here:
-% https://pandoc.org/MANUAL.html#latex-macros
-% \newcommand{\atest}{\count255=1\loop hi\ifnum\count255<10\advance\count255 by 1 \repeat}
+[//]: #  The following doesn't work outside of a LaTeX output because pandoc only
+[//]: #  provides a bare bones macro replacement mechanism --- it doesn't really speak
+[//]: #  TeX macro language itself. I'm leaving this here as a reminder since I had
+[//]: #  to learn this lesson with some confusion. See here:
+[//]: #  https://pandoc.org/MANUAL.html#latex-macros
+[//]: #  \newcommand{\atest}{\count255=1\loop hi\ifnum\count255<10\advance\count255 by 1 \repeat}
 
 This is a collection of notes about permutations --- all the different
 ways of ordering a set of distinct elements. In group theory, the group of
