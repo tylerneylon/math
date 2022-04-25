@@ -155,6 +155,31 @@ mean "merge, in $\pi$, the cycles starting with 3 and 5."
 
 An example:
 
+$$(1\;2)(3\;4)(5\;6) * (3\;5) = (1\;2)(3\;4\;5\;6).$$
+
+What if 3 and 5 were already in the same cycle?
+Then $\pi * (3\;5)$ takes on the meaning
+"cut apart the subcycles starting with 3 and 5:"
+
+$$(1\;2)(3\;4\;5\;6) * (3\;5) = (1\;2)(3\;4)(5\;6)$$
+
+or
+
+$$(1\;2\;3\;4\;5) * (3\;5) = (3\;4)(5\;1\;2);$$
+
+this last example might be easier to see when you keep
+in mind that
+
+$$(1\;2\;3\;4\;5) = (\underline{3}\;4\;\underline{5}\;1\;2).$$
+
+Now I'm ready to more carefully define the cut-merge operation
+$*(a\;b)$. In the definition below, I'll write $(x{-})$ to
+denote the cycle starting with $x$; and, analogously,
+I'll write $(x{-}\;y{-})$ to indicate a cycle containing both
+$x$ and $y$, possibly with other elements indicated by the
+dashes.
+
+
 [//]: # TODO HERE vvvvvv
 
 # References
