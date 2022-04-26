@@ -112,7 +112,7 @@ This article uses a particular notation for permutations called
 *cycle notation*: the intuition for cycle notation is to write out
 a string of integers in $[n]$ with the interpretation
 that any consecutive pair $ij$ indicates that $i$ is mapped to $j$.
-Our permutation from [-@eq:eq1] looks like this in cycle notation:
+Our permutation from ([-@eq:eq1]) looks like this in cycle notation:
 
 $$ \pi = (2\;5\;3)(4\;7) $$
 
@@ -159,7 +159,7 @@ $$(1\;2)(3\;4)(5\;6) * (3\;5) = (1\;2)(3\;4\;5\;6).$$
 
 What if 3 and 5 were already in the same cycle?
 Then $\pi * (3\;5)$ takes on the meaning
-"cut apart the subcycles starting with 3 and 5:"
+"*cut* apart the subcycles starting with 3 and 5:"
 
 $$(1\;2)(3\;4\;5\;6) * (3\;5) = (1\;2)(3\;4)(5\;6)$$
 
