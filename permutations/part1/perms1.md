@@ -173,11 +173,43 @@ in mind that
 $$(1\;2\;3\;4\;5) = (\underline{3}\;4\;\underline{5}\;1\;2).$$
 
 Now I'm ready to more carefully define the cut-merge operation
-$*(a\;b)$. In the definition below, I'll write $(x{-})$ to
+$*(x\;y)$. In the definition below, I'll write $(x{-})$ to
 denote the cycle starting with $x$; and, analogously,
 I'll write $(x{-}\;y{-})$ to indicate a cycle containing both
 $x$ and $y$, possibly with other elements indicated by the
 dashes.
+
+**Definition** $\quad$
+The *cut-merge* operation $*(x\;y)$ operates on a
+permutation $\pi$ via
+
+$$ \pi * (x\;y) = \begin{cases}
+    (x{-}\;y{-})\,\sigma & \text{when } \pi = (x{-})(y{-})\,\sigma, \text{ or,} \\
+    (x{-})(y{-})\,\sigma & \text{when } \pi = (x{-}\;y{-})\,\sigma, \\
+\end{cases}$$
+where $\sigma$ represents all the other cycles of $\pi$ ($\sigma$ may
+represent no cycles).
+
+The operation *cuts* a cycle if $x$ and $y$ are in the same cycle; otherwise
+it *merges* the cycles of $x$ and $y$.
+A shorthand for the definition is:
+
+$$ (x{-}\;y{-}) \; \underset{*(x\;y)}{\longleftrightarrow} \; (x{-})(y{-}). $$
+
+Note that a merge can still operate on elements not explicitly written
+in cycle notation. If I write $e$ to denote the identity permutation,
+with $\pi_i=i\;\forall i$, then
+
+$$e * (x\;y) = (x\;y). $$
+
+Similarly,
+
+$$(1\;2) * (2\;3) = (2\;1\;3)$$
+
+because, setting $x=2$ and $y=3$, we think of
+the left side as $(x{-})(y{-})=(2 1)(3)$.
+
+
 
 
 [//]: # TODO HERE vvvvvv
