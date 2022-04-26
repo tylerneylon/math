@@ -196,6 +196,8 @@ A shorthand for the definition is:
 
 $$ (x{-}\;y{-}) \; \underset{*(x\;y)}{\longleftrightarrow} \; (x{-})(y{-}). $$
 
+[//]: # *a
+
 Note that a merge can still operate on elements not explicitly written
 in cycle notation. If I write $e$ to denote the identity permutation,
 with $\pi_i=i\;\forall i$, then
@@ -209,8 +211,28 @@ $$(1\;2) * (2\;3) = (2\;1\;3)$$
 because, setting $x=2$ and $y=3$, we think of
 the left side as $(x{-})(y{-})=(2 1)(3)$.
 
+**Observeration 1** $\quad$
+The cut-merge operation $\pi * (x\;y)$ is simply $\pi$ composed with
+the permutation $(x\;y)$.
 
+To state this observation again, I'll introduce the notation $\rho_{ab}()$
+for the function that swaps input elements $a$ and $b$, but otherwise
+acts as the identity function. Thus $\rho_{ab}()$ is the function version
+of the *transposition* that we would write in cycle notation as $(a\;b)$.
+With $\rho_{ab}()$ defined, I can express observation 1 like so:
 
+$$ \left(\pi * (x\;y)\right)(i) = \rho_{xy}(\pi(i)), $$ {#eq:eq2}
+
+where I'm thinking of permutations as functions, so the $(i)$ sub-expression
+is evaluating the function on input $i \in \{1, 2, \ldots, n\}$.
+
+I could stop to carefully prove observation 1, but I think you'll have more fun
+if you convince yourself it's true on your own.
+
+Why did I bother to define the cut-merge operation when I could have just
+started with ([-@eq:eq2]) instead? Because the perspective of the definition I'm
+using will let us make some interesting further observations, as we'll see
+below.
 
 [//]: # TODO HERE vvvvvv
 
