@@ -234,6 +234,20 @@ started with ([-@eq:eq2]) instead? Because the perspective of the definition I'm
 using will let us make some interesting further observations, as we'll see
 below.
 
+# The Magnitude and Parity of a Permutation
+
+**Definition** $\quad$
+The *magnitude* of a permutation $\pi$ is given by
+
+$$ m(\pi) := \#(\text{cycle elements of }\pi) - \#(\text{cycles of }\pi), $$
+
+where a *cycle element* of $\pi$ is any element written in the
+cycle notation of $\pi$, and where we similarly count the *cycles* of $\pi$
+based on how many cycles are written in $\pi$'s cycle notation.
+
+For example, the permutation $\pi = (2\;5\;3)(4\;7)$ has 5 cycle
+elements and 2 cycles, so $m(\pi) = 3$.
+
 [//]: # TODO HERE vvvvvv
 
 # References
