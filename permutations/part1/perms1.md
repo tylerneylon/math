@@ -10,6 +10,8 @@
 \providecommand{\smallscr}[1]{\class{smallscr}{#1}}
 \providecommand{\smallscrskip}[1]{\class{smallscrskip}{\hskip #1}}
 
+\renewcommand{\theenumi}{(\roman{enumi})}
+
 [//]: #  The following doesn't work outside of a LaTeX output because pandoc only
 [//]: #  provides a bare bones macro replacement mechanism --- it doesn't really speak
 [//]: #  TeX macro language itself. I'm leaving this here as a reminder since I had
@@ -247,6 +249,51 @@ based on how many cycles are written in $\pi$'s cycle notation.
 
 For example, the permutation $\pi = (2\;5\;3)(4\;7)$ has 5 cycle
 elements and 2 cycles, so $m(\pi) = 3$.
+
+Notice that $m(\pi)$ remains the same if we include singleton cycles in
+our cycle notation. It would be nonstandard to include singletons, but it
+would still be a consistent notation. Continuing our example,
+$\pi = (1)(2\;5\;3)(4\;7)(6)
+\Rightarrow m(\pi) = 7 - 4 = 3$, as before.
+This leads to:
+
+**Observeration 2** $\quad$
+$$ m(\pi) = n - \#(\text{orbits}), $$
+where an *orbit* is either a cycle with multiple elements,
+or a *singleton*, which is an element $i : \pi(i) = i$.
+
+Let's see why the definition of $m(\pi)$ is interesting.
+
+**Observeration 3** $\quad$
+
+#. Every merge increases $m(\pi)$ by 1.
+#. Every cut decreases $m(\pi)$ by 1.
+#. $m(\pi)$ is the least number of cut-merge operations which
+   can reach $\pi$ from the identity permutation $e$.
+
+Parts (i) and (ii) are easy to check.
+
+Part (iii) is clear from the cut-merge perspective in that
+(a) we cannot build $\pi$ in fewer operations, based on (i);
+and (b) we can indeed build $\pi$ in $m(\pi)$ merges by appending
+together the appropriate singletons one at a time. For example:
+
+$$(2\;5\;3)(4\;7) = e * (2\;5) * (2\;3) * (4\;7).$$ {#eq:eq3}
+
+Starting now, I'll write simply $\sigma \tau$ or $\sigma\cdot\tau$ to denote
+the composition of permutations $\sigma$ and $\tau$.
+Using observation 1, we can see that the construction pattern used in
+([-@eq:eq3]) must work for any cycle that we want to write as a composition
+of transpositions:
+
+$$(x_1\;x_2\cdots x_k) = (x_1\;x_2)(x_1\;x_3)\cdots(x_1\;x_k).$$
+
+In other words, every permutation is the product of $m(\pi)$
+transpositions, and cannot be the product of fewer.
+It could be the product of more, though:
+
+$$ (1\;2\;3) = (1\;2)(1\;3)(8\;9)(8\;9). $$
+
 
 [//]: # TODO HERE vvvvvv
 

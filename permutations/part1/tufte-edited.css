@@ -420,3 +420,23 @@ label.margin-toggle:not(.sidenote-number) { display: none; }
                             div.figure { max-width: 90%; }
                             div.title { width: 90%; }
                             img { width: 100%; } }
+
+/* small roman numerals for an ol element */
+
+ol {
+    counter-reset: list;
+}
+ol > li {
+    list-style: none;
+    position: relative;
+}
+ol > li:before {
+    counter-increment: list;
+    content: "(" counter(list, lower-roman) "). ";
+    display: inline-block;
+    width: 2em;
+    text-align: right;
+    position: absolute;
+    left: -2.5em;
+}
+
