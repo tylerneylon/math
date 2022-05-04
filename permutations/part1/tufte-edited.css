@@ -440,3 +440,24 @@ ol > li:before {
     left: -2.5em;
 }
 
+/* a boxed environment */
+
+.box {
+    width: 55%;
+    border: 1px solid #e2e2e2;
+    /* padding: 10px; */
+    background-color: #f5f5f5;
+}
+
+.box > p {
+    width: 100%;
+    margin-block: 0;
+    margin: 10px;
+}
+
+.box > ol {
+    padding-inline-start: 58px;
+    width: calc(100% - 80px);
+}
+
+@media screen and (max-width: 760px) { .box { width: 90%; } }

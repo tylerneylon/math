@@ -182,16 +182,17 @@ I'll write $(x{-}\;y{-})$ to indicate a cycle containing both
 $x$ and $y$, possibly with other elements indicated by the
 dashes.
 
+<div class="box">
 **Definition** $\quad$
 The *cut-merge* operation $*(x\;y)$ operates on a
 permutation $\pi$ via
-
 $$ \pi * (x\;y) = \begin{cases}
     (x{-}\;y{-})\,\sigma & \text{when } \pi = (x{-})(y{-})\,\sigma, \text{ or,} \\
     (x{-})(y{-})\,\sigma & \text{when } \pi = (x{-}\;y{-})\,\sigma, \\
 \end{cases}$$
 where $\sigma$ represents all the other cycles of $\pi$ ($\sigma$ may
 represent no cycles).
+</div>
 
 The operation *cuts* a cycle if $x$ and $y$ are in the same cycle; otherwise
 it *merges* the cycles of $x$ and $y$.
@@ -214,9 +215,11 @@ $$(1\;2) * (2\;3) = (2\;1\;3)$$
 because, setting $x=2$ and $y=3$, we think of
 the left side as $(x{-})(y{-})=(2 1)(3)$.
 
-**Observeration 1** $\quad$
+<div class="box">
+**Observation 1** $\quad$
 The cut-merge operation $\pi * (x\;y)$ is simply $\pi$ composed with
 the permutation $(x\;y)$.
+</div>
 
 To state this observation again, I'll introduce the notation $\rho_{ab}()$
 for the function that swaps input elements $a$ and $b$, but otherwise
@@ -258,19 +261,23 @@ $\pi = (1)(2\;5\;3)(4\;7)(6)
 \Rightarrow m(\pi) = 7 - 4 = 3$, as before.
 This leads to:
 
-**Observeration 2** $\quad$
+<div class="box">
+**Observation 2** $\quad$
 $$ m(\pi) = n - \#(\text{orbits}), $$
 where an *orbit* is either a cycle with multiple elements,
 or a *singleton*, which is an element $i : \pi(i) = i$.
+</div>
 
 Let's see why the definition of $m(\pi)$ is interesting.
 
-**Observeration 3** $\quad$
+<div class="box">
+**Observation 3** $\quad$
 
 #. Every merge increases $m(\pi)$ by 1.
 #. Every cut decreases $m(\pi)$ by 1.
 #. $m(\pi)$ is the least number of cut-merge operations which
    can reach $\pi$ from the identity permutation $e$.
+</div>
 
 Parts (i) and (ii) are easy to check.
 
@@ -298,8 +305,10 @@ $$ (1\;2\;3) = (1\;2)(1\;3)(8\;9)(8\;9). $$
 Now we're getting to an interesting way to split permutations into two
 distinct subsets:
 
+<div class="box">
 **Definition** $\quad$
 A permutation $\pi$ is *odd* if $m(\pi)$ is odd, and *even* otherwise.
+</div>
 
 As soon as we call something even or odd, we expect some kind of behavior
 like this to happen:
