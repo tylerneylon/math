@@ -450,7 +450,7 @@ ol > li:before {
 }
 
 .box > p {
-    width: 100%;
+    width: calc(100% - 20px);
     margin-block: 0;
     margin: 10px;
 }
