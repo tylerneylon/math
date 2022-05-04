@@ -10,6 +10,7 @@
 \providecommand{\smallscr}[1]{\class{smallscr}{#1}}
 \providecommand{\smallscrskip}[1]{\class{smallscrskip}{\hskip #1}}
 
+\newcommand{\parity}{\textsf{parity}}
 \renewcommand{\theenumi}{(\roman{enumi})}
 
 [//]: #  The following doesn't work outside of a LaTeX output because pandoc only
@@ -293,6 +294,60 @@ transpositions, and cannot be the product of fewer.
 It could be the product of more, though:
 
 $$ (1\;2\;3) = (1\;2)(1\;3)(8\;9)(8\;9). $$
+
+Now we're getting to an interesting way to split permutations into two
+distinct subsets:
+
+**Definition** $\quad$
+A permutation $\pi$ is *odd* if $m(\pi)$ is odd, and *even* otherwise.
+
+As soon as we call something even or odd, we expect some kind of behavior
+like this to happen:
+
+$$
+\begin{alignedat}{2}
+\text{even} &+ \text{even} &&= \text{even}  \\
+\text{odd}  &+ \text{even} &&= \text{odd}   \\
+\text{odd}  &+ \text{odd}  &&= \text{even}. \\
+\end{alignedat}
+$$ {#eq:eq4}
+
+It turns out that these rules do indeed hold true when we
+identify integer addition with permutation composition; I'll explain
+why.
+
+The key to proving ([-@eq:eq4]) is to see that, for any sequence
+of transpositions $t_1, t_2, \ldots, t_k$:
+
+$$m(t_1t_2\cdots t_k)\text{ is even iff } k \text{ is even}.$$ {#eq:eq5}
+
+This fact follows from observation 3. In more detail:
+Certainly $m(e)=0$ (reminder that $e$ is the identity permutation); this
+corresponds to $k=0$ in ([-@eq:eq5]), an empty product.
+Now for larger values of $k$: If $\pi=t_1t_2\cdots t_{k-1}$ and we
+compose $\pi$ with $t_k$ (move from $\pi$ to $\pi\cdot t_k$),
+then the parity (even/odd-ness) of the permutation switches because
+$m(\pi\cdot t_k) = m(\pi) \pm 1$ (by observation 3).
+So $\pi\cdot t_k$ is even iff $\pi$ is odd. This is enough
+to complete a proof of ([-@eq:eq5]) by induction on $k$.
+
+[//]: # TODO The bit below is all new; try to clean it up and clarify.
+
+Planning ahead, it will be useful to define the parity function of a
+permutation $\pi$ like so:
+$$\textsf{parity}(\pi) := \begin{cases}
+    \phantom{-}1  & \text{if $\pi$ is even, and} \\
+    -1            & \text{if $\pi$ is odd.}
+\end{cases}$$
+Notice that $\parity(\pi) = (-1)^{m(\pi)}$.
+This function corresponds to ([-@eq:eq4]) in the sense that
+$$\parity(\sigma\cdot\tau) = \parity(\sigma) \cdot \parity(\tau)$$ {#eq:eq5b}
+for any permutations $\sigma$ and $\tau$.
+The intuitive connection between the additive equations in ([-@eq:eq4])
+and the multiplicative nature of ([-@eq:eq5b]) can be understood by noticing
+that
+$$(-1)^\text{even}(-1)^\text{odd} = (-1)^\text{odd},$$
+and so on for other even/odd combinations.
 
 
 [//]: # TODO HERE vvvvvv
