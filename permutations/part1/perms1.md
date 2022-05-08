@@ -10,7 +10,7 @@
 \providecommand{\smallscr}[1]{\class{smallscr}{#1}}
 \providecommand{\smallscrskip}[1]{\class{smallscrskip}{\hskip #1}}
 
-\newcommand{\parity}{\textsf{parity}}
+\newcommand{\sign}{\textsf{sign}}
 \renewcommand{\theenumi}{(\roman{enumi})}
 
 [//]: #  The following doesn't work outside of a LaTeX output because pandoc only
@@ -321,44 +321,101 @@ $$
 \end{alignedat}
 $$ {#eq:eq4}
 
-It turns out that these rules do indeed hold true when we
-identify integer addition with permutation composition; I'll explain
-why.
+It turns out that these rules do indeed hold true in the sense that, for
+example, if we compose an odd permutation with another odd permutation,
+the result is an even permutation. Next I'll explain
+why the intuitive identities of ([-@eq:eq4]) are true for permutations.
 
-The key to proving ([-@eq:eq4]) is to see that, for any sequence
+The key to the proof is to see that, for any sequence
 of transpositions $t_1, t_2, \ldots, t_k$:
 
 $$m(t_1t_2\cdots t_k)\text{ is even iff } k \text{ is even}.$$ {#eq:eq5}
 
 This fact follows from observation 3. In more detail:
-Certainly $m(e)=0$ (reminder that $e$ is the identity permutation); this
+Certainly $m(e)=0$ (recall that $e$ is the identity permutation); this
 corresponds to $k=0$ in ([-@eq:eq5]), an empty product.
 Now for larger values of $k$: If $\pi=t_1t_2\cdots t_{k-1}$ and we
 compose $\pi$ with $t_k$ (move from $\pi$ to $\pi\cdot t_k$),
 then the parity (even/odd-ness) of the permutation switches because
-$m(\pi\cdot t_k) = m(\pi) \pm 1$ (by observation 3).
+$m(\pi\cdot t_k) = m(\pi) \pm 1$ by observation 3.
 So $\pi\cdot t_k$ is even iff $\pi$ is odd. This is enough
 to complete a proof of ([-@eq:eq5]) by induction on $k$.
 
 [//]: # TODO The bit below is all new; try to clean it up and clarify.
 
-Planning ahead, it will be useful to define the parity function of a
+Planning ahead, it will be useful to define the sign function of a
 permutation $\pi$ like so:
-$$\textsf{parity}(\pi) := \begin{cases}
+$$\textsf{sign}(\pi) := \begin{cases}
     \phantom{-}1  & \text{if $\pi$ is even, and} \\
     -1            & \text{if $\pi$ is odd.}
 \end{cases}$$
-Notice that $\parity(\pi) = (-1)^{m(\pi)}$.
-This function corresponds to ([-@eq:eq4]) in the sense that
-$$\parity(\sigma\cdot\tau) = \parity(\sigma) \cdot \parity(\tau)$$ {#eq:eq5b}
-for any permutations $\sigma$ and $\tau$.
-The intuitive connection between the additive equations in ([-@eq:eq4])
-and the multiplicative nature of ([-@eq:eq5b]) can be understood by noticing
-that
-$$(-1)^\text{even}(-1)^\text{odd} = (-1)^\text{odd},$$
-and so on for other even/odd combinations.
+Notice that $\sign(\pi) = (-1)^{m(\pi)}$.
+
+When we use this sign function, we're essentially moving from an additive view
+of even/odd-ness and into a multiplicative view --- but the two views are
+equivalent.
+For example, the equation
+$$\text{even} + \text{odd} = \text{odd}$$
+becomes
+$$(-1)^\text{even}(-1)^\text{odd} = (-1)^\text{odd}.$$
+The general equation $(-1)^a(-1)^b = (-1)^{a+b}$ provides the equivalence.
+
+We can now state the idea of ([-@eq:eq4]) both more formally and more
+succinctly.
+
+<div class="box">
+For any two permutations $\sigma$ and $\tau$,
+$$\sign(\sigma\cdot\tau) = \sign(\sigma) \cdot \sign(\tau).$$ {#eq:eq5b}
+</div>
+
+Let's see why ([-@eq:eq5b]) is true.
+Let $k = m(\sigma)$ and $k' = m(\tau)$. Then, using observation
+3(iii), we can find transpositions $(t_i)_1^k$ and $(t'_i)_1^{k'}$ so that
+\begin{align*}
+  \sigma &= t_1 \cdots t_k \\
+  \tau   &= t'_1 \cdots t'_{k'}.
+\end{align*}
+Then
+$$
+\begin{alignedat}{2}
+\sign(\sigma\cdot\tau) &= (-1)^{m(\sigma\tau)} & \text{by def'n of }\sign \\
+&= (-1)^{m(t_1\cdots t_k \cdot t'_1 \cdots t'_{k'})} &
+          \quad\text{ by def'n of $t_i$ and $t'_i$} \\
+&= (-1)^{k + k'} & \text{ by (5)} \\
+&= (-1)^k (-1)^{k'} \\
+&= \sign(\sigma)\sign(\tau).
+\end{alignedat}
+$$
+This completes the proof of ([-@eq:eq5b]). And ([-@eq:eq5b]) expresses the same
+idea as ([-@eq:eq4]), so that we have now justified both of all of those
+formulae.
+
+[//]: # *a
+
+Moving back to group theory: Notice that if $\sigma$ and $\tau$ are both even
+permutations, then so is $\sigma\tau$. In other words, the subset of even
+permutations is closed under composition, so that they form a subgroup of $S_n$.
+This is not true for odd permutations.
+
+# A Historic Note
+
+I like the cut-merge proof of ([-@eq:eq5b]) because it provides an intuition
+for *why* parity makes sense for permutations.
+In a nutshell, every permutation is a sequence of transpositions (cut-merges),
+and every transposition is a flip of the parity because the magnitude must
+either increase or decrease by 1.
+Here's a sketch of the intuitive paths we've crossed:
+
+[//]: # TODO HERE vvvvvv Clean up this overfull diagram.
+
+$$\text{transpositions} \leftrightarrow
+  \text{cut-merges} \leftrightarrow
+  \text{changes to cycles} \leftrightarrow
+  \text{changes to $m(\pi)$} \leftrightarrow
+  \text{changes to $\sign(\pi)$}.
+$$
 
 
-[//]: # TODO HERE vvvvvv
+
 
 # References
