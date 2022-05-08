@@ -387,7 +387,7 @@ $$
 \end{alignedat}
 $$
 This completes the proof of ([-@eq:eq5b]). And ([-@eq:eq5b]) expresses the same
-idea as ([-@eq:eq4]), so that we have now justified both of all of those
+idea as ([-@eq:eq4]), so that we have now justified all of those
 formulae.
 
 [//]: # *a
