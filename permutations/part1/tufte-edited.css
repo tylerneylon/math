@@ -346,6 +346,16 @@ table {
     font-size: initial;
 }
 
+/* table3 */
+
+.table3 table {
+    font-size: 120%;
+}
+
+.table3 tr {
+    padding: 10px 0;
+}
+
 li p { width: 100%; }
 
 hr { margin: 0; }

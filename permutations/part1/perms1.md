@@ -4,11 +4,13 @@
 
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\eqnset}[1]{\left.\mbox{$#1$}\;\;\right\rbrace\class{postbrace}{ }}
+\providecommand{\latexonlyrule}[3][]{}
 \providecommand{\optquad}{\class{optquad}{}}
 \providecommand{\smallscrneg}{\class{smallscrneg}{ }}
 \providecommand{\bigscr}[1]{\class{bigscr}{#1}}
 \providecommand{\smallscr}[1]{\class{smallscr}{#1}}
 \providecommand{\smallscrskip}[1]{\class{smallscrskip}{\hskip #1}}
+\providecommand{\rule}[2]{\rule{#1}{#2}}
 
 \newcommand{\sign}{\textsf{sign}}
 \renewcommand{\theenumi}{(\roman{enumi})}
@@ -414,34 +416,10 @@ Here's a sketch of the intuitive paths we've crossed:
  | | | |
 :-------:|:-:|:-------:|:-:|:-------:
 $\fbox{transpositions}$ | $\longleftrightarrow$ | $\fbox{cut-merges}$ | $\longleftrightarrow$ | $\fbox{changes to cycles}$
- | | | |  | $\updownarrow\rule[-3mm]{0mm}{7.5mm}$
+ | | | |  | $\updownarrow\customstrut$
  | | | $\fbox{changes to parity}$ | $\longleftrightarrow$ | $\fbox{changes to \(m(\pi)\)}$
 
-- ----------------------------- ----------------------- --------------------------------------------- ----------------------- ---------------------------------------- -
-   $\fbox{transpositions}$       $\longleftrightarrow$      $\fbox{cut-merges}$                        $\longleftrightarrow$   $\fbox{changes to cycles}$
-  
-                                                                                                                               $\updownarrow\rule[-3mm]{0mm}{7.5mm}$
-  
-                                                           $\fbox{changes to parity}$                  $\longleftrightarrow$   $\fbox{changes to \(m(\pi)\)}$
-- ----------------------------- ----------------------- --------------------------------------------- ----------------------- ---------------------------------------- -
-
-- ------------------------- ------------------- ---------------------------- ------------------- ---------------------------------------- -
-   $\fbox{transpositions}$   $\leftrightarrow$      $\fbox{cut-merges}$       $\leftrightarrow$   $\fbox{changes to cycles}$
-  
-                                                                                                  $\updownarrow\rule[-3mm]{0mm}{7.5mm}$
-  
-                                                 $\fbox{changes to parity}$   $\leftrightarrow$   $\fbox{changes to \(m(\pi)\)}$
-- ------------------------- ------------------- ---------------------------- ------------------- ---------------------------------------- -
-
 </div>
-
-$$\text{transpositions} \leftrightarrow
-  \text{cut-merges} \leftrightarrow
-  \text{changes to cycles} \leftrightarrow
-  \text{changes to $m(\pi)$} \leftrightarrow
-  \text{changes to $\sign(\pi)$}.
-$$
-
 
 
 
