@@ -12,6 +12,9 @@
 \providecommand{\smallscrskip}[1]{\class{smallscrskip}{\hskip #1}}
 \providecommand{\rule}[2]{\rule{#1}{#2}}
 
+\newcommand{\mydots}{{\cdot}\kern -0.1pt{\cdot}\kern -0.1pt{\cdot}}
+
+
 \newcommand{\sign}{\textsf{sign}}
 \renewcommand{\theenumi}{(\roman{enumi})}
 
@@ -180,17 +183,16 @@ $$(1\;2\;3\;4\;5) = (\underline{3}\;4\;\underline{5}\;1\;2).$$
 Now I'm ready to more carefully define the cut-merge operation
 $*(x\;y)$. In the definition below, I'll write $(x{-})$ to
 denote the cycle starting with $x$; and, analogously,
-I'll write $(x{-}\;y{-})$ to indicate a cycle containing both
-$x$ and $y$, possibly with other elements indicated by the
-dashes.
+I'll write $(x\mydots\;y\mydots)$ to indicate a cycle containing both
+$x$ and $y$, possibly with other elements indicated by the dots.
 
 <div class="box">
 **Definition** $\quad$
 The *cut-merge* operation $*(x\;y)$ operates on a
 permutation $\pi$ via
 $$ \pi * (x\;y) = \begin{cases}
-    (x{-}\;y{-})\,\sigma & \text{when } \pi = (x{-})(y{-})\,\sigma, \text{ or,} \\
-    (x{-})(y{-})\,\sigma & \text{when } \pi = (x{-}\;y{-})\,\sigma, \\
+    (x\mydots\;y\mydots)\,\sigma & \text{when } \pi = (x\mydots)(y\mydots)\,\sigma, \text{ or,} \\
+    (x\mydots)(y\mydots)\,\sigma & \text{when } \pi = (x\mydots\;y\mydots)\,\sigma, \\
 \end{cases}$$
 where $\sigma$ represents all the other cycles of $\pi$ ($\sigma$ may
 represent no cycles).
@@ -200,7 +202,7 @@ The operation *cuts* a cycle if $x$ and $y$ are in the same cycle; otherwise
 it *merges* the cycles of $x$ and $y$.
 A shorthand for the definition is:
 
-$$ (x{-}\;y{-}) \; \underset{*(x\;y)}{\longleftrightarrow} \; (x{-})(y{-}). $$
+$$ (x\mydots\;y\mydots) \; \underset{*(x\;y)}{\longleftrightarrow} \; (x\mydots)(y\mydots). $$
 
 [//]: # *a
 
