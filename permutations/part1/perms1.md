@@ -397,16 +397,43 @@ permutations, then so is $\sigma\tau$. In other words, the subset of even
 permutations is closed under composition, so that they form a subgroup of $S_n$.
 This is not true for odd permutations.
 
-# A Historic Note
+# Previous Approaches to Permutation Parity
 
 I like the cut-merge proof of ([-@eq:eq5b]) because it provides an intuition
 for *why* parity makes sense for permutations.
 In a nutshell, every permutation is a sequence of transpositions (cut-merges),
 and every transposition is a flip of the parity because the magnitude must
 either increase or decrease by 1.
+
 Here's a sketch of the intuitive paths we've crossed:
 
 [//]: # TODO HERE vvvvvv Clean up this overfull diagram.
+
+<div class="table3">
+
+ | | | |
+:-------:|:-:|:-------:|:-:|:-------:
+$\fbox{transpositions}$ | $\longleftrightarrow$ | $\fbox{cut-merges}$ | $\longleftrightarrow$ | $\fbox{changes to cycles}$
+ | | | |  | $\updownarrow\rule[-3mm]{0mm}{7.5mm}$
+ | | | $\fbox{changes to parity}$ | $\longleftrightarrow$ | $\fbox{changes to \(m(\pi)\)}$
+
+- ----------------------------- ----------------------- --------------------------------------------- ----------------------- ---------------------------------------- -
+   $\fbox{transpositions}$       $\longleftrightarrow$      $\fbox{cut-merges}$                        $\longleftrightarrow$   $\fbox{changes to cycles}$
+  
+                                                                                                                               $\updownarrow\rule[-3mm]{0mm}{7.5mm}$
+  
+                                                           $\fbox{changes to parity}$                  $\longleftrightarrow$   $\fbox{changes to \(m(\pi)\)}$
+- ----------------------------- ----------------------- --------------------------------------------- ----------------------- ---------------------------------------- -
+
+- ------------------------- ------------------- ---------------------------- ------------------- ---------------------------------------- -
+   $\fbox{transpositions}$   $\leftrightarrow$      $\fbox{cut-merges}$       $\leftrightarrow$   $\fbox{changes to cycles}$
+  
+                                                                                                  $\updownarrow\rule[-3mm]{0mm}{7.5mm}$
+  
+                                                 $\fbox{changes to parity}$   $\leftrightarrow$   $\fbox{changes to \(m(\pi)\)}$
+- ------------------------- ------------------- ---------------------------- ------------------- ---------------------------------------- -
+
+</div>
 
 $$\text{transpositions} \leftrightarrow
   \text{cut-merges} \leftrightarrow
