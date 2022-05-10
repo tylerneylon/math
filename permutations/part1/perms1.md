@@ -181,7 +181,7 @@ in mind that
 $$(1\;2\;3\;4\;5) = (\underline{3}\;4\;\underline{5}\;1\;2).$$
 
 Now I'm ready to more carefully define the cut-merge operation
-$*(x\;y)$. In the definition below, I'll write $(x{-})$ to
+$*(x\;y)$. In the definition below, I'll write $(x\mydots)$ to
 denote the cycle starting with $x$; and, analogously,
 I'll write $(x\mydots\;y\mydots)$ to indicate a cycle containing both
 $x$ and $y$, possibly with other elements indicated by the dots.
@@ -217,7 +217,7 @@ Similarly,
 $$(1\;2) * (2\;3) = (2\;1\;3)$$
 
 because, setting $x=2$ and $y=3$, we think of
-the left side as $(x{-})(y{-})=(2 1)(3)$.
+the left side as $(x\mydots)(y\mydots)=(2 1)(3)$.
 
 <div class="box">
 **Observation 1** $\quad$
