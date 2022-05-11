@@ -10,10 +10,8 @@
 \providecommand{\bigscr}[1]{\class{bigscr}{#1}}
 \providecommand{\smallscr}[1]{\class{smallscr}{#1}}
 \providecommand{\smallscrskip}[1]{\class{smallscrskip}{\hskip #1}}
-\providecommand{\rule}[2]{\rule{#1}{#2}}
 
 \newcommand{\mydots}{{\cdot}\kern -0.1pt{\cdot}\kern -0.1pt{\cdot}}
-
 
 \newcommand{\sign}{\textsf{sign}}
 \renewcommand{\theenumi}{(\roman{enumi})}
@@ -186,7 +184,8 @@ denote the cycle starting with $x$; and, analogously,
 I'll write $(x\mydots\;y\mydots)$ to indicate a cycle containing both
 $x$ and $y$, possibly with other elements indicated by the dots.
 
-<div class="box">
+<div class="box"> \boxedstart
+
 **Definition** $\quad$
 The *cut-merge* operation $*(x\;y)$ operates on a
 permutation $\pi$ via
@@ -194,9 +193,10 @@ $$ \pi * (x\;y) = \begin{cases}
     (x\mydots\;y\mydots)\,\sigma & \text{when } \pi = (x\mydots)(y\mydots)\,\sigma, \text{ or,} \\
     (x\mydots)(y\mydots)\,\sigma & \text{when } \pi = (x\mydots\;y\mydots)\,\sigma, \\
 \end{cases}$$
-where $\sigma$ represents all the other cycles of $\pi$ ($\sigma$ may
-represent no cycles).
-</div>
+where $\sigma$ represents all the other cycles of $\pi$; $\sigma$ may
+represent no cycles.
+
+\boxedend </div>
 
 The operation *cuts* a cycle if $x$ and $y$ are in the same cycle; otherwise
 it *merges* the cycles of $x$ and $y$.
@@ -219,11 +219,13 @@ $$(1\;2) * (2\;3) = (2\;1\;3)$$
 because, setting $x=2$ and $y=3$, we think of
 the left side as $(x\mydots)(y\mydots)=(2 1)(3)$.
 
-<div class="box">
+<div class="box"> \boxedstart
+
 **Observation 1** $\quad$
 The cut-merge operation $\pi * (x\;y)$ is simply $\pi$ composed with
 the permutation $(x\;y)$.
-</div>
+
+\boxedend </div>
 
 To state this observation again, I'll introduce the notation $\rho_{ab}()$
 for the function that swaps input elements $a$ and $b$, but otherwise
@@ -265,23 +267,27 @@ $\pi = (1)(2\;5\;3)(4\;7)(6)
 \Rightarrow m(\pi) = 7 - 4 = 3$, as before.
 This leads to:
 
-<div class="box">
+<div class="box"> \boxedstart
+
 **Observation 2** $\quad$
 $$ m(\pi) = n - \#(\text{orbits}), $$
 where an *orbit* is either a cycle with multiple elements,
 or a *singleton*, which is an element $i : \pi(i) = i$.
-</div>
+
+\boxedend </div>
 
 Let's see why the definition of $m(\pi)$ is interesting.
 
-<div class="box">
+<div class="box"> \boxedstart
+
 **Observation 3** $\quad$
 
 #. Every merge increases $m(\pi)$ by 1.
 #. Every cut decreases $m(\pi)$ by 1.
 #. $m(\pi)$ is the least number of cut-merge operations which
    can reach $\pi$ from the identity permutation $e$.
-</div>
+
+\boxedend </div>
 
 Parts (i) and (ii) are easy to check.
 
@@ -309,10 +315,12 @@ $$ (1\;2\;3) = (1\;2)(1\;3)(8\;9)(8\;9). $$
 Now we're getting to an interesting way to split permutations into two
 distinct subsets:
 
-<div class="box">
+<div class="box"> \boxedstart
+
 **Definition** $\quad$
 A permutation $\pi$ is *odd* if $m(\pi)$ is odd, and *even* otherwise.
-</div>
+
+\boxedend </div>
 
 As soon as we call something even or odd, we expect some kind of behavior
 like this to happen:
@@ -367,10 +375,12 @@ The general equation $(-1)^a(-1)^b = (-1)^{a+b}$ provides the equivalence.
 We can now state the idea of ([-@eq:eq4]) both more formally and more
 succinctly.
 
-<div class="box">
+<div class="box"> \boxedstart
+
 For any two permutations $\sigma$ and $\tau$,
 $$\sign(\sigma\cdot\tau) = \sign(\sigma) \cdot \sign(\tau).$$ {#eq:eq5b}
-</div>
+
+\boxedend </div>
 
 Let's see why ([-@eq:eq5b]) is true.
 Let $k = m(\sigma)$ and $k' = m(\tau)$. Then, using observation

@@ -450,6 +450,16 @@ $endif$
 \newcommand{\bigscr}[1]{#1}
 \newcommand{\smallscrskip}[1]{}
 
+% I learned some things from these two links:
+% https://tex.stackexchange.com/questions/145812/using-fbox-in-a-newenvironment
+% https://tex.stackexchange.com/questions/120042/splitting-a-command-syntax-across-a-newenvironment-definition
+
+\newsavebox{\mybox}
+\newenvironment{myboxed}{\begin{lrbox}{\mybox}\begin{minipage}{\textwidth - 2\fboxsep - 0.8pt}}{\end{minipage}\end{lrbox}\fbox{\usebox{\mybox}}}
+
+\newcommand{\boxedstart}{\begin{myboxed}}
+\newcommand{\boxedend}{\end{myboxed}}
+
 % End custom, non-pandoc commands.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
