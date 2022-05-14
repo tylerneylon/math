@@ -356,6 +356,15 @@ table {
     padding: 10px 0;
 }
 
+.table3 tr>td {
+    padding-top: 20px;
+}
+
+.table3 tr:first-child>td {
+    padding-top: 0;
+}
+
+
 li p { width: 100%; }
 
 hr { margin: 0; }

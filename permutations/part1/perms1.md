@@ -83,6 +83,10 @@ This article covers the following independent observations about permutations:
   *cycle notation* (not a new idea), and I'll explain a human-oriented
   algorithm to efficiently multiply permutations written in this notation.
 
+[//]: # TODO ^^^^^^ I think the multiplication algorithm will be another part.
+[//]: #             So update the above list accordingly.
+
+
 [//]: # * I'll define the graph $G_n$ with elements of $S_n$ as nodes, and with
 [//]: #   transpositions as edges. (This kind of graph has been defined in the
 [//]: #   literature before.)
