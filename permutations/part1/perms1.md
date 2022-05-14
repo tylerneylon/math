@@ -437,6 +437,117 @@ $\fbox{transpositions}$ | $\longleftrightarrow$ | $\fbox{cut-merges}$ | $\longle
 
 </div>
 
+I'll contrast the proof above of ([-@eq:eq5b]) with two other approaches.
 
+## Herstein's Proof
+
+In his book *Topics in Algebra*, I.N. Herstein uses the
+Vandermonde polynomial:
+
+$$ p(x_1,\ldots, x_n) := \prod_{i<j}(x_i-x_j). $$
+
+Given a permutation $\pi$, we can now define
+
+$$ \pi(p(x_1,\ldots, x_n)) := p(x_{\pi_1},\ldots, x_{\pi_n}). $$
+
+The polynomial $\pi(p)$ is still a product of $(x_i - x_j)$ for
+all $i\ne j$, but the sign of the polynomial may change.
+For example, when $n=3$, and $\pi=(1\;2)$:
+
+\begin{align*}
+p(x_1, x_2, x_3) &= (x_1 - x_2)(x_1 - x_3)(x_2 - x_3) \\
+\pi(p)           &= (x_2 - x_1)(x_2 - x_3)(x_1 - x_3) = -p.
+\end{align*}
+
+Since $\pi(p) = \pm p$ for any $\pi$, we can (re)define
+
+$$ \sign(\pi) := \pi(p)/p \in \{-1, +1\}. $$ {#eq:eq7}
+
+(Temporarily forget our original definition of $\sign(\pi)$.
+We'll re-prove ([-@eq:eq5b]), and because our new and old $\sign()$
+functions are the same on $e$ and on transpositions, it will
+follow that they are in fact the same function.)
+
+Notice that
+
+$$\pi(-p) = -\pi(p)$$ {#eq:eq8}
+
+based on the definition of $\pi(p)$.
+
+This means that, for any two permutations $\sigma$ and $\tau$,
+
+$$
+\begin{alignedat}{2}
+\sigma(\tau(p)) &= \sigma(\sign(\tau)\cdot p) & \text{by } (7) \\
+                &= \sign(\tau)\cdot\sigma(p)  & \text{by } (8) \\
+                &= \sign(\sigma)\cdot\sign(\tau)\cdot p.
+\end{alignedat}
+$$
+
+In summary, $\sign(\sigma\cdot\tau) = \sign(\sigma)\cdot\sigma(\tau)$,
+which confirms ([-@eq:eq5b]) for this new definition of $\sign()$.
+This proof provides less insight than the cut-merge approach
+as to *why* ([-@eq:eq5b]) is true ---
+into what is going on behind the scenes to make things click.
+
+## Artin's Proof
+
+The other approach I'll consider is from the book *Algebra* by Michael
+Artin. This second alternative proof works by translating permutations
+into the language of linear algebra, and relies upon properties of
+the determinant of a matrix. On the off chance that you're not fluent
+in properties of determinants, you can skim or skip this section
+and safely resume reading afterwards (the remainder of this note
+does not rely on linear algebra).
+
+I'll use the variable $e_i$ to denote the length-$n$ column vector
+$$e_i =
+\begin{array}{l}
+0 \\
+0 \\
+\vdots \\
+1 \longleftarrow i^\text{th}\text{ place}. \\
+\vdots \\
+0 \\
+0 \\
+\end{array}$$
+
+For example, if $n=3$, then
+
+$$
+e_1 = \begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix} \quad
+e_2 = \begin{pmatrix} 1 \\ 1 \\ 0 \end{pmatrix} \quad
+e_3 = \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix}.
+$$
+
+Now I can define, for permutation $\pi$, the $n\times n$ matrix $M_\pi$
+as having $e_{\pi_i}$ for its $i^\text{th}$ column;
+this is how Artin represents a permutation as a matrix.
+For example, if $\sigma = (3\;2\;1)$ then
+$M_\sigma = \left(\begin{smallmatrix}&1\\ &&1\\ 1 \end{smallmatrix}\right)$.
+
+Let's see why this matrix definition makes sense.
+Let $\vec n := \left(\begin{smallmatrix}1 \\ 2 \\ \vdots \\
+n\end{smallmatrix}\right)$, and then, using the column-expansion perspective of
+matrix multiplication,
+
+$$M_\pi\vec n = 1\cdot e_{\pi_1} + 2\cdot e_{\pi_2} + \ldots + n\cdot e_{\pi_n}
+= 
+\left(
+\begin{array}{l}
+\vdots \\
+i \\
+\vdots \\
+\end{array}
+\right)
+\longleftarrow\text{ in row }\pi_i.
+$$
+
+In other words, when we multiply $M_\pi$ on the left of a column vector,
+we take whatever value was in the $i^\text{th}$ row and move it to the
+$\pi_i^\text{th}$ row.
+For example, with $n=3$, $M_\sigma\vec n =
+\left(\begin{smallmatrix}&1\\ &&1\\ 1 \end{smallmatrix}\right)
+\left(\begin{smallmatrix}1 \\ 2 \\ 3 \\ \end{smallmatrix}\right) = \left(\begin{smallmatrix}2 \\ 3 \\ 1 \\ \end{smallmatrix}\right)$.
 
 # References
