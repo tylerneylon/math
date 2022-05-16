@@ -3,6 +3,7 @@
 % Started typing up 166.2022
 
 \newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
 \newcommand{\eqnset}[1]{\left.\mbox{$#1$}\;\;\right\rbrace\class{postbrace}{ }}
 \providecommand{\latexonlyrule}[3][]{}
 \providecommand{\optquad}{\class{optquad}{}}
@@ -14,6 +15,8 @@
 \newcommand{\mydots}{{\cdot}\kern -0.1pt{\cdot}\kern -0.1pt{\cdot}}
 
 \newcommand{\sign}{\textsf{sign}}
+\newcommand{\csfn}{\textsf{cs}}
+\newcommand{\order}{\textsf{order}}
 \renewcommand{\theenumi}{(\roman{enumi})}
 
 [//]: #  The following doesn't work outside of a LaTeX output because pandoc only
@@ -499,6 +502,11 @@ the determinant of a matrix. On the off chance that you're not fluent
 in properties of determinants, you can skim or skip this section
 and safely resume reading afterwards (the remainder of this note
 does not rely on linear algebra).
+I'm not a huge fan of this proof because
+it's so easy to get lost in the details of tracking the relationship
+between vector coordinates and how permutations act on them. I'll
+break the proof down into small steps to walk you through
+the dance of indices.
 
 I'll use the variable $e_i$ to denote the length-$n$ column vector
 $$e_i =
@@ -541,13 +549,150 @@ i \\
 \end{array}
 \right)
 \longleftarrow\text{ in row }\pi_i.
-$$
+$$ {#eq:eq9}
 
 In other words, when we multiply $M_\pi$ on the left of a column vector,
 we take whatever value was in the $i^\text{th}$ row and move it to the
 $\pi_i^\text{th}$ row.
 For example, with $n=3$, $M_\sigma\vec n =
 \left(\begin{smallmatrix}&1\\ &&1\\ 1 \end{smallmatrix}\right)
-\left(\begin{smallmatrix}1 \\ 2 \\ 3 \\ \end{smallmatrix}\right) = \left(\begin{smallmatrix}2 \\ 3 \\ 1 \\ \end{smallmatrix}\right)$.
+\left(\begin{smallmatrix}1 \\ 2 \\ 3 \\ \end{smallmatrix}\right) =
+\left(\begin{smallmatrix}2 \\ 3 \\ 1 \\ \end{smallmatrix}\right)$.
+We can express the way $M_\pi$ performs $\pi$ by rewriting ([-@eq:eq9])
+as:
+$$ y = M_\pi\vec n \Rightarrow y_{\pi_i}=i \Rightarrow
+   y_j=\pi^{-1}(j) \Rightarrow \pi(y_j) = j.
+$$ {#eq:eq10}
+Intuitively: ``$\pi$ maps each value in $M_\pi\vec n$ to its row number.''
+
+\newcommand{\xcolvec}{\begin{pmatrix}x_1 \\ \vdots \\ x_n\end{pmatrix}}
+
+It will be useful to slightly generalize ([-@eq:eq10]) like this,
+using the notation $[v]_i$ to indicate the $i^\text{th}$
+coordinate of column vector $v$:
+$$\left[M_\pi\begin{pmatrix} x_1 \\ \vdots \\ x_n\end{pmatrix}
+   \right]_{\displaystyle\, \pi_i}
+   \!\! = x_i \quad\Rightarrow\quad
+   \left[M_\pi\begin{pmatrix}x_1 \\ \vdots \\ x_n\end{pmatrix}
+   \right]_{\displaystyle\, i}
+   \!\! = x_{\pi^{-1}i}.
+$$ {#eq:eq11}
+
+We're ready to see how the composition of permutations $\sigma$ and $\tau$
+translates to matrices via ([-@eq:eq11]):
+$$ \left[M_\tau M_\sigma \xcolvec\right]_{\displaystyle\, i} =
+   \left[M_\sigma \xcolvec\right]_{\displaystyle\,\tau^{-1}(i)} \!\! =
+   x_{\sigma^{-1}(\tau^{-1}(i))}.
+$$ {#eq:eq12}
+That is,
+$$ y = M_\tau M_\sigma\vec n \Rightarrow
+   y_i = \sigma^{-1}(\tau^{-1}(i)) \Rightarrow
+   \tau(\sigma(y_i)) = i.
+$$ {#eq:eq13}
+Keep in mind that I've always been writing
+(and will continue to write) $\sigma \cdot \tau$ to mean that
+$\sigma$ happens first and $\tau$ second. In traditional functional
+notation, this same composition is written as $\tau(\sigma(i))$.
+Intuitively:
+$$
+\sigma\cdot\tau \approx \tau(\sigma(\cdot)) \approx M_\tau M_\sigma.
+$$
+The switch of ordering can be confusing.
+
+Back to ([-@eq:eq13]): We can summarize this as
+$$M_{\sigma\cdot\tau} = M_\tau M_\sigma.$$
+
+At long last, I'm ready to (re)define the $\sign()$ function,
+following Artin:
+$$\sign(\pi) := \det(M_\pi),$$
+where $\det()$ is the determinant function of a square matrix.
+
+It turns out that this definition is also consistent with
+our earlier definitions because:
+
+* $\det(M_t) = -1$ for any transposition $t$ because exchanging
+  any two columns of a matrix negates its determinant; and
+* when $\pi=\prod_{i=1}^k t_i$ for transpositions $(t_i)_1^k$,
+  $\sign(\pi) = \det(M_\pi) = \det(\prod_{i=1}^kM_{t_i})
+  = (-1)^k =$ our cut-merge definition of $\sign()$, based
+  on ([-@eq:eq5]).
+
+In using this approach, Artin is able to show that
+([-@eq:eq5b]) holds simply by delegating the work to the properties
+of matrix determinants. In particular, using the fact that
+$\det(AB) = \det(A)\det(B)$:
+$$\sign(\sigma\cdot\tau) = \det(M_\tau M_\sigma) =
+  \det(M_\tau)\det(M_\sigma) = \sign(\sigma)\sign(\tau).
+$$
+
+Artin's proof is certainly valid, though I think it offers
+less insight into *why* equation ([-@eq:eq5b]) holds when
+compared to the cut-merge proof.
+
+## Cycle Structures
+
+Let $\sigma = (1\;3)(2\;4\;5)$ and $\tau = (1\;4)(2\;3)$.
+Then
+\begin{align*}
+  \sigma \tau &= (1\;2)(3\;4\;5), \text{ and} \\
+  \tau \sigma &= (1\;5\;2)(3\;4).
+\end{align*}
+
+Notice that these two permutations each have one
+cycle of length 2 and another of length 3. Is this a
+coincidence? It turns out that this similarity of
+structure will *always* hold between $\sigma \tau$ and
+$\tau \sigma$. I'll have to define a new concept before I can
+precisely formulate this relationship.
+
+<div class="box"> \boxedstart
+
+**Definition** $\quad$
+Given a permtuation $\pi$, a *cycle set* $S$ of $\pi$ is a set
+of elements in the domain of $\pi$ such that, for any $a,b\in S$,
+$\exists k:\pi^k(a)=b$. Notice that every element in the domain
+of $\pi$ is in exactly one cycle set of $\pi$.
+
+\indent
+The *cycle structure* $\csfn(\pi)$ of $\pi$ is a
+function $f:\N_{\ge 1}\to\N_{\ge 0}$ such that
+$f(i) :=$ the number of cycle sets of $\pi$ with $i$ elements.
+
+\boxedend </div>
+
+As a shorthand, I'll write $(f(1), f(2), f(3), \ldots)$ to
+express a cycle structure. For example, when $n=5$,
+the permutation $(1\;2)(3\;4\;5)$ has cycle structure
+$(0, 1, 1)$; so does the permutation $(1\;5\;2)(3\;4)$.
+Now I can state:
+
+<div class="box"> \boxedstart
+
+**Observation 4** $\quad$
+For any permutations $\sigma$ and $\tau$,
+$$ \csfn(\sigma\tau) = \csfn(\tau\sigma). $$
+
+\boxedend </div>
+
+**Proof 1** $\quad$
+Given permutation $\pi$,
+I'll write $\order_\pi(i)=k$ to mean that $\pi^k(i)=i$,
+and there is no $\ell < k : \pi^\ell(i)=i$.
+To prove the observations, it's sufficient to show that there is
+a 1-1 and onto mapping $f:[n]\to[n]$ such that
+$\order_{\sigma\tau}(i)=k \Leftrightarrow \order_{\tau\sigma}(f(i))=k$.
+
+Suppose $\order_{\sigma\tau}(i)=k$.
+Let $j=\tau^{-1}(i)$.
+In the following equations, I'll use a left-to-write, input-to-output
+notation, where $i\pi$ means $\pi(i)$ and $i\sigma\tau$ means
+$\tau(\sigma(i))$. We have:
+$$ i = i(\sigma\tau)^k = j\tau(\sigma\tau)^k = j(\tau\sigma)^k\tau. $$
+Now apply $\tau^{-1}$ to the left-most and right-most expressions above
+to arrive at:
+$$ j= i\tau^{-1} = j(\tau\sigma)^k
+   \;\Rightarrow\; \order_{\tau\sigma}(j) \le k = \order_{\sigma\tau}(i).
+$$
+
 
 # References
