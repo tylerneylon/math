@@ -19,6 +19,12 @@
 \newcommand{\order}{\textsf{order}}
 \renewcommand{\theenumi}{(\roman{enumi})}
 
+[//]: #  TODO: Try adding a table of contents, but not at the tippy top.
+[//]: #        I think it will work better after the introductory text.
+[//]: #        This may be helpful to achieve that:
+[//]: #        https://stackoverflow.com/questions/25591517/pandoc-inserting-pages-before-generated-table-of-contents
+
+
 [//]: #  The following doesn't work outside of a LaTeX output because pandoc only
 [//]: #  provides a bare bones macro replacement mechanism --- it doesn't really speak
 [//]: #  TeX macro language itself. I'm leaving this here as a reminder since I had
@@ -629,7 +635,7 @@ Artin's proof is certainly valid, though I think it offers
 less insight into *why* equation ([-@eq:eq5b]) holds when
 compared to the cut-merge proof.
 
-## Cycle Structures
+# Cycle Structures
 
 Let $\sigma = (1\;3)(2\;4\;5)$ and $\tau = (1\;4)(2\;3)$.
 Then
@@ -674,11 +680,14 @@ $$ \csfn(\sigma\tau) = \csfn(\tau\sigma). $$
 
 \boxedend </div>
 
+I'll provide two proofs because they each
+shed their own light on why this is true.
+
 **Proof 1** $\quad$
 Given permutation $\pi$,
 I'll write $\order_\pi(i)=k$ to mean that $\pi^k(i)=i$,
 and there is no $\ell < k : \pi^\ell(i)=i$.
-To prove the observations, it's sufficient to show that there is
+To prove the observation, it's sufficient to show that there is
 a 1-1 and onto mapping $f:[n]\to[n]$ such that
 $\order_{\sigma\tau}(i)=k \Leftrightarrow \order_{\tau\sigma}(f(i))=k$.
 
@@ -690,9 +699,44 @@ $\tau(\sigma(i))$. We have:
 $$ i = i(\sigma\tau)^k = j\tau(\sigma\tau)^k = j(\tau\sigma)^k\tau. $$
 Now apply $\tau^{-1}$ to the left-most and right-most expressions above
 to arrive at:
+
 $$ j= i\tau^{-1} = j(\tau\sigma)^k
    \;\Rightarrow\; \order_{\tau\sigma}(j) \le k = \order_{\sigma\tau}(i).
+$$ {#eq:eq15}
+
+On the other hand, if $\ell=\order_{\tau\sigma}(j)$, then
+$$ i = (j)\tau = (j)(\tau\sigma)^\ell\tau
+     = (j)\tau(\sigma\tau)^\ell = i(\sigma\tau)^\ell
 $$
+$$ \Rightarrow \order_{\sigma\tau}(i) \le \ell = \order_{\tau\sigma}(j).
+$$ {#eq:eq16}
+
+Combining ([-@eq:eq15]) and ([-@eq:eq16]),
+$$ \order_{\sigma\tau}(i) = \order_{\tau\sigma}(j=\tau^{-1}(i)), $$
+and it turns out that $\tau^{-1}$ is the mapping $f:[n]\to [n]$
+we needed to complete the proof.
+$\square$
+
+**Proof 2** $\quad$
+Given any permutation product $\sigma\tau$, we can decompose
+$\tau$ into transpositions as in
+$\tau = t_1\cdots t_k$.
+Now we can think in terms of a series of smaller steps that carry
+us from $\sigma\tau$ over to $\tau\sigma$:
+\begin{align*}
+  \pi_0 &= \sigma\tau = \sigma\cdot t_1 \cdots t_k \\
+  \pi_1 &= t_k \cdot \sigma \cdot \tau t_k^{-1} = t_k\sigma t_1\cdots t_{k-1} \\
+  \vdots \\
+  \pi_k &= t_1\cdots t_k \sigma \tau t_k^{-1}\cdots t_1^{-1} = \tau\sigma.
+\end{align*}
+Each small step here can be characterized as
+$\pi_{i+1} = t_{k-i}\pi_i t_{k-i}$, using the fact that $t_j^{-1}=t_j$,
+which is true for any transposition. So the problem
+is reduced to showing that
+$$ \csfn(\pi) = \csfn(t \pi t) \text{ for any permutation $\pi$
+and transposition $t$.} $$
+
+
 
 
 # References
