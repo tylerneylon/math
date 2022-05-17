@@ -19,6 +19,7 @@
 \newcommand{\csfn}{\textsf{cs}}
 \newcommand{\order}{\textsf{order}}
 \newcommand{\nbors}{\textsf{nbors}}
+\newcommand{\samecycles}{\textsf{same$\\\_$cycles}}
 \renewcommand{\theenumi}{(\roman{enumi})}
 
 [//]: #  TODO: Try adding a table of contents, but not at the tippy top.
@@ -770,7 +771,33 @@ I can state clearly once I've provided a couple new definitions.
 Given any permutation $\pi$, let
 $$\nbors(\pi) := \{b\cdot a: \pi = a\cdot b\}.
 $$
+And let
+$$ \samecycles(\pi) := \{\sigma\in S_n : \csfn(\sigma)=\csfn(\pi)\}. $$
 
+<div class="box"> \boxedstart
+
+**Question 1** $\quad$
+Observation 4 tells us that, for any $\pi \in S_n$,
+$$ \nbors(\pi) \subset \samecycles(\pi). $$
+Are these sets actually equal?
+
+\boxedend </div>
+
+This is similar to asking:
+Given $\pi$ and the freedom to decompose it as
+$\pi=a\cdot b$, what are all the possible values of $b\cdot a$?
+
+The answer arises from a simple permutation decomposition.
+Let's start with:
+
+<div class="box"> \boxedstart
+
+**Observation 5** $\quad$
+The cycle notation of $\tau^{-1}\sigma\tau$ is the
+same as the cycle notation of $\sigma$ after each
+element $i$ is replaced with $(i)\tau$.
+
+\boxedend </div>
 
 
 # References
