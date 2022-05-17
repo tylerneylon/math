@@ -14,9 +14,11 @@
 
 \newcommand{\mydots}{{\cdot}\kern -0.1pt{\cdot}\kern -0.1pt{\cdot}}
 
+\newcommand{\?}{\stackrel{?}{=}}
 \newcommand{\sign}{\textsf{sign}}
 \newcommand{\csfn}{\textsf{cs}}
 \newcommand{\order}{\textsf{order}}
+\newcommand{\nbors}{\textsf{nbors}}
 \renewcommand{\theenumi}{(\roman{enumi})}
 
 [//]: #  TODO: Try adding a table of contents, but not at the tippy top.
@@ -725,7 +727,7 @@ Now we can think in terms of a series of smaller steps that carry
 us from $\sigma\tau$ over to $\tau\sigma$:
 \begin{align*}
   \pi_0 &= \sigma\tau = \sigma\cdot t_1 \cdots t_k \\
-  \pi_1 &= t_k \cdot \sigma \cdot \tau t_k^{-1} = t_k\sigma t_1\cdots t_{k-1} \\
+  \pi_1 &= t_k \cdot \sigma \cdot \tau \cdot t_k^{-1} = t_k\sigma t_1\cdots t_{k-1} \\
   \vdots \\
   \pi_k &= t_1\cdots t_k \sigma \tau t_k^{-1}\cdots t_1^{-1} = \tau\sigma.
 \end{align*}
@@ -734,8 +736,40 @@ $\pi_{i+1} = t_{k-i}\pi_i t_{k-i}$, using the fact that $t_j^{-1}=t_j$,
 which is true for any transposition. So the problem
 is reduced to showing that
 $$ \csfn(\pi) = \csfn(t \pi t) \text{ for any permutation $\pi$
-and transposition $t$.} $$
+and transposition $t$.} $$ {#eq:eq17}
+It turns out that applying $t=(x\;y)$ in this manner simply swaps the
+places of $x$ and $y$ in the cycle notation of $\pi$. For example:
+$$ (1\;3)(\underline{1}\;2\;5\;\underline{3}\;7)(1\;3)
+   = (\underline{3}\;2\;5\;\underline{1}\;7). $$
+This confirms ([-@eq:eq17]), which completes the proof.
+$\square$
 
+Notice that observation 4 can be generalized for any rotation
+of any finite product of permutations. For example,
+$$ \csfn(abcd) = \csfn(bcda) = \csfn(cdab) = \csfn(dabc). $$
+The equation $\csfn(\sigma\tau) = \csfn(\tau\sigma)$ makes it
+tempting to suspect that cycle structure is preserved no matter
+what order we multiply a given list of permutations.
+For example, we could ask if the following identities would hold
+for any three permutations $a,b,c$:
+$$ \csfn(abc) \? \csfn(acb) \? \csfn(bac) \? \csfn(bca), \text{etc.} $$
+for all the orderings of $a,b,c$; and similarly for any finite
+list of permutations.
+
+But this is not true in general. For example, if
+$a = (1\;2\;3)$, $b = (1\;2)$, $c=(1\;3)$, then
+$$
+\begin{alignedat}{2}
+a\;b\;c &= (1\;2\;3)(1\;2)(1\;3) &&= (1\;3\;2) \\
+c\;b\;a &= (1\;3)(1\;2)(1\;2\;3) &&= e.
+\end{alignedat}
+$$
+There is a natural follow-up question to observation 4 which
+I can state clearly once I've provided a couple new definitions.
+
+Given any permutation $\pi$, let
+$$\nbors(\pi) := \{b\cdot a: \pi = a\cdot b\}.
+$$
 
 
 
