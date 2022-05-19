@@ -18,8 +18,9 @@
 \newcommand{\sign}{\textsf{sign}}
 \newcommand{\csfn}{\textsf{cs}}
 \newcommand{\order}{\textsf{order}}
-\newcommand{\nbors}{\textsf{nbors}}
+\newcommand{\flips}{\textsf{flips}}
 \newcommand{\samecycles}{\textsf{same$\\\_$cycles}}
+\newcommand{\canon}{\textsf{canon}}
 \renewcommand{\theenumi}{(\roman{enumi})}
 
 [//]: #  TODO: Try adding a table of contents, but not at the tippy top.
@@ -769,7 +770,7 @@ There is a natural follow-up question to observation 4 which
 I can state clearly once I've provided a couple new definitions.
 
 Given any permutation $\pi$, let
-$$\nbors(\pi) := \{b\cdot a: \pi = a\cdot b\}.
+$$\flips(\pi) := \{b\cdot a: \pi = a\cdot b\}.
 $$
 And let
 $$ \samecycles(\pi) := \{\sigma\in S_n : \csfn(\sigma)=\csfn(\pi)\}. $$
@@ -778,7 +779,7 @@ $$ \samecycles(\pi) := \{\sigma\in S_n : \csfn(\sigma)=\csfn(\pi)\}. $$
 
 **Question 1** $\quad$
 Observation 4 tells us that, for any $\pi \in S_n$,
-$$ \nbors(\pi) \subset \samecycles(\pi). $$
+$$ \flips(\pi) \subset \samecycles(\pi). $$
 Are these sets actually equal?
 
 \boxedend </div>
@@ -796,6 +797,98 @@ Let's start with:
 The cycle notation of $\tau^{-1}\sigma\tau$ is the
 same as the cycle notation of $\sigma$ after each
 element $i$ is replaced with $(i)\tau$.
+
+\boxedend </div>
+
+The observation is true because
+$$ (i\tau)(\tau^{-1}\sigma\tau) = i\sigma\tau; $$
+that is, if $\sigma' := \tau^{-1}\sigma\tau$ and
+$\sigma : i \mapsto j$, then
+$\sigma' : i\tau \mapsto j\tau$.
+
+For example, if $\tau = (2\;5\;3)$ and
+$\sigma = (1\;2)(3\;4\;5)$, then
+$$ \tau^{-1}\sigma\tau = (1\;5)(2\;4\;3)
+  = [(1\;2)(3\;4\;5)].\text{replace}(\tau).$$
+
+Note that this replacement operation is specific to cycle
+notation. If we were to instead write out $\pi$ as the
+string $\pi_1 \pi_2 \ldots \pi_n$, then the corresponding
+string for $\tau^{-1}\sigma\tau$ is no longer replacement
+with $\tau$. I'll illustrate this distinction with an example:
+$$
+\begin{alignedat}{2}
+     \tau &= (2\;5\;3) \\
+     \sigma &= 2\;1\;4\;5\;3 && \phantom{ = }\text{ (This is
+     $\sigma_1\sigma_2\sigma_3\sigma_4\sigma_5$.)} \\
+     \tau^{-1}\sigma\tau &= 5\;4\;2\;3\;1 && \ne
+     [2\;1\;4\;5\;3].\text{replace}(\tau) \\
+     \sigma\tau &= 5\;1\;4\;3\;2 && = [2\;1\;4\;5\;3].\text{replace}(\tau).
+\end{alignedat}
+$$
+
+Now we're in a good position to answer question 1.
+Let's choose a canonical "first" element of $\samecycles(\pi)$.
+A simple way to do this it to treat all singleton-free
+cycle notations in $\samecycles(\pi)$ as strings, treating the ")"
+character as the last in the alphabet (we'll ignore the "(" character
+for the sake of ordering). Then we can define
+$$ \canon(\pi) := \text{ the lexicographically first element of
+   }\samecycles(\pi).
+$$
+For example, $\canon(3\;4\;2)(1\;5) = (1\;2\;3)(4\;5)$.
+If we had not specified the ordering of ")", then it would
+be unclear if $(1\;2)(3\;4\;5)$ or $(1\;2\;3)(4\;5)$ were first.
+
+Now we're ready for
+
+<div class="box"> \boxedstart
+
+**Answer to Question 1** $\quad$
+Given any $\sigma\in\samecycles(\pi)$,
+we can decompose $\pi=a\cdot b$ so that $b\cdot a=\sigma$.
+That is, $\flips(\pi) = \samecycles(\pi)$.
+
+\boxedend </div>
+
+**Proof** $\quad$
+We can use observation 5 to find $\tau$ so that
+$$ \pi = \tau^{-1}\sigma\tau. $$ {#eq:eq20}
+Let $a = \tau^{-1}$ and $b=\tau\pi$. Then
+$$
+\begin{alignedat}{2}
+     ab &= \pi \\
+     ba &= \tau\pi\tau^{-1} = \sigma\quad\text{by (17).}
+\end{alignedat}
+$$
+$\square$
+
+Note that the $\tau$ used in the proof may not be unique
+because there are different cycle notation strings for the
+same permutation. Consider $\pi=(1\;2)$ and $\sigma=(3\;4)$.
+We can convert $\pi$ into $\sigma$ in different ways:
+$$
+\begin{alignedat}{2}
+    & (1\;\;2) \quad\quad && (1\;\;2) \\
+    & \kern 1pt\downarrow\;\;\downarrow \;\;\tau=(1\;3)(2\;4) \quad\quad &&
+      \kern 1pt\downarrow\;\;\downarrow \;\;\tau'=(1\;4)(2\;3) \\
+    & (3\;\;4) && (4\;\;3)
+\end{alignedat}
+$$
+The above diagram is an informal way of writing that
+$$
+\tau^{-1}\pi\tau = (3\;4) = (4\;3) = \tau'^{-1}\pi\tau'.
+$$
+
+# The Magnitude is Like a Norm
+
+In this section I'll point out some interesting
+properties of the magnitude function.
+
+<div class="box"> \boxedstart
+
+**Observation 6** $\quad$
+Write the observation here.
 
 \boxedend </div>
 
