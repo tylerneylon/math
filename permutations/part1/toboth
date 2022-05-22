@@ -7,7 +7,7 @@ spt='$$p$$$$i$$'
 
 name=perms1
 # If I want a table of contents, I could add a --toc flag here.
-FLAGS="-s -M figPrefix=figure -M secPrefix="§" -M secPrefixTemplate="${spt}" --filter pandoc-crossref -M eqnPrefix= -M linkcolor=black --number-sections --bibliography=${name}.bib ${name}.md"
+FLAGS="-s -M figPrefix=figure -M secPrefix="§" -M secPrefixTemplate="${spt}" --filter pandoc-crossref -M eqnPrefix= -M linkcolor=black --number-sections --citeproc --bibliography=${name}.bib ${name}.md"
 
 # Make and the html file.
 pandoc --mathjax --template=template.html ${FLAGS} > ${name}.html

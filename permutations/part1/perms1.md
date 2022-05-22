@@ -1,6 +1,6 @@
 % Notes on Permutations: Cycles and Transpositions
 % Tyler Neylon
-% Started typing up 166.2022
+% 261.2022
 
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
@@ -91,18 +91,19 @@ This article covers the following independent observations about permutations:
 * I'll show that the magnitude $m(\cdot)$ acts like a norm on the group $S_n$,
   and that it can define a coherent distance function $\dist(\cdot, \cdot)$
   on $S_n$.
-* Finally, I'll look at a particular notation for permutations called
+
+<!--
+  Finally, I'll look at a particular notation for permutations called
   *cycle notation* (not a new idea), and I'll explain a human-oriented
   algorithm to efficiently multiply permutations written in this notation.
+-->
 
-[//]: # TODO ^^^^^^ I think the multiplication algorithm will be another part.
-[//]: #             So update the above list accordingly.
-
-
-[//]: # * I'll define the graph $G_n$ with elements of $S_n$ as nodes, and with
-[//]: #   transpositions as edges. (This kind of graph has been defined in the
-[//]: #   literature before.)
-[//]: # this item continues, but I'm omitting it b/c it goes in part 2. ^^^
+<!--
+* I'll define the graph $G_n$ with elements of $S_n$ as nodes, and with
+  transpositions as edges. (This kind of graph has been defined in the
+  literature before.)
+this item continues, but I'm omitting it b/c it goes in part 2. ^^^
+-->
 
 When I say these are *independent* observations, I mean that these ideas are new
 to me. I have not tried much to check if they are new to the world
@@ -962,5 +963,10 @@ of $k\in\R$, and so that
 $m(k\cdot\pi) = |k|\cdot m(\pi)$?
 
 \boxedend </div>
+
+---
+nocite: |
+  @*
+...
 
 # References

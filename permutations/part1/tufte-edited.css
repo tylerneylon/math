@@ -480,3 +480,10 @@ ol > li:before {
 }
 
 @media screen and (max-width: 760px) { .box { width: 90%; } }
+
+/* bibliography style */
+
+div.csl-entry {
+    margin-top: 30px;
+    font-size: 16pt;
+}
