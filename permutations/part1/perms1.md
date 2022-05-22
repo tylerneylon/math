@@ -16,11 +16,12 @@
 
 \newcommand{\?}{\stackrel{?}{=}}
 \newcommand{\sign}{\textsf{sign}}
-\newcommand{\csfn}{\textsf{cs}}
 \newcommand{\order}{\textsf{order}}
 \newcommand{\flips}{\textsf{flips}}
 \newcommand{\samecycles}{\textsf{same$\\\_$cycles}}
 \newcommand{\canon}{\textsf{canon}}
+\newcommand{\cs}{\mathsf{cs}}
+\newcommand{\dist}{\mathsf{dist}}
 \renewcommand{\theenumi}{(\roman{enumi})}
 
 [//]: #  TODO: Try adding a table of contents, but not at the tippy top.
@@ -67,8 +68,6 @@ permutations as mappings.
 [//]: # Here is more to the comment.
 [//]: # Commenty comment.
 
-\newcommand{\cs}{\mathsf{cs}}
-\newcommand{\dist}{\mathsf{dist}}
 
 This article covers the following independent observations about permutations:
 
@@ -664,7 +663,7 @@ $\exists k:\pi^k(a)=b$. Notice that every element in the domain
 of $\pi$ is in exactly one cycle set of $\pi$.
 
 \indent
-The *cycle structure* $\csfn(\pi)$ of $\pi$ is a
+The *cycle structure* $\cs(\pi)$ of $\pi$ is a
 function $f:\N_{\ge 1}\to\N_{\ge 0}$ such that
 $f(i) :=$ the number of cycle sets of $\pi$ with $i$ elements.
 
@@ -680,7 +679,7 @@ Now I can state:
 
 **Observation 4** $\quad$
 For any permutations $\sigma$ and $\tau$,
-$$ \csfn(\sigma\tau) = \csfn(\tau\sigma). $$
+$$ \cs(\sigma\tau) = \cs(\tau\sigma). $$
 
 \boxedend </div>
 
@@ -737,7 +736,7 @@ Each small step here can be characterized as
 $\pi_{i+1} = t_{k-i}\pi_i t_{k-i}$, using the fact that $t_j^{-1}=t_j$,
 which is true for any transposition. So the problem
 is reduced to showing that
-$$ \csfn(\pi) = \csfn(t \pi t) \text{ for any permutation $\pi$
+$$ \cs(\pi) = \cs(t \pi t) \text{ for any permutation $\pi$
 and transposition $t$.} $$ {#eq:eq17}
 It turns out that applying $t=(x\;y)$ in this manner simply swaps the
 places of $x$ and $y$ in the cycle notation of $\pi$. For example:
@@ -748,13 +747,13 @@ $\square$
 
 Notice that observation 4 can be generalized for any rotation
 of any finite product of permutations. For example,
-$$ \csfn(abcd) = \csfn(bcda) = \csfn(cdab) = \csfn(dabc). $$
-The equation $\csfn(\sigma\tau) = \csfn(\tau\sigma)$ makes it
+$$ \cs(abcd) = \cs(bcda) = \cs(cdab) = \cs(dabc). $$
+The equation $\cs(\sigma\tau) = \cs(\tau\sigma)$ makes it
 tempting to suspect that cycle structure is preserved no matter
 what order we multiply a given list of permutations.
 For example, we could ask if the following identities would hold
 for any three permutations $a,b,c$:
-$$ \csfn(abc) \? \csfn(acb) \? \csfn(bac) \? \csfn(bca), \text{etc.} $$
+$$ \cs(abc) \? \cs(acb) \? \cs(bac) \? \cs(bca), \text{etc.} $$
 for all the orderings of $a,b,c$; and similarly for any finite
 list of permutations.
 
@@ -773,7 +772,7 @@ Given any permutation $\pi$, let
 $$\flips(\pi) := \{b\cdot a: \pi = a\cdot b\}.
 $$
 And let
-$$ \samecycles(\pi) := \{\sigma\in S_n : \csfn(\sigma)=\csfn(\pi)\}. $$
+$$ \samecycles(\pi) := \{\sigma\in S_n : \cs(\sigma)=\cs(\pi)\}. $$
 
 <div class="box"> \boxedstart
 
@@ -888,9 +887,80 @@ properties of the magnitude function.
 <div class="box"> \boxedstart
 
 **Observation 6** $\quad$
-Write the observation here.
+For any permutations $\pi$ and $\sigma$:
+
+1. $m(\pi) \ge 0$; and $m(\pi) = 0$ iff $\pi=e$.
+2. $m(\pi\sigma) \le m(\pi) + m(\sigma).$
+3. $m(\pi^{-1}) = m(\pi).$
+4. $m(\pi\sigma) = m(\sigma\pi).$
 
 \boxedend </div>
 
+**Proof** $\quad$
+Start by noticing that $m(\pi)$ is the least number of
+transpositions by which we can get from $e$ to $\pi$;
+ie, $m(\pi)$ is the least integer for which we can write
+$\pi=\prod_{i=1}^{m(\pi)}t_i$ for transpositions
+$(t_i)_1^{m(\pi)}$.
+
+[//]: # a_
+
+Thinking of $\pi$ and $\sigma$ as a composition of this
+minimal number of transpositions, parts (i) and (ii) are
+straightforward.
+
+Part (iii) follows since the cycle notation for
+$\pi^{-1}$ is simply the reverse of the cycle notation for $\pi$.
+
+Part (iv) follows from observation 4.
+$\square$
+
+In many ways, the magnitude of a permutation acts like
+a vector norm --- the key difference is that we don't have
+a meaningful interpretation of $k\pi$ for any $k\in\R$, so
+we don't have the additional rule $m(k\pi) = |k|\cdot m(\pi)$.
+
+This makes it interesting to define a notion of
+distance between permutations:
+
+<div class="box"> \boxedstart
+
+**Definition** $\quad$
+Given permutations $\pi$ and $\sigma$,
+$$\dist(\pi, \sigma) := m(\pi^{-1}\sigma).$$
+
+\boxedend </div>
+
+I'll justify why this definition makes sense.
+Let $x=\pi^{-1}\sigma$.
+Then $\pi x=\sigma$, so $\dist(\pi, \sigma)$ is
+measuring the fewest "hops" --- transitions ---
+needed to get from $\pi$ to $\sigma$.
+
+We'd like a good distance function to be symmetric,
+and luckily for us, this one is:
+$$\dist(\sigma,\pi) = m(\sigma^{-1}\pi) = m(\pi^{-1}\sigma) = \dist(\pi,
+\sigma);$$
+the middle equality following since $m(\pi) = m(\pi^{-1})$ by observation 6.
+
+You might ask if we're making an arbitrary
+choice by using multiplication on the right to
+get from $\pi$ to $\sigma$ --- what about the other
+direction? But the symmetry above shows that
+the two choices are equivalent, so that the definition
+is more elegant than it may first appear.
+
+To conclude this note, I'll ask a fun and
+intriguing question whose answer I don't yet know:
+
+<div class="box"> \boxedstart
+
+**Question 2** $\quad$
+Is there a way to generalize $S_n$ and $m(\cdot)$ so
+that the product $k\cdot\pi$ makes sense for some values
+of $k\in\R$, and so that
+$m(k\cdot\pi) = |k|\cdot m(\pi)$?
+
+\boxedend </div>
 
 # References
