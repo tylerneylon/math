@@ -86,7 +86,9 @@ This article covers the following independent observations about permutations:
   of this breakdown using cut-merge operations.
 * I'll discuss a generalization of the parity (even-ness or odd-ness) of a
   permutation $\pi$ that I call the *magnitude* $m(\pi)$ of the permutation.
-* I'll define the *cycle structure* $\cs(\pi)$ and show that
+* I'll define the *cycle structure* $\cs(\pi)$, which captures the sizes
+  of cycles in the permutation $\pi$;
+  and I'll show that
   $\cs(a \cdot b) = \cs(b \cdot a)$ for any two permutations $a, b$.
 * I'll show that the magnitude $m(\cdot)$ acts like a norm on the group $S_n$,
   and that it can define a coherent distance function $\dist(\cdot, \cdot)$
@@ -132,15 +134,17 @@ We could also think of it as a function $\pi:[n]\to[n]$, using
 $[n]$ to denote the integers $\{1, 2,\ldots, n\}$.
 
 This article uses a particular notation for permutations called
-*cycle notation*: the intuition for cycle notation is to write out
+*cycle notation*: the idea for cycle notation is to write out
 a string of integers in $[n]$ with the interpretation
-that any consecutive pair $ij$ indicates that $i$ is mapped to $j$.
+that any consecutive pair $ij$ indicates that $i$ is mapped to $j$,
+and any $i$ at the end of a parenthesized group maps to $j$ at the
+start of the same group.
 Our permutation from ([-@eq:eq1]) looks like this in cycle notation:
 
 $$ \pi = (2\;5\;3)(4\;7) $$
 
 because $\pi(2) = 5$, $\pi(5) = 3$, and $\pi(4) = 7$.
-Further, each sequence in parentheses *wraps around*;
+Each sequence in parentheses *wraps around*, so
 $\pi(3)=2$ and $\pi(7)=4$.
 Thus each parenthesized sequence is a *cycle*.
 It is understood that any omitted elements are mapped to themselves;
@@ -265,6 +269,8 @@ below.
 
 # The Magnitude and Parity of a Permutation
 
+<div class="box"> \boxedstart
+
 **Definition** $\quad$
 The *magnitude* of a permutation $\pi$ is given by
 
@@ -273,6 +279,8 @@ $$ m(\pi) := \#(\text{cycle elements of }\pi) - \#(\text{cycles of }\pi), $$
 where a *cycle element* of $\pi$ is any element written in the
 cycle notation of $\pi$, and where we similarly count the *cycles* of $\pi$
 based on how many cycles are written in $\pi$'s cycle notation.
+
+\boxedend </div>
 
 For example, the permutation $\pi = (2\;5\;3)(4\;7)$ has 5 cycle
 elements and 2 cycles, so $m(\pi) = 3$.
@@ -329,8 +337,8 @@ It could be the product of more, though:
 
 $$ (1\;2\;3) = (1\;2)(1\;3)(8\;9)(8\;9). $$
 
-Now we're getting to an interesting way to split permutations into two
-distinct subsets:
+Now we're ready to define an interesting way to classify all
+permutations into two different types:
 
 <div class="box"> \boxedstart
 
@@ -372,7 +380,7 @@ to complete a proof of ([-@eq:eq5]) by induction on $k$.
 
 [//]: # TODO The bit below is all new; try to clean it up and clarify.
 
-Planning ahead, it will be useful to define the sign function of a
+It will be useful to define the sign function of a
 permutation $\pi$ like so:
 $$\textsf{sign}(\pi) := \begin{cases}
     \phantom{-}1  & \text{if $\pi$ is even, and} \\
@@ -426,7 +434,8 @@ formulae.
 Moving back to group theory: Notice that if $\sigma$ and $\tau$ are both even
 permutations, then so is $\sigma\tau$. In other words, the subset of even
 permutations is closed under composition, so that they form a subgroup of $S_n$.
-This is not true for odd permutations.
+This subgroup is called the *alternating group*. Since odd permutations are not
+closed under composition, they don't form a subgroup.
 
 # Previous Approaches to Permutation Parity
 
@@ -438,7 +447,7 @@ either increase or decrease by 1.
 
 Here's a sketch of the intuitive paths we've crossed:
 
-[//]: # TODO HERE vvvvvv Clean up this overfull diagram.
+[//]: # TODO vvvvvv Clean up this overfull diagram.
 
 <div class="table3">
 
@@ -491,9 +500,10 @@ This means that, for any two permutations $\sigma$ and $\tau$,
 
 $$
 \begin{alignedat}{2}
-\sigma(\tau(p)) &= \sigma(\sign(\tau)\cdot p) & \text{by } (7) \\
-                &= \sign(\tau)\cdot\sigma(p)  & \text{by } (8) \\
-                &= \sign(\sigma)\cdot\sign(\tau)\cdot p.
+\sign(\sigma\tau)\cdot p &= \tau(\sigma(p)) & \text{by } (7) \\
+                         &= \tau(\sign(\sigma)\cdot p) & \text{by } (7) \\
+                         &= \sign(\sigma)\cdot\tau(p)  & \text{by } (8) \\
+                         &= \sign(\sigma)\cdot\sign(\tau)\cdot p.
 \end{alignedat}
 $$
 
@@ -534,14 +544,14 @@ For example, if $n=3$, then
 
 $$
 e_1 = \begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix} \quad
-e_2 = \begin{pmatrix} 1 \\ 1 \\ 0 \end{pmatrix} \quad
+e_2 = \begin{pmatrix} 0 \\ 1 \\ 0 \end{pmatrix} \quad
 e_3 = \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix}.
 $$
 
 Now I can define, for permutation $\pi$, the $n\times n$ matrix $M_\pi$
 as having $e_{\pi_i}$ for its $i^\text{th}$ column;
 this is how Artin represents a permutation as a matrix.
-For example, if $\sigma = (3\;2\;1)$ then
+For example, if $\sigma = (3\;2\;1)$, then
 $M_\sigma = \left(\begin{smallmatrix}&1\\ &&1\\ 1 \end{smallmatrix}\right)$.
 
 Let's see why this matrix definition makes sense.
@@ -827,8 +837,11 @@ $$
 \end{alignedat}
 $$
 
-Now we're in a good position to answer question 1.
-Let's choose a canonical "first" element of $\samecycles(\pi)$.
+<!-- a* -->
+
+To help build intuition for the set
+$\samecycles(\pi)$, we can
+choose a canonical "first" element of $\samecycles(\pi)$.
 A simple way to do this it to treat all singleton-free
 cycle notations in $\samecycles(\pi)$ as strings, treating the ")"
 character as the last in the alphabet (we'll ignore the "(" character
@@ -840,7 +853,7 @@ For example, $\canon(3\;4\;2)(1\;5) = (1\;2\;3)(4\;5)$.
 If we had not specified the ordering of ")", then it would
 be unclear if $(1\;2)(3\;4\;5)$ or $(1\;2\;3)(4\;5)$ were first.
 
-Now we're ready for
+Now we're ready for:
 
 <div class="box"> \boxedstart
 
@@ -863,6 +876,12 @@ $$
 $$
 $\square$
 
+The main idea of this proof is to use observation 5 to see that
+$\cs(\tau^{-1}\sigma\tau) = \cs(\sigma)$ for any $\tau$.
+And, as the proof shows,
+by choosing the right $\tau$, we can make $\tau^{-1}\sigma\tau$ equal
+to anything in $\flips(\sigma)$.
+
 Note that the $\tau$ used in the proof may not be unique
 because there are different cycle notation strings for the
 same permutation. Consider $\pi=(1\;2)$ and $\sigma=(3\;4)$.
@@ -881,6 +900,8 @@ $$
 $$
 
 # The Magnitude is Like a Norm
+
+<!-- HERE -->
 
 In this section I'll point out some interesting
 properties of the magnitude function.
