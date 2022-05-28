@@ -555,16 +555,15 @@ For example, if $\sigma = (3\;2\;1)$, then
 $M_\sigma = \left(\begin{smallmatrix}&1\\ &&1\\ 1 \end{smallmatrix}\right)$.
 
 Let's see why this matrix definition makes sense.
-Let $\vec n := \left(\begin{smallmatrix}1 \\ 2 \\ \vdots \\
-n\end{smallmatrix}\right)$, and then, using the column-expansion perspective of
+Using the column-expansion perspective of
 matrix multiplication,
 
-$$M_\pi\vec n = 1\cdot e_{\pi_1} + 2\cdot e_{\pi_2} + \ldots + n\cdot e_{\pi_n}
+$$M_\pi x = x_1\cdot e_{\pi_1} + x_2\cdot e_{\pi_2} + \ldots + x_n\cdot e_{\pi_n}
 = 
 \left(
 \begin{array}{l}
 \vdots \\
-i \\
+x_i \\
 \vdots \\
 \end{array}
 \right)
@@ -574,53 +573,49 @@ $$ {#eq:eq9}
 In other words, when we multiply $M_\pi$ on the left of a column vector,
 we take whatever value was in the $i^\text{th}$ row and move it to the
 $\pi_i^\text{th}$ row.
-For example, with $n=3$, $M_\sigma\vec n =
+For example,
+$M_\sigma\left(\begin{smallmatrix}1 \\ 2 \\ 3 \end{smallmatrix}\right) =
 \left(\begin{smallmatrix}&1\\ &&1\\ 1 \end{smallmatrix}\right)
 \left(\begin{smallmatrix}1 \\ 2 \\ 3 \\ \end{smallmatrix}\right) =
 \left(\begin{smallmatrix}2 \\ 3 \\ 1 \\ \end{smallmatrix}\right)$.
-We can express the way $M_\pi$ performs $\pi$ by rewriting ([-@eq:eq9])
-as:
-$$ y = M_\pi\vec n \Rightarrow y_{\pi_i}=i \Rightarrow
-   y_j=\pi^{-1}(j) \Rightarrow \pi(y_j) = j.
-$$ {#eq:eq10}
-Intuitively: ``$\pi$ maps each value in $M_\pi\vec n$ to its row number.''
+Continuing with this intuition, left-multiplying by
+$M_\tau M_\sigma$ is like performing $\sigma$ followed by $\tau$ in the
+sense that the $i^\text{th}$ row is moved to the $\tau(\sigma(i))^\text{th}$.
+I personally prefer to have statements like this algebraically checked,
+so in the next couple of paragraphs, I'll spell out more carefully
+why this is true.
 
 \newcommand{\xcolvec}{\begin{pmatrix}x_1 \\ \vdots \\ x_n\end{pmatrix}}
 
-It will be useful to slightly generalize ([-@eq:eq10]) like this,
+It's useful
+to slightly rewrite ([-@eq:eq9]) as in the right-hand
+expression below,
 using the notation $[v]_i$ to indicate the $i^\text{th}$
 coordinate of column vector $v$:
 $$\left[M_\pi\begin{pmatrix} x_1 \\ \vdots \\ x_n\end{pmatrix}
    \right]_{\displaystyle\, \pi_i}
    \!\! = x_i \quad\Rightarrow\quad
-   \left[M_\pi\begin{pmatrix}x_1 \\ \vdots \\ x_n\end{pmatrix}
-   \right]_{\displaystyle\, i}
-   \!\! = x_{\pi^{-1}i}.
+   \left[M_\pi x
+   \right]_{i}
+   = x_{\pi^{-1}i}.
 $$ {#eq:eq11}
 
-We're ready to see how the composition of permutations $\sigma$ and $\tau$
+So the composition of permutations $\sigma$ and $\tau$
 translates to matrices via ([-@eq:eq11]):
-$$ \left[M_\tau M_\sigma \xcolvec\right]_{\displaystyle\, i} =
-   \left[M_\sigma \xcolvec\right]_{\displaystyle\,\tau^{-1}(i)} \!\! =
+$$ \left[M_\tau M_\sigma x\right]_{i} =
+   \left[M_\sigma x\right]_{\tau^{-1}(i)} =
    x_{\sigma^{-1}(\tau^{-1}(i))}.
 $$ {#eq:eq12}
-That is,
-$$ y = M_\tau M_\sigma\vec n \Rightarrow
-   y_i = \sigma^{-1}(\tau^{-1}(i)) \Rightarrow
-   \tau(\sigma(y_i)) = i.
-$$ {#eq:eq13}
-Keep in mind that I've always been writing
-(and will continue to write) $\sigma \cdot \tau$ to mean that
-$\sigma$ happens first and $\tau$ second. In traditional functional
-notation, this same composition is written as $\tau(\sigma(i))$.
-Intuitively:
-$$
-\sigma\cdot\tau \approx \tau(\sigma(\cdot)) \approx M_\tau M_\sigma.
-$$
-The switch of ordering can be confusing.
 
-Back to ([-@eq:eq13]): We can summarize this as
-$$M_{\sigma\cdot\tau} = M_\tau M_\sigma.$$
+Writing $M_{\sigma\tau}$ for the matrix of permutation $\sigma\tau$, we have
+$$ \left[M_{\sigma\tau} x\right]_{i} =
+   x_{(\sigma\tau)^{-1}(i)} = x_{\sigma^{-1}(\tau^{-1}(i))}.
+$$ {#eq:eq12b}
+
+Together, ([-@eq:eq12]) and ([-@eq:eq12b]) confirm that:
+$$ M_{\sigma\tau} = M_\tau M_\sigma $$
+in the sense that they act the same in matrix multiplications, from
+which we can conclude that they are in fact identical matrices.
 
 At long last, I'm ready to (re)define the $\sign()$ function,
 following Artin:
