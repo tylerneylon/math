@@ -873,9 +873,11 @@ $\square$
 
 The main idea of this proof is to use observation 5 to see that
 $\cs(\tau^{-1}\sigma\tau) = \cs(\sigma)$ for any $\tau$.
-And, as the proof shows,
+As the proof shows,
 by choosing the right $\tau$, we can make $\tau^{-1}\sigma\tau$ equal
 to anything in $\flips(\sigma)$.
+And anything of the form $\tau^{-1}\sigma\tau$ is in $\flips(\sigma)$ by
+considering $a=\tau$ and $b=\tau^{-1}\sigma$.
 
 Note that the $\tau$ used in the proof may not be unique
 because there are different cycle notation strings for the
