@@ -919,12 +919,13 @@ For any permutations $\pi$ and $\sigma$:
 Start by noticing that $m(\pi)$ is the least number of
 transpositions by which we can get from $e$ to $\pi$;
 ie, $m(\pi)$ is the least integer for which we can write
-$\pi=\prod_{i=1}^{m(\pi)}t_i$ for transpositions
+$\pi=\prod_{i=1}^{m(\pi)}t_i$ for some transpositions
 $(t_i)_1^{m(\pi)}$.
 
 [//]: # a_
 
-Thinking of $\pi$ and $\sigma$ as a composition of this
+Considering each
+of $\pi$ and $\sigma$ as a composition of this
 minimal number of transpositions, parts (i) and (ii) are
 straightforward.
 
@@ -959,7 +960,7 @@ needed to get from $\pi$ to $\sigma$.
 We'd like a good distance function to be symmetric,
 and luckily for us, this one is:
 $$\dist(\sigma,\pi) = m(\sigma^{-1}\pi) = m(\pi^{-1}\sigma) = \dist(\pi,
-\sigma);$$
+\sigma),$$
 the middle equality following since $m(\pi) = m(\pi^{-1})$ by observation 6.
 
 You might ask if we're making an arbitrary
