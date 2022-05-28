@@ -554,9 +554,11 @@ this is how Artin represents a permutation as a matrix.
 For example, if $\sigma = (3\;2\;1)$, then
 $M_\sigma = \left(\begin{smallmatrix}&1\\ &&1\\ 1 \end{smallmatrix}\right)$.
 
+\newcommand{\xcolvec}{\begin{pmatrix}x_1 \\ \vdots \\ x_n\end{pmatrix}}
+
 Let's see why this matrix definition makes sense.
 Using the column-expansion perspective of
-matrix multiplication,
+matrix multiplication, with $x=\xcolvec$,
 
 $$M_\pi x = x_1\cdot e_{\pi_1} + x_2\cdot e_{\pi_2} + \ldots + x_n\cdot e_{\pi_n}
 = 
@@ -585,8 +587,6 @@ I personally prefer to have statements like this algebraically checked,
 so in the next couple of paragraphs, I'll spell out more carefully
 why this is true.
 
-\newcommand{\xcolvec}{\begin{pmatrix}x_1 \\ \vdots \\ x_n\end{pmatrix}}
-
 It's useful
 to slightly rewrite ([-@eq:eq9]) as in the right-hand
 expression below,
@@ -600,8 +600,8 @@ $$\left[M_\pi\begin{pmatrix} x_1 \\ \vdots \\ x_n\end{pmatrix}
    = x_{\pi^{-1}i}.
 $$ {#eq:eq11}
 
-So the composition of permutations $\sigma$ and $\tau$
-translates to matrices via ([-@eq:eq11]):
+So left-multiplying by both $M_\tau$ and $M_\sigma$
+works like so, using ([-@eq:eq11]):
 $$ \left[M_\tau M_\sigma x\right]_{i} =
    \left[M_\sigma x\right]_{\tau^{-1}(i)} =
    x_{\sigma^{-1}(\tau^{-1}(i))}.
