@@ -24,18 +24,21 @@
 \newcommand{\dist}{\mathsf{dist}}
 \renewcommand{\theenumi}{(\roman{enumi})}
 
-[//]: #  TODO: Try adding a table of contents, but not at the tippy top.
-[//]: #        I think it will work better after the introductory text.
-[//]: #        This may be helpful to achieve that:
-[//]: #        https://stackoverflow.com/questions/25591517/pandoc-inserting-pages-before-generated-table-of-contents
+<!--
+    I thought about adding a table of contents, but I think this article is not
+    really long enough to justify it. Here is a note for the future in case I
+    one day do want a table of contents:
+    https://stackoverflow.com/questions/25591517/pandoc-inserting-pages-before-generated-table-of-contents
+-->
 
-
-[//]: #  The following doesn't work outside of a LaTeX output because pandoc only
-[//]: #  provides a bare bones macro replacement mechanism --- it doesn't really speak
-[//]: #  TeX macro language itself. I'm leaving this here as a reminder since I had
-[//]: #  to learn this lesson with some confusion. See here:
-[//]: #  https://pandoc.org/MANUAL.html#latex-macros
-[//]: #  \newcommand{\atest}{\count255=1\loop hi\ifnum\count255<10\advance\count255 by 1 \repeat}
+<!--
+   The following doesn't work outside of a LaTeX output because pandoc only
+   provides a bare bones macro replacement mechanism --- it doesn't really speak
+   TeX macro language itself. I'm leaving this here as a reminder since I had
+   to learn this lesson with some confusion. See here:
+   https://pandoc.org/MANUAL.html#latex-macros
+   \newcommand{\atest}{\count255=1\loop hi\ifnum\count255<10\advance\count255 by 1 \repeat}
+-->
 
 This is a collection of notes about permutations --- all the different
 ways of ordering a set of distinct elements. In group theory, the group of
@@ -378,8 +381,6 @@ $m(\pi\cdot t_k) = m(\pi) \pm 1$ by observation 3.
 So $\pi\cdot t_k$ is even iff $\pi$ is odd. This is enough
 to complete a proof of ([-@eq:eq5]) by induction on $k$.
 
-[//]: # TODO The bit below is all new; try to clean it up and clarify.
-
 It will be useful to define the sign function of a
 permutation $\pi$ like so:
 $$\textsf{sign}(\pi) := \begin{cases}
@@ -447,12 +448,10 @@ either increase or decrease by 1.
 
 Here's a sketch of the intuitive paths we've crossed:
 
-[//]: # TODO vvvvvv Clean up this overfull diagram.
-
 <div class="table3">
 
  | | | |
-:-------:|:-:|:-------:|:-:|:-------:
+:--------:|:-:|:--------:|:-:|:--------:
 $\fbox{transpositions}$ | $\longleftrightarrow$ | $\fbox{cut-merges}$ | $\longleftrightarrow$ | $\fbox{changes to cycles}$
  | | | |  | $\updownarrow\customstrut$
  | | | $\fbox{changes to parity}$ | $\longleftrightarrow$ | $\fbox{changes to \(m(\pi)\)}$
