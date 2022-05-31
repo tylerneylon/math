@@ -898,8 +898,6 @@ $$
 
 # The Magnitude is Like a Norm
 
-<!-- HERE -->
-
 In this section I'll point out some interesting
 properties of the magnitude function.
 
@@ -954,7 +952,7 @@ $$\dist(\pi, \sigma) := m(\pi^{-1}\sigma).$$
 I'll justify why this definition makes sense.
 Let $x=\pi^{-1}\sigma$.
 Then $\pi x=\sigma$, so $\dist(\pi, \sigma)$ is
-measuring the fewest "hops" --- transitions ---
+measuring the fewest "hops" --- transpositions ---
 needed to get from $\pi$ to $\sigma$.
 
 We'd like a good distance function to be symmetric,
@@ -962,13 +960,10 @@ and luckily for us, this one is:
 $$\dist(\sigma,\pi) = m(\sigma^{-1}\pi) = m(\pi^{-1}\sigma) = \dist(\pi,
 \sigma),$$
 the middle equality following since $m(\pi) = m(\pi^{-1})$ by observation 6.
-
-You might ask if we're making an arbitrary
-choice by using multiplication on the right to
-get from $\pi$ to $\sigma$ --- what about the other
-direction? But the symmetry above shows that
-the two choices are equivalent, so that the definition
-is more elegant than it may first appear.
+This symmetry addresses the apparent inelegance of the definition;
+indeed, the definition may appear to treat $\pi$ and $\sigma$ differently,
+but the end result does not depend on the order of these inputs to
+$\dist()$.
 
 To conclude this note, I'll ask a fun and
 intriguing question whose answer I don't yet know:
