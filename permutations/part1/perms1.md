@@ -169,9 +169,17 @@ For $n=8$,   $(1\;5\;2)(3\;7)(4\;8\;6)$   denotes       $\tt 51782436$.
 You could write the same permutation many ways in cycle notation;
 for example:
 
+<div class="bigscr">
 $$ \pi = (7\;4)(5\;3\;2) = (3\;2\;5)(7\;4) = (2\;5\;3)(4\;7). $$
+</div>
+<div class="smallscr"> \smallstart
+\begin{align*}
+\pi = (7\;4)(5\;3\;2) &= (3\;2\;5)(7\;4) \\[0.2cm]
+                      &= (2\;5\;3)(4\;7).
+\end{align*}
+</div> \smallend
 
-Among those choices, I cosider the last one to be standard because
+Among those choices, I consider the last one to be standard because
 it's lexicographically first.
 
 # The Cut-Merge Operation
@@ -185,17 +193,23 @@ mean "merge, in $\pi$, the cycles starting with 3 and 5."
 
 An example:
 
+<div class="smallscrsmaller">
 $$(1\;2)(3\;4)(5\;6) * (3\;5) = (1\;2)(3\;4\;5\;6).$$
+</div>
 
 What if 3 and 5 were already in the same cycle?
 Then $\pi * (3\;5)$ takes on the meaning
 "*cut* apart the subcycles starting with 3 and 5:"
 
+<div class="smallscrsmaller">
 $$(1\;2)(3\;4\;5\;6) * (3\;5) = (1\;2)(3\;4)(5\;6)$$
+</div>
 
 or
 
+<div class="smallscrsmaller">
 $$(1\;2\;3\;4\;5) * (3\;5) = (3\;4)(5\;1\;2);$$
+</div>
 
 this last example might be easier to see when you keep
 in mind that
@@ -213,12 +227,27 @@ $x$ and $y$, possibly with other elements indicated by the dots.
 **Definition** $\quad$
 The *cut-merge* operation $*(x\;y)$ operates on a
 permutation $\pi$ via
-$$ \pi * (x\;y) = \begin{cases}
-    (x\mydots\;y\mydots)\,\sigma & \text{when } \pi = (x\mydots)(y\mydots)\,\sigma, \text{ or,} \\
-    (x\mydots)(y\mydots)\,\sigma & \text{when } \pi = (x\mydots\;y\mydots)\,\sigma, \\
+
+<div class="bigscr">
+$$ \;\pi * (x\;y) = \begin{cases}
+    (x\mydots\;y\mydots) & \text{if } \pi = (x\mydots)(y\mydots) \text{ or,} \\
+    (x\mydots)(y\mydots) & \text{if } \pi = (x\mydots\;y\mydots). \\
 \end{cases}$$
-where $\sigma$ represents all the other cycles of $\pi$; $\sigma$ may
-represent no cycles.
+</div>
+
+<div class="smallscr"> \smallstart
+$$ \;\pi * (x\;y) = \begin{cases}
+    (x\mydots\;y\mydots) \\
+    \;
+        \text{if } \pi = (x\mydots)(y\mydots); \\[0.3cm]
+    (x\mydots)(y\mydots) \\
+    \;
+        \text{if } \pi = (x\mydots\;y\mydots). \\
+\end{cases}$$
+</div> \smallend
+
+If there are any other cycles (ones without $x$ or $y$), then they
+are unaffected by the $(x\;y)$ operation.
 
 \boxedend </div>
 
