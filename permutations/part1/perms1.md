@@ -306,7 +306,15 @@ below.
 **Definition** $\quad$
 The *magnitude* of a permutation $\pi$ is given by
 
+<div class="bigscr">
 $$ m(\pi) := \#(\text{cycle elements of }\pi) - \#(\text{cycles of }\pi), $$
+</div>
+<div class="smallscr"> \smallstart
+\begin{align*}
+m(\pi) & := \#(\text{cycle elements of }\pi) \\
+       & \;- \#(\text{cycles of }\pi), 
+\end{align*}
+</div> \smallend
 
 where a *cycle element* of $\pi$ is any element written in the
 cycle notation of $\pi$, and where we similarly count the *cycles* of $\pi$
@@ -320,8 +328,8 @@ elements and 2 cycles, so $m(\pi) = 3$.
 Notice that $m(\pi)$ remains the same if we include singleton cycles in
 our cycle notation. It would be nonstandard to include singletons, but it
 would still be a consistent notation. Continuing our example,
-$\pi = (1)(2\;5\;3)(4\;7)(6)
-\Rightarrow m(\pi) = 7 - 4 = 3$, as before.
+$\pi = (1)(2\;5\;3)(4\;7)(6)$
+$\Rightarrow$ $m(\pi) = 7 - 4 = 3$, as before.
 This leads to:
 
 <div class="box"> \boxedstart
@@ -353,7 +361,9 @@ Part (iii) is clear from the cut-merge perspective in that
 and (b) we can indeed build $\pi$ in $m(\pi)$ merges by appending
 together the appropriate singletons one at a time. For example:
 
+<div class="smallscrsmaller">
 $$(2\;5\;3)(4\;7) = e * (2\;5) * (2\;3) * (4\;7).$$ {#eq:eq3}
+</div>
 
 Starting now, I'll write simply $\sigma \tau$ or $\sigma\cdot\tau$ to denote
 the composition of permutations $\sigma$ and $\tau$.
@@ -361,7 +371,9 @@ Using observation 1, we can see that the construction pattern used in
 ([-@eq:eq3]) must work for any cycle that we want to write as a composition
 of transpositions:
 
+<div class="smallscrsmaller">
 $$(x_1\;x_2\cdots x_k) = (x_1\;x_2)(x_1\;x_3)\cdots(x_1\;x_k).$$
+</div>
 
 In other words, every permutation is the product of $m(\pi)$
 transpositions, and cannot be the product of fewer.
@@ -398,7 +410,9 @@ why the intuitive identities of ([-@eq:eq4]) are true for permutations.
 The key to the proof is to see that, for any sequence
 of transpositions $t_1, t_2, \ldots, t_k$:
 
+<div class="smallscrsmaller">
 $$m(t_1t_2\cdots t_k)\text{ is even iff } k \text{ is even}.$$ {#eq:eq5}
+</div>
 
 This fact follows from observation 3. In more detail:
 Certainly $m(e)=0$ (recall that $e$ is the identity permutation); this
@@ -433,7 +447,10 @@ succinctly.
 <div class="box"> \boxedstart
 
 For any two permutations $\sigma$ and $\tau$,
-$$\sign(\sigma\cdot\tau) = \sign(\sigma) \cdot \sign(\tau).$$ {#eq:eq5b}
+
+<div class="smallscrsmaller">
+$$\;\sign(\sigma\cdot\tau) = \sign(\sigma) \cdot \sign(\tau).\!\!\!\!\!\!\!$$ {#eq:eq5b}
+</div>
 
 \boxedend </div>
 
