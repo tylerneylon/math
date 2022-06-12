@@ -384,13 +384,13 @@ div.fullwidth, table.fullwidth { width: 100%; }
 div.table-wrapper { overflow-x: auto;
                     font-family: "Trebuchet MS", "Gill Sans", "Gill Sans MT", sans-serif; }
 
-@media screen and (max-width: 760px) { p, footer { width: 90%; }
+@media screen and (max-width: 760px) { p, footer { width: 97%; }
                                        pre.code { width: 87.5%; }
                                        ul { width: 85%; }
-                                       figure { max-width: 90%; }
+                                       figure { max-width: 97%; }
                                        figcaption, figure.fullwidth figcaption { margin-right: 0%;
                                                                                  max-width: none; }
-                                       blockquote p, blockquote footer { width: 90%; }}
+                                       blockquote p, blockquote footer { width: 97%; }}
 
 .sans { font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
         letter-spacing: .03em; }
@@ -490,7 +490,7 @@ ol > li:before {
     width: calc(100% - 80px);
 }
 
-@media screen and (max-width: 760px) { .box { width: 90%; } }
+@media screen and (max-width: 760px) { .box { width: 97%; } }
 
 /* bibliography style */
 

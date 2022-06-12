@@ -350,7 +350,7 @@ Let's see why the definition of $m(\pi)$ is interesting.
 #. Every merge increases $m(\pi)$ by 1.
 #. Every cut decreases $m(\pi)$ by 1.
 #. $m(\pi)$ is the least number of cut-merge operations which
-   can reach $\pi$ from the identity permutation $e$.
+   can reach $\pi$ from the identity permutation *e*.
 
 \boxedend </div>
 
@@ -361,9 +361,15 @@ Part (iii) is clear from the cut-merge perspective in that
 and (b) we can indeed build $\pi$ in $m(\pi)$ merges by appending
 together the appropriate singletons one at a time. For example:
 
-<div class="smallscrsmaller">
+<div class="bigscr">
 $$(2\;5\;3)(4\;7) = e * (2\;5) * (2\;3) * (4\;7).$$ {#eq:eq3}
 </div>
+<div class="smallscr"> \smallstart
+\begin{alignat*}{1}
+& (2\;5\;3)(4\;7) \\
+& \quad = e * (2\;5) * (2\;3) * (4\;7).\quad (3)
+\end{alignat*}
+</div> \smallend
 
 Starting now, I'll write simply $\sigma \tau$ or $\sigma\cdot\tau$ to denote
 the composition of permutations $\sigma$ and $\tau$.
@@ -462,6 +468,11 @@ Let $k = m(\sigma)$ and $k' = m(\tau)$. Then, using observation
   \tau   &= t'_1 \cdots t'_{k'}.
 \end{align*}
 Then
+
+
+
+
+<div class="bigscr">
 $$
 \begin{alignedat}{2}
 \sign(\sigma\cdot\tau) &= (-1)^{m(\sigma\tau)} & \text{by def'n of }\sign \\
@@ -472,6 +483,24 @@ $$
 &= \sign(\sigma)\sign(\tau).
 \end{alignedat}
 $$
+</div>
+<div class="smallscr"> \smallstart
+$$
+\begin{alignedat}{2}
+\sign(\sigma\cdot\tau) &= (-1)^{m(\sigma\tau)} \\[0.2cm]
+&& \quad\llap{(\textit{by def'n of }\sign)} \\[0.2cm]
+&= (-1)^{m(t_1\cdots t_k \cdot t'_1 \cdots t'_{k'})} \\[0.2cm]
+&& \quad\llap{(\textit{by def'n of $t_i$ and $t'_i$})} \\[0.2cm]
+&= (-1)^{k + k'} \\[0.2cm]
+&& \quad\llap{(\textit{by (5)})} \\[0.2cm]
+&= (-1)^k (-1)^{k'} \\[0.2cm]
+&= \sign(\sigma)\sign(\tau).
+\end{alignedat}
+$$
+</div> \smallend
+
+
+
 This completes the proof of ([-@eq:eq5b]). And ([-@eq:eq5b]) expresses the same
 idea as ([-@eq:eq4]), so that we have now justified all of those
 formulae.
