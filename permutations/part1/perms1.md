@@ -2,6 +2,20 @@
 % Tyler Neylon
 % 261.2022
 
+% DELETE
+<div class="bigscr">
+</div>
+<div class="smallscr"> \smallstart
+\begin{align*}
+\end{align*}
+</div> \smallend
+
+% TODO Once everything else is fixed,
+%      review the word wrap issue in the
+%      sentence "I'll use the variable e_i to denote the length-n ..."
+%      which is at the start of S 4.2.
+
+
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\eqnset}[1]{\left.\mbox{$#1$}\;\;\right\rbrace\class{postbrace}{ }}
@@ -523,7 +537,7 @@ either increase or decrease by 1.
 
 Here's a sketch of the intuitive paths we've crossed:
 
-<div class="table3">
+<div class="bigscr table3">
 
  | | | |
 :--------:|:-:|:--------:|:-:|:--------:
@@ -532,6 +546,23 @@ $\fbox{transpositions}$ | $\longleftrightarrow$ | $\fbox{cut-merges}$ | $\longle
  | | | $\fbox{changes to parity}$ | $\longleftrightarrow$ | $\fbox{changes to \(m(\pi)\)}$
 
 </div>
+<div class="smallscr"> \smallstart
+
+$$
+\begin{array}{c}
+  \fbox{transpositions} \\
+  \updownarrow \\
+  \fbox{cut-merges} \\
+  \updownarrow \\
+  \fbox{changes to cycles} \\
+  \updownarrow \\
+  \fbox{changes to $m(\pi)$} \\
+  \updownarrow \\
+  \fbox{changes to parity} \\
+\end{array}
+$$
+
+</div> \smallend
 
 I'll contrast the proof above of ([-@eq:eq5b]) with two other approaches.
 
@@ -550,14 +581,19 @@ The polynomial $\pi(p)$ is still a product of $(x_i - x_j)$ for
 all $i\ne j$, but the sign of the polynomial may change.
 For example, when $n=3$, and $\pi=(1\;2)$:
 
+<div class="smallscrsmaller">
 \begin{align*}
-p(x_1, x_2, x_3) &= (x_1 - x_2)(x_1 - x_3)(x_2 - x_3) \\
-\pi(p)           &= (x_2 - x_1)(x_2 - x_3)(x_1 - x_3) = -p.
+p(x_1, x_2, x_3) &= (x_1 - x_2)(x_1 - x_3)(x_2 - x_3) \\[0.2cm]
+\pi(p)           &= (x_2 - x_1)(x_2 - x_3)(x_1 - x_3) \\[0.2cm]
+                 &= -p.
 \end{align*}
+</div>
 
 Since $\pi(p) = \pm p$ for any $\pi$, we can (re)define
 
+<div class="smallscrsmaller">
 $$ \sign(\pi) := \pi(p)/p \in \{-1, +1\}. $$ {#eq:eq7}
+</div>
 
 (Temporarily forget our original definition of $\sign(\pi)$.
 We'll re-prove ([-@eq:eq5b]), and because our new and old $\sign()$
@@ -572,6 +608,7 @@ based on the definition of $\pi(p)$.
 
 This means that, for any two permutations $\sigma$ and $\tau$,
 
+<div class="smallscrsmaller">
 $$
 \begin{alignedat}{2}
 \sign(\sigma\tau)\cdot p &= \tau(\sigma(p)) & \text{by } (7) \\
@@ -580,6 +617,7 @@ $$
                          &= \sign(\sigma)\cdot\sign(\tau)\cdot p.
 \end{alignedat}
 $$
+</div>
 
 In summary, $\sign(\sigma\cdot\tau) = \sign(\sigma)\cdot\sigma(\tau)$,
 which confirms ([-@eq:eq5b]) for this new definition of $\sign()$.
@@ -603,6 +641,7 @@ break the proof down into small steps to walk you through
 the dance of indices.
 
 I'll use the variable $e_i$ to denote the length-$n$ column vector
+
 $$e_i =
 \begin{array}{l}
 0 \\
@@ -634,6 +673,7 @@ Let's see why this matrix definition makes sense.
 Using the column-expansion perspective of
 matrix multiplication, with $x=\xcolvec$,
 
+<div class="bigscr">
 $$M_\pi x = x_1\cdot e_{\pi_1} + x_2\cdot e_{\pi_2} + \ldots + x_n\cdot e_{\pi_n}
 = 
 \left(
@@ -645,6 +685,21 @@ x_i \\
 \right)
 \longleftarrow\text{ in row }\pi_i.
 $$ {#eq:eq9}
+</div>
+
+<div class="smallscr smallscrsmaller"> \smallstart
+\begin{align*}
+M_\pi x &= x_1\cdot e_{\pi_1} + x_2\cdot e_{\pi_2} + \ldots + x_n\cdot e_{\pi_n} \\[0.3cm]
+        &= \left(
+\begin{array}{l}
+\vdots \\
+x_i \\
+\vdots \\
+\end{array}
+\right)
+\longleftarrow\text{ in row }\pi_i. \;\; (9)
+\end{align*}
+</div> \smallend
 
 In other words, when we multiply $M_\pi$ on the left of a column vector,
 we take whatever value was in the $i^\text{th}$ row and move it to the
@@ -666,6 +721,8 @@ to slightly rewrite ([-@eq:eq9]) as in the right-hand
 expression below,
 using the notation $[v]_i$ to indicate the $i^\text{th}$
 coordinate of column vector $v$:
+
+<div class="bigscr">
 $$\left[M_\pi\begin{pmatrix} x_1 \\ \vdots \\ x_n\end{pmatrix}
    \right]_{\displaystyle\, \pi_i}
    \!\! = x_i \quad\Rightarrow\quad
@@ -673,18 +730,43 @@ $$\left[M_\pi\begin{pmatrix} x_1 \\ \vdots \\ x_n\end{pmatrix}
    \right]_{i}
    = x_{\pi^{-1}i}.
 $$ {#eq:eq11}
+</div>
+<div class="smallscr"> \smallstart
+\begin{align*}
+\left[M_\pi\begin{pmatrix} x_1 \\ \vdots \\ x_n\end{pmatrix}
+   \right]_{\displaystyle\, \pi_i}
+   \!\! = x_i \quad\Rightarrow\\[0.2cm]
+   \left[M_\pi x
+   \right]_{i}
+   = x_{\pi^{-1}i}. \quad (10)
+\end{align*}
+</div> \smallend
 
 So left-multiplying by both $M_\tau$ and $M_\sigma$
 works like so, using ([-@eq:eq11]):
+
+<div class="bigscr">
 $$ \left[M_\tau M_\sigma x\right]_{i} =
    \left[M_\sigma x\right]_{\tau^{-1}(i)} =
    x_{\sigma^{-1}(\tau^{-1}(i))}.
 $$ {#eq:eq12}
+</div>
+
+<div class="smallscr"> \smallstart
+\begin{align*}
+\left[M_\tau M_\sigma x\right]_{i} &=
+   \left[M_\sigma x\right]_{\tau^{-1}(i)} \\[0.2cm]
+   &= x_{\sigma^{-1}(\tau^{-1}(i))}. \quad (11)
+\end{align*}
+</div> \smallend
 
 Writing $M_{\sigma\tau}$ for the matrix of permutation $\sigma\tau$, we have
+
+<div class="smallscrsmaller">
 $$ \left[M_{\sigma\tau} x\right]_{i} =
    x_{(\sigma\tau)^{-1}(i)} = x_{\sigma^{-1}(\tau^{-1}(i))}.
 $$ {#eq:eq12b}
+</div>
 
 Together, ([-@eq:eq12]) and ([-@eq:eq12b]) confirm that:
 $$ M_{\sigma\tau} = M_\tau M_\sigma $$
@@ -702,17 +784,28 @@ our earlier definitions because:
 * $\det(M_t) = -1$ for any transposition $t$ because exchanging
   any two columns of a matrix negates its determinant; and
 * when $\pi=\prod_{i=1}^k t_i$ for transpositions $(t_i)_1^k$,
-  $\sign(\pi) = \det(M_\pi) = \det(\prod_{i=1}^kM_{t_i})
-  = (-1)^k =$ our cut-merge definition of $\sign()$, based
+  $\sign(\pi) = \det(M_\pi)$ $= \det(\prod_{i=1}^kM_{t_i})$
+  $= (-1)^k =$ our cut-merge definition of $\sign()$, based
   on ([-@eq:eq5]).
 
 In using this approach, Artin is able to show that
 ([-@eq:eq5b]) holds simply by delegating the work to the properties
 of matrix determinants. In particular, using the fact that
 $\det(AB) = \det(A)\det(B)$:
+
+<div class="bigscr">
 $$\sign(\sigma\cdot\tau) = \det(M_\tau M_\sigma) =
   \det(M_\tau)\det(M_\sigma) = \sign(\sigma)\sign(\tau).
 $$
+</div>
+
+<div class="smallscr"> \smallstart
+\begin{align*}
+  \sign(\sigma\cdot\tau) &= \det(M_\tau M_\sigma) \\[0.2cm]
+  &= \det(M_\tau)\det(M_\sigma) \\[0.2cm]
+  &= \sign(\sigma)\sign(\tau).
+\end{align*}
+</div> \smallend
 
 Artin's proof is certainly valid, though I think it offers
 less insight into *why* equation ([-@eq:eq5b]) holds when
@@ -783,16 +876,29 @@ $$ i = i(\sigma\tau)^k = j\tau(\sigma\tau)^k = j(\tau\sigma)^k\tau. $$
 Now apply $\tau^{-1}$ to the left-most and right-most expressions above
 to arrive at:
 
+<div class="bigscr">
 $$ j= i\tau^{-1} = j(\tau\sigma)^k
    \;\Rightarrow\; \order_{\tau\sigma}(j) \le k = \order_{\sigma\tau}(i).
 $$ {#eq:eq15}
+</div>
+
+<div class="smallscr"> \smallstart
+\begin{align*}
+   j= i\tau^{-1} &= j(\tau\sigma)^k \\[0.2cm]
+   \;\Rightarrow\; \order_{\tau\sigma}(j) \le k &= \order_{\sigma\tau}(i).
+   \;(13)
+\end{align*}
+</div> \smallend
 
 On the other hand, if $\ell=\order_{\tau\sigma}(j)$, then
+
+<div class="smallscrsmaller">
 $$ i = (j)\tau = (j)(\tau\sigma)^\ell\tau
      = (j)\tau(\sigma\tau)^\ell = i(\sigma\tau)^\ell
 $$
 $$ \Rightarrow \order_{\sigma\tau}(i) \le \ell = \order_{\tau\sigma}(j).
 $$ {#eq:eq16}
+</div>
 
 Combining ([-@eq:eq15]) and ([-@eq:eq16]),
 $$ \order_{\sigma\tau}(i) = \order_{\tau\sigma}(j=\tau^{-1}(i)), $$
@@ -815,9 +921,9 @@ us from $\sigma\tau$ over to $\tau\sigma$:
 Each small step here can be characterized as
 $\pi_{i+1} = t_{k-i}\pi_i t_{k-i}$, using the fact that $t_j^{-1}=t_j$,
 which is true for any transposition. So the problem
-is reduced to showing that
-$$ \cs(\pi) = \cs(t \pi t) \text{ for any permutation $\pi$
-and transposition $t$.} $$ {#eq:eq17}
+is reduced to showing that, for any permutation $\pi$ and
+transposition $t$,
+$$ \cs(\pi) = \cs(t \pi t). $$ {#eq:eq17}
 It turns out that applying $t=(x\;y)$ in this manner simply swaps the
 places of $x$ and $y$ in the cycle notation of $\pi$. For example:
 $$ (1\;3)(\underline{1}\;2\;5\;\underline{3}\;7)(1\;3)
@@ -827,13 +933,35 @@ $\square$
 
 Notice that observation 4 can be generalized for any rotation
 of any finite product of permutations. For example,
+
+<div class="bigscr">
 $$ \cs(abcd) = \cs(bcda) = \cs(cdab) = \cs(dabc). $$
+</div>
+
+<div class="smallscr"> \smallstart
+\begin{align*}
+   \cs(abcd) &= \cs(bcda) \\[0.2cm]
+   = \cs(cdab) &= \cs(dabc).
+\end{align*}
+</div> \smallend
+
 The equation $\cs(\sigma\tau) = \cs(\tau\sigma)$ makes it
 tempting to suspect that cycle structure is preserved no matter
 what order we multiply a given list of permutations.
 For example, we could ask if the following identities would hold
 for any three permutations $a,b,c$:
+
+<div class="bigscr">
 $$ \cs(abc) \? \cs(acb) \? \cs(bac) \? \cs(bca), \text{etc.} $$
+</div>
+
+<div class="smallscr"> \smallstart
+\begin{align*}
+      \cs(abc) &\? \cs(acb) \\[0.2cm]
+   \? \cs(bac) &\? \cs(bca), \text{etc.}
+\end{align*}
+</div> \smallend
+
 for all the orderings of $a,b,c$; and similarly for any finite
 list of permutations.
 
@@ -852,6 +980,8 @@ Given any permutation $\pi$, let
 $$\flips(\pi) := \{b\cdot a: \pi = a\cdot b\}.
 $$
 And let
+
+% HERE
 $$ \samecycles(\pi) := \{\sigma\in S_n : \cs(\sigma)=\cs(\pi)\}. $$
 
 <div class="box"> \boxedstart
