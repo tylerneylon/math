@@ -640,7 +640,8 @@ between vector coordinates and how permutations act on them. I'll
 break the proof down into small steps to walk you through
 the dance of indices.
 
-I'll use the variable $e_i$ to denote the length-$n$ column vector
+I'll use the variable $e_i$ to denote the column vector of
+length $n$:
 
 $$e_i =
 \begin{array}{l}
@@ -981,8 +982,16 @@ $$\flips(\pi) := \{b\cdot a: \pi = a\cdot b\}.
 $$
 And let
 
-% HERE
+<div class="bigscr">
 $$ \samecycles(\pi) := \{\sigma\in S_n : \cs(\sigma)=\cs(\pi)\}. $$
+</div>
+
+<div class="smallscr"> \smallstart
+\begin{alignat*}{2}
+& \samecycles(\pi) \\[0.2cm]
+& \qquad := \{\sigma\in S_n : \cs(\sigma)=\cs(\pi)\}.
+\end{alignat*}
+</div> \smallend
 
 <div class="box"> \boxedstart
 
@@ -1017,14 +1026,27 @@ $\sigma' : i\tau \mapsto j\tau$.
 
 For example, if $\tau = (2\;5\;3)$ and
 $\sigma = (1\;2)(3\;4\;5)$, then
+
+
+<div class="bigscr">
 $$ \tau^{-1}\sigma\tau = (1\;5)(2\;4\;3)
   = [(1\;2)(3\;4\;5)].\text{replace}(\tau).$$
+</div>
+
+<div class="smallscr"> \smallstart
+\begin{align*}
+\tau^{-1}\sigma\tau &= (1\;5)(2\;4\;3) \\
+  &= [(1\;2)(3\;4\;5)].\text{replace}(\tau).
+\end{align*}
+</div> \smallend
 
 Note that this replacement operation is specific to cycle
 notation. If we were to instead write out $\pi$ as the
 string $\pi_1 \pi_2 \ldots \pi_n$, then the corresponding
 string for $\tau^{-1}\sigma\tau$ is no longer replacement
 with $\tau$. I'll illustrate this distinction with an example:
+
+<div class="bigscr">
 $$
 \begin{alignedat}{2}
      \tau &= (2\;5\;3) \\
@@ -1035,6 +1057,22 @@ $$
      \sigma\tau &= 5\;1\;4\;3\;2 && = [2\;1\;4\;5\;3].\text{replace}(\tau).
 \end{alignedat}
 $$
+</div>
+
+<div class="smallscr"> \smallstart
+$$
+\begin{alignedat}{2}
+     \tau &= (2\;5\;3) \\
+     \sigma &= 2\;1\;4\;5\;3 \\
+            & \phantom{ = }\text{ (This is
+     $\sigma_1\sigma_2\sigma_3\sigma_4\sigma_5$.)} \\[0.5cm]
+     \tau^{-1}\sigma\tau &= 5\;4\;2\;3\;1 \\
+     &\ne [2\;1\;4\;5\;3].\text{replace}(\tau) \\[0.5cm]
+     \sigma\tau &= 5\;1\;4\;3\;2 \\
+     &= [2\;1\;4\;5\;3].\text{replace}(\tau).
+\end{alignedat}
+$$
+</div> \smallend
 
 <!-- a* -->
 
@@ -1044,10 +1082,8 @@ choose a canonical "first" element of $\samecycles(\pi)$.
 A simple way to do this it to treat all singleton-free
 cycle notations in $\samecycles(\pi)$ as strings, treating the ")"
 character as the last in the alphabet (we'll ignore the "(" character
-for the sake of ordering). Then we can define
-$$ \canon(\pi) := \text{ the lexicographically first element of
-   }\samecycles(\pi).
-$$
+for the sake of ordering). Then we can define $\canon(\pi)$ to be
+the lexicographically first element of $\samecycles(\pi)$.
 For example, $\canon(3\;4\;2)(1\;5) = (1\;2\;3)(4\;5)$.
 If we had not specified the ordering of ")", then it would
 be unclear if $(1\;2)(3\;4\;5)$ or $(1\;2\;3)(4\;5)$ were first.
@@ -1087,6 +1123,8 @@ Note that the $\tau$ used in the proof may not be unique
 because there are different cycle notation strings for the
 same permutation. Consider $\pi=(1\;2)$ and $\sigma=(3\;4)$.
 We can convert $\pi$ into $\sigma$ in different ways:
+
+<div class="bigscr">
 $$
 \begin{alignedat}{2}
     & (1\;\;2) \quad\quad && (1\;\;2) \\
@@ -1095,6 +1133,26 @@ $$
     & (3\;\;4) && (4\;\;3)
 \end{alignedat}
 $$
+</div>
+
+<div class="smallscr"> \smallstart
+$$
+\begin{alignedat}{2}
+    & (1\;\;2) \quad\quad \\
+    & \kern 1pt\downarrow\;\;\downarrow \;\;\tau=(1\;3)(2\;4) \\
+    & (3\;\;4) \\
+    \phantom{.}
+\end{alignedat}
+$$
+$$
+\begin{alignedat}{2}
+    & (1\;\;2) \\
+    & \kern 1pt\downarrow\;\;\downarrow \;\;\tau'=(1\;4)(2\;3) \\
+    & (4\;\;3)
+\end{alignedat}
+$$
+</div> \smallend
+
 The above diagram is an informal way of writing that
 $$
 \tau^{-1}\pi\tau = (3\;4) = (4\;3) = \tau'^{-1}\pi\tau'.
@@ -1161,8 +1219,19 @@ needed to get from $\pi$ to $\sigma$.
 
 We'd like a good distance function to be symmetric,
 and luckily for us, this one is:
+
+<div class="bigscr">
 $$\dist(\sigma,\pi) = m(\sigma^{-1}\pi) = m(\pi^{-1}\sigma) = \dist(\pi,
 \sigma),$$
+</div>
+
+<div class="smallscr"> \smallstart
+\begin{align*}
+\dist(\sigma,\pi) &= m(\sigma^{-1}\pi) = m(\pi^{-1}\sigma) \\
+                  &= \dist(\pi, \sigma),
+\end{align*}
+</div> \smallend
+
 the middle equality following since $m(\pi) = m(\pi^{-1})$ by observation 6.
 This symmetry addresses the apparent inelegance of the definition;
 indeed, the definition may appear to treat $\pi$ and $\sigma$ differently,
