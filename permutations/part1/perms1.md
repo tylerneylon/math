@@ -2,20 +2,6 @@
 % Tyler Neylon
 % 261.2022
 
-% DELETE
-<div class="bigscr">
-</div>
-<div class="smallscr"> \smallstart
-\begin{align*}
-\end{align*}
-</div> \smallend
-
-% TODO Once everything else is fixed,
-%      review the word wrap issue in the
-%      sentence "I'll use the variable e_i to denote the length-n ..."
-%      which is at the start of S 4.2.
-
-
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\eqnset}[1]{\left.\mbox{$#1$}\;\;\right\rbrace\class{postbrace}{ }}
@@ -1106,7 +1092,7 @@ Let $a = \tau^{-1}$ and $b=\tau\pi$. Then
 $$
 \begin{alignedat}{2}
      ab &= \pi \\
-     ba &= \tau\pi\tau^{-1} = \sigma\quad\text{by (17).}
+     ba &= \tau\pi\tau^{-1} = \sigma\quad\text{by (16).}
 \end{alignedat}
 $$
 $\square$
