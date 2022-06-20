@@ -1,6 +1,6 @@
 % Notes on Permutations: Cycles and Transpositions
 % Tyler Neylon
-% 261.2022
+% 332.2022
 
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
