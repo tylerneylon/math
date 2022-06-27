@@ -1,0 +1,122 @@
+% Notes on Permutations: A Chalkboard Algorithm
+% Tyler Neylon
+% 342.2022
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\eqnset}[1]{\left.\mbox{$#1$}\;\;\right\rbrace\class{postbrace}{ }}
+\providecommand{\latexonlyrule}[3][]{}
+\providecommand{\optquad}{\class{optquad}{}}
+\providecommand{\smallscrneg}{\class{smallscrneg}{ }}
+\providecommand{\bigscr}[1]{\class{bigscr}{#1}}
+\providecommand{\smallscr}[1]{\class{smallscr}{#1}}
+\providecommand{\smallscrskip}[1]{\class{smallscrskip}{\hskip #1}}
+
+\newcommand{\mydots}{{\cdot}\kern -0.1pt{\cdot}\kern -0.1pt{\cdot}}
+
+\newcommand{\?}{\stackrel{?}{=}}
+\newcommand{\sign}{\textsf{sign}}
+\newcommand{\order}{\textsf{order}}
+\newcommand{\flips}{\textsf{flips}}
+\newcommand{\samecycles}{\textsf{same$\\\_$cycles}}
+\newcommand{\canon}{\textsf{canon}}
+\newcommand{\cs}{\mathsf{cs}}
+\newcommand{\dist}{\mathsf{dist}}
+\renewcommand{\theenumi}{(\roman{enumi})}
+
+[
+Formats:
+ [html](http://tylerneylon.com/a/perms2/perms2.html) |
+ [pdf](http://tylerneylon.com/a/perms2/perms2.pdf)
+ $\,$
+]
+
+*This is a continuation of notes about permutations; this series
+began with
+[some notes on cycles and
+transpositions](http://tylerneylon.com/a/perms1/perms1.html).*
+
+<!-- TODO
+
+* [ ] Right now I say some examples are the same that aren't. Fix
+      that lack of consistency.
+* [ ] Delete perms1.md which is in this directory for reference.
+* [ ] Check and clean up how the references are looking.
+* [ ] There are two elements I added by hand to perms1.html which I'd rather add
+      to the template file: the google analytics tracking, and the call to
+      subscribe at the bottom of the page.
+
+-->
+
+This short article describes a chalkboard method for
+multiplying (that is, composing) permutations written in cycle notation.
+When I call it a *chalkboard method*, I mean that it's useful for
+humans doing simple math by hand --- akin to long-hand addition taught
+in school --- and as opposed to an algorithm designed for a computer.
+
+This article can be read as an extension to an earlier note about
+permutations, although
+this one can be read independently, assuming that you know both what
+permutation multiplication (synonymously, composition) is, and what
+cycle notation is. (If not, you can learn by reading
+[the previous note in this
+series](http://tylerneylon.com/a/perms1/perms1.html).)
+
+The chalkboard algorithm I'll describe is something I derived for fun.
+I haven't put effort into discovering if someone else has come up with
+it before me.
+
+Let's get started. As an example, consider
+$$\sigma = (1\;3\;7\;2) \quad\text{and}\quad
+  \tau = (2\;5)(3\;4\;7).$$ {#eq:eq0}
+We can define the product $\sigma\cdot\tau$ as the permutation $\mu$ where
+$$\mu(x) = (\sigma\cdot\tau)(x) = \tau(\sigma(x)).$$ {#eq:eq1}
+I've chosen to work with the intuition that
+the element on the left ($\sigma$) "happens first;"
+this notation seems more natural to me.
+Some authors choose the opposite ordering because it avoids the
+awkward reversal of symbols in ([-@eq:eq1]).
+
+In our example,
+$$ \mu = (1\;4\;7\;5\;2), $$
+as can be verified by asking, for each $x\in\{1,2,\ldots,7\}$,
+what is $y=\sigma(x)$? followed by asking what is $\tau(y)$?
+
+Let's informally call this a 2-lookup method, in the sense that a
+human will perform a scan of $\sigma$ to find $\sigma(x)$ and then
+another scan of $\tau$ to find $\tau(y)$ for each input $x$ to $\mu$.
+This article improves on this by providing an algorithm that
+is a 1-lookup method. In some informal sense we can say it's twice
+as fast for a human to execute.
+
+(A computer can multiply permutations even more efficiently. We could
+encode a permutation as a hash map (a `dict` in Python, or an
+`object` in JavaScript, for example) where the keys are the input numbers
+and the values are what those values map to. In this case, each lookup of a
+value $\mu(x)$ takes constant time, so that computing all of $\mu$ requires
+$O(n)$ time, where $n$ is the size of the domain of the permutations.
+I don't consider a human working on a chalkboard to have access to
+constant-time lookups, so this algorithm is only for computers.)
+
+# A Worked Example
+
+I'll illustrate the method by working through example
+([-@eq:eq0]), and then I'll summarize the general process.
+
+Say that a permutation is *single-cycle* when its cycle notation
+has one cycle: $\sigma_1=(1\;4\;2)$ is single-cycle, whereas
+$\sigma_2=(1\;2)(3\;5)$ is not.
+
+* Step 1. [Write the problem.] Write $\sigma\cdot\tau$ in cycle notation;
+     include single-element cycles in $\tau$, but not of $\sigma$. Write a dot
+     over $\tau(a)$, where $a$ is the left-most element in
+     $\sigma$'s cycle:
+     $$\begin{array}{rcll}
+           \sigma\cdot\tau & = & \underline{(1\;3\;7\;2\;5\;4)} & 
+           \underline{(1\;\dot 2)(3)(4\;6)(5)(7)}. \\
+           && \sigma & \tau \\
+     \end{array}$$
+* Step 2. [Process the problem.]
+
+
+# References
