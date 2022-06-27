@@ -40,6 +40,10 @@
    \newcommand{\atest}{\count255=1\loop hi\ifnum\count255<10\advance\count255 by 1 \repeat}
 -->
 
+[Formats:
+ [html](http://tylerneylon.com/a/perms1/perms1.html) |
+ [pdf](http://tylerneylon.com/a/perms1/perms1.pdf)]
+
 This is a collection of notes about permutations --- all the different
 ways of ordering a set of distinct elements. In group theory, the group of
 permutations of size $n$ is denoted $S_n$. For example:
