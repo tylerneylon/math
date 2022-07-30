@@ -234,6 +234,10 @@ ol, ul { -webkit-padding-start: 5%;
   ol, ul { width: 45%; }
 }
 
+@media screen and (min-width: 761px) {
+  ul ul { width: calc(100% - 31.5px); }
+}
+
 li { padding: 0.5rem 0; }
 
 figure, div.figure { padding: 0;

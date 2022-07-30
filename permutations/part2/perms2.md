@@ -122,7 +122,7 @@ $\sigma_2=(1\;2)(3\;5)$ is not.
      $\overline x$ in $\sigma$, where $x$ is the right-most, not-yet-overlined
      element of $\sigma$ (above, we have $x=4$).
 
-     Call the dotted elemented in $\tau$ as $\dot y$ (above, we have $y=2$).
+     Call the dotted element in $\tau$ as $\dot y$ (above, we have $y=2$).
      In $\tau$, insert a new
      $\hat y$ after $x$ and add a dot over $z=\tau(x)$, like so:
      $$x\, \lower 1ex\hbox{$\hat y$}\,\dot z.$$
@@ -130,26 +130,22 @@ $\sigma_2=(1\;2)(3\;5)$ is not.
      $\crossedouty$.
 
      Here is how step 2 applies to our example:
-
      $$\sigma\cdot\tau =
          (1\;3\;7\;2\;5\;\bar 4)\;
          (1\;\crossedouttwo)(3)(4\lower 2ex\hbox{$\hat 2$}\dot 6)(5)(7)
      $$
-
      $$\sigma\cdot\tau =
          (1\;3\;7\;2\;\bar 5\;\bar 4)\;
          (1\;\crossedouttwo)(3)
          (4\lower 2ex\hbox{$\hat 2$}\crossedoutsix)
          (\dot 5\lower 2ex\hbox{$\hat 6$})(7)
      $$
-
      $$\sigma\cdot\tau =
          (1\;3\;7\;\bar 2\;\bar 5\;\bar 4)\;
          (\dot 1\;\crossedouttwo\lower 2ex\hbox{$\hat 5$})(3)
          (4\lower 2ex\hbox{$\hat 2$}\crossedoutsix)
          (\crossedoutfive\lower 2ex\hbox{$\hat 6$})(7)
      $$
-
      $$\sigma\cdot\tau =
          (1\;3\;\bar 7\;\bar 2\;\bar 5\;\bar 4)\;
          (\crossedoutone\;\crossedouttwo\lower 2ex\hbox{$\hat 5$})(3)
@@ -157,5 +153,41 @@ $\sigma_2=(1\;2)(3\;5)$ is not.
          (\crossedoutfive\lower 2ex\hbox{$\hat 6$})
          (\dot 7\lower 2ex\hbox{$\hat 1$})
      $$
+     $$\sigma\cdot\tau =
+         (1\;\bar 3\;\bar 7\;\bar 2\;\bar 5\;\bar 4)\;
+         (\crossedoutone\;\crossedouttwo\lower 2ex\hbox{$\hat 5$})
+         (\dot 3\lower 2ex\hbox{$\hat 7$})
+         (4\lower 2ex\hbox{$\hat 2$}\crossedoutsix)
+         (\crossedoutfive\lower 2ex\hbox{$\hat 6$})
+         (\crossedoutseven\lower 2ex\hbox{$\hat 1$})
+     $$
+     $$\sigma\cdot\tau =
+         (\bar 1\;\bar 3\;\bar 7\;\bar 2\;\bar 5\;\bar 4)\;
+         (\crossedoutone\lower 2ex\hbox{$\hat 3$}
+         \crossedouttwo\lower 2ex\hbox{$\hat 5$})
+         (\crossedoutthree\lower 2ex\hbox{$\hat 7$})
+         (4\lower 2ex\hbox{$\hat 2$}\crossedoutsix)
+         (\crossedoutfive\lower 2ex\hbox{$\hat 6$})
+         (\crossedoutseven\lower 2ex\hbox{$\hat 1$})
+     $$
+     At the end of that last equation, we've drawn a line over all
+     the elements of $\sigma$, indicating that we're done with step 2.
+* Step 3. [Write the answer.]
+     Repeat this until all the elements are used (meaning they
+     are included in the answer).
+
+     + [Step 3a.] Write "$(a$" where $a$ is the least unused element
+       appearing in $\sigma$ or $\tau$. If all the elements are used, you're
+       done.
+     + [Step 3b.] Let $b$ be the right-most element in the answer so far.
+       Let $c$ the element after $b$ in our final notation for $\tau$:
+       If the notation is $$b\, \lower 1ex\hbox{$\hat c$}\, d,$$
+       then $c$ is the inserted element; otherwise $c=\tau(b)$.
+       If $c=a$, then write ")" and go to step 3a; otherwise write "$c$"
+       and repeat this step (step 3b).
+
+    To finish our example:
+
+    $$ \sigma\cdot\tau = (1\;3\;7)(2\;5\;6\;4). $$
 
 # References
