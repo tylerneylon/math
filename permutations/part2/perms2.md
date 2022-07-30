@@ -116,7 +116,46 @@ $\sigma_2=(1\;2)(3\;5)$ is not.
            \underline{(1\;\dot 2)(3)(4\;6)(5)(7)}. \\
            && \sigma & \tau \\
      \end{array}$$
+     $$a=1 \qquad \tau(a)=2.$$
 * Step 2. [Process the problem.]
+     Repeat this until $\sigma$ is exhausted: Draw a line over element
+     $\overline x$ in $\sigma$, where $x$ is the right-most, not-yet-overlined
+     element of $\sigma$ (above, we have $x=4$).
 
+     Call the dotted elemented in $\tau$ as $\dot y$ (above, we have $y=2$).
+     In $\tau$, insert a new
+     $\hat y$ after $x$ and add a dot over $z=\tau(x)$, like so:
+     $$x\, \lower 1ex\hbox{$\hat y$}\,\dot z.$$
+     Cross out the previous dot:
+     $\crossedouty$.
+
+     Here is how step 2 applies to our example:
+
+     $$\sigma\cdot\tau =
+         (1\;3\;7\;2\;5\;\bar 4)\;
+         (1\;\crossedouttwo)(3)(4\lower 2ex\hbox{$\hat 2$}\dot 6)(5)(7)
+     $$
+
+     $$\sigma\cdot\tau =
+         (1\;3\;7\;2\;\bar 5\;\bar 4)\;
+         (1\;\crossedouttwo)(3)
+         (4\lower 2ex\hbox{$\hat 2$}\crossedoutsix)
+         (\dot 5\lower 2ex\hbox{$\hat 6$})(7)
+     $$
+
+     $$\sigma\cdot\tau =
+         (1\;3\;7\;\bar 2\;\bar 5\;\bar 4)\;
+         (\dot 1\;\crossedouttwo\lower 2ex\hbox{$\hat 5$})(3)
+         (4\lower 2ex\hbox{$\hat 2$}\crossedoutsix)
+         (\crossedoutfive\lower 2ex\hbox{$\hat 6$})(7)
+     $$
+
+     $$\sigma\cdot\tau =
+         (1\;3\;\bar 7\;\bar 2\;\bar 5\;\bar 4)\;
+         (\crossedoutone\;\crossedouttwo\lower 2ex\hbox{$\hat 5$})(3)
+         (4\lower 2ex\hbox{$\hat 2$}\crossedoutsix)
+         (\crossedoutfive\lower 2ex\hbox{$\hat 6$})
+         (\dot 7\lower 2ex\hbox{$\hat 1$})
+     $$
 
 # References
