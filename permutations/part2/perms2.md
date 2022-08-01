@@ -67,12 +67,22 @@ I haven't put effort into discovering if someone else has come up with
 it before me.
 
 Let's get started. As an example, consider
+
+<div class="bigscr">
 $$\sigma = (1\;3\;7\;2\;5\;4) \quad\text{and}\quad
   \tau = (1\;2)(4\;6).$$ {#eq:eq0}
+</div>
+<div class="smallscr"> \smallstart
+\begin{align*}
+\sigma &= (1\;3\;7\;2\;5\;4) \quad\text{and} \\[0.2cm]
+\tau   &= (1\;2)(4\;6). \quad (1)
+\end{align*}
+</div> \smallend
+
 We can define the product $\sigma\cdot\tau$ as the permutation $\mu$ where
 $$\mu(x) = (\sigma\cdot\tau)(x) = \tau(\sigma(x)).$$ {#eq:eq1}
 I've chosen to work with the intuition that
-the element on the left ($\sigma$) "happens first;"
+the element on the left $(\sigma)$ "happens first;"
 this notation seems more natural to me.
 Some authors choose the opposite ordering because it avoids the
 awkward reversal of symbols in ([-@eq:eq1]).
@@ -111,11 +121,23 @@ $\sigma_2=(1\;2)(3\;5)$ is not.
      include single-element cycles in $\tau$, but not of $\sigma$. Write a dot
      over $\tau(a)$, where $a$ is the left-most element in
      $\sigma$'s cycle:
+
+     <div class="bigscr">
      $$\begin{array}{rcll}
            \sigma\cdot\tau & = & \underline{(1\;3\;7\;2\;5\;4)} & 
            \underline{(1\;\dot 2)(3)(4\;6)(5)(7)}. \\
            && \sigma & \tau \\
      \end{array}$$
+     </div>
+     <div class="smallscr"> \smallstart
+     $$\begin{array}{rcll}
+           \sigma\cdot\tau & = & \underline{(1\;3\;7\;2\;5\;4)} \; \cdot \\
+           && (\textit{This is }\sigma.) \\[0.2cm]
+           && \underline{(1\;\dot 2)(3)(4\;6)(5)(7)}. \\
+           && (\textit{This is }\tau.)
+     \end{array}$$
+     </div> \smallend
+
      $$a=1 \qquad \tau(a)=2.$$
 * Step 2. [Process the problem.]
      Repeat this until $\sigma$ is exhausted: Draw a line over element
