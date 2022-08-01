@@ -122,6 +122,12 @@ $\sigma_2=(1\;2)(3\;5)$ is not.
      over $\tau(a)$, where $a$ is the left-most element in
      $\sigma$'s cycle:
 
+     <!-- TEMP XXX TBD delete this -->
+     <div class="bigscr">
+     </div>
+     <div class="smallscr"> \smallstart
+     </div> \smallend
+
      <div class="bigscr">
      $$\begin{array}{rcll}
            \sigma\cdot\tau & = & \underline{(1\;3\;7\;2\;5\;4)} & 
@@ -152,22 +158,67 @@ $\sigma_2=(1\;2)(3\;5)$ is not.
      $\crossedouty$.
 
      Here is how step 2 applies to our example:
+
+     <div class="bigscr">
      $$\sigma\cdot\tau =
          (1\;3\;7\;2\;5\;\bar 4)\;
          (1\;\crossedouttwo)(3)(4\lower 2ex\hbox{$\hat 2$}\dot 6)(5)(7)
      $$
+     </div>
+     <div class="smallscr"> \smallstart
+     $$\begin{array}{l}
+       \sigma\cdot\tau =
+         (1\;3\;7\;2\;5\;\bar 4)\;\cdot
+     \end{array}$$
+     $$\begin{array}{r}
+         \qquad
+         (1\;\crossedouttwo)(3)(4\lower 2ex\hbox{$\hat 2$}\dot 6)(5)(7)
+     \end{array}$$
+     </div> \smallend
+
+     <div class="bigscr">
      $$\sigma\cdot\tau =
          (1\;3\;7\;2\;\bar 5\;\bar 4)\;
          (1\;\crossedouttwo)(3)
          (4\lower 2ex\hbox{$\hat 2$}\crossedoutsix)
          (\dot 5\lower 2ex\hbox{$\hat 6$})(7)
      $$
+     </div>
+     <div class="smallscr"> \smallstart
+     $$\begin{array}{l}
+       \sigma\cdot\tau =
+         (1\;3\;7\;2\;\bar 5\;\bar 4)\;\cdot
+     \end{array}$$
+     $$\begin{array}{r}
+         \qquad
+         (1\;\crossedouttwo)(3)
+         (4\lower 2ex\hbox{$\hat 2$}\crossedoutsix)
+         (\dot 5\lower 2ex\hbox{$\hat 6$})(7)
+     \end{array}$$
+     </div> \smallend
+
+     <div class="bigscr">
      $$\sigma\cdot\tau =
          (1\;3\;7\;\bar 2\;\bar 5\;\bar 4)\;
          (\dot 1\;\crossedouttwo\lower 2ex\hbox{$\hat 5$})(3)
          (4\lower 2ex\hbox{$\hat 2$}\crossedoutsix)
          (\crossedoutfive\lower 2ex\hbox{$\hat 6$})(7)
      $$
+     </div>
+     <div class="smallscr"> \smallstart
+     $$\begin{array}{l}
+       \sigma\cdot\tau =
+         (1\;3\;7\;\bar 2\;\bar 5\;\bar 4)\;\cdot
+     \end{array}$$
+     $$\begin{array}{r}
+         \qquad
+         (\dot 1\;\crossedouttwo\lower 2ex\hbox{$\hat 5$})(3)
+         (4\lower 2ex\hbox{$\hat 2$}\crossedoutsix)
+         (\crossedoutfive\lower 2ex\hbox{$\hat 6$})(7)
+     \end{array}$$
+     </div> \smallend
+
+     <div class="bigscr">
      $$\sigma\cdot\tau =
          (1\;3\;\bar 7\;\bar 2\;\bar 5\;\bar 4)\;
          (\crossedoutone\;\crossedouttwo\lower 2ex\hbox{$\hat 5$})(3)
@@ -175,6 +226,22 @@ $\sigma_2=(1\;2)(3\;5)$ is not.
          (\crossedoutfive\lower 2ex\hbox{$\hat 6$})
          (\dot 7\lower 2ex\hbox{$\hat 1$})
      $$
+     </div>
+     <div class="smallscr"> \smallstart
+     $$\begin{array}{l}
+       \sigma\cdot\tau =
+         (1\;3\;\bar 7\;\bar 2\;\bar 5\;\bar 4)\;\cdot
+     \end{array}$$
+     $$\begin{array}{r}
+         \qquad
+         (\crossedoutone\;\crossedouttwo\lower 2ex\hbox{$\hat 5$})(3)
+         (4\lower 2ex\hbox{$\hat 2$}\crossedoutsix)
+         (\crossedoutfive\lower 2ex\hbox{$\hat 6$})
+         (\dot 7\lower 2ex\hbox{$\hat 1$})
+     \end{array}$$
+     </div> \smallend
+
+     <div class="bigscr">
      $$\sigma\cdot\tau =
          (1\;\bar 3\;\bar 7\;\bar 2\;\bar 5\;\bar 4)\;
          (\crossedoutone\;\crossedouttwo\lower 2ex\hbox{$\hat 5$})
@@ -183,6 +250,23 @@ $\sigma_2=(1\;2)(3\;5)$ is not.
          (\crossedoutfive\lower 2ex\hbox{$\hat 6$})
          (\crossedoutseven\lower 2ex\hbox{$\hat 1$})
      $$
+     </div>
+     <div class="smallscr"> \smallstart
+     $$\begin{array}{l}
+       \sigma\cdot\tau =
+         (1\;\bar 3\;\bar 7\;\bar 2\;\bar 5\;\bar 4)\;\cdot
+     \end{array}$$
+     $$\begin{array}{r}
+         \qquad
+         (\crossedoutone\;\crossedouttwo\lower 2ex\hbox{$\hat 5$})
+         (\dot 3\lower 2ex\hbox{$\hat 7$})
+         (4\lower 2ex\hbox{$\hat 2$}\crossedoutsix)
+         (\crossedoutfive\lower 2ex\hbox{$\hat 6$})
+         (\crossedoutseven\lower 2ex\hbox{$\hat 1$})
+     \end{array}$$
+     </div> \smallend
+
+     <div class="bigscr">
      $$\sigma\cdot\tau =
          (\bar 1\;\bar 3\;\bar 7\;\bar 2\;\bar 5\;\bar 4)\;
          (\crossedoutone\lower 2ex\hbox{$\hat 3$}
@@ -192,6 +276,23 @@ $\sigma_2=(1\;2)(3\;5)$ is not.
          (\crossedoutfive\lower 2ex\hbox{$\hat 6$})
          (\crossedoutseven\lower 2ex\hbox{$\hat 1$})
      $$
+     </div>
+     <div class="smallscr"> \smallstart
+     $$\begin{array}{l}
+       \sigma\cdot\tau =
+         (\bar 1\;\bar 3\;\bar 7\;\bar 2\;\bar 5\;\bar 4)\;\cdot
+     \end{array}$$
+     $$\begin{array}{r}
+         \qquad
+         (\crossedoutone\lower 2ex\hbox{$\hat 3$}
+         \crossedouttwo\lower 2ex\hbox{$\hat 5$})
+         (\crossedoutthree\lower 2ex\hbox{$\hat 7$})
+         (4\lower 2ex\hbox{$\hat 2$}\crossedoutsix)
+         (\crossedoutfive\lower 2ex\hbox{$\hat 6$})
+         (\crossedoutseven\lower 2ex\hbox{$\hat 1$})
+     \end{array}$$
+     </div> \smallend
+
      At the end of that last equation, we've drawn a line over all
      the elements of $\sigma$, indicating that we're done with step 2.
 * Step 3. [Write the answer.]
