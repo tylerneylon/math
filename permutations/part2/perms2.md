@@ -1,6 +1,6 @@
 % Notes on Permutations: A Chalkboard Algorithm
 % Tyler Neylon
-% 342.2022
+% 422.2022
 
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
@@ -121,12 +121,6 @@ $\sigma_2=(1\;2)(3\;5)$ is not.
      include single-element cycles in $\tau$, but not of $\sigma$. Write a dot
      over $\tau(a)$, where $a$ is the left-most element in
      $\sigma$'s cycle:
-
-     <!-- TEMP XXX TBD delete this -->
-     <div class="bigscr">
-     </div>
-     <div class="smallscr"> \smallstart
-     </div> \smallend
 
      <div class="bigscr">
      $$\begin{array}{rcll}
