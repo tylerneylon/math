@@ -190,4 +190,39 @@ $\sigma_2=(1\;2)(3\;5)$ is not.
 
     $$ \sigma\cdot\tau = (1\;3\;7)(2\;5\;6\;4). $$
 
+The first time you read about this method, it may seem like a lot,
+but after working a few examples, it feels natural and easy.
+
+# Why It Works
+
+In this section, I'll define $\mu$ as the permutation
+produced by this method, and it will be my job to show
+that $\mu=\sigma\cdot\tau$.
+
+At the start of each iteration of step 2, we're going to insert
+element $y$ after $x$ in our notation of $\tau$, where
+\begin{align*}
+    x &= \text{the right-most un-overlined element of }\sigma, \text{ and} \\
+    y &= \text{the dotted element in }\tau.
+\end{align*}
+Effectively, we're recording that $\mu(x)=y$.
+
+In each case, $y$ is chosen as, informally, the element in $\tau$
+after [the element in $\sigma$ after $x$].
+In other words,
+$$y = \tau(\sigma(x)).$$ {#eq:eq2}
+whenever we write $x\lowerhaty$.
+
+When we write out the answer in step 3, either element $x$
+in $\tau$ has an inserted element after it or not.
+If element $y$ is inserted, then we have
+$$\mu(x) = y = \tau(\sigma(x))$$ {#eq:eq3}
+by ([-@eq:eq2]). If $x$ has no inserted element after it,
+then $x$ never appeared in $\sigma$'s cycle notation,
+meaning $\sigma(x)=x$. Then
+$$ \mu(x) = \tau(x) = \tau(\sigma(x)). $$ {#eq:eq4}
+Since either ([-@eq:eq3]) or ([-@eq:eq4]) holds for all inputs
+$x$ to $\mu$, we must have $\mu = \sigma\cdot \tau$,
+concluding the proof of correctness.
+
 # References
