@@ -225,4 +225,42 @@ Since either ([-@eq:eq3]) or ([-@eq:eq4]) holds for all inputs
 $x$ to $\mu$, we must have $\mu = \sigma\cdot \tau$,
 concluding the proof of correctness.
 
+# The General Process
+
+The steps written in $\S1$ will work for any single-cycle
+permutation $\sigma$. It's not difficult to extend this
+method to work for any $\sigma$.
+
+Below is the general method, simplified with some shorthand
+notation that I believe will be clear in the context
+from $\S1$. This is the same as above, with some changes in step 2
+to accommodate multi-cycle $\sigma$s.
+
+* Step 1. [Write the problem.] Write $\sigma\cdot\tau$ in cycle notation;
+     include single-element cycles $(x)$ in $\tau$ whenever $\sigma(x)\ne x$;
+     exclude single-element cycles in $\sigma$.
+* Step 2. [Process the problem.] Repeat until $\sigma$ is overlined:
+    + [2a.] Set $x :=$ the right-most non-overlined element in $\sigma$,
+          *or* ")".
+    + [2b.] If $x=$")" then let $a :=$ the left-most element in this cycle of
+          $\sigma$. Write a dot over $\tau(a)$; go to step 2a.
+    + [2c.] In $\tau$, write $x\lhy\dot z$, where $y$ is the dotted
+          element of $\tau$. Cross out $y$'s dot in $\tau$.
+* Step 3. [Write the answer.]
+     Repeat this until all the elements are used (meaning they
+     are included in the answer).
+
+     + [3a.] Write "$(a$" where $a$ is the least unused element
+       appearing in $\sigma$ or $\tau$. If all the elements are used, you're
+       done.
+     + [3b.] Let $b$ be the right-most element in the answer so far.
+       Let $c$ the element after $b$ in our final notation for $\tau$:
+       If the notation is $$b\, \lower 1ex\hbox{$\hat c$}\, d,$$
+       then $c$ is the inserted element; otherwise $c=\tau(b)$.
+       If $c=a$, then write ")" and go to step 3a; otherwise write "$c$"
+       and repeat this step (step 3b).
+
+It's straightforward to apply essentially the same proof of correctness
+to this general version of the method.
+
 # References
