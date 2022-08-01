@@ -38,10 +38,10 @@ transpositions](http://tylerneylon.com/a/perms1/perms1.html).*
 
 <!-- TODO
 
-* [ ] Right now I say some examples are the same that aren't. Fix
+* [x] Right now I say some examples are the same that aren't. Fix
       that lack of consistency.
-* [ ] Delete perms1.md which is in this directory for reference.
-* [ ] Check and clean up how the references are looking.
+* [x] Delete perms1.md which is in this directory for reference.
+* [x] Check and clean up how the references are looking.
 * [ ] There are two elements I added by hand to perms1.html which I'd rather add
       to the template file: the google analytics tracking, and the call to
       subscribe at the bottom of the page.
