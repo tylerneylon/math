@@ -67,8 +67,8 @@ I haven't put effort into discovering if someone else has come up with
 it before me.
 
 Let's get started. As an example, consider
-$$\sigma = (1\;3\;7\;2) \quad\text{and}\quad
-  \tau = (2\;5)(3\;4\;7).$$ {#eq:eq0}
+$$\sigma = (1\;3\;7\;2\;5\;4) \quad\text{and}\quad
+  \tau = (1\;2)(4\;6).$$ {#eq:eq0}
 We can define the product $\sigma\cdot\tau$ as the permutation $\mu$ where
 $$\mu(x) = (\sigma\cdot\tau)(x) = \tau(\sigma(x)).$$ {#eq:eq1}
 I've chosen to work with the intuition that
@@ -78,7 +78,7 @@ Some authors choose the opposite ordering because it avoids the
 awkward reversal of symbols in ([-@eq:eq1]).
 
 In our example,
-$$ \mu = (1\;4\;7\;5\;2), $$
+$$ \mu = (1\;3\;7)(2\;5\;6\;4), $$
 as can be verified by asking, for each $x\in\{1,2,\ldots,7\}$,
 what is $y=\sigma(x)$? followed by asking what is $\tau(y)$?
 
@@ -89,14 +89,14 @@ This article improves on this by providing an algorithm that
 is a 1-lookup method. In some informal sense we can say it's twice
 as fast for a human to execute.
 
-(A computer can multiply permutations even more efficiently. We could
+A computer can multiply permutations even more efficiently. We could
 encode a permutation as a hash map (a `dict` in Python, or an
 `object` in JavaScript, for example) where the keys are the input numbers
 and the values are what those values map to. In this case, each lookup of a
 value $\mu(x)$ takes constant time, so that computing all of $\mu$ requires
 $O(n)$ time, where $n$ is the size of the domain of the permutations.
 I don't consider a human working on a chalkboard to have access to
-constant-time lookups, so this algorithm is only for computers.)
+constant-time lookups, so this algorithm is only for computers.
 
 # A Worked Example
 
@@ -213,6 +213,12 @@ In other words,
 $$y = \tau(\sigma(x)).$$ {#eq:eq2}
 whenever we write $x\lowerhaty$.
 
+At the end of an iteration of step 2, the newly-dotted
+element $\dot z$ will satisfy $z=\tau(x)$. This sets us up for the next
+iteration of step 3, in which we'll begin looking at a new
+$x'$ with $\sigma(x')=x$, preparing us to continue
+fulfilling ([-@eq:eq2]) for the next value $y' = \dot z$.
+
 When we write out the answer in step 3, either element $x$
 in $\tau$ has an inserted element after it or not.
 If element $y$ is inserted, then we have
@@ -262,5 +268,3 @@ to accommodate multi-cycle $\sigma$s.
 
 It's straightforward to apply essentially the same proof of correctness
 to this general version of the method.
-
-# References
