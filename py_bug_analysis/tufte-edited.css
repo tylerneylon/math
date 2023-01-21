@@ -383,6 +383,8 @@ li p { width: 100%; }
 
 hr { margin: 0; }
 
+.box hr { margin: auto; }
+
 div.fullwidth, table.fullwidth { width: 100%; }
 
 div.table-wrapper { overflow-x: auto;

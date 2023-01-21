@@ -51,10 +51,25 @@ end
 CodeBlock = function(el)
   -- transform to <span style="color: red;"></span>
   if FORMAT:match 'html' then
-    html = '<pre><code>  ' .. el.text:gsub('%[(.-)%]%{(.-)%}', html_repl) .. '</code></pre>'
+    text, _ = el.text:gsub('^%{formatted%}', '')
+    html = '<pre><code>  ' .. text:gsub('%[(.-)%]%{(.-)%}', html_repl) .. '</code></pre>'
     return pandoc.RawBlock("html", html)
   elseif FORMAT:match 'latex' then
-    latex = '\\begin{verbatim}\n' .. el.text:gsub('%[(.-)%]%{(.-)%}', latex_repl) .. '\\end{verbatim}'
+
+    ltag    = 'verbatim'
+    lsuffix = ''
+
+    text, n = el.text:gsub('^%{formatted%}', '')
+    if n > 0 then
+      ltag = 'Verbatim'
+      lsuffix = '[commandchars=\\\\\\{\\}]'
+    end
+
+    latex = (
+      '\\medskip\n\\begin{' .. ltag .. '}' .. lsuffix .. '\n' ..
+      text:gsub('%[(.-)%]%{(.-)%}', latex_repl) ..
+      '\n\\end{' .. ltag .. '}\n\\medskip'
+    )
     -- html = '<pre><code>' .. el.text:gsub('%[(.-)%]%{(.-)%}', repl) .. '</code></pre>'
     return pandoc.RawBlock("latex", latex)
   else
