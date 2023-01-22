@@ -84,13 +84,19 @@ local filter = {
 
     BulletList = function(el)
 
+        -- Turn this on to help with debugging.
+        --[[
+		local f = io.open('dbg_output_from_filter_lua.txt', 'a')
+        f:write('________________________________\n')
+        f:write(tostring(el))
+        f:write('\n')
+        f:close()
+        ]]
+
         local filter_done = false
 
-        -- This walks the bullet list. It stops changing things as soon as the
-        -- first change is made. The first change is made if it sees a Plain
-        -- that begins with '{+}', in which case it wraps the Plain in a
-        -- BulletList, effectively increasing the nesting level of that Plain.
-        return el:walk({Plain = function(el)
+        -- This function will be called on Para and Plain elements.
+        local function process_elt(el)
             if filter_done then return el end
             local do_indent = false
             local first_str_done = false
@@ -106,37 +112,13 @@ local filter = {
                 filter_done = true
                 return pandoc.BulletList(el)
             end
-            -- print('\n', el)
-            -- return el
-        end})
-
-        --[=[
-
-        print('\n')
-        print('1', el)
-        print('2', el.content)
-        print('3', el.content[1])
-        print('4', el.content[1][1])
-        print('5', el.content[1][1].content)
-        print('6', el.content[1][1].content[1])
-        print('7', el.content[1][1].content[1].text)
-
-        --[[ text, n = el.content[1][1].content[1].text:gsub('^%{%+%}', '')
-
-        if n > 0 then
-            print('{+} noticed')
-        end
-        ]]
-
-        if FORMAT:match 'html' then
-            return el
-        elseif FORMAT:match 'latex' then
-            return el
-        else
-            return el
         end
 
-        ]=]
+        -- This walks the bullet list. It stops changing things as soon as the
+        -- first change is made. The first change is made if it sees a Plain
+        -- that begins with '{+}', in which case it wraps the Plain in a
+        -- BulletList, effectively increasing the nesting level of that Plain.
+        return el:walk({Plain = process_elt, Para = process_elt})
 
     end
 }
