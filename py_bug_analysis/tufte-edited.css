@@ -504,3 +504,11 @@ div.csl-entry {
     margin-top: 30px;
     font-size: 16pt;
 }
+
+pre code {
+    font-size: 15px;
+}
+
+code {
+    font-size: 18px;
+}

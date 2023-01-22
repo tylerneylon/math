@@ -177,7 +177,7 @@ multiprocessing/__init__.py
 
 * {+} I added some debug prints in the source to help understand exactly where
   the code was stuck.
-  + To be a little bad, you can use sudo to edit your standard library files
+  + To be a little bad, you can use *sudo* to edit your standard library files
     directly. Obviously this is a terrible idea (which I did); a more
     responsible thing to do is to work with a different siloed version of the
     standard library.
@@ -198,8 +198,37 @@ logger.setLevel(logging.DEBUG)
 
 * {+} The docs for that are [here](https://docs.python.org/3/library/multiprocessing.html#logging).
 
+* **Print when locks are acquired and released.**
+  + Based on the nature of the problem — multiple processes, sometimes freezing,
+    sometimes not — this looks like a race condition. A common type of race
+    condition is when a lock can be held indefinitely.
+  + By looking at the source of `multiprocessing.Queue`, I see that several locks
+    are used, so it seems likely one of these is getting stuck.
+  + Here’s one way to add debug prints each time a lock is acquired or
+    released:
 
+<div class="box"> \boxedstart
 
+```
+# In synchronize.py, edit the _make_methods()
+# method of class Lock like so:
 
+def _make_methods(self):
 
+	def dbg_acquire(blocking=True, timeout=None):
+		res = self._semlock.acquire(blocking, timeout)
+		if res:
+			print('Lock acquired')
+		return res
+
+	self.acquire = dbg_acquire
+
+	def dbg_release():
+		self._semlock.release()
+		print('Lock released')
+
+	self.release = dbg_release
+```
+
+\boxedend </div>
 
