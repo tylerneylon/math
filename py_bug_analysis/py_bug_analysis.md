@@ -175,8 +175,30 @@ multiprocessing/__init__.py
 
 \boxedend </div>
 
-+ I added some debug prints in the source to help understand exactly where
+* {+} I added some debug prints in the source to help understand exactly where
   the code was stuck.
+  + To be a little bad, you can use sudo to edit your standard library files
+    directly. Obviously this is a terrible idea (which I did); a more
+    responsible thing to do is to work with a different siloed version of the
+    standard library.
+
+* **Print built-in logging messages from multiprocessing code.**
+  + The multiprocessing module can provide some built-in debug messages that can
+    help you see, at a high level (well, relative to low stuff) what's going on.
+    You turn it on like this:
+
+<div class="box"> \boxedstart
+
+```
+logger = mp.log_to_stderr()
+logger.setLevel(logging.DEBUG)
+```
+
+\boxedend </div>
+
+* {+} The docs for that are [here](https://docs.python.org/3/library/multiprocessing.html#logging).
+
+
 
 
 

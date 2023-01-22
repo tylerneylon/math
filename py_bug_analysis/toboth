@@ -9,15 +9,21 @@ name=py_bug_analysis
 # If I want a table of contents, I could add a --toc flag here.
 FLAGS="-s -M figPrefix=figure -M secPrefix="§" -M secPrefixTemplate="${spt}" --filter pandoc-crossref -M eqnPrefix= -M linkcolor=black --number-sections --citeproc --bibliography=${name}.bib --lua-filter=filter.lua ${name}.md"
 
+TMP=$(mktemp tmp_XXXX)
+
 # Make the html file.
 pandoc --mathjax --template=template.html ${FLAGS} > ${name}.html
+sed 's|<li><ul>|<li style="list-style-type: none;"><ul>|' ${name}.html > ${TMP}
+mv ${TMP} ${name}.html
 
 # Make and open the pdf file.
 pandoc -t latex -o ${name}.tex -s ${FLAGS} --template=template.tex
-TMP=$(mktemp tmp_XXXX)
 sed 's|img/\(.*\)\.svg|img/\1.pdf|' ${name}.tex > ${TMP}
-# sed 's|images/\(.*\)\.png|images/pdfs/\1.pdf|' ${name}.tex > ${TMP}
 mv ${TMP} ${name}.tex
+cat ${name}.tex <(echo) | sed '{N;s/\\item.*itemize.*/\\item[]\\begin{itemize}/;P;D;}' > ${TMP}
+mv ${TMP} ${name}.tex
+
+# sed 's|images/\(.*\)\.png|images/pdfs/\1.pdf|' ${name}.tex > ${TMP}
 # awk -f tex_edits.awk ${name}.tex > ${TMP}
 # mv ${TMP} ${name}.tex
 pdflatex ${name}.tex
