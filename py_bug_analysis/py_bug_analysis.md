@@ -331,4 +331,36 @@ Print out a list of all threads in the current process, and their stacks:
 \boxedend </div>
 
 
+<div class="box"> \boxedstart
+
+Print out the name / identifier / pid for the current process and thread.
+
+In this example, I'll also show one way to package up multiple strings into a
+single print. This is useful to reduce the likelihood of prints overlapping each
+other across different processes.
+
+    frames = sys._current_frames()
+    thread = threading.current_thread()
+    stack = ''.join(traceback.format_stack(frames[thread.ident]))
+    # inspect.cleandoc() trims some whitespace for you.
+    msg = inspect.cleandoc(f'''
+        Lock acquired
+        {process.current_process()} pid={os.getpid()}
+        {threading.current_thread()}
+        Stack:
+        {stack}
+    ''')
+    print(msg, flush=True)
+
+    # Note that I'm calling process.current_process() above since
+    # I'm within the multiprocessing source; outside of it, you'd
+    # call multiprocessing.current_process() instead.
+
+It's useful to include `flush=True` because when you redirect to a file, flushing
+is not automatic. Without the flush, you might end up seeing a side effect that
+happened *after* a debug print line, but never seeing that debug print in your
+output.
+
+\boxedend </div>
+
 
