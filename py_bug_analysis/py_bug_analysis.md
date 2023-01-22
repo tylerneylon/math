@@ -232,3 +232,103 @@ def _make_methods(self):
 
 \boxedend </div>
 
+* {+} If you only had a single lock in your program, then you could look through
+  the above prints to confirm that `acquire()` was called twice with no
+  `release()` in between. That alone is not deadly, but if neither locker ever
+  releases, then it becomes a mortal embrace.
+
+  + There are a few things to improve from this setup:
+    - I have many locks, so **I have too many debug prints**.
+      I'll explain how to focus on a single lock next.
+    - So far, these will let me confirm that a particular lock appears to be the
+      deadlock source, but **it won't tell me *why* the deadlock happened**.
+      I need more information to understand why; I'll add stack traces below to
+      help with that.
+    - Finally, **there can be missing debug prints**.
+      That is, it's possible that a
+      lock is released or acquired, but that the debug print never happens, such
+      as if the process becomes stuck or killed after the acquire/release but
+      before the print. In fact, I think I saw this happen in one of my test runs,
+      and it was extremely confusing. I chose to ignore it as an anomaly, and
+      later realized this was the likely cause. I don't think there's an easy fix
+      for this. Basically, it's good to know that it might happen in rare cases.
+      For the sake of debugging, I'd suggest running things multiple times so you
+      don't get hung up on missing debug prints.
+
+* **Print acquire/release updates only for a single lock.**
+  + At first I started to do this by adding a new constructor argument to `Queue`
+    and `Lock` that would turn on debug prints. This would be a nice general
+    solution, but I was aiming for quick and effective rather than a gold medal
+    for clean code. So I copied-and-pasted all of classes `Lock` and `Queue` into
+    `Lock2` and `Queue2`, and added the debug code only to those new classes.
+  + I then made only my `writer_q` queue an instance of `Queue2`. Within that, I
+    looked at different locks and found the deadlock to occur on a lock it calls
+    `self._wlock`. So that particular lock was the *only* instance of `Lock2` in my
+    code.
+  + The `multiprocessing` module actually uses factory functions to create
+    instances of many of its classes, so you need to do more than add
+    declarations for class `Lock2` in *synchronize.py*. You also need to add the
+    appropriate methods to the `BaseContext` class in *context.py*, like this:
+
+<div class="box"> \boxedstart
+
+```
+def Lock2(self):
+	'''Returns a non-recursive lock object'''
+	from .synchronize import Lock2
+	return Lock2(ctx=self.get_context())
+```
+
+\boxedend </div>
+
+* **Print process, thread, and stack trace information at will.**
+  + From the above, I was able to gather strong evidence that `Queue`'s `_wlock`
+    lock was being double-booked. It was easy to see why the 2nd acquisition was
+    locking — the code would freeze, I can hit ctrl-C and see a stack trace.
+  + (I'll explain the details of the freeze in the next section, "The Source of
+    the Problem.")
+  + In order to understand why the penultimate acquisition was happening (and
+    from there to hopefully understand why it was not released), I printed out
+    process and thread status with each lock acquisition.
+  + Here is how to do that:
+
+<div class="box"> \boxedstart
+
+Print out the stack trace of any thread, such as the current thread:
+
+    frames = sys._current_frames()
+    thread = threading.current_thread()
+    stack = ''.join(traceback.format_stack(frames[thread.ident]))
+    print(stack)
+
+The above idiom can be extended to print out stack traces for other threads; in
+fact, the main use case for `sys._current_frames()` is to enable you to do so even
+in a deadlock situation. Here's a quote from the
+[sys docs for `_current_frames()`](https://docs.python.org/3/library/sys.html#sys._current_frames):
+
+> "This is most useful for debugging deadlock: this function does not require the
+> deadlocked threads’ cooperation, and such threads’ call stacks are frozen for as
+> long as they remain deadlocked. The frame returned for a non-deadlocked thread
+> may bear no relationship to that thread’s current activity by the time calling
+> code examines the frame."
+
+For the record, here's a simpler way to print out the current stack trace:
+
+    traceback.print_stack()
+
+\boxedend </div>
+
+<div class="box"> \boxedstart
+
+Print out a list of all threads in the current process, and their stacks:
+
+    frames = sys._current_frames()
+    for thread in threading.enumerate():
+        print(thread.name)
+        if thread.ident in frames:
+            traceback.print_stack(frames[thread.ident])
+
+\boxedend </div>
+
+
+

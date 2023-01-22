@@ -512,3 +512,8 @@ pre code {
 code {
     font-size: 18px;
 }
+
+.box blockquote p {
+    width: 100%;
+    font-style: italic;
+}
