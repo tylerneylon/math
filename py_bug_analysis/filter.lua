@@ -1,20 +1,39 @@
 function html_repl(text, attrs)
     if attrs == nil then return text end
+
     -- print('html_repl', 'text=', text, 'attrs=', attrs)
+
     if attrs == 'bold' then
         return '<b>' .. text .. '</b>'
     end
+
     color = attrs:match('color="(.-)"')
-    return '<span style="color:' .. color .. '"><b>' .. text .. '</b></span>'
+    if color then
+        return '<span style="color:' .. color .. '"><b>' .. text .. '</b></span>'
+    end
+
+    url = attrs:match('url="(.-)"')
+    if url then
+        return '<a href="' .. url .. '">' .. text .. '</a>'
+    end
 end
 
 function latex_repl(text, attrs)
     if attrs == nil then return text end
+
     if attrs == 'bold' then
         return '\\textbf{' .. text .. '}'
     end
+
     color = attrs:match('color="(.-)"')
-    return '\\textcolor{' .. color .. '}{' .. text .. '}'
+    if color then
+        return '\\textcolor{' .. color .. '}{' .. text .. '}'
+    end
+
+    url = attrs:match('url="(.-)"')
+    if url then
+        return '\\href{' .. url .. '}{' .. text .. '}'
+    end
 end
 
 local filter = {

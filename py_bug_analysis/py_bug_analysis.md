@@ -339,22 +339,24 @@ In this example, I'll also show one way to package up multiple strings into a
 single print. This is useful to reduce the likelihood of prints overlapping each
 other across different processes.
 
-    frames = sys._current_frames()
-    thread = threading.current_thread()
-    stack = ''.join(traceback.format_stack(frames[thread.ident]))
-    # inspect.cleandoc() trims some whitespace for you.
-    msg = inspect.cleandoc(f'''
-        Lock acquired
-        {process.current_process()} pid={os.getpid()}
-        {threading.current_thread()}
-        Stack:
-        {stack}
-    ''')
-    print(msg, flush=True)
+```
+{formatted}frames = sys._current_frames()
+thread = threading.current_thread()
+stack = ''.join(traceback.format_stack(frames[thread.ident]))
+# inspect.cleandoc() trims some whitespace for you.
+msg = [inspect.cleandoc]{url="https://docs.python.org/3/library/inspect.html#inspect.cleandoc"}(f'''
+    Lock acquired
+    {[process.current_process()]{bold}} pid={[os.getpid()]{bold}}
+    {[threading.current_thread()]{bold}}
+    Stack:
+    {stack}
+''')
+print(msg, flush=True)
 
-    # Note that I'm calling process.current_process() above since
-    # I'm within the multiprocessing source; outside of it, you'd
-    # call multiprocessing.current_process() instead.
+# Note that I'm calling process.current_process() above since
+# I'm within the multiprocessing source; outside of it, you'd
+# call multiprocessing.current_process() instead.
+```
 
 It's useful to include `flush=True` because when you redirect to a file, flushing
 is not automatic. Without the flush, you might end up seeing a side effect that
