@@ -1,4 +1,6 @@
 function html_repl(text, attrs)
+    if attrs == nil then return text end
+    -- print('html_repl', 'text=', text, 'attrs=', attrs)
     if attrs == 'bold' then
         return '<b>' .. text .. '</b>'
     end
@@ -7,6 +9,7 @@ function html_repl(text, attrs)
 end
 
 function latex_repl(text, attrs)
+    if attrs == nil then return text end
     if attrs == 'bold' then
         return '\\textbf{' .. text .. '}'
     end
@@ -56,7 +59,7 @@ local filter = {
         -- transform to <span style="color: red;"></span>
         if FORMAT:match 'html' then
             text, _ = el.text:gsub('^%{formatted%}', '')
-            html = '<pre><code>  ' .. text:gsub('%[(.-)%]%{(.-)%}', html_repl) .. '</code></pre>'
+            html = '<pre><code>  ' .. text:gsub('%[([^%]]-)%]%{(.-)%}', html_repl) .. '</code></pre>'
             return pandoc.RawBlock("html", html)
         elseif FORMAT:match 'latex' then
 
@@ -69,9 +72,11 @@ local filter = {
                 lsuffix = '[commandchars=\\\\\\{\\}]'
             end
 
+            text = text:gsub('%{', '\\{'):gsub('%}', '\\}')
+
             latex = (
                 '\\medskip\n\\begin{' .. ltag .. '}' .. lsuffix .. '\n' ..
-                text:gsub('%[(.-)%]%{(.-)%}', latex_repl) ..
+                text:gsub('%[([^%]]-)%]\\%{(.-)\\%}', latex_repl) ..
                 '\n\\end{' .. ltag .. '}\n\\medskip'
             )
             -- html = '<pre><code>' .. el.text:gsub('%[(.-)%]%{(.-)%}', repl) .. '</code></pre>'
