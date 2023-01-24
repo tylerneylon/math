@@ -365,4 +365,65 @@ output.
 
 \boxedend </div>
 
+* **Use a timeout-based hook to auto-print more info.**
+  + Often, when someone makes an indefinitely-blocking call to
+    `Lock.acquire()`,
+    you expect the lock to be acquired quickly. If it's not acquired after, say,
+    2 full seconds, that might indicate something's gone
+    sideways.
+  + All of the above can produce many printouts, so it's nice to have an
+    automatic hook that executes at the point when things are deadlocked.
+  + We can do this by hooking into the `dbg_acquire()` method on `Lock2`, as in
+    the next example.
+
+
+<div class="box"> \boxedstart
+
+This example is from *queues.py*, in the `_feed()` method, which I'll explain
+further below.
+
+I replaced the single line:
+
+    wacquire()
+
+with this:
+ 
+    if not wacquire(True, 2):  # Try to lock, timeout after 2sec.
+        # Debug prints.
+        print('I appear to be stuck.')
+        print('Threads:')
+        frames = sys._current_frames()
+        for thread in threading.enumerate():
+            print(thread.name)
+            if thread.ident in frames:
+                traceback.print_stack(frames[thread.ident])
+        wacquire()
+
+\boxedend </div>
+
+* **Check which processes are alive.**
+  + At this point in the debugging, I was pretty sure that one of my pool's
+    workers was dying quite violently, and taking our precious `_wlock` with it
+    to its grave. I wanted to confirm this suspicion by checking that a
+    given process had first acquired the lock and then died without releasing
+    it.
+  + I thought about programmatically getting the appropriate `Process` object in
+    Python, but then I realized it would be easier to just print out the pid
+    with the lock, and use *pgrep* to see if the pid was alive at a given point.
+    Like this:
+
+
+<div class="box"> \boxedstart
+
+`$ python3 my_program.py`\
+… it freezes; I can see any pids that hold the lock
+via debug prints from the steps above.
+
+Me, in another shell:\
+`$ pgrep python`\
+… list of living Python pids. If a dead (missing) pid holds the lock, that
+causes a deadlock.
+
+\boxedend </div>
+
 
