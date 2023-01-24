@@ -426,4 +426,62 @@ causes a deadlock.
 
 \boxedend </div>
 
+* {+} It worked! My suspicions were confirmed.
+  + Now I can tell you how things were breaking.
+
+## The Source of the Problem
+
+Internally, Python's multiprocess queues rely on os-level pipes for
+communication. A pipe is a FIFO (first-in, first-out) buffer of bytes. When two
+processes have the same pipe open, either one can write bytes into it, or read
+bytes out of it. It‘s already similar to a queue, except that:
+
+* The application itself must wrap and unwrap messages since the os sees the
+  pipe as just a sequence of bytes; there are no built-in message delimiters.
+* Pipes have a limited capacity, typically something like 64KiB. This is
+  small enough that it often makes sense to add code on either end of the pipe
+  to deal with either many messages, or large messages.
+
+In particular, `multiprocessing.Queue` supports many `put()` calls by including
+a process-local buffer before data reaches the pipe. Every time a Queue instance
+arrives in a new process, it creates a thread called a feeder thread in that
+process. When you call `Queue.put()`, your message goes into the process-local
+buffer before hitting the pipe; it works this way so that `put()` calls never
+block, even if the pipe is full. It's the feeder thread's job to asynchronously
+move data out of the process-local buffer and put that into the pipe according
+to the pipe’s capacity.
+
+The feeder thread is smart enough to use a write lock on the pipe. This way, no
+two messages will be interwoven and thus mangled if two processes execute a
+`put()` at the same time.
+
+The Queue implementation is also smart enough to flush the process-local buffer
+into the pipe when any process undergoes a normal shutdown process. Essentially,
+when the process-local copy of a Queue is garbage collected, it waits for the
+feeder thread to empty the process-local buffer. This ensures that (a) no data
+is lost, and (b) the locks don't end up in a broken state.
+
+So far, so good, right? What can go wrong?
+
+Well, the problem is in the combination of:
+
+#. A `Queue` that depends on clean process shutdown, along with
+#. a `Pool` that is
+#. managed by a `with` statement.
+
+A `multiprocessing.Pool` object is normally quite friendly to its workers.
+However, it turns out that when you manage the lifetime of a pool via the `with`
+statement, the workers will be terminated with prejudice. That is, killed
+without a chance to clean themselves up.
+
+So a worker can acquire `_wlock`, be unceremoniously killed, and then the
+next thread that wants to acquire `_wlock` is stuck. In my case, the feeder thread
+is stuck when I call `writer_q.put('STOP')`. The `'STOP'` message never gets
+through, but I don't see any bad behavior unless I try to join the writer
+process, which never completes as it's waiting forlornly for its long-lost
+sentinel signal (the `'STOP'` message).
+
+The timeline looks like this:
+
+
 
