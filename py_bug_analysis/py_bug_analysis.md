@@ -703,6 +703,30 @@ Avoid terminating processes
 
 \boxedend </div>
 
+# How can I help other developers?
+
+I don't usually write up post mortems like this — otherwise I wouldn't get much
+done! But this was a fun bug, and I learned enough while debugging that I wanted
+to take notes and share these with other coder friends.
+
+The notes above cover tactical tips, like flushing your prints immediately to
+promote accurate logs, but I also have a small collection of higher-level
+strategic considerations.
+
+Concurrency debugging suggestions from myself and friends:
+
+* Tips I like:
+  + **[Be methodical]** It's easy to get lost in the weeds. Write down questions that will help you understand the problem, being thoughtful and deliberate about your strategy to isolate the problem. If this will be production code, avoid the temptation to say "good enough" if it seems fixed but you don't know why. If it's throw-away code, avoid the temptation to spend too much time debugging when you don't really need to.
+  + **[Decouple and learn]** Some quick stack traces are likely to give you hints as to which objects are not working correctly. Try to decouple the critical code objects early on, and understand how those handle concurrency in depth. If the behavior is hard to decouple, this is likely to be a design flaw that you can fix before debugging the rest.
+* Tips from Scott Cameron:
+  + **[Break it more]** If you have a guess about the problem, try to make it worse (such as making it break sooner / more often when non-deterministic). This gives you empirical evidence to support / refute your guess.
+  + **[Think]** Just sit there and think hard. Concurrency bugs are a case where you may get more return-on-investment for staring at code and thinking rather than trying-and-seeing.
+  + **[Remove safety checks]** This one sounds bananas, but bear with me. The idea here is that often fancy or clever devices designed to simplify your life by hiding complexity are actually the things introducing the problem. In my case, this was more-or-less true, since I was using a `with` clause that was partially the source of my bug. In other words, simplify and reduce magic.
+* A tip from Joël Franusic:
+  + **[Use Go]** Use Go.
+
+
+
 
 
 
