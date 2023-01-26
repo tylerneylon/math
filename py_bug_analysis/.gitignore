@@ -1,3 +1,4 @@
 py_bug_analysis.html
 py_bug_analysis.tex
 *.pdf
+!img/*.pdf

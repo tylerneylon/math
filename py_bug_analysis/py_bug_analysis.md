@@ -483,5 +483,6 @@ sentinel signal (the `'STOP'` message).
 
 The timeline looks like this:
 
+![](img/deadlock_diagram.svg)
 
 

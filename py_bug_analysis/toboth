@@ -22,6 +22,8 @@ sed 's|img/\(.*\)\.svg|img/\1.pdf|' ${name}.tex > ${TMP}
 mv ${TMP} ${name}.tex
 cat ${name}.tex <(echo) | sed '{N;s/\\item.*itemize.*/\\item[]\\begin{itemize}/;P;D;}' > ${TMP}
 mv ${TMP} ${name}.tex
+cat ${name}.tex <(echo) | sed 's/^\(\\includegraphics.*\)/\\begin{center}\1\\end{center}/' > ${TMP}
+mv ${TMP} ${name}.tex
 
 # sed 's|images/\(.*\)\.png|images/pdfs/\1.pdf|' ${name}.tex > ${TMP}
 # awk -f tex_edits.awk ${name}.tex > ${TMP}
