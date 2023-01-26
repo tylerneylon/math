@@ -608,3 +608,71 @@ Have fun!
 
 \boxedend </div>
 
+# Fixing the Problem
+
+## Non-Solutions
+
+**Cleanup Messages**
+
+At first, I tried to modify my mapper function, which runs on the workers, so
+that it would recognize a special message to flush the feeder thread. If all
+workers flushed their feeder exhaust ports before expiring, then none of the
+workers would try to acquire `_wlock` when the pool decided to become the
+terminator.
+
+However, this is not a great idea. Why not? Because pool does not distribute
+tasks in a round-robin fashion. And it shouldn't really, because you basically
+want to always have all cores busy for as long as possible — so it makes sense
+to let workers take tasks on a first-come first-serve basis. When I implemented
+this, some workers would get two cleanup messages, and some got none.
+
+**Other Queue Types**
+
+I also thought about using one of the other Queue types provided by
+multiprocessing: `SimpleQueue`, which has no buffer; or `JoinableQueue`, which
+supports feedback to a message producer than messages have been completely
+processed (not just received).
+
+Both of these are non-starters because they don't solve the fundamental problem:
+As soon as you rely on a lock, you can't dance with processes that are
+terminated. And all of these queue types have at least one lock.
+
+## A Two-Line Fix
+
+The fix is almost painfully simple:
+
+<div class="box"> \boxedstart
+
+Instead of this:
+
+```
+with mp.Pool(num_cores) as p:
+    p.map(process_one_input, a_giant_list)
+```
+
+do this:
+
+```
+{formatted}with mp.Pool(num_cores) as p:
+    p.map(process_one_input, a_giant_list)
+    [p.close()]{bold}
+    [p.join()]{bold}
+```
+
+\boxedend </div>
+
+Calling `p.join()` gives all workers the time to get their affairs in order
+before their demise. We only call `p.close()` first because the class requires
+this before we can `join()`.
+
+Another alternative is to simply avoid using a `with` clause. However, if
+there's a reasonable way for me to use `with` clauses, I prefer them because
+it's an unmissable cue to future developers that there is some context here
+which we probably want to ensure is cleaned up.
+
+A subtle consequence of this design is that, if an exception is raised by the
+`p.map()` call, then the workers may still be terminated. In my case, exceptions
+mean we should stop the program; but it's good to keep in mind this possible
+issue for other applications.
+
+
