@@ -675,4 +675,35 @@ A subtle consequence of this design is that, if an exception is raised by the
 mean we should stop the program; but it's good to keep in mind this possible
 issue for other applications.
 
+# Hints in the Docs
+
+To what degree was this bug my fault?
+First, to give some credit to the developers of
+multiprocessing, there is a relevant warning in the docs, which I'll include
+below. Second, to be fair to myself, I don't see why terminating the workers is
+the right behavior for `Pool.__exit__()`; it's surprising behavior to me which
+is fundamentally incompatible with the design of the rest of the module. It
+seems more natural for the end of a `with` clause to close and join the pool.
+If `terminate()` is necessary, it can be called after joining.
+
+Here's the warning from the
+[docs for multiprocessing](https://docs.python.org/3/library/multiprocessing.html#:~:text=Avoid%20terminating%20processes):
+
+<div class="box"> \boxedstart
+
+Avoid terminating processes
+
+> Using the `Process.terminate` method to stop a process is liable to cause any
+> shared resources (such as locks, semaphores, pipes and queues) currently being
+> used by the process to become broken or unavailable to other
+> processes.
+> 
+> Therefore it is probably best to only consider using `Process.terminate` on
+> processes which never use any shared resources.
+
+\boxedend </div>
+
+
+
+
 
