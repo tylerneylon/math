@@ -485,4 +485,33 @@ The timeline looks like this:
 
 ![](img/deadlock_diagram.svg)
 
+As a list of events, the deadlock occurs like this:
+
+* I create the `writer_q` Queue.
+* I create the Pool, which creates worker processes.
+* Each worker process has a local copy of `writer_q`, which creates its own feeder
+  thread.
+* The workers call `writer_q.put()` many times, and that data passes through the
+  local queue buffer.
+* The main thread of execution on each work threads completes.
+* The `with` clause that contains the scope of the Pool ends, so
+  `Pool.__exit__()` is called.
+* The Pool terminates all remaining worker processes.
+* If any of those workers are killed while holding the write lock (`_wlock`) of
+  `writer_q,` the queue is now stuck. But there's no deadlock quite yet because
+  nothing is waiting yet.
+* Meanwhile, back in the main process, I call `writer_q.put('STOP')` so I can wait
+  for the writer process to complete. This does not block on the main thread
+  because the main thread never acquires `_wlock`. Only the feeder thread ever
+  holds `_wlock`.
+* However, the feeder thread in the main process becomes stuck as soon as it
+  tries to transfer `'STOP'` into the pipe. It can't acquire the `_wlock` because
+  it's still locked by the dead worker.
+* The writer process keeps chugging away in its `for iter(writer_q.get, 'STOP')`
+  loop, never getting the message.
+* The main thread is now also stuck waiting for the writer process to stop.
+
+That's the whole bug. I'll explain in a minute how I decided to fix it.
+
+
 
