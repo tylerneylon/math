@@ -513,5 +513,98 @@ As a list of events, the deadlock occurs like this:
 
 That's the whole bug. I'll explain in a minute how I decided to fix it.
 
+## Unnecessary but Interesting Steps
 
+Before explaining the fix, I wanted to give some tips for building cpython from
+source. Why? Well, at one point I thought I'd have to debug at the C level, so I
+took that red pill temporarily. It turns out, I didn't really need to do that,
+but it was easier than I had expected. And kind of fun.
+
+Here are some tips if you'd like to build cpython from source on ubuntu, which
+is the platform I've been using:
+
+
+<div class="box"> \boxedstart
+
+**Build from source.**
+
+___
+
+Find the version you want and download the gzipped tarball from cpython's github
+tags page.
+
+```
+# For example, this would work in a dedicated directory:
+
+$ wget https://github.com/python/cpython/archive/refs/tags/v3.10.6.tar.gz
+$ gunzip *.gz
+$ tar xvf *
+$ cd cpython<hit_tab>
+$ ./configure
+$ make
+```
+
+That's actually enough already to build from source. To run your freshly baked
+interpreter, do this:
+
+    $ ./python
+
+\boxedend </div>
+
+
+<div class="box"> \boxedstart
+
+**Remind yourself you're using an edited version of Python.**
+
+___
+
+I highly recommend editing *Programs/python.c* by inserting the following line
+at the start of `main()`:
+
+    printf("narf\n");
+
+This will ensure that you are constantly reminded that you're running your own
+personal narfed version of *cpython* every time you run. Please be sure to
+spell "narf" correctly; otherwise you may be confused by a clearly misspelled
+nonsense word.
+
+\boxedend </div>
+
+
+<div class="box"> \boxedstart
+
+**Get the ffi and openssl libraries linked in.**
+
+___
+
+```
+# For some reasons, my run of ./configure did not find these
+# on my box. I fixed this like so:
+
+$ sudo apt-get install libffi-dev
+$ sudo apt-get install libssl-dev
+$ ./configure
+$ make
+```
+
+\boxedend </div>
+
+<div class="box"> \boxedstart
+
+**Get pip up and running.**
+
+___
+
+I didn't get pip with my wget from github. Go figure. But it's not too hard to
+get:
+
+    $ ./python -m ensurepip
+
+From there you can run:
+
+    $ ./python -m pip install whatever
+
+Have fun!
+
+\boxedend </div>
 

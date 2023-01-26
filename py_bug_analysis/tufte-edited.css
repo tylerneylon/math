@@ -514,6 +514,7 @@ pre code {
 
 code {
     font-size: 18px;
+    white-space: pre-wrap;
 }
 
 .box blockquote p {
