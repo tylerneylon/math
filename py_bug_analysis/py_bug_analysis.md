@@ -1,6 +1,6 @@
 % Post Mortem of a Sneaky Bug Whilst Using Python Multiprocessing
 % Tyler Neylon
-% 34.2023
+% 35.2023
 
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
@@ -557,10 +557,10 @@ Find the version you want and download the gzipped tarball from cpython's github
 tags page.
 
 ```
-# For example, this would work in a
+{formatted}# For example, this would work in a
 # dedicated directory:
 
-$ wget https://github.com/python/cpython/archive/refs/tags/v3.10.6.tar.gz
+$ wget [https://github.com/python/cpython/archive/refs/tags/v3.10.6.tar.gz]{small}
 $ gunzip *.gz
 $ tar xvf *
 $ cd cpython<hit_tab>

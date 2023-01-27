@@ -7,6 +7,10 @@ function html_repl(text, attrs)
         return '<b>' .. text .. '</b>'
     end
 
+    if attrs == 'small' then
+        return '<span style="font-size:80%">' .. text .. '</span>'
+    end
+
     color = attrs:match('color="(.-)"')
     if color then
         return '<span style="color:' .. color .. '"><b>' .. text .. '</b></span>'
@@ -23,6 +27,10 @@ function latex_repl(text, attrs)
 
     if attrs == 'bold' then
         return '\\textbf{' .. text .. '}'
+    end
+
+    if attrs == 'small' then
+        return '{\\footnotesize ' .. text .. '}'
     end
 
     color = attrs:match('color="(.-)"')
