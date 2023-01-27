@@ -395,7 +395,7 @@ div.table-wrapper { overflow-x: auto;
 
 @media screen and (max-width: 760px) { p, footer { width: 97%; }
                                        pre.code { width: 87.5%; }
-                                       ul { width: 85%; }
+                                       ul { width: calc( 97% - 10px ); }
                                        figure { max-width: 97%; }
                                        figcaption, figure.fullwidth figcaption { margin-right: 0%;
                                                                                  max-width: none; }

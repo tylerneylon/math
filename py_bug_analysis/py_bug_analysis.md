@@ -88,8 +88,8 @@ with mp.Pool(num_cores) as [p]{color="orange"}:
     # writer_q.
     [p]{color="orange"}.map(process_an_input, data_list)
 
-[# Before we use the result,
-# ensure the queues are done.]{bold}
+[# Before we use the result,]{bold}
+[# ensure the queues are done.]{bold}
 [writer_q]{color="blue"}.put('STOP')
 writer_proc.join()
 ```
@@ -142,8 +142,8 @@ in other situations.
 <div class="box"> \boxedstart
 
 ```
-# In your shell, print out locations where python finds
-# library imports:
+# In your shell, print out locations
+# where python finds library imports:
 
 $ python3 -c 'import sys; print("\n".join(sys.path))'
 ```
@@ -151,15 +151,17 @@ $ python3 -c 'import sys; print("\n".join(sys.path))'
 (prints out a list of directories)
 
 ```
-# One of those dirs, probably near the top of the list, contains
-# your standard library files.
+# One of those dirs, probably near the
+# top of the list, contains your
+# standard library files.
 ```
 
 ___
 
 ```
-# In Python's REPL, see the location actually used for a
-# particular module import:
+# In Python's REPL, see the location
+# actually used for a particular
+# module import:
 
 $ python3 -v
 ```
@@ -169,12 +171,14 @@ $ python3 -v
 ```
 >>> import multiprocessing
 
-# /usr/lib/python3.10/multiprocessing/__pycache__/
-__init__.cpython-310.pyc matches /usr/lib/python3.10/
-multiprocessing/__init__.py
+# /usr/lib/python3.10/multiprocessing/
+  _pycache__/__init__.cpython-310.pyc
+  matches /usr/lib/python3.10/
+  multiprocessing/__init__.py
 …
 
-# The example above tells us my standard library is (mostly) at
+# The example above tells us my
+# standard library is (mostly) at
 # /usr/lib/python3.10/MODULE_NAME.
 ```
 
@@ -215,24 +219,27 @@ logger.setLevel(logging.DEBUG)
 <div class="box"> \boxedstart
 
 ```
-# In synchronize.py, edit the _make_methods()
-# method of class Lock like so:
+# In synchronize.py, edit the
+# _make_methods() method of class Lock
+# like so:
 
 def _make_methods(self):
 
-	def dbg_acquire(blocking=True, timeout=None):
-		res = self._semlock.acquire(blocking, timeout)
-		if res:
-			print('Lock acquired')
-		return res
+    def dbg_acquire(
+            blocking=True,
+            timeout=None):
+        res = self._semlock.acquire(blocking, timeout)
+        if res:
+            print('Lock acquired')
+        return res
 
-	self.acquire = dbg_acquire
+    self.acquire = dbg_acquire
 
-	def dbg_release():
-		self._semlock.release()
-		print('Lock released')
+    def dbg_release():
+        self._semlock.release()
+        print('Lock released')
 
-	self.release = dbg_release
+    self.release = dbg_release
 ```
 
 \boxedend </div>
@@ -279,9 +286,10 @@ def _make_methods(self):
 
 ```
 def Lock2(self):
-	'''Returns a non-recursive lock object'''
-	from .synchronize import Lock2
-	return Lock2(ctx=self.get_context())
+    '''Return a non-recursive lock.'''
+    from .synchronize import Lock2
+    ctx = self.get_context()
+    return Lock2(ctx=ctx)
 ```
 
 \boxedend </div>
@@ -303,8 +311,9 @@ Print out the stack trace of any thread, such as the current thread:
 
     frames = sys._current_frames()
     thread = threading.current_thread()
-    stack = ''.join(traceback.format_stack(frames[thread.ident]))
-    print(stack)
+    frame  = frames[thread.ident]
+    trace  = traceback.format_stack(frame)
+    print(''.join(trace))
 
 The above idiom can be extended to print out stack traces for other threads; in
 fact, the main use case for `sys._current_frames()` is to enable you to do so even
@@ -331,7 +340,8 @@ Print out a list of all threads in the current process, and their stacks:
     for thread in threading.enumerate():
         print(thread.name)
         if thread.ident in frames:
-            traceback.print_stack(frames[thread.ident])
+            frame = frames[thread.ident]
+            traceback.print_stack(frame)
 
 \boxedend </div>
 
@@ -347,20 +357,26 @@ other across different processes.
 ```
 {formatted}frames = sys._current_frames()
 thread = threading.current_thread()
-stack = ''.join(traceback.format_stack(frames[thread.ident]))
-# inspect.cleandoc() trims some whitespace for you.
+frame  = frames[thread.ident]
+trace  = traceback.format_stack(frame)
+stack  = ''.join(trace)
+# inspect.cleandoc() trims some
+# whitespace for you.
 msg = [inspect.cleandoc]{url="https://docs.python.org/3/library/inspect.html#inspect.cleandoc"}(f'''
     Lock acquired
-    {[process.current_process()]{bold}} pid={[os.getpid()]{bold}}
-    {[threading.current_thread()]{bold}}
+    proc {[process.current_process()]{bold}}
+    pid {[os.getpid()]{bold}}
+    thrd {[threading.current_thread()]{bold}}
     Stack:
     {stack}
 ''')
 print(msg, flush=True)
 
-# Note that I'm calling process.current_process() above since
-# I'm within the multiprocessing source; outside of it, you'd
-# call multiprocessing.current_process() instead.
+# I call process.current_process()
+# above since I'm within the
+# multiprocessing source; outside of
+# it, you'd instead call
+# multiprocessing.current_process().
 ```
 
 It's useful to include `flush=True` because when you redirect to a file, flushing
@@ -393,15 +409,17 @@ I replaced the single line:
 
 with this:
  
-    if not wacquire(True, 2):  # Try to lock, timeout after 2sec.
+    # Try to lock, timeout after 2 sec.
+    if not wacquire(True, 2):
         # Debug prints.
         print('I appear to be stuck.')
         print('Threads:')
         frames = sys._current_frames()
-        for thread in threading.enumerate():
-            print(thread.name)
-            if thread.ident in frames:
-                traceback.print_stack(frames[thread.ident])
+        for th in threading.enumerate():
+            print(th.name)
+            if th.ident in frames:
+                fr = frames[th.ident]
+                traceback.print_stack(fr)
         wacquire()
 
 \boxedend </div>
@@ -539,7 +557,8 @@ Find the version you want and download the gzipped tarball from cpython's github
 tags page.
 
 ```
-# For example, this would work in a dedicated directory:
+# For example, this would work in a
+# dedicated directory:
 
 $ wget https://github.com/python/cpython/archive/refs/tags/v3.10.6.tar.gz
 $ gunzip *.gz
@@ -583,7 +602,8 @@ nonsense word.
 ___
 
 ```
-# For some reasons, my run of ./configure did not find these
+# For some reason, my run of
+# ./configure did not find these
 # on my box. I fixed this like so:
 
 $ sudo apt-get install libffi-dev
@@ -652,14 +672,14 @@ Instead of this:
 
 ```
 with mp.Pool(num_cores) as p:
-    p.map(process_one_input, a_giant_list)
+    p.map(process_an_input, data_list)
 ```
 
 do this:
 
 ```
 {formatted}with mp.Pool(num_cores) as p:
-    p.map(process_one_input, a_giant_list)
+    p.map(process_an_input, data_list)
     [p.close()]{bold}
     [p.join()]{bold}
 ```
