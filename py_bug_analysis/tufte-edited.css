@@ -499,8 +499,6 @@ ol > li:before {
     width: calc(100% - 80px);
 }
 
-@media screen and (max-width: 760px) { .box { width: 97%; } }
-
 /* bibliography style */
 
 div.csl-entry {
@@ -521,3 +519,11 @@ code {
     width: 100%;
     font-style: italic;
 }
+
+@media screen and (max-width: 760px) {
+    .box { width: 97%; }
+    html { font-size: 13px; }
+    code { font-size: 13px; }
+    pre code { font-size: 13px; }
+}
+

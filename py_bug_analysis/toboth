@@ -15,6 +15,7 @@ TMP=$(mktemp tmp_XXXX)
 pandoc --mathjax --template=template.html ${FLAGS} > ${name}.html
 sed 's|<li><ul>|<li style="list-style-type: none;"><ul>|' ${name}.html > ${TMP}
 mv ${TMP} ${name}.html
+chmod 644 ${name}.html
 
 # Make and open the pdf file.
 pandoc -t latex -o ${name}.tex -s ${FLAGS} --template=template.tex

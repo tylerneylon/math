@@ -144,7 +144,36 @@ local filter = {
         -- BulletList, effectively increasing the nesting level of that Plain.
         return el:walk({Plain = process_elt, Para = process_elt})
 
+    end,
+
+	MetaInlines = function(el)
+        print('metainlines:', el)
+        return el
+    end,
+
+	MetaBlocks = function(el)
+        print('metablocks:', el)
+        return el
+    end,
+
+    Meta = function(el)
+        el.date = pandoc.Link(el.date, 'https://tylerneylon.com/a/7date/')
+        -- el = el.date
+        -- for k, v in pairs(el) do
+        --     print(k, v)
+        -- end
+        -- print('\n\n')
+        return el
     end
+
+    -- Blocks = function(el)
+    --     print('\n\n')
+    --     print('blocks')
+    --     for k, v in pairs(el) do
+    --         print(k, v)
+    --     end
+    --     return nil
+    -- end
 }
 
 return {filter}

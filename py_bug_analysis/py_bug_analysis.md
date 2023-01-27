@@ -1,6 +1,6 @@
 % Post Mortem of a Sneaky Bug Whilst Using Python Multiprocessing
 % Tyler Neylon
-% 25.2023
+% 34.2023
 
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
@@ -62,31 +62,36 @@ the
 <div class="box"> \boxedstart
 
 ```
-{formatted}import multiprocessing as mp
+{formatted}from multiprocessing as mp
+Process = mp.Process
 
 [# Load the data.]{bold}
-a_giant_list = read_input()
+data_list = read_input()
 
-[# Set up the writer process and queue.]{bold}
+[# Make the writer process/queue.]{bold}
 [writer_q]{color="blue"} = mp.Queue()
-def writer_fn():
+def writer_f():
     global [writer_q]{color="blue"}
-    # Process each message in the queue, stopping when
-    # we receive a message == 'STOP'.
+    # Process each message in the
+    # queue, stopping when we get
+    # a message == 'STOP'.
     for msg in iter([writer_q]{color="blue"}.get, 'STOP'):
         write_msg_into_data(msg)
-writer_process = mp.Process(target=writer_fn)
-writer_process.start()
+writer_proc = Process(target=writer_f)
+writer_proc.start()
 
 [# Process the data.]{bold}
 with mp.Pool(num_cores) as [p]{color="orange"}:
-    # The function process_one_input() takes an input
-    # datum and puts the processed output to writer_q.
-    [p]{color="orange"}.map(process_one_input, a_giant_list)
+    # The process_one_input() fn
+    # processes an input datum
+    # and put()s the output to
+    # writer_q.
+    [p]{color="orange"}.map(process_an_input, data_list)
 
-[# Before we use the result, ensure the queues are done.]{bold}
+[# Before we use the result,
+# ensure the queues are done.]{bold}
 [writer_q]{color="blue"}.put('STOP')
-writer_process.join()
+writer_proc.join()
 ```
 
 \boxedend </div>
@@ -110,7 +115,7 @@ the last line:
 <div class="box"> \boxedstart
 
 ```
-writer_process.join()
+writer_proc.join()
 ```
 
 \boxedend </div>
