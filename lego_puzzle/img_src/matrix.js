@@ -264,6 +264,12 @@ export function rotateAroundZ(angle) {
     return A;
 }
 
+export function translate(v) {
+    let A = eye(4);
+    for (let i = 0; i < 3; i++) A[i][3] = v[i];
+    return A;
+}
+
 
 // ______________________________________________________________________
 // Tests

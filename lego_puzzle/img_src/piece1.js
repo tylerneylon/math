@@ -58,7 +58,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
 
     // Add a small degree of fading for the farther-back points and lines.
-    space.ctx.fadeRange = [8, 10];
+    // space.ctx.fadeRange = [8, 10];
 
     space.ctx.zoom = 3;
     space.addPoints(pts);
@@ -68,11 +68,25 @@ window.addEventListener('DOMContentLoaded', (event) => {
     space.makeDraggable();
     // space.ctx.rotationsPerSec = 0.05;
     space.ctx.rotationSign = -1;
-    space.setZDist(zDist);
+    space.setZDist(20);
     // space.rotateAround([0.3, -1, 0.5]);
 
     // space.ctx.rotateMat = matrix.eye(4);
-    space.ctx.rotateMat = matrix.rotateAroundX(Math.PI / 2);
+    space.ctx.transMat[1][3] = 2;
+    space.ctx.rotateMat = matrix.mult(
+        matrix.rotateAroundY(Math.PI * 0),
+        matrix.rotateAroundX(Math.PI * 0.5)
+    );
 
-    space.render();
+    space.setTransform(matrix.mult(
+        matrix.translate([0, 0, 6]),
+        matrix.rotateAroundX(Math.PI * 0.29),
+        matrix.rotateAroundY(Math.PI * 0.2),
+        matrix.rotateAroundX(Math.PI * 0.5)
+    ));
+
+    // space.setTransform(space.ctx.rotateMat);
+    artist.render();
+
+    // space.render();
 });
