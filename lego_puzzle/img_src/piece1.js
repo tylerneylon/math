@@ -19,6 +19,18 @@ import * as util   from './util.js';
 
 let zDist = 8;
 
+let thickStyle = {
+    stroke: '#444',
+    fill:   'transparent',
+    'stroke-width': 3
+};
+
+let thinStyle = {
+    stroke: '#444',
+    fill:   'transparent',
+    'stroke-width': 1
+};
+
 
 // ______________________________________________________________________
 // Main
@@ -27,6 +39,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     let artist = init.setup();
     space.setArtist(artist);
+    space.ctx.doDrawDots = false;
 
     // Set up the piece points and lines.
     let pts = [];
@@ -43,14 +56,18 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 let pt = [x, y, z];
                 pts.push(pt);
 
+                let s = (y === 0 ? thinStyle : thickStyle);
                 if (x < 1) xSt.push(idx);
-                if (x > -1) lines.push({from: xSt.shift(), to: idx});
+                if (x > -1) lines.push({from: xSt.shift(), to: idx, style: s});
 
+                s = (x === 0 ? thinStyle : thickStyle);
+                // s = thickStyle;
                 if (y < 1) ySt.push(idx);
-                if (y > -1) lines.push({from: ySt.shift(), to: idx});
+                if (y > -1) lines.push({from: ySt.shift(), to: idx, style: s});
 
+                s = (x * y !== 0 ? thickStyle : thinStyle);
                 if (z === 0) zSt.push(idx);
-                if (z !== 0) lines.push({from: zSt.shift(), to: idx});
+                if (z !== 0) lines.push({from: zSt.shift(), to: idx, style: s});
 
                 idx++;
             }
@@ -71,5 +88,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
         matrix.rotateAroundX(Math.PI * 0.5)
     ));
 
-    artist.render();
+    if (false) {
+        space.setZDist(6);
+        space.setAngleMat(matrix.mult(
+            matrix.rotateAroundX(Math.PI * 0.29),
+            matrix.rotateAroundY(Math.PI * 0.2),
+            matrix.rotateAroundX(Math.PI * 0.5)
+        ));
+        space.ctx.rotationsPerSec = 0;
+        space.animate();
+    }
 });
