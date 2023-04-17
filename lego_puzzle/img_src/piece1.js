@@ -9,6 +9,7 @@
 // Imports
 
 import * as init   from './init.js';
+import * as matrix from './matrix.js';
 import * as space  from './space.js';
 import * as util   from './util.js';
 
@@ -69,6 +70,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
     space.ctx.rotationSign = -1;
     space.setZDist(zDist);
     // space.rotateAround([0.3, -1, 0.5]);
+
+    // space.ctx.rotateMat = matrix.eye(4);
+    space.ctx.rotateMat = matrix.rotateAroundX(Math.PI / 2);
 
     space.render();
 });
