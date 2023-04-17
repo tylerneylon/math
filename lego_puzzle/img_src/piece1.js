@@ -1,4 +1,4 @@
-/* cube_test2.js
+/* piece1.js
  *
  * Render a rotating cube with space.js.
  *
