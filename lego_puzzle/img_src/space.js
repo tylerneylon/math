@@ -924,6 +924,11 @@ export function setArtist(newArtist) {
     artist = newArtist;
 }
 
+export function render() {
+    setTransform(matrix.mult(ctx.transMat, ctx.rotateMat));
+    artist.render();
+}
+
 export function reset() {
     lastTs = null;
     mousedownTs = null;

@@ -24,7 +24,8 @@ let zDist = 8;
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    space.setArtist(init.setup());
+    let artist = init.setup();
+    space.setArtist(artist);
 
     // Set up the piece points and lines.
     let pts = [];
@@ -56,7 +57,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
 
     // Add a small degree of fading for the farther-back points and lines.
-    space.ctx.fadeRange = [6, 16];
+    space.ctx.fadeRange = [8, 10];
 
     space.ctx.zoom = 3;
     space.addPoints(pts);
@@ -64,10 +65,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // space.addFaces(faces);
 
     space.makeDraggable();
-    space.ctx.rotationsPerSec = 0.05;
+    // space.ctx.rotationsPerSec = 0.05;
     space.ctx.rotationSign = -1;
     space.setZDist(zDist);
-    space.rotateAround([0.3, -1, 0.5]);
+    // space.rotateAround([0.3, -1, 0.5]);
 
-    space.animate();
+    space.render();
 });
