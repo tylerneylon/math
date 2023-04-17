@@ -63,20 +63,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
     space.ctx.zoom = 3;
     space.addPoints(pts);
     space.addLines(lines);
-    // space.addFaces(faces);
-
-    space.makeDraggable();
-    // space.ctx.rotationsPerSec = 0.05;
-    space.ctx.rotationSign = -1;
-    space.setZDist(20);
-    // space.rotateAround([0.3, -1, 0.5]);
-
-    // space.ctx.rotateMat = matrix.eye(4);
-    space.ctx.transMat[1][3] = 2;
-    space.ctx.rotateMat = matrix.mult(
-        matrix.rotateAroundY(Math.PI * 0),
-        matrix.rotateAroundX(Math.PI * 0.5)
-    );
 
     space.setTransform(matrix.mult(
         matrix.translate([0, 0, 6]),
@@ -85,8 +71,5 @@ window.addEventListener('DOMContentLoaded', (event) => {
         matrix.rotateAroundX(Math.PI * 0.5)
     ));
 
-    // space.setTransform(space.ctx.rotateMat);
     artist.render();
-
-    // space.render();
 });
