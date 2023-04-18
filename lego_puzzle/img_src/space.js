@@ -556,7 +556,14 @@ function addAnyNewNormals() {
         let Q = matrix.transpose(matrix.qr(matrix.transpose(S))[0]);
         // Build the matrix faceP whose columns are the (3d) points in `face`.
         let faceP = [];
-        for (let j = 0; j < face.length; j++) faceP.push(P[face[j]]);
+        for (let j = 0; j < face.length; j++) {
+            faceP.push(
+                vector.sub(
+                    P[face[j]],
+                    center
+                )
+            );
+        }
         faceP = matrix.transpose(faceP).slice(0, 3);
         let T = matrix.mult(Q, faceP);
         // Confirm that the points are essentially planar.
