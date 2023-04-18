@@ -83,7 +83,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     space.setTransform(matrix.mult(
         matrix.translate([0, 0, 6]),
-        matrix.rotateAroundX(Math.PI * 0.29),
+        matrix.rotateAroundX(Math.PI * 0.19),  // 0.29
         matrix.rotateAroundY(Math.PI * 0.2),
         matrix.rotateAroundX(Math.PI * 0.5)
     ));
