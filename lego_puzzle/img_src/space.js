@@ -190,6 +190,13 @@ let edgeGroup    = null;
 // ______________________________________________________________________
 // Internal functions.
 
+// This is for debugging.
+function prObj(obj) {
+    for (let [k, v] of Object.entries(obj)) {
+        console.log(k, v);
+    }
+}
+
 function didDrag() {
     let motion = xDrag + yDrag;
     console.log(`didDrag(): motion=${motion}.`);
@@ -361,6 +368,22 @@ function getFadeColor(stdBaseColor, z, retObj) {
         for (let i in util.ctx.stdColor) {
             retObj.coreFill[i] = util.ctx.stdColor[i];
         }
+    }
+    return util.getColorStr();
+}
+
+// XXX TODO proper function description.
+// XXX TODO This does not yet handle transparency.
+// towardLight is expected to be the cosine similarity between the face's normal
+// direction and the direction of the light.
+function getShadedFaceColor(baseColor, towardLight) {
+    let colorArr = util.getStdColor(baseColor);
+    for (let i = 0; i < 3; i++) {
+        colorArr[i] = Math.max(0, colorArr[i] + 0.5 * towardLight);
+    }
+    let scale = Math.max(1, ...colorArr);
+    for (let i = 0; i < 3; i++) {
+        util.ctx.stdColor[i] = colorArr[i] / scale;
     }
     return util.getColorStr();
 }
@@ -582,7 +605,9 @@ function addAnyNewNormals() {
         }
         angles.sort((a, b) => b.angle - a.angle);
         for (let j = 0; j < angles.length; j++) face[j] = angles[j].index;
-        ctx.facePolygons.push(artist.addPolygon([], facePolyStyle));
+        let style = Object.assign({}, facePolyStyle, face.style);
+        face.baseColor = style.fill;
+        ctx.facePolygons.push(artist.addPolygon([], style));
 
         // TODO Move mouse event setup to its own function.
         let polygon = ctx.facePolygons[ctx.facePolygons.length - 1];
@@ -916,7 +941,15 @@ export function updatePoints() {
         let ell = Math.floor(towardLight * 40) + 215;
         let alpha = (towardLight ** 2) * 0.3 + 0.4;  // Between 0.4 and 0.7.
         if (!ctx.doDrawFaces) alpha = 0;
-        polygon.setAttribute('fill', `rgba(${ell}, ${ell}, ${ell}, ${alpha})`);
+        // TODO HERE
+        // Factor this out to a function. If there is a base color, use that
+        // somehow. If not, use what I already have as a default.
+        // I need to first save an incoming fill color to a special location so
+        // I can treat fill as a per-frame variable that loads from a saved base
+        // color. See if I can re-use how I do this in another place (if I do)
+        // for code consistency.
+        // polygon.setAttribute('fill', `rgba(${ell}, ${ell}, ${ell}, ${alpha})`);
+        polygon.setAttribute('fill', getShadedFaceColor(face.baseColor, towardLight));
 
         if (!isHidden) {
             for (let j of face) xys[j].isForeground = true;

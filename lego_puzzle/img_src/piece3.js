@@ -96,6 +96,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
 
     let faces = Object.values(faceMap);
+    for (let face of faces) {
+        face.style = {fill: '#f00'};
+    }
 
     // Add a small degree of fading for the farther-back points and lines.
     // space.ctx.fadeRange = [8, 10];
@@ -112,7 +115,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         matrix.rotateAroundX(Math.PI * 0.5)
     ));
 
-    if (false) {
+    if (true) {
         space.setZDist(6);
         space.setAngleMat(matrix.mult(
             matrix.rotateAroundX(Math.PI * 0.29),
