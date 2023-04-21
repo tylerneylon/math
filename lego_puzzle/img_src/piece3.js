@@ -47,6 +47,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let artist = init.setup();
     space.setArtist(artist);
     space.ctx.doDrawDots = false;
+    // space.ctx.doDrawNormalLines = true;  // XXX
+    // space.ctx.doDrawFaces = false;  // XXX
 
     // Set up the piece points and lines.
     let pts = [];
@@ -117,7 +119,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
             matrix.rotateAroundY(Math.PI * 0.2),
             matrix.rotateAroundX(Math.PI * 0.5)
         ));
-        space.ctx.rotationsPerSec = 0;
+        space.ctx.rotationsPerSec = 0.2;
+        space.makeDraggable();
         space.animate();
     }
 });

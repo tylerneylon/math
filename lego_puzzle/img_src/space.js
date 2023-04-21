@@ -423,7 +423,7 @@ function orderElts(xys) {
 
     // 4. Draw any remaining interior lines.
     for (let line of ctx.lines) {
-        if (line.elt.parentElement) continue;
+        if (line.elt.parentElement) continue;  // Skip already-drawn lines.
         // Case A: Internal lines not yet rendered.
         if (line.type === 'internal') {
             mainGroup.appendChild(line.elt);
@@ -438,6 +438,15 @@ function orderElts(xys) {
     for (let polygon of ctx.facePolygons) mainGroup.appendChild(polygon);
 
     // 6. Draw all remaining points and edges.
+    for (let line of ctx.lines) {
+        if (line.elt.parentElement) continue;  // Skip already-drawn lines.
+        // Lines marked as "internal" or "face" by the caller have special
+        // treatment above. The purpose of these next lines is to support border
+        // lines drawn after all faces.
+        if (line.type === undefined) {
+            mainGroup.appendChild(line.elt);
+        }
+    }
     for (let pt of pts) {
         if (!pt.elt || pt.elt.parentElement) continue;
         // Add any dependencies, eg lines adjacent to a dot.
@@ -557,12 +566,7 @@ function addAnyNewNormals() {
         // Build the matrix faceP whose columns are the (3d) points in `face`.
         let faceP = [];
         for (let j = 0; j < face.length; j++) {
-            faceP.push(
-                vector.sub(
-                    P[face[j]],
-                    center
-                )
-            );
+            faceP.push(vector.sub(P[face[j]], center));
         }
         faceP = matrix.transpose(faceP).slice(0, 3);
         let T = matrix.mult(Q, faceP);
