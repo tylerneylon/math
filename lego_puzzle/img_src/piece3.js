@@ -84,6 +84,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
                         }
                     }
                 }
+                if (y === -1) {
+                    for (let xx = x; xx >= x - 1; xx--) {
+                        if (-1 <= xx && xx <= 0) {
+                          util.push(faceMap, `${xx}::0`, idx);
+                        }
+                    }
+                }
 
                 let s = (y === 0 ? thinStyle : thickStyle);
                 if (x < 1) xSt.push(idx);
