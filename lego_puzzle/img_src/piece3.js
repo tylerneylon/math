@@ -71,8 +71,16 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     for (let xx = x; xx >= x - 1; xx--) {
                         for (let yy = y; yy >= y - 1; yy--) {
                             if (-xx < 2 && xx < 1 && -yy < 2 && yy < 1) {
-                                util.push(faceMap, `${xx}:${yy}`, idx);
+                                util.push(faceMap, `${xx}:${yy}:`, idx);
                             }
+                        }
+                    }
+                }
+                // Push the side faces.
+                if (x === -1) {
+                    for (let yy = y; yy >= y - 1; yy--) {
+                        if (-1 <= yy && yy <= 0) {
+                          util.push(faceMap, `:${yy}:0`, idx);
                         }
                     }
                 }
@@ -95,6 +103,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
+    // XXX
+    prObj(faceMap);
+
     let faces = Object.values(faceMap);
     for (let face of faces) {
         face.style = {fill: '#f00'};
@@ -115,7 +126,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         matrix.rotateAroundX(Math.PI * 0.5)
     ));
 
-    if (true) {
+    if (false) {
         space.setZDist(6);
         space.setAngleMat(matrix.mult(
             matrix.rotateAroundX(Math.PI * 0.29),
