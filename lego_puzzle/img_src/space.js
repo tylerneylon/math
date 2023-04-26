@@ -404,6 +404,34 @@ function drawNormalLines() {
     }
 }
 
+// This returns an array of indexes into ctx.faces so that the, when face[i] is
+// behind face[j], i occurs before j in the array. In other words, the faces are
+// ordered farthest-first. This makes the assumption that no two faces
+// intersect.
+function getFaceOrder(xys) {
+
+    // XXX
+    function cmpFaces(face1, face2) {
+
+    }
+
+}
+
+// TODO:
+//     The plan is for this function to eventually replace orderElts() and to
+//     delete the old function (whose code is saved for posterity in git).
+function orderElts2(xys) {
+
+    // TODO HERE:
+    //     I want to avoid duplicating the hard work done by getXYArray().
+    //     For the face planes, I need to have the pre-perspective values.
+    //     I suggest simply saving them in the xys array, and dropping the
+    //     doPerspective parameter.
+
+    // Find equations for all the face planes.
+    for (let face of ctx.faces) findFacePlane(face, xys);
+}
+
 function orderElts(xys) {
 
     // 1. Remove all SVG elements so we can re-insert in a new order.

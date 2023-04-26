@@ -121,7 +121,30 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // Add a small degree of fading for the farther-back points and lines.
     // space.ctx.fadeRange = [8, 10];
 
-    space.ctx.zoom = 3;
+    space.ctx.zoom = 2;
+    space.addPoints(pts);
+    space.addLines(lines);
+    space.addFaces(faces);
+
+    // XXX
+    pts   = structuredClone(pts);
+
+    let newLines = [];
+    for (let i = 0; i < lines.length; i++) {
+        newLines[i] = Object.assign({}, lines[i]);
+        newLines[i].from += 18;
+        newLines[i].to += 18;
+    }
+    lines = newLines;
+
+    faces = structuredClone(faces);
+    for (let face of faces) {
+        face.style = {fill: '#0f0'};
+        for (let i = 0; i < 4; i++) face[i] += 18;
+    }
+    for (let pt of pts) {
+        pt[2] += 1.1;
+    }
     space.addPoints(pts);
     space.addLines(lines);
     space.addFaces(faces);
@@ -133,7 +156,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         matrix.rotateAroundX(Math.PI * 0.5)
     ));
 
-    if (false) {
+    if (true) {
         space.setZDist(6);
         space.setAngleMat(matrix.mult(
             matrix.rotateAroundX(Math.PI * 0.29),
