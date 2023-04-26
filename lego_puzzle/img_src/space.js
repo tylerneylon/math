@@ -419,19 +419,44 @@ function getFaceOrder(xys) {
 
 }
 
+// Add an equation for the current plane of the given face.
+// Every face obeys an equation of the form <a,p>=c, for some unit vector p with
+// p.z >= 0, and some constant c. This function sets the values of face.p to
+// this unit vector, and face.c to this constant.
+function findFacePlane(face, pts) {
+    let p = vector.unit(vector.cross(
+        vector.sub(pts[face[1]], pts[face[0]]),
+        vector.sub(pts[face[2]], pts[face[0]])
+    ));
+    if (p[2] < 0) p = p.map(x => -x);
+    let c = vector.dot(pts[face[0]], p);
+
+    face.p = p;
+    face.c = c;
+
+    if (false) {
+        // Sanity check.
+        console.log(`Length(p) = ${vector.len(p)}`);
+        console.log('p =', p);
+        console.log('c =', c);
+
+        for (let i of face) {
+            let q = pts[i];
+            console.log(`Dot prod with pt[${i}] =`, vector.dot(q, p));
+        }
+    }
+}
+
 // TODO:
 //     The plan is for this function to eventually replace orderElts() and to
 //     delete the old function (whose code is saved for posterity in git).
 function orderElts2(xys) {
 
-    // TODO HERE:
-    //     I want to avoid duplicating the hard work done by getXYArray().
-    //     For the face planes, I need to have the pre-perspective values.
-    //     I suggest simply saving them in the xys array, and dropping the
-    //     doPerspective parameter.
+    // Have an array-based version of the (pre-perspective) points.
+    let pts = xys.map(xy => [xy.x0, xy.y0, xy.z0]);
 
     // Find equations for all the face planes.
-    for (let face of ctx.faces) findFacePlane(face, xys);
+    for (let face of ctx.faces) findFacePlane(face, pts);
 }
 
 function orderElts(xys) {
@@ -985,6 +1010,9 @@ export function updatePoints() {
             for (let j of face) xys[j].isForeground = true;
         }
     }
+
+    // XXX
+    orderElts2(xys);
 
     orderElts(xys);
 
