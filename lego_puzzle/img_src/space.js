@@ -223,7 +223,9 @@ function getXYArray(pts, doPerspective, doRotate) {
         let [x, y, z] = [p[0][i], p[1][i], p[2][i]];
         let w = 1;
         if (doPerspective) w = z / ctx.zoom;
-        xyArray.push({x: x / w, y: y / w, z, isVisible: z >= eyeZ});
+        let xy = {x0: x, y0: y, z0: z, x: x / w, y: y / w, z, w};
+        xy.isVisible = (z >= eyeZ);
+        xyArray.push(xy);
     }
     return xyArray;
 }
