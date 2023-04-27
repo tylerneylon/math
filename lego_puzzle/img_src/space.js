@@ -434,6 +434,7 @@ function findFacePlane(face, pts) {
     face.p = p;
     face.c = c;
 
+    // XXX
     if (false) {
         // Sanity check.
         console.log(`Length(p) = ${vector.len(p)}`);
@@ -452,11 +453,37 @@ function findFacePlane(face, pts) {
 //     delete the old function (whose code is saved for posterity in git).
 function orderElts2(xys) {
 
+    // Remove all SVG elements so we can re-insert in a new order.
+    for (let dot     of ctx.dots)         dot.remove();
+    for (let outline of ctx.outlines)     outline.remove();
+    for (let line    of ctx.lines)        line.elt.remove();
+    for (let polygon of ctx.facePolygons) polygon.remove();
+
     // Have an array-based version of the (pre-perspective) points.
     let pts = xys.map(xy => [xy.x0, xy.y0, xy.z0]);
 
     // Find equations for all the face planes.
     for (let face of ctx.faces) findFacePlane(face, pts);
+
+    // Make points depend on their incident lines.
+    for (let pt of pts) pt.deps = [];
+    for (const [lineIdx, line] of ctx.lines.entries()) {
+        pts[line.from].deps.push(lineIdx);
+        pts[line.to].deps.push(lineIdx);
+    }
+
+    // Make lines depend on their incident faces.
+    for (let line of ctx.lines) line.deps = [...line.faces];
+
+    // TODO HERE: I'm leading toward sorting all faces and lines (not points;
+    //            they are only dependency-based. I believe I can now compare
+    //            lines with faces; and faces with faces; but not yet lines with
+    //            lines. I need a way to decide which line is in front of which
+    //            other. I suspect finding their perspective-based xy point of
+    //            intersection will work. Compare the z values (using
+    //            interpolation) at that point. Actually, it's not obvious to me
+    //            that I can straight interpolate the z values. I'll have to
+    //            think about it more.
 }
 
 function orderElts(xys) {
@@ -797,6 +824,42 @@ export function addLines(lines, slices) {
 export function addFaces(faces) {
     ctx.faces.push(...faces);
     addAnyNewNormals();
+    // XXX TODO: Also call this from addLines().
+    ensureFaceEdgesAreIndexed();
+}
+
+// XXX TODO Comment and move this function.
+// This ensures that each line has line.faces = [faceIdx*] for any faces which
+// have the given line as an edge; and that, similarly, each face has
+// face.edges = [lineIdx*] for each line that is part of its border.
+function ensureFaceEdgesAreIndexed() {
+    // This will recompute all connections every time it's called.
+    // I'm doing this for now because, in order to implement an incremental
+    // version, I would need to track in pass in what is new, which may be just
+    // lines, or just faces. It is possible, but a little more code, and I
+    // suspect this is not going to be a critical path.
+    for (let face of ctx.faces) face.edges = [];
+    for (let [lineIdx, line] of ctx.lines.entries()) {
+        line.faces = [];
+        for (let [faceIdx, face] of ctx.faces.entries()) {
+            let n = face.length;
+            for (let i = 0; i < n; i++) {
+                if (
+                    (face[i] === line.from && face[(i + 1) % n] == line.to) ||
+                    (face[i] === line.to   && face[(i + 1) % n] == line.from)
+                ) {
+
+                    console.log('\n');
+                    console.log('Found a connection.');
+                    console.log('Line:', line.from, line.to);
+                    console.log('Face:', face.join(', '));
+
+                    face.edges.push(lineIdx);
+                    line.faces.push(faceIdx);
+                }
+            }
+        }
+    }
 }
 
 export function setCircle(center, r, normal, style) {
@@ -996,7 +1059,7 @@ export function updatePoints() {
         let ell = Math.floor(towardLight * 40) + 215;
         let alpha = (towardLight ** 2) * 0.3 + 0.4;  // Between 0.4 and 0.7.
         if (!ctx.doDrawFaces) alpha = 0;
-        // TODO HERE
+        // TODO
         // Factor this out to a function. If there is a base color, use that
         // somehow. If not, use what I already have as a default.
         // I need to first save an incoming fill color to a special location so
