@@ -451,31 +451,29 @@ function findFacePlane(face, pts) {
 // XXX TODO
 //     Add a proper docstring.
 //     I will temporarily export this so I can test it.
-//     NOTE: The current code _does not work_.
+//     If needed, avoid multiple same-input calls to cmp().
 export function sortWithPartialOrder(inputArr, cmp) {
     let arr    = [...inputArr];  // Make a copy that we can modify.
     let sorted = [];
+
     while (arr.length > 0) {
-        let item = arr.pop();
-        let idx  = [...sorted.keys()];
-        let insertAt = 0;
-        while (idx.length > 0) {
-            let n = Math.floor(idx.length / 2);
-            let result = cmp(item, sorted[n]);
-            if (result === '<') {
-                idx.splice(n);  // Drop all idx items starting with idx[n].
-            } else if (result === '>') {
-                insertAt = idx[n];
-                idx.splice(0, n + 1);  // Drop up through and including idx[n].
-            } else if (result === '=') {
-                insertAt = idx[n];
-                idx = [];  // Indicate that we're done.
-            } else {
-                idx.splice(n, 1);  // Drop the single item idx[n].
+
+        // Ensure the first element in `arr` is minimal.
+        while (true) {
+            let didChange = false;
+            for (let i in arr) {
+                if (cmp(arr[0], arr[i]) == '>') {
+                    didChange = true;
+                    arr.unshift(...arr.splice(i, 1));
+                }
             }
+            if (!didChange) break;
         }
-        sorted.splice(insertAt, 0, item);
+
+        // Append that to `sorted`.
+        sorted.push(...arr.splice(0, 1));
     }
+
     return sorted;
 }
 
