@@ -448,6 +448,37 @@ function findFacePlane(face, pts) {
     }
 }
 
+// XXX TODO
+//     Add a proper docstring.
+//     I will temporarily export this so I can test it.
+//     NOTE: The current code _does not work_.
+export function sortWithPartialOrder(inputArr, cmp) {
+    let arr    = [...inputArr];  // Make a copy that we can modify.
+    let sorted = [];
+    while (arr.length > 0) {
+        let item = arr.pop();
+        let idx  = [...sorted.keys()];
+        let insertAt = 0;
+        while (idx.length > 0) {
+            let n = Math.floor(idx.length / 2);
+            let result = cmp(item, sorted[n]);
+            if (result === '<') {
+                idx.splice(n);  // Drop all idx items starting with idx[n].
+            } else if (result === '>') {
+                insertAt = idx[n];
+                idx.splice(0, n + 1);  // Drop up through and including idx[n].
+            } else if (result === '=') {
+                insertAt = idx[n];
+                idx = [];  // Indicate that we're done.
+            } else {
+                idx.splice(n, 1);  // Drop the single item idx[n].
+            }
+        }
+        sorted.splice(insertAt, 0, item);
+    }
+    return sorted;
+}
+
 // TODO:
 //     The plan is for this function to eventually replace orderElts() and to
 //     delete the old function (whose code is saved for posterity in git).
