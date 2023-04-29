@@ -167,20 +167,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
         numCalls++;
         console.log('cmp', a, b);
         console.log(`numCalls = ${numCalls}`);
-        if (a === 0) return b % 2 === 0 ? '<' : (b === 0 ? '=' : '>');
+        if (a === 0) return b === 0 ? '=' : (b % 2 === 0 ? '<' : '>');
         if (b === 0) return a % 2 === 0 ? '>' : '<';
         if (a % 2 !== b %2) return null;
         return a < b ? '<' : (a > b ? '>' : '=');
     }
 
-    /*
+    console.log('0 cmp 0', cmp(0, 0));
     console.log('0 cmp 1', cmp(0, 1));
     console.log('1 cmp 0', cmp(1, 0));
     console.log('0 cmp 2', cmp(0, 2));
     console.log('0 cmp 3', cmp(0, 3));
     console.log('3 cmp 1', cmp(3, 1));
     console.log('2 cmp 1', cmp(2, 1));
-    */
+
+    debugger;
 
     let sorted = space.sortWithPartialOrder([0, 1, 2, 3, 4, 5, 6, 7], cmp);
     console.log('sorted result:');

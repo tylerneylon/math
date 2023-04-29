@@ -451,8 +451,40 @@ function findFacePlane(face, pts) {
 // XXX TODO
 //     Add a proper docstring.
 //     I will temporarily export this so I can test it.
-//     If needed, avoid multiple same-input calls to cmp().
-export function sortWithPartialOrder(inputArr, cmp) {
+export function sortWithPartialOrder(inputArr, inputCmp) {
+
+    // 1. Set up memoization for inputCmp().
+
+    let objectIdCounter = 0;
+    const objectIdMap = new Map();
+    function objectId(obj) {
+        if (!objectIdMap.has(obj)) {
+            objectIdMap.set(obj, ++objectIdCounter);
+        }
+        return objectIdMap.get(obj);
+    }
+
+    const cache = new Map();
+    function cmp(a, b) {
+        console.log('cachedCmp', a, b);
+        let [aId, bId] = [objectId(a), objectId(b)];
+        let key = aId + ':' + bId;
+        if (cache.has(key)) return cache.get(key);
+        
+        let result = inputCmp(a, b);
+        cache.set(key, result);
+
+        let newKey = bId + ':' + aId;
+        let newResult = result;
+        if (result === '<') newResult = '>';
+        if (result === '>') newResult = '<';
+        cache.set(newKey, newResult);
+
+        return result;
+    }
+
+    // 2. Sort `arr`, using the memoized comparison function cmp().
+
     let arr    = [...inputArr];  // Make a copy that we can modify.
     let sorted = [];
 
