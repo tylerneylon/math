@@ -181,11 +181,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
     console.log('3 cmp 1', cmp(3, 1));
     console.log('2 cmp 1', cmp(2, 1));
 
-    debugger;
-
     let sorted = space.sortWithPartialOrder([0, 1, 2, 3, 4, 5, 6, 7], cmp);
     console.log('sorted result:');
     console.log(sorted);
+
+    debugger;
 
     if (true) {
         space.setZDist(6);

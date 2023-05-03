@@ -451,6 +451,76 @@ function findFacePlane(face, pts) {
 // XXX TODO
 //     Add a proper docstring.
 //     I will temporarily export this so I can test it.
+export function sortWithPartialOrder2(inputArr, inputCmp) {
+
+    // 1. Set up memoization for inputCmp().
+
+    let objectIdCounter = 0;
+    const objectIdMap = new Map();
+    function objectId(obj) {
+        if (!objectIdMap.has(obj)) {
+            objectIdMap.set(obj, ++objectIdCounter);
+        }
+        return objectIdMap.get(obj);
+    }
+
+    const cache = new Map();
+    function cmp(a, b) {
+        console.log('cachedCmp', a, b);
+        let [aId, bId] = [objectId(a), objectId(b)];
+        let key = aId + ':' + bId;
+        if (cache.has(key)) return cache.get(key);
+
+        let result = (aId === bId) ? '=' : inputCmp(a, b);
+        cache.set(key, result);
+
+        let newKey = bId + ':' + aId;
+        let newResult = result;
+        if (result === '<') newResult = '>';
+        if (result === '>') newResult = '<';
+        cache.set(newKey, newResult);
+
+        return result;
+    }
+
+    // 2. Sort `arr`, using the memoized comparison function cmp().
+
+    let arr      = [...inputArr];  // Make a copy that we can modify.
+    let sorted   = [];
+    let x        = arr[0];
+    let xId      = objectId(x);
+    let cmpTree  = {xId: [x]}
+    let root     = xId;
+
+    while (arr.length > 0) {
+
+        let minId  = root;
+        let minObj = cmpTree[root][0];
+        for (let x of arr) {
+            let xId = objectId(x);
+            if (xId in cmpTree) continue;
+            let c = cmp(x, minObj);
+            if (c === '>') {
+                cmpTree[minId].push(x);
+                cmpTree[objectId(x)] = [x];
+            }
+            if (c === '<') {
+                cmpTree[xId] = [x, c];
+                minId  = xId;
+                minObj = x;
+            }
+        }
+
+        // XXX TODO HERE1
+        // I'm working on the above alg.
+    }
+
+    return sorted;
+}
+
+// XXX TODO
+//     Add a proper docstring.
+//     I will temporarily export this so I can test it.
 export function sortWithPartialOrder(inputArr, inputCmp) {
 
     // 1. Set up memoization for inputCmp().
@@ -536,7 +606,7 @@ function orderElts2(xys) {
     // Make lines depend on their incident faces.
     for (let line of ctx.lines) line.deps = [...line.faces];
 
-    // TODO HERE: I'm leading toward sorting all faces and lines (not points;
+    // TODO HERE2: I'm leading toward sorting all faces and lines (not points;
     //            they are only dependency-based. I believe I can now compare
     //            lines with faces; and faces with faces; but not yet lines with
     //            lines. I need a way to decide which line is in front of which
