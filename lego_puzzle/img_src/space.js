@@ -487,27 +487,39 @@ export function sortWithPartialOrder2(inputArr, inputCmp) {
 
     let arr      = [...inputArr];  // Make a copy that we can modify.
     let sorted   = [];
-    let x        = arr[0];
-    let xId      = objectId(x);
     let cmpTree  = {xId: [x]}
-    let root     = xId;
+    let minObj   = arr[arr.length - 1];
+    let minId    = objectId(minObj)
 
     while (arr.length > 0) {
 
-        let minId  = root;
-        let minObj = cmpTree[root][0];
-        for (let x of arr) {
+        let xIdx   = 0;
+        while (true) {
+            let x   = arr[xIdx];
             let xId = objectId(x);
             if (xId in cmpTree) continue;
             let c = cmp(x, minObj);
             if (c === '>') {
+                //util.push(cmpTree, minId, x);
                 cmpTree[minId].push(x);
                 cmpTree[objectId(x)] = [x];
-            }
+            } 
             if (c === '<') {
-                cmpTree[xId] = [x, c];
+                // XXX Do I actually use these lists, the values here?
+                cmpTree[xId] = [x, minObj];
+                arr.split(xIdx, 1);
+                arr.push(x);
                 minId  = xId;
                 minObj = x;
+                xIdx   = 0;
+            } else {
+                xIdx++;
+                if (xIdx == arr.length) {
+                    sorted.push(minObj);
+                    minObj = arr[arr.length - 1];
+                    minId  = objectId(minObj);
+                    break;
+                }
             }
         }
 
