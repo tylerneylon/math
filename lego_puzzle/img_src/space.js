@@ -487,45 +487,69 @@ export function sortWithPartialOrder2(inputArr, inputCmp) {
 
     let arr      = [...inputArr];  // Make a copy that we can modify.
     let sorted   = [];
-    let cmpTree  = {xId: [x]}
     let minObj   = arr[arr.length - 1];
     let minId    = objectId(minObj)
+    let cmpTree  = {[minId]: [minObj]}
 
     while (arr.length > 0) {
 
-        let xIdx   = 0;
+        let xIdx = -1;
         while (true) {
+
+            xIdx++;
+
+            console.log('_________________________________');
+            console.log('Start of main loop, arr:', arr.join(', '));
+            console.log('sorted:', sorted.join(', '));
+            console.log('minObj:', minObj);
+            console.log('cmpTree:');
+            let parts = [];
+            for (let [k, v] of Object.entries(cmpTree)) {
+                parts.push(`${k}:[` + v.join(', ') + ']');
+            }
+            console.log(parts.join(', '));
+            console.log(`xIdx = ${xIdx}`);
+
+            if (xIdx == arr.length) {
+                sorted.push(arr.pop());
+                console.log(`Just moved ${sorted[sorted.length - 1]} from arr to sorted`);
+                for (let i = 2; i < cmpTree[minId].length; i++) {
+                    delete cmpTree[cmpTree[minId][i]];
+                }
+                minObj = arr[arr.length - 1];
+                minId  = objectId(minObj);
+                console.log(`Set minObj to ${minObj}`);
+                break;
+            }
+
             let x   = arr[xIdx];
             let xId = objectId(x);
+            console.log(`Considering x=${x}`);
             if (xId in cmpTree) continue;
             let c = cmp(x, minObj);
             if (c === '>') {
+                console.log(`Found that ${x} > ${minObj}`);
                 //util.push(cmpTree, minId, x);
-                cmpTree[minId].push(x);
+                cmpTree[minId].push(xId);
                 cmpTree[objectId(x)] = [x];
             } 
             if (c === '<') {
-                // XXX Do I actually use these lists, the values here?
-                cmpTree[xId] = [x, minObj];
-                arr.split(xIdx, 1);
+                console.log(`Found that ${x} < ${minObj}`);
+                cmpTree[xId] = [x, minId];
+                arr.splice(xIdx, 1);
                 arr.push(x);
                 minId  = xId;
                 minObj = x;
-                xIdx   = 0;
-            } else {
-                xIdx++;
-                if (xIdx == arr.length) {
-                    sorted.push(minObj);
-                    minObj = arr[arr.length - 1];
-                    minId  = objectId(minObj);
-                    break;
-                }
+                xIdx   = -1;
             }
         }
 
         // XXX TODO HERE1
         // I'm working on the above alg.
     }
+
+    console.log('About to return sorted:');
+    console.log(sorted.join(', '));
 
     return sorted;
 }
