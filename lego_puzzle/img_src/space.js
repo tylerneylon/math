@@ -451,7 +451,7 @@ function findFacePlane(face, pts) {
 // XXX TODO
 //     Add a proper docstring.
 //     I will temporarily export this so I can test it.
-export function sortWithPartialOrder2(inputArr, inputCmp) {
+export function sortWithPartialOrder(inputArr, inputCmp) {
 
     // 1. Set up memoization for inputCmp().
 
@@ -511,67 +511,6 @@ export function sortWithPartialOrder2(inputArr, inputCmp) {
                 xIdx = -1;
             }
         }
-    }
-
-    return sorted;
-}
-
-// XXX TODO
-//     Add a proper docstring.
-//     I will temporarily export this so I can test it.
-export function sortWithPartialOrder(inputArr, inputCmp) {
-
-    // 1. Set up memoization for inputCmp().
-
-    let objectIdCounter = 0;
-    const objectIdMap = new Map();
-    function objectId(obj) {
-        if (!objectIdMap.has(obj)) {
-            objectIdMap.set(obj, ++objectIdCounter);
-        }
-        return objectIdMap.get(obj);
-    }
-
-    const cache = new Map();
-    function cmp(a, b) {
-        console.log('cachedCmp', a, b);
-        let [aId, bId] = [objectId(a), objectId(b)];
-        let key = aId + ':' + bId;
-        if (cache.has(key)) return cache.get(key);
-        
-        let result = inputCmp(a, b);
-        cache.set(key, result);
-
-        let newKey = bId + ':' + aId;
-        let newResult = result;
-        if (result === '<') newResult = '>';
-        if (result === '>') newResult = '<';
-        cache.set(newKey, newResult);
-
-        return result;
-    }
-
-    // 2. Sort `arr`, using the memoized comparison function cmp().
-
-    let arr    = [...inputArr];  // Make a copy that we can modify.
-    let sorted = [];
-
-    while (arr.length > 0) {
-
-        // Ensure the first element in `arr` is minimal.
-        while (true) {
-            let didChange = false;
-            for (let i in arr) {
-                if (cmp(arr[0], arr[i]) == '>') {
-                    didChange = true;
-                    arr.unshift(...arr.splice(i, 1));
-                }
-            }
-            if (!didChange) break;
-        }
-
-        // Append that to `sorted`.
-        sorted.push(...arr.splice(0, 1));
     }
 
     return sorted;
