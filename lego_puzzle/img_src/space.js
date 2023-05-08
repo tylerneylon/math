@@ -455,42 +455,32 @@ export function sortWithPartialOrder2(inputArr, inputCmp) {
 
     // 1. Set up memoization for inputCmp().
 
-    let objectIdCounter = 0;
-    const objectIdMap = new Map();
-    function objectId(obj) {
-        if (!objectIdMap.has(obj)) {
-            objectIdMap.set(obj, ++objectIdCounter);
-        }
-        return objectIdMap.get(obj);
-    }
-
-    const cache = new Map();
+    // This serves to both memorize results as well as to allow us to treat the
+    // input as an array of integers, although imputArr may have any types.
+    const cache = {};
     function cmp(a, b) {
-        console.log('cachedCmp', a, b);
-        let [aId, bId] = [objectId(a), objectId(b)];
-        let key = aId + ':' + bId;
-        if (cache.has(key)) return cache.get(key);
+        let key = a + ':' + b;
+        let val = cache[key];
+        if (val !== undefined) return val;
 
-        let result = (aId === bId) ? '=' : inputCmp(a, b);
-        cache.set(key, result);
+        let result = (a === b) ? '=' : inputCmp(inputArr[a], inputArr[b]);
+        cache[key] = result;
 
-        let newKey = bId + ':' + aId;
-        let newResult = result;
-        if (result === '<') newResult = '>';
-        if (result === '>') newResult = '<';
-        cache.set(newKey, newResult);
+        let otherKey = b + ':' + a;
+        let otherResult = result;
+        if (result === '<') otherResult = '>';
+        if (result === '>') otherResult = '<';
+        cache[otherKey] = otherResult;
 
         return result;
     }
 
     // 2. Sort `arr`, using the memoized comparison function cmp().
 
-    // Hold the unsorted items in an object for quick random removal.
-    let arr      = [...inputArr];
-    let sorted   = [];
-    let minObj   = arr[arr.length - 1];
-    let minId    = objectId(minObj)
-    let cmpTree  = {[minId]: []}
+    let arr     = inputArr.map((e, i) => i);
+    let sorted  = [];
+    let min     = arr[arr.length - 1];
+    let cmpTree = {[min]: []}
 
     while (arr.length > 0) {
 
@@ -499,31 +489,26 @@ export function sortWithPartialOrder2(inputArr, inputCmp) {
 
             xIdx++;
             if (xIdx == arr.length) {
-                sorted.push(minObj);
-                arr.splice(arr.indexOf(minObj), 1);
-                for (let i = 1; i < cmpTree[minId].length; i++) {
-                    delete cmpTree[objectId(cmpTree[minId][i])];
+                sorted.push(min);
+                arr.splice(arr.indexOf(min), 1);
+                for (let i = 1; i < cmpTree[min].length; i++) {
+                    delete cmpTree[cmpTree[min][i]];
                 }
-                minObj = cmpTree[minId][0];
-                minId  = objectId(minObj);
+                min = cmpTree[min][0];
                 break;
             }
 
-            let x   = arr[xIdx];
-            let xId = objectId(x);
-            if (xId in cmpTree) continue;
-            let c = cmp(x, minObj);
+            let x = arr[xIdx];
+            if (x in cmpTree) continue;
+            let c = cmp(x, min);
             if (c === '>') {
-                cmpTree[minId].push(x);
-                cmpTree[objectId(x)] = [];
+                cmpTree[min].push(x);
+                cmpTree[x] = [];
             } 
             if (c === '<') {
-                cmpTree[xId] = [minObj];
-                arr.splice(xIdx, 1);
-                arr.push(x);
-                minId  = xId;
-                minObj = x;
-                xIdx   = -1;
+                cmpTree[x] = [min];
+                min  = x;
+                xIdx = -1;
             }
         }
     }
