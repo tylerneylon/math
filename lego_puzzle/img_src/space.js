@@ -458,7 +458,8 @@ function findFacePlane(face, pts) {
 //  * It assumes that if a < b then also b > a (otherwise what is happening?).
 //  * It builds a tree to infer transitive comparisons, and tries to maximize
 //    the use of that tree.
-// XXX This function probably does not need to be exported.
+// XXX 1. This function probably does not need to be exported.
+//     2. Consider putting this in util.js instead of here.
 export function sortWithPartialOrder(inputArr, inputCmp) {
 
     // 1. Set up memoization for inputCmp().
