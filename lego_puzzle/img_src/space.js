@@ -485,11 +485,15 @@ export function sortWithPartialOrder2(inputArr, inputCmp) {
 
     // 2. Sort `arr`, using the memoized comparison function cmp().
 
-    let arr      = [...inputArr];  // Make a copy that we can modify.
+    // Hold the unsorted items in an object for quick random removal.
+    let items    = {}
+    for (let item of inputArr) items[objectId(item)] = item;
+    let arr      = Object.values(items);
     let sorted   = [];
     let minObj   = arr[arr.length - 1];
     let minId    = objectId(minObj)
-    let cmpTree  = {[minId]: [minObj]}
+    // cmpTree[itemId] = [item, largerObj*].
+    let cmpTree  = {[minId]: [minObj], root: minId}
 
     while (arr.length > 0) {
 
@@ -505,19 +509,27 @@ export function sortWithPartialOrder2(inputArr, inputCmp) {
             console.log('cmpTree:');
             let parts = [];
             for (let [k, v] of Object.entries(cmpTree)) {
-                parts.push(`${k}:[` + v.join(', ') + ']');
+                if (Array.isArray(v)) {
+                    parts.push(`${k}:[` + v.join(', ') + ']');
+                } else {
+                    parts.push(`${k}:${v}`);
+                }
             }
             console.log(parts.join(', '));
             console.log(`xIdx = ${xIdx}`);
 
             if (xIdx == arr.length) {
-                sorted.push(arr.pop());
+                sorted.push(minObj);
+                delete items[minId];
+                arr = Object.values(items);
                 console.log(`Just moved ${sorted[sorted.length - 1]} from arr to sorted`);
+                // debugger;
                 for (let i = 2; i < cmpTree[minId].length; i++) {
-                    delete cmpTree[cmpTree[minId][i]];
+                    delete cmpTree[objectId(cmpTree[minId][i])];
                 }
-                minObj = arr[arr.length - 1];
+                minObj = cmpTree[minId][1];
                 minId  = objectId(minObj);
+                cmpTree.root = minId;
                 console.log(`Set minObj to ${minObj}`);
                 break;
             }
@@ -530,12 +542,12 @@ export function sortWithPartialOrder2(inputArr, inputCmp) {
             if (c === '>') {
                 console.log(`Found that ${x} > ${minObj}`);
                 //util.push(cmpTree, minId, x);
-                cmpTree[minId].push(xId);
+                cmpTree[minId].push(x);
                 cmpTree[objectId(x)] = [x];
             } 
             if (c === '<') {
                 console.log(`Found that ${x} < ${minObj}`);
-                cmpTree[xId] = [x, minId];
+                cmpTree[xId] = [x, minObj];
                 arr.splice(xIdx, 1);
                 arr.push(x);
                 minId  = xId;
