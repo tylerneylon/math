@@ -498,46 +498,26 @@ export function sortWithPartialOrder2(inputArr, inputCmp) {
         while (true) {
 
             xIdx++;
-
-            console.log('_________________________________');
-            console.log('Start of main loop, arr:', arr.join(', '));
-            console.log('sorted:', sorted.join(', '));
-            console.log('minObj:', minObj);
-            console.log('cmpTree:');
-            let parts = [];
-            for (let [k, v] of Object.entries(cmpTree)) {
-                parts.push(`${k}:[` + v.join(', ') + ']');
-            }
-            console.log(parts.join(', '));
-            console.log(`xIdx = ${xIdx}`);
-
             if (xIdx == arr.length) {
                 sorted.push(minObj);
                 arr.splice(arr.indexOf(minObj), 1);
-                console.log(`Just moved ${sorted[sorted.length - 1]} from arr to sorted`);
-                // debugger;
                 for (let i = 1; i < cmpTree[minId].length; i++) {
                     delete cmpTree[objectId(cmpTree[minId][i])];
                 }
                 minObj = cmpTree[minId][0];
                 minId  = objectId(minObj);
-                console.log(`Set minObj to ${minObj}`);
                 break;
             }
 
             let x   = arr[xIdx];
             let xId = objectId(x);
-            console.log(`Considering x=${x}`);
             if (xId in cmpTree) continue;
             let c = cmp(x, minObj);
             if (c === '>') {
-                console.log(`Found that ${x} > ${minObj}`);
-                //util.push(cmpTree, minId, x);
                 cmpTree[minId].push(x);
                 cmpTree[objectId(x)] = [];
             } 
             if (c === '<') {
-                console.log(`Found that ${x} < ${minObj}`);
                 cmpTree[xId] = [minObj];
                 arr.splice(xIdx, 1);
                 arr.push(x);
@@ -546,13 +526,7 @@ export function sortWithPartialOrder2(inputArr, inputCmp) {
                 xIdx   = -1;
             }
         }
-
-        // XXX TODO HERE1
-        // I'm working on the above alg.
     }
-
-    console.log('About to return sorted:');
-    console.log(sorted.join(', '));
 
     return sorted;
 }
