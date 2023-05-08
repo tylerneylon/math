@@ -448,9 +448,17 @@ function findFacePlane(face, pts) {
     }
 }
 
-// XXX TODO
-//     Add a proper docstring.
-//     I will temporarily export this so I can test it.
+// This will sort the values in `inputArr` according to the comparison data
+// provided by calls to `inputCmp()`, which is expected to return the values '='
+// (a string), '<', '>', or null; where a null indicates that the comparison
+// value is undetermined, and that those two elements may go in any order.
+// This function attempts to reduce the number of calls to inputCmp() in several
+// ways:
+//  * It memorizes given return values.
+//  * It assumes that if a < b then also b > a (otherwise what is happening?).
+//  * It builds a tree to infer transitive comparisons, and tries to maximize
+//    the use of that tree.
+// XXX This function probably does not need to be exported.
 export function sortWithPartialOrder(inputArr, inputCmp) {
 
     // 1. Set up memoization for inputCmp().
