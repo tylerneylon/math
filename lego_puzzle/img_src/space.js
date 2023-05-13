@@ -461,12 +461,12 @@ function findFacePlane(face, pts) {
 //    the use of that tree.
 // XXX 1. This function probably does not need to be exported.
 //     2. Consider putting this in util.js instead of here.
-export function sortWithPartialOrder(inputArr, inputCmp) {
+export function sortWithPartialInfo(inputArr, inputCmp) {
 
     // 1. Set up memoization for inputCmp().
 
     // This serves to both memorize results as well as to allow us to treat the
-    // input as an array of integers, although imputArr may have any types.
+    // input as an array of integers, although inputArr may have any types.
     const cache = {};
     function cmp(a, b) {
         let key = a + ':' + b;
