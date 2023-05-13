@@ -58,6 +58,11 @@ ctx.lines = [];  // This will contain {from, to, elt} objects.
 
 ctx.doDrawFaces = true;
 ctx.doDrawBackFaces = false;
+
+// TODO: Consider supporting this flag.
+// For now, we always do this.
+// ctx.doConnectFaceEdges = true;
+
 ctx.faces = [];  // This will contain [pt1, pt2, .., ptn, 'style'] arrays.
 ctx.normals = [[], [], [], []];  // This will be a matrix of face normals.
 ctx.faceCenters = [];
@@ -538,6 +543,7 @@ function orderElts2(xys) {
     for (let polygon of ctx.facePolygons) polygon.remove();
 
     // Have an array-based version of the (pre-perspective) points.
+    // XXX Is this the best way to do this?
     let pts = xys.map(xy => [xy.x0, xy.y0, xy.z0]);
 
     // Find equations for all the face planes.
@@ -551,7 +557,9 @@ function orderElts2(xys) {
     }
 
     // Make lines depend on their incident faces.
-    for (let line of ctx.lines) line.deps = [...line.faces];
+    for (let line of ctx.lines) {
+        line.deps = [...line.faces];
+    }
 
     // TODO HERE2: I'm leading toward sorting all faces and lines (not points;
     //            they are only dependency-based. I believe I can now compare
@@ -562,6 +570,34 @@ function orderElts2(xys) {
     //            interpolation) at that point. Actually, it's not obvious to me
     //            that I can straight interpolate the z values. I'll have to
     //            think about it more.
+
+
+    // For now, I'll add in faces in an arbitrary order, and render lines and
+    // edges as soon as all their dependencies are visible.
+
+    // console.log('Starting orderElts2 add-elts phase');
+    for (let i = 0; i < ctx.faces.length; i++) {
+        let face    = ctx.faces[i];
+        let polygon = ctx.facePolygons[i];
+        mainGroup.appendChild(polygon);
+
+        for (let lineIdx of face.edges) {
+            // debugger;
+            let line = ctx.lines[lineIdx];
+            let deps = line.deps;
+            deps.splice(deps.indexOf(i), 1);
+            if (deps.length === 0) {
+                // console.log(`Adding line with index ${lineIdx}`);
+                // line.elt['stroke-width'] = 10;
+                line.elt.setAttribute('stroke-width', 10);
+                mainGroup.appendChild(line.elt);
+            }
+        }
+    }
+
+    // TODO
+
+
 }
 
 function orderElts(xys) {
@@ -1156,7 +1192,8 @@ export function updatePoints() {
     // XXX
     orderElts2(xys);
 
-    orderElts(xys);
+    // XXX
+    // orderElts(xys);
 
     if (ctx.doDrawNormalLines) drawNormalLines();
 
