@@ -24,26 +24,32 @@ let zDist = 8;
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    space.setArtist(init.setup());
+    // space.setArtist(init.setup());
 
-    let [pts, lines, faces] = util.getCubePtsLinesFaces();
-    faces[0].style = {fill: '#714'};
-    faces[5].style = {fill: '#16c'};
+    init.addContainerSwitcher((artist) => {
 
-    // Add a small degree of fading for the farther-back points and lines.
-    space.ctx.fadeRange = [6, 16];
-    space.ctx.doDrawBackFaces = true;
+        space.reset();
+        space.setArtist(artist);
 
-    space.ctx.zoom = 3;
-    space.addPoints(pts);
-    space.addLines(lines);
-    space.addFaces([faces[0], faces[5]]);
+        let [pts, lines, faces] = util.getCubePtsLinesFaces();
+        faces[0].style = {fill: '#714'};
+        faces[5].style = {fill: '#16c'};
 
-    space.makeDraggable();
-    space.ctx.rotationsPerSec = 0.05;
-    space.ctx.rotationSign = -1;
-    space.setZDist(zDist);
-    space.rotateAround([0.3, -1, 0.5]);
+        // Add a small degree of fading for the farther-back points and lines.
+        space.ctx.fadeRange = [6, 16];
+        space.ctx.doDrawBackFaces = true;
 
-    space.animate();
+        space.ctx.zoom = 3;
+        space.addPoints(pts);
+        space.addLines(lines);
+        space.addFaces([faces[0], faces[5]]);
+
+        space.makeDraggable();
+        space.ctx.rotationsPerSec = 0.05;
+        space.ctx.rotationSign = -1;
+        space.setZDist(zDist);
+        space.rotateAround([0.3, -1, 0.5]);
+
+        space.animate();
+    });
 });
