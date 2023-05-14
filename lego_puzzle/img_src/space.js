@@ -531,10 +531,18 @@ export function sortWithPartialInfo(inputArr, inputCmp) {
     return sorted;
 }
 
+// XXX
+let numOE2Calls = 0;
+let commentElt  = document.getElementById('comment');
+
 // TODO:
 //     The plan is for this function to eventually replace orderElts() and to
 //     delete the old function (whose code is saved for posterity in git).
 function orderElts2(xys) {
+
+    numOE2Calls++;
+    commentElt.innerHTML = `orderElts2 called: ${numOE2Calls} time(s) so far`;
+
 
     // Remove all SVG elements so we can re-insert in a new order.
     for (let dot     of ctx.dots)         dot.remove();
