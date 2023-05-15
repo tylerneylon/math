@@ -557,6 +557,14 @@ function orderElts2(xys) {
     // Find equations for all the face planes.
     for (let face of ctx.faces) findFacePlane(face, pts);
 
+    // TODO
+    // * Avoid the need to assign a function like this in every call.
+    //   For line.faceDrawn(), I may be able to define a line class, or assign
+    //   the function as lines are added by the user.
+    //   For pts, these are coming out of the xys structure. I may consider not
+    //   returning a new array, but rather just updating properties on
+    //   persistent xy points.
+
     // Make points depend on their incident lines.
     for (let i = 0; i < pts.length; i++) {
         let pt = pts[i];
@@ -567,9 +575,9 @@ function orderElts2(xys) {
             // console.log(`lineDrawn() called, this:`, this);
             this.deps.splice(this.deps.indexOf(lineIdx), 1);
             if (this.deps.length === 0) {
-                console.log(`Adding point ${this.idx}`);
-                mainGroup.appendChild(ctx.dots[this.idx]);
+                // console.log(`Adding point ${this.idx}`);
                 mainGroup.appendChild(ctx.outlines[this.idx]);
+                mainGroup.appendChild(ctx.dots[this.idx]);
             }
         }
     }
@@ -616,6 +624,13 @@ function orderElts2(xys) {
         let polygon = ctx.facePolygons[i];
         mainGroup.appendChild(polygon);
         for (let lineIdx of face.edges) ctx.lines[lineIdx].faceDrawn(i);
+    }
+    for (let i = 0; i < ctx.lines.length; i++) {
+        let line    = ctx.lines[i];
+        if (line.elt.parentElement) continue;
+        mainGroup.appendChild(line.elt);
+        pts[line.from].lineDrawn(i);
+        pts[line.to].lineDrawn(i);
     }
 
     // TODO
