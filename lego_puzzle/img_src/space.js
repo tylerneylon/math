@@ -558,10 +558,37 @@ function orderElts2(xys) {
     for (let face of ctx.faces) findFacePlane(face, pts);
 
     // Make points depend on their incident lines.
-    for (let pt of pts) pt.deps = [];
+    for (let i = 0; i < pts.length; i++) {
+        let pt = pts[i];
+        pt.deps = [];
+        pt.idx  = i;
+        pt.lineDrawn = function (lineIdx) {
+            // XXX
+            // console.log(`lineDrawn() called, this:`, this);
+            this.deps.splice(this.deps.indexOf(lineIdx), 1);
+            if (this.deps.length === 0) {
+                console.log(`Adding point ${this.idx}`);
+                mainGroup.appendChild(ctx.dots[this.idx]);
+                mainGroup.appendChild(ctx.outlines[this.idx]);
+            }
+        }
+    }
     for (const [lineIdx, line] of ctx.lines.entries()) {
+
+        // XXX
+        line.elt.setAttribute('stroke-width', 10);
+        line.idx = lineIdx;
+
         pts[line.from].deps.push(lineIdx);
         pts[line.to].deps.push(lineIdx);
+        line.faceDrawn = function (faceIdx) {
+            this.deps.splice(this.deps.indexOf(faceIdx), 1);
+            if (this.deps.length === 0) {
+                mainGroup.appendChild(this.elt);
+                pts[line.from].lineDrawn(this.idx);
+                pts[line.to].lineDrawn(this.idx);
+            }
+        }
     }
 
     // Make lines depend on their incident faces.
@@ -588,19 +615,7 @@ function orderElts2(xys) {
         let face    = ctx.faces[i];
         let polygon = ctx.facePolygons[i];
         mainGroup.appendChild(polygon);
-
-        for (let lineIdx of face.edges) {
-            // debugger;
-            let line = ctx.lines[lineIdx];
-            let deps = line.deps;
-            deps.splice(deps.indexOf(i), 1);
-            if (deps.length === 0) {
-                // console.log(`Adding line with index ${lineIdx}`);
-                // line.elt['stroke-width'] = 10;
-                line.elt.setAttribute('stroke-width', 10);
-                mainGroup.appendChild(line.elt);
-            }
-        }
+        for (let lineIdx of face.edges) ctx.lines[lineIdx].faceDrawn(i);
     }
 
     // TODO
