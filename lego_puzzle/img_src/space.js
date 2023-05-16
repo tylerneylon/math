@@ -214,6 +214,15 @@ function logEvent(e) {
     console.log(`${e.type} on ${e.target}`);
 }
 
+// This is intended to be a method on points returned by getXYArray().
+function lineDrawn(lineIdx) {
+    this.deps.splice(this.deps.indexOf(lineIdx), 1);
+    if (this.deps.length === 0) {
+        mainGroup.appendChild(ctx.outlines[this.idx]);
+        mainGroup.appendChild(ctx.dots[this.idx]);
+    }
+}
+
 function getXYArray(pts, doPerspective, doRotate) {
 
     if (doRotate === undefined) doRotate = true;
@@ -226,13 +235,19 @@ function getXYArray(pts, doPerspective, doRotate) {
     // Apply perspective.
     let xyArray = [];
     for (let i = 0; i < p[0].length; i++) {
-        let [x, y, z] = [p[0][i], p[1][i], p[2][i]];
+        let pt = [p[0][i], p[1][i], p[2][i]];
+        let [x, y, z] = pt;
         let w = 1;
         if (doPerspective) w = z / ctx.zoom;
-        let xy = {x0: x, y0: y, z0: z, x: x / w, y: y / w, z, w};
-        xy.isVisible = (z >= eyeZ);
-        xyArray.push(xy);
+        pt = Object.assign(
+            pt,
+            {x0: x, y0: y, z0: z, x: x / w, y: y / w, z, w}
+        );
+        pt.isVisible = (z >= eyeZ);
+        pt.lineDrawn = lineDrawn;
+        xyArray.push(pt);
     }
+
     return xyArray;
 }
 
@@ -538,7 +553,7 @@ let commentElt  = document.getElementById('comment');
 // TODO:
 //     The plan is for this function to eventually replace orderElts() and to
 //     delete the old function (whose code is saved for posterity in git).
-function orderElts2(xys) {
+function orderElts2(pts) {
 
     numOE2Calls++;
     commentElt.innerHTML = `orderElts2 called: ${numOE2Calls} time(s) so far`;
@@ -550,11 +565,10 @@ function orderElts2(xys) {
     for (let line    of ctx.lines)        line.elt.remove();
     for (let polygon of ctx.facePolygons) polygon.remove();
 
-    // Have an array-based version of the (pre-perspective) points.
-    // XXX Is this the best way to do this?
-    let pts = xys.map(xy => [xy.x0, xy.y0, xy.z0]);
-
     // Find equations for all the face planes.
+    // XXX Note that I messed with the inputs here so they are now
+    // perspective-adjusted points, where as this function expects
+    // pre-perspective coordinates. I'll have to adjust for this if I use it.
     for (let face of ctx.faces) findFacePlane(face, pts);
 
     // TODO
@@ -570,16 +584,6 @@ function orderElts2(xys) {
         let pt = pts[i];
         pt.deps = [];
         pt.idx  = i;
-        pt.lineDrawn = function (lineIdx) {
-            // XXX
-            // console.log(`lineDrawn() called, this:`, this);
-            this.deps.splice(this.deps.indexOf(lineIdx), 1);
-            if (this.deps.length === 0) {
-                // console.log(`Adding point ${this.idx}`);
-                mainGroup.appendChild(ctx.outlines[this.idx]);
-                mainGroup.appendChild(ctx.dots[this.idx]);
-            }
-        }
     }
     for (const [lineIdx, line] of ctx.lines.entries()) {
 
