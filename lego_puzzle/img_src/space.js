@@ -580,20 +580,11 @@ function orderElts2(pts) {
     //   persistent xy points.
 
     // Make points depend on their incident lines.
-    for (let i = 0; i < pts.length; i++) {
-        let pt = pts[i];
-        pt.deps = [];
-        pt.idx  = i;
-    }
+    for (let [i, pt] of pts.entries()) Object.assign(pt, {idx: i, deps: []});
     for (const [lineIdx, line] of ctx.lines.entries()) {
-
-        // XXX
-        line.elt.setAttribute('stroke-width', 10);
-        line.idx = lineIdx;
-        line.pts = pts;
-
-        pts[line.from].deps.push(lineIdx);
-        pts[line.to].deps.push(lineIdx);
+        line.elt.setAttribute('stroke-width', 10);  // XXX
+        Object.assign(line, {idx: lineIdx, pts});
+        for (let i of [line.from, line.to]) pts[i].deps.push(lineIdx);
     }
 
     // Make lines depend on their incident faces.
