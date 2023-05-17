@@ -590,17 +590,10 @@ function orderElts2(pts) {
         // XXX
         line.elt.setAttribute('stroke-width', 10);
         line.idx = lineIdx;
+        line.pts = pts;
 
         pts[line.from].deps.push(lineIdx);
         pts[line.to].deps.push(lineIdx);
-        line.faceDrawn = function (faceIdx) {
-            this.deps.splice(this.deps.indexOf(faceIdx), 1);
-            if (this.deps.length === 0) {
-                mainGroup.appendChild(this.elt);
-                pts[line.from].lineDrawn(this.idx);
-                pts[line.to].lineDrawn(this.idx);
-            }
-        }
     }
 
     // Make lines depend on their incident faces.
@@ -630,7 +623,7 @@ function orderElts2(pts) {
         for (let lineIdx of face.edges) ctx.lines[lineIdx].faceDrawn(i);
     }
     for (let i = 0; i < ctx.lines.length; i++) {
-        let line    = ctx.lines[i];
+        let line = ctx.lines[i];
         if (line.elt.parentElement) continue;
         mainGroup.appendChild(line.elt);
         pts[line.from].lineDrawn(i);
@@ -638,8 +631,6 @@ function orderElts2(pts) {
     }
 
     // TODO
-
-
 }
 
 function orderElts(xys) {
@@ -955,6 +946,16 @@ export function addPoints(pts, labels) {
     if (labels) ctx.labels = labels;
 }
 
+// XXX This is not really public, so put it somewhere else in this file.
+function faceDrawn(faceIdx) {
+    this.deps.splice(this.deps.indexOf(faceIdx), 1);
+    if (this.deps.length === 0) {
+        mainGroup.appendChild(this.elt);
+        this.pts[this.from].lineDrawn(this.idx);
+        this.pts[this.to].lineDrawn(this.idx);
+    }
+}
+
 // This expects `lines` to be an array of {from, to} objects, where `from` and
 // `to` are indexes into the `pts` array. Each line object may also have an
 // optional `style` key, which indicates the style overrides for that line.
@@ -969,6 +970,7 @@ export function addLines(lines, slices) {
         line.baseColor = util.getStdColor(style.stroke);
         line.coreColor = line.baseColor;  // Save to undo edge highlights.
         line.coreWidth = style['stroke-width'];
+        line.faceDrawn = faceDrawn;
         ctx.lines.push(line);
     }
     ctx.slices = slices;  // If no edges are highlighted, undefined is ok.
