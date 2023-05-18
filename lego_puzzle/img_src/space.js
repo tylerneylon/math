@@ -558,7 +558,6 @@ function orderElts2(pts) {
     numOE2Calls++;
     commentElt.innerHTML = `orderElts2 called: ${numOE2Calls} time(s) so far`;
 
-
     // Remove all SVG elements so we can re-insert in a new order.
     for (let dot     of ctx.dots)         dot.remove();
     for (let outline of ctx.outlines)     outline.remove();
@@ -588,9 +587,7 @@ function orderElts2(pts) {
     }
 
     // Make lines depend on their incident faces.
-    for (let line of ctx.lines) {
-        line.deps = [...line.faces];
-    }
+    for (let line of ctx.lines) line.deps = [...line.faces];
 
     // TODO HERE2: I'm leading toward sorting all faces and lines (not points;
     //            they are only dependency-based. I believe I can now compare
@@ -617,8 +614,7 @@ function orderElts2(pts) {
         let line = ctx.lines[i];
         if (line.elt.parentElement) continue;
         mainGroup.appendChild(line.elt);
-        pts[line.from].lineDrawn(i);
-        pts[line.to].lineDrawn(i);
+        for (let ptIdx of [line.from, line.to]) pts[ptIdx].lineDrawn(i);
     }
 
     // TODO
