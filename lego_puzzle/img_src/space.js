@@ -875,13 +875,16 @@ function moveElt(elt, dx, dy) {
 }
 
 // XXX TODO Move this to the appropriate section of this file.
-export function addLabels(labels) {
+export function addLabels(labels, offset) {
     for (let [i, label] of labels.entries()) {
-        addLabel(ctx.dots[i], label);
+        addLabel(ctx.dots[i], label, offset);
     }
 }
 
-function addLabel(dot, label) {
+function addLabel(dot, label, offset) {
+
+    if (offset === undefined) offset = 0;
+
     dot.label = artist.add('g');
     let r = artist.addRect({x: 0, y: 0}, whiteStyle, dot.label);
     let t = artist.addText({x: 0, y: 0}, label, textStyle, dot.label);
@@ -900,8 +903,8 @@ function addLabel(dot, label) {
     moveElt(r, -padding, -(hText + padding));
 
     // Adjust the anchor point to be in the middle of the text box.
-    moveElt(r, -wText / 2, hText / 2);
-    moveElt(t, -wText / 2, hText / 2);
+    moveElt(r, -wText / 2 + offset, hText / 2 - offset);
+    moveElt(t, -wText / 2 + offset, hText / 2 - offset);
 }
 
 function toggleFaceLabels(faceIdx, doShow, awayFrom) {
