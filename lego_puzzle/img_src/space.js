@@ -543,12 +543,18 @@ export function sortWithPartialInfo(inputArr, inputCmp) {
         }
     }
 
-    return sorted;
+    return sorted.map(i => inputArr[i]);
 }
 
 // XXX
 let numOE2Calls = 0;
 let commentElt  = document.getElementById('comment');
+
+// XXX For now, this assumes that both s1 and s2 are faces.
+// Eventually I want to support the case that either could be a face or an edge.
+function compareShapes(s1, s2) {
+    return '<';
+}
 
 // TODO:
 //     The plan is for this function to eventually replace orderElts() and to
@@ -604,11 +610,11 @@ function orderElts2(pts) {
     // edges as soon as all their dependencies are visible.
 
     // console.log('Starting orderElts2 add-elts phase');
-    for (let i = 0; i < ctx.faces.length; i++) {
-        let face    = ctx.faces[i];
-        let polygon = ctx.facePolygons[i];
-        mainGroup.appendChild(polygon);
-        for (let lineIdx of face.edges) ctx.lines[lineIdx].faceDrawn(i);
+    let shapes = [...ctx.faces];
+    let backToFront = sortWithPartialInfo(shapes, compareShapes);
+    for (let face of backToFront) {
+        mainGroup.appendChild(face.polygon);
+        for (let lineIdx of face.edges) ctx.lines[lineIdx].faceDrawn(face.idx);
     }
     for (let i = 0; i < ctx.lines.length; i++) {
         let line = ctx.lines[i];
@@ -827,6 +833,7 @@ function addAnyNewNormals() {
 
         // TODO Move mouse event setup to its own function.
         let polygon = ctx.facePolygons[ctx.facePolygons.length - 1];
+        face.polygon = polygon;
         polygon.setAttribute('stroke-width', '4');
         polygon.addEventListener('mouseover', e => {
             logEvent(e);
@@ -984,6 +991,7 @@ export function addLines(lines, slices) {
 // are convex and listed counterclockwise.
 export function addFaces(faces) {
     ctx.faces.push(...faces);
+    ctx.faces.forEach((face, i) => { face.idx = i; });
     addAnyNewNormals();
     // XXX TODO: Also call this from addLines().
     ensureFaceEdgesAreIndexed();
