@@ -874,6 +874,36 @@ function moveElt(elt, dx, dy) {
     elt.setAttribute('y', parseInt(elt.getAttribute('y')) + dy);
 }
 
+// XXX TODO Move this to the appropriate section of this file.
+export function addLabels(labels) {
+    for (let [i, label] of labels.entries()) {
+        addLabel(ctx.dots[i], label);
+    }
+}
+
+function addLabel(dot, label) {
+    dot.label = artist.add('g');
+    let r = artist.addRect({x: 0, y: 0}, whiteStyle, dot.label);
+    let t = artist.addText({x: 0, y: 0}, label, textStyle, dot.label);
+    t.setAttribute('pointer-events', 'none');
+    if (t.style) t.style.userSelect = 'none';
+
+    // Adjust the background rectangle.
+    let padding = 5;
+    r.setAttribute('rx', padding);
+    let box = t.getBBox();
+    let wText = box.width;
+    let hText = box.height - 6;
+    r.setAttribute('width',  wText + 2 * padding);
+    r.setAttribute('height', hText + 2 * padding);
+    // Place the rect's anchor point at the bottom-left of the text box.
+    moveElt(r, -padding, -(hText + padding));
+
+    // Adjust the anchor point to be in the middle of the text box.
+    moveElt(r, -wText / 2, hText / 2);
+    moveElt(t, -wText / 2, hText / 2);
+}
+
 function toggleFaceLabels(faceIdx, doShow, awayFrom) {
 
     if (faceIdx === -1) return;
@@ -891,24 +921,7 @@ function toggleFaceLabels(faceIdx, doShow, awayFrom) {
         dot.awayFrom  = awayFrom;
         if (doShow) {
             let label = ctx.labels[i];
-            dot.label = artist.add('g');
-            let r = artist.addRect({x: 0, y: 0}, whiteStyle, dot.label);
-            let t = artist.addText({x: 0, y: 0}, label, textStyle, dot.label);
-
-            // Adjust the background rectangle.
-            let padding = 5;
-            r.setAttribute('rx', padding);
-            let box = t.getBBox();
-            let wText = box.width;
-            let hText = box.height - 6;
-            r.setAttribute('width',  wText + 2 * padding);
-            r.setAttribute('height', hText + 2 * padding);
-            // Place the rect's anchor point at the bottom-left of the text box.
-            moveElt(r, -padding, -(hText + padding));
-
-            // Adjust the anchor point to be in the middle of the text box.
-            moveElt(r, -wText / 2, hText / 2);
-            moveElt(t, -wText / 2, hText / 2);
+            addLabel(dot, label);
         } else if (dot.label) {
             dot.label.remove();
             delete dot.label;

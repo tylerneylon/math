@@ -41,6 +41,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
         space.ctx.zoom = 3;
         space.addPoints(pts);
+        space.addLabels([0, 1, 2, 3, 4, 5, 6, 7]);
         space.addLines(lines);
         space.addFaces([faces[0], faces[5]]);
 
