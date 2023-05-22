@@ -481,7 +481,7 @@ function findFacePlane(face, pts) {
 //    the use of that tree.
 // XXX 1. This function probably does not need to be exported.
 //     2. Consider putting this in util.js instead of here.
-export function sortWithPartialInfo(inputArr, inputCmp) {
+export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
 
     // 1. Set up memoization for inputCmp().
 
@@ -493,7 +493,7 @@ export function sortWithPartialInfo(inputArr, inputCmp) {
         let val = cache[key];
         if (val !== undefined) return val;
 
-        let result = (a === b) ? '=' : inputCmp(inputArr[a], inputArr[b]);
+        let result = (a === b) ? '=' : inputCmp(inputArr[a], inputArr[b], ctx);
         cache[key] = result;
 
         let otherKey = b + ':' + a;
@@ -525,6 +525,12 @@ export function sortWithPartialInfo(inputArr, inputCmp) {
                     delete cmpTree[cmpTree[min][i]];
                 }
                 min = cmpTree[min][0];
+                // If the order is not fully determined, cmpTree could be empty
+                // yet we may still have elements left in arr.
+                if (min === undefined && arr.length > 0) {
+                    min = arr[arr.length - 1];
+                    cmpTree[min] = [];
+                }
                 break;
             }
 
@@ -550,9 +556,34 @@ export function sortWithPartialInfo(inputArr, inputCmp) {
 let numOE2Calls = 0;
 let commentElt  = document.getElementById('comment');
 
+function updateBoundsForFace(face, pts) {
+    face.xMin = Math.min(...face.map(i => pts[i][0]));
+    face.xMax = Math.max(...face.map(i => pts[i][0]));
+    face.yMin = Math.min(...face.map(i => pts[i][1]));
+    face.yMax = Math.max(...face.map(i => pts[i][1]));
+}
+
 // XXX For now, this assumes that both s1 and s2 are faces.
 // Eventually I want to support the case that either could be a face or an edge.
-function compareShapes(s1, s2) {
+function compareShapes(s1, s2, pts) {
+
+    console.assert(s1.type === 'face', 'compareShapes() only takes faces rn');
+    console.assert(s2.type === 'face', 'compareShapes() only takes faces rn');
+
+    updateBoundsForFace(s1, pts);
+    updateBoundsForFace(s2, pts);
+
+    if (s1.xMax < s2.xMin ||
+        s1.xMin > s2.xMax ||
+        s1.yMax < s2.yMin ||
+        s1.yMin > s2.yMax) {
+        commentElt.innerHTML = 'bounding box miss';
+        return null;
+    } else {
+        commentElt.innerHTML = 'bounding boxes overlap';
+    }
+
+
     return '<';
 }
 
@@ -611,7 +642,7 @@ function orderElts2(pts) {
 
     // console.log('Starting orderElts2 add-elts phase');
     let shapes = [...ctx.faces];
-    let backToFront = sortWithPartialInfo(shapes, compareShapes);
+    let backToFront = sortWithPartialInfo(shapes, compareShapes, pts);
     for (let face of backToFront) {
         mainGroup.appendChild(face.polygon);
         for (let lineIdx of face.edges) ctx.lines[lineIdx].faceDrawn(face.idx);
@@ -991,7 +1022,7 @@ export function addLines(lines, slices) {
 // are convex and listed counterclockwise.
 export function addFaces(faces) {
     ctx.faces.push(...faces);
-    ctx.faces.forEach((face, i) => { face.idx = i; });
+    ctx.faces.forEach((face, i) => { face.idx = i; face.type = 'face'; });
     addAnyNewNormals();
     // XXX TODO: Also call this from addLines().
     ensureFaceEdgesAreIndexed();
