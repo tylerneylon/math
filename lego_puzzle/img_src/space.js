@@ -587,8 +587,52 @@ function compareShapes(s1, s2, pts) {
 
     // 2. Check to see if any point is in the boundaries of the other face.
 
-    // XXX TODO HERE
+    // XXX tmp
+    let thereIsAPointOverlap = false;
 
+    let shapes = [s1, s2];
+    for (let i = 0; i < 2; i++) {
+        let ptShape = shapes[i];
+        let poly    = shapes[1 - i];
+
+        for (let ptIdx of ptShape) {
+            // Ignore shared points as they can't tell which face is in front.
+            if (ptIdx in poly.ptSet) continue;
+            let q = pts[ptIdx];
+
+            // Check if a ray from pt -> (infty, 0) crosses each edge.
+            let numCross = 0;
+            for (let j0 = 0; j0 < poly.length; j0++) {
+                let j1 = (j0 + 1) % poly.length;
+                let k0 = poly[j0], k1 = poly[j1];
+                let p0 = pts[k0],  p1 = pts[k1];
+
+                // First check if the edge crosses the line y=q.y.
+                if ( (p1.y > q.y && p0.y <= q.y) ||
+                     (p0.y > q.y && p1.y <= q.y) ) {
+
+                    let x = ( (p1.x - q.x) * (p0.y - q.y) -
+                              (p0.x - q.x) * (p1.y - q.y) ) /
+                            (p0.y - p1.y);
+
+                    if (x > 0) numCross++;
+                }
+            }
+
+            if (numCross % 2 === 1) {
+                commentElt.innerHTML += `\n Point ${ptIdx} is an overlap`;
+                // TODO HERE Determine which face is in front.
+                thereIsAPointOverlap = true;
+            }
+        }
+    }
+    if (!thereIsAPointOverlap) {
+        commentElt.innerHTML += '\n No point overlap';
+    }
+
+    // TODO Make a test case for the next section; write the next section.
+
+    // 3. Check if there are any edge-edge overlaps.
 
     return '<';
 }
