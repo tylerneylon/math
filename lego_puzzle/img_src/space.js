@@ -570,6 +570,8 @@ function compareShapes(s1, s2, pts) {
     console.assert(s1.type === 'face', 'compareShapes() only takes faces rn');
     console.assert(s2.type === 'face', 'compareShapes() only takes faces rn');
 
+    // 1. Return null quickly if the bounding boxes don't overlap.
+
     updateBoundsForFace(s1, pts);
     updateBoundsForFace(s2, pts);
 
@@ -582,6 +584,10 @@ function compareShapes(s1, s2, pts) {
     } else {
         commentElt.innerHTML = 'bounding boxes overlap';
     }
+
+    // 2. Check to see if any point is in the boundaries of the other face.
+
+    // XXX TODO HERE
 
 
     return '<';
@@ -1021,8 +1027,19 @@ export function addLines(lines, slices) {
 // Each face is expected to live in a plane, and it's expected that the points
 // are convex and listed counterclockwise.
 export function addFaces(faces) {
+    // Make a local internal copy of the array that we will modify.
+    // This enables the caller to do other things with their `faces` array after
+    // this call.
+    faces = structuredClone(faces);
+
     ctx.faces.push(...faces);
-    ctx.faces.forEach((face, i) => { face.idx = i; face.type = 'face'; });
+    // Augment the face data.
+    ctx.faces.forEach((face, i) => {
+        face.idx   = i;
+        face.type  = 'face';
+        face.ptSet = {};
+        face.forEach((pt) => { face.ptSet[pt] = true; });
+    });
     addAnyNewNormals();
     // XXX TODO: Also call this from addLines().
     ensureFaceEdgesAreIndexed();
