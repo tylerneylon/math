@@ -621,8 +621,20 @@ function compareShapes(s1, s2, pts) {
 
             if (numCross % 2 === 1) {
                 commentElt.innerHTML += `\n Point ${ptIdx} is an overlap`;
+                let ptZ = q.z;
+                commentElt.innerHTML += `\n Point has z=${ptZ}`;
                 // TODO HERE Determine which face is in front.
+                // * Each face is on a plane {p: <p, n> = c}, where
+                //   n is a unit normal of the face, and c is a constant.
+                // * We can find that equation per face; check with an assert
+                //   for now.
+                // * The ray to the intersection point has an equation
+                //   p = r * t, where r is a vector and t a scalar.
+                // * Solve for t in the eqn t * <r, n> = c.
+                // * This gives us the z value on the face.
+                // * Be sure to use pre-perspective x and y values throughout.
                 thereIsAPointOverlap = true;
+                return '<';
             }
         }
     }
