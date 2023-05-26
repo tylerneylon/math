@@ -444,13 +444,18 @@ function getFaceOrder(xys) {
 // Every face obeys an equation of the form <a,p>=c, for some unit vector p with
 // p.z >= 0, and some constant c. This function sets the values of face.p to
 // this unit vector, and face.c to this constant.
-function findFacePlane(face, pts) {
+function findFacePlane(face, pts, n) {
+    n = n.slice(0, 3);  // Drop the 4th coordinate, if present.
+
+    /*
     let p = vector.unit(vector.cross(
         vector.sub(pts[face[1]], pts[face[0]]),
         vector.sub(pts[face[2]], pts[face[0]])
     ));
-    if (p[2] < 0) p = p.map(x => -x);
-    let c = vector.dot(pts[face[0]], p);
+    */
+
+    // TODO HERE3: Update this to consistently use pre-perspective coordinates.
+    let c = vector.dot(pts[face[0]], n);
 
     face.p = p;
     face.c = c;
@@ -652,7 +657,7 @@ function compareShapes(s1, s2, pts) {
 // TODO:
 //     The plan is for this function to eventually replace orderElts() and to
 //     delete the old function (whose code is saved for posterity in git).
-function orderElts2(pts) {
+function orderElts2(pts, normalXYs) {
 
     numOE2Calls++;
     commentElt.innerHTML = `orderElts2 called: ${numOE2Calls} time(s) so far`;
@@ -667,7 +672,9 @@ function orderElts2(pts) {
     // XXX Note that I messed with the inputs here so they are now
     // perspective-adjusted points, where as this function expects
     // pre-perspective coordinates. I'll have to adjust for this if I use it.
-    for (let face of ctx.faces) findFacePlane(face, pts);
+    for (let [i, face] of ctx.faces.entries()) {
+        findFacePlane(face, pts, normalXYs[i]);
+    }
 
     // TODO
     // * Avoid the need to assign a function like this in every call.
@@ -1349,7 +1356,7 @@ export function updatePoints() {
     }
 
     // XXX
-    orderElts2(xys);
+    orderElts2(xys, normalXYs);
 
     // XXX
     // orderElts(xys);
