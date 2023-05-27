@@ -457,7 +457,7 @@ function findFacePlane(face, pts, n) {
     // TODO HERE3: Update this to consistently use pre-perspective coordinates.
     let c = vector.dot(pts[face[0]], n);
 
-    face.p = p;
+    face.n = n;
     face.c = c;
 
     // XXX
@@ -669,20 +669,9 @@ function orderElts2(pts, normalXYs) {
     for (let polygon of ctx.facePolygons) polygon.remove();
 
     // Find equations for all the face planes.
-    // XXX Note that I messed with the inputs here so they are now
-    // perspective-adjusted points, where as this function expects
-    // pre-perspective coordinates. I'll have to adjust for this if I use it.
     for (let [i, face] of ctx.faces.entries()) {
         findFacePlane(face, pts, normalXYs[i]);
     }
-
-    // TODO
-    // * Avoid the need to assign a function like this in every call.
-    //   For line.faceDrawn(), I may be able to define a line class, or assign
-    //   the function as lines are added by the user.
-    //   For pts, these are coming out of the xys structure. I may consider not
-    //   returning a new array, but rather just updating properties on
-    //   persistent xy points.
 
     // Make points depend on their incident lines.
     for (let [i, pt] of pts.entries()) Object.assign(pt, {idx: i, deps: []});
