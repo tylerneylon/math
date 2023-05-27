@@ -627,7 +627,24 @@ function compareShapes(s1, s2, pts) {
             if (numCross % 2 === 1) {
                 commentElt.innerHTML += `\n Point ${ptIdx} is an overlap`;
                 let ptZ = q.z;
-                commentElt.innerHTML += `\n Point has z=${ptZ}`;
+                commentElt.innerHTML += ` with z=${ptZ.toFixed(2)}`;
+
+                // The other face has eqn <a, face.n> = face.c.
+                // a = t * q. t = face.c / <q, face.n>.
+                let t = poly.c / vector.dot(q, poly.n);
+                let polyZ = q[2] * t;
+                commentElt.innerHTML += ` other poly has z=${polyZ.toFixed(2)}`;
+
+                if ((i == 0) == (ptZ < polyZ)) {
+                    // Either:
+                    // * s1=pt, s2=poly and ptZ < polyZ => s1 is in front; or
+                    // * s1=poly, s2=pt and ptZ > polyZ => s1 is in front.
+                    return '>';  // 'Greatest' shapes here are drawn in front.
+                } else {
+                    // The opposite of the above; s2 is in front.
+                    return '<';  // 'Greatest' shapes here are drawn in front.
+                }
+
                 // TODO HERE Determine which face is in front.
                 // * Each face is on a plane {p: <p, n> = c}, where
                 //   n is a unit normal of the face, and c is a constant.
