@@ -568,12 +568,10 @@ function updateBoundsForFace(face, pts) {
     face.yMax = Math.max(...face.map(i => pts[i][1]));
 }
 
-// XXX For now, this assumes that both s1 and s2 are faces.
-// Eventually I want to support the case that either could be a face or an edge.
-function compareShapes(s1, s2, pts) {
+function compareTwoFaces(s1, s2, pts) {
 
-    console.assert(s1.type === 'face', 'compareShapes() only takes faces rn');
-    console.assert(s2.type === 'face', 'compareShapes() only takes faces rn');
+    console.assert(s1.type === 'face');
+    console.assert(s2.type === 'face');
 
     // 1. Return null quickly if the bounding boxes don't overlap.
 
@@ -645,17 +643,7 @@ function compareShapes(s1, s2, pts) {
                     return '<';  // 'Greatest' shapes here are drawn in front.
                 }
 
-                // TODO HERE Determine which face is in front.
-                // * Each face is on a plane {p: <p, n> = c}, where
-                //   n is a unit normal of the face, and c is a constant.
-                // * We can find that equation per face; check with an assert
-                //   for now.
-                // * The ray to the intersection point has an equation
-                //   p = r * t, where r is a vector and t a scalar.
-                // * Solve for t in the eqn t * <r, n> = c.
-                // * This gives us the z value on the face.
-                // * Be sure to use pre-perspective x and y values throughout.
-                thereIsAPointOverlap = true;
+                thereIsAPointOverlap = true;  // XXX
                 return '<';
             }
         }
@@ -667,6 +655,21 @@ function compareShapes(s1, s2, pts) {
     // TODO Make a test case for the next section; write the next section.
 
     // 3. Check if there are any edge-edge overlaps.
+
+    return '<';
+}
+
+// XXX For now, this assumes that both s1 and s2 are faces.
+// Eventually I want to support the case that either could be a face or an edge.
+function compareShapes(s1, s2, pts) {
+
+    // TODO: Implement a shape-agnostic bounding box check.
+    //       Is it worth caching the bounding boxes?
+    //       They are very fast to compute, so for now keep the code simple.
+
+    if (s1.type === 'face' && s2.type === 'face') {
+        return compareTwoFaces(s1, s2, pts);
+    }
 
     return '<';
 }
@@ -716,12 +719,21 @@ function orderElts2(pts, normalXYs) {
     // edges as soon as all their dependencies are visible.
 
     // console.log('Starting orderElts2 add-elts phase');
-    let shapes = [...ctx.faces];
+    let shapes = [...ctx.faces, ...ctx.lines];
     let backToFront = sortWithPartialInfo(shapes, compareShapes, pts);
-    for (let face of backToFront) {
-        mainGroup.appendChild(face.polygon);
-        for (let lineIdx of face.edges) ctx.lines[lineIdx].faceDrawn(face.idx);
+    for (let shape of backToFront) {
+        if (shape.type === 'face') {
+            mainGroup.appendChild(shape.polygon);
+            for (let i of shape.edges) ctx.lines[i].faceDrawn(shape.idx);
+        }
+        if (shape.type === 'line') {
+            if (shape.elt.parentElement) continue;
+            mainGroup.appendChild(shape.elt);
+            for (let i of [shape.from, shape.to]) pts[i].lineDrawn(shape.idx);
+        }
     }
+    // TODO: Eventually this should not be needed at all, as we ought to be
+    //       including all lines in the shapes sorted above.
     for (let i = 0; i < ctx.lines.length; i++) {
         let line = ctx.lines[i];
         if (line.elt.parentElement) continue;
@@ -1087,6 +1099,8 @@ export function addLines(lines, slices) {
         line.coreColor = line.baseColor;  // Save to undo edge highlights.
         line.coreWidth = style['stroke-width'];
         line.faceDrawn = faceDrawn;
+        line.type      = 'line';
+        line.idx       = ctx.lines.length;
         ctx.lines.push(line);
     }
     ctx.slices = slices;  // If no edges are highlighted, undefined is ok.
