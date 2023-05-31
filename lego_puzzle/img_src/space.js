@@ -690,10 +690,6 @@ function compareShapes(s1, s2, pts) {
         return null;
     }
 
-    // TODO: Implement a shape-agnostic bounding box check.
-    //       Is it worth caching the bounding boxes?
-    //       They are very fast to compute, so for now keep the code simple.
-
     if (s1.type === 'face' && s2.type === 'face') {
         return compareTwoFaces(s1, s2, pts);
     }
