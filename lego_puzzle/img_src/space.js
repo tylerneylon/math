@@ -568,7 +568,22 @@ function updateBoundsForFace(face, pts) {
     face.yMax = Math.max(...face.map(i => pts[i][1]));
 }
 
+function updateBoundsForLine(line, pts) {
+    line.xMin = Math.min(...[line.from, line.to].map(i => pts[i][0]));
+    line.xMax = Math.max(...[line.from, line.to].map(i => pts[i][0]));
+    line.yMin = Math.min(...[line.from, line.to].map(i => pts[i][1]));
+    line.yMax = Math.max(...[line.from, line.to].map(i => pts[i][1]));
+}
+
+function updateBoundsForShape(shape, pts) {
+    console.assert(shape.type === 'face' || shape.type === 'line');
+    if (shape.type === 'face') updateBoundsForFace(shape, pts);
+    if (shape.type === 'line') updateBoundsForLine(shape, pts);
+}
+
 function compareTwoFaces(s1, s2, pts) {
+
+    // TODO: Remove the bounds check as it is now outside this fn.
 
     console.assert(s1.type === 'face');
     console.assert(s2.type === 'face');
@@ -662,6 +677,18 @@ function compareTwoFaces(s1, s2, pts) {
 // XXX For now, this assumes that both s1 and s2 are faces.
 // Eventually I want to support the case that either could be a face or an edge.
 function compareShapes(s1, s2, pts) {
+
+    // Return null quickly if the bounding boxes don't overlap.
+
+    updateBoundsForShape(s1, pts);
+    updateBoundsForShape(s2, pts);
+
+    if (s1.xMax < s2.xMin ||
+        s1.xMin > s2.xMax ||
+        s1.yMax < s2.yMin ||
+        s1.yMin > s2.yMax) {
+        return null;
+    }
 
     // TODO: Implement a shape-agnostic bounding box check.
     //       Is it worth caching the bounding boxes?
