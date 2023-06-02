@@ -562,17 +562,17 @@ let numOE2Calls = 0;
 let commentElt  = document.getElementById('comment');
 
 function updateBoundsForFace(face, pts) {
-    face.xMin = Math.min(...face.map(i => pts[i][0]));
-    face.xMax = Math.max(...face.map(i => pts[i][0]));
-    face.yMin = Math.min(...face.map(i => pts[i][1]));
-    face.yMax = Math.max(...face.map(i => pts[i][1]));
+    face.xMin = Math.min(...face.map(i => pts[i].x));
+    face.xMax = Math.max(...face.map(i => pts[i].x));
+    face.yMin = Math.min(...face.map(i => pts[i].y));
+    face.yMax = Math.max(...face.map(i => pts[i].y));
 }
 
 function updateBoundsForLine(line, pts) {
-    line.xMin = Math.min(...[line.from, line.to].map(i => pts[i][0]));
-    line.xMax = Math.max(...[line.from, line.to].map(i => pts[i][0]));
-    line.yMin = Math.min(...[line.from, line.to].map(i => pts[i][1]));
-    line.yMax = Math.max(...[line.from, line.to].map(i => pts[i][1]));
+    line.xMin = Math.min(...[line.from, line.to].map(i => pts[i].x));
+    line.xMax = Math.max(...[line.from, line.to].map(i => pts[i].x));
+    line.yMin = Math.min(...[line.from, line.to].map(i => pts[i].y));
+    line.yMax = Math.max(...[line.from, line.to].map(i => pts[i].y));
 }
 
 function updateBoundsForShape(shape, pts) {
@@ -674,9 +674,124 @@ function compareTwoFaces(s1, s2, pts) {
     return '<';
 }
 
+// This solves the 2x2 system of equations for x and y:
+// ( a b )( x ) = ( e )
+// ( c d )( y ) = ( f )
+// This assumes that the left matrix not identically zero, but otherwise handles
+// all edge cases correctly. This returns null if there is no solution;
+// otherwise an array [x, y].
+function solveLinEqn(a, b, c, d, e, f) {
+    if (a === 0 && b === 0) {
+        // Swap the rows.
+        [a, b, c, d, e, f] = [c, d, a, b, f, e];
+    }
+    let col_swap_needed = (a === 0);
+    if (col_swap_needed) [a, b, c, d] = [b, a, d, c];
+
+    // Now a is nonzero and we can easily use a row-echelon approach.
+    let numer = a * f - c * e;
+    let denom = a * d - b * c;
+    if (denom === 0 && numer !== 0) return null;  // The no-solution case.
+    let y = (denom === 0 ? 0 : numer / denom);
+    let x = (e - b * y) / a;
+
+    return (col_swap_needed ? [y, x] : [x, y]);
+}
+
+function compareTwoLines(s1, s2, pts) {
+
+    /*
+    if (s1.from === 3 && s1.to === 7) {
+        console.log(s2);
+    }
+    */
+
+    // 1. If the lines share one vertex, order based on the z value of the
+    //    non-shared vertex.
+
+    // TODO: Carefully test that this is working.
+    //       I have not yet at all really tested this.
+
+    // XXX tmp delete this
+    function ret(x) {
+        say(`Returning ${x} based on single-shared vertex`);
+        return x;
+    }
+
+    // TODO: Just delete the string 'ret' from each line; keep parens.
+    if (s1.from === s2.from) return ret(pts[s1.to  ].z < pts[s2.to  ] ? '>' : '<');
+    if (s1.from === s2.to  ) return ret(pts[s1.to  ].z < pts[s2.from] ? '>' : '<');
+    if (s1.to   === s2.from) return ret(pts[s1.from].z < pts[s2.to  ] ? '>' : '<');
+    if (s1.to   === s2.to  ) return ret(pts[s1.from].z < pts[s2.from] ? '>' : '<');
+
+    /*
+    if (s1.from === 0 && s1.to === 4) {
+        commentElt.innerHTML += `<p>comparing ${s1.from}<->${s1.to} and ${s2.from}<->${s2.to}`;
+        // console.log(s2);
+    }
+    */
+
+    // 2. Determine if there is a point overlap in the view plane.
+
+    // We'll treat each line as the set of points
+    // { (x, y) + t * (dx, dy), t in [0, 1] }
+    // and we'll solve for t0, t1, one t parameter per line.
+    //
+    // Here is the linear equation system we're solving for t0 and t1:
+    // ( dx0 -dx1 )( t0 ) = ( x1 - x0 )
+    // ( dy0 -dy1 )( t1 ) = ( y1 - y0 )
+    let a = pts[s1.to].x - pts[s1.from].x;  // dx0
+    let b = pts[s2.to].x - pts[s2.from].x;  // dx1
+    let c = pts[s1.to].y - pts[s1.from].y;  // dy0
+    let d = pts[s2.to].y - pts[s2.from].y;  // dy1
+    let e = pts[s2.from].x - pts[s1.from].x;  // x1 - x0
+    let f = pts[s2.from].y - pts[s1.from].y;  // y1 - y0
+
+    let soln = solveLinEqn(a, -b, c, -d, e, f);
+    if (soln === null) {
+        // There is no solution.
+        say('No soln at all to lin eqn')
+        return null;
+    }
+    let t0 = soln[0], t1 = soln[1];
+    if (t0 < 0 || t0 > 1 || t1 < 0 || t1 > 1) {
+        say('No overlap due to t val(s) out of [0, 1]');
+        return null;
+    }
+
+    // XXX
+
+    // console.log('t0', t0, 't1', t1);
+
+    commentElt.innerHTML += '<p>Edge-edge intersection is found: ';
+    commentElt.innerHTML += `${s1.from}<->${s1.to} and ${s2.from}<->${s2.to}`;
+
+    // TODO HERE
+
+
+}
+
+// XXX
+function getShapeName(s) {
+    if (s.type === 'face') {
+        return `face(${s[0]}, ${s[1]}, ${s[2]}, ${s[3]})`;
+    }
+    if (s.type === 'line') {
+        return `${s.from}<->${s.to}`;
+    }
+}
+
+// XXX
+function say(s) {
+    commentElt.innerHTML += s;
+}
+
 // XXX For now, this assumes that both s1 and s2 are faces.
 // Eventually I want to support the case that either could be a face or an edge.
 function compareShapes(s1, s2, pts) {
+
+    say('<p>compareShapes(' + getShapeName(s1) +
+        ', ' + getShapeName(s2) + ') ');
 
     // Return null quickly if the bounding boxes don't overlap.
 
@@ -687,11 +802,16 @@ function compareShapes(s1, s2, pts) {
         s1.xMin > s2.xMax ||
         s1.yMax < s2.yMin ||
         s1.yMin > s2.yMax) {
+        say('Returning null due to no bbox overlap');
         return null;
     }
 
     if (s1.type === 'face' && s2.type === 'face') {
         return compareTwoFaces(s1, s2, pts);
+    }
+
+    if (s1.type === 'line' && s2.type === 'line') {
+        return compareTwoLines(s1, s2, pts);
     }
 
     return '<';
@@ -703,7 +823,8 @@ function compareShapes(s1, s2, pts) {
 function orderElts2(pts, normalXYs) {
 
     numOE2Calls++;
-    commentElt.innerHTML = `orderElts2 called: ${numOE2Calls} time(s) so far`;
+    // commentElt.innerHTML = `orderElts2 called: ${numOE2Calls} time(s) so far`;
+    commentElt.innerHTML = '';
 
     // Remove all SVG elements so we can re-insert in a new order.
     for (let dot     of ctx.dots)         dot.remove();
@@ -740,6 +861,9 @@ function orderElts2(pts, normalXYs) {
 
     // For now, I'll add in faces in an arbitrary order, and render lines and
     // edges as soon as all their dependencies are visible.
+
+    // XXX
+    compareShapes(ctx.lines[4], ctx.lines[5], pts);
 
     // console.log('Starting orderElts2 add-elts phase');
     let shapes = [...ctx.faces, ...ctx.lines];
