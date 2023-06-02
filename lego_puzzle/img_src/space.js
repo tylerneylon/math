@@ -767,7 +767,12 @@ function compareTwoLines(s1, s2, pts) {
     commentElt.innerHTML += `${s1.from}<->${s1.to} and ${s2.from}<->${s2.to}`;
 
     // TODO HERE
-
+    // Analogous to how I call findFacePlane() for all faces in orderElts2(),
+    // call a new fn findLineEqn() for all lines. Use those to simplify the
+    // expressions of a-f above.
+    // Use my physical notebook notes from 305.2023 to find tau0, tau1 for each
+    // line, and then use those to find the corresponding z values along the ray
+    // of intersection.
 
 }
 
