@@ -449,8 +449,22 @@ function findFacePlane(face, pts, n) {
     face.c = vector.dot(pts[face[0]], face.n);
 }
 
-// TODO: docstring
+// This function simplifies access to some information about a given line.
+// It sets x, y to be the in-perspective starting point, and dx, dy to be the
+// in-perspective delta from start to finish. Analogously, it sets
+// (x0, y0, z0) and (dx0, dy0, dz0) to be the starting point and delta in
+// pre-perspective coordinates.
 function findLineEqns(line, pts) {
+    line.x  = pts[line.from].x;
+    line.y  = pts[line.from].y;
+    line.dx = pts[line.to].x - line.x;
+    line.dy = pts[line.to].y - line.y;
+
+    line.x0  = pts[line.from].x0;
+    line.y0  = pts[line.from].y0;
+    line.z0  = pts[line.from].z0;
+    // line.dx0 = pts[line.to].x0 - 
+
 }
 
 // This will sort the values in `inputArr` according to the comparison data
@@ -656,8 +670,8 @@ function compareTwoFaces(s1, s2, pts) {
 // This solves the 2x2 system of equations for x and y:
 // ( a b )( x ) = ( e )
 // ( c d )( y ) = ( f )
-// This assumes that the left matrix not identically zero, but otherwise handles
-// all edge cases correctly. This returns null if there is no solution;
+// This handles all edge cases correctly, such as the matrix being singular but
+// the problem still being solveable. This returns null if there is no solution;
 // otherwise an array [x, y].
 function solveLinEqn(a, b, c, d, e, f) {
     if (a === 0 && b === 0) {
@@ -670,9 +684,10 @@ function solveLinEqn(a, b, c, d, e, f) {
     // Now a is nonzero and we can easily use a row-echelon approach.
     let numer = a * f - c * e;
     let denom = a * d - b * c;
-    if (denom === 0 && numer !== 0) return null;  // The no-solution case.
+    if (denom === 0 && numer !== 0) return null;  // There is no solution.
     let y = (denom === 0 ? 0 : numer / denom);
-    let x = (e - b * y) / a;
+    if (a === 0 && e - b * y !== 0) return null;  // There is no solution.
+    let x = (e - b * y === 0 ? 0 : (e - b * y) / a);
 
     return (col_swap_needed ? [y, x] : [x, y]);
 }
