@@ -441,37 +441,16 @@ function getFaceOrder(xys) {
 }
 
 // Add an equation for the current plane of the given face.
-// Every face obeys an equation of the form <a,p>=c, for some unit vector p with
-// p.z >= 0, and some constant c. This function sets the values of face.p to
-// this unit vector, and face.c to this constant.
+// Every face obeys an equation of the form <a,n>=c, for some unit vector n
+// and some constant c. This function sets the values of face.n to such a
+// unit vector, and face.c to this constant.
 function findFacePlane(face, pts, n) {
-    n = n.slice(0, 3);  // Drop the 4th coordinate, if present.
+    face.n = n.slice(0, 3);  // Drop the 4th coordinate, if present.
+    face.c = vector.dot(pts[face[0]], face.n);
+}
 
-    /*
-    let p = vector.unit(vector.cross(
-        vector.sub(pts[face[1]], pts[face[0]]),
-        vector.sub(pts[face[2]], pts[face[0]])
-    ));
-    */
-
-    // TODO HERE3: Update this to consistently use pre-perspective coordinates.
-    let c = vector.dot(pts[face[0]], n);
-
-    face.n = n;
-    face.c = c;
-
-    // XXX
-    if (false) {
-        // Sanity check.
-        console.log(`Length(p) = ${vector.len(p)}`);
-        console.log('p =', p);
-        console.log('c =', c);
-
-        for (let i of face) {
-            let q = pts[i];
-            console.log(`Dot prod with pt[${i}] =`, vector.dot(q, p));
-        }
-    }
+// TODO: docstring
+function findLineEqns(line, pts) {
 }
 
 // This will sort the values in `inputArr` according to the comparison data
@@ -840,6 +819,9 @@ function orderElts2(pts, normalXYs) {
     // Find equations for all the face planes.
     for (let [i, face] of ctx.faces.entries()) {
         findFacePlane(face, pts, normalXYs[i]);
+    }
+    for (let line of ctx.lines) {
+        findLineEqns(line, pts);
     }
 
     // Make points depend on their incident lines.
