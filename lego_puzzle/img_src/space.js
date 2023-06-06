@@ -451,20 +451,24 @@ function findFacePlane(face, pts, n) {
 
 // This function simplifies access to some information about a given line.
 // It sets x, y to be the in-perspective starting point, and dx, dy to be the
-// in-perspective delta from start to finish. Analogously, it sets
-// (x0, y0, z0) and (dx0, dy0, dz0) to be the starting point and delta in
-// pre-perspective coordinates.
+// in-perspective delta from start to finish.
+// This also sets up the orthonormal basis (a, b, c), in pre-perspective
+// coordinates, so that the extended line has the equation:
+//   line = {p : <p,a> = 0 and <p,b> = d}
+// where the constant d is given by the value line.d.
 function findLineEqns(line, pts) {
     line.x  = pts[line.from].x;
     line.y  = pts[line.from].y;
     line.dx = pts[line.to].x - line.x;
     line.dy = pts[line.to].y - line.y;
 
-    line.x0  = pts[line.from].x0;
-    line.y0  = pts[line.from].y0;
-    line.z0  = pts[line.from].z0;
-    // line.dx0 = pts[line.to].x0 - 
+    let from = [pts[line.from].x0, pts[line.from].y0, pts[line.from].z];
+    let to   = [pts[line.to].x0,   pts[line.to].y0,   pts[line.to].z];
 
+    line.a = vector.unit(vector.cross(to, from));
+    line.c = vector.unit(vector.sub(  to, from));
+    line.b = vector.unit(vector.cross(a , c));
+    line.d = vector.dot(from, b);
 }
 
 // This will sort the values in `inputArr` according to the comparison data
