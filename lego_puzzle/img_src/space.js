@@ -465,6 +465,8 @@ function findLineEqns(line, pts) {
     let from = [pts[line.from].x0, pts[line.from].y0, pts[line.from].z];
     let to   = [pts[line.to].x0,   pts[line.to].y0,   pts[line.to].z];
 
+    // TODO: Figure out how to handle edge cases.
+
     line.a = vector.unit(vector.cross(to, from));
     line.c = vector.unit(vector.sub(  to, from));
     line.b = vector.unit(vector.cross(line.a , line.c));
@@ -757,8 +759,8 @@ function compareTwoLines(s1, s2, pts) {
 
     // console.log('t0', t0, 't1', t1);
 
-    commentElt.innerHTML += '<p>Edge-edge intersection is found: ';
-    commentElt.innerHTML += `${s1.from}<->${s1.to} and ${s2.from}<->${s2.to}`;
+    say('<p>Edge-edge intersection is found: ' + 
+        `${s1.from}<->${s1.to} and ${s2.from}<->${s2.to}`);
 
     // TODO HERE
     // Analogous to how I call findFacePlane() for all faces in orderElts2(),
@@ -768,6 +770,46 @@ function compareTwoLines(s1, s2, pts) {
     // line, and then use those to find the corresponding z values along the ray
     // of intersection.
 
+    let viewPlaneRay = [s1.x + t1 * s1.dx, s1.y + t1 * s1.dy, ctx.zoom];
+    let line1Ray = vector.scale(
+        viewPlaneRay,
+        s1.d / vector.dot(viewPlaneRay, s1.b)
+    );
+    let line2Ray = vector.scale(
+        viewPlaneRay,
+        s2.d / vector.dot(viewPlaneRay, s2.b)
+    );
+
+    function ret2(x) {
+        say(`Returning ${x} based on an overlap point`);
+        return x;
+    }
+
+    say(`line1Ray.z = ${line1Ray[2].toFixed(3)}`);
+    say(`line2Ray.z = ${line2Ray[2].toFixed(3)}`);
+
+    return (line1Ray[2] < line2Ray[2]) ? ret2('>') : ret2('<');
+
+
+
+    /*
+    // XXX Sanity checking that these are the same.
+    let viewPlaneRay2 = [s2.x + t2 * s2.dx, s2.y + t2 * s2.dy, ctx.zoom];
+    console.log('viewPlaneRay', viewPlaneRay);
+    console.log('viewPlaneRay2', viewPlaneRay2);
+    */
+
+
+    /*
+    // XXX This is a sanity check. The value ought to be close to 0.
+    console.log('<viewPlaneRay, a> =', vector.dot(viewPlaneRay, s1.a));
+
+
+    // XXX This is a sanity check. The value ought to be close to 0.
+    console.log('<line1Ray, a> =', vector.dot(line1Ray, s1.a));
+    console.log('<line1Ray, b> =', vector.dot(line1Ray, s1.b));
+    console.log('line1.d =', s1.d);
+    */
 }
 
 // XXX
@@ -782,7 +824,7 @@ function getShapeName(s) {
 
 // XXX
 function say(s) {
-    commentElt.innerHTML += s;
+    commentElt.innerHTML += (s + '<br/>\n');
 }
 
 // XXX For now, this assumes that both s1 and s2 are faces.
