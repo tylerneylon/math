@@ -220,6 +220,7 @@ function lineDrawn(lineIdx) {
     if (this.deps.length === 0) {
         mainGroup.appendChild(ctx.outlines[this.idx]);
         mainGroup.appendChild(ctx.dots[this.idx]);
+        say(`[lineDrawn] Rendering: dot ${this.idx}`);
     }
 }
 
@@ -912,14 +913,24 @@ function orderElts2(pts, normalXYs) {
     // console.log('Starting orderElts2 add-elts phase');
     let shapes = [...ctx.faces, ...ctx.lines];
     let backToFront = sortWithPartialInfo(shapes, compareShapes, pts);
+
+    // XXX
+    say('<p>Here is the ordering of shapes I got, back-to-front:');
+    for (let s of backToFront) {
+        say(getShapeName(s));
+    }
+
+    say('<p>Now I\'ll render:');
     for (let shape of backToFront) {
         if (shape.type === 'face') {
             mainGroup.appendChild(shape.polygon);
+            say('[1] Rendering: ' + getShapeName(shape));
             for (let i of shape.edges) ctx.lines[i].faceDrawn(shape.idx);
         }
         if (shape.type === 'line') {
             if (shape.elt.parentElement) continue;
             mainGroup.appendChild(shape.elt);
+            say('[2] Rendering: ' + getShapeName(shape));
             for (let i of [shape.from, shape.to]) pts[i].lineDrawn(shape.idx);
         }
     }
@@ -929,6 +940,7 @@ function orderElts2(pts, normalXYs) {
         let line = ctx.lines[i];
         if (line.elt.parentElement) continue;
         mainGroup.appendChild(line.elt);
+        say('[3] Rendering: ' + getShapeName(line));
         for (let ptIdx of [line.from, line.to]) pts[ptIdx].lineDrawn(i);
     }
 
@@ -1270,6 +1282,7 @@ function faceDrawn(faceIdx) {
     this.deps.splice(this.deps.indexOf(faceIdx), 1);
     if (this.deps.length === 0) {
         mainGroup.appendChild(this.elt);
+        say('[faceDrawn] Rendering: ' + getShapeName(this));
         this.pts[this.from].lineDrawn(this.idx);
         this.pts[this.to].lineDrawn(this.idx);
     }
