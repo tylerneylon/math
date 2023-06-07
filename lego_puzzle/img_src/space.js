@@ -467,8 +467,8 @@ function findLineEqns(line, pts) {
 
     line.a = vector.unit(vector.cross(to, from));
     line.c = vector.unit(vector.sub(  to, from));
-    line.b = vector.unit(vector.cross(a , c));
-    line.d = vector.dot(from, b);
+    line.b = vector.unit(vector.cross(line.a , line.c));
+    line.d = vector.dot(from, line.b);
 }
 
 // This will sort the values in `inputArr` according to the comparison data
@@ -738,14 +738,14 @@ function compareTwoLines(s1, s2, pts) {
     // Here is the linear equation system we're solving for t0 and t1:
     // ( dx0 -dx1 )( t0 ) = ( x1 - x0 )
     // ( dy0 -dy1 )( t1 ) = ( y1 - y0 )
-    let a = pts[s1.to].x - pts[s1.from].x;  // dx0
-    let b = pts[s2.to].x - pts[s2.from].x;  // dx1
-    let c = pts[s1.to].y - pts[s1.from].y;  // dy0
-    let d = pts[s2.to].y - pts[s2.from].y;  // dy1
-    let e = pts[s2.from].x - pts[s1.from].x;  // x1 - x0
-    let f = pts[s2.from].y - pts[s1.from].y;  // y1 - y0
+    let a =  s1.dx;
+    let b = -s2.dx;
+    let c =  s1.dy;
+    let d = -s2.dy;
+    let e = s2.x - s1.x;
+    let f = s2.y - s1.y;
 
-    let soln = solveLinEqn(a, -b, c, -d, e, f);
+    let soln = solveLinEqn(a, b, c, d, e, f);
     if (soln === null) {
         // There is no solution.
         say('No soln at all to lin eqn')
