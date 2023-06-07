@@ -733,26 +733,22 @@ function compareTwoLines(s1, s2, pts) {
 
     // We'll treat each line as the set of points
     // { (x, y) + t * (dx, dy), t in [0, 1] }
-    // and we'll solve for t0, t1, one t parameter per line.
+    // and we'll solve for t1, t2, one t parameter per line.
     //
-    // Here is the linear equation system we're solving for t0 and t1:
-    // ( dx0 -dx1 )( t0 ) = ( x1 - x0 )
-    // ( dy0 -dy1 )( t1 ) = ( y1 - y0 )
-    let a =  s1.dx;
-    let b = -s2.dx;
-    let c =  s1.dy;
-    let d = -s2.dy;
-    let e = s2.x - s1.x;
-    let f = s2.y - s1.y;
-
-    let soln = solveLinEqn(a, b, c, d, e, f);
+    // Here is the linear equation system we're solving for t1 and t2:
+    // ( dx1 -dx2 )( t1 ) = ( x2 - x1 )
+    // ( dy1 -dy2 )( t2 ) = ( y2 - y1 )
+    let soln = solveLinEqn(
+        s1.dx, -s2.dx, s1.dy, -s2.dy,
+        s2.x - s1.x, s2.y - s1.y
+    );
     if (soln === null) {
         // There is no solution.
         say('No soln at all to lin eqn')
         return null;
     }
-    let t0 = soln[0], t1 = soln[1];
-    if (t0 < 0 || t0 > 1 || t1 < 0 || t1 > 1) {
+    let t1 = soln[0], t2 = soln[1];
+    if (t1 < 0 || t1 > 1 || t2 < 0 || t2 > 1) {
         say('No overlap due to t val(s) out of [0, 1]');
         return null;
     }
