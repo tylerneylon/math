@@ -517,6 +517,9 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
     let min     = arr[arr.length - 1];
     let cmpTree = {[min]: []}
 
+    say('<p>Beginning to sort');
+    say(`Candidate min = ${getShapeName(inputArr[min])}`);
+
     while (arr.length > 0) {
 
         let xIdx = -1;
@@ -524,6 +527,8 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
 
             xIdx++;
             if (xIdx == arr.length) {
+                let stars = '*************';  // XXX
+                say(`<br/>${stars} Adding shape ${getShapeName(inputArr[min])}<br/>`);
                 sorted.push(min);
                 arr.splice(arr.indexOf(min), 1);
                 for (let i = 1; i < cmpTree[min].length; i++) {
@@ -536,17 +541,41 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
                     min = arr[arr.length - 1];
                     cmpTree[min] = [];
                 }
+                if (min !== undefined) {
+                    let n = getShapeName(inputArr[min]);  // XXX
+                    say(`Min candidate = ${n}`);
+
+                    // Print out the cmpTree.
+                    let y = min;
+                    let parts = [];
+                    while (y !== undefined) {
+                        parts.push(getShapeName(inputArr[y]));
+                        if (y in cmpTree) {
+                            y = cmpTree[y][0];
+                        } else {
+                            break;
+                        }
+                    }
+                    say('cmpTree: ' + parts.join(' < '));
+                }
                 break;
             }
 
             let x = arr[xIdx];
-            if (x in cmpTree) continue;
+            let n = getShapeName(inputArr[x]);  // XXX
+            if (x in cmpTree) {
+                say(`  Keeping it < ${n} as n is in the cmpTree`);
+                continue;
+            }
             let c = cmp(x, min);
             if (c === '>') {
+                say(`  Keeping it < ${n} as indicated by cmp`);
                 cmpTree[min].push(x);
                 cmpTree[x] = [];
             } 
             if (c === '<') {
+                say(`  It looks like ${n} is smaller`);
+                say(`New candidate min = ${n}`);
                 cmpTree[x] = [min];
                 min  = x;
                 xIdx = -1;
@@ -720,10 +749,10 @@ function compareTwoLines(s1, s2, pts) {
     }
 
     // TODO: Just delete the string 'ret' from each line; keep parens.
-    if (s1.from === s2.from) return ret(pts[s1.to  ].z < pts[s2.to  ] ? '>' : '<');
-    if (s1.from === s2.to  ) return ret(pts[s1.to  ].z < pts[s2.from] ? '>' : '<');
-    if (s1.to   === s2.from) return ret(pts[s1.from].z < pts[s2.to  ] ? '>' : '<');
-    if (s1.to   === s2.to  ) return ret(pts[s1.from].z < pts[s2.from] ? '>' : '<');
+    if (s1.from === s2.from) return ret(pts[s1.to  ].z < pts[s2.to  ] ? '<' : '>');
+    if (s1.from === s2.to  ) return ret(pts[s1.to  ].z < pts[s2.from] ? '<' : '>');
+    if (s1.to   === s2.from) return ret(pts[s1.from].z < pts[s2.to  ] ? '<' : '>');
+    if (s1.to   === s2.to  ) return ret(pts[s1.from].z < pts[s2.from] ? '<' : '>');
 
     /*
     if (s1.from === 0 && s1.to === 4) {
@@ -856,7 +885,8 @@ function compareShapes(s1, s2, pts) {
         return compareTwoLines(s1, s2, pts);
     }
 
-    return '<';
+    return null;
+    // return '<';
 }
 
 // TODO:
@@ -867,6 +897,12 @@ function orderElts2(pts, normalXYs) {
     numOE2Calls++;
     // commentElt.innerHTML = `orderElts2 called: ${numOE2Calls} time(s) so far`;
     commentElt.innerHTML = '';
+
+    // XXX
+    say('<p>Point z values:');
+    for (let [i, xy] of pts.entries()) {
+        say(`${i}: ${xy.z}`);
+    }
 
     // Remove all SVG elements so we can re-insert in a new order.
     for (let dot     of ctx.dots)         dot.remove();
@@ -1578,7 +1614,7 @@ export function updatePoints() {
             for (let j of face) xys[j].isForeground = true;
         }
     }
-
+    
     // XXX
     orderElts2(xys, normalXYs);
 
