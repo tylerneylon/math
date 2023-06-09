@@ -610,6 +610,30 @@ function updateBoundsForShape(shape, pts) {
     if (shape.type === 'line') updateBoundsForLine(shape, pts);
 }
 
+function compareLineAndFace(s1, s2, pts) {
+
+    let face = s1;
+    let line = s2;
+    let doSwap = false;
+
+    if (s1.type === 'line') {
+        [face, line] = [line, face];
+        doSwap = true;
+    }
+    function ret(x) {
+        console.assert(x === '<' || x === '>');
+        if (doSwap) return x === '<' ? '>' : '<';
+        return x;
+    }
+
+    console.assert(face.type === 'face' && line.type === 'line');
+
+    // The face is behind "<" the line when the line is one edge of the face.
+    if (line.from in face.ptSet || line.to in face.ptSet) return ret('<');
+
+    return null;
+}
+
 function compareTwoFaces(s1, s2, pts) {
 
     // TODO: Remove the bounds check as it is now outside this fn.
@@ -854,6 +878,7 @@ function getShapeName(s) {
 
 // XXX
 function say(s) {
+    return;  // XXX
     commentElt.innerHTML += (s + '<br/>\n');
 }
 
@@ -879,10 +904,10 @@ function compareShapes(s1, s2, pts) {
 
     if (s1.type === 'face' && s2.type === 'face') {
         return compareTwoFaces(s1, s2, pts);
-    }
-
-    if (s1.type === 'line' && s2.type === 'line') {
+    } else if (s1.type === 'line' && s2.type === 'line') {
         return compareTwoLines(s1, s2, pts);
+    } else {
+        return compareLineAndFace(s1, s2, pts);
     }
 
     return null;
@@ -961,7 +986,7 @@ function orderElts2(pts, normalXYs) {
         if (shape.type === 'face') {
             mainGroup.appendChild(shape.polygon);
             say('[1] Rendering: ' + getShapeName(shape));
-            for (let i of shape.edges) ctx.lines[i].faceDrawn(shape.idx);
+            // for (let i of shape.edges) ctx.lines[i].faceDrawn(shape.idx);
         }
         if (shape.type === 'line') {
             if (shape.elt.parentElement) continue;
