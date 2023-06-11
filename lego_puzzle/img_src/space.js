@@ -732,6 +732,9 @@ function compareFaces(s1, s2, pts) {
             // of the other. But it would still be quite easy for a third
             // interposed shape to change the order in which we should be
             // rendering the shapes.
+            // TODO HERE:
+            // Ignore all shared vertex cases (only in this sub-check) because
+            // of the above concern.
             let c = compareShapes(border1, border2, pts);
             if (c) {
                 commentElt.innerHTML += '\n Yes edge-edge overlap';
