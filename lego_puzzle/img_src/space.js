@@ -474,6 +474,19 @@ function findLineEqns(line, pts) {
     line.d = vector.dot(from, line.b);
 }
 
+// This function resets face.borders to an array of line objects, and sets the
+// current coordinate equations for those line objects. The motivation for this
+// is to support edge-edge overlap checks between two faces.
+function findEdgeEqns(face, pts) {
+    face.borders = [];
+    let n = face.length;
+    for (let i = 0; i < n; i++) {
+        let borderLine = {from: face[i], to: face[(i + 1) % n]};
+        findLineEqns(borderLine, pts);
+        face.borders.push(borderLine);
+    }
+}
+
 // This will sort the values in `inputArr` according to the comparison data
 // provided by calls to `inputCmp()`, which is expected to return the values '='
 // (a string), '<', '>', or null; where a null indicates that the comparison
@@ -737,7 +750,7 @@ function solveLinEqn(a, b, c, d, e, f) {
     return (col_swap_needed ? [y, x] : [x, y]);
 }
 
-function compareTwoLines(s1, s2, pts) {
+function compareLines(s1, s2, pts) {
 
     /*
     if (s1.from === 3 && s1.to === 7) {
@@ -890,7 +903,7 @@ function compareShapes(s1, s2, pts) {
     if (s1.type === 'face' && s2.type === 'face') {
         return compareFaces(s1, s2, pts);
     } else if (s1.type === 'line' && s2.type === 'line') {
-        return compareTwoLines(s1, s2, pts);
+        return compareLines(s1, s2, pts);
     } else {
         return compareLineAndFace(s1, s2, pts);
     }
@@ -923,6 +936,7 @@ function orderElts2(pts, normalXYs) {
     // Find equations for all the face planes.
     for (let [i, face] of ctx.faces.entries()) {
         findFacePlane(face, pts, normalXYs[i]);
+        findEdgeEqns(face, pts);
     }
     for (let line of ctx.lines) {
         findLineEqns(line, pts);
