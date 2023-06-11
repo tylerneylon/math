@@ -641,22 +641,7 @@ function compareTwoFaces(s1, s2, pts) {
     console.assert(s1.type === 'face');
     console.assert(s2.type === 'face');
 
-    // 1. Return null quickly if the bounding boxes don't overlap.
-
-    updateBoundsForFace(s1, pts);
-    updateBoundsForFace(s2, pts);
-
-    if (s1.xMax < s2.xMin ||
-        s1.xMin > s2.xMax ||
-        s1.yMax < s2.yMin ||
-        s1.yMin > s2.yMax) {
-        commentElt.innerHTML = 'bounding box miss';
-        return null;
-    } else {
-        commentElt.innerHTML = 'bounding boxes overlap';
-    }
-
-    // 2. Check to see if any point is in the boundaries of the other face.
+    // 1. Check to see if any point is in the boundaries of the other face.
 
     // XXX tmp
     let thereIsAPointOverlap = false;
@@ -722,7 +707,7 @@ function compareTwoFaces(s1, s2, pts) {
 
     // TODO Make a test case for the next section; write the next section.
 
-    // 3. Check if there are any edge-edge overlaps.
+    // 2. Check if there are any edge-edge overlaps.
 
     return '<';
 }
