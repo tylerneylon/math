@@ -482,6 +482,7 @@ function findEdgeEqns(face, pts) {
     let n = face.length;
     for (let i = 0; i < n; i++) {
         let borderLine = {from: face[i], to: face[(i + 1) % n]};
+        borderLine.type = 'line';
         findLineEqns(borderLine, pts);
         face.borders.push(borderLine);
     }
@@ -722,6 +723,25 @@ function compareFaces(s1, s2, pts) {
 
     // 2. Check if there are any edge-edge overlaps.
 
+    for (let border1 of s1.borders) {
+        for (let border2 of s2.borders) {
+            // NOTE: This can cause a weird case. We might have two faces which
+            // share at least one vertex, where one face has an edge coming
+            // toward the camera, and (sharing a vertex) an edge on the face
+            // goes away from the camera. Then we would judge one shape in front
+            // of the other. But it would still be quite easy for a third
+            // interposed shape to change the order in which we should be
+            // rendering the shapes.
+            let c = compareShapes(border1, border2, pts);
+            if (c) {
+                commentElt.innerHTML += '\n Yes edge-edge overlap';
+                return c;
+            }
+        }
+    }
+    commentElt.innerHTML += '\n No edge-edge overlap';
+
+    // XXX
     return '<';
 }
 
