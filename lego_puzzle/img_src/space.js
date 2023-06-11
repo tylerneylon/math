@@ -634,7 +634,7 @@ function compareLineAndFace(s1, s2, pts) {
     return null;
 }
 
-function compareTwoFaces(s1, s2, pts) {
+function compareFaces(s1, s2, pts) {
 
     // TODO: Remove the bounds check as it is now outside this fn.
 
@@ -888,7 +888,7 @@ function compareShapes(s1, s2, pts) {
     }
 
     if (s1.type === 'face' && s2.type === 'face') {
-        return compareTwoFaces(s1, s2, pts);
+        return compareFaces(s1, s2, pts);
     } else if (s1.type === 'line' && s2.type === 'line') {
         return compareTwoLines(s1, s2, pts);
     } else {
