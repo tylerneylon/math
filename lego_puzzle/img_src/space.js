@@ -648,6 +648,54 @@ function compareLineAndFace(s1, s2, pts) {
     return null;
 }
 
+// This accepts a single point and a face/polygon. This function compares them,
+// and returns '<' when the point is behind the face; '>' when the point is in
+// front of the face; and null when the point and face do not overlap in the
+// view plane.
+function comparePointAndFace(ptI, face, pts) {
+
+    if (ptI in face.ptSet) return null;
+
+    let q = pts[ptI];
+
+    // Check if a ray from pt -> (infty, 0) crosses each edge.
+    let numCross = 0;
+    for (let j0 = 0; j0 < face.length; j0++) {
+        let j1 = (j0 + 1) % face.length;
+        let k0 = face[j0], k1 = face[j1];
+        let p0 = pts[k0],  p1 = pts[k1];
+
+        // First check if the edge crosses the line y=q.y.
+        if ( (p1.y > q.y && p0.y <= q.y) ||
+             (p0.y > q.y && p1.y <= q.y) ) {
+
+            // TODO: Handle the case that p0.y == p1.y.
+            let x = ( (p1.x - q.x) * (p0.y - q.y) -
+                      (p0.x - q.x) * (p1.y - q.y) ) /
+                    (p0.y - p1.y);
+
+            if (x > 0) numCross++;
+        }
+    }
+
+    if (numCross % 2 === 1) {
+        commentElt.innerHTML += `\n Point ${ptI} is an overlap`;
+        let ptZ = q.z;
+        commentElt.innerHTML += ` with z=${ptZ.toFixed(2)}`;
+
+        // The other face has eqn <a, face.n> = face.c.
+        // a = t * q. t = face.c / <q, face.n>.
+        let t = face.c / vector.dot(q, face.n);
+        let faceZ = q[2] * t;
+        commentElt.innerHTML += ` other face has z=${faceZ.toFixed(2)}`;
+
+        // Returning '>' means "draw the pt last" (draw point after face).
+        return (ptZ < faceZ) ? '>' : '<';
+    }
+
+    return null;
+}
+
 function compareFaces(s1, s2, pts) {
 
     // TODO: Remove the bounds check as it is now outside this fn.
@@ -666,58 +714,14 @@ function compareFaces(s1, s2, pts) {
         let poly    = shapes[1 - i];
 
         for (let ptIdx of ptShape) {
-            // Ignore shared points as they can't tell which face is in front.
-            if (ptIdx in poly.ptSet) continue;
-            let q = pts[ptIdx];
-
-            // Check if a ray from pt -> (infty, 0) crosses each edge.
-            let numCross = 0;
-            for (let j0 = 0; j0 < poly.length; j0++) {
-                let j1 = (j0 + 1) % poly.length;
-                let k0 = poly[j0], k1 = poly[j1];
-                let p0 = pts[k0],  p1 = pts[k1];
-
-                // First check if the edge crosses the line y=q.y.
-                if ( (p1.y > q.y && p0.y <= q.y) ||
-                     (p0.y > q.y && p1.y <= q.y) ) {
-
-                    let x = ( (p1.x - q.x) * (p0.y - q.y) -
-                              (p0.x - q.x) * (p1.y - q.y) ) /
-                            (p0.y - p1.y);
-
-                    if (x > 0) numCross++;
-                }
-            }
-
-            if (numCross % 2 === 1) {
-                commentElt.innerHTML += `\n Point ${ptIdx} is an overlap`;
-                let ptZ = q.z;
-                commentElt.innerHTML += ` with z=${ptZ.toFixed(2)}`;
-
-                // The other face has eqn <a, face.n> = face.c.
-                // a = t * q. t = face.c / <q, face.n>.
-                let t = poly.c / vector.dot(q, poly.n);
-                let polyZ = q[2] * t;
-                commentElt.innerHTML += ` other poly has z=${polyZ.toFixed(2)}`;
-
-                if ((i == 0) == (ptZ < polyZ)) {
-                    // Either:
-                    // * s1=pt, s2=poly and ptZ < polyZ => s1 is in front; or
-                    // * s1=poly, s2=pt and ptZ > polyZ => s1 is in front.
-                    return '>';  // 'Greatest' shapes here are drawn in front.
-                } else {
-                    // The opposite of the above; s2 is in front.
-                    return '<';  // 'Greatest' shapes here are drawn in front.
-                }
-
-                thereIsAPointOverlap = true;  // XXX
-                return '<';
+            let c = comparePointAndFace(ptIdx, poly, pts);
+            if (c !== null) {
+                if (i === 0) return c;
+                if (i === 1) return (c === '>') ? '<' : '>';
             }
         }
     }
-    if (!thereIsAPointOverlap) {
-        commentElt.innerHTML += '\n No point overlap';
-    }
+    commentElt.innerHTML += '\n No point overlap';
 
     // TODO Make a test case for the next section; write the next section.
 
