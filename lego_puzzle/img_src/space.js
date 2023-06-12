@@ -9,6 +9,8 @@
 //  * Refactor so that there is less code redundancy across
 //    initial dot/line placement and setting a new transform.
 //  * Ensure initial render is consistent with follow-ups.
+//  * Factor out all z-order-focused functions into a new zorder.js file.
+//    (In general, aim to reduce the size and complexity of this file.)
 
 // ______________________________________________________________________
 // Imports
