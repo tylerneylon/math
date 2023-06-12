@@ -741,7 +741,9 @@ function compareFaces(s1, s2, pts) {
             // TODO HERE:
             // Ignore all shared vertex cases (only in this sub-check) because
             // of the above concern.
-            let c = compareShapes(border1, border2, pts);
+            let c = compareShapes(
+                border1, border2, pts, {doSharedVertexCheck: false}
+            );
             if (c) {
                 commentElt.innerHTML += '\n Yes edge-edge overlap';
                 return c;
@@ -779,7 +781,7 @@ function solveLinEqn(a, b, c, d, e, f) {
     return (col_swap_needed ? [y, x] : [x, y]);
 }
 
-function compareLines(s1, s2, pts) {
+function compareLines(s1, s2, pts, options) {
 
     /*
     if (s1.from === 3 && s1.to === 7) {
@@ -799,11 +801,24 @@ function compareLines(s1, s2, pts) {
         return x;
     }
 
-    // TODO: Just delete the string 'ret' from each line; keep parens.
-    if (s1.from === s2.from) return ret(pts[s1.to  ].z < pts[s2.to  ] ? '<' : '>');
-    if (s1.from === s2.to  ) return ret(pts[s1.to  ].z < pts[s2.from] ? '<' : '>');
-    if (s1.to   === s2.from) return ret(pts[s1.from].z < pts[s2.to  ] ? '<' : '>');
-    if (s1.to   === s2.to  ) return ret(pts[s1.from].z < pts[s2.from] ? '<' : '>');
+    // Right now the shared-vertex check is optional, and turned off for
+    // border-border checks when seeing if one face overlaps another.
+    if (options === undefined || options.doSharedVertexCheck) {
+
+        // TODO: Define this at an outer scope so that it need not be redefined
+        // inside this (compareLines()) fn.
+        // This function exists to keep some code concise.
+        // TODO: Describe what this does.
+        function c(z1, z2) {
+            return (z1 < z2) ? '>' : '<';
+        }
+
+        // TODO: Just delete the string 'ret' from each line; keep parens.
+        if (s1.from === s2.from) return ret(c(pts[s1.to  ].z, pts[s2.to  ]));
+        if (s1.from === s2.to  ) return ret(c(pts[s1.to  ].z, pts[s2.from]));
+        if (s1.to   === s2.from) return ret(c(pts[s1.from].z, pts[s2.to  ]));
+        if (s1.to   === s2.to  ) return ret(c(pts[s1.from].z, pts[s2.from]));
+    }
 
     /*
     if (s1.from === 0 && s1.to === 4) {
@@ -911,7 +926,7 @@ function say(s) {
 
 // XXX For now, this assumes that both s1 and s2 are faces.
 // Eventually I want to support the case that either could be a face or an edge.
-function compareShapes(s1, s2, pts) {
+function compareShapes(s1, s2, pts, options) {
 
     say('<p>compareShapes(' + getShapeName(s1) +
         ', ' + getShapeName(s2) + ') ');
@@ -932,7 +947,7 @@ function compareShapes(s1, s2, pts) {
     if (s1.type === 'face' && s2.type === 'face') {
         return compareFaces(s1, s2, pts);
     } else if (s1.type === 'line' && s2.type === 'line') {
-        return compareLines(s1, s2, pts);
+        return compareLines(s1, s2, pts, options);
     } else {
         return compareLineAndFace(s1, s2, pts);
     }
