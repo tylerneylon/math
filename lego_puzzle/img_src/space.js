@@ -645,7 +645,7 @@ function compareLineAndFace(s1, s2, pts) {
     console.assert(face.type === 'face' && line.type === 'line');
 
     // The face is behind "<" the line when the line is one edge of the face.
-    if (line.from in face.ptSet || line.to in face.ptSet) return ret('<');
+    if (line.from in face.ptSet && line.to in face.ptSet) return ret('<');
 
     return null;
 }
