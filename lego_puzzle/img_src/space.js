@@ -628,24 +628,25 @@ function updateBoundsForShape(shape, pts) {
 
 function compareLineAndFace(s1, s2, pts) {
 
-    let face = s1;
-    let line = s2;
+    let line = s1;
+    let face = s2;
     let doSwap = false;
 
-    if (s1.type === 'line') {
+    if (s1.type !== 'line') {
         [face, line] = [line, face];
         doSwap = true;
     }
     function ret(x) {
         console.assert(x === '<' || x === '>');
-        if (doSwap) return x === '<' ? '>' : '<';
+        if (doSwap) x = (x === '<') ? '>' : '<';
+        say(`compareLineAndFace() is returning ${x}`);
         return x;
     }
 
     console.assert(face.type === 'face' && line.type === 'line');
 
-    // The face is behind "<" the line when the line is one edge of the face.
-    if (line.from in face.ptSet && line.to in face.ptSet) return ret('<');
+    // The line is in front ">" of the face when the line is an edge of it.
+    if (line.from in face.ptSet && line.to in face.ptSet) return ret('>');
 
     // Check if either line endpoint both (a) is not shared with the face and
     // (b) overlaps the face in the view plane.
@@ -665,7 +666,15 @@ function compareLineAndFace(s1, s2, pts) {
 // view plane.
 function comparePointAndFace(ptI, face, pts) {
 
-    if (ptI in face.ptSet) return null;
+    function ret(v) {
+        say('');
+        let name1 = `point ${ptI}`;
+        let name2 = getShapeName(face);
+        say(`comparePointAndFace(${name1}, ${name2}) is returning ${v}`);
+        return v;
+    }
+
+    if (ptI in face.ptSet) return ret(null);
 
     let q = pts[ptI];
 
@@ -701,10 +710,10 @@ function comparePointAndFace(ptI, face, pts) {
         commentElt.innerHTML += ` other face has z=${faceZ.toFixed(2)}`;
 
         // Returning '>' means "draw the pt last" (draw point after face).
-        return (ptZ < faceZ) ? '>' : '<';
+        return ret((ptZ < faceZ) ? '>' : '<');
     }
 
-    return null;
+    return ret(null);
 }
 
 function compareFaces(s1, s2, pts) {
@@ -823,10 +832,10 @@ function compareLines(s1, s2, pts, options) {
         }
 
         // TODO: Just delete the string 'ret' from each line; keep parens.
-        if (s1.from === s2.from) return ret(c(pts[s1.to  ].z, pts[s2.to  ]));
-        if (s1.from === s2.to  ) return ret(c(pts[s1.to  ].z, pts[s2.from]));
-        if (s1.to   === s2.from) return ret(c(pts[s1.from].z, pts[s2.to  ]));
-        if (s1.to   === s2.to  ) return ret(c(pts[s1.from].z, pts[s2.from]));
+        if (s1.from === s2.from) return ret(c(pts[s1.to  ].z, pts[s2.to  ].z));
+        if (s1.from === s2.to  ) return ret(c(pts[s1.to  ].z, pts[s2.from].z));
+        if (s1.to   === s2.from) return ret(c(pts[s1.from].z, pts[s2.to  ].z));
+        if (s1.to   === s2.to  ) return ret(c(pts[s1.from].z, pts[s2.from].z));
     }
 
     /*
@@ -940,6 +949,11 @@ function compareShapes(s1, s2, pts, options) {
     say('<p>compareShapes(' + getShapeName(s1) +
         ', ' + getShapeName(s2) + ') ');
 
+    function ret(v) {
+        say(`compareShapes() is returning ${v}`);
+        return v;
+    }
+
     // Return null quickly if the bounding boxes don't overlap.
 
     updateBoundsForShape(s1, pts);
@@ -950,18 +964,18 @@ function compareShapes(s1, s2, pts, options) {
         s1.yMax < s2.yMin ||
         s1.yMin > s2.yMax) {
         say('Returning null due to no bbox overlap');
-        return null;
+        return ret(null);
     }
 
     if (s1.type === 'face' && s2.type === 'face') {
-        return compareFaces(s1, s2, pts);
+        return ret(compareFaces(s1, s2, pts));
     } else if (s1.type === 'line' && s2.type === 'line') {
-        return compareLines(s1, s2, pts, options);
+        return ret(compareLines(s1, s2, pts, options));
     } else {
-        return compareLineAndFace(s1, s2, pts);
+        return ret(compareLineAndFace(s1, s2, pts));
     }
 
-    return null;
+    return ret(null);
     // return '<';
 }
 
