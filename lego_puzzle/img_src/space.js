@@ -647,6 +647,15 @@ function compareLineAndFace(s1, s2, pts) {
     // The face is behind "<" the line when the line is one edge of the face.
     if (line.from in face.ptSet && line.to in face.ptSet) return ret('<');
 
+    // Check if either line endpoint both (a) is not shared with the face and
+    // (b) overlaps the face in the view plane.
+    for (let ptIdx of [line.from, line.to]) {
+        if (ptIdx in face.ptSet) continue;
+        let c = comparePointAndFace(ptIdx, face, pts);
+        if (c !== null) return ret(c);
+    }
+
+    // If we get here, neither line endpoint overlaps the face.
     return null;
 }
 
