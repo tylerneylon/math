@@ -660,7 +660,15 @@ function compareLineAndFace(s1, s2, pts) {
         if (c !== null) return ret(c);
     }
 
-    // If we get here, neither line endpoint overlaps the face.
+    // Check if the line overlaps any border line of the face.
+    for (let border of face.borders) {
+        let c = compareShapes(
+            line, border, pts, {doSharedVertexCheck: false}
+        );
+        if (c) return ret(c);
+    }
+
+    // If we get here, the line doesn't overlap the face.
     return null;
 }
 
