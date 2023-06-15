@@ -914,9 +914,11 @@ function compareLines(s1, s2, pts, options) {
     say(`line1Ray.z = ${line1Ray[2].toFixed(3)}`);
     say(`line2Ray.z = ${line2Ray[2].toFixed(3)}`);
 
+    // TODO: Think about what a good value for the tolerance is here.
+    let delta = line2Ray[2] - line1Ray[2];
+    if (Math.abs(delta) < 0.00001) return ret2(null);
+
     return (line1Ray[2] < line2Ray[2]) ? ret2('>') : ret2('<');
-
-
 
     /*
     // XXX Sanity checking that these are the same.
@@ -958,11 +960,12 @@ function say(s) {
 // Eventually I want to support the case that either could be a face or an edge.
 function compareShapes(s1, s2, pts, options) {
 
-    say('<p>compareShapes(' + getShapeName(s1) +
-        ', ' + getShapeName(s2) + ') ');
+    let myCall = getShapeName(s1) + ', ' + getShapeName(s2);
+    myCall     = 'compareShapes(' + myCall + ')';
+    say('<p>' + myCall + ' called');
 
     function ret(v) {
-        say(`compareShapes() is returning ${v}`);
+        say(myCall + ' is returning ' + v);
         return v;
     }
 
@@ -980,10 +983,13 @@ function compareShapes(s1, s2, pts, options) {
     }
 
     if (s1.type === 'face' && s2.type === 'face') {
+        say(myCall + ' delegating to compareFaces()');
         return ret(compareFaces(s1, s2, pts));
     } else if (s1.type === 'line' && s2.type === 'line') {
+        say(myCall + ' delegating to compareLines()');
         return ret(compareLines(s1, s2, pts, options));
     } else {
+        say(myCall + ' delegating to compareLineAndFace()');
         return ret(compareLineAndFace(s1, s2, pts));
     }
 
