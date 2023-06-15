@@ -59,6 +59,7 @@ ctx.dotSize = 0.06;
 ctx.lines = [];  // This will contain {from, to, elt} objects.
 
 ctx.doDrawFaces = true;
+ctx.doShadeFaces = true;
 ctx.doDrawBackFaces = false;
 
 // TODO: Consider supporting this flag.
@@ -404,10 +405,13 @@ function getFadeColor(stdBaseColor, z, retObj) {
 // direction and the direction of the light.
 function getShadedFaceColor(baseColor, towardLight) {
     let colorArr = util.getStdColor(baseColor);
-    for (let i = 0; i < 3; i++) {
-        colorArr[i] = Math.max(0, colorArr[i] + 0.5 * towardLight);
+    let scale = 1;
+    if (ctx.doShadeFaces) {
+        for (let i = 0; i < 3; i++) {
+            colorArr[i] = Math.max(0, colorArr[i] + 0.5 * towardLight);
+        }
+        scale = Math.max(1, ...colorArr);
     }
-    let scale = Math.max(1, ...colorArr);
     for (let i = 0; i < 3; i++) {
         util.ctx.stdColor[i] = colorArr[i] / scale;
     }
@@ -1035,7 +1039,7 @@ function orderElts2(pts, normalXYs) {
     // edges as soon as all their dependencies are visible.
 
     // XXX
-    compareShapes(ctx.lines[4], ctx.lines[5], pts);
+    // compareShapes(ctx.lines[4], ctx.lines[5], pts);
 
     // console.log('Starting orderElts2 add-elts phase');
     let shapes = [...ctx.faces, ...ctx.lines];
