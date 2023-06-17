@@ -839,15 +839,28 @@ function compareLines(s1, s2, pts, options) {
         // inside this (compareLines()) fn.
         // This function exists to keep some code concise.
         // TODO: Describe what this does.
+        /*
         function c(z1, z2) {
             return (z1 < z2) ? '>' : '<';
         }
+        */
+
+        // This compares line 1 from sh ("shared") to i1 against line 2 from sh
+        // to i2. If the ray from the eye (origin) to sh is more aligned with
+        // either, then that closer line is > than the other.
+        // TODO: Define this at an outer scope so that it need not be redefined
+        // inside this (compareLines()) fn.
+        function c(sh, i1, i2) {
+            let v1 = -vector.dot(pts[sh], vector.sub(pts[i1], pts[sh]));
+            let v2 = -vector.dot(pts[sh], vector.sub(pts[i2], pts[sh]));
+            return (v1 > v2) ? '>' : '<';
+        }
 
         // TODO: Just delete the string 'ret' from each line; keep parens.
-        if (s1.from === s2.from) return ret(c(pts[s1.to  ].z, pts[s2.to  ].z));
-        if (s1.from === s2.to  ) return ret(c(pts[s1.to  ].z, pts[s2.from].z));
-        if (s1.to   === s2.from) return ret(c(pts[s1.from].z, pts[s2.to  ].z));
-        if (s1.to   === s2.to  ) return ret(c(pts[s1.from].z, pts[s2.from].z));
+        if (s1.from === s2.from) return ret(c(s1.from, s1.to, s2.to));
+        if (s1.from === s2.to  ) return ret(c(s1.from, s1.to, s2.from));
+        if (s1.to   === s2.from) return ret(c(s1.to, s1.from, s2.to));
+        if (s1.to   === s2.to  ) return ret(c(s1.to, s1.from, s2.from));
     }
 
     /*
