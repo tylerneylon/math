@@ -981,7 +981,7 @@ function dedent() {
 
 // XXX
 function say(s) {
-    // return;  // XXX
+    return;  // XXX
     // commentElt.innerHTML += (prefix + s + '<br/>\n');
     commentParts.push(prefix + s + '<br/>\n');
 }
