@@ -835,16 +835,6 @@ function compareLines(s1, s2, pts, options) {
     // border-border checks when seeing if one face overlaps another.
     if (options === undefined || options.doSharedVertexCheck) {
 
-        // TODO: Define this at an outer scope so that it need not be redefined
-        // inside this (compareLines()) fn.
-        // This function exists to keep some code concise.
-        // TODO: Describe what this does.
-        /*
-        function c(z1, z2) {
-            return (z1 < z2) ? '>' : '<';
-        }
-        */
-
         // This compares line 1 from sh ("shared") to i1 against line 2 from sh
         // to i2. If the ray from the eye (origin) to sh is more aligned with
         // either, then that closer line is > than the other.
