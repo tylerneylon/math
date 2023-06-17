@@ -540,6 +540,20 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
     say('<p>Beginning to sort');
     say(`Candidate min = ${getShapeName(inputArr[min])}`);
 
+    function printCmpTree(min, cmpTree) {
+        let y = min;
+        let parts = [];
+        while (y !== undefined) {
+            parts.push(getShapeName(inputArr[y]));
+            if (y in cmpTree) {
+                y = cmpTree[y][0];
+            } else {
+                break;
+            }
+        }
+        say('cmpTree: ' + parts.join(' < '));
+    }
+
     while (arr.length > 0) {
 
         let xIdx = -1;
@@ -564,19 +578,7 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
                 if (min !== undefined) {
                     let n = getShapeName(inputArr[min]);  // XXX
                     say(`Min candidate = ${n}`);
-
-                    // Print out the cmpTree.
-                    let y = min;
-                    let parts = [];
-                    while (y !== undefined) {
-                        parts.push(getShapeName(inputArr[y]));
-                        if (y in cmpTree) {
-                            y = cmpTree[y][0];
-                        } else {
-                            break;
-                        }
-                    }
-                    say('cmpTree: ' + parts.join(' < '));
+                    printCmpTree(min, cmpTree);
                 }
                 break;
             }
@@ -602,6 +604,7 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
                 cmpTree[x] = [min];
                 min  = x;
                 xIdx = -1;
+                printCmpTree(min, cmpTree);
             }
         }
     }
@@ -786,7 +789,7 @@ function compareFaces(s1, s2, pts) {
     commentElt.innerHTML += '\n No edge-edge overlap';
 
     // XXX
-    return '<';
+    return null;
 }
 
 // This solves the 2x2 system of equations for x and y:
