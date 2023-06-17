@@ -547,7 +547,7 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
 
             xIdx++;
             if (xIdx == arr.length) {
-                let stars = '*************';  // XXX
+                let stars = '*'.repeat(30);  // XXX
                 say(`<br/>${stars} Adding shape ${getShapeName(inputArr[min])}<br/>`);
                 sorted.push(min);
                 arr.splice(arr.indexOf(min), 1);
@@ -584,17 +584,20 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
             let x = arr[xIdx];
             let n = getShapeName(inputArr[x]);  // XXX
             if (x in cmpTree) {
-                say(`  Keeping it < ${n} as n is in the cmpTree`);
+                let minName = getShapeName(inputArr[min]);
+                say(`Keeping the min (${minName}) < ${n} as n is in the cmpTree`);
                 continue;
             }
+            indent();
             let c = cmp(x, min);
+            dedent();
             if (c === '>') {
-                say(`  Keeping it < ${n} as indicated by cmp`);
+                say(`Keeping the min < ${n} as indicated by cmp`);
                 cmpTree[min].push(x);
                 cmpTree[x] = [];
             } 
             if (c === '<') {
-                say(`  It looks like ${n} is smaller`);
+                say(`It looks like ${n} is smaller`);
                 say(`New candidate min = ${n}`);
                 cmpTree[x] = [min];
                 min  = x;
@@ -953,10 +956,31 @@ function getShapeName(s) {
     }
 }
 
+let prefix = '';
+
+let commentParts = [];
+
+function startComments() {
+    commentParts = [];
+}
+
+function showComments() {
+    commentElt.innerHTML = commentParts.join('\n');
+}
+
+function indent() {
+    prefix = prefix + '&nbsp;'.repeat(4);
+}
+
+function dedent() {
+    prefix = prefix.substr(4 * 6);  // 4 * len('&nbsp;')
+}
+
 // XXX
 function say(s) {
-    return;  // XXX
-    commentElt.innerHTML += (s + '<br/>\n');
+    // return;  // XXX
+    // commentElt.innerHTML += (prefix + s + '<br/>\n');
+    commentParts.push(prefix + s + '<br/>\n');
 }
 
 // XXX For now, this assumes that both s1 and s2 are faces.
@@ -965,7 +989,8 @@ function compareShapes(s1, s2, pts, options) {
 
     let myCall = getShapeName(s1) + ', ' + getShapeName(s2);
     myCall     = 'compareShapes(' + myCall + ')';
-    say('<p>' + myCall + ' called');
+    say('');
+    say(myCall + ' called');
 
     function ret(v) {
         say(myCall + ' is returning ' + v);
@@ -1004,6 +1029,8 @@ function compareShapes(s1, s2, pts, options) {
 //     The plan is for this function to eventually replace orderElts() and to
 //     delete the old function (whose code is saved for posterity in git).
 function orderElts2(pts, normalXYs) {
+
+    startComments();
 
     numOE2Calls++;
     // commentElt.innerHTML = `orderElts2 called: ${numOE2Calls} time(s) so far`;
@@ -1092,7 +1119,7 @@ function orderElts2(pts, normalXYs) {
         for (let ptIdx of [line.from, line.to]) pts[ptIdx].lineDrawn(i);
     }
 
-    // TODO
+    showComments();
 }
 
 function orderElts(xys) {
