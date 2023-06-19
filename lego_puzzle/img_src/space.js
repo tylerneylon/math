@@ -587,7 +587,7 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
             let n = getShapeName(inputArr[x]);  // XXX
             if (x in cmpTree) {
                 let minName = getShapeName(inputArr[min]);
-                say(`Keeping the min (${minName}) < ${n} as n is in the cmpTree`);
+                say(`<br>Keeping the min (${minName}) < ${n} as n is in the cmpTree`);
                 continue;
             }
             indent();
@@ -649,7 +649,9 @@ function compareLineAndFace(s1, s2, pts) {
     function ret(x) {
         console.assert(x === '<' || x === '>');
         if (doSwap) x = (x === '<') ? '>' : '<';
-        say(`compareLineAndFace() is returning ${x}`);
+        let n1 = getShapeName(s1);
+        let n2 = getShapeName(s2);
+        say(`compareLineAndFace: ${n1} ${n2} is returning ${x}`);
         return x;
     }
 
@@ -687,7 +689,7 @@ function comparePointAndFace(ptI, face, pts) {
     function ret(v) {
         let name1 = `point ${ptI}`;
         let name2 = getShapeName(face);
-        say(`comparePointAndFace(${name1}, ${name2}) is returning ${v}`);
+        say(`comparePointAndFace: ${name1} ${name2} is returning ${v}`);
         return v;
     }
 
@@ -831,8 +833,11 @@ function compareLines(s1, s2, pts, options) {
     //       I have not yet at all really tested this.
 
     // XXX tmp delete this
-    function ret(x) {
-        say(`Returning ${x} based on single-shared vertex`);
+    function ret(x, reason) {
+        if (reason === undefined) reason = '';
+        let n1 = getShapeName(s1);
+        let n2 = getShapeName(s2);
+        say(`compareLines: ${n1} ${n2} is returning ${x}` + reason);
         return x;
     }
 
@@ -848,14 +853,14 @@ function compareLines(s1, s2, pts, options) {
         function c(sh, i1, i2) {
             let v1 = -vector.dot(pts[sh], vector.sub(pts[i1], pts[sh]));
             let v2 = -vector.dot(pts[sh], vector.sub(pts[i2], pts[sh]));
-            return (v1 > v2) ? '>' : '<';
+            return ret((v1 > v2) ? '>' : '<', ': single shared vertex');
         }
 
         // TODO: Just delete the string 'ret' from each line; keep parens.
-        if (s1.from === s2.from) return ret(c(s1.from, s1.to, s2.to));
-        if (s1.from === s2.to  ) return ret(c(s1.from, s1.to, s2.from));
-        if (s1.to   === s2.from) return ret(c(s1.to, s1.from, s2.to));
-        if (s1.to   === s2.to  ) return ret(c(s1.to, s1.from, s2.from));
+        if (s1.from === s2.from) return c(s1.from, s1.to, s2.to);
+        if (s1.from === s2.to  ) return c(s1.from, s1.to, s2.from);
+        if (s1.to   === s2.from) return c(s1.to, s1.from, s2.to);
+        if (s1.to   === s2.to  ) return c(s1.to, s1.from, s2.from);
     }
 
     /*
@@ -880,21 +885,18 @@ function compareLines(s1, s2, pts, options) {
     );
     if (soln === null) {
         // There is no solution.
-        say('No soln at all to lin eqn')
-        return null;
+        return ret(null, ': no soln at all to lin eqn');
     }
     let t1 = soln[0], t2 = soln[1];
     if (t1 < 0 || t1 > 1 || t2 < 0 || t2 > 1) {
-        say('No overlap due to t val(s) out of [0, 1]');
-        return null;
+        return ret(null, ': no overlap due to t val(s) out of [0, 1]');
     }
 
     // XXX
 
     // console.log('t0', t0, 't1', t1);
 
-    say('Edge-edge intersection is found: ' + 
-        `${s1.from}<->${s1.to} and ${s2.from}<->${s2.to}`);
+    let reason = ': line-line overlap:';
 
     // TODO HERE
     // Analogous to how I call findFacePlane() for all faces in orderElts2(),
@@ -914,19 +916,14 @@ function compareLines(s1, s2, pts, options) {
         s2.d / vector.dot(viewPlaneRay, s2.b)
     );
 
-    function ret2(x) {
-        say(`Returning ${x} based on an overlap point`);
-        return x;
-    }
-
-    say(`line1Ray.z = ${line1Ray[2].toFixed(3)}`);
-    say(`line2Ray.z = ${line2Ray[2].toFixed(3)}`);
+    reason += ` line1Ray.z=${line1Ray[2].toFixed(3)}`;
+    reason += ` line2Ray.z=${line2Ray[2].toFixed(3)}`;
 
     // TODO: Think about what a good value for the tolerance is here.
     let delta = line2Ray[2] - line1Ray[2];
-    if (Math.abs(delta) < 0.00001) return ret2(null);
+    if (Math.abs(delta) < 0.00001) return ret(null, ': overlap pt is the same');
 
-    return (line1Ray[2] < line2Ray[2]) ? ret2('>') : ret2('<');
+    return (line1Ray[2] < line2Ray[2]) ? ret('>', reason) : ret('<', reason);
 
     /*
     // XXX Sanity checking that these are the same.
@@ -946,6 +943,7 @@ function compareLines(s1, s2, pts, options) {
     console.log('<line1Ray, b> =', vector.dot(line1Ray, s1.b));
     console.log('line1.d =', s1.d);
     */
+    return ret(null, ': fall-through case');
 }
 
 // XXX
