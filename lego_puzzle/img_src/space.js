@@ -981,7 +981,11 @@ function dedent() {
 function say(s) {
     // return;  // XXX
     // commentElt.innerHTML += (prefix + s + '<br/>\n');
-    commentParts.push(prefix + s + '<br/>\n');
+
+    let spanStart = '';
+    let spanEnd   = '';
+    if (prefix) [spanStart, spanEnd] = ['<span class="gray">', '</span>'];
+    commentParts.push(prefix + spanStart + s + spanEnd + '<br/>\n');
 }
 
 // XXX For now, this assumes that both s1 and s2 are faces.
