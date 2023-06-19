@@ -223,7 +223,7 @@ function lineDrawn(lineIdx) {
     if (this.deps.length === 0) {
         mainGroup.appendChild(ctx.outlines[this.idx]);
         mainGroup.appendChild(ctx.dots[this.idx]);
-        say(`[lineDrawn] Rendering: dot ${this.idx}`);
+        say(`Rendering: dot ${this.idx}`);
     }
 }
 
@@ -594,7 +594,7 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
             let c = cmp(x, min);
             dedent();
             if (c === '>') {
-                say(`Keeping the min < ${n} as indicated by cmp`);
+                say(`<br>Keeping the min < ${n} as indicated by cmp`);
                 cmpTree[min].push(x);
                 cmpTree[x] = [];
             } 
@@ -685,7 +685,6 @@ function compareLineAndFace(s1, s2, pts) {
 function comparePointAndFace(ptI, face, pts) {
 
     function ret(v) {
-        say('');
         let name1 = `point ${ptI}`;
         let name2 = getShapeName(face);
         say(`comparePointAndFace(${name1}, ${name2}) is returning ${v}`);
@@ -894,7 +893,7 @@ function compareLines(s1, s2, pts, options) {
 
     // console.log('t0', t0, 't1', t1);
 
-    say('<p>Edge-edge intersection is found: ' + 
+    say('Edge-edge intersection is found: ' + 
         `${s1.from}<->${s1.to} and ${s2.from}<->${s2.to}`);
 
     // TODO HERE
@@ -952,7 +951,8 @@ function compareLines(s1, s2, pts, options) {
 // XXX
 function getShapeName(s) {
     if (s.type === 'face') {
-        return `face(${s[0]}, ${s[1]}, ${s[2]}, ${s[3]})`;
+        return 'face(' + s.join(',') + ')';
+        // return `face(${s[0]}, ${s[1]}, ${s[2]}, ${s[3]})`;
     }
     if (s.type === 'line') {
         return `${s.from}--${s.to}`;
@@ -990,13 +990,14 @@ function say(s) {
 // Eventually I want to support the case that either could be a face or an edge.
 function compareShapes(s1, s2, pts, options) {
 
-    let myCall = getShapeName(s1) + ', ' + getShapeName(s2);
-    myCall     = 'compareShapes(' + myCall + ')';
-    say('');
+    let myCall = getShapeName(s1) + ' ' + getShapeName(s2);
+    myCall     = 'compareShapes: ' + myCall;
     say(myCall + ' called');
 
-    function ret(v) {
-        say(myCall + ' is returning ' + v);
+    function ret(v, reason) {
+        dedent();
+        if (reason === undefined) reason = '';
+        say(myCall + ' is returning ' + v + ' ' + reason);
         return v;
     }
 
@@ -1009,23 +1010,26 @@ function compareShapes(s1, s2, pts, options) {
         s1.xMin > s2.xMax ||
         s1.yMax < s2.yMin ||
         s1.yMin > s2.yMax) {
-        say('Returning null due to no bbox overlap');
-        return ret(null);
+        indent();
+        return ret(null, 'no bbox overlap');
     }
 
     if (s1.type === 'face' && s2.type === 'face') {
         say(myCall + ' delegating to compareFaces()');
+        indent();
         return ret(compareFaces(s1, s2, pts));
     } else if (s1.type === 'line' && s2.type === 'line') {
         say(myCall + ' delegating to compareLines()');
+        indent();
         return ret(compareLines(s1, s2, pts, options));
     } else {
         say(myCall + ' delegating to compareLineAndFace()');
+        indent();
         return ret(compareLineAndFace(s1, s2, pts));
     }
 
-    return ret(null);
-    // return '<';
+    indent();
+    return ret(null, 'fall-through case');
 }
 
 // TODO:
@@ -1093,22 +1097,22 @@ function orderElts2(pts, normalXYs) {
     let backToFront = sortWithPartialInfo(shapes, compareShapes, pts);
 
     // XXX
-    say('<p>Here is the ordering of shapes I got, back-to-front:');
+    say('<p><hr>Here is the ordering of shapes I got, back-to-front:');
     for (let s of backToFront) {
         say(getShapeName(s));
     }
 
-    say('<p>Now I\'ll render:');
+    say('<p><hr>Now I\'ll render:');
     for (let shape of backToFront) {
         if (shape.type === 'face') {
             mainGroup.appendChild(shape.polygon);
-            say('[1] Rendering: ' + getShapeName(shape));
+            say('Rendering: ' + getShapeName(shape));
             // for (let i of shape.edges) ctx.lines[i].faceDrawn(shape.idx);
         }
         if (shape.type === 'line') {
             if (shape.elt.parentElement) continue;
             mainGroup.appendChild(shape.elt);
-            say('[2] Rendering: ' + getShapeName(shape));
+            say('Rendering: ' + getShapeName(shape));
             for (let i of [shape.from, shape.to]) pts[i].lineDrawn(shape.idx);
         }
     }
@@ -1118,7 +1122,7 @@ function orderElts2(pts, normalXYs) {
         let line = ctx.lines[i];
         if (line.elt.parentElement) continue;
         mainGroup.appendChild(line.elt);
-        say('[3] Rendering: ' + getShapeName(line));
+        say('Rendering: ' + getShapeName(line));
         for (let ptIdx of [line.from, line.to]) pts[ptIdx].lineDrawn(i);
     }
 
