@@ -539,7 +539,7 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
 
     let hl1 = '<span class="highlight">';
     let hl2 = '</span>';
-    say('<p><hr>Beginning to sort');
+    say('<p><hr>Beginning to sort<br>');
     say(`Candidate ${hl1}min = ${getShapeName(inputArr[min])}${hl2}`);
 
     function printCmpTree(min, cmpTree) {
@@ -589,20 +589,20 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
             let n = getShapeName(inputArr[x]);  // XXX
             if (x in cmpTree) {
                 let minName = getShapeName(inputArr[min]);
-                say(`<br>Keeping the min (${minName}) < ${n} as n is in the cmpTree`);
+                say(`Keeping the min (${minName}) < ${n} as n is in the cmpTree`);
                 continue;
             }
             indent();
             let c = cmp(x, min);
             dedent();
             if (c === '>') {
-                say(`<br>Keeping the min < ${n} as indicated by cmp`);
+                say(`Keeping the min < ${n} as indicated by cmp`);
                 cmpTree[min].push(x);
                 cmpTree[x] = [];
             } 
             if (c === '<') {
                 // say(`It looks like ${n} is smaller`);
-                say(`<br>New candidate ${hl1}min = ${n}${hl2}`);
+                say(`New candidate ${hl1}min = ${n}${hl2}`);
                 cmpTree[x] = [min];
                 min  = x;
                 xIdx = -1;
