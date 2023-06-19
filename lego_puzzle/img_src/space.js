@@ -537,8 +537,10 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
     let min     = arr[arr.length - 1];
     let cmpTree = {[min]: []}
 
+    let hl1 = '<span class="highlight">';
+    let hl2 = '</span>';
     say('<p><hr>Beginning to sort');
-    say(`Candidate min = ${getShapeName(inputArr[min])}`);
+    say(`Candidate ${hl1}min = ${getShapeName(inputArr[min])}${hl2}`);
 
     function printCmpTree(min, cmpTree) {
         let y = min;
@@ -563,8 +565,6 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
             if (xIdx == arr.length) {
                 let n = getShapeName(inputArr[min]);
                 say(`<span class="framed">Adding shape ${n}</span>`);
-                // let stars = '*'.repeat(30);  // XXX
-                // say(`<br/>${stars} Adding shape ${getShapeName(inputArr[min])}<br/>`);
                 sorted.push(min);
                 arr.splice(arr.indexOf(min), 1);
                 for (let i = 1; i < cmpTree[min].length; i++) {
@@ -579,7 +579,7 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
                 }
                 if (min !== undefined) {
                     let n = getShapeName(inputArr[min]);  // XXX
-                    say(`Min candidate = ${n}`);
+                    say(`Candidate ${hl1}min = ${n}${hl2}`);
                     printCmpTree(min, cmpTree);
                 }
                 break;
@@ -602,7 +602,7 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
             } 
             if (c === '<') {
                 // say(`It looks like ${n} is smaller`);
-                say(`<br>New candidate min = ${n}`);
+                say(`<br>New candidate ${hl1}min = ${n}${hl2}`);
                 cmpTree[x] = [min];
                 min  = x;
                 xIdx = -1;
