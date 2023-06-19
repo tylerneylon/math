@@ -561,8 +561,10 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
 
             xIdx++;
             if (xIdx == arr.length) {
-                let stars = '*'.repeat(30);  // XXX
-                say(`<br/>${stars} Adding shape ${getShapeName(inputArr[min])}<br/>`);
+                let n = getShapeName(inputArr[min]);
+                say(`<span class="framed">Adding shape ${n}</span>`);
+                // let stars = '*'.repeat(30);  // XXX
+                // say(`<br/>${stars} Adding shape ${getShapeName(inputArr[min])}<br/>`);
                 sorted.push(min);
                 arr.splice(arr.indexOf(min), 1);
                 for (let i = 1; i < cmpTree[min].length; i++) {
