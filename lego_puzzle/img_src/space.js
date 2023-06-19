@@ -537,7 +537,7 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
     let min     = arr[arr.length - 1];
     let cmpTree = {[min]: []}
 
-    say('<p>Beginning to sort');
+    say('<p><hr>Beginning to sort');
     say(`Candidate min = ${getShapeName(inputArr[min])}`);
 
     function printCmpTree(min, cmpTree) {
@@ -599,8 +599,8 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
                 cmpTree[x] = [];
             } 
             if (c === '<') {
-                say(`It looks like ${n} is smaller`);
-                say(`New candidate min = ${n}`);
+                // say(`It looks like ${n} is smaller`);
+                say(`<br>New candidate min = ${n}`);
                 cmpTree[x] = [min];
                 min  = x;
                 xIdx = -1;
@@ -955,7 +955,7 @@ function getShapeName(s) {
         return `face(${s[0]}, ${s[1]}, ${s[2]}, ${s[3]})`;
     }
     if (s.type === 'line') {
-        return `${s.from}<->${s.to}`;
+        return `${s.from}--${s.to}`;
     }
 }
 
@@ -981,7 +981,7 @@ function dedent() {
 
 // XXX
 function say(s) {
-    return;  // XXX
+    // return;  // XXX
     // commentElt.innerHTML += (prefix + s + '<br/>\n');
     commentParts.push(prefix + s + '<br/>\n');
 }
@@ -1040,9 +1040,9 @@ function orderElts2(pts, normalXYs) {
     commentElt.innerHTML = '';
 
     // XXX
-    say('<p>Point z values:');
+    say('<tt><p><hr>Point z values:');
     for (let [i, xy] of pts.entries()) {
-        say(`${i}: ${xy.z}`);
+        say(`${i}: ${xy.z.toFixed(3)}`);
     }
 
     // Remove all SVG elements so we can re-insert in a new order.
