@@ -740,8 +740,6 @@ function comparePointAndFace(ptI, face, pts) {
 
 function compareFaces(s1, s2, pts) {
 
-    // TODO: Remove the bounds check as it is now outside this fn.
-
     console.assert(s1.type === 'face');
     console.assert(s2.type === 'face');
 
@@ -763,9 +761,6 @@ function compareFaces(s1, s2, pts) {
             }
         }
     }
-    commentElt.innerHTML += '\n No point overlap';
-
-    // TODO Make a test case for the next section; write the next section.
 
     // 2. Check if there are any edge-edge overlaps.
 
@@ -784,13 +779,9 @@ function compareFaces(s1, s2, pts) {
             let c = compareShapes(
                 border1, border2, pts, {doSharedVertexCheck: false}
             );
-            if (c) {
-                commentElt.innerHTML += '\n Yes edge-edge overlap';
-                return c;
-            }
+            if (c) return c;
         }
     }
-    commentElt.innerHTML += '\n No edge-edge overlap';
 
     // XXX
     return null;
@@ -969,6 +960,7 @@ function startComments() {
 }
 
 function showComments() {
+    if (!commentElt) return;
     commentElt.innerHTML = commentParts.join('\n');
 }
 
@@ -978,10 +970,6 @@ function indent() {
 
 function dedent() {
     prefix = prefix.substr(4 * 6);  // 4 * len('&nbsp;')
-}
-
-function resetComments() {
-    commentElt.innerHTML = '';
 }
 
 // XXX
@@ -1050,7 +1038,6 @@ function orderElts2(pts, normalXYs) {
 
     numOE2Calls++;
     // commentElt.innerHTML = `orderElts2 called: ${numOE2Calls} time(s) so far`;
-    resetComments();
 
     // XXX
     say('<tt><p><hr>Point z values:');
