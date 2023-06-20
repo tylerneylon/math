@@ -688,10 +688,11 @@ function compareLineAndFace(s1, s2, pts) {
 // view plane.
 function comparePointAndFace(ptI, face, pts) {
 
-    function ret(v) {
-        let name1 = `point ${ptI}`;
-        let name2 = getShapeName(face);
-        say(`comparePointAndFace: ${name1} ${name2} is returning ${v}`);
+    function ret(v, reason) {
+        if (reason === undefined) reason = '';
+        let n1 = `point ${ptI}`;
+        let n2 = getShapeName(face);
+        say(`comparePointAndFace: ${n1} ${n2} is returning ${v}` + reason);
         return v;
     }
 
@@ -720,18 +721,18 @@ function comparePointAndFace(ptI, face, pts) {
     }
 
     if (numCross % 2 === 1) {
-        commentElt.innerHTML += `\n Point ${ptI} is an overlap`;
+        let reason = `: Point ${ptI} is an overlap`;
         let ptZ = q.z;
-        commentElt.innerHTML += ` with z=${ptZ.toFixed(2)}`;
+        reason += ` with z=${ptZ.toFixed(2)}`;
 
         // The other face has eqn <a, face.n> = face.c.
         // a = t * q. t = face.c / <q, face.n>.
         let t = face.c / vector.dot(q, face.n);
         let faceZ = q[2] * t;
-        commentElt.innerHTML += ` other face has z=${faceZ.toFixed(2)}`;
+        reason += ` other face has z=${faceZ.toFixed(2)}`;
 
         // Returning '>' means "draw the pt last" (draw point after face).
-        return ret((ptZ < faceZ) ? '>' : '<');
+        return ret((ptZ < faceZ) ? '>' : '<', reason);
     }
 
     return ret(null);
@@ -979,6 +980,10 @@ function dedent() {
     prefix = prefix.substr(4 * 6);  // 4 * len('&nbsp;')
 }
 
+function resetComments() {
+    commentElt.innerHTML = '';
+}
+
 // XXX
 function say(s) {
     // return;  // XXX
@@ -1045,7 +1050,7 @@ function orderElts2(pts, normalXYs) {
 
     numOE2Calls++;
     // commentElt.innerHTML = `orderElts2 called: ${numOE2Calls} time(s) so far`;
-    commentElt.innerHTML = '';
+    resetComments();
 
     // XXX
     say('<tt><p><hr>Point z values:');
