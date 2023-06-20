@@ -21,6 +21,12 @@ import * as util   from './util.js';
 
 let zDist = 8;
 
+let thickStyle = {
+    stroke: '#444',
+    fill:   'transparent',
+    'stroke-width': 10
+};
+
 
 // ______________________________________________________________________
 // Main
@@ -35,6 +41,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         space.setArtist(artist);
 
         let [pts, lines, faces] = util.getCubePtsLinesFaces();
+        for (let line of lines) line.style = thickStyle;
 
         // Rotate the last 4 points around the x-axis by 45 degrees.
         let R = matrix.rotateAroundX(Math.PI / 4);

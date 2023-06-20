@@ -22,6 +22,12 @@ import * as util   from './util.js';
 
 let zDist = 8;
 
+let thickStyle = {
+    stroke: '#444',
+    fill:   'transparent',
+    'stroke-width': 10
+};
+
 
 // ______________________________________________________________________
 // Main
@@ -44,7 +50,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             [ 2,  0,  1]   // 5
         ];
 
-        let lines = [{from: 4, to: 5}];
+        let lines = [{from: 4, to: 5, style: thickStyle}];
         let faces = [[0, 1, 2, 3]];
         faces[0].style = {fill: '#16c'};
 

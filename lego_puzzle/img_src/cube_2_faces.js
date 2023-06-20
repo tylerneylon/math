@@ -18,6 +18,12 @@ import * as util   from './util.js';
 
 let zDist = 8;
 
+let thickStyle = {
+    stroke: '#444',
+    fill:   'transparent',
+    'stroke-width': 10
+};
+
 
 // ______________________________________________________________________
 // Main
@@ -32,6 +38,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
         space.setArtist(artist);
 
         let [pts, lines, faces] = util.getCubePtsLinesFaces();
+
+        // Style the lines and faces.
+        for (let line of lines) line.style = thickStyle;
         faces[0].style = {fill: '#714'};
         faces[5].style = {fill: '#16c'};
 

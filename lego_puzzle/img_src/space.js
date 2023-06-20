@@ -1063,7 +1063,7 @@ function orderElts2(pts, normalXYs) {
     // Make points depend on their incident lines.
     for (let [i, pt] of pts.entries()) Object.assign(pt, {idx: i, deps: []});
     for (const [lineIdx, line] of ctx.lines.entries()) {
-        line.elt.setAttribute('stroke-width', 10);  // XXX
+        // line.elt.setAttribute('stroke-width', 10);  // XXX
         Object.assign(line, {idx: lineIdx, pts});
         for (let i of [line.from, line.to]) pts[i].deps.push(lineIdx);
     }
