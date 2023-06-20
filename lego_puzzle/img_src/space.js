@@ -220,7 +220,7 @@ function logEvent(e) {
 // This is intended to be a method on points returned by getXYArray().
 function lineDrawn(lineIdx) {
     this.deps.splice(this.deps.indexOf(lineIdx), 1);
-    if (this.deps.length === 0) {
+    if (this.deps.length === 0 && ctx.doDrawDots) {
         mainGroup.appendChild(ctx.outlines[this.idx]);
         mainGroup.appendChild(ctx.dots[this.idx]);
         say(`Rendering: dot ${this.idx}`);
@@ -1486,6 +1486,7 @@ export function addLines(lines, slices) {
         ctx.lines.push(line);
     }
     ctx.slices = slices;  // If no edges are highlighted, undefined is ok.
+    ensureFaceEdgesAreIndexed();
 }
 
 // This expects each face to be an array of indexes into `pts`.
