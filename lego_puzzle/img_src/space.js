@@ -736,9 +736,6 @@ function compareFaces(s1, s2, pts) {
 
     // 1. Check to see if any point is in the boundaries of the other face.
 
-    // XXX tmp
-    let thereIsAPointOverlap = false;
-
     let shapes = [s1, s2];
     for (let i = 0; i < 2; i++) {
         let ptShape = shapes[i];
@@ -757,16 +754,6 @@ function compareFaces(s1, s2, pts) {
 
     for (let border1 of s1.borders) {
         for (let border2 of s2.borders) {
-            // NOTE: This can cause a weird case. We might have two faces which
-            // share at least one vertex, where one face has an edge coming
-            // toward the camera, and (sharing a vertex) an edge on the face
-            // goes away from the camera. Then we would judge one shape in front
-            // of the other. But it would still be quite easy for a third
-            // interposed shape to change the order in which we should be
-            // rendering the shapes.
-            // TODO HERE:
-            // Ignore all shared vertex cases (only in this sub-check) because
-            // of the above concern.
             let c = compareShapes(
                 border1, border2, pts, {doSharedVertexCheck: false}
             );
@@ -774,25 +761,14 @@ function compareFaces(s1, s2, pts) {
         }
     }
 
-    // XXX
     return null;
 }
 
 function compareLines(s1, s2, pts, options) {
 
-    /*
-    if (s1.from === 3 && s1.to === 7) {
-        console.log(s2);
-    }
-    */
-
     // 1. If the lines share one vertex, order based on the z value of the
     //    non-shared vertex.
 
-    // TODO: Carefully test that this is working.
-    //       I have not yet at all really tested this.
-
-    // XXX tmp delete this
     function ret(x, reason) {
         if (reason === undefined) reason = '';
         let n1 = getShapeName(s1);
@@ -823,13 +799,6 @@ function compareLines(s1, s2, pts, options) {
         if (s1.to   === s2.to  ) return c(s1.to, s1.from, s2.from);
     }
 
-    /*
-    if (s1.from === 0 && s1.to === 4) {
-        commentElt.innerHTML += `<p>comparing ${s1.from}<->${s1.to} and ${s2.from}<->${s2.to}`;
-        // console.log(s2);
-    }
-    */
-
     // 2. Determine if there is a point overlap in the view plane.
 
     // We'll treat each line as the set of points
@@ -852,19 +821,7 @@ function compareLines(s1, s2, pts, options) {
         return ret(null, ': no overlap due to t val(s) out of [0, 1]');
     }
 
-    // XXX
-
-    // console.log('t0', t0, 't1', t1);
-
     let reason = ': line-line overlap:';
-
-    // TODO HERE
-    // Analogous to how I call findFacePlane() for all faces in orderElts2(),
-    // call a new fn findLineEqn() for all lines. Use those to simplify the
-    // expressions of a-f above.
-    // Use my physical notebook notes from 305.2023 to find tau0, tau1 for each
-    // line, and then use those to find the corresponding z values along the ray
-    // of intersection.
 
     let viewPlaneRay = [s1.x + t1 * s1.dx, s1.y + t1 * s1.dy, ctx.zoom];
     let line1Ray = vector.scale(
@@ -884,26 +841,6 @@ function compareLines(s1, s2, pts, options) {
     if (Math.abs(delta) < 0.00001) return ret(null, ': overlap pt is the same');
 
     return (line1Ray[2] < line2Ray[2]) ? ret('>', reason) : ret('<', reason);
-
-    /*
-    // XXX Sanity checking that these are the same.
-    let viewPlaneRay2 = [s2.x + t2 * s2.dx, s2.y + t2 * s2.dy, ctx.zoom];
-    console.log('viewPlaneRay', viewPlaneRay);
-    console.log('viewPlaneRay2', viewPlaneRay2);
-    */
-
-
-    /*
-    // XXX This is a sanity check. The value ought to be close to 0.
-    console.log('<viewPlaneRay, a> =', vector.dot(viewPlaneRay, s1.a));
-
-
-    // XXX This is a sanity check. The value ought to be close to 0.
-    console.log('<line1Ray, a> =', vector.dot(line1Ray, s1.a));
-    console.log('<line1Ray, b> =', vector.dot(line1Ray, s1.b));
-    console.log('line1.d =', s1.d);
-    */
-    return ret(null, ': fall-through case');
 }
 
 
@@ -968,11 +905,8 @@ function orderElts2(pts, normalXYs) {
 
     startComments();
 
-    // XXX
     say('<tt><p><hr>Point z values:');
-    for (let [i, xy] of pts.entries()) {
-        say(`${i}: ${xy.z.toFixed(3)}`);
-    }
+    for (let [i, xy] of pts.entries()) say(`${i}: ${xy.z.toFixed(3)}`);
 
     // Remove all SVG elements so we can re-insert in a new order.
     for (let dot     of ctx.dots)         dot.remove();
@@ -1000,39 +934,17 @@ function orderElts2(pts, normalXYs) {
     // Make lines depend on their incident faces.
     for (let line of ctx.lines) line.deps = [...line.faces];
 
-    // TODO HERE2: I'm leading toward sorting all faces and lines (not points;
-    //            they are only dependency-based. I believe I can now compare
-    //            lines with faces; and faces with faces; but not yet lines with
-    //            lines. I need a way to decide which line is in front of which
-    //            other. I suspect finding their perspective-based xy point of
-    //            intersection will work. Compare the z values (using
-    //            interpolation) at that point. Actually, it's not obvious to me
-    //            that I can straight interpolate the z values. I'll have to
-    //            think about it more.
-
-
-    // For now, I'll add in faces in an arbitrary order, and render lines and
-    // edges as soon as all their dependencies are visible.
-
-    // XXX
-    // compareShapes(ctx.lines[4], ctx.lines[5], pts);
-
-    // console.log('Starting orderElts2 add-elts phase');
     let shapes = [...ctx.faces, ...ctx.lines];
     let backToFront = sortWithPartialInfo(shapes, compareShapes, pts);
 
-    // XXX
     say('<p><hr>Here is the ordering of shapes I got, back-to-front:');
-    for (let s of backToFront) {
-        say(getShapeName(s));
-    }
+    for (let s of backToFront) say(getShapeName(s));
 
     say('<p><hr>Now I\'ll render:');
     for (let shape of backToFront) {
         if (shape.type === 'face') {
             mainGroup.appendChild(shape.polygon);
             say('Rendering: ' + getShapeName(shape));
-            // for (let i of shape.edges) ctx.lines[i].faceDrawn(shape.idx);
         }
         if (shape.type === 'line') {
             if (shape.elt.parentElement) continue;
@@ -1040,15 +952,6 @@ function orderElts2(pts, normalXYs) {
             say('Rendering: ' + getShapeName(shape));
             for (let i of [shape.from, shape.to]) pts[i].lineDrawn(shape.idx);
         }
-    }
-    // TODO: Eventually this should not be needed at all, as we ought to be
-    //       including all lines in the shapes sorted above.
-    for (let i = 0; i < ctx.lines.length; i++) {
-        let line = ctx.lines[i];
-        if (line.elt.parentElement) continue;
-        mainGroup.appendChild(line.elt);
-        say('Rendering: ' + getShapeName(line));
-        for (let ptIdx of [line.from, line.to]) pts[ptIdx].lineDrawn(i);
     }
 
     showComments();
