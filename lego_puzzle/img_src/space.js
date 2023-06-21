@@ -434,18 +434,9 @@ function drawNormalLines() {
     }
 }
 
-// This returns an array of indexes into ctx.faces so that the, when face[i] is
-// behind face[j], i occurs before j in the array. In other words, the faces are
-// ordered farthest-first. This makes the assumption that no two faces
-// intersect.
-function getFaceOrder(xys) {
 
-    // XXX
-    function cmpFaces(face1, face2) {
-
-    }
-
-}
+// ______________________________________________________________________
+// Functions to mathematicize shape geometry.
 
 // Add an equation for the current plane of the given face.
 // Every face obeys an equation of the form <a,n>=c, for some unit vector n
@@ -493,6 +484,10 @@ function findEdgeEqns(face, pts) {
         face.borders.push(borderLine);
     }
 }
+
+
+// ______________________________________________________________________
+// Functions to help determine shape z-ordering.
 
 // This will sort the values in `inputArr` according to the comparison data
 // provided by calls to `inputCmp()`, which is expected to return the values '='
@@ -613,10 +608,6 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
 
     return sorted.map(i => inputArr[i]);
 }
-
-// XXX
-let numOE2Calls = 0;
-let commentElt  = document.getElementById('comment');
 
 function updateBoundsForFace(face, pts) {
     face.xMin = Math.min(...face.map(i => pts[i].x));
@@ -787,31 +778,6 @@ function compareFaces(s1, s2, pts) {
     return null;
 }
 
-// This solves the 2x2 system of equations for x and y:
-// ( a b )( x ) = ( e )
-// ( c d )( y ) = ( f )
-// This handles all edge cases correctly, such as the matrix being singular but
-// the problem still being solveable. This returns null if there is no solution;
-// otherwise an array [x, y].
-function solveLinEqn(a, b, c, d, e, f) {
-    if (a === 0 && b === 0) {
-        // Swap the rows.
-        [a, b, c, d, e, f] = [c, d, a, b, f, e];
-    }
-    let col_swap_needed = (a === 0);
-    if (col_swap_needed) [a, b, c, d] = [b, a, d, c];
-
-    // Now a is nonzero and we can easily use a row-echelon approach.
-    let numer = a * f - c * e;
-    let denom = a * d - b * c;
-    if (denom === 0 && numer !== 0) return null;  // There is no solution.
-    let y = (denom === 0 ? 0 : numer / denom);
-    if (a === 0 && e - b * y !== 0) return null;  // There is no solution.
-    let x = (e - b * y === 0 ? 0 : (e - b * y) / a);
-
-    return (col_swap_needed ? [y, x] : [x, y]);
-}
-
 function compareLines(s1, s2, pts, options) {
 
     /*
@@ -940,51 +906,17 @@ function compareLines(s1, s2, pts, options) {
     return ret(null, ': fall-through case');
 }
 
-// XXX
-function getShapeName(s) {
-    if (s.type === 'face') {
-        return 'face(' + s.join(',') + ')';
-        // return `face(${s[0]}, ${s[1]}, ${s[2]}, ${s[3]})`;
-    }
-    if (s.type === 'line') {
-        return `${s.from}--${s.to}`;
-    }
-}
 
-let prefix = '';
-
-let commentParts = [];
-
-function startComments() {
-    commentParts = [];
-}
-
-function showComments() {
-    if (!commentElt) return;
-    commentElt.innerHTML = commentParts.join('\n');
-}
-
-function indent() {
-    prefix = prefix + '&nbsp;'.repeat(4);
-}
-
-function dedent() {
-    prefix = prefix.substr(4 * 6);  // 4 * len('&nbsp;')
-}
-
-// XXX
-function say(s) {
-    // return;  // XXX
-    // commentElt.innerHTML += (prefix + s + '<br/>\n');
-
-    let spanStart = '';
-    let spanEnd   = '';
-    if (prefix) [spanStart, spanEnd] = ['<span class="gray">', '</span>'];
-    commentParts.push(prefix + spanStart + s + spanEnd + '<br/>\n');
-}
-
-// XXX For now, this assumes that both s1 and s2 are faces.
-// Eventually I want to support the case that either could be a face or an edge.
+// This compares the shapes s1 and s2; it returns:
+//   '<'  if s1 is behind s2,
+//   '>'  if s1 is in front of s2, and
+//   null if the shapes do not overlap.
+// It's expected that s1 and s2 are both either lines or faces.
+// The `options` object may contain {doSharedVertexCheck: false}; the default
+// value for this option is `true`. This option only applies to line-line
+// comparisons, in which case lines may be optionally considered to overlap even
+// when they only share an endpoint (this makes sense when the lines are
+// rendered as wide, and are not of the same color).
 function compareShapes(s1, s2, pts, options) {
 
     let myCall = getShapeName(s1) + ' ' + getShapeName(s2);
@@ -1035,9 +967,6 @@ function compareShapes(s1, s2, pts, options) {
 function orderElts2(pts, normalXYs) {
 
     startComments();
-
-    numOE2Calls++;
-    // commentElt.innerHTML = `orderElts2 called: ${numOE2Calls} time(s) so far`;
 
     // XXX
     say('<tt><p><hr>Point z values:');
@@ -1201,6 +1130,79 @@ function orderElts(xys) {
         mainGroup.appendChild(pt.elt);
     }
 }
+
+
+// ______________________________________________________________________
+// Debug messaging.
+
+let commentElt  = document.getElementById('comment');
+let prefix = '';
+let commentParts = [];
+
+function startComments() {
+    commentParts = [];
+}
+
+function showComments() {
+    if (!commentElt) return;
+    commentElt.innerHTML = commentParts.join('\n');
+}
+
+function indent() {
+    prefix = prefix + '&nbsp;'.repeat(4);
+}
+
+function dedent() {
+    prefix = prefix.substr(4 * 6);  // 4 * len('&nbsp;')
+}
+
+function say(s) {
+    // return;  // XXX
+    // commentElt.innerHTML += (prefix + s + '<br/>\n');
+
+    let spanStart = '';
+    let spanEnd   = '';
+    if (prefix) [spanStart, spanEnd] = ['<span class="gray">', '</span>'];
+    commentParts.push(prefix + spanStart + s + spanEnd + '<br/>\n');
+}
+
+function getShapeName(s) {
+    if (s.type === 'face') {
+        return 'face(' + s.join(',') + ')';
+        // return `face(${s[0]}, ${s[1]}, ${s[2]}, ${s[3]})`;
+    }
+    if (s.type === 'line') {
+        return `${s.from}--${s.to}`;
+    }
+}
+
+
+// This solves the 2x2 system of equations for x and y:
+// ( a b )( x ) = ( e )
+// ( c d )( y ) = ( f )
+// This handles all edge cases correctly, such as the matrix being singular but
+// the problem still being solveable. This returns null if there is no solution;
+// otherwise an array [x, y].
+// TODO: Move this into util.
+function solveLinEqn(a, b, c, d, e, f) {
+    if (a === 0 && b === 0) {
+        // Swap the rows.
+        [a, b, c, d, e, f] = [c, d, a, b, f, e];
+    }
+    let col_swap_needed = (a === 0);
+    if (col_swap_needed) [a, b, c, d] = [b, a, d, c];
+
+    // Now a is nonzero and we can easily use a row-echelon approach.
+    let numer = a * f - c * e;
+    let denom = a * d - b * c;
+    if (denom === 0 && numer !== 0) return null;  // There is no solution.
+    let y = (denom === 0 ? 0 : numer / denom);
+    if (a === 0 && e - b * y !== 0) return null;  // There is no solution.
+    let x = (e - b * y === 0 ? 0 : (e - b * y) / a);
+
+    return (col_swap_needed ? [y, x] : [x, y]);
+}
+
 
 // This expects `pt` to be a 4d column vector.
 function calculateDrawPt(pt) {
