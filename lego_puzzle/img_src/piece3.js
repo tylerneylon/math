@@ -42,11 +42,18 @@ let thinStyle = {
 //
 
 function clone3DObject(obj) {
-    return obj.map(structuredClone);
+    return obj.map(x => structuredClone(x));
 }
 
 // This adds the 3D vector v to all the points in object `obj`.
 function translate3DObject(obj, v) {
+    for (let [i, pt] of obj[0].entries()) {
+        obj[0][i] = pt.map((x, j) => x + v[j]);
+    }
+}
+
+function style3DObject(obj, faceStyle) {
+    obj[2].forEach(face => Object.assign(face, {style: faceStyle}));
 }
 
 
@@ -143,33 +150,32 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // space.ctx.fadeRange = [8, 10];
 
     space.ctx.zoom = 2;
+
+    // TODO2:Don't mess with input values, but rather copy them into space.js.
+    //       The immediate reason is that I can't clone objects that include svg
+    //       elements as descendents. Bigger-picture, it seems just like a
+    //       better practice to decouple user data from internal data.
+
+    // TODO1:The current setup reveals a super-weird bug. I think it may have to
+    //       do with normal vectors. Oh right, it won't get the order of
+    //       vertices incorrect if the normal vector is zero.
+    //       That must be it.
+    //       So I want to fix object handling so that the origin does not need
+    //       to be interior to the object before adding it.
+
+    translate3DObject(obj, [0, 0, -1.0]);
+
+    let obj2 = clone3DObject(obj);
+    translate3DObject(obj2, [0, 0, 1.1]);
+    style3DObject(obj2, {fill: '#0f0'});
+
+    let obj3 = clone3DObject(obj);
+    translate3DObject(obj3, [0, 0, 2.2]);
+    style3DObject(obj3, {fill: '#00f'});
+
     space.addObject(obj);
-    // space.addPoints(pts);
-    // space.addLines(lines);
-    // space.addFaces(faces);
-
-    // XXX
-    pts   = structuredClone(pts);
-
-    let newLines = [];
-    for (let i = 0; i < lines.length; i++) {
-        newLines[i] = Object.assign({}, lines[i]);
-        newLines[i].from += 18;
-        newLines[i].to += 18;
-    }
-    lines = newLines;
-
-    faces = structuredClone(faces);
-    for (let face of faces) {
-        face.style = {fill: '#0f0'};
-        for (let i = 0; i < 4; i++) face[i] += 18;
-    }
-    for (let pt of pts) {
-        pt[2] += 1.1;
-    }
-    space.addPoints(pts);
-    space.addLines(lines);
-    space.addFaces(faces);
+    // space.addObject(obj2);
+    // space.addObject(obj3);
 
     space.setTransform(matrix.mult(
         matrix.translate([0, 0, 6]),
