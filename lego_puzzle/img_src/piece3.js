@@ -156,39 +156,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         matrix.rotateAroundX(Math.PI * 0.5)
     ));
 
-    // XXX
-    let numCalls = 0;
-
-    // odd < 0
-    // 0 < even
-    // odd and even do not compare
-    // otherwise the order is the same as normal numbers
-    function cmp(a, b) {
-        numCalls++;
-        console.log('cmp', a, b);
-        console.log(`numCalls = ${numCalls}`);
-        if (a === 0) return b === 0 ? '=' : (b % 2 === 0 ? '<' : '>');
-        if (b === 0) return a % 2 === 0 ? '>' : '<';
-        if (a % 2 !== b %2) return null;
-        return a < b ? '<' : (a > b ? '>' : '=');
-    }
-
-    console.log('0 cmp 0', cmp(0, 0));
-    console.log('0 cmp 1', cmp(0, 1));
-    console.log('1 cmp 0', cmp(1, 0));
-    console.log('0 cmp 2', cmp(0, 2));
-    console.log('0 cmp 3', cmp(0, 3));
-    console.log('3 cmp 1', cmp(3, 1));
-    console.log('2 cmp 1', cmp(2, 1));
-
-    let sorted = space.sortWithPartialOrder([0, 1, 2, 3, 4, 5, 6, 7], cmp);
-    // let sorted = space.sortWithPartialOrder([0, 1, 2, 3, 4, 5], cmp);
-    console.log('sorted result:');
-    console.log(sorted);
-
-    debugger;
-
-    if (true) {
+    if (false) {
         space.setZDist(6);
         space.setAngleMat(matrix.mult(
             matrix.rotateAroundX(Math.PI * 0.29),
