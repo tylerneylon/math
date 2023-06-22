@@ -1349,6 +1349,23 @@ function toggleFaceLabels(faceIdx, doShow, awayFrom) {
 // ______________________________________________________________________
 // Public functions.
 
+// This expects `obj` to be an array in the format [pts, lines, faces].
+// This is similar to calling addPoints(), addLines(), and addFaces(), except
+// that the point indexes used in `obj` are assumed to be internal (referring to
+// its own points array), and are translated to the global points array by this
+// function.
+export function addObject(obj) {
+    console.assert(obj.length === 3);
+    let n = ctx.pts[0].length;
+    addPoints(obj[0]);
+    addLines(obj[1].map(
+        line => Object.assign(line, {from: line.from + n, to: line.to + n})
+    ));
+    addFaces(obj[2].map(
+        face => Object.assign(face, face.map(idx => idx + n))
+    ));
+}
+
 // This expects `pts` to be an array of 3d points, with each point being an
 // array of 3 numbers.
 export function addPoints(pts, labels) {

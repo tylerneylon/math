@@ -33,6 +33,25 @@ let thinStyle = {
 
 
 // ______________________________________________________________________
+// 3D-Object Handling Functions
+//
+// Longer-term, it will make sense to put these into their
+// own module (file). It will make sense for 3D objects to
+// be instances of a dedicated class. For development, I'll work
+// with functions (not a class).
+//
+
+function clone3DObject(obj) {
+    return obj.map(structuredClone);
+}
+
+// This adds the 3D vector v to all the points in object `obj`.
+function translate3DObject(obj, v) {
+}
+
+
+
+// ______________________________________________________________________
 // Main
 
 // This is for debugging.
@@ -118,13 +137,16 @@ window.addEventListener('DOMContentLoaded', (event) => {
         face.style = {fill: '#f00'};
     }
 
+    let obj = [pts, lines, faces];
+
     // Add a small degree of fading for the farther-back points and lines.
     // space.ctx.fadeRange = [8, 10];
 
     space.ctx.zoom = 2;
-    space.addPoints(pts);
-    space.addLines(lines);
-    space.addFaces(faces);
+    space.addObject(obj);
+    // space.addPoints(pts);
+    // space.addLines(lines);
+    // space.addFaces(faces);
 
     // XXX
     pts   = structuredClone(pts);
