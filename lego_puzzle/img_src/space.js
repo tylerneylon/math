@@ -1158,7 +1158,7 @@ function addAnyNewDots() {
     }
 }
 
-function addAnyNewNormals() {
+function addAnyNewNormals(objCenter) {
     for (let i = ctx.normals[0].length; i < ctx.faces.length; i++) {
 
         let face = ctx.faces[i];
@@ -1191,7 +1191,7 @@ function addAnyNewNormals() {
         // Choose the sign of n so that it points away from the origin.
         // This assumes the overall shape is convex, and that the origin is on
         // the interior of the shape.
-        let sign = Math.sign(vector.dot(n, center));
+        let sign = Math.sign(vector.dot(n, vector.sub(center, objCenter)));
         n = n.map(x => x * sign);
 
         n.push(0);  // Make n a length-4 vector.
@@ -1421,14 +1421,24 @@ export function addFaces(faces) {
     faces = structuredClone(faces);
 
     ctx.faces.push(...faces);
+
     // Augment the face data.
+    let allPts = {};
     ctx.faces.forEach((face, i) => {
         face.idx   = i;
         face.type  = 'face';
         face.ptSet = {};
-        face.forEach((pt) => { face.ptSet[pt] = true; });
+        face.forEach((pt) => { face.ptSet[pt] = true; allPts[pt] = true });
     });
-    addAnyNewNormals();
+    // Find a point inside the object. I call it objCenter, but it doesn't have
+    // to be the middle, just in the interior to get the normals right.
+    let objCenter = [0, 0, 0];
+    let P = matrix.transpose(ctx.pts);
+    for (let i in allPts) {
+        objCenter = vector.add(objCenter, P[i]);
+    }
+    objCenter = vector.scale(objCenter, 1 / Object.keys(allPts).length);
+    addAnyNewNormals(objCenter);
     // XXX TODO: Also call this from addLines().
     ensureFaceEdgesAreIndexed();
 }
