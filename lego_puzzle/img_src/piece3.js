@@ -144,6 +144,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
         face.style = {fill: '#f00'};
     }
 
+    let dbgMode = true;
+    if (dbgMode) space.ctx.doDrawDots = true;
+
     let obj = [pts, lines, faces];
 
     // Add a small degree of fading for the farther-back points and lines.
@@ -176,6 +179,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
     space.addObject(obj);
     // space.addObject(obj2);
     // space.addObject(obj3);
+
+    if (dbgMode) {
+        let offset = 15;
+        let n = obj[0].length;
+        space.addLabels([...Array(n).keys()], offset);
+    }
 
     space.setTransform(matrix.mult(
         matrix.translate([0, 0, 6]),

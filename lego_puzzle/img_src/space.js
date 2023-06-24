@@ -537,18 +537,28 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
     say('<p><hr>Beginning to sort<br>');
     say(`Candidate ${hl1}min = ${getShapeName(inputArr[min])}${hl2}`);
 
+    let getName = x => getShapeName(inputArr[x]);
     function printCmpTree(min, cmpTree) {
         let y = min;
-        let parts = [];
+        let cols = [[getName(y)]];
         while (y !== undefined) {
-            parts.push(getShapeName(inputArr[y]));
             if (y in cmpTree) {
+                cols.push(cmpTree[y].map(getName));
                 y = cmpTree[y][0];
             } else {
                 break;
             }
         }
-        say('cmpTree: ' + parts.join(' < '));
+        say('cmpTree:');
+        showTableWithColumns(cols.slice(0, cols.length - 1), ' < ');
+        /*
+        say('full cmpTree data:');
+        let x = Object.fromEntries(Object.entries(cmpTree).map(
+            ([k, v], _) =>
+            [getName(k), v.map(getName)]
+        ));
+        say(JSON.stringify(x));
+        */
     }
 
     while (arr.length > 0) {
@@ -557,7 +567,7 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
         while (true) {
 
             xIdx++;
-            if (xIdx == arr.length) {
+            if (xIdx === arr.length) {
                 let n = getShapeName(inputArr[min]);
                 say(`<span class="framed">Adding shape ${n}</span>`);
                 sorted.push(min);
@@ -1046,7 +1056,7 @@ function startComments() {
     commentParts = [];
 }
 
-function showComments() {
+export /* XXX */ function showComments() {
     if (!commentElt) return;
     commentElt.innerHTML = commentParts.join('\n');
 }
@@ -1059,7 +1069,7 @@ function dedent() {
     prefix = prefix.substr(4 * 6);  // 4 * len('&nbsp;')
 }
 
-function say(s) {
+export /* XXX */ function say(s) {
     // return;  // XXX
     // commentElt.innerHTML += (prefix + s + '<br/>\n');
 
@@ -1067,6 +1077,29 @@ function say(s) {
     let spanEnd   = '';
     if (prefix) [spanStart, spanEnd] = ['<span class="gray">', '</span>'];
     commentParts.push(prefix + spanStart + s + spanEnd + '<br/>\n');
+}
+
+// XXX
+// space.showTableWithColumns([['hi', 'there'], ['abc', 'def']], '___'); space.showComments()
+
+export /* XXX */ function showTableWithColumns(cols, topSep) {
+
+    let numRows = Math.max(...cols.map(x => x.length));
+    cols.forEach(col => {
+        while (col.length < numRows) col.push('');
+    });
+
+    // Find the maximum width in each column.
+    let widths = cols.map(col => Math.max(...col.map(x => x.length)));
+    // say('widths: ' + widths.join(', ')); // XXX
+
+    let nonTopSep = ''.padStart(topSep.length);
+    // say(`nonTopSet="${nonTopSep}"`);  // XXX
+    for (let i = 0; i < numRows; i++) {
+        let sep = (i === 0) ? topSep : nonTopSep;
+        let msg = cols.map((col, j) => col[i].padStart(widths[j])).join(sep);
+        say(msg.replaceAll(' ', '&nbsp;'));
+    }
 }
 
 function getShapeName(s) {
