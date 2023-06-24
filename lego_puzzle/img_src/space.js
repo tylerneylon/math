@@ -1056,7 +1056,7 @@ function startComments() {
     commentParts = [];
 }
 
-export /* XXX */ function showComments() {
+function showComments() {
     if (!commentElt) return;
     commentElt.innerHTML = commentParts.join('\n');
 }
@@ -1069,7 +1069,7 @@ function dedent() {
     prefix = prefix.substr(4 * 6);  // 4 * len('&nbsp;')
 }
 
-export /* XXX */ function say(s) {
+function say(s) {
     // return;  // XXX
     // commentElt.innerHTML += (prefix + s + '<br/>\n');
 
@@ -1079,10 +1079,7 @@ export /* XXX */ function say(s) {
     commentParts.push(prefix + spanStart + s + spanEnd + '<br/>\n');
 }
 
-// XXX
-// space.showTableWithColumns([['hi', 'there'], ['abc', 'def']], '___'); space.showComments()
-
-export /* XXX */ function showTableWithColumns(cols, topSep) {
+function showTableWithColumns(cols, topSep) {
 
     let numRows = Math.max(...cols.map(x => x.length));
     cols.forEach(col => {
