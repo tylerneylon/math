@@ -551,14 +551,6 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
         }
         say('cmpTree:');
         showTableWithColumns(cols.slice(0, cols.length - 1), ' < ');
-        /*
-        say('full cmpTree data:');
-        let x = Object.fromEntries(Object.entries(cmpTree).map(
-            ([k, v], _) =>
-            [getName(k), v.map(getName)]
-        ));
-        say(JSON.stringify(x));
-        */
     }
 
     while (arr.length > 0) {
@@ -895,7 +887,11 @@ function compareShapes(s1, s2, pts, options) {
         indent();
         return ret(compareFaces(s1, s2, pts));
     } else if (s1.type === 'line' && s2.type === 'line') {
-        say(myCall + ' delegating to compareLines()');
+        let optsStr = '';
+        if (options && options.doSharedVertexCheck === false) {
+            optsStr = 'noSharedVertexCheck';
+        }
+        say(myCall + ` delegating to compareLines(${optsStr})`);
         indent();
         return ret(compareLines(s1, s2, pts, options));
     } else {
@@ -1109,6 +1105,7 @@ function getShapeName(s) {
     }
 }
 
+function isTiny(x) { return Math.abs(x) < 0.00001; }
 
 // This solves the 2x2 system of equations for x and y:
 // ( a b )( x ) = ( e )
@@ -1118,20 +1115,20 @@ function getShapeName(s) {
 // otherwise an array [x, y].
 // TODO: Move this into util.
 function solveLinEqn(a, b, c, d, e, f) {
-    if (a === 0 && b === 0) {
+    if (isTiny(a) && isTiny(b)) {
         // Swap the rows.
         [a, b, c, d, e, f] = [c, d, a, b, f, e];
     }
-    let col_swap_needed = (a === 0);
+    let col_swap_needed = isTiny(a);
     if (col_swap_needed) [a, b, c, d] = [b, a, d, c];
 
     // Now a is nonzero and we can easily use a row-echelon approach.
     let numer = a * f - c * e;
     let denom = a * d - b * c;
-    if (denom === 0 && numer !== 0) return null;  // There is no solution.
-    let y = (denom === 0 ? 0 : numer / denom);
-    if (a === 0 && e - b * y !== 0) return null;  // There is no solution.
-    let x = (e - b * y === 0 ? 0 : (e - b * y) / a);
+    if (isTiny(denom) && !isTiny(numer)) return null;  // There's no solution.
+    let y = (isTiny(denom) ? 0 : numer / denom);
+    if (isTiny(a) && !isTiny(e - b * y)) return null;  // There's no solution.
+    let x = (isTiny(e - b * y) ? 0 : (e - b * y) / a);
 
     return (col_swap_needed ? [y, x] : [x, y]);
 }
