@@ -177,8 +177,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     style3DObject(obj3, {fill: '#00f'});
 
     space.addObject(obj);
-    // space.addObject(obj2);
-    // space.addObject(obj3);
+    space.addObject(obj2);
+    space.addObject(obj3);
 
     if (dbgMode) {
         let offset = 15;
