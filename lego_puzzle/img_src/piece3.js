@@ -52,6 +52,33 @@ function translate3DObject(obj, v) {
     }
 }
 
+function rotate3DObjectAroundXAxis(obj, angle) {
+    let R = matrix.rotateAroundX(angle);
+    for (let [i, pt] of obj[0].entries()) {
+        let a     = matrix.transpose([obj[0][i].concat([1])]);
+        let b     = matrix.mult(R, a);
+        obj[0][i] = matrix.transpose(b)[0].slice(0, 3);
+    }
+}
+
+function rotate3DObjectAroundYAxis(obj, angle) {
+    let R = matrix.rotateAroundY(angle);
+    for (let [i, pt] of obj[0].entries()) {
+        let a     = matrix.transpose([obj[0][i].concat([1])]);
+        let b     = matrix.mult(R, a);
+        obj[0][i] = matrix.transpose(b)[0].slice(0, 3);
+    }
+}
+
+function rotate3DObjectAroundZAxis(obj, angle) {
+    let R = matrix.rotateAroundZ(angle);
+    for (let [i, pt] of obj[0].entries()) {
+        let a     = matrix.transpose([obj[0][i].concat([1])]);
+        let b     = matrix.mult(R, a);
+        obj[0][i] = matrix.transpose(b)[0].slice(0, 3);
+    }
+}
+
 function style3DObject(obj, faceStyle) {
     obj[2].forEach(face => Object.assign(face, {style: faceStyle}));
 }
@@ -144,7 +171,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         face.style = {fill: '#f00'};
     }
 
-    let dbgMode = true;
+    let dbgMode = false;
     if (dbgMode) space.ctx.doDrawDots = true;
 
     let obj = [pts, lines, faces];
@@ -176,9 +203,16 @@ window.addEventListener('DOMContentLoaded', (event) => {
     translate3DObject(obj3, [0, 0, 2.2]);
     style3DObject(obj3, {fill: '#00f'});
 
+    let obj4 = clone3DObject(obj);
+    rotate3DObjectAroundXAxis(obj4, -Math.PI / 2);
+    rotate3DObjectAroundZAxis(obj4,  Math.PI / 2);
+    translate3DObject(obj4, [-2.1, 0, 0]);
+    style3DObject(obj4, {fill: '#880'});
+
     space.addObject(obj);
     space.addObject(obj2);
     space.addObject(obj3);
+    space.addObject(obj4);
 
     if (dbgMode) {
         let offset = 15;
