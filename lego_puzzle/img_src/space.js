@@ -1066,7 +1066,7 @@ function dedent() {
 }
 
 function say(s) {
-    // return;  // XXX
+    return;  // XXX
     // commentElt.innerHTML += (prefix + s + '<br/>\n');
 
     let spanStart = '';

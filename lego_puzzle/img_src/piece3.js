@@ -168,7 +168,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     let faces = Object.values(faceMap);
     for (let face of faces) {
-        face.style = {fill: '#f00'};
+        face.style = {fill: '#a44'};
     }
 
     let dbgMode = false;
@@ -195,24 +195,33 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     translate3DObject(obj, [0, 0, -1.0]);
 
+    let gap = 0.2;
+
     let obj2 = clone3DObject(obj);
-    translate3DObject(obj2, [0, 0, 1.1]);
-    style3DObject(obj2, {fill: '#0f0'});
+    translate3DObject(obj2, [0, 0, 1 + gap]);
+    style3DObject(obj2, {fill: '#4a4'});
 
     let obj3 = clone3DObject(obj);
-    translate3DObject(obj3, [0, 0, 2.2]);
-    style3DObject(obj3, {fill: '#00f'});
+    translate3DObject(obj3, [0, 0, 2 + 2 * gap]);
+    style3DObject(obj3, {fill: '#44a'});
 
     let obj4 = clone3DObject(obj);
     rotate3DObjectAroundXAxis(obj4, -Math.PI / 2);
     rotate3DObjectAroundZAxis(obj4,  Math.PI / 2);
-    translate3DObject(obj4, [-2.1, 0, 0]);
+    translate3DObject(obj4, [-2 - gap, 0, 0]);
     style3DObject(obj4, {fill: '#880'});
+
+    let obj5 = clone3DObject(obj);
+    rotate3DObjectAroundXAxis(obj5, Math.PI / 2);
+    rotate3DObjectAroundYAxis(obj5, -Math.PI / 2);
+    translate3DObject(obj5, [0, -2 - gap, 0]);
+    style3DObject(obj5, {fill: '#808'});
 
     space.addObject(obj);
     space.addObject(obj2);
     space.addObject(obj3);
     space.addObject(obj4);
+    space.addObject(obj5);
 
     if (dbgMode) {
         let offset = 15;
@@ -221,7 +230,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
 
     space.setTransform(matrix.mult(
-        matrix.translate([0, 0, 6]),
+        matrix.translate([0, 0, 9]),
         matrix.rotateAroundX(Math.PI * 0.19),  // 0.29
         matrix.rotateAroundY(Math.PI * 0.2),
         matrix.rotateAroundX(Math.PI * 0.5)
