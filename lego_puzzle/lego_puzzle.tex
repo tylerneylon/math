@@ -1,0 +1,173 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{fancyvrb}
+\usepackage{fvextra}
+%\RecustomVerbatimEnvironment{verbatim}{Verbatim}{commandchars=\\\{\}}
+\usepackage{lmodern}
+\usepackage{bold-extra}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+\makeatletter
+\@ifpackageloaded{subfig}{}{\usepackage{subfig}}
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\captionsetup[subfloat]{margin=0.5em}
+\AtBeginDocument{%
+\renewcommand*\figurename{Figure}
+\renewcommand*\tablename{Table}
+}
+\AtBeginDocument{%
+\renewcommand*\listfigurename{List of Figures}
+\renewcommand*\listtablename{List of Tables}
+}
+\newcounter{pandoccrossref@subfigures@footnote@counter}
+\newenvironment{pandoccrossrefsubfigures}{%
+\setcounter{pandoccrossref@subfigures@footnote@counter}{0}
+\begin{figure}\centering%
+\gdef\global@pandoccrossref@subfigures@footnotes{}%
+\DeclareRobustCommand{\footnote}[1]{\footnotemark%
+\stepcounter{pandoccrossref@subfigures@footnote@counter}%
+\ifx\global@pandoccrossref@subfigures@footnotes\empty%
+\gdef\global@pandoccrossref@subfigures@footnotes{{##1}}%
+\else%
+\g@addto@macro\global@pandoccrossref@subfigures@footnotes{, {##1}}%
+\fi}}%
+{\end{figure}%
+\addtocounter{footnote}{-\value{pandoccrossref@subfigures@footnote@counter}}
+\@for\f:=\global@pandoccrossref@subfigures@footnotes\do{\stepcounter{footnote}\footnotetext{\f}}%
+\gdef\global@pandoccrossref@subfigures@footnotes{}}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={A Simple 3D Puzzle},
+  pdfauthor={Tyler Neylon},
+  colorlinks=true,
+  linkcolor={black},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+\title{A Simple 3D Puzzle}
+\author{Tyler Neylon}
+\date{\href{https://tylerneylon.com/a/7date/}{345.2023}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Begin custom, non-pandoc commands.
+
+\newcommand{\customstrut}{\rule[-3mm]{0mm}{7.5mm}}
+\newenvironment{densearray}{\begin{array}{rcl}}{\end{array}}
+\newcommand{\class}[1]{}
+\newcommand{\Rule}[3]{}
+\newcommand{\optquad}{\quad}
+\newcommand{\smallscrneg}{}
+\newcommand{\smallscr}[1]{}
+\newcommand{\bigscr}[1]{#1}
+\newcommand{\smallscrskip}[1]{}
+
+% I learned some things from these two links:
+% https://tex.stackexchange.com/questions/145812/using-fbox-in-a-newenvironment
+% https://tex.stackexchange.com/questions/120042/splitting-a-command-syntax-across-a-newenvironment-definition
+
+\newsavebox{\mybox}
+\newenvironment{myboxed}{\begin{lrbox}{\mybox}\begin{minipage}{0.98\textwidth}}{\end{minipage}\end{lrbox}\fbox{\usebox{\mybox}}}
+
+\newcommand{\boxedstart}{\begin{myboxed}}
+\newcommand{\boxedend}{\end{myboxed}}
+
+\newcommand{\crossedouty}{\dot y \kern -4.5pt \raise 4.9pt \hbox{\(\scriptscriptstyle\diagup\)}}
+\newcommand{\crossedoutone}{\dot 1 \kern -5.1pt \raise 6.6pt \hbox{\(\scriptscriptstyle\diagup\)}}
+\newcommand{\crossedouttwo}{\dot 2 \kern -5.1pt \raise 6.6pt \hbox{\(\scriptscriptstyle\diagup\)}}
+\newcommand{\crossedoutthree}{\dot 3 \kern -5.1pt \raise 6.6pt \hbox{\(\scriptscriptstyle\diagup\)}}
+\newcommand{\crossedoutfive}{\dot 5 \kern -5.1pt \raise 6.6pt \hbox{\(\scriptscriptstyle\diagup\)}}
+\newcommand{\crossedoutsix}{\dot 6 \kern -5.1pt \raise 6.6pt \hbox{\(\scriptscriptstyle\diagup\)}}
+\newcommand{\crossedoutseven}{\dot 7 \kern -5.1pt \raise 6.6pt \hbox{\(\scriptscriptstyle\diagup\)}}
+\newcommand{\lowerhaty}{\lower 1ex\hbox{\(\hat y\)}}
+\newcommand{\lhy}{\lower 1ex\hbox{\(\hat y\)}}
+
+\let\smallstart\iffalse
+\let\smallend\fi
+
+% End custom, non-pandoc commands.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\maketitle
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\eqnset}[1]{\left.\mbox{$#1$}\;\;\right\rbrace\class{postbrace}{ }}
+\providecommand{\latexonlyrule}[3][]{}
+\providecommand{\optquad}{\class{optquad}{}}
+\providecommand{\smallscrneg}{\class{smallscrneg}{ }}
+\providecommand{\bigscr}[1]{\class{bigscr}{#1}}
+\providecommand{\smallscr}[1]{\class{smallscr}{#1}}
+\providecommand{\smallscrskip}[1]{\class{smallscrskip}{\hskip #1}}
+
+\newcommand{\mydots}{{\cdot}\kern -0.1pt{\cdot}\kern -0.1pt{\cdot}}
+
+\newcommand{\?}{\stackrel{?}{=}}
+\newcommand{\sign}{\textsf{sign}}
+\newcommand{\order}{\textsf{order}}
+\newcommand{\flips}{\textsf{flips}}
+\newcommand{\samecycles}{\textsf{same$\\\_$cycles}}
+\newcommand{\canon}{\textsf{canon}}
+\newcommand{\cs}{\mathsf{cs}}
+\newcommand{\dist}{\mathsf{dist}}
+\renewcommand{\theenumi}{(\roman{enumi})}
+
+{[} Formats:
+\href{http://tylerneylon.com/a/py_bug_analysis/py_bug_analysis.html}{html}
+\textbar{}
+\href{http://tylerneylon.com/a/py_bug_analysis/py_bug_analysis.pdf}{pdf}
+\(\,\){]}
+
+Here's a fun puzzle: Take six boxes, each \(1\times 2\times 2\) in size,
+and find a way to pack them into a \(3\times 3\times 3\) cube.
+
+\end{document}
+
