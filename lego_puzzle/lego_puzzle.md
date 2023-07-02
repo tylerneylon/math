@@ -41,9 +41,10 @@ I learned about this puzzle through Donald Knuth's
 The six boxes have a total volume of 24 cubies (I'll call a $1\times 1\times 1$
 unit a "cubie," as Knuth does). They certainly have a chance of
 fitting into the 27 cubie spaces of the larger $3\times 3\times 3$
-volume. But the initial configurations I tried failed to fit:
+volume. But the initial configurations I tried failed to fit more than
+five boxes in the space allowed:
 
-(another image here)
+<object type="image/svg+xml" data="img/img2.svg"></object>
 
 You might be able to solve this by simply thinking about it.
 But it's even more fun to play with a physical model.
