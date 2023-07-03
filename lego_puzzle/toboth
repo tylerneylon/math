@@ -20,6 +20,7 @@ chmod 644 ${name}.html
 # Make and open the pdf file.
 pandoc -t latex -o ${name}.tex -s ${FLAGS} --template=template.tex
 sed 's|img/\(.*\)\.svg|img/\1.pdf|' ${name}.tex > ${TMP}
+# sed 's|graphics{img/\(.*\.svg\)|svg{img/\1|' ${name}.tex > ${TMP}
 mv ${TMP} ${name}.tex
 cat ${name}.tex <(echo) | sed '{N;s/\\item.*itemize.*/\\item[]\\begin{itemize}/;P;D;}' > ${TMP}
 mv ${TMP} ${name}.tex

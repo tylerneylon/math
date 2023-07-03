@@ -34,7 +34,7 @@ Formats:
 Here's a fun puzzle: Take six boxes, each $1\times 2\times 2$ in size,
 and find a way to pack them into a $3\times 3\times 3$ cube.
 
-<object type="image/svg+xml" data="img/img1.svg"></object>
+![](img/img1.svg)
 
 I learned about this puzzle through Donald Knuth's
 *The Art of Computer Programming,* $\S 7.2.2.1$.
@@ -44,7 +44,7 @@ fitting into the 27 cubie spaces of the larger $3\times 3\times 3$
 volume. But the initial configurations I tried failed to fit more than
 five boxes in the space allowed:
 
-<object type="image/svg+xml" data="img/img2.svg"></object>
+![](img/img2.svg)
 
 You might be able to solve this by simply thinking about it.
 But it's even more fun to play with a physical model.

@@ -38,6 +38,19 @@
   \KOMAoptions{parskip=half}}
 \makeatother
 \usepackage{xcolor}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
@@ -169,6 +182,8 @@
 Here's a fun puzzle: Take six boxes, each \(1\times 2\times 2\) in size,
 and find a way to pack them into a \(3\times 3\times 3\) cube.
 
+\begin{center}\includegraphics{img/img1.pdf}\end{center}
+
 I learned about this puzzle through Donald Knuth's \emph{The Art of
 Computer Programming,} \(\S 7.2.2.1\). The six boxes have a total volume
 of 24 cubies (I'll call a \(1\times 1\times 1\) unit a ``cubie,'' as
@@ -176,6 +191,8 @@ Knuth does). They certainly have a chance of fitting into the 27 cubie
 spaces of the larger \(3\times 3\times 3\) volume. But the initial
 configurations I tried failed to fit more than five boxes in the space
 allowed:
+
+\begin{center}\includegraphics{img/img2.pdf}\end{center}
 
 You might be able to solve this by simply thinking about it. But it's
 even more fun to play with a physical model.
