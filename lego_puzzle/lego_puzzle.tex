@@ -45,7 +45,7 @@
 \makeatother
 % Scale images if necessary, so that they will not overflow the page
 % margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
+% using explicit options in \includegraphics[width=0.5\textwidth][width, height, ...]{}
 \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 % Set default figure placement to htbp
 \makeatletter
@@ -182,7 +182,7 @@
 Here's a fun puzzle: Take six boxes, each \(1\times 2\times 2\) in size,
 and find a way to pack them into a \(3\times 3\times 3\) cube.
 
-\begin{center}\includegraphics{img/img1.pdf}\end{center}
+\begin{center}\includegraphics[width=0.5\textwidth]{img/img1.pdf}\end{center}
 
 I learned about this puzzle through Donald Knuth's \emph{The Art of
 Computer Programming,} \(\S 7.2.2.1\). The six boxes have a total volume
@@ -192,7 +192,7 @@ spaces of the larger \(3\times 3\times 3\) volume. But the initial
 configurations I tried failed to fit more than five boxes in the space
 allowed:
 
-\begin{center}\includegraphics{img/img2.pdf}\end{center}
+\begin{center}\includegraphics[width=0.5\textwidth]{img/img2.pdf}\end{center}
 
 You might be able to solve this by simply thinking about it. But it's
 even more fun to play with a physical model.
