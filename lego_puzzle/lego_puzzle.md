@@ -26,8 +26,8 @@
 
 [
 Formats:
- [html](http://tylerneylon.com/a/py_bug_analysis/py_bug_analysis.html) |
- [pdf](http://tylerneylon.com/a/py_bug_analysis/py_bug_analysis.pdf)
+ [html](http://tylerneylon.com/a/lego_puzzle/lego_puzzle.html) |
+ [pdf](http://tylerneylon.com/a/lego_puzzle/lego_puzzle.pdf)
  $\,$
 ]
 
