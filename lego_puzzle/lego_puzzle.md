@@ -48,7 +48,10 @@ five boxes in the space allowed:
 
 You might be able to solve this by simply thinking about it.
 But it's even more fun to play with a physical model.
+\newline Did you know that a $2\times 2$ Lego brick with 2
+tile-heights on top forms a perfect cube?
 
+![](img/annotated_lego_cube.png)
 
 
 
