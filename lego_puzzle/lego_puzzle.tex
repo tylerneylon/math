@@ -45,7 +45,7 @@
 \makeatother
 % Scale images if necessary, so that they will not overflow the page
 % margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width=0.5\textwidth][width, height, ...]{}
+% using explicit options in \includegraphics[width, height, ...]{}
 \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 % Set default figure placement to htbp
 \makeatletter
@@ -200,6 +200,10 @@ a \(2\times 2\) Lego brick with 2 tile-heights on top forms a perfect
 cube?
 
 \begin{center}\includegraphics[width=0.5\textwidth]{img/annotated_lego_cube.png}\end{center}
+
+This allows us to construct the puzzle like so:
+
+\begin{center}\includegraphics[width=0.9\textwidth,height=\textheight]{img/piece_steps2.png}\end{center}
 
 \end{document}
 

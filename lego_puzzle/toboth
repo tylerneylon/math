@@ -21,7 +21,7 @@ chmod 644 ${name}.html
 pandoc -t latex -o ${name}.tex -s ${FLAGS} --template=template.tex
 sed 's|img/\(.*\)\.svg|img/\1.pdf|' ${name}.tex > ${TMP}
 mv ${TMP} ${name}.tex
-sed 's|includegraphics|includegraphics[width=0.5\\textwidth]|' ${name}.tex > ${TMP}
+sed 's|includegraphics{|includegraphics[width=0.5\\textwidth]{|' ${name}.tex > ${TMP}
 # sed 's|graphics{img/\(.*\.svg\)|svg{img/\1|' ${name}.tex > ${TMP}
 mv ${TMP} ${name}.tex
 cat ${name}.tex <(echo) | sed '{N;s/\\item.*itemize.*/\\item[]\\begin{itemize}/;P;D;}' > ${TMP}
