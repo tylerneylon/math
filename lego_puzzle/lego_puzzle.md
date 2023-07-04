@@ -53,6 +53,9 @@ tile-heights on top forms a perfect cube?
 
 ![](img/annotated_lego_cube.png)
 
+This allows us to construct the puzzle like so:
+
+
 
 
 
