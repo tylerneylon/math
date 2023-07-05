@@ -31,6 +31,8 @@ Formats:
  $\,$
 ]
 
+# The Puzzle
+
 Here's a fun puzzle: Take six boxes, each $1\times 2\times 2$ in size,
 and find a way to pack them into a $3\times 3\times 3$ cube.
 
@@ -62,7 +64,21 @@ Here's the hodgepodge model I built with my kids' Legos:
 
 ![](img/home_model.jpg)
 
+I'll write a little about the math behind this puzzle below,
+but for now I'll give you a vertical break so you don't
+accidentally see the solution. Try out the puzzle first!
 
+<p>&nbsp;
+\vspace{1in}
+
+![](img/here_be_spoilers.jpg){width=90%}
+
+<p>&nbsp;
+\newpage
+
+# The Solution
+
+Next part of the article.
 
 
 
