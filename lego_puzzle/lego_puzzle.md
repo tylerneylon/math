@@ -58,6 +58,10 @@ This allows us to construct the puzzle like so:
 ![](img/piece_steps2.png){width=90%}
 ![](img/puzzle_box_steps.png){width=90%}
 
+Here's the hodgepodge model I built with my kids' Legos:
+
+![](img/home_model.jpg)
+
 
 
 
