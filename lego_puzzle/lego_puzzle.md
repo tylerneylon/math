@@ -56,6 +56,7 @@ tile-heights on top forms a perfect cube?
 This allows us to construct the puzzle like so:
 
 ![](img/piece_steps2.png){width=90%}
+![](img/puzzle_box_steps.png){width=90%}
 
 
 
