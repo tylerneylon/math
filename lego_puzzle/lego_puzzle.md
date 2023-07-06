@@ -78,7 +78,7 @@ accidentally see the solution. Try out the puzzle first!
 
 # The Solution
 
-Next part of the article.
+Here's the solution:
 
 
 
