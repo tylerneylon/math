@@ -1451,7 +1451,7 @@ export function addFaces(faces) {
 
     // Augment the face data.
     let allPts = {};
-    ctx.faces.forEach((face, i) => {
+    faces.forEach((face, i) => {
         face.idx   = i;
         face.type  = 'face';
         face.ptSet = {};
