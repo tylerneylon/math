@@ -80,6 +80,8 @@ accidentally see the solution. Try out the puzzle first!
 
 Here's the solution:
 
+![](img/soln_steps.svg){width=90%}
+
 
 
 

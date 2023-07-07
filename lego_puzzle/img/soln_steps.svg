@@ -1,0 +1,7148 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="1750"
+   height="430"
+   version="1.1"
+   id="svg"
+   sodipodi:docname="soln_steps.svg"
+   inkscape:version="1.2.2 (b0a84865, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs564" />
+  <sodipodi:namedview
+     id="namedview562"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="0.32153204"
+     inkscape:cx="1387.109"
+     inkscape:cy="650.01298"
+     inkscape:window-width="1440"
+     inkscape:window-height="847"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg" />
+  <g
+     id="g559"
+     transform="translate(-187.93693,-111.94565)">
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="294.07907"
+       y1="369.30023"
+       x2="350.8187"
+       y2="347.78323"
+       pointer-events="none"
+       id="line313" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="349.56311"
+       y1="289.0668"
+       x2="350.8187"
+       y2="347.78323"
+       pointer-events="none"
+       id="line315" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="350.8187"
+       y1="347.78323"
+       x2="390.4397"
+       y2="377.90445"
+       pointer-events="none"
+       id="line317" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="404.35135"
+       y1="270.83627"
+       x2="402.96191"
+       y2="328.00928"
+       pointer-events="none"
+       id="line319" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="405.88611"
+       y1="207.6843"
+       x2="404.35135"
+       y2="270.83627"
+       pointer-events="none"
+       id="line321" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="404.35135"
+       y1="270.83627"
+       x2="349.6203"
+       y2="289.04779"
+       pointer-events="none"
+       id="line323" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="447.61899"
+       y1="296.33322"
+       x2="404.35135"
+       y2="270.83627"
+       pointer-events="none"
+       id="line325" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="402.96191"
+       y1="328.00928"
+       x2="350.87302"
+       y2="347.76263"
+       pointer-events="none"
+       id="line327" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="443.97604"
+       y1="355.64142"
+       x2="402.96191"
+       y2="328.00928"
+       pointer-events="none"
+       id="line329" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="447.61899"
+       y1="296.33322"
+       x2="443.97604"
+       y2="355.64142"
+       pointer-events="none"
+       id="line331" />
+    <polygon
+       stroke="transparent"
+       fill="#d4d44c"
+       stroke-width="4"
+       points="391.35317,316.96497 390.4956,377.88119 350.87301,347.76262 349.62029,289.04779 "
+       ptArray="349.6202897091557,289.0477876278586,391.3531713788431,316.96496961203746,390.4956036124358,377.88119403862646,350.8730099572758,347.7626216815631"
+       display="hi"
+       id="polygon333" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="349.6203"
+       y1="289.04779"
+       x2="350.87302"
+       y2="347.76263"
+       pointer-events="none"
+       id="line335" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="390.49561"
+       y1="377.8812"
+       x2="350.87302"
+       y2="347.76263"
+       pointer-events="none"
+       id="line337" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="443.97604"
+       y1="355.64142"
+       x2="390.49561"
+       y2="377.8812"
+       pointer-events="none"
+       id="line339" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="490.19983"
+       y1="386.78348"
+       x2="443.97604"
+       y2="355.64142"
+       pointer-events="none"
+       id="line341" />
+    <polygon
+       stroke="transparent"
+       fill="#989810"
+       stroke-width="4"
+       points="490.19984,386.78347 496.69227,325.25137 438.97274,348.82005 435.39461,412.01056 "
+       ptArray="435.3946117327862,412.0105606470398,490.1998423749939,386.7834707008408,496.692273512833,325.2513694883048,438.9727428843391,348.8200486417983"
+       display="hi"
+       id="polygon343" />
+    <polygon
+       stroke="transparent"
+       fill="#d4d44c"
+       stroke-width="4"
+       points="435.39461,412.01056 390.4956,377.88119 391.35317,316.96497 438.97274,348.82005 "
+       ptArray="438.9727428843391,348.8200486417983,435.3946117327862,412.0105606470398,390.4956036124358,377.88119403862646,391.3531713788431,316.96496961203746"
+       display="hi"
+       id="polygon345" />
+    <polygon
+       stroke="transparent"
+       fill="#981098"
+       stroke-width="4"
+       points="391.29421,316.98659 329.36512,339.69497 331.87205,402.25973 390.4397,377.90444 "
+       ptArray="390.4396950028677,377.90444356685975,391.29420954072566,316.9865899463425,329.36511899648724,339.6949668139107,331.87205039597546,402.2597283318417"
+       display="hi"
+       id="polygon347" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="331.91232"
+       y1="402.29483"
+       x2="390.48178"
+       y2="377.93646"
+       pointer-events="none"
+       id="line349" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="267.49921"
+       y1="429.08356"
+       x2="331.91232"
+       y2="402.29483"
+       pointer-events="none"
+       id="line351" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="232.04247"
+       y1="392.82599"
+       x2="294.07907"
+       y2="369.30023"
+       pointer-events="none"
+       id="line353" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="289.67975"
+       y1="308.99271"
+       x2="294.07907"
+       y2="369.30023"
+       pointer-events="none"
+       id="line355" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="294.07907"
+       y1="369.30023"
+       x2="331.87204"
+       y2="402.25974"
+       pointer-events="none"
+       id="line357" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="331.87204"
+       y1="402.25974"
+       x2="390.4397"
+       y2="377.90445"
+       pointer-events="none"
+       id="line359" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="331.91232"
+       y1="402.29483"
+       x2="329.40756"
+       y2="339.72778"
+       pointer-events="none"
+       id="line361" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375"
+       y1="439.87189"
+       x2="331.91232"
+       y2="402.29483"
+       pointer-events="none"
+       id="line363" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="390.48178"
+       y1="377.93646"
+       x2="391.33868"
+       y2="317.01636"
+       pointer-events="none"
+       id="line365" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="435.38504"
+       y1="412.07343"
+       x2="390.48178"
+       y2="377.93646"
+       pointer-events="none"
+       id="line367" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375"
+       y1="439.87189"
+       x2="435.38504"
+       y2="412.07343"
+       pointer-events="none"
+       id="line369" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="486.69525"
+       y1="451.08118"
+       x2="435.38504"
+       y2="412.07343"
+       pointer-events="none"
+       id="line371" />
+    <polygon
+       stroke="transparent"
+       fill="#eeee66"
+       stroke-width="4"
+       points="405.88611,207.68429 451.66818,230.41103 392.31122,248.9112 348.23036,223.90186 "
+       ptArray="348.2303578224442,223.9018620337862,405.88610673580695,207.68429187090692,451.66817872993164,230.41103341921152,392.31122017722987,248.91120418350476"
+       display="hi"
+       id="polygon373" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="405.88611"
+       y1="207.6843"
+       x2="348.23035"
+       y2="223.90186"
+       pointer-events="none"
+       id="line375" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="451.66818"
+       y1="230.41103"
+       x2="405.88611"
+       y2="207.6843"
+       pointer-events="none"
+       id="line377" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="451.66818"
+       y1="230.41103"
+       x2="447.61899"
+       y2="296.33322"
+       pointer-events="none"
+       id="line379" />
+    <polygon
+       stroke="transparent"
+       fill="#d4d44c"
+       stroke-width="4"
+       points="348.23036,223.90186 392.31122,248.9112 391.35317,316.96497 349.62029,289.04779 "
+       ptArray="349.6202897091557,289.0477876278586,348.2303578224442,223.9018620337862,392.31122017722987,248.91120418350476,391.3531713788431,316.96496961203746"
+       display="hi"
+       id="polygon381" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="348.23035"
+       y1="223.90186"
+       x2="349.6203"
+       y2="289.04779"
+       pointer-events="none"
+       id="line383" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="391.35318"
+       y1="316.96497"
+       x2="349.6203"
+       y2="289.04779"
+       pointer-events="none"
+       id="line385" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="447.61899"
+       y1="296.33322"
+       x2="391.35318"
+       y2="316.96497"
+       pointer-events="none"
+       id="line387" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="391.35318"
+       y1="316.96497"
+       x2="390.49561"
+       y2="377.8812"
+       pointer-events="none"
+       id="line389" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="348.16998"
+       y1="223.91885"
+       x2="349.56311"
+       y2="289.0668"
+       pointer-events="none"
+       id="line391" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="289.67975"
+       y1="308.99271"
+       x2="349.56311"
+       y2="289.0668"
+       pointer-events="none"
+       id="line393" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="349.56311"
+       y1="289.0668"
+       x2="391.29422"
+       y2="316.9866"
+       pointer-events="none"
+       id="line395" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="391.29422"
+       y1="316.9866"
+       x2="390.4397"
+       y2="377.90445"
+       pointer-events="none"
+       id="line397" />
+    <polygon
+       stroke="transparent"
+       fill="#ffa0a0"
+       stroke-width="4"
+       points="391.33869,317.01635 329.40755,339.7278 375,375 438.96304,348.87893 "
+       ptArray="438.9630426176715,348.87893395175297,391.33869303018344,317.0163511688599,329.40755341971703,339.7277958404671,375,375"
+       display="hi"
+       id="polygon399" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="329.40756"
+       y1="339.72778"
+       x2="391.33868"
+       y2="317.01636"
+       pointer-events="none"
+       id="line401" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="438.96304"
+       y1="348.87894"
+       x2="391.33868"
+       y2="317.01636"
+       pointer-events="none"
+       id="line403" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="435.39462"
+       y1="412.01056"
+       x2="390.49561"
+       y2="377.8812"
+       pointer-events="none"
+       id="line405" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="435.38504"
+       y1="412.07343"
+       x2="438.96304"
+       y2="348.87894"
+       pointer-events="none"
+       id="line407" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="496.69226"
+       y1="325.25137"
+       x2="447.61899"
+       y2="296.33322"
+       pointer-events="none"
+       id="line409" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="496.69226"
+       y1="325.25137"
+       x2="490.19983"
+       y2="386.78348"
+       pointer-events="none"
+       id="line411" />
+    <polygon
+       stroke="transparent"
+       fill="#989810"
+       stroke-width="4"
+       points="443.00155,277.67044 438.97274,348.82005 496.69227,325.25137 503.96021,256.36939 "
+       ptArray="503.9602113360005,256.36939350012176,443.0015539233732,277.6704396571069,438.9727428843391,348.8200486417983,496.692273512833,325.2513694883048"
+       display="hi"
+       id="polygon413" />
+    <polygon
+       stroke="transparent"
+       fill="#eeee66"
+       stroke-width="4"
+       points="503.96021,256.36939 451.66818,230.41103 392.31122,248.9112 443.00155,277.67044 "
+       ptArray="443.0015539233732,277.6704396571069,503.9602113360005,256.36939350012176,451.66817872993164,230.41103341921152,392.31122017722987,248.91120418350476"
+       display="hi"
+       id="polygon415" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="392.31122"
+       y1="248.91121"
+       x2="348.23035"
+       y2="223.90186"
+       pointer-events="none"
+       id="line417" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="451.66818"
+       y1="230.41103"
+       x2="392.31122"
+       y2="248.91121"
+       pointer-events="none"
+       id="line419" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="503.96021"
+       y1="256.36938"
+       x2="451.66818"
+       y2="230.41103"
+       pointer-events="none"
+       id="line421" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="503.96021"
+       y1="256.36938"
+       x2="496.69226"
+       y2="325.25137"
+       pointer-events="none"
+       id="line423" />
+    <polygon
+       stroke="transparent"
+       fill="#d4d44c"
+       stroke-width="4"
+       points="443.00155,277.67044 438.97274,348.82005 391.35317,316.96497 392.31122,248.9112 "
+       ptArray="392.31122017722987,248.91120418350476,443.0015539233732,277.6704396571069,438.9727428843391,348.8200486417983,391.3531713788431,316.96496961203746"
+       display="hi"
+       id="polygon425" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="392.31122"
+       y1="248.91121"
+       x2="391.35318"
+       y2="316.96497"
+       pointer-events="none"
+       id="line427" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="438.97275"
+       y1="348.82004"
+       x2="391.35318"
+       y2="316.96497"
+       pointer-events="none"
+       id="line429" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="496.69226"
+       y1="325.25137"
+       x2="438.97275"
+       y2="348.82004"
+       pointer-events="none"
+       id="line431" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="490.19983"
+       y1="386.78348"
+       x2="435.39462"
+       y2="412.01056"
+       pointer-events="none"
+       id="line433" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="438.97275"
+       y1="348.82004"
+       x2="435.39462"
+       y2="412.01056"
+       pointer-events="none"
+       id="line435" />
+    <polygon
+       stroke="transparent"
+       fill="#ffa0a0"
+       stroke-width="4"
+       points="375,375 438.96304,348.87893 493.8158,385.57761 427.91627,415.93821 "
+       ptArray="427.91626548071224,415.9382136602186,375,375,438.9630426176715,348.87893395175297,493.8157978918128,385.57760744400525"
+       display="hi"
+       id="polygon437" />
+    <polygon
+       stroke="transparent"
+       fill="#981098"
+       stroke-width="4"
+       points="329.36512,339.69497 331.87205,402.25973 267.46135,429.04484 260.87947,364.80753 "
+       ptArray="260.87946772384345,364.8075264438491,329.36511899648724,339.6949668139107,331.87205039597546,402.2597283318417,267.4613513797011,429.0448402649294"
+       display="hi"
+       id="polygon439" />
+    <polygon
+       stroke="transparent"
+       fill="#d44cd4"
+       stroke-width="4"
+       points="232.04246,392.826 267.46135,429.04484 260.87947,364.80753 223.88698,330.88495 "
+       ptArray="223.8869840928716,330.88495276399425,232.04246444024406,392.82599753252765,267.4613513797011,429.0448402649294,260.87946772384345,364.8075264438491"
+       display="hi"
+       id="polygon441" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="223.88698"
+       y1="330.88495"
+       x2="232.04247"
+       y2="392.82599"
+       pointer-events="none"
+       id="line443" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="232.04247"
+       y1="392.82599"
+       x2="267.46136"
+       y2="429.04483"
+       pointer-events="none"
+       id="line445" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="267.46136"
+       y1="429.04483"
+       x2="331.87204"
+       y2="402.25974"
+       pointer-events="none"
+       id="line447" />
+    <polygon
+       stroke="transparent"
+       fill="#f69090"
+       stroke-width="4"
+       points="267.4992,429.08355 308.146,470.64837 303.73231,404.10412 260.91916,364.84392 "
+       ptArray="260.91915837903997,364.84392327485773,267.49920465543835,429.08354847852115,308.1459986176831,470.64837350002273,303.73230748810255,404.10412055187504"
+       display="hi"
+       id="polygon449" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="267.49921"
+       y1="429.08356"
+       x2="260.91916"
+       y2="364.84393"
+       pointer-events="none"
+       id="line451" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="308.146"
+       y1="470.64838"
+       x2="267.49921"
+       y2="429.08356"
+       pointer-events="none"
+       id="line453" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="308.146"
+       y1="470.64838"
+       x2="375"
+       y2="439.87189"
+       pointer-events="none"
+       id="line455" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="424.57166"
+       y1="483.10367"
+       x2="375"
+       y2="439.87189"
+       pointer-events="none"
+       id="line457" />
+    <polygon
+       stroke="transparent"
+       fill="#ee66ee"
+       stroke-width="4"
+       points="392.24885,248.93064 348.16997,223.91885 284.77457,241.75088 326.54876,269.40782 "
+       ptArray="326.5487564049941,269.4078205757817,392.2488524379361,248.9306427439575,348.1699682537077,223.91884858042812,284.77456935660337,241.75088352914457"
+       display="hi"
+       id="polygon459" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="284.77457"
+       y1="241.75089"
+       x2="348.16998"
+       y2="223.91885"
+       pointer-events="none"
+       id="line461" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="223.88698"
+       y1="330.88495"
+       x2="289.67975"
+       y2="308.99271"
+       pointer-events="none"
+       id="line463" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="284.77457"
+       y1="241.75089"
+       x2="289.67975"
+       y2="308.99271"
+       pointer-events="none"
+       id="line465" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="289.67975"
+       y1="308.99271"
+       x2="329.36511"
+       y2="339.69498"
+       pointer-events="none"
+       id="line467" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="329.36511"
+       y1="339.69498"
+       x2="331.87204"
+       y2="402.25974"
+       pointer-events="none"
+       id="line469" />
+    <polygon
+       stroke="transparent"
+       fill="#ffa0a0"
+       stroke-width="4"
+       points="303.73231,404.10412 375,375 329.40755,339.7278 260.91916,364.84392 "
+       ptArray="260.91915837903997,364.84392327485773,303.73230748810255,404.10412055187504,375,375,329.40755341971703,339.7277958404671"
+       display="hi"
+       id="polygon471" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="260.91916"
+       y1="364.84393"
+       x2="329.40756"
+       y2="339.72778"
+       pointer-events="none"
+       id="line473" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375"
+       y1="375"
+       x2="329.40756"
+       y2="339.72778"
+       pointer-events="none"
+       id="line475" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375"
+       y1="439.87189"
+       x2="375"
+       y2="375"
+       pointer-events="none"
+       id="line477" />
+    <polygon
+       stroke="transparent"
+       fill="#ffa0a0"
+       stroke-width="4"
+       points="427.91627,415.93821 353.84902,450.06177 303.73231,404.10412 375,375 "
+       ptArray="375,375,427.91626548071224,415.9382136602186,353.8490152814317,450.0617731839781,303.73230748810255,404.10412055187504"
+       display="hi"
+       id="polygon479" />
+    <polygon
+       stroke="transparent"
+       fill="#ba5454"
+       stroke-width="4"
+       points="427.91627,415.93821 353.84902,450.06177 355.26318,518.82972 424.57167,483.10366 "
+       ptArray="424.57167049320685,483.1036641834103,427.91626548071224,415.9382136602186,353.8490152814317,450.0617731839781,355.2631794336437,518.8297227582435"
+       display="hi"
+       id="polygon481" />
+    <polygon
+       stroke="transparent"
+       fill="#ba5454"
+       stroke-width="4"
+       points="427.91627,415.93821 493.8158,385.57761 486.69525,451.08117 424.57167,483.10366 "
+       ptArray="424.57167049320685,483.1036641834103,427.91626548071224,415.9382136602186,493.8157978918128,385.57760744400525,486.6952494513106,451.08117189125903"
+       display="hi"
+       id="polygon483" />
+    <polygon
+       stroke="transparent"
+       fill="#f69090"
+       stroke-width="4"
+       points="308.146,470.64837 303.73231,404.10412 353.84902,450.06177 355.26318,518.82972 "
+       ptArray="355.2631794336437,518.8297227582435,308.1459986176831,470.64837350002273,303.73230748810255,404.10412055187504,353.8490152814317,450.0617731839781"
+       display="hi"
+       id="polygon485" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="355.26318"
+       y1="518.82971"
+       x2="308.146"
+       y2="470.64838"
+       pointer-events="none"
+       id="line487" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="424.57166"
+       y1="483.10367"
+       x2="486.69525"
+       y2="451.08118"
+       pointer-events="none"
+       id="line489" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="355.26318"
+       y1="518.82971"
+       x2="424.57166"
+       y2="483.10367"
+       pointer-events="none"
+       id="line491" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="424.57166"
+       y1="483.10367"
+       x2="427.91626"
+       y2="415.9382"
+       pointer-events="none"
+       id="line493" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="303.7323"
+       y1="404.10413"
+       x2="260.91916"
+       y2="364.84393"
+       pointer-events="none"
+       id="line495" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="308.146"
+       y1="470.64838"
+       x2="303.7323"
+       y2="404.10413"
+       pointer-events="none"
+       id="line497" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375"
+       y1="375"
+       x2="438.96304"
+       y2="348.87894"
+       pointer-events="none"
+       id="line499" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="303.7323"
+       y1="404.10413"
+       x2="375"
+       y2="375"
+       pointer-events="none"
+       id="line501" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="427.91626"
+       y1="415.9382"
+       x2="375"
+       y2="375"
+       pointer-events="none"
+       id="line503" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="355.26318"
+       y1="518.82971"
+       x2="353.84903"
+       y2="450.06177"
+       pointer-events="none"
+       id="line505" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="353.84903"
+       y1="450.06177"
+       x2="303.7323"
+       y2="404.10413"
+       pointer-events="none"
+       id="line507" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="486.69525"
+       y1="451.08118"
+       x2="493.8158"
+       y2="385.57761"
+       pointer-events="none"
+       id="line509" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="493.8158"
+       y1="385.57761"
+       x2="438.96304"
+       y2="348.87894"
+       pointer-events="none"
+       id="line511" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="427.91626"
+       y1="415.9382"
+       x2="493.8158"
+       y2="385.57761"
+       pointer-events="none"
+       id="line513" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="353.84903"
+       y1="450.06177"
+       x2="427.91626"
+       y2="415.9382"
+       pointer-events="none"
+       id="line515" />
+    <polygon
+       stroke="transparent"
+       fill="#d44cd4"
+       stroke-width="4"
+       points="253.43937,292.1943 214.7447,261.44908 223.88698,330.88495 260.87947,364.80753 "
+       ptArray="260.87946772384345,364.8075264438491,253.4393712979054,292.194299902426,214.7446959465885,261.4490820076878,223.8869840928716,330.88495276399425"
+       display="hi"
+       id="polygon517" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="214.74469"
+       y1="261.4491"
+       x2="223.88698"
+       y2="330.88495"
+       pointer-events="none"
+       id="line519" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="223.88698"
+       y1="330.88495"
+       x2="260.87946"
+       y2="364.80753"
+       pointer-events="none"
+       id="line521" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="260.87946"
+       y1="364.80753"
+       x2="267.46136"
+       y2="429.04483"
+       pointer-events="none"
+       id="line523" />
+    <polygon
+       stroke="transparent"
+       fill="#981098"
+       stroke-width="4"
+       points="329.36512,339.69497 326.54876,269.40782 253.43937,292.1943 260.87947,364.80753 "
+       ptArray="260.87946772384345,364.8075264438491,329.36511899648724,339.6949668139107,326.5487564049941,269.4078205757817,253.4393712979054,292.194299902426"
+       display="hi"
+       id="polygon525" />
+    <polygon
+       stroke="transparent"
+       fill="#ee66ee"
+       stroke-width="4"
+       points="214.7447,261.44908 253.43937,292.1943 326.54876,269.40782 284.77457,241.75088 "
+       ptArray="284.77456935660337,241.75088352914457,214.7446959465885,261.4490820076878,253.4393712979054,292.194299902426,326.5487564049941,269.4078205757817"
+       display="hi"
+       id="polygon527" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="214.74469"
+       y1="261.4491"
+       x2="284.77457"
+       y2="241.75089"
+       pointer-events="none"
+       id="line529" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="214.74469"
+       y1="261.4491"
+       x2="253.43938"
+       y2="292.19431"
+       pointer-events="none"
+       id="line531" />
+    <polygon
+       stroke="transparent"
+       fill="#981098"
+       stroke-width="4"
+       points="392.24885,248.93064 391.29421,316.98659 329.36512,339.69497 326.54876,269.40782 "
+       ptArray="326.5487564049941,269.4078205757817,392.2488524379361,248.9306427439575,391.29420954072566,316.9865899463425,329.36511899648724,339.6949668139107"
+       display="hi"
+       id="polygon533" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="348.16998"
+       y1="223.91885"
+       x2="392.24884"
+       y2="248.93065"
+       pointer-events="none"
+       id="line535" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="392.24884"
+       y1="248.93065"
+       x2="391.29422"
+       y2="316.9866"
+       pointer-events="none"
+       id="line537" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="329.36511"
+       y1="339.69498"
+       x2="391.29422"
+       y2="316.9866"
+       pointer-events="none"
+       id="line539" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="260.87946"
+       y1="364.80753"
+       x2="329.36511"
+       y2="339.69498"
+       pointer-events="none"
+       id="line541" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="253.43938"
+       y1="292.19431"
+       x2="260.87946"
+       y2="364.80753"
+       pointer-events="none"
+       id="line543" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="284.77457"
+       y1="241.75089"
+       x2="326.54877"
+       y2="269.40781"
+       pointer-events="none"
+       id="line545" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="326.54877"
+       y1="269.40781"
+       x2="392.24884"
+       y2="248.93065"
+       pointer-events="none"
+       id="line547" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="326.54877"
+       y1="269.40781"
+       x2="329.36511"
+       y2="339.69498"
+       pointer-events="none"
+       id="line549" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="253.43938"
+       y1="292.19431"
+       x2="326.54877"
+       y2="269.40781"
+       pointer-events="none"
+       id="line551" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="443.00156"
+       y1="277.67044"
+       x2="392.31122"
+       y2="248.91121"
+       pointer-events="none"
+       id="line553" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="503.96021"
+       y1="256.36938"
+       x2="443.00156"
+       y2="277.67044"
+       pointer-events="none"
+       id="line555" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="443.00156"
+       y1="277.67044"
+       x2="438.97275"
+       y2="348.82004"
+       pointer-events="none"
+       id="line557" />
+  </g>
+  <g
+     id="g1377"
+     transform="translate(206.26676,-111.94565)">
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="504.07996"
+       y1="256.35199"
+       x2="496.80389"
+       y2="325.24808"
+       pointer-events="none"
+       id="line1049" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="496.80389"
+       y1="325.24808"
+       x2="552.9549"
+       y2="358.33206"
+       pointer-events="none"
+       id="line1051" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="331.91232"
+       y1="402.29483"
+       x2="390.48178"
+       y2="377.93646"
+       pointer-events="none"
+       id="line1053" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="267.49921"
+       y1="429.08356"
+       x2="331.91232"
+       y2="402.29483"
+       pointer-events="none"
+       id="line1055" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="404.35135"
+       y1="270.83627"
+       x2="402.96191"
+       y2="328.00928"
+       pointer-events="none"
+       id="line1057" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="402.96191"
+       y1="328.00928"
+       x2="350.87302"
+       y2="347.76263"
+       pointer-events="none"
+       id="line1059" />
+    <polygon
+       stroke="transparent"
+       fill="#d4d44c"
+       stroke-width="4"
+       points="390.4956,377.88119 350.87301,347.76262 349.62029,289.04779 391.35317,316.96497 "
+       ptArray="349.6202897091557,289.0477876278586,391.3531713788431,316.96496961203746,390.4956036124358,377.88119403862646,350.8730099572758,347.7626216815631"
+       display="hi"
+       id="polygon1061" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="405.88611"
+       y1="207.6843"
+       x2="404.35135"
+       y2="270.83627"
+       pointer-events="none"
+       id="line1063" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="404.35135"
+       y1="270.83627"
+       x2="349.6203"
+       y2="289.04779"
+       pointer-events="none"
+       id="line1065" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="349.6203"
+       y1="289.04779"
+       x2="350.87302"
+       y2="347.76263"
+       pointer-events="none"
+       id="line1067" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="390.49561"
+       y1="377.8812"
+       x2="350.87302"
+       y2="347.76263"
+       pointer-events="none"
+       id="line1069" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="294.07907"
+       y1="369.30023"
+       x2="350.8187"
+       y2="347.78323"
+       pointer-events="none"
+       id="line1071" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="349.56311"
+       y1="289.0668"
+       x2="350.8187"
+       y2="347.78323"
+       pointer-events="none"
+       id="line1073" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="350.8187"
+       y1="347.78323"
+       x2="390.4397"
+       y2="377.90445"
+       pointer-events="none"
+       id="line1075" />
+    <polygon
+       stroke="transparent"
+       fill="#981098"
+       stroke-width="4"
+       points="329.36512,339.69497 331.87205,402.25973 390.4397,377.90444 391.29421,316.98659 "
+       ptArray="390.4396950028677,377.90444356685975,391.29420954072566,316.9865899463425,329.36511899648724,339.6949668139107,331.87205039597546,402.2597283318417"
+       display="hi"
+       id="polygon1077" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="232.04247"
+       y1="392.82599"
+       x2="294.07907"
+       y2="369.30023"
+       pointer-events="none"
+       id="line1079" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="289.67975"
+       y1="308.99271"
+       x2="294.07907"
+       y2="369.30023"
+       pointer-events="none"
+       id="line1081" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="294.07907"
+       y1="369.30023"
+       x2="331.87204"
+       y2="402.25974"
+       pointer-events="none"
+       id="line1083" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="331.87204"
+       y1="402.25974"
+       x2="390.4397"
+       y2="377.90445"
+       pointer-events="none"
+       id="line1085" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="331.91232"
+       y1="402.29483"
+       x2="329.40756"
+       y2="339.72778"
+       pointer-events="none"
+       id="line1087" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375"
+       y1="439.87189"
+       x2="331.91232"
+       y2="402.29483"
+       pointer-events="none"
+       id="line1089" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="443.97604"
+       y1="355.64142"
+       x2="402.96191"
+       y2="328.00928"
+       pointer-events="none"
+       id="line1091" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="447.61899"
+       y1="296.33322"
+       x2="404.35135"
+       y2="270.83627"
+       pointer-events="none"
+       id="line1093" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="447.61899"
+       y1="296.33322"
+       x2="443.97604"
+       y2="355.64142"
+       pointer-events="none"
+       id="line1095" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="443.97604"
+       y1="355.64142"
+       x2="390.49561"
+       y2="377.8812"
+       pointer-events="none"
+       id="line1097" />
+    <polygon
+       stroke="transparent"
+       fill="#d4d44c"
+       stroke-width="4"
+       points="390.4956,377.88119 391.35317,316.96497 438.97274,348.82005 435.39461,412.01056 "
+       ptArray="438.9727428843391,348.8200486417983,435.3946117327862,412.0105606470398,390.4956036124358,377.88119403862646,391.3531713788431,316.96496961203746"
+       display="hi"
+       id="polygon1099" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="390.48178"
+       y1="377.93646"
+       x2="391.33868"
+       y2="317.01636"
+       pointer-events="none"
+       id="line1101" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="435.38504"
+       y1="412.07343"
+       x2="390.48178"
+       y2="377.93646"
+       pointer-events="none"
+       id="line1103" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375"
+       y1="439.87189"
+       x2="435.38504"
+       y2="412.07343"
+       pointer-events="none"
+       id="line1105" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="486.69525"
+       y1="451.08118"
+       x2="435.38504"
+       y2="412.07343"
+       pointer-events="none"
+       id="line1107" />
+    <polygon
+       stroke="transparent"
+       fill="#ba5454"
+       stroke-width="4"
+       points="493.8158,385.57761 486.69525,451.08117 424.57167,483.10366 427.91627,415.93821 "
+       ptArray="424.57167049320685,483.1036641834103,427.91626548071224,415.9382136602186,493.8157978918128,385.57760744400525,486.6952494513106,451.08117189125903"
+       display="hi"
+       id="polygon1109" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="490.19983"
+       y1="386.78348"
+       x2="443.97604"
+       y2="355.64142"
+       pointer-events="none"
+       id="line1111" />
+    <polygon
+       stroke="transparent"
+       fill="#989810"
+       stroke-width="4"
+       points="496.69227,325.25137 438.97274,348.82005 435.39461,412.01056 490.19984,386.78347 "
+       ptArray="435.3946117327862,412.0105606470398,490.1998423749939,386.7834707008408,496.692273512833,325.2513694883048,438.9727428843391,348.8200486417983"
+       display="hi"
+       id="polygon1113" />
+    <polygon
+       stroke="transparent"
+       fill="#eeee66"
+       stroke-width="4"
+       points="451.66818,230.41103 392.31122,248.9112 348.23036,223.90186 405.88611,207.68429 "
+       ptArray="348.2303578224442,223.9018620337862,405.88610673580695,207.68429187090692,451.66817872993164,230.41103341921152,392.31122017722987,248.91120418350476"
+       display="hi"
+       id="polygon1115" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="405.88611"
+       y1="207.6843"
+       x2="348.23035"
+       y2="223.90186"
+       pointer-events="none"
+       id="line1117" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="451.66818"
+       y1="230.41103"
+       x2="405.88611"
+       y2="207.6843"
+       pointer-events="none"
+       id="line1119" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="451.66818"
+       y1="230.41103"
+       x2="447.61899"
+       y2="296.33322"
+       pointer-events="none"
+       id="line1121" />
+    <polygon
+       stroke="transparent"
+       fill="#d4d44c"
+       stroke-width="4"
+       points="392.31122,248.9112 391.35317,316.96497 349.62029,289.04779 348.23036,223.90186 "
+       ptArray="349.6202897091557,289.0477876278586,348.2303578224442,223.9018620337862,392.31122017722987,248.91120418350476,391.3531713788431,316.96496961203746"
+       display="hi"
+       id="polygon1123" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="348.23035"
+       y1="223.90186"
+       x2="349.6203"
+       y2="289.04779"
+       pointer-events="none"
+       id="line1125" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="391.35318"
+       y1="316.96497"
+       x2="349.6203"
+       y2="289.04779"
+       pointer-events="none"
+       id="line1127" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="447.61899"
+       y1="296.33322"
+       x2="391.35318"
+       y2="316.96497"
+       pointer-events="none"
+       id="line1129" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="391.35318"
+       y1="316.96497"
+       x2="390.49561"
+       y2="377.8812"
+       pointer-events="none"
+       id="line1131" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="348.16998"
+       y1="223.91885"
+       x2="349.56311"
+       y2="289.0668"
+       pointer-events="none"
+       id="line1133" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="289.67975"
+       y1="308.99271"
+       x2="349.56311"
+       y2="289.0668"
+       pointer-events="none"
+       id="line1135" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="349.56311"
+       y1="289.0668"
+       x2="391.29422"
+       y2="316.9866"
+       pointer-events="none"
+       id="line1137" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="391.29422"
+       y1="316.9866"
+       x2="390.4397"
+       y2="377.90445"
+       pointer-events="none"
+       id="line1139" />
+    <polygon
+       stroke="transparent"
+       fill="#ffa0a0"
+       stroke-width="4"
+       points="329.40755,339.7278 375,375 438.96304,348.87893 391.33869,317.01635 "
+       ptArray="438.9630426176715,348.87893395175297,391.33869303018344,317.0163511688599,329.40755341971703,339.7277958404671,375,375"
+       display="hi"
+       id="polygon1141" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="329.40756"
+       y1="339.72778"
+       x2="391.33868"
+       y2="317.01636"
+       pointer-events="none"
+       id="line1143" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="438.96304"
+       y1="348.87894"
+       x2="391.33868"
+       y2="317.01636"
+       pointer-events="none"
+       id="line1145" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="435.39462"
+       y1="412.01056"
+       x2="390.49561"
+       y2="377.8812"
+       pointer-events="none"
+       id="line1147" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="435.38504"
+       y1="412.07343"
+       x2="438.96304"
+       y2="348.87894"
+       pointer-events="none"
+       id="line1149" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="496.69226"
+       y1="325.25137"
+       x2="447.61899"
+       y2="296.33322"
+       pointer-events="none"
+       id="line1151" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="496.69226"
+       y1="325.25137"
+       x2="490.19983"
+       y2="386.78348"
+       pointer-events="none"
+       id="line1153" />
+    <polygon
+       stroke="transparent"
+       fill="#989810"
+       stroke-width="4"
+       points="438.97274,348.82005 496.69227,325.25137 503.96021,256.36939 443.00155,277.67044 "
+       ptArray="503.9602113360005,256.36939350012176,443.0015539233732,277.6704396571069,438.9727428843391,348.8200486417983,496.692273512833,325.2513694883048"
+       display="hi"
+       id="polygon1155" />
+    <polygon
+       stroke="transparent"
+       fill="#eeee66"
+       stroke-width="4"
+       points="451.66818,230.41103 392.31122,248.9112 443.00155,277.67044 503.96021,256.36939 "
+       ptArray="443.0015539233732,277.6704396571069,503.9602113360005,256.36939350012176,451.66817872993164,230.41103341921152,392.31122017722987,248.91120418350476"
+       display="hi"
+       id="polygon1157" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="392.31122"
+       y1="248.91121"
+       x2="348.23035"
+       y2="223.90186"
+       pointer-events="none"
+       id="line1159" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="451.66818"
+       y1="230.41103"
+       x2="392.31122"
+       y2="248.91121"
+       pointer-events="none"
+       id="line1161" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="503.96021"
+       y1="256.36938"
+       x2="451.66818"
+       y2="230.41103"
+       pointer-events="none"
+       id="line1163" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="503.96021"
+       y1="256.36938"
+       x2="496.69226"
+       y2="325.25137"
+       pointer-events="none"
+       id="line1165" />
+    <polygon
+       stroke="transparent"
+       fill="#d4d44c"
+       stroke-width="4"
+       points="438.97274,348.82005 391.35317,316.96497 392.31122,248.9112 443.00155,277.67044 "
+       ptArray="392.31122017722987,248.91120418350476,443.0015539233732,277.6704396571069,438.9727428843391,348.8200486417983,391.3531713788431,316.96496961203746"
+       display="hi"
+       id="polygon1167" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="392.31122"
+       y1="248.91121"
+       x2="391.35318"
+       y2="316.96497"
+       pointer-events="none"
+       id="line1169" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="438.97275"
+       y1="348.82004"
+       x2="391.35318"
+       y2="316.96497"
+       pointer-events="none"
+       id="line1171" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="496.69226"
+       y1="325.25137"
+       x2="438.97275"
+       y2="348.82004"
+       pointer-events="none"
+       id="line1173" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="490.19983"
+       y1="386.78348"
+       x2="435.39462"
+       y2="412.01056"
+       pointer-events="none"
+       id="line1175" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="438.97275"
+       y1="348.82004"
+       x2="435.39462"
+       y2="412.01056"
+       pointer-events="none"
+       id="line1177" />
+    <polygon
+       stroke="transparent"
+       fill="#ffa0a0"
+       stroke-width="4"
+       points="438.96304,348.87893 493.8158,385.57761 427.91627,415.93821 375,375 "
+       ptArray="427.91626548071224,415.9382136602186,375,375,438.9630426176715,348.87893395175297,493.8157978918128,385.57760744400525"
+       display="hi"
+       id="polygon1179" />
+    <polygon
+       stroke="transparent"
+       fill="#981098"
+       stroke-width="4"
+       points="331.87205,402.25973 267.46135,429.04484 260.87947,364.80753 329.36512,339.69497 "
+       ptArray="260.87946772384345,364.8075264438491,329.36511899648724,339.6949668139107,331.87205039597546,402.2597283318417,267.4613513797011,429.0448402649294"
+       display="hi"
+       id="polygon1181" />
+    <polygon
+       stroke="transparent"
+       fill="#d44cd4"
+       stroke-width="4"
+       points="267.46135,429.04484 260.87947,364.80753 223.88698,330.88495 232.04246,392.826 "
+       ptArray="223.8869840928716,330.88495276399425,232.04246444024406,392.82599753252765,267.4613513797011,429.0448402649294,260.87946772384345,364.8075264438491"
+       display="hi"
+       id="polygon1183" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="223.88698"
+       y1="330.88495"
+       x2="232.04247"
+       y2="392.82599"
+       pointer-events="none"
+       id="line1185" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="232.04247"
+       y1="392.82599"
+       x2="267.46136"
+       y2="429.04483"
+       pointer-events="none"
+       id="line1187" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="267.46136"
+       y1="429.04483"
+       x2="331.87204"
+       y2="402.25974"
+       pointer-events="none"
+       id="line1189" />
+    <polygon
+       stroke="transparent"
+       fill="#f69090"
+       stroke-width="4"
+       points="308.146,470.64837 303.73231,404.10412 260.91916,364.84392 267.4992,429.08355 "
+       ptArray="260.91915837903997,364.84392327485773,267.49920465543835,429.08354847852115,308.1459986176831,470.64837350002273,303.73230748810255,404.10412055187504"
+       display="hi"
+       id="polygon1191" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="267.49921"
+       y1="429.08356"
+       x2="260.91916"
+       y2="364.84393"
+       pointer-events="none"
+       id="line1193" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="308.146"
+       y1="470.64838"
+       x2="267.49921"
+       y2="429.08356"
+       pointer-events="none"
+       id="line1195" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="308.146"
+       y1="470.64838"
+       x2="375"
+       y2="439.87189"
+       pointer-events="none"
+       id="line1197" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="424.57166"
+       y1="483.10367"
+       x2="375"
+       y2="439.87189"
+       pointer-events="none"
+       id="line1199" />
+    <polygon
+       stroke="transparent"
+       fill="#ba5454"
+       stroke-width="4"
+       points="353.84902,450.06177 355.26318,518.82972 424.57167,483.10366 427.91627,415.93821 "
+       ptArray="424.57167049320685,483.1036641834103,427.91626548071224,415.9382136602186,353.8490152814317,450.0617731839781,355.2631794336437,518.8297227582435"
+       display="hi"
+       id="polygon1201" />
+    <polygon
+       stroke="transparent"
+       fill="#f69090"
+       stroke-width="4"
+       points="303.73231,404.10412 353.84902,450.06177 355.26318,518.82972 308.146,470.64837 "
+       ptArray="355.2631794336437,518.8297227582435,308.1459986176831,470.64837350002273,303.73230748810255,404.10412055187504,353.8490152814317,450.0617731839781"
+       display="hi"
+       id="polygon1203" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="355.26318"
+       y1="518.82971"
+       x2="308.146"
+       y2="470.64838"
+       pointer-events="none"
+       id="line1205" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="424.57166"
+       y1="483.10367"
+       x2="486.69525"
+       y2="451.08118"
+       pointer-events="none"
+       id="line1207" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="355.26318"
+       y1="518.82971"
+       x2="424.57166"
+       y2="483.10367"
+       pointer-events="none"
+       id="line1209" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="424.57166"
+       y1="483.10367"
+       x2="427.91626"
+       y2="415.9382"
+       pointer-events="none"
+       id="line1211" />
+    <polygon
+       stroke="transparent"
+       fill="#ee66ee"
+       stroke-width="4"
+       points="348.16997,223.91885 284.77457,241.75088 326.54876,269.40782 392.24885,248.93064 "
+       ptArray="326.5487564049941,269.4078205757817,392.2488524379361,248.9306427439575,348.1699682537077,223.91884858042812,284.77456935660337,241.75088352914457"
+       display="hi"
+       id="polygon1213" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="284.77457"
+       y1="241.75089"
+       x2="348.16998"
+       y2="223.91885"
+       pointer-events="none"
+       id="line1215" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="223.88698"
+       y1="330.88495"
+       x2="289.67975"
+       y2="308.99271"
+       pointer-events="none"
+       id="line1217" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="284.77457"
+       y1="241.75089"
+       x2="289.67975"
+       y2="308.99271"
+       pointer-events="none"
+       id="line1219" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="289.67975"
+       y1="308.99271"
+       x2="329.36511"
+       y2="339.69498"
+       pointer-events="none"
+       id="line1221" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="329.36511"
+       y1="339.69498"
+       x2="331.87204"
+       y2="402.25974"
+       pointer-events="none"
+       id="line1223" />
+    <polygon
+       stroke="transparent"
+       fill="#ffa0a0"
+       stroke-width="4"
+       points="375,375 329.40755,339.7278 260.91916,364.84392 303.73231,404.10412 "
+       ptArray="260.91915837903997,364.84392327485773,303.73230748810255,404.10412055187504,375,375,329.40755341971703,339.7277958404671"
+       display="hi"
+       id="polygon1225" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="260.91916"
+       y1="364.84393"
+       x2="329.40756"
+       y2="339.72778"
+       pointer-events="none"
+       id="line1227" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375"
+       y1="375"
+       x2="329.40756"
+       y2="339.72778"
+       pointer-events="none"
+       id="line1229" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375"
+       y1="439.87189"
+       x2="375"
+       y2="375"
+       pointer-events="none"
+       id="line1231" />
+    <polygon
+       stroke="transparent"
+       fill="#ffa0a0"
+       stroke-width="4"
+       points="353.84902,450.06177 303.73231,404.10412 375,375 427.91627,415.93821 "
+       ptArray="375,375,427.91626548071224,415.9382136602186,353.8490152814317,450.0617731839781,303.73230748810255,404.10412055187504"
+       display="hi"
+       id="polygon1233" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="303.7323"
+       y1="404.10413"
+       x2="260.91916"
+       y2="364.84393"
+       pointer-events="none"
+       id="line1235" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="308.146"
+       y1="470.64838"
+       x2="303.7323"
+       y2="404.10413"
+       pointer-events="none"
+       id="line1237" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375"
+       y1="375"
+       x2="438.96304"
+       y2="348.87894"
+       pointer-events="none"
+       id="line1239" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="303.7323"
+       y1="404.10413"
+       x2="375"
+       y2="375"
+       pointer-events="none"
+       id="line1241" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="427.91626"
+       y1="415.9382"
+       x2="375"
+       y2="375"
+       pointer-events="none"
+       id="line1243" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="486.69525"
+       y1="451.08118"
+       x2="493.8158"
+       y2="385.57761"
+       pointer-events="none"
+       id="line1245" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="493.8158"
+       y1="385.57761"
+       x2="438.96304"
+       y2="348.87894"
+       pointer-events="none"
+       id="line1247" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="427.91626"
+       y1="415.9382"
+       x2="493.8158"
+       y2="385.57761"
+       pointer-events="none"
+       id="line1249" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="443.00156"
+       y1="277.67044"
+       x2="392.31122"
+       y2="248.91121"
+       pointer-events="none"
+       id="line1251" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="503.96021"
+       y1="256.36938"
+       x2="443.00156"
+       y2="277.67044"
+       pointer-events="none"
+       id="line1253" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="443.00156"
+       y1="277.67044"
+       x2="438.97275"
+       y2="348.82004"
+       pointer-events="none"
+       id="line1255" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="512.28052"
+       y1="178.70184"
+       x2="504.07996"
+       y2="256.35199"
+       pointer-events="none"
+       id="line1257" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="504.07996"
+       y1="256.35199"
+       x2="564.39905"
+       y2="286.28918"
+       pointer-events="none"
+       id="line1259" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="443.11484"
+       y1="277.65665"
+       x2="504.07996"
+       y2="256.35199"
+       pointer-events="none"
+       id="line1261" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="439.07852"
+       y1="348.82132"
+       x2="496.80389"
+       y2="325.24808"
+       pointer-events="none"
+       id="line1263" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="443.11484"
+       y1="277.65665"
+       x2="439.07852"
+       y2="348.82132"
+       pointer-events="none"
+       id="line1265" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="375.11642"
+       y1="374.94144"
+       x2="439.07852"
+       y2="348.82132"
+       pointer-events="none"
+       id="line1267" />
+    <polygon
+       stroke="transparent"
+       fill="#54ba54"
+       stroke-width="4"
+       points="502.0444,311.08408 564.39902,286.28919 552.95491,358.33206 493.94466,385.51872 "
+       ptArray="552.9549063680296,358.3320573212238,493.94466480212026,385.5187201857912,502.0444029683317,311.08408100759095,564.3990246916835,286.2891913697007"
+       display="hi"
+       id="polygon1269" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="564.39905"
+       y1="286.28918"
+       x2="552.9549"
+       y2="358.33206"
+       pointer-events="none"
+       id="line1271" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="493.94467"
+       y1="385.51871"
+       x2="552.9549"
+       y2="358.33206"
+       pointer-events="none"
+       id="line1273" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="439.07852"
+       y1="348.82132"
+       x2="493.94467"
+       y2="385.51871"
+       pointer-events="none"
+       id="line1275" />
+    <polygon
+       stroke="transparent"
+       fill="#54ba54"
+       stroke-width="4"
+       points="428.04676,415.87861 493.94466,385.51872 502.0444,311.08408 431.88514,338.98243 "
+       ptArray="502.0444029683317,311.08408100759095,431.8851358414464,338.9824346084582,428.0467588965089,415.87860524635045,493.94466480212026,385.5187201857912"
+       display="hi"
+       id="polygon1277" />
+    <polygon
+       stroke="transparent"
+       fill="#a0ffa0"
+       stroke-width="4"
+       points="512.28054,178.70184 447.69386,196.92387 511.32788,225.77116 577.41623,204.34346 "
+       ptArray="511.3278806227145,225.7711615844104,577.4162284081096,204.34345855882847,512.2805432477359,178.70183654821477,447.69385729582666,196.92387414913935"
+       display="hi"
+       id="polygon1279" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="512.28052"
+       y1="178.70184"
+       x2="577.4162"
+       y2="204.34346"
+       pointer-events="none"
+       id="line1281" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="447.69385"
+       y1="196.92387"
+       x2="512.28052"
+       y2="178.70184"
+       pointer-events="none"
+       id="line1283" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="447.69385"
+       y1="196.92387"
+       x2="443.11484"
+       y2="277.65665"
+       pointer-events="none"
+       id="line1285" />
+    <polygon
+       stroke="transparent"
+       fill="#981098"
+       stroke-width="4"
+       points="391.29421,316.98659 329.36512,339.69497 326.54876,269.40782 392.24885,248.93064 "
+       ptArray="326.5487564049941,269.4078205757817,392.2488524379361,248.9306427439575,391.29420954072566,316.9865899463425,329.36511899648724,339.6949668139107"
+       display="hi"
+       id="polygon1287" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="348.16998"
+       y1="223.91885"
+       x2="392.24884"
+       y2="248.93065"
+       pointer-events="none"
+       id="line1289" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="392.24884"
+       y1="248.93065"
+       x2="391.29422"
+       y2="316.9866"
+       pointer-events="none"
+       id="line1291" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375.12418"
+       y1="301.41641"
+       x2="443.11484"
+       y2="277.65665"
+       pointer-events="none"
+       id="line1293" />
+    <polygon
+       stroke="transparent"
+       fill="#54ba54"
+       stroke-width="4"
+       points="511.32788,225.77116 577.41623,204.34346 564.39902,286.28919 502.0444,311.08408 "
+       ptArray="564.3990246916835,286.2891913697007,502.0444029683317,311.08408100759095,511.3278806227145,225.7711615844104,577.4162284081096,204.34345855882847"
+       display="hi"
+       id="polygon1295" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="577.4162"
+       y1="204.34346"
+       x2="564.39905"
+       y2="286.28918"
+       pointer-events="none"
+       id="line1297" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="502.0444"
+       y1="311.08408"
+       x2="564.39905"
+       y2="286.28918"
+       pointer-events="none"
+       id="line1299" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="443.11484"
+       y1="277.65665"
+       x2="502.0444"
+       y2="311.08408"
+       pointer-events="none"
+       id="line1301" />
+    <polygon
+       stroke="transparent"
+       fill="#54ba54"
+       stroke-width="4"
+       points="431.88514,338.98243 502.0444,311.08408 511.32788,225.77116 436.32232,250.09008 "
+       ptArray="511.3278806227145,225.7711615844104,436.3223188022341,250.09007645840805,431.8851358414464,338.9824346084582,502.0444029683317,311.08408100759095"
+       display="hi"
+       id="polygon1303" />
+    <polygon
+       stroke="transparent"
+       fill="#ee66ee"
+       stroke-width="4"
+       points="253.43937,292.1943 326.54876,269.40782 284.77457,241.75088 214.7447,261.44908 "
+       ptArray="284.77456935660337,241.75088352914457,214.7446959465885,261.4490820076878,253.4393712979054,292.194299902426,326.5487564049941,269.4078205757817"
+       display="hi"
+       id="polygon1305" />
+    <polygon
+       stroke="transparent"
+       fill="#d44cd4"
+       stroke-width="4"
+       points="214.7447,261.44908 223.88698,330.88495 260.87947,364.80753 253.43937,292.1943 "
+       ptArray="260.87946772384345,364.8075264438491,253.4393712979054,292.194299902426,214.7446959465885,261.4490820076878,223.8869840928716,330.88495276399425"
+       display="hi"
+       id="polygon1307" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="214.74469"
+       y1="261.4491"
+       x2="223.88698"
+       y2="330.88495"
+       pointer-events="none"
+       id="line1309" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="214.74469"
+       y1="261.4491"
+       x2="284.77457"
+       y2="241.75089"
+       pointer-events="none"
+       id="line1311" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="284.77457"
+       y1="241.75089"
+       x2="326.54877"
+       y2="269.40781"
+       pointer-events="none"
+       id="line1313" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="326.54877"
+       y1="269.40781"
+       x2="392.24884"
+       y2="248.93065"
+       pointer-events="none"
+       id="line1315" />
+    <polygon
+       stroke="transparent"
+       fill="#90f690"
+       stroke-width="4"
+       points="375.12417,301.4164 375.13303,217.39568 436.32232,250.09008 431.88514,338.98243 "
+       ptArray="436.3223188022341,250.09007645840805,431.8851358414464,338.9824346084582,375.12416503294565,301.41639754043496,375.133027295754,217.395681196185"
+       display="hi"
+       id="polygon1317" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="329.36511"
+       y1="339.69498"
+       x2="391.29422"
+       y2="316.9866"
+       pointer-events="none"
+       id="line1319" />
+    <polygon
+       stroke="transparent"
+       fill="#90f690"
+       stroke-width="4"
+       points="375.12417,301.4164 431.88514,338.98243 428.04676,415.87861 375.11641,374.94143 "
+       ptArray="428.0467588965089,415.87860524635045,375.11640982414303,374.9414343275579,375.12416503294565,301.41639754043496,431.8851358414464,338.9824346084582"
+       display="hi"
+       id="polygon1321" />
+    <polygon
+       stroke="transparent"
+       fill="#a0ffa0"
+       stroke-width="4"
+       points="447.69386,196.92387 511.32788,225.77116 436.32232,250.09008 375.13303,217.39568 "
+       ptArray="436.3223188022341,250.09007645840805,375.133027295754,217.395681196185,447.69385729582666,196.92387414913935,511.3278806227145,225.7711615844104"
+       display="hi"
+       id="polygon1323" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="375.13303"
+       y1="217.39568"
+       x2="447.69385"
+       y2="196.92387"
+       pointer-events="none"
+       id="line1325" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="375.12418"
+       y1="301.41641"
+       x2="375.11642"
+       y2="374.94144"
+       pointer-events="none"
+       id="line1327" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="375.13303"
+       y1="217.39568"
+       x2="375.12418"
+       y2="301.41641"
+       pointer-events="none"
+       id="line1329" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375.12418"
+       y1="301.41641"
+       x2="431.88513"
+       y2="338.98242"
+       pointer-events="none"
+       id="line1331" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="511.32788"
+       y1="225.77116"
+       x2="577.4162"
+       y2="204.34346"
+       pointer-events="none"
+       id="line1333" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="447.69385"
+       y1="196.92387"
+       x2="511.32788"
+       y2="225.77116"
+       pointer-events="none"
+       id="line1335" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="502.0444"
+       y1="311.08408"
+       x2="493.94467"
+       y2="385.51871"
+       pointer-events="none"
+       id="line1337" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="511.32788"
+       y1="225.77116"
+       x2="502.0444"
+       y2="311.08408"
+       pointer-events="none"
+       id="line1339" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="431.88513"
+       y1="338.98242"
+       x2="502.0444"
+       y2="311.08408"
+       pointer-events="none"
+       id="line1341" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="375.13303"
+       y1="217.39568"
+       x2="436.32233"
+       y2="250.09007"
+       pointer-events="none"
+       id="line1343" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="436.32233"
+       y1="250.09007"
+       x2="511.32788"
+       y2="225.77116"
+       pointer-events="none"
+       id="line1345" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="375.11642"
+       y1="374.94144"
+       x2="428.04675"
+       y2="415.8786"
+       pointer-events="none"
+       id="line1347" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="428.04675"
+       y1="415.8786"
+       x2="493.94467"
+       y2="385.51871"
+       pointer-events="none"
+       id="line1349" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="431.88513"
+       y1="338.98242"
+       x2="428.04675"
+       y2="415.8786"
+       pointer-events="none"
+       id="line1351" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="436.32233"
+       y1="250.09007"
+       x2="431.88513"
+       y2="338.98242"
+       pointer-events="none"
+       id="line1353" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="223.88698"
+       y1="330.88495"
+       x2="260.87946"
+       y2="364.80753"
+       pointer-events="none"
+       id="line1355" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="260.87946"
+       y1="364.80753"
+       x2="267.46136"
+       y2="429.04483"
+       pointer-events="none"
+       id="line1357" />
+    <polygon
+       stroke="transparent"
+       fill="#981098"
+       stroke-width="4"
+       points="326.54876,269.40782 253.43937,292.1943 260.87947,364.80753 329.36512,339.69497 "
+       ptArray="260.87946772384345,364.8075264438491,329.36511899648724,339.6949668139107,326.5487564049941,269.4078205757817,253.4393712979054,292.194299902426"
+       display="hi"
+       id="polygon1359" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="214.74469"
+       y1="261.4491"
+       x2="253.43938"
+       y2="292.19431"
+       pointer-events="none"
+       id="line1361" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="260.87946"
+       y1="364.80753"
+       x2="329.36511"
+       y2="339.69498"
+       pointer-events="none"
+       id="line1363" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="253.43938"
+       y1="292.19431"
+       x2="260.87946"
+       y2="364.80753"
+       pointer-events="none"
+       id="line1365" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="326.54877"
+       y1="269.40781"
+       x2="329.36511"
+       y2="339.69498"
+       pointer-events="none"
+       id="line1367" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="253.43938"
+       y1="292.19431"
+       x2="326.54877"
+       y2="269.40781"
+       pointer-events="none"
+       id="line1369" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="355.26318"
+       y1="518.82971"
+       x2="353.84903"
+       y2="450.06177"
+       pointer-events="none"
+       id="line1371" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="353.84903"
+       y1="450.06177"
+       x2="303.7323"
+       y2="404.10413"
+       pointer-events="none"
+       id="line1373" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="353.84903"
+       y1="450.06177"
+       x2="427.91626"
+       y2="415.9382"
+       pointer-events="none"
+       id="line1375" />
+  </g>
+  <g
+     id="g3151"
+     transform="translate(673.91614,-111.94565)">
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="294.07907"
+       y1="369.30023"
+       x2="350.8187"
+       y2="347.78323"
+       pointer-events="none"
+       id="line2741" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="349.56311"
+       y1="289.0668"
+       x2="350.8187"
+       y2="347.78323"
+       pointer-events="none"
+       id="line2743" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="348.16998"
+       y1="223.91885"
+       x2="349.56311"
+       y2="289.0668"
+       pointer-events="none"
+       id="line2745" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="232.04247"
+       y1="392.82599"
+       x2="294.07907"
+       y2="369.30023"
+       pointer-events="none"
+       id="line2747" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="289.67975"
+       y1="308.99271"
+       x2="294.07907"
+       y2="369.30023"
+       pointer-events="none"
+       id="line2749" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="289.67975"
+       y1="308.99271"
+       x2="349.56311"
+       y2="289.0668"
+       pointer-events="none"
+       id="line2751" />
+    <polygon
+       stroke="transparent"
+       fill="#d44cd4"
+       stroke-width="4"
+       points="260.87947,364.80753 223.88698,330.88495 232.04246,392.826 267.46135,429.04484 "
+       ptArray="223.8869840928716,330.88495276399425,232.04246444024406,392.82599753252765,267.4613513797011,429.0448402649294,260.87946772384345,364.8075264438491"
+       display="hi"
+       id="polygon2753" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="223.88698"
+       y1="330.88495"
+       x2="232.04247"
+       y2="392.82599"
+       pointer-events="none"
+       id="line2755" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="223.88698"
+       y1="330.88495"
+       x2="289.67975"
+       y2="308.99271"
+       pointer-events="none"
+       id="line2757" />
+    <polygon
+       stroke="transparent"
+       fill="#d44cd4"
+       stroke-width="4"
+       points="223.88698,330.88495 260.87947,364.80753 253.43937,292.1943 214.7447,261.44908 "
+       ptArray="260.87946772384345,364.8075264438491,253.4393712979054,292.194299902426,214.7446959465885,261.4490820076878,223.8869840928716,330.88495276399425"
+       display="hi"
+       id="polygon2759" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="404.35135"
+       y1="270.83627"
+       x2="402.96191"
+       y2="328.00928"
+       pointer-events="none"
+       id="line2761" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="405.88611"
+       y1="207.6843"
+       x2="404.35135"
+       y2="270.83627"
+       pointer-events="none"
+       id="line2763" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="404.35135"
+       y1="270.83627"
+       x2="349.6203"
+       y2="289.04779"
+       pointer-events="none"
+       id="line2765" />
+    <polygon
+       stroke="transparent"
+       fill="#d4d44c"
+       stroke-width="4"
+       points="391.35317,316.96497 349.62029,289.04779 348.23036,223.90186 392.31122,248.9112 "
+       ptArray="349.6202897091557,289.0477876278586,348.2303578224442,223.9018620337862,392.31122017722987,248.91120418350476,391.3531713788431,316.96496961203746"
+       display="hi"
+       id="polygon2767" />
+    <polygon
+       stroke="transparent"
+       fill="#eeee66"
+       stroke-width="4"
+       points="392.31122,248.9112 348.23036,223.90186 405.88611,207.68429 451.66818,230.41103 "
+       ptArray="348.2303578224442,223.9018620337862,405.88610673580695,207.68429187090692,451.66817872993164,230.41103341921152,392.31122017722987,248.91120418350476"
+       display="hi"
+       id="polygon2769" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="405.88611"
+       y1="207.6843"
+       x2="348.23035"
+       y2="223.90186"
+       pointer-events="none"
+       id="line2771" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="402.96191"
+       y1="328.00928"
+       x2="350.87302"
+       y2="347.76263"
+       pointer-events="none"
+       id="line2773" />
+    <polygon
+       stroke="transparent"
+       fill="#d4d44c"
+       stroke-width="4"
+       points="350.87301,347.76262 349.62029,289.04779 391.35317,316.96497 390.4956,377.88119 "
+       ptArray="349.6202897091557,289.0477876278586,391.3531713788431,316.96496961203746,390.4956036124358,377.88119403862646,350.8730099572758,347.7626216815631"
+       display="hi"
+       id="polygon2775" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="349.6203"
+       y1="289.04779"
+       x2="350.87302"
+       y2="347.76263"
+       pointer-events="none"
+       id="line2777" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="348.23035"
+       y1="223.90186"
+       x2="349.6203"
+       y2="289.04779"
+       pointer-events="none"
+       id="line2779" />
+    <polygon
+       stroke="transparent"
+       fill="#ee66ee"
+       stroke-width="4"
+       points="284.77457,241.75088 326.54876,269.40782 392.24885,248.93064 348.16997,223.91885 "
+       ptArray="326.5487564049941,269.4078205757817,392.2488524379361,248.9306427439575,348.1699682537077,223.91884858042812,284.77456935660337,241.75088352914457"
+       display="hi"
+       id="polygon2781" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="284.77457"
+       y1="241.75089"
+       x2="348.16998"
+       y2="223.91885"
+       pointer-events="none"
+       id="line2783" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="284.77457"
+       y1="241.75089"
+       x2="289.67975"
+       y2="308.99271"
+       pointer-events="none"
+       id="line2785" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="289.67975"
+       y1="308.99271"
+       x2="329.36511"
+       y2="339.69498"
+       pointer-events="none"
+       id="line2787" />
+    <polygon
+       stroke="transparent"
+       fill="#981098"
+       stroke-width="4"
+       points="253.43937,292.1943 260.87947,364.80753 329.36512,339.69497 326.54876,269.40782 "
+       ptArray="260.87946772384345,364.8075264438491,329.36511899648724,339.6949668139107,326.5487564049941,269.4078205757817,253.4393712979054,292.194299902426"
+       display="hi"
+       id="polygon2789" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="294.07907"
+       y1="369.30023"
+       x2="331.87204"
+       y2="402.25974"
+       pointer-events="none"
+       id="line2791" />
+    <polygon
+       stroke="transparent"
+       fill="#981098"
+       stroke-width="4"
+       points="267.46135,429.04484 260.87947,364.80753 329.36512,339.69497 331.87205,402.25973 "
+       ptArray="260.87946772384345,364.8075264438491,329.36511899648724,339.6949668139107,331.87205039597546,402.2597283318417,267.4613513797011,429.0448402649294"
+       display="hi"
+       id="polygon2793" />
+    <polygon
+       stroke="transparent"
+       fill="#ee66ee"
+       stroke-width="4"
+       points="326.54876,269.40782 284.77457,241.75088 214.7447,261.44908 253.43937,292.1943 "
+       ptArray="284.77456935660337,241.75088352914457,214.7446959465885,261.4490820076878,253.4393712979054,292.194299902426,326.5487564049941,269.4078205757817"
+       display="hi"
+       id="polygon2795" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="214.74469"
+       y1="261.4491"
+       x2="223.88698"
+       y2="330.88495"
+       pointer-events="none"
+       id="line2797" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="214.74469"
+       y1="261.4491"
+       x2="284.77457"
+       y2="241.75089"
+       pointer-events="none"
+       id="line2799" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="214.74469"
+       y1="261.4491"
+       x2="253.43938"
+       y2="292.19431"
+       pointer-events="none"
+       id="line2801" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="223.88698"
+       y1="330.88495"
+       x2="260.87946"
+       y2="364.80753"
+       pointer-events="none"
+       id="line2803" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="391.35318"
+       y1="316.96497"
+       x2="349.6203"
+       y2="289.04779"
+       pointer-events="none"
+       id="line2805" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="349.56311"
+       y1="289.0668"
+       x2="391.29422"
+       y2="316.9866"
+       pointer-events="none"
+       id="line2807" />
+    <polygon
+       stroke="transparent"
+       fill="#981098"
+       stroke-width="4"
+       points="329.36512,339.69497 326.54876,269.40782 392.24885,248.93064 391.29421,316.98659 "
+       ptArray="326.5487564049941,269.4078205757817,392.2488524379361,248.9306427439575,391.29420954072566,316.9865899463425,329.36511899648724,339.6949668139107"
+       display="hi"
+       id="polygon2809" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="390.49561"
+       y1="377.8812"
+       x2="350.87302"
+       y2="347.76263"
+       pointer-events="none"
+       id="line2811" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="350.8187"
+       y1="347.78323"
+       x2="390.4397"
+       y2="377.90445"
+       pointer-events="none"
+       id="line2813" />
+    <polygon
+       stroke="transparent"
+       fill="#981098"
+       stroke-width="4"
+       points="331.87205,402.25973 390.4397,377.90444 391.29421,316.98659 329.36512,339.69497 "
+       ptArray="390.4396950028677,377.90444356685975,391.29420954072566,316.9865899463425,329.36511899648724,339.6949668139107,331.87205039597546,402.2597283318417"
+       display="hi"
+       id="polygon2815" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="348.16998"
+       y1="223.91885"
+       x2="392.24884"
+       y2="248.93065"
+       pointer-events="none"
+       id="line2817" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="331.87204"
+       y1="402.25974"
+       x2="390.4397"
+       y2="377.90445"
+       pointer-events="none"
+       id="line2819" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="391.29422"
+       y1="316.9866"
+       x2="390.4397"
+       y2="377.90445"
+       pointer-events="none"
+       id="line2821" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="392.24884"
+       y1="248.93065"
+       x2="391.29422"
+       y2="316.9866"
+       pointer-events="none"
+       id="line2823" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="232.04247"
+       y1="392.82599"
+       x2="267.46136"
+       y2="429.04483"
+       pointer-events="none"
+       id="line2825" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="267.46136"
+       y1="429.04483"
+       x2="331.87204"
+       y2="402.25974"
+       pointer-events="none"
+       id="line2827" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="329.36511"
+       y1="339.69498"
+       x2="331.87204"
+       y2="402.25974"
+       pointer-events="none"
+       id="line2829" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="329.36511"
+       y1="339.69498"
+       x2="391.29422"
+       y2="316.9866"
+       pointer-events="none"
+       id="line2831" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="260.87946"
+       y1="364.80753"
+       x2="267.46136"
+       y2="429.04483"
+       pointer-events="none"
+       id="line2833" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="260.87946"
+       y1="364.80753"
+       x2="329.36511"
+       y2="339.69498"
+       pointer-events="none"
+       id="line2835" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="253.43938"
+       y1="292.19431"
+       x2="260.87946"
+       y2="364.80753"
+       pointer-events="none"
+       id="line2837" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="329.33984"
+       y1="339.68546"
+       x2="260.84006"
+       y2="364.80219"
+       pointer-events="none"
+       id="line2839" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="331.91232"
+       y1="402.29483"
+       x2="390.48178"
+       y2="377.93646"
+       pointer-events="none"
+       id="line2841" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="267.49921"
+       y1="429.08356"
+       x2="331.91232"
+       y2="402.29483"
+       pointer-events="none"
+       id="line2843" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="331.91232"
+       y1="402.29483"
+       x2="329.40756"
+       y2="339.72778"
+       pointer-events="none"
+       id="line2845" />
+    <polygon
+       stroke="transparent"
+       fill="#ffa0a0"
+       stroke-width="4"
+       points="329.40755,339.7278 260.91916,364.84392 303.73231,404.10412 375,375 "
+       ptArray="260.91915837903997,364.84392327485773,303.73230748810255,404.10412055187504,375,375,329.40755341971703,339.7277958404671"
+       display="hi"
+       id="polygon2847" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="443.97604"
+       y1="355.64142"
+       x2="402.96191"
+       y2="328.00928"
+       pointer-events="none"
+       id="line2849" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="447.61899"
+       y1="296.33322"
+       x2="404.35135"
+       y2="270.83627"
+       pointer-events="none"
+       id="line2851" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="447.61899"
+       y1="296.33322"
+       x2="443.97604"
+       y2="355.64142"
+       pointer-events="none"
+       id="line2853" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="443.97604"
+       y1="355.64142"
+       x2="390.49561"
+       y2="377.8812"
+       pointer-events="none"
+       id="line2855" />
+    <polygon
+       stroke="transparent"
+       fill="#d4d44c"
+       stroke-width="4"
+       points="391.35317,316.96497 438.97274,348.82005 435.39461,412.01056 390.4956,377.88119 "
+       ptArray="438.9727428843391,348.8200486417983,435.3946117327862,412.0105606470398,390.4956036124358,377.88119403862646,391.3531713788431,316.96496961203746"
+       display="hi"
+       id="polygon2857" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="390.48178"
+       y1="377.93646"
+       x2="391.33868"
+       y2="317.01636"
+       pointer-events="none"
+       id="line2859" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="451.66818"
+       y1="230.41103"
+       x2="405.88611"
+       y2="207.6843"
+       pointer-events="none"
+       id="line2861" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="451.66818"
+       y1="230.41103"
+       x2="447.61899"
+       y2="296.33322"
+       pointer-events="none"
+       id="line2863" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="447.61899"
+       y1="296.33322"
+       x2="391.35318"
+       y2="316.96497"
+       pointer-events="none"
+       id="line2865" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="391.35318"
+       y1="316.96497"
+       x2="390.49561"
+       y2="377.8812"
+       pointer-events="none"
+       id="line2867" />
+    <polygon
+       stroke="transparent"
+       fill="#ffa0a0"
+       stroke-width="4"
+       points="375,375 438.96304,348.87893 391.33869,317.01635 329.40755,339.7278 "
+       ptArray="438.9630426176715,348.87893395175297,391.33869303018344,317.0163511688599,329.40755341971703,339.7277958404671,375,375"
+       display="hi"
+       id="polygon2869" />
+    <polygon
+       stroke="transparent"
+       fill="#f69090"
+       stroke-width="4"
+       points="303.73231,404.10412 260.91916,364.84392 267.4992,429.08355 308.146,470.64837 "
+       ptArray="260.91915837903997,364.84392327485773,267.49920465543835,429.08354847852115,308.1459986176831,470.64837350002273,303.73230748810255,404.10412055187504"
+       display="hi"
+       id="polygon2871" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="267.49921"
+       y1="429.08356"
+       x2="260.91916"
+       y2="364.84393"
+       pointer-events="none"
+       id="line2873" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="329.40756"
+       y1="339.72778"
+       x2="391.33868"
+       y2="317.01636"
+       pointer-events="none"
+       id="line2875" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="260.91916"
+       y1="364.84393"
+       x2="329.40756"
+       y2="339.72778"
+       pointer-events="none"
+       id="line2877" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375"
+       y1="375"
+       x2="329.40756"
+       y2="339.72778"
+       pointer-events="none"
+       id="line2879" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="284.77457"
+       y1="241.75089"
+       x2="326.54877"
+       y2="269.40781"
+       pointer-events="none"
+       id="line2881" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="326.54877"
+       y1="269.40781"
+       x2="392.24884"
+       y2="248.93065"
+       pointer-events="none"
+       id="line2883" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="326.54877"
+       y1="269.40781"
+       x2="329.36511"
+       y2="339.69498"
+       pointer-events="none"
+       id="line2885" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="253.43938"
+       y1="292.19431"
+       x2="326.54877"
+       y2="269.40781"
+       pointer-events="none"
+       id="line2887" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="326.52139"
+       y1="269.38446"
+       x2="329.33984"
+       y2="339.68546"
+       pointer-events="none"
+       id="line2889" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="323.33209"
+       y1="189.83359"
+       x2="326.52139"
+       y2="269.38446"
+       pointer-events="none"
+       id="line2891" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="303.7323"
+       y1="404.10413"
+       x2="260.91916"
+       y2="364.84393"
+       pointer-events="none"
+       id="line2893" />
+    <polygon
+       stroke="transparent"
+       fill="#9090f6"
+       stroke-width="4"
+       points="260.84005,364.80219 253.3959,292.17415 298.60826,328.09927 303.65226,404.06394 "
+       ptArray="253.39590344831385,292.17415134719033,298.6082634410602,328.099267795889,303.6522554327171,404.06394409265874,260.84005237984826,364.8021925973859"
+       display="hi"
+       id="polygon2895" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="253.3959"
+       y1="292.17416"
+       x2="260.84006"
+       y2="364.80219"
+       pointer-events="none"
+       id="line2897" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="326.52139"
+       y1="269.38446"
+       x2="253.3959"
+       y2="292.17416"
+       pointer-events="none"
+       id="line2899" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="374.92807"
+       y1="301.43207"
+       x2="326.52139"
+       y2="269.38446"
+       pointer-events="none"
+       id="line2901" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="374.93259"
+       y1="374.95862"
+       x2="329.33984"
+       y2="339.68546"
+       pointer-events="none"
+       id="line2903" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="392.31122"
+       y1="248.91121"
+       x2="348.23035"
+       y2="223.90186"
+       pointer-events="none"
+       id="line2905" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="303.65225"
+       y1="404.06393"
+       x2="260.84006"
+       y2="364.80219"
+       pointer-events="none"
+       id="line2907" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="374.93259"
+       y1="374.95862"
+       x2="303.65225"
+       y2="404.06393"
+       pointer-events="none"
+       id="line2909" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="374.92807"
+       y1="301.43207"
+       x2="374.93259"
+       y2="374.95862"
+       pointer-events="none"
+       id="line2911" />
+    <polygon
+       stroke="transparent"
+       fill="#a0a0ff"
+       stroke-width="4"
+       points="244.9132,209.41352 323.33211,189.83359 374.92295,217.40924 292.79684,240.57672 "
+       ptArray="323.33210511700474,189.83358959741219,374.92294865896486,217.40923641542042,292.7968381074404,240.57671720074762,244.9131950158276,209.4135156298974"
+       display="hi"
+       id="polygon2913" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="323.33209"
+       y1="189.83359"
+       x2="244.91319"
+       y2="209.41351"
+       pointer-events="none"
+       id="line2915" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="374.92294"
+       y1="217.40924"
+       x2="323.33209"
+       y2="189.83359"
+       pointer-events="none"
+       id="line2917" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="374.92294"
+       y1="217.40924"
+       x2="374.92807"
+       y2="301.43207"
+       pointer-events="none"
+       id="line2919" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="308.146"
+       y1="470.64838"
+       x2="267.49921"
+       y2="429.08356"
+       pointer-events="none"
+       id="line2921" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375"
+       y1="439.87189"
+       x2="331.91232"
+       y2="402.29483"
+       pointer-events="none"
+       id="line2923" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="435.38504"
+       y1="412.07343"
+       x2="390.48178"
+       y2="377.93646"
+       pointer-events="none"
+       id="line2925" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375"
+       y1="439.87189"
+       x2="435.38504"
+       y2="412.07343"
+       pointer-events="none"
+       id="line2927" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="308.146"
+       y1="470.64838"
+       x2="375"
+       y2="439.87189"
+       pointer-events="none"
+       id="line2929" />
+    <polygon
+       stroke="transparent"
+       fill="#f69090"
+       stroke-width="4"
+       points="353.84902,450.06177 355.26318,518.82972 308.146,470.64837 303.73231,404.10412 "
+       ptArray="355.2631794336437,518.8297227582435,308.1459986176831,470.64837350002273,303.73230748810255,404.10412055187504,353.8490152814317,450.0617731839781"
+       display="hi"
+       id="polygon2931" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="424.57166"
+       y1="483.10367"
+       x2="375"
+       y2="439.87189"
+       pointer-events="none"
+       id="line2933" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375"
+       y1="439.87189"
+       x2="375"
+       y2="375"
+       pointer-events="none"
+       id="line2935" />
+    <polygon
+       stroke="transparent"
+       fill="#ffa0a0"
+       stroke-width="4"
+       points="303.73231,404.10412 375,375 427.91627,415.93821 353.84902,450.06177 "
+       ptArray="375,375,427.91626548071224,415.9382136602186,353.8490152814317,450.0617731839781,303.73230748810255,404.10412055187504"
+       display="hi"
+       id="polygon2937" />
+    <polygon
+       stroke="transparent"
+       fill="#ba5454"
+       stroke-width="4"
+       points="355.26318,518.82972 424.57167,483.10366 427.91627,415.93821 353.84902,450.06177 "
+       ptArray="424.57167049320685,483.1036641834103,427.91626548071224,415.9382136602186,353.8490152814317,450.0617731839781,355.2631794336437,518.8297227582435"
+       display="hi"
+       id="polygon2939" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="355.26318"
+       y1="518.82971"
+       x2="308.146"
+       y2="470.64838"
+       pointer-events="none"
+       id="line2941" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="486.69525"
+       y1="451.08118"
+       x2="435.38504"
+       y2="412.07343"
+       pointer-events="none"
+       id="line2943" />
+    <polygon
+       stroke="transparent"
+       fill="#ba5454"
+       stroke-width="4"
+       points="486.69525,451.08117 424.57167,483.10366 427.91627,415.93821 493.8158,385.57761 "
+       ptArray="424.57167049320685,483.1036641834103,427.91626548071224,415.9382136602186,493.8157978918128,385.57760744400525,486.6952494513106,451.08117189125903"
+       display="hi"
+       id="polygon2945" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="424.57166"
+       y1="483.10367"
+       x2="486.69525"
+       y2="451.08118"
+       pointer-events="none"
+       id="line2947" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="355.26318"
+       y1="518.82971"
+       x2="424.57166"
+       y2="483.10367"
+       pointer-events="none"
+       id="line2949" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="355.26318"
+       y1="518.82971"
+       x2="353.84903"
+       y2="450.06177"
+       pointer-events="none"
+       id="line2951" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="308.146"
+       y1="470.64838"
+       x2="303.7323"
+       y2="404.10413"
+       pointer-events="none"
+       id="line2953" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="490.19983"
+       y1="386.78348"
+       x2="443.97604"
+       y2="355.64142"
+       pointer-events="none"
+       id="line2955" />
+    <polygon
+       stroke="transparent"
+       fill="#989810"
+       stroke-width="4"
+       points="438.97274,348.82005 435.39461,412.01056 490.19984,386.78347 496.69227,325.25137 "
+       ptArray="435.3946117327862,412.0105606470398,490.1998423749939,386.7834707008408,496.692273512833,325.2513694883048,438.9727428843391,348.8200486417983"
+       display="hi"
+       id="polygon2957" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="438.96304"
+       y1="348.87894"
+       x2="391.33868"
+       y2="317.01636"
+       pointer-events="none"
+       id="line2959" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="435.39462"
+       y1="412.01056"
+       x2="390.49561"
+       y2="377.8812"
+       pointer-events="none"
+       id="line2961" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="435.38504"
+       y1="412.07343"
+       x2="438.96304"
+       y2="348.87894"
+       pointer-events="none"
+       id="line2963" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="496.69226"
+       y1="325.25137"
+       x2="447.61899"
+       y2="296.33322"
+       pointer-events="none"
+       id="line2965" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="496.69226"
+       y1="325.25137"
+       x2="490.19983"
+       y2="386.78348"
+       pointer-events="none"
+       id="line2967" />
+    <polygon
+       stroke="transparent"
+       fill="#989810"
+       stroke-width="4"
+       points="496.69227,325.25137 503.96021,256.36939 443.00155,277.67044 438.97274,348.82005 "
+       ptArray="503.9602113360005,256.36939350012176,443.0015539233732,277.6704396571069,438.9727428843391,348.8200486417983,496.692273512833,325.2513694883048"
+       display="hi"
+       id="polygon2969" />
+    <polygon
+       stroke="transparent"
+       fill="#eeee66"
+       stroke-width="4"
+       points="392.31122,248.9112 443.00155,277.67044 503.96021,256.36939 451.66818,230.41103 "
+       ptArray="443.0015539233732,277.6704396571069,503.9602113360005,256.36939350012176,451.66817872993164,230.41103341921152,392.31122017722987,248.91120418350476"
+       display="hi"
+       id="polygon2971" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="451.66818"
+       y1="230.41103"
+       x2="392.31122"
+       y2="248.91121"
+       pointer-events="none"
+       id="line2973" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="503.96021"
+       y1="256.36938"
+       x2="451.66818"
+       y2="230.41103"
+       pointer-events="none"
+       id="line2975" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="503.96021"
+       y1="256.36938"
+       x2="496.69226"
+       y2="325.25137"
+       pointer-events="none"
+       id="line2977" />
+    <polygon
+       stroke="transparent"
+       fill="#d4d44c"
+       stroke-width="4"
+       points="391.35317,316.96497 392.31122,248.9112 443.00155,277.67044 438.97274,348.82005 "
+       ptArray="392.31122017722987,248.91120418350476,443.0015539233732,277.6704396571069,438.9727428843391,348.8200486417983,391.3531713788431,316.96496961203746"
+       display="hi"
+       id="polygon2979" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="392.31122"
+       y1="248.91121"
+       x2="391.35318"
+       y2="316.96497"
+       pointer-events="none"
+       id="line2981" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="438.97275"
+       y1="348.82004"
+       x2="391.35318"
+       y2="316.96497"
+       pointer-events="none"
+       id="line2983" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="496.69226"
+       y1="325.25137"
+       x2="438.97275"
+       y2="348.82004"
+       pointer-events="none"
+       id="line2985" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="490.19983"
+       y1="386.78348"
+       x2="435.39462"
+       y2="412.01056"
+       pointer-events="none"
+       id="line2987" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="438.97275"
+       y1="348.82004"
+       x2="435.39462"
+       y2="412.01056"
+       pointer-events="none"
+       id="line2989" />
+    <polygon
+       stroke="transparent"
+       fill="#ffa0a0"
+       stroke-width="4"
+       points="493.8158,385.57761 427.91627,415.93821 375,375 438.96304,348.87893 "
+       ptArray="427.91626548071224,415.9382136602186,375,375,438.9630426176715,348.87893395175297,493.8157978918128,385.57760744400525"
+       display="hi"
+       id="polygon2991" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375"
+       y1="375"
+       x2="438.96304"
+       y2="348.87894"
+       pointer-events="none"
+       id="line2993" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="303.7323"
+       y1="404.10413"
+       x2="375"
+       y2="375"
+       pointer-events="none"
+       id="line2995" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="353.84903"
+       y1="450.06177"
+       x2="303.7323"
+       y2="404.10413"
+       pointer-events="none"
+       id="line2997" />
+    <polygon
+       stroke="transparent"
+       fill="#9090f6"
+       stroke-width="4"
+       points="303.65226,404.06394 298.60826,328.09927 352.12995,370.62686 353.76883,450.02431 "
+       ptArray="298.6082634410602,328.099267795889,352.12994940419594,370.62685983189,353.7688318060313,450.024311162138,303.6522554327171,404.06394409265874"
+       display="hi"
+       id="polygon2999" />
+    <polygon
+       stroke="transparent"
+       fill="#9090f6"
+       stroke-width="4"
+       points="244.9132,209.41352 253.3959,292.17415 298.60826,328.09927 292.79684,240.57672 "
+       ptArray="253.39590344831385,292.17415134719033,298.6082634410602,328.099267795889,292.7968381074404,240.57671720074762,244.9131950158276,209.4135156298974"
+       display="hi"
+       id="polygon3001" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="244.91319"
+       y1="209.41351"
+       x2="253.3959"
+       y2="292.17416"
+       pointer-events="none"
+       id="line3003" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="298.60828"
+       y1="328.09927"
+       x2="253.3959"
+       y2="292.17416"
+       pointer-events="none"
+       id="line3005" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="298.60828"
+       y1="328.09927"
+       x2="303.65225"
+       y2="404.06393"
+       pointer-events="none"
+       id="line3007" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="374.92807"
+       y1="301.43207"
+       x2="298.60828"
+       y2="328.09927"
+       pointer-events="none"
+       id="line3009" />
+    <polygon
+       stroke="transparent"
+       fill="#9090f6"
+       stroke-width="4"
+       points="350.21688,277.94631 352.12995,370.62686 298.60826,328.09927 292.79684,240.57672 "
+       ptArray="352.12994940419594,370.62685983189,298.6082634410602,328.099267795889,292.7968381074404,240.57671720074762,350.21688403509035,277.9463146231345"
+       display="hi"
+       id="polygon3011" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="443.00156"
+       y1="277.67044"
+       x2="392.31122"
+       y2="248.91121"
+       pointer-events="none"
+       id="line3013" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="503.96021"
+       y1="256.36938"
+       x2="443.00156"
+       y2="277.67044"
+       pointer-events="none"
+       id="line3015" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="443.00156"
+       y1="277.67044"
+       x2="438.97275"
+       y2="348.82004"
+       pointer-events="none"
+       id="line3017" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="504.07996"
+       y1="256.35199"
+       x2="496.80389"
+       y2="325.24808"
+       pointer-events="none"
+       id="line3019" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="512.28052"
+       y1="178.70184"
+       x2="504.07996"
+       y2="256.35199"
+       pointer-events="none"
+       id="line3021" />
+    <polygon
+       stroke="transparent"
+       fill="#a0ffa0"
+       stroke-width="4"
+       points="447.69386,196.92387 511.32788,225.77116 577.41623,204.34346 512.28054,178.70184 "
+       ptArray="511.3278806227145,225.7711615844104,577.4162284081096,204.34345855882847,512.2805432477359,178.70183654821477,447.69385729582666,196.92387414913935"
+       display="hi"
+       id="polygon3023" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="512.28052"
+       y1="178.70184"
+       x2="577.4162"
+       y2="204.34346"
+       pointer-events="none"
+       id="line3025" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="447.69385"
+       y1="196.92387"
+       x2="512.28052"
+       y2="178.70184"
+       pointer-events="none"
+       id="line3027" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="504.07996"
+       y1="256.35199"
+       x2="564.39905"
+       y2="286.28918"
+       pointer-events="none"
+       id="line3029" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="443.11484"
+       y1="277.65665"
+       x2="504.07996"
+       y2="256.35199"
+       pointer-events="none"
+       id="line3031" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="496.80389"
+       y1="325.24808"
+       x2="552.9549"
+       y2="358.33206"
+       pointer-events="none"
+       id="line3033" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="439.07852"
+       y1="348.82132"
+       x2="496.80389"
+       y2="325.24808"
+       pointer-events="none"
+       id="line3035" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="443.11484"
+       y1="277.65665"
+       x2="439.07852"
+       y2="348.82132"
+       pointer-events="none"
+       id="line3037" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="447.69385"
+       y1="196.92387"
+       x2="443.11484"
+       y2="277.65665"
+       pointer-events="none"
+       id="line3039" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375.12418"
+       y1="301.41641"
+       x2="443.11484"
+       y2="277.65665"
+       pointer-events="none"
+       id="line3041" />
+    <polygon
+       stroke="transparent"
+       fill="#90f690"
+       stroke-width="4"
+       points="375.13303,217.39568 436.32232,250.09008 431.88514,338.98243 375.12417,301.4164 "
+       ptArray="436.3223188022341,250.09007645840805,431.8851358414464,338.9824346084582,375.12416503294565,301.41639754043496,375.133027295754,217.395681196185"
+       display="hi"
+       id="polygon3043" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="424.57166"
+       y1="483.10367"
+       x2="427.91626"
+       y2="415.9382"
+       pointer-events="none"
+       id="line3045" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="427.91626"
+       y1="415.9382"
+       x2="375"
+       y2="375"
+       pointer-events="none"
+       id="line3047" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="486.69525"
+       y1="451.08118"
+       x2="493.8158"
+       y2="385.57761"
+       pointer-events="none"
+       id="line3049" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="493.8158"
+       y1="385.57761"
+       x2="438.96304"
+       y2="348.87894"
+       pointer-events="none"
+       id="line3051" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="427.91626"
+       y1="415.9382"
+       x2="493.8158"
+       y2="385.57761"
+       pointer-events="none"
+       id="line3053" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="375.11642"
+       y1="374.94144"
+       x2="439.07852"
+       y2="348.82132"
+       pointer-events="none"
+       id="line3055" />
+    <polygon
+       stroke="transparent"
+       fill="#90f690"
+       stroke-width="4"
+       points="431.88514,338.98243 428.04676,415.87861 375.11641,374.94143 375.12417,301.4164 "
+       ptArray="428.0467588965089,415.87860524635045,375.11640982414303,374.9414343275579,375.12416503294565,301.41639754043496,431.8851358414464,338.9824346084582"
+       display="hi"
+       id="polygon3057" />
+    <polygon
+       stroke="transparent"
+       fill="#a0ffa0"
+       stroke-width="4"
+       points="511.32788,225.77116 436.32232,250.09008 375.13303,217.39568 447.69386,196.92387 "
+       ptArray="436.3223188022341,250.09007645840805,375.133027295754,217.395681196185,447.69385729582666,196.92387414913935,511.3278806227145,225.7711615844104"
+       display="hi"
+       id="polygon3059" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="375.13303"
+       y1="217.39568"
+       x2="447.69385"
+       y2="196.92387"
+       pointer-events="none"
+       id="line3061" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="375.12418"
+       y1="301.41641"
+       x2="375.11642"
+       y2="374.94144"
+       pointer-events="none"
+       id="line3063" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="375.13303"
+       y1="217.39568"
+       x2="375.12418"
+       y2="301.41641"
+       pointer-events="none"
+       id="line3065" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375.12418"
+       y1="301.41641"
+       x2="431.88513"
+       y2="338.98242"
+       pointer-events="none"
+       id="line3067" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="431.67438"
+       y1="339.00092"
+       x2="374.92807"
+       y2="301.43207"
+       pointer-events="none"
+       id="line3069" />
+    <polygon
+       stroke="transparent"
+       fill="#5454ba"
+       stroke-width="4"
+       points="436.09531,250.10627 431.67438,339.00092 352.12995,370.62686 350.21688,277.94631 "
+       ptArray="431.6743773315153,339.00092205693016,352.12994940419594,370.62685983189,350.21688403509035,277.9463146231345,436.0953065983355,250.10626599953451"
+       display="hi"
+       id="polygon3071" />
+    <polygon
+       stroke="transparent"
+       fill="#a0a0ff"
+       stroke-width="4"
+       points="374.92295,217.40924 436.09531,250.10627 350.21688,277.94631 292.79684,240.57672 "
+       ptArray="436.0953065983355,250.10626599953451,350.21688403509035,277.9463146231345,292.7968381074404,240.57671720074762,374.92294865896486,217.40923641542042"
+       display="hi"
+       id="polygon3073" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="375.11642"
+       y1="374.94144"
+       x2="428.04675"
+       y2="415.8786"
+       pointer-events="none"
+       id="line3075" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="427.85007"
+       y1="415.89865"
+       x2="374.93259"
+       y2="374.95862"
+       pointer-events="none"
+       id="line3077" />
+    <polygon
+       stroke="transparent"
+       fill="#5454ba"
+       stroke-width="4"
+       points="427.85008,415.89864 431.67438,339.00092 352.12995,370.62686 353.76883,450.02431 "
+       ptArray="431.6743773315153,339.00092205693016,352.12994940419594,370.62685983189,353.7688318060313,450.024311162138,427.8500823286797,415.89864387540166"
+       display="hi"
+       id="polygon3079" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="353.76883"
+       y1="450.02432"
+       x2="303.65225"
+       y2="404.06393"
+       pointer-events="none"
+       id="line3081" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="427.85007"
+       y1="415.89865"
+       x2="353.76883"
+       y2="450.02432"
+       pointer-events="none"
+       id="line3083" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="431.67438"
+       y1="339.00092"
+       x2="427.85007"
+       y2="415.89865"
+       pointer-events="none"
+       id="line3085" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="292.79684"
+       y1="240.57672"
+       x2="244.91319"
+       y2="209.41351"
+       pointer-events="none"
+       id="line3087" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="374.92294"
+       y1="217.40924"
+       x2="292.79684"
+       y2="240.57672"
+       pointer-events="none"
+       id="line3089" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="436.09531"
+       y1="250.10626"
+       x2="374.92294"
+       y2="217.40924"
+       pointer-events="none"
+       id="line3091" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="436.09531"
+       y1="250.10626"
+       x2="431.67438"
+       y2="339.00092"
+       pointer-events="none"
+       id="line3093" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="292.79684"
+       y1="240.57672"
+       x2="298.60828"
+       y2="328.09927"
+       pointer-events="none"
+       id="line3095" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="350.21689"
+       y1="277.94632"
+       x2="292.79684"
+       y2="240.57672"
+       pointer-events="none"
+       id="line3097" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="436.09531"
+       y1="250.10626"
+       x2="350.21689"
+       y2="277.94632"
+       pointer-events="none"
+       id="line3099" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="352.12994"
+       y1="370.62686"
+       x2="298.60828"
+       y2="328.09927"
+       pointer-events="none"
+       id="line3101" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="352.12994"
+       y1="370.62686"
+       x2="353.76883"
+       y2="450.02432"
+       pointer-events="none"
+       id="line3103" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="431.67438"
+       y1="339.00092"
+       x2="352.12994"
+       y2="370.62686"
+       pointer-events="none"
+       id="line3105" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="350.21689"
+       y1="277.94632"
+       x2="352.12994"
+       y2="370.62686"
+       pointer-events="none"
+       id="line3107" />
+    <polygon
+       stroke="transparent"
+       fill="#54ba54"
+       stroke-width="4"
+       points="564.39902,286.28919 552.95491,358.33206 493.94466,385.51872 502.0444,311.08408 "
+       ptArray="552.9549063680296,358.3320573212238,493.94466480212026,385.5187201857912,502.0444029683317,311.08408100759095,564.3990246916835,286.2891913697007"
+       display="hi"
+       id="polygon3109" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="564.39905"
+       y1="286.28918"
+       x2="552.9549"
+       y2="358.33206"
+       pointer-events="none"
+       id="line3111" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="493.94467"
+       y1="385.51871"
+       x2="552.9549"
+       y2="358.33206"
+       pointer-events="none"
+       id="line3113" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="439.07852"
+       y1="348.82132"
+       x2="493.94467"
+       y2="385.51871"
+       pointer-events="none"
+       id="line3115" />
+    <polygon
+       stroke="transparent"
+       fill="#54ba54"
+       stroke-width="4"
+       points="493.94466,385.51872 502.0444,311.08408 431.88514,338.98243 428.04676,415.87861 "
+       ptArray="502.0444029683317,311.08408100759095,431.8851358414464,338.9824346084582,428.0467588965089,415.87860524635045,493.94466480212026,385.5187201857912"
+       display="hi"
+       id="polygon3117" />
+    <polygon
+       stroke="transparent"
+       fill="#54ba54"
+       stroke-width="4"
+       points="577.41623,204.34346 564.39902,286.28919 502.0444,311.08408 511.32788,225.77116 "
+       ptArray="564.3990246916835,286.2891913697007,502.0444029683317,311.08408100759095,511.3278806227145,225.7711615844104,577.4162284081096,204.34345855882847"
+       display="hi"
+       id="polygon3119" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="577.4162"
+       y1="204.34346"
+       x2="564.39905"
+       y2="286.28918"
+       pointer-events="none"
+       id="line3121" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="502.0444"
+       y1="311.08408"
+       x2="564.39905"
+       y2="286.28918"
+       pointer-events="none"
+       id="line3123" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="443.11484"
+       y1="277.65665"
+       x2="502.0444"
+       y2="311.08408"
+       pointer-events="none"
+       id="line3125" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="502.0444"
+       y1="311.08408"
+       x2="493.94467"
+       y2="385.51871"
+       pointer-events="none"
+       id="line3127" />
+    <polygon
+       stroke="transparent"
+       fill="#54ba54"
+       stroke-width="4"
+       points="502.0444,311.08408 511.32788,225.77116 436.32232,250.09008 431.88514,338.98243 "
+       ptArray="511.3278806227145,225.7711615844104,436.3223188022341,250.09007645840805,431.8851358414464,338.9824346084582,502.0444029683317,311.08408100759095"
+       display="hi"
+       id="polygon3129" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="511.32788"
+       y1="225.77116"
+       x2="577.4162"
+       y2="204.34346"
+       pointer-events="none"
+       id="line3131" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="447.69385"
+       y1="196.92387"
+       x2="511.32788"
+       y2="225.77116"
+       pointer-events="none"
+       id="line3133" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="511.32788"
+       y1="225.77116"
+       x2="502.0444"
+       y2="311.08408"
+       pointer-events="none"
+       id="line3135" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="375.13303"
+       y1="217.39568"
+       x2="436.32233"
+       y2="250.09007"
+       pointer-events="none"
+       id="line3137" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="436.32233"
+       y1="250.09007"
+       x2="511.32788"
+       y2="225.77116"
+       pointer-events="none"
+       id="line3139" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="431.88513"
+       y1="338.98242"
+       x2="502.0444"
+       y2="311.08408"
+       pointer-events="none"
+       id="line3141" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="428.04675"
+       y1="415.8786"
+       x2="493.94467"
+       y2="385.51871"
+       pointer-events="none"
+       id="line3143" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="431.88513"
+       y1="338.98242"
+       x2="428.04675"
+       y2="415.8786"
+       pointer-events="none"
+       id="line3145" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="436.32233"
+       y1="250.09007"
+       x2="431.88513"
+       y2="338.98242"
+       pointer-events="none"
+       id="line3147" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="353.84903"
+       y1="450.06177"
+       x2="427.91626"
+       y2="415.9382"
+       pointer-events="none"
+       id="line3149" />
+  </g>
+  <g
+     id="g5240"
+     transform="translate(1141.5655,-111.94565)">
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="405.88934"
+       y1="207.55138"
+       x2="407.59381"
+       y2="137.41565"
+       pointer-events="none"
+       id="line4748" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="404.35135"
+       y1="270.83627"
+       x2="402.96191"
+       y2="328.00928"
+       pointer-events="none"
+       id="line4750" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="405.88611"
+       y1="207.6843"
+       x2="404.35135"
+       y2="270.83627"
+       pointer-events="none"
+       id="line4752" />
+    <polygon
+       stroke="transparent"
+       fill="#eeee66"
+       stroke-width="4"
+       points="348.23036,223.90186 405.88611,207.68429 451.66818,230.41103 392.31122,248.9112 "
+       ptarray="348.2303578224442,223.9018620337862,405.88610673580695,207.68429187090692,451.66817872993164,230.41103341921152,392.31122017722987,248.91120418350476"
+       display="hi"
+       id="polygon4754" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="405.88611"
+       y1="207.6843"
+       x2="348.23035"
+       y2="223.90186"
+       pointer-events="none"
+       id="line4756" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="451.66818"
+       y1="230.41103"
+       x2="405.88611"
+       y2="207.6843"
+       pointer-events="none"
+       id="line4758" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="348.22742"
+       y1="223.76442"
+       x2="405.88934"
+       y2="207.55138"
+       pointer-events="none"
+       id="line4760" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="451.67673"
+       y1="230.27182"
+       x2="405.88934"
+       y2="207.55138"
+       pointer-events="none"
+       id="line4762" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="404.35135"
+       y1="270.83627"
+       x2="349.6203"
+       y2="289.04779"
+       pointer-events="none"
+       id="line4764" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="447.61899"
+       y1="296.33322"
+       x2="404.35135"
+       y2="270.83627"
+       pointer-events="none"
+       id="line4766" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="402.96191"
+       y1="328.00928"
+       x2="350.87302"
+       y2="347.76263"
+       pointer-events="none"
+       id="line4768" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="443.97604"
+       y1="355.64142"
+       x2="402.96191"
+       y2="328.00928"
+       pointer-events="none"
+       id="line4770" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="447.61899"
+       y1="296.33322"
+       x2="443.97604"
+       y2="355.64142"
+       pointer-events="none"
+       id="line4772" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="451.66818"
+       y1="230.41103"
+       x2="447.61899"
+       y2="296.33322"
+       pointer-events="none"
+       id="line4774" />
+    <polygon
+       stroke="transparent"
+       fill="#eeee66"
+       stroke-width="4"
+       points="443.00155,277.67044 503.96021,256.36939 451.66818,230.41103 392.31122,248.9112 "
+       ptarray="443.0015539233732,277.6704396571069,503.9602113360005,256.36939350012176,451.66817872993164,230.41103341921152,392.31122017722987,248.91120418350476"
+       display="hi"
+       id="polygon4776" />
+    <polygon
+       stroke="transparent"
+       fill="#d4d44c"
+       stroke-width="4"
+       points="349.62029,289.04779 348.23036,223.90186 392.31122,248.9112 391.35317,316.96497 "
+       ptarray="349.6202897091557,289.0477876278586,348.2303578224442,223.9018620337862,392.31122017722987,248.91120418350476,391.3531713788431,316.96496961203746"
+       display="hi"
+       id="polygon4778" />
+    <polygon
+       stroke="transparent"
+       fill="#d4d44c"
+       stroke-width="4"
+       points="349.62029,289.04779 391.35317,316.96497 390.4956,377.88119 350.87301,347.76262 "
+       ptarray="349.6202897091557,289.0477876278586,391.3531713788431,316.96496961203746,390.4956036124358,377.88119403862646,350.8730099572758,347.7626216815631"
+       display="hi"
+       id="polygon4780" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="349.6203"
+       y1="289.04779"
+       x2="350.87302"
+       y2="347.76263"
+       pointer-events="none"
+       id="line4782" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="348.23035"
+       y1="223.90186"
+       x2="349.6203"
+       y2="289.04779"
+       pointer-events="none"
+       id="line4784" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="294.07907"
+       y1="369.30023"
+       x2="350.8187"
+       y2="347.78323"
+       pointer-events="none"
+       id="line4786" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="349.56311"
+       y1="289.0668"
+       x2="350.8187"
+       y2="347.78323"
+       pointer-events="none"
+       id="line4788" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="348.16998"
+       y1="223.91885"
+       x2="349.56311"
+       y2="289.0668"
+       pointer-events="none"
+       id="line4790" />
+    <polygon
+       stroke="transparent"
+       fill="#66eeee"
+       stroke-width="4"
+       points="456.2052,156.54699 407.5938,137.41565 346.67608,151.05319 393.3908,172.22478 "
+       ptarray="456.20520036314997,156.54698951917183,407.5938040314486,137.41564977666852,346.67608269484833,151.05319025128583,393.3907979569008,172.22478371797226"
+       display="hi"
+       id="polygon4792" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="346.67609"
+       y1="151.05319"
+       x2="407.59381"
+       y2="137.41565"
+       pointer-events="none"
+       id="line4794" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="348.22742"
+       y1="223.76442"
+       x2="346.67609"
+       y2="151.05319"
+       pointer-events="none"
+       id="line4796" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="284.83075"
+       y1="241.58994"
+       x2="348.22742"
+       y2="223.76442"
+       pointer-events="none"
+       id="line4798" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="392.31326"
+       y1="248.76711"
+       x2="348.22742"
+       y2="223.76442"
+       pointer-events="none"
+       id="line4800" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="456.2052"
+       y1="156.547"
+       x2="407.59381"
+       y2="137.41565"
+       pointer-events="none"
+       id="line4802" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="451.67673"
+       y1="230.27182"
+       x2="456.2052"
+       y2="156.547"
+       pointer-events="none"
+       id="line4804" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="392.31326"
+       y1="248.76711"
+       x2="451.67673"
+       y2="230.27182"
+       pointer-events="none"
+       id="line4806" />
+    <polygon
+       stroke="transparent"
+       fill="#66eeee"
+       stroke-width="4"
+       points="323.42906,189.68648 279.3302,166.12979 346.67608,151.05319 393.3908,172.22478 "
+       ptarray="323.42905708681525,189.68647615050088,279.33019934278747,166.12979176987838,346.67608269484833,151.05319025128583,393.3907979569008,172.22478371797226"
+       display="hi"
+       id="polygon4808" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="279.3302"
+       y1="166.12979"
+       x2="346.67609"
+       y2="151.05319"
+       pointer-events="none"
+       id="line4810" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="393.39081"
+       y1="172.22478"
+       x2="346.67609"
+       y2="151.05319"
+       pointer-events="none"
+       id="line4812" />
+    <polygon
+       stroke="transparent"
+       fill="#66eeee"
+       stroke-width="4"
+       points="393.3908,172.22478 456.2052,156.54699 512.16886,178.57186 447.58167,196.78465 "
+       ptarray="393.3907979569008,172.22478371797226,456.20520036314997,156.54698951917183,512.1688556022657,178.57185986657274,447.58167134883666,196.78464958941697"
+       display="hi"
+       id="polygon4814" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="393.39081"
+       y1="172.22478"
+       x2="456.2052"
+       y2="156.547"
+       pointer-events="none"
+       id="line4816" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="392.31326"
+       y1="248.76711"
+       x2="393.39081"
+       y2="172.22478"
+       pointer-events="none"
+       id="line4818" />
+    <polygon
+       stroke="transparent"
+       fill="#66eeee"
+       stroke-width="4"
+       points="375.02107,217.24585 447.58167,196.78465 393.3908,172.22478 323.42906,189.68648 "
+       ptarray="375.0210673774055,217.2458453757016,447.58167134883666,196.78464958941697,393.3907979569008,172.22478371797226,323.42905708681525,189.68647615050088"
+       display="hi"
+       id="polygon4820" />
+    <polygon
+       stroke="transparent"
+       fill="#ee66ee"
+       stroke-width="4"
+       points="326.54876,269.40782 392.24885,248.93064 348.16997,223.91885 284.77457,241.75088 "
+       ptarray="326.5487564049941,269.4078205757817,392.2488524379361,248.9306427439575,348.1699682537077,223.91884858042812,284.77456935660337,241.75088352914457"
+       display="hi"
+       id="polygon4822" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="391.35318"
+       y1="316.96497"
+       x2="349.6203"
+       y2="289.04779"
+       pointer-events="none"
+       id="line4824" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="232.04247"
+       y1="392.82599"
+       x2="294.07907"
+       y2="369.30023"
+       pointer-events="none"
+       id="line4826" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="289.67975"
+       y1="308.99271"
+       x2="294.07907"
+       y2="369.30023"
+       pointer-events="none"
+       id="line4828" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="289.67975"
+       y1="308.99271"
+       x2="349.56311"
+       y2="289.0668"
+       pointer-events="none"
+       id="line4830" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="349.56311"
+       y1="289.0668"
+       x2="391.29422"
+       y2="316.9866"
+       pointer-events="none"
+       id="line4832" />
+    <polygon
+       stroke="transparent"
+       fill="#981098"
+       stroke-width="4"
+       points="326.54876,269.40782 392.24885,248.93064 391.29421,316.98659 329.36512,339.69497 "
+       ptarray="326.5487564049941,269.4078205757817,392.2488524379361,248.9306427439575,391.29420954072566,316.9865899463425,329.36511899648724,339.6949668139107"
+       display="hi"
+       id="polygon4834" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="392.31122"
+       y1="248.91121"
+       x2="348.23035"
+       y2="223.90186"
+       pointer-events="none"
+       id="line4836" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="284.77457"
+       y1="241.75089"
+       x2="348.16998"
+       y2="223.91885"
+       pointer-events="none"
+       id="line4838" />
+    <polygon
+       stroke="transparent"
+       fill="#d44cd4"
+       stroke-width="4"
+       points="223.88698,330.88495 232.04246,392.826 267.46135,429.04484 260.87947,364.80753 "
+       ptarray="223.8869840928716,330.88495276399425,232.04246444024406,392.82599753252765,267.4613513797011,429.0448402649294,260.87946772384345,364.8075264438491"
+       display="hi"
+       id="polygon4840" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="223.88698"
+       y1="330.88495"
+       x2="232.04247"
+       y2="392.82599"
+       pointer-events="none"
+       id="line4842" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="223.88698"
+       y1="330.88495"
+       x2="289.67975"
+       y2="308.99271"
+       pointer-events="none"
+       id="line4844" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="284.77457"
+       y1="241.75089"
+       x2="289.67975"
+       y2="308.99271"
+       pointer-events="none"
+       id="line4846" />
+    <polygon
+       stroke="transparent"
+       fill="#ee66ee"
+       stroke-width="4"
+       points="284.77457,241.75088 214.7447,261.44908 253.43937,292.1943 326.54876,269.40782 "
+       ptarray="284.77456935660337,241.75088352914457,214.7446959465885,261.4490820076878,253.4393712979054,292.194299902426,326.5487564049941,269.4078205757817"
+       display="hi"
+       id="polygon4848" />
+    <polygon
+       stroke="transparent"
+       fill="#d44cd4"
+       stroke-width="4"
+       points="260.87947,364.80753 253.43937,292.1943 214.7447,261.44908 223.88698,330.88495 "
+       ptarray="260.87946772384345,364.8075264438491,253.4393712979054,292.194299902426,214.7446959465885,261.4490820076878,223.8869840928716,330.88495276399425"
+       display="hi"
+       id="polygon4850" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="214.74469"
+       y1="261.4491"
+       x2="223.88698"
+       y2="330.88495"
+       pointer-events="none"
+       id="line4852" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="214.74469"
+       y1="261.4491"
+       x2="284.77457"
+       y2="241.75089"
+       pointer-events="none"
+       id="line4854" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="284.77457"
+       y1="241.75089"
+       x2="326.54877"
+       y2="269.40781"
+       pointer-events="none"
+       id="line4856" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="348.16998"
+       y1="223.91885"
+       x2="392.24884"
+       y2="248.93065"
+       pointer-events="none"
+       id="line4858" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="390.49561"
+       y1="377.8812"
+       x2="350.87302"
+       y2="347.76263"
+       pointer-events="none"
+       id="line4860" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="350.8187"
+       y1="347.78323"
+       x2="390.4397"
+       y2="377.90445"
+       pointer-events="none"
+       id="line4862" />
+    <polygon
+       stroke="transparent"
+       fill="#981098"
+       stroke-width="4"
+       points="390.4397,377.90444 391.29421,316.98659 329.36512,339.69497 331.87205,402.25973 "
+       ptarray="390.4396950028677,377.90444356685975,391.29420954072566,316.9865899463425,329.36511899648724,339.6949668139107,331.87205039597546,402.2597283318417"
+       display="hi"
+       id="polygon4864" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="294.07907"
+       y1="369.30023"
+       x2="331.87204"
+       y2="402.25974"
+       pointer-events="none"
+       id="line4866" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="331.87204"
+       y1="402.25974"
+       x2="390.4397"
+       y2="377.90445"
+       pointer-events="none"
+       id="line4868" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="391.29422"
+       y1="316.9866"
+       x2="390.4397"
+       y2="377.90445"
+       pointer-events="none"
+       id="line4870" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="392.24884"
+       y1="248.93065"
+       x2="391.29422"
+       y2="316.9866"
+       pointer-events="none"
+       id="line4872" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="326.54877"
+       y1="269.40781"
+       x2="392.24884"
+       y2="248.93065"
+       pointer-events="none"
+       id="line4874" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="447.61899"
+       y1="296.33322"
+       x2="391.35318"
+       y2="316.96497"
+       pointer-events="none"
+       id="line4876" />
+    <polygon
+       stroke="transparent"
+       fill="#d4d44c"
+       stroke-width="4"
+       points="392.31122,248.9112 443.00155,277.67044 438.97274,348.82005 391.35317,316.96497 "
+       ptarray="392.31122017722987,248.91120418350476,443.0015539233732,277.6704396571069,438.9727428843391,348.8200486417983,391.3531713788431,316.96496961203746"
+       display="hi"
+       id="polygon4878" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="451.66818"
+       y1="230.41103"
+       x2="392.31122"
+       y2="248.91121"
+       pointer-events="none"
+       id="line4880" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="443.97604"
+       y1="355.64142"
+       x2="390.49561"
+       y2="377.8812"
+       pointer-events="none"
+       id="line4882" />
+    <polygon
+       stroke="transparent"
+       fill="#d4d44c"
+       stroke-width="4"
+       points="438.97274,348.82005 435.39461,412.01056 390.4956,377.88119 391.35317,316.96497 "
+       ptarray="438.9727428843391,348.8200486417983,435.3946117327862,412.0105606470398,390.4956036124358,377.88119403862646,391.3531713788431,316.96496961203746"
+       display="hi"
+       id="polygon4884" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="391.35318"
+       y1="316.96497"
+       x2="390.49561"
+       y2="377.8812"
+       pointer-events="none"
+       id="line4886" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="392.31122"
+       y1="248.91121"
+       x2="391.35318"
+       y2="316.96497"
+       pointer-events="none"
+       id="line4888" />
+    <polygon
+       stroke="transparent"
+       fill="#4cd4d4"
+       stroke-width="4"
+       points="284.83075,241.58994 326.61199,269.23699 323.42906,189.68648 279.3302,166.12979 "
+       ptarray="284.83074634408337,241.58993898120042,326.6119874812447,269.2369885590421,323.42905708681525,189.68647615050088,279.33019934278747,166.12979176987838"
+       display="hi"
+       id="polygon4890" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="284.83075"
+       y1="241.58994"
+       x2="279.3302"
+       y2="166.12979"
+       pointer-events="none"
+       id="line4892" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="326.612"
+       y1="269.237"
+       x2="284.83075"
+       y2="241.58994"
+       pointer-events="none"
+       id="line4894" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="326.612"
+       y1="269.237"
+       x2="392.31326"
+       y2="248.76711"
+       pointer-events="none"
+       id="line4896" />
+    <polygon
+       stroke="transparent"
+       fill="#4cd4d4"
+       stroke-width="4"
+       points="326.61199,269.23699 375.01966,301.26881 375.02107,217.24585 323.42906,189.68648 "
+       ptarray="326.6119874812447,269.2369885590421,375.0196640002997,301.2688142359509,375.0210673774055,217.2458453757016,323.42905708681525,189.68647615050088"
+       display="hi"
+       id="polygon4898" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="323.42905"
+       y1="189.68648"
+       x2="279.3302"
+       y2="166.12979"
+       pointer-events="none"
+       id="line4900" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="323.42905"
+       y1="189.68648"
+       x2="393.39081"
+       y2="172.22478"
+       pointer-events="none"
+       id="line4902" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="326.612"
+       y1="269.237"
+       x2="323.42905"
+       y2="189.68648"
+       pointer-events="none"
+       id="line4904" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="375.02106"
+       y1="217.24585"
+       x2="323.42905"
+       y2="189.68648"
+       pointer-events="none"
+       id="line4906" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="443.00156"
+       y1="277.67044"
+       x2="392.31122"
+       y2="248.91121"
+       pointer-events="none"
+       id="line4908" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="443.01013"
+       y1="277.51917"
+       x2="392.31326"
+       y2="248.76711"
+       pointer-events="none"
+       id="line4910" />
+    <polygon
+       stroke="transparent"
+       fill="#109898"
+       stroke-width="4"
+       points="443.01012,277.51916 375.01966,301.26881 375.02107,217.24585 447.58167,196.78465 "
+       ptarray="443.010120069208,277.5191598078538,375.0196640002997,301.2688142359509,375.0210673774055,217.2458453757016,447.58167134883666,196.78464958941697"
+       display="hi"
+       id="polygon4912" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="375.01965"
+       y1="301.26883"
+       x2="326.612"
+       y2="269.237"
+       pointer-events="none"
+       id="line4914" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="503.96021"
+       y1="256.36938"
+       x2="451.66818"
+       y2="230.41103"
+       pointer-events="none"
+       id="line4916" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="503.97562"
+       y1="256.22339"
+       x2="451.67673"
+       y2="230.27182"
+       pointer-events="none"
+       id="line4918" />
+    <polygon
+       stroke="transparent"
+       fill="#109898"
+       stroke-width="4"
+       points="512.16886,178.57186 447.58167,196.78465 443.01012,277.51916 503.97562,256.22338 "
+       ptarray="512.1688556022657,178.57185986657274,447.58167134883666,196.78464958941697,443.010120069208,277.5191598078538,503.97561719110354,256.22338430644055"
+       display="hi"
+       id="polygon4920" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="512.16888"
+       y1="178.57185"
+       x2="456.2052"
+       y2="156.547"
+       pointer-events="none"
+       id="line4922" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="503.97562"
+       y1="256.22339"
+       x2="512.16888"
+       y2="178.57185"
+       pointer-events="none"
+       id="line4924" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="443.01013"
+       y1="277.51917"
+       x2="503.97562"
+       y2="256.22339"
+       pointer-events="none"
+       id="line4926" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="447.58167"
+       y1="196.78465"
+       x2="393.39081"
+       y2="172.22478"
+       pointer-events="none"
+       id="line4928" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="447.58167"
+       y1="196.78465"
+       x2="512.16888"
+       y2="178.57185"
+       pointer-events="none"
+       id="line4930" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="443.01013"
+       y1="277.51917"
+       x2="447.58167"
+       y2="196.78465"
+       pointer-events="none"
+       id="line4932" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="375.01965"
+       y1="301.26883"
+       x2="443.01013"
+       y2="277.51917"
+       pointer-events="none"
+       id="line4934" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="375.02106"
+       y1="217.24585"
+       x2="447.58167"
+       y2="196.78465"
+       pointer-events="none"
+       id="line4936" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="375.01965"
+       y1="301.26883"
+       x2="375.02106"
+       y2="217.24585"
+       pointer-events="none"
+       id="line4938" />
+    <polygon
+       stroke="transparent"
+       fill="#981098"
+       stroke-width="4"
+       points="260.87947,364.80753 329.36512,339.69497 331.87205,402.25973 267.46135,429.04484 "
+       ptarray="260.87946772384345,364.8075264438491,329.36511899648724,339.6949668139107,331.87205039597546,402.2597283318417,267.4613513797011,429.0448402649294"
+       display="hi"
+       id="polygon4940" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="331.91232"
+       y1="402.29483"
+       x2="390.48178"
+       y2="377.93646"
+       pointer-events="none"
+       id="line4942" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="267.49921"
+       y1="429.08356"
+       x2="331.91232"
+       y2="402.29483"
+       pointer-events="none"
+       id="line4944" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="331.91232"
+       y1="402.29483"
+       x2="329.40756"
+       y2="339.72778"
+       pointer-events="none"
+       id="line4946" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="289.67975"
+       y1="308.99271"
+       x2="329.36511"
+       y2="339.69498"
+       pointer-events="none"
+       id="line4948" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="232.04247"
+       y1="392.82599"
+       x2="267.46136"
+       y2="429.04483"
+       pointer-events="none"
+       id="line4950" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="267.46136"
+       y1="429.04483"
+       x2="331.87204"
+       y2="402.25974"
+       pointer-events="none"
+       id="line4952" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="329.36511"
+       y1="339.69498"
+       x2="331.87204"
+       y2="402.25974"
+       pointer-events="none"
+       id="line4954" />
+    <polygon
+       stroke="transparent"
+       fill="#ffa0a0"
+       stroke-width="4"
+       points="260.91916,364.84392 303.73231,404.10412 375,375 329.40755,339.7278 "
+       ptarray="260.91915837903997,364.84392327485773,303.73230748810255,404.10412055187504,375,375,329.40755341971703,339.7277958404671"
+       display="hi"
+       id="polygon4956" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="390.48178"
+       y1="377.93646"
+       x2="391.33868"
+       y2="317.01636"
+       pointer-events="none"
+       id="line4958" />
+    <polygon
+       stroke="transparent"
+       fill="#ffa0a0"
+       stroke-width="4"
+       points="438.96304,348.87893 391.33869,317.01635 329.40755,339.7278 375,375 "
+       ptarray="438.9630426176715,348.87893395175297,391.33869303018344,317.0163511688599,329.40755341971703,339.7277958404671,375,375"
+       display="hi"
+       id="polygon4960" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="496.69226"
+       y1="325.25137"
+       x2="447.61899"
+       y2="296.33322"
+       pointer-events="none"
+       id="line4962" />
+    <polygon
+       stroke="transparent"
+       fill="#989810"
+       stroke-width="4"
+       points="503.96021,256.36939 443.00155,277.67044 438.97274,348.82005 496.69227,325.25137 "
+       ptarray="503.9602113360005,256.36939350012176,443.0015539233732,277.6704396571069,438.9727428843391,348.8200486417983,496.692273512833,325.2513694883048"
+       display="hi"
+       id="polygon4964" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="490.19983"
+       y1="386.78348"
+       x2="443.97604"
+       y2="355.64142"
+       pointer-events="none"
+       id="line4966" />
+    <polygon
+       stroke="transparent"
+       fill="#989810"
+       stroke-width="4"
+       points="435.39461,412.01056 490.19984,386.78347 496.69227,325.25137 438.97274,348.82005 "
+       ptarray="435.3946117327862,412.0105606470398,490.1998423749939,386.7834707008408,496.692273512833,325.2513694883048,438.9727428843391,348.8200486417983"
+       display="hi"
+       id="polygon4968" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="496.69226"
+       y1="325.25137"
+       x2="490.19983"
+       y2="386.78348"
+       pointer-events="none"
+       id="line4970" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="503.96021"
+       y1="256.36938"
+       x2="496.69226"
+       y2="325.25137"
+       pointer-events="none"
+       id="line4972" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="503.96021"
+       y1="256.36938"
+       x2="443.00156"
+       y2="277.67044"
+       pointer-events="none"
+       id="line4974" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="438.97275"
+       y1="348.82004"
+       x2="391.35318"
+       y2="316.96497"
+       pointer-events="none"
+       id="line4976" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="496.69226"
+       y1="325.25137"
+       x2="438.97275"
+       y2="348.82004"
+       pointer-events="none"
+       id="line4978" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="435.39462"
+       y1="412.01056"
+       x2="390.49561"
+       y2="377.8812"
+       pointer-events="none"
+       id="line4980" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="490.19983"
+       y1="386.78348"
+       x2="435.39462"
+       y2="412.01056"
+       pointer-events="none"
+       id="line4982" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="438.97275"
+       y1="348.82004"
+       x2="435.39462"
+       y2="412.01056"
+       pointer-events="none"
+       id="line4984" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="443.00156"
+       y1="277.67044"
+       x2="438.97275"
+       y2="348.82004"
+       pointer-events="none"
+       id="line4986" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="504.07996"
+       y1="256.35199"
+       x2="496.80389"
+       y2="325.24808"
+       pointer-events="none"
+       id="line4988" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="512.28052"
+       y1="178.70184"
+       x2="504.07996"
+       y2="256.35199"
+       pointer-events="none"
+       id="line4990" />
+    <polygon
+       stroke="transparent"
+       fill="#a0ffa0"
+       stroke-width="4"
+       points="511.32788,225.77116 577.41623,204.34346 512.28054,178.70184 447.69386,196.92387 "
+       ptarray="511.3278806227145,225.7711615844104,577.4162284081096,204.34345855882847,512.2805432477359,178.70183654821477,447.69385729582666,196.92387414913935"
+       display="hi"
+       id="polygon4992" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="512.28052"
+       y1="178.70184"
+       x2="577.4162"
+       y2="204.34346"
+       pointer-events="none"
+       id="line4994" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="447.69385"
+       y1="196.92387"
+       x2="512.28052"
+       y2="178.70184"
+       pointer-events="none"
+       id="line4996" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="504.07996"
+       y1="256.35199"
+       x2="564.39905"
+       y2="286.28918"
+       pointer-events="none"
+       id="line4998" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="443.11484"
+       y1="277.65665"
+       x2="504.07996"
+       y2="256.35199"
+       pointer-events="none"
+       id="line5000" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="496.80389"
+       y1="325.24808"
+       x2="552.9549"
+       y2="358.33206"
+       pointer-events="none"
+       id="line5002" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="439.07852"
+       y1="348.82132"
+       x2="496.80389"
+       y2="325.24808"
+       pointer-events="none"
+       id="line5004" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="443.11484"
+       y1="277.65665"
+       x2="439.07852"
+       y2="348.82132"
+       pointer-events="none"
+       id="line5006" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="447.69385"
+       y1="196.92387"
+       x2="443.11484"
+       y2="277.65665"
+       pointer-events="none"
+       id="line5008" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375.12418"
+       y1="301.41641"
+       x2="443.11484"
+       y2="277.65665"
+       pointer-events="none"
+       id="line5010" />
+    <polygon
+       stroke="transparent"
+       fill="#90f690"
+       stroke-width="4"
+       points="436.32232,250.09008 431.88514,338.98243 375.12417,301.4164 375.13303,217.39568 "
+       ptarray="436.3223188022341,250.09007645840805,431.8851358414464,338.9824346084582,375.12416503294565,301.41639754043496,375.133027295754,217.395681196185"
+       display="hi"
+       id="polygon5012" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375"
+       y1="439.87189"
+       x2="331.91232"
+       y2="402.29483"
+       pointer-events="none"
+       id="line5014" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="435.38504"
+       y1="412.07343"
+       x2="390.48178"
+       y2="377.93646"
+       pointer-events="none"
+       id="line5016" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375"
+       y1="439.87189"
+       x2="435.38504"
+       y2="412.07343"
+       pointer-events="none"
+       id="line5018" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="486.69525"
+       y1="451.08118"
+       x2="435.38504"
+       y2="412.07343"
+       pointer-events="none"
+       id="line5020" />
+    <polygon
+       stroke="transparent"
+       fill="#ba5454"
+       stroke-width="4"
+       points="424.57167,483.10366 427.91627,415.93821 493.8158,385.57761 486.69525,451.08117 "
+       ptarray="424.57167049320685,483.1036641834103,427.91626548071224,415.9382136602186,493.8157978918128,385.57760744400525,486.6952494513106,451.08117189125903"
+       display="hi"
+       id="polygon5022" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="329.40756"
+       y1="339.72778"
+       x2="391.33868"
+       y2="317.01636"
+       pointer-events="none"
+       id="line5024" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="438.96304"
+       y1="348.87894"
+       x2="391.33868"
+       y2="317.01636"
+       pointer-events="none"
+       id="line5026" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="435.38504"
+       y1="412.07343"
+       x2="438.96304"
+       y2="348.87894"
+       pointer-events="none"
+       id="line5028" />
+    <polygon
+       stroke="transparent"
+       fill="#ffa0a0"
+       stroke-width="4"
+       points="427.91627,415.93821 375,375 438.96304,348.87893 493.8158,385.57761 "
+       ptarray="427.91626548071224,415.9382136602186,375,375,438.9630426176715,348.87893395175297,493.8157978918128,385.57760744400525"
+       display="hi"
+       id="polygon5030" />
+    <polygon
+       stroke="transparent"
+       fill="#f69090"
+       stroke-width="4"
+       points="260.91916,364.84392 267.4992,429.08355 308.146,470.64837 303.73231,404.10412 "
+       ptarray="260.91915837903997,364.84392327485773,267.49920465543835,429.08354847852115,308.1459986176831,470.64837350002273,303.73230748810255,404.10412055187504"
+       display="hi"
+       id="polygon5032" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="267.49921"
+       y1="429.08356"
+       x2="260.91916"
+       y2="364.84393"
+       pointer-events="none"
+       id="line5034" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="308.146"
+       y1="470.64838"
+       x2="267.49921"
+       y2="429.08356"
+       pointer-events="none"
+       id="line5036" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="308.146"
+       y1="470.64838"
+       x2="375"
+       y2="439.87189"
+       pointer-events="none"
+       id="line5038" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="424.57166"
+       y1="483.10367"
+       x2="375"
+       y2="439.87189"
+       pointer-events="none"
+       id="line5040" />
+    <polygon
+       stroke="transparent"
+       fill="#ba5454"
+       stroke-width="4"
+       points="424.57167,483.10366 427.91627,415.93821 353.84902,450.06177 355.26318,518.82972 "
+       ptarray="424.57167049320685,483.1036641834103,427.91626548071224,415.9382136602186,353.8490152814317,450.0617731839781,355.2631794336437,518.8297227582435"
+       display="hi"
+       id="polygon5042" />
+    <polygon
+       stroke="transparent"
+       fill="#f69090"
+       stroke-width="4"
+       points="355.26318,518.82972 308.146,470.64837 303.73231,404.10412 353.84902,450.06177 "
+       ptarray="355.2631794336437,518.8297227582435,308.1459986176831,470.64837350002273,303.73230748810255,404.10412055187504,353.8490152814317,450.0617731839781"
+       display="hi"
+       id="polygon5044" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="355.26318"
+       y1="518.82971"
+       x2="308.146"
+       y2="470.64838"
+       pointer-events="none"
+       id="line5046" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="424.57166"
+       y1="483.10367"
+       x2="486.69525"
+       y2="451.08118"
+       pointer-events="none"
+       id="line5048" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="355.26318"
+       y1="518.82971"
+       x2="424.57166"
+       y2="483.10367"
+       pointer-events="none"
+       id="line5050" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="424.57166"
+       y1="483.10367"
+       x2="427.91626"
+       y2="415.9382"
+       pointer-events="none"
+       id="line5052" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="260.91916"
+       y1="364.84393"
+       x2="329.40756"
+       y2="339.72778"
+       pointer-events="none"
+       id="line5054" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375"
+       y1="375"
+       x2="329.40756"
+       y2="339.72778"
+       pointer-events="none"
+       id="line5056" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375"
+       y1="439.87189"
+       x2="375"
+       y2="375"
+       pointer-events="none"
+       id="line5058" />
+    <polygon
+       stroke="transparent"
+       fill="#ffa0a0"
+       stroke-width="4"
+       points="375,375 427.91627,415.93821 353.84902,450.06177 303.73231,404.10412 "
+       ptarray="375,375,427.91626548071224,415.9382136602186,353.8490152814317,450.0617731839781,303.73230748810255,404.10412055187504"
+       display="hi"
+       id="polygon5060" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="303.7323"
+       y1="404.10413"
+       x2="260.91916"
+       y2="364.84393"
+       pointer-events="none"
+       id="line5062" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="308.146"
+       y1="470.64838"
+       x2="303.7323"
+       y2="404.10413"
+       pointer-events="none"
+       id="line5064" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375"
+       y1="375"
+       x2="438.96304"
+       y2="348.87894"
+       pointer-events="none"
+       id="line5066" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="303.7323"
+       y1="404.10413"
+       x2="375"
+       y2="375"
+       pointer-events="none"
+       id="line5068" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="427.91626"
+       y1="415.9382"
+       x2="375"
+       y2="375"
+       pointer-events="none"
+       id="line5070" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="486.69525"
+       y1="451.08118"
+       x2="493.8158"
+       y2="385.57761"
+       pointer-events="none"
+       id="line5072" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="493.8158"
+       y1="385.57761"
+       x2="438.96304"
+       y2="348.87894"
+       pointer-events="none"
+       id="line5074" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="427.91626"
+       y1="415.9382"
+       x2="493.8158"
+       y2="385.57761"
+       pointer-events="none"
+       id="line5076" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="329.36511"
+       y1="339.69498"
+       x2="391.29422"
+       y2="316.9866"
+       pointer-events="none"
+       id="line5078" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="375.11642"
+       y1="374.94144"
+       x2="439.07852"
+       y2="348.82132"
+       pointer-events="none"
+       id="line5080" />
+    <polygon
+       stroke="transparent"
+       fill="#90f690"
+       stroke-width="4"
+       points="428.04676,415.87861 375.11641,374.94143 375.12417,301.4164 431.88514,338.98243 "
+       ptarray="428.0467588965089,415.87860524635045,375.11640982414303,374.9414343275579,375.12416503294565,301.41639754043496,431.8851358414464,338.9824346084582"
+       display="hi"
+       id="polygon5082" />
+    <polygon
+       stroke="transparent"
+       fill="#a0ffa0"
+       stroke-width="4"
+       points="436.32232,250.09008 375.13303,217.39568 447.69386,196.92387 511.32788,225.77116 "
+       ptarray="436.3223188022341,250.09007645840805,375.133027295754,217.395681196185,447.69385729582666,196.92387414913935,511.3278806227145,225.7711615844104"
+       display="hi"
+       id="polygon5084" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="375.13303"
+       y1="217.39568"
+       x2="447.69385"
+       y2="196.92387"
+       pointer-events="none"
+       id="line5086" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="375.12418"
+       y1="301.41641"
+       x2="375.11642"
+       y2="374.94144"
+       pointer-events="none"
+       id="line5088" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="375.13303"
+       y1="217.39568"
+       x2="375.12418"
+       y2="301.41641"
+       pointer-events="none"
+       id="line5090" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="375.12418"
+       y1="301.41641"
+       x2="431.88513"
+       y2="338.98242"
+       pointer-events="none"
+       id="line5092" />
+    <polygon
+       stroke="transparent"
+       fill="#981098"
+       stroke-width="4"
+       points="260.87947,364.80753 329.36512,339.69497 326.54876,269.40782 253.43937,292.1943 "
+       ptarray="260.87946772384345,364.8075264438491,329.36511899648724,339.6949668139107,326.5487564049941,269.4078205757817,253.4393712979054,292.194299902426"
+       display="hi"
+       id="polygon5094" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="223.88698"
+       y1="330.88495"
+       x2="260.87946"
+       y2="364.80753"
+       pointer-events="none"
+       id="line5096" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="260.87946"
+       y1="364.80753"
+       x2="267.46136"
+       y2="429.04483"
+       pointer-events="none"
+       id="line5098" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="260.87946"
+       y1="364.80753"
+       x2="329.36511"
+       y2="339.69498"
+       pointer-events="none"
+       id="line5100" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="326.54877"
+       y1="269.40781"
+       x2="329.36511"
+       y2="339.69498"
+       pointer-events="none"
+       id="line5102" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="214.74469"
+       y1="261.4491"
+       x2="253.43938"
+       y2="292.19431"
+       pointer-events="none"
+       id="line5104" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="253.43938"
+       y1="292.19431"
+       x2="260.87946"
+       y2="364.80753"
+       pointer-events="none"
+       id="line5106" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="253.43938"
+       y1="292.19431"
+       x2="326.54877"
+       y2="269.40781"
+       pointer-events="none"
+       id="line5108" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="329.33984"
+       y1="339.68546"
+       x2="260.84006"
+       y2="364.80219"
+       pointer-events="none"
+       id="line5110" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="326.52139"
+       y1="269.38446"
+       x2="329.33984"
+       y2="339.68546"
+       pointer-events="none"
+       id="line5112" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="323.33209"
+       y1="189.83359"
+       x2="326.52139"
+       y2="269.38446"
+       pointer-events="none"
+       id="line5114" />
+    <polygon
+       stroke="transparent"
+       fill="#9090f6"
+       stroke-width="4"
+       points="253.3959,292.17415 298.60826,328.09927 303.65226,404.06394 260.84005,364.80219 "
+       ptarray="253.39590344831385,292.17415134719033,298.6082634410602,328.099267795889,303.6522554327171,404.06394409265874,260.84005237984826,364.8021925973859"
+       display="hi"
+       id="polygon5116" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="253.3959"
+       y1="292.17416"
+       x2="260.84006"
+       y2="364.80219"
+       pointer-events="none"
+       id="line5118" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="326.52139"
+       y1="269.38446"
+       x2="253.3959"
+       y2="292.17416"
+       pointer-events="none"
+       id="line5120" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="374.92807"
+       y1="301.43207"
+       x2="326.52139"
+       y2="269.38446"
+       pointer-events="none"
+       id="line5122" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="374.93259"
+       y1="374.95862"
+       x2="329.33984"
+       y2="339.68546"
+       pointer-events="none"
+       id="line5124" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="303.65225"
+       y1="404.06393"
+       x2="260.84006"
+       y2="364.80219"
+       pointer-events="none"
+       id="line5126" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="374.93259"
+       y1="374.95862"
+       x2="303.65225"
+       y2="404.06393"
+       pointer-events="none"
+       id="line5128" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="374.92807"
+       y1="301.43207"
+       x2="374.93259"
+       y2="374.95862"
+       pointer-events="none"
+       id="line5130" />
+    <polygon
+       stroke="transparent"
+       fill="#a0a0ff"
+       stroke-width="4"
+       points="323.33211,189.83359 374.92295,217.40924 292.79684,240.57672 244.9132,209.41352 "
+       ptarray="323.33210511700474,189.83358959741219,374.92294865896486,217.40923641542042,292.7968381074404,240.57671720074762,244.9131950158276,209.4135156298974"
+       display="hi"
+       id="polygon5132" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="323.33209"
+       y1="189.83359"
+       x2="244.91319"
+       y2="209.41351"
+       pointer-events="none"
+       id="line5134" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="374.92294"
+       y1="217.40924"
+       x2="323.33209"
+       y2="189.83359"
+       pointer-events="none"
+       id="line5136" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="374.92294"
+       y1="217.40924"
+       x2="374.92807"
+       y2="301.43207"
+       pointer-events="none"
+       id="line5138" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="355.26318"
+       y1="518.82971"
+       x2="353.84903"
+       y2="450.06177"
+       pointer-events="none"
+       id="line5140" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="353.84903"
+       y1="450.06177"
+       x2="303.7323"
+       y2="404.10413"
+       pointer-events="none"
+       id="line5142" />
+    <polygon
+       stroke="transparent"
+       fill="#9090f6"
+       stroke-width="4"
+       points="298.60826,328.09927 352.12995,370.62686 353.76883,450.02431 303.65226,404.06394 "
+       ptarray="298.6082634410602,328.099267795889,352.12994940419594,370.62685983189,353.7688318060313,450.024311162138,303.6522554327171,404.06394409265874"
+       display="hi"
+       id="polygon5144" />
+    <polygon
+       stroke="transparent"
+       fill="#9090f6"
+       stroke-width="4"
+       points="253.3959,292.17415 298.60826,328.09927 292.79684,240.57672 244.9132,209.41352 "
+       ptarray="253.39590344831385,292.17415134719033,298.6082634410602,328.099267795889,292.7968381074404,240.57671720074762,244.9131950158276,209.4135156298974"
+       display="hi"
+       id="polygon5146" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="244.91319"
+       y1="209.41351"
+       x2="253.3959"
+       y2="292.17416"
+       pointer-events="none"
+       id="line5148" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="298.60828"
+       y1="328.09927"
+       x2="253.3959"
+       y2="292.17416"
+       pointer-events="none"
+       id="line5150" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="298.60828"
+       y1="328.09927"
+       x2="303.65225"
+       y2="404.06393"
+       pointer-events="none"
+       id="line5152" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="374.92807"
+       y1="301.43207"
+       x2="298.60828"
+       y2="328.09927"
+       pointer-events="none"
+       id="line5154" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="431.67438"
+       y1="339.00092"
+       x2="374.92807"
+       y2="301.43207"
+       pointer-events="none"
+       id="line5156" />
+    <polygon
+       stroke="transparent"
+       fill="#5454ba"
+       stroke-width="4"
+       points="431.67438,339.00092 352.12995,370.62686 350.21688,277.94631 436.09531,250.10627 "
+       ptarray="431.6743773315153,339.00092205693016,352.12994940419594,370.62685983189,350.21688403509035,277.9463146231345,436.0953065983355,250.10626599953451"
+       display="hi"
+       id="polygon5158" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="375.11642"
+       y1="374.94144"
+       x2="428.04675"
+       y2="415.8786"
+       pointer-events="none"
+       id="line5160" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="427.85007"
+       y1="415.89865"
+       x2="374.93259"
+       y2="374.95862"
+       pointer-events="none"
+       id="line5162" />
+    <polygon
+       stroke="transparent"
+       fill="#5454ba"
+       stroke-width="4"
+       points="431.67438,339.00092 352.12995,370.62686 353.76883,450.02431 427.85008,415.89864 "
+       ptarray="431.6743773315153,339.00092205693016,352.12994940419594,370.62685983189,353.7688318060313,450.024311162138,427.8500823286797,415.89864387540166"
+       display="hi"
+       id="polygon5164" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="353.76883"
+       y1="450.02432"
+       x2="303.65225"
+       y2="404.06393"
+       pointer-events="none"
+       id="line5166" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="427.85007"
+       y1="415.89865"
+       x2="353.76883"
+       y2="450.02432"
+       pointer-events="none"
+       id="line5168" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="431.67438"
+       y1="339.00092"
+       x2="427.85007"
+       y2="415.89865"
+       pointer-events="none"
+       id="line5170" />
+    <polygon
+       stroke="transparent"
+       fill="#a0a0ff"
+       stroke-width="4"
+       points="436.09531,250.10627 350.21688,277.94631 292.79684,240.57672 374.92295,217.40924 "
+       ptarray="436.0953065983355,250.10626599953451,350.21688403509035,277.9463146231345,292.7968381074404,240.57671720074762,374.92294865896486,217.40923641542042"
+       display="hi"
+       id="polygon5172" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="292.79684"
+       y1="240.57672"
+       x2="244.91319"
+       y2="209.41351"
+       pointer-events="none"
+       id="line5174" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="374.92294"
+       y1="217.40924"
+       x2="292.79684"
+       y2="240.57672"
+       pointer-events="none"
+       id="line5176" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="436.09531"
+       y1="250.10626"
+       x2="374.92294"
+       y2="217.40924"
+       pointer-events="none"
+       id="line5178" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="436.09531"
+       y1="250.10626"
+       x2="431.67438"
+       y2="339.00092"
+       pointer-events="none"
+       id="line5180" />
+    <polygon
+       stroke="transparent"
+       fill="#9090f6"
+       stroke-width="4"
+       points="352.12995,370.62686 298.60826,328.09927 292.79684,240.57672 350.21688,277.94631 "
+       ptarray="352.12994940419594,370.62685983189,298.6082634410602,328.099267795889,292.7968381074404,240.57671720074762,350.21688403509035,277.9463146231345"
+       display="hi"
+       id="polygon5182" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="292.79684"
+       y1="240.57672"
+       x2="298.60828"
+       y2="328.09927"
+       pointer-events="none"
+       id="line5184" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="350.21689"
+       y1="277.94632"
+       x2="292.79684"
+       y2="240.57672"
+       pointer-events="none"
+       id="line5186" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="436.09531"
+       y1="250.10626"
+       x2="350.21689"
+       y2="277.94632"
+       pointer-events="none"
+       id="line5188" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="352.12994"
+       y1="370.62686"
+       x2="298.60828"
+       y2="328.09927"
+       pointer-events="none"
+       id="line5190" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="352.12994"
+       y1="370.62686"
+       x2="353.76883"
+       y2="450.02432"
+       pointer-events="none"
+       id="line5192" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="431.67438"
+       y1="339.00092"
+       x2="352.12994"
+       y2="370.62686"
+       pointer-events="none"
+       id="line5194" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="350.21689"
+       y1="277.94632"
+       x2="352.12994"
+       y2="370.62686"
+       pointer-events="none"
+       id="line5196" />
+    <polygon
+       stroke="transparent"
+       fill="#54ba54"
+       stroke-width="4"
+       points="552.95491,358.33206 493.94466,385.51872 502.0444,311.08408 564.39902,286.28919 "
+       ptarray="552.9549063680296,358.3320573212238,493.94466480212026,385.5187201857912,502.0444029683317,311.08408100759095,564.3990246916835,286.2891913697007"
+       display="hi"
+       id="polygon5198" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="564.39905"
+       y1="286.28918"
+       x2="552.9549"
+       y2="358.33206"
+       pointer-events="none"
+       id="line5200" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="493.94467"
+       y1="385.51871"
+       x2="552.9549"
+       y2="358.33206"
+       pointer-events="none"
+       id="line5202" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="439.07852"
+       y1="348.82132"
+       x2="493.94467"
+       y2="385.51871"
+       pointer-events="none"
+       id="line5204" />
+    <polygon
+       stroke="transparent"
+       fill="#54ba54"
+       stroke-width="4"
+       points="502.0444,311.08408 431.88514,338.98243 428.04676,415.87861 493.94466,385.51872 "
+       ptarray="502.0444029683317,311.08408100759095,431.8851358414464,338.9824346084582,428.0467588965089,415.87860524635045,493.94466480212026,385.5187201857912"
+       display="hi"
+       id="polygon5206" />
+    <polygon
+       stroke="transparent"
+       fill="#54ba54"
+       stroke-width="4"
+       points="564.39902,286.28919 502.0444,311.08408 511.32788,225.77116 577.41623,204.34346 "
+       ptarray="564.3990246916835,286.2891913697007,502.0444029683317,311.08408100759095,511.3278806227145,225.7711615844104,577.4162284081096,204.34345855882847"
+       display="hi"
+       id="polygon5208" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="577.4162"
+       y1="204.34346"
+       x2="564.39905"
+       y2="286.28918"
+       pointer-events="none"
+       id="line5210" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="502.0444"
+       y1="311.08408"
+       x2="564.39905"
+       y2="286.28918"
+       pointer-events="none"
+       id="line5212" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="443.11484"
+       y1="277.65665"
+       x2="502.0444"
+       y2="311.08408"
+       pointer-events="none"
+       id="line5214" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="502.0444"
+       y1="311.08408"
+       x2="493.94467"
+       y2="385.51871"
+       pointer-events="none"
+       id="line5216" />
+    <polygon
+       stroke="transparent"
+       fill="#54ba54"
+       stroke-width="4"
+       points="511.32788,225.77116 436.32232,250.09008 431.88514,338.98243 502.0444,311.08408 "
+       ptarray="511.3278806227145,225.7711615844104,436.3223188022341,250.09007645840805,431.8851358414464,338.9824346084582,502.0444029683317,311.08408100759095"
+       display="hi"
+       id="polygon5218" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="511.32788"
+       y1="225.77116"
+       x2="577.4162"
+       y2="204.34346"
+       pointer-events="none"
+       id="line5220" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="447.69385"
+       y1="196.92387"
+       x2="511.32788"
+       y2="225.77116"
+       pointer-events="none"
+       id="line5222" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="511.32788"
+       y1="225.77116"
+       x2="502.0444"
+       y2="311.08408"
+       pointer-events="none"
+       id="line5224" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="375.13303"
+       y1="217.39568"
+       x2="436.32233"
+       y2="250.09007"
+       pointer-events="none"
+       id="line5226" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="436.32233"
+       y1="250.09007"
+       x2="511.32788"
+       y2="225.77116"
+       pointer-events="none"
+       id="line5228" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="1"
+       x1="431.88513"
+       y1="338.98242"
+       x2="502.0444"
+       y2="311.08408"
+       pointer-events="none"
+       id="line5230" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="428.04675"
+       y1="415.8786"
+       x2="493.94467"
+       y2="385.51871"
+       pointer-events="none"
+       id="line5232" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="431.88513"
+       y1="338.98242"
+       x2="428.04675"
+       y2="415.8786"
+       pointer-events="none"
+       id="line5234" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="436.32233"
+       y1="250.09007"
+       x2="431.88513"
+       y2="338.98242"
+       pointer-events="none"
+       id="line5236" />
+    <line
+       stroke="#444444"
+       fill="transparent"
+       stroke-width="3"
+       x1="353.84903"
+       y1="450.06177"
+       x2="427.91626"
+       y2="415.9382"
+       pointer-events="none"
+       id="line5238" />
+  </g>
+  <g
+     id="g307" />
+  <g
+     id="g309" />
+  <g
+     id="g311" />
+</svg>
