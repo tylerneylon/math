@@ -195,7 +195,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     translate3DObject(obj, [0, 0, -1.0]);
 
-    let gap = 0.01;
+    let gap = 0.001;
 
     let obj2 = clone3DObject(obj);
     translate3DObject(obj2, [0, 0, 1 + gap]);
@@ -208,7 +208,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let obj4 = clone3DObject(obj);
     rotate3DObjectAroundXAxis(obj4, -Math.PI / 2);
     rotate3DObjectAroundZAxis(obj4,  Math.PI / 2);
-    translate3DObject(obj4, [-2 - gap, 0, 0]);
+    translate3DObject(obj4, [1 + gap, 1 + gap, 0]);
     style3DObject(obj4, {fill: '#880'});
 
     let obj5 = clone3DObject(obj);
@@ -220,7 +220,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     space.addObject(obj);   // red
     // space.addObject(obj2);  // green
     // space.addObject(obj3);  // blue
-    // space.addObject(obj4);  // yellow
+    space.addObject(obj4);  // yellow
     space.addObject(obj5);  // magenta
 
     if (dbgMode) {
