@@ -506,6 +506,14 @@ function findEdgeEqns(face, pts) {
 //     2. Consider putting this in util.js instead of here.
 export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
 
+    // XXX Delete all DEBUG1 code blocks.
+    //     DEBUG1 = I'm attempting to reduce the number of cmp() calls when the
+    //     input is already sorted or close to sorted.
+
+    // DEBUG1
+    console.log('Start sortWithPartialInfo()');
+    let numCmpCalls = 0;
+
     // 1. Set up memoization for inputCmp().
 
     // This serves to both memorize results as well as to allow us to treat the
@@ -516,7 +524,17 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
         let val = cache[key];
         if (val !== undefined) return val;
 
-        let result = (a === b) ? '=' : inputCmp(inputArr[a], inputArr[b], ctx);
+        // let result = (a === b) ? '=' : inputCmp(inputArr[a], inputArr[b], ctx);
+ 
+        // XXX DEBUG1 (replace with the above line)
+        let result;
+        if (a === b) {
+            result = '=';
+        } else {
+            numCmpCalls++;
+            result = inputCmp(inputArr[a], inputArr[b], ctx);
+        }
+    
         cache[key] = result;
 
         let otherKey = b + ':' + a;
@@ -610,6 +628,10 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
             }
         }
     }
+
+    // DEBUG1
+    console.log(`numCmpCalls = ${numCmpCalls}`);
+    console.log('End sortWithPartialInfo()');
 
     return sorted.map(i => inputArr[i]);
 }
