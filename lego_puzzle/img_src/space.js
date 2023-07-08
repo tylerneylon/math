@@ -105,6 +105,9 @@ ctx.edgeHighlightColors = [
     '#44d'
 ].map(util.getStdColor).map(x => x.map(y => y * 0.8));
 
+// This is a cache of the z-ordering from the previous frame.
+ctx.prevBackToFront = null;
+
 let lightDir = vector.unit([-1, -1, -2]);
 
 let highlightedFaceElt = null;
@@ -940,8 +943,10 @@ function orderElts2(pts, normalXYs) {
     // Make lines depend on their incident faces.
     for (let line of ctx.lines) line.deps = [...line.faces];
 
-    let shapes = [...ctx.faces, ...ctx.lines];
+    let shapes = ctx.prevBackToFront ?? [...ctx.faces, ...ctx.lines];
+    // let shapes = [...ctx.faces, ...ctx.lines];
     let backToFront = sortWithPartialInfo(shapes, compareShapes, pts);
+    ctx.prevBackToFront = backToFront;
 
     say('<p><hr>Here is the ordering of shapes I got, back-to-front:');
     for (let s of backToFront) say(getShapeName(s));
