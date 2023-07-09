@@ -630,6 +630,22 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
     }
 
     // DEBUG1
+    // Find the chains in `arr`.
+    let chainLens = [];
+    let thisChain = 1;
+    sorted.forEach((elt, i) => {
+        if (i === sorted.length - 1) return;
+        if (cmp(elt, sorted[i + 1]) === '<') {
+            thisChain++;
+        } else {
+            chainLens.push(thisChain);
+            thisChain = 1;
+        }
+    });
+    console.log('Chain lengths in sorted:');
+    console.log(chainLens.join(', '));
+
+    // DEBUG1
     console.log(`numCmpCalls = ${numCmpCalls}`);
     console.log('End sortWithPartialInfo()');
 
