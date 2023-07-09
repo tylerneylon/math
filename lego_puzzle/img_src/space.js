@@ -576,11 +576,11 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
 
     while (arr.length > 0) {
 
-        let xIdx = -1;
+        let xIdx = arr.length;
         while (true) {
 
-            xIdx++;
-            if (xIdx === arr.length) {
+            xIdx--;
+            if (xIdx === -1) {
                 let n = getShapeName(inputArr[min]);
                 say(`<span class="framed">Adding shape ${n}</span>`);
                 sorted.push(min);
@@ -623,7 +623,7 @@ export function sortWithPartialInfo(inputArr, inputCmp, ctx) {
                 say(`New candidate ${hl1}min = ${n}${hl2}`);
                 cmpTree[x] = [min];
                 min  = x;
-                xIdx = -1;
+                xIdx = arr.length;
                 printCmpTree(min, cmpTree);
             }
         }
@@ -1663,7 +1663,13 @@ export function animate() {
     window.requestAnimationFrame(setupFrame);
 }
 
+let numTimesLeft = 30;  // DEBUG1
+
 export function updatePoints() {
+
+    // DEBUG1
+    if (numTimesLeft <= 0) return;
+    numTimesLeft--;
 
     console.assert(artist !== null);
 

@@ -264,6 +264,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             matrix.rotateAroundX(Math.PI * 0.5)
         ));
         space.ctx.rotationsPerSec = 0.2;
+        space.ctx.rotationsPerSec = 0.1;  // XXX DEBUG1
         space.makeDraggable();
         space.animate();
     }
