@@ -38,6 +38,9 @@ function say(s) {
 
 function showTableWithColumns(cols, topSep) {
 
+    // Convert each cell to a string as needed.
+    cols = cols.map(col => col.map(x => x + ''));
+
     let numRows = Math.max(...cols.map(x => x.length));
     cols.forEach(col => {
         while (col.length < numRows) col.push('');
@@ -221,18 +224,28 @@ function sortWithPartialInfo1(inputArr, inputCmp, ctx) {
 // ______________________________________________________________________
 // Tests
 
-function test1() {
+let activeTest = null;
 
+function check(bool) {
+    if (!bool) {
+        console.log(`${activeTest.name} failed`);
+        process.exit(1);
+    }
+}
+
+function test1() {
     let arr = [0, 1];
     function cmp(x, y) {
         return (x < y) ? '<' : (x > y ? '>' : '=');
     }
     let result = sortWithPartialInfo1(arr, cmp);
+    check(result[0] === 0 && result[1] === 1);
 }
 
 allTests = [test1];
 allTests.forEach(testFn => {
-    console.log(`Running ${testFn.name}`);
+    activeTest = testFn;
+    console.log(`\nRunning ${testFn.name}`);
     testFn();
 });
 console.log('Done running all tests!');
