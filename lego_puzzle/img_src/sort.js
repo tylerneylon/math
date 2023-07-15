@@ -20,6 +20,44 @@
 
 
 // ______________________________________________________________________
+// Debug functions
+
+let spaceChar = ' ';  // Alternative: &nbsp; for html.
+let prefix = '';
+
+function indent() {
+    prefix = prefix + spaceChar.repeat(4);
+}
+
+function dedent() {
+    prefix = prefix.substr(4 * spaceChar.length);
+}
+
+function say(s) {
+}
+
+function showTableWithColumns(cols, topSep) {
+
+    let numRows = Math.max(...cols.map(x => x.length));
+    cols.forEach(col => {
+        while (col.length < numRows) col.push('');
+    });
+
+    // Find the maximum width in each column.
+    let widths = cols.map(col => Math.max(...col.map(x => x.length)));
+    // say('widths: ' + widths.join(', ')); // XXX
+
+    let nonTopSep = ''.padStart(topSep.length);
+    // say(`nonTopSet="${nonTopSep}"`);  // XXX
+    for (let i = 0; i < numRows; i++) {
+        let sep = (i === 0) ? topSep : nonTopSep;
+        let msg = cols.map((col, j) => col[i].padStart(widths[j])).join(sep);
+        say(msg.replaceAll(' ', '&nbsp;'));
+    }
+}
+
+
+// ______________________________________________________________________
 // Main function
 
 // This will sort the values in `inputArr` according to the comparison data
@@ -33,7 +71,7 @@
 //  * It assumes that if a < b then also b > a (otherwise what is happening?).
 //  * It builds a tree to infer transitive comparisons, and tries to maximize
 //    the use of that tree.
-function sortWithPartialInfo(inputArr, inputCmp, ctx) {
+function sortWithPartialInfo1(inputArr, inputCmp, ctx) {
 
     // XXX Delete all DEBUG1 code blocks.
     //     DEBUG1 = I'm attempting to reduce the number of cmp() calls when the
@@ -82,12 +120,10 @@ function sortWithPartialInfo(inputArr, inputCmp, ctx) {
     let min     = arr[arr.length - 1];
     let cmpTree = {[min]: []}
 
-    let hl1 = '<span class="highlight">';
-    let hl2 = '</span>';
     say('<p><hr>Beginning to sort<br>');
-    say(`Candidate ${hl1}min = ${getShapeName(inputArr[min])}${hl2}`);
+    say(`Candidate min = ${inputArr[min]}`);
 
-    let getName = x => getShapeName(inputArr[x]);
+    let getName = x => inputArr[x];
     function printCmpTree(min, cmpTree) {
         let y = min;
         let cols = [[getName(y)]];
@@ -110,8 +146,8 @@ function sortWithPartialInfo(inputArr, inputCmp, ctx) {
 
             xIdx--;
             if (xIdx === -1) {
-                let n = getShapeName(inputArr[min]);
-                say(`<span class="framed">Adding shape ${n}</span>`);
+                let n = inputArr[min];
+                say(`<span class="framed">Adding item ${n}</span>`);
                 sorted.push(min);
                 arr.splice(arr.indexOf(min), 1);
                 for (let i = 1; i < cmpTree[min].length; i++) {
@@ -125,17 +161,17 @@ function sortWithPartialInfo(inputArr, inputCmp, ctx) {
                     cmpTree[min] = [];
                 }
                 if (min !== undefined) {
-                    let n = getShapeName(inputArr[min]);  // XXX
-                    say(`Candidate ${hl1}min = ${n}${hl2}`);
+                    let n = inputArr[min];  // XXX
+                    say(`Candidate min = ${n}`);
                     printCmpTree(min, cmpTree);
                 }
                 break;
             }
 
             let x = arr[xIdx];
-            let n = getShapeName(inputArr[x]);  // XXX
+            let n = inputArr[x];  // XXX
             if (x in cmpTree) {
-                let minName = getShapeName(inputArr[min]);
+                let minName = inputArr[min];
                 say(`Keeping the min (${minName}) < ${n} as n is in the cmpTree`);
                 continue;
             }
@@ -149,7 +185,7 @@ function sortWithPartialInfo(inputArr, inputCmp, ctx) {
             } 
             if (c === '<') {
                 // say(`It looks like ${n} is smaller`);
-                say(`New candidate ${hl1}min = ${n}${hl2}`);
+                say(`New candidate min = ${n}`);
                 cmpTree[x] = [min];
                 min  = x;
                 xIdx = arr.length;
@@ -184,3 +220,19 @@ function sortWithPartialInfo(inputArr, inputCmp, ctx) {
 
 // ______________________________________________________________________
 // Tests
+
+function test1() {
+
+    let arr = [0, 1];
+    function cmp(x, y) {
+        return (x < y) ? '<' : (x > y ? '>' : '=');
+    }
+    let result = sortWithPartialInfo1(arr, cmp);
+}
+
+allTests = [test1];
+allTests.forEach(testFn => {
+    console.log(`Running ${testFn.name}`);
+    testFn();
+});
+console.log('Done running all tests!');

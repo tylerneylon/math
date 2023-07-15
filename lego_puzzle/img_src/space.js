@@ -1109,7 +1109,7 @@ function dedent() {
 }
 
 function say(s) {
-    return;  // XXX
+    // return;  // XXX
     // commentElt.innerHTML += (prefix + s + '<br/>\n');
 
     let spanStart = '';
@@ -1679,7 +1679,7 @@ export function animate() {
     window.requestAnimationFrame(setupFrame);
 }
 
-let numTimesLeft = 30;  // DEBUG1
+let numTimesLeft = 3;  // DEBUG1
 
 export function updatePoints() {
 
