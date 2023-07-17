@@ -297,13 +297,38 @@ function test4() {
     testWithWeirdCmp(arr);
 }
 
-
+// Try a case with two distince bottlenecks. Specifically:
+// * The target sorted order is (1 2 3) -1 (4 5 6) -2 (7 8 9)
+// * Within a paren-group, the sorting is normal.
+// * Neg-neg: normal sorting on absolute values.
+// * pos(x)-neg(y): Return [x vs 3*|y| + 0.5].
+function test5() {
+    let arr = [-2, -1, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    function cmp(x, y) {
+        if (Math.sign(x) === 1 && Math.sign(y) === -1) {
+            return usualCmp(x, 0.5 - 3 * y);
+        }
+        if (Math.sign(x) === -1 && Math.sign(y) === 1) {
+            return usualCmp(0.5 - 3 * x, y);
+        }
+        if (Math.sign(x) === -1 && Math.sign(y) === -1) {
+            return usualCmp(-x, -y);
+        }
+        if (Math.floor((x - 1) / 3) === Math.floor((y - 1) / 3)) {
+            return usualCmp(x, y);
+        }
+        return null;
+    }
+    let result = sortWithPartialInfo1(arr, cmp);
+    console.log('result:');
+    console.log(result);
+}
 
 
 // ______________________________________________________________________
 // Run the tests
 
-allTests = [test1, test2, test3, test4];
+allTests = [test1, test2, test3, test4, test5];
 allTests.forEach(testFn => {
     activeTest = testFn;
     console.log('\n' + '_'.repeat(80));
