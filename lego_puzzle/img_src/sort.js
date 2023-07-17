@@ -222,7 +222,7 @@ function sortWithPartialInfo1(inputArr, inputCmp, ctx) {
 
 
 // ______________________________________________________________________
-// Tests
+// Tests definitions
 
 let activeTest = null;
 
@@ -256,7 +256,7 @@ function test2() {
         return (x < y) ? '<' : (x > y ? '>' : '=');
     }
     let result = sortWithPartialInfo1(arr, cmp);
-    check(result[0] === 0 && result[1] === 1);
+    check(result.every((x, i) => (x === i)));
 }
 
 
@@ -297,10 +297,17 @@ function test4() {
     testWithWeirdCmp(arr);
 }
 
+
+
+
+// ______________________________________________________________________
+// Run the tests
+
 allTests = [test1, test2, test3, test4];
 allTests.forEach(testFn => {
     activeTest = testFn;
-    console.log(`\nRunning ${testFn.name}`);
+    console.log('\n' + '_'.repeat(80));
+    console.log(`Running ${testFn.name}`);
     testFn();
 });
 console.log('Done running all tests!');
