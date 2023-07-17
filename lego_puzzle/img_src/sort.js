@@ -233,6 +233,12 @@ function check(bool) {
     }
 }
 
+// This is convenient to have around.
+function usualCmp(x, y) {
+    if (x === y) return '=';
+    return (x < y) ? '<' : '>';
+}
+
 function test1() {
     let arr = [0, 1];
     function cmp(x, y) {
@@ -242,7 +248,40 @@ function test1() {
     check(result[0] === 0 && result[1] === 1);
 }
 
-allTests = [test1];
+// This is a general test function meant to be called multiple times
+// with different integer-valued arrays.
+function testWithWeirdCmp(arr) {
+    // This cmp() maintains the usual order against 0, but
+    // otherwise: * pos vs neg is null; and
+    //            * x vs y (same-sign) returns |x| vs |y|
+    // So the determined order will be like -1, -2, -3, .. -k, 0, 1, 2, ...
+    function  cmp(x, y) {
+        if (Math.sign(x) === Math.sign(y)) {
+            return usualCmp(Math.abs(x), Math.abs(y));
+        }
+        if (x === 0 || y === 0) return usualCmp(x, y);
+        return null;
+    }
+    let result = sortWithPartialInfo1(arr, cmp);
+    console.log('result:');
+    console.log(result);
+}
+
+function test2() {
+    let k = 1;
+    let n = 2 * k + 1;
+    let arr = Array.from({length: n}, (_, i) => i - k);
+    testWithWeirdCmp(arr);
+}
+
+function test3() {
+    let k = 4;
+    let n = 2 * k + 1;
+    let arr = Array.from({length: n}, (_, i) => i - k);
+    testWithWeirdCmp(arr);
+}
+
+allTests = [test1, test2, test3];
 allTests.forEach(testFn => {
     activeTest = testFn;
     console.log(`\nRunning ${testFn.name}`);
