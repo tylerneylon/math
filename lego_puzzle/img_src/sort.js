@@ -220,6 +220,11 @@ function sortWithPartialInfo1(inputArr, inputCmp, ctx) {
     return sorted.map(i => inputArr[i]);
 }
 
+function push(elt, prop, newItem) {
+    if (!elt.hasOwnProperty(prop)) elt[prop] = [];
+    elt[prop].push(newItem);
+}
+
 function sortWithPartialInfo2(inputArr, inputCmp, ctx) {
 
     // XXX Delete all DEBUG1 code blocks.
@@ -270,10 +275,34 @@ function sortWithPartialInfo2(inputArr, inputCmp, ctx) {
     // ______________________________________________________________________
     // Start of the main stuff.
 
+    // We'll create a forest to track known comparisons.
+    // forest[item] = <array of items larger than `item`>
+    // TODO Explain in more detail the data structure.
+    let forest = {};
+    let roots  = arr;
 
+    while (roots.length > 0) {
 
+        let maybeMin = roots[0];
 
+        for (let i = 0; i < roots.length; i++) {
+            let root = roots[i];
+            if (root === maybeMin) continue;
+            let c = cmp(maybeMin, root);
+            if (c === '<') {
+                push(forest, maybeMin, root);
+                roots.splice(i, 1);
+                i--;
+            } else if (c === '>') {
+                push(forest, root, maybeMin);
+                roots.splice(0, 1);
+                i = -1;
+            }
+        }
 
+        sorted.push(maybeMin);
+        roots.splice(roots.indexOf(maybeMin), 1);
+    }
 
     // End of the main stuff.
     // ______________________________________________________________________
@@ -310,7 +339,7 @@ function test1() {
     function cmp(x, y) {
         return (x < y) ? '<' : (x > y ? '>' : '=');
     }
-    let result = sortWithPartialInfo1(arr, cmp);
+    let result = sortWithPartialInfo2(arr, cmp);
     check(result[0] === 0 && result[1] === 1);
 }
 
@@ -320,7 +349,7 @@ function test2() {
     function cmp(x, y) {
         return (x < y) ? '<' : (x > y ? '>' : '=');
     }
-    let result = sortWithPartialInfo1(arr, cmp);
+    let result = sortWithPartialInfo2(arr, cmp);
     check(result.every((x, i) => (x === i)));
 }
 
@@ -339,7 +368,7 @@ function testWithWeirdCmp(arr) {
         if (x === 0 || y === 0) return usualCmp(x, y);
         return null;
     }
-    let result = sortWithPartialInfo1(arr, cmp);
+    let result = sortWithPartialInfo2(arr, cmp);
     console.log('result:');
     console.log(result);
 }
@@ -384,7 +413,7 @@ function test5() {
         }
         return null;
     }
-    let result = sortWithPartialInfo1(arr, cmp);
+    let result = sortWithPartialInfo2(arr, cmp);
     console.log('result:');
     console.log(result);
 }
