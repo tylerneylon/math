@@ -239,6 +239,7 @@ function usualCmp(x, y) {
     return (x < y) ? '<' : '>';
 }
 
+// Test with a standard total ordering.
 function test1() {
     let arr = [0, 1];
     function cmp(x, y) {
@@ -247,6 +248,17 @@ function test1() {
     let result = sortWithPartialInfo1(arr, cmp);
     check(result[0] === 0 && result[1] === 1);
 }
+
+// Test with a standard total ordering; larger array this time.
+function test2() {
+    let arr = [...Array(10).keys()];
+    function cmp(x, y) {
+        return (x < y) ? '<' : (x > y ? '>' : '=');
+    }
+    let result = sortWithPartialInfo1(arr, cmp);
+    check(result[0] === 0 && result[1] === 1);
+}
+
 
 // This is a general test function meant to be called multiple times
 // with different integer-valued arrays.
@@ -267,21 +279,25 @@ function testWithWeirdCmp(arr) {
     console.log(result);
 }
 
-function test2() {
+// The next two tests check performance on a partial comparison function with a
+// single element (0) as a kind of bottleneck between two subcases that are
+// otherwise non-comparable.
+
+function test3() {
     let k = 1;
     let n = 2 * k + 1;
     let arr = Array.from({length: n}, (_, i) => i - k);
     testWithWeirdCmp(arr);
 }
 
-function test3() {
+function test4() {
     let k = 4;
     let n = 2 * k + 1;
     let arr = Array.from({length: n}, (_, i) => i - k);
     testWithWeirdCmp(arr);
 }
 
-allTests = [test1, test2, test3];
+allTests = [test1, test2, test3, test4];
 allTests.forEach(testFn => {
     activeTest = testFn;
     console.log(`\nRunning ${testFn.name}`);
