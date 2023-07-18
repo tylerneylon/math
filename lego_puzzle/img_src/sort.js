@@ -275,33 +275,51 @@ function sortWithPartialInfo2(inputArr, inputCmp, ctx) {
     // ______________________________________________________________________
     // Start of the main stuff.
 
-    // We'll create a forest to track known comparisons.
-    // forest[item] = <array of items larger than `item`>
-    // TODO Explain in more detail the data structure.
-    let forest = {};
-    let roots  = arr;
+    // We'll build a forest to track known comparisons.
+    //  * after[item]  = <array of items larger than `item`>
+    //  * before[item] = <single most-recent item less than `item`>
+    // I'll use a sentinel object 'enoch' (the string) which
+    // is less than everything; its purpose is to point to the
+    // roots of all trees in the forest.
+    let after  = {enoch: arr}
+    let before = {};
+    let roots  = after.enoch;
+
+    // TODO: Performance is not good when the list is pre-sorted
+    //       and cmp() is a total order. Can we use an approach closer
+    //       to mergesort to improve that case?
 
     while (roots.length > 0) {
 
+        console.log(`Start of loop: roots has length ${roots.length}`);
+
         let maybeMin = roots[0];
+        console.log(`Setting maybeMin = ${maybeMin}`);
 
         for (let i = 0; i < roots.length; i++) {
             let root = roots[i];
             if (root === maybeMin) continue;
             let c = cmp(maybeMin, root);
+            console.log(`Found that ${maybeMin} ${c} ${root}`);
             if (c === '<') {
-                push(forest, maybeMin, root);
+                push(after, maybeMin, root);
+                before[root] = maybeMin;
                 roots.splice(i, 1);
                 i--;
             } else if (c === '>') {
-                push(forest, root, maybeMin);
+                push(after, root, maybeMin);
+                before[maybeMin] = root;
+                maybeMin = root;
+                console.log(`Setting maybeMin = ${maybeMin}`);
                 roots.splice(0, 1);
                 i = -1;
             }
         }
 
+        console.log(`Pushing ${maybeMin} onto sorted`);
         sorted.push(maybeMin);
         roots.splice(roots.indexOf(maybeMin), 1);
+        after[maybeMin]?.forEach(newRoot => roots.push(newRoot));
     }
 
     // End of the main stuff.
