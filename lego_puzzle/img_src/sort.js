@@ -59,6 +59,23 @@ function showTableWithColumns(cols, topSep) {
     }
 }
 
+// This returns an object that maps each node in the tree rooteded at `root`
+// to the number of leaf descendents it has.
+function findNumLeafDesc(root, tree, numLeafDesc) {
+
+    // TODO HERE 1: Currently on my first pass of this function.
+
+    if (numLeafDesc === undefined) numLeafDesc = {};
+
+    tree[root].forEach(kid => {
+        findNumLeafDesc(kid, tree, numLeafDesc);
+    });
+
+    if (tree[root].length === 0) numLeafDesc[root] = 1;
+
+    return numLeafDesc;
+}
+
 
 // ______________________________________________________________________
 // Main function
@@ -293,6 +310,32 @@ function sortWithPartialInfo2(inputArr, inputCmp, ctx) {
 
         console.log(`Start of loop: roots has length ${roots.length}`);
 
+        // Print out the full forest.
+        console.log('Forest:');
+        roots.forEach(root => {
+            console.log('_'.repeat(30));
+
+            // TODO HERE 2:
+            // I'm working on a nice printout of a forest in ascii.
+            // Like
+            // 1 - 2 -  3 -  4
+            //            \  5
+            //            \  6
+            //       \  7 -  8
+            //   \ 9 - 10 - 11
+
+            // Find number of leaf descendents per element.
+            let numLeafDesc = {};
+
+
+
+            // Do a breadth-first walk through the tree on `root`.
+            let col = [root];
+            while (true) {
+
+            }
+        });
+
         let maybeMin = roots[0];
         console.log(`Setting maybeMin = ${maybeMin}`);
 
@@ -358,6 +401,8 @@ function test1() {
         return (x < y) ? '<' : (x > y ? '>' : '=');
     }
     let result = sortWithPartialInfo2(arr, cmp);
+    console.log('result:');
+    console.log(result);
     check(result[0] === 0 && result[1] === 1);
 }
 
@@ -368,6 +413,8 @@ function test2() {
         return (x < y) ? '<' : (x > y ? '>' : '=');
     }
     let result = sortWithPartialInfo2(arr, cmp);
+    console.log('result:');
+    console.log(result);
     check(result.every((x, i) => (x === i)));
 }
 
