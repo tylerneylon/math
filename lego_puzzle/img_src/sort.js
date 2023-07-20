@@ -59,22 +59,27 @@ function showTableWithColumns(cols, topSep) {
     }
 }
 
-// This returns an object that maps each node in the tree rooteded at `root`
+// This returns an object that maps each node in the tree rooted at `root`
 // to the number of leaf descendents it has.
 function findNumLeafDesc(root, tree, numLeafDesc) {
 
-    // TODO HERE 1: Currently on my first pass of this function.
-
     if (numLeafDesc === undefined) numLeafDesc = {};
 
-    tree[root].forEach(kid => {
+    tree[root]?.forEach(kid => {
         findNumLeafDesc(kid, tree, numLeafDesc);
     });
-
-    if (tree[root].length === 0) numLeafDesc[root] = 1;
+    if (!(root in tree) || tree[root].length === 0) {
+        numLeafDesc[root] = 1;
+    } else {
+        let descPerKid = tree[root].map(x => numLeafDesc[x]);
+        numLeafDesc[root] = descPerKid.reduce((x, y) => x + y);
+    }
 
     return numLeafDesc;
 }
+
+// XXX
+exports.findNumLeafDesc = findNumLeafDesc;
 
 
 // ______________________________________________________________________
@@ -315,7 +320,7 @@ function sortWithPartialInfo2(inputArr, inputCmp, ctx) {
         roots.forEach(root => {
             console.log('_'.repeat(30));
 
-            // TODO HERE 2:
+            // TODO HERE:
             // I'm working on a nice printout of a forest in ascii.
             // Like
             // 1 - 2 -  3 -  4
@@ -325,7 +330,7 @@ function sortWithPartialInfo2(inputArr, inputCmp, ctx) {
             //   \ 9 - 10 - 11
 
             // Find number of leaf descendents per element.
-            let numLeafDesc = {};
+            let numLeafDesc = findNumLeafDesc(root, after);
 
 
 
@@ -487,11 +492,13 @@ function test5() {
 // ______________________________________________________________________
 // Run the tests
 
-allTests = [test1, test2, test3, test4, test5];
-allTests.forEach(testFn => {
-    activeTest = testFn;
-    console.log('\n' + '_'.repeat(80));
-    console.log(`Running ${testFn.name}`);
-    testFn();
-});
-console.log('Done running all tests!');
+if (false) {
+    allTests = [test1, test2, test3, test4, test5];
+    allTests.forEach(testFn => {
+        activeTest = testFn;
+        console.log('\n' + '_'.repeat(80));
+        console.log(`Running ${testFn.name}`);
+        testFn();
+    });
+    console.log('Done running all tests!');
+}
