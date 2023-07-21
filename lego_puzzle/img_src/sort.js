@@ -36,9 +36,10 @@ function dedent() {
 function say(s) {
 }
 
-function showTableWithColumns(cols, topSep, printFn) {
+function showTableWithColumns(cols, topSep, midSep, printFn) {
 
     if (topSep === undefined) topSep = ' ';
+    if (midSep === undefined) midSep = ' ';
     if (printFn === undefined) printFn = say;
 
     // Convert each cell to a string as needed.
@@ -58,7 +59,7 @@ function showTableWithColumns(cols, topSep, printFn) {
     for (let i = 0; i < numRows; i++) {
         let sep = (i === 0) ? topSep : nonTopSep;
         let msg = cols.map((col, j) => col[i].padStart(widths[j])).join(sep);
-        printFn(msg.replaceAll(' ', '&nbsp;'));
+        printFn(msg.replaceAll(' ', midSep));
     }
 }
 
@@ -110,7 +111,8 @@ function printTree(root, tree) {
         cols[depth].push(prefix + node);
         for (let i = 1; i < numLeafDesc[node]; i++) cols[depth].push('');
     });
-    showTableWithColumns(cols, ' ', console.log);
+    // TODO: Modify showTable..() to accept an `opts` value instead.
+    showTableWithColumns(cols, ' ', ' ', console.log);
 }
 
 // XXX
@@ -510,7 +512,7 @@ function test5() {
 // ______________________________________________________________________
 // Run the tests
 
-if (false) {
+if (true) {
     allTests = [test1, test2, test3, test4, test5];
     allTests.forEach(testFn => {
         activeTest = testFn;
