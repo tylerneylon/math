@@ -86,12 +86,13 @@ function findNumLeafDesc(root, tree, numLeafDesc) {
 // Each call is of the form fn(node, depth, childNum).
 // For the root, `childNum` is undefined.
 // Otherwise, `childNum` is the index of this node as a child of its parent.
-function depthFirstTraverse(root, tree, fn, depth, childNum) {
+function depthFirstTraverse(root, tree, fn1, fn2, depth, childNum) {
     if (depth === undefined) depth = 0;
-    fn(root, depth, childNum);
+    fn1(root, depth, childNum);
     tree[root]?.forEach((node, i) => {
-        depthFirstTraverse(node, tree, fn, depth + 1, i)
+        depthFirstTraverse(node, tree, fn1, fn2, depth + 1, i)
     });
+    fn2(root, depth, childNum);
 }
 
 // Print out a tree like this:
@@ -108,7 +109,11 @@ function printTree(root, tree) {
         if (childNum === undefined) prefix = '';
         if (childNum === 0) prefix = '- ';
         if (cols.length <= depth) cols.push([]);
+        while (depth > 0 && cols[depth].length < cols[depth - 1].length - 1) {
+            cols[depth].push('');
+        }
         cols[depth].push(prefix + node);
+    }, (node, depth) => {
         for (let i = 1; i < numLeafDesc[node]; i++) cols[depth].push('');
     });
     // TODO: Modify showTable..() to accept an `opts` value instead.
@@ -350,44 +355,63 @@ function sortWithPartialInfo2(inputArr, inputCmp, ctx) {
     //       and cmp() is a total order. Can we use an approach closer
     //       to mergesort to improve that case?
 
-    while (roots.length > 0) {
 
-        console.log(`Start of loop: roots has length ${roots.length}`);
-
-        // Print out the full forest.
+    function printForest() {
         console.log('Forest:');
         roots.forEach(root => {
             console.log('_'.repeat(30));
             printTree(root, after);
         });
+        console.log('_'.repeat(30));
+    }
 
-        let maybeMin = roots[0];
-        console.log(`Setting maybeMin = ${maybeMin}`);
+
+    while (roots.length > 0) {
+
+        console.log(`Start of loop: roots has length ${roots.length}`);
+
+        // Print out the full forest.
+        printForest();
+
+        let minSoFarIdx = 0;
+        let minSoFar    = roots[minSoFarIdx];
+        console.log(`Setting minSoFar = ${minSoFar}`);
+        console.log(`roots = ${roots.join(' ')}`);
 
         for (let i = 0; i < roots.length; i++) {
             let root = roots[i];
-            if (root === maybeMin) continue;
-            let c = cmp(maybeMin, root);
-            console.log(`Found that ${maybeMin} ${c} ${root}`);
+            if (root === minSoFar) continue;
+            let c = cmp(minSoFar, root);
+            console.log(`Found that ${minSoFar} ${c} ${root}`);
             if (c === '<') {
-                push(after, maybeMin, root);
-                before[root] = maybeMin;
+                push(after, minSoFar, root);
+                before[root] = minSoFar;
                 roots.splice(i, 1);
                 i--;
+                printForest();
             } else if (c === '>') {
-                push(after, root, maybeMin);
-                before[maybeMin] = root;
-                maybeMin = root;
-                console.log(`Setting maybeMin = ${maybeMin}`);
-                roots.splice(0, 1);
+                push(after, root, minSoFar);
+                before[minSoFar] = root;
+                roots.splice(minSoFarIdx, 1);
+                minSoFar = root;
+                minSoFarIdx = (i > minSoFarIdx) ? i - 1 : i;
+                console.log(`Setting minSoFar = ${minSoFar}`);
+                // console.log(`roots[minSoFarIdx] = ${roots[minSoFarIdx]}`);
+                console.log(`Removed old minSoFar from roots; got: ${roots.join(' ')}`);
                 i = -1;
+                printForest();
             }
         }
 
-        console.log(`Pushing ${maybeMin} onto sorted`);
-        sorted.push(maybeMin);
-        roots.splice(roots.indexOf(maybeMin), 1);
-        after[maybeMin]?.forEach(newRoot => roots.push(newRoot));
+        console.log(`Pushing ${minSoFar} onto sorted`);
+        console.log(`Here are the children of ${minSoFar}: ${after[minSoFar]?.join(' ')}`);
+        sorted.push(minSoFar);
+        roots.splice(roots.indexOf(minSoFar), 1);
+        // after[minSoFar]?.forEach(newRoot => roots.push(newRoot));
+        after[minSoFar]?.forEach(newRoot => {
+            console.log(`Adding ${newRoot} to roots`);
+            roots.push(newRoot)
+        });
     }
 
     // End of the main stuff.
@@ -513,7 +537,9 @@ function test5() {
 // Run the tests
 
 if (true) {
-    allTests = [test1, test2, test3, test4, test5];
+    // XXX
+    // allTests = [test1, test2, test3, test4, test5];
+    allTests = [test4];
     allTests.forEach(testFn => {
         activeTest = testFn;
         console.log('\n' + '_'.repeat(80));
