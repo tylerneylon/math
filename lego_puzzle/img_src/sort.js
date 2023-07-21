@@ -36,7 +36,10 @@ function dedent() {
 function say(s) {
 }
 
-function showTableWithColumns(cols, topSep) {
+function showTableWithColumns(cols, topSep, printFn) {
+
+    if (topSep === undefined) topSep = ' ';
+    if (printFn === undefined) printFn = say;
 
     // Convert each cell to a string as needed.
     cols = cols.map(col => col.map(x => x + ''));
@@ -55,7 +58,7 @@ function showTableWithColumns(cols, topSep) {
     for (let i = 0; i < numRows; i++) {
         let sep = (i === 0) ? topSep : nonTopSep;
         let msg = cols.map((col, j) => col[i].padStart(widths[j])).join(sep);
-        say(msg.replaceAll(' ', '&nbsp;'));
+        printFn(msg.replaceAll(' ', '&nbsp;'));
     }
 }
 
@@ -78,8 +81,42 @@ function findNumLeafDesc(root, tree, numLeafDesc) {
     return numLeafDesc;
 }
 
+// Run fn() on each node of the given tree in depth-first order.
+// Each call is of the form fn(node, depth, childNum).
+// For the root, `childNum` is undefined.
+// Otherwise, `childNum` is the index of this node as a child of its parent.
+function depthFirstTraverse(root, tree, fn, depth, childNum) {
+    if (depth === undefined) depth = 0;
+    fn(root, depth, childNum);
+    tree[root]?.forEach((node, i) => {
+        depthFirstTraverse(node, tree, fn, depth + 1, i)
+    });
+}
+
+// Print out a tree like this:
+// 1 - 2 -  3 -  4
+//            \  5
+//            \  6
+//       \  7 -  8
+//   \ 9 - 10 - 11
+function printTree(root, tree) {
+    let numLeafDesc = findNumLeafDesc(root, tree);
+    let cols = [];
+    depthFirstTraverse(root, tree, (node, depth, childNum) => {
+        let prefix = '\\ ';
+        if (childNum === undefined) prefix = '';
+        if (childNum === 0) prefix = '- ';
+        if (cols.length <= depth) cols.push([]);
+        cols[depth].push(prefix + node);
+        for (let i = 1; i < numLeafDesc[node]; i++) cols[depth].push('');
+    });
+    showTableWithColumns(cols, ' ', console.log);
+}
+
 // XXX
 exports.findNumLeafDesc = findNumLeafDesc;
+exports.depthFirstTraverse = depthFirstTraverse;
+exports.printTree = printTree;
 
 
 // ______________________________________________________________________
@@ -319,26 +356,7 @@ function sortWithPartialInfo2(inputArr, inputCmp, ctx) {
         console.log('Forest:');
         roots.forEach(root => {
             console.log('_'.repeat(30));
-
-            // TODO HERE:
-            // I'm working on a nice printout of a forest in ascii.
-            // Like
-            // 1 - 2 -  3 -  4
-            //            \  5
-            //            \  6
-            //       \  7 -  8
-            //   \ 9 - 10 - 11
-
-            // Find number of leaf descendents per element.
-            let numLeafDesc = findNumLeafDesc(root, after);
-
-
-
-            // Do a breadth-first walk through the tree on `root`.
-            let col = [root];
-            while (true) {
-
-            }
+            printTree(root, after);
         });
 
         let maybeMin = roots[0];
