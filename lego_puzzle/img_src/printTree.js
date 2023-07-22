@@ -36,43 +36,26 @@ function showTableWithColumns(cols, topSep) {
     // Find the maximum width in each column.
     let widths = cols.map(col => Math.max(...col.map(x => x.length)));
 
-    let nonTopSep = ''.padStart(topSep.length);
+    let nonTopSep = ''.padEnd(topSep.length);
     for (let i = 0; i < numRows; i++) {
         let sep = (i === 0) ? topSep : nonTopSep;
-        let msg = cols.map((col, j) => col[i].padStart(widths[j])).join(sep);
+        let msg = cols.map((col, j) => col[i].padEnd(widths[j])).join(sep);
         console.log(msg);
     }
 }
 
-// This returns an object that maps each node in the tree rooted at `root`
-// to the number of leaf descendents it has.
-function findNumLeafDesc(root, tree, numLeafDesc) {
-
-    if (numLeafDesc === undefined) numLeafDesc = {};
-
-    tree[root]?.forEach(kid => {
-        findNumLeafDesc(kid, tree, numLeafDesc);
-    });
-    if (!(root in tree) || tree[root].length === 0) {
-        numLeafDesc[root] = 1;
-    } else {
-        let descPerKid = tree[root].map(x => numLeafDesc[x]);
-        numLeafDesc[root] = descPerKid.reduce((x, y) => x + y);
-    }
-
-    return numLeafDesc;
-}
-
-// Run fn() on each node of the given tree in depth-first order.
+// Run fn1() and fn2() on each node of the given tree in depth-first order.
 // Each call is of the form fn(node, depth, childNum).
 // For the root, `childNum` is undefined.
 // Otherwise, `childNum` is the index of this node as a child of its parent.
-function depthFirstTraverse(root, tree, fn, depth, childNum) {
+// fn1() is called before its children, fn2() after.
+function depthFirstTraverse(root, tree, fn1, fn2, depth, childNum) {
     if (depth === undefined) depth = 0;
-    fn(root, depth, childNum);
+    fn1(root, depth, childNum);
     tree[root]?.forEach((node, i) => {
-        depthFirstTraverse(node, tree, fn, depth + 1, i)
+        depthFirstTraverse(node, tree, fn1, fn2, depth + 1, i)
     });
+    fn2(root, depth, childNum);
 }
 
 // Print out a tree like this:
@@ -82,15 +65,20 @@ function depthFirstTraverse(root, tree, fn, depth, childNum) {
 //       \  7 -  8
 //   \ 9 - 10 - 11
 function printTree(root, tree) {
-    let numLeafDesc = findNumLeafDesc(root, tree);
     let cols = [];
+    let numRows = 0;
     depthFirstTraverse(root, tree, (node, depth, childNum) => {
         let prefix = '\\ ';
         if (childNum === undefined) prefix = '';
         if (childNum === 0) prefix = '- ';
         if (cols.length <= depth) cols.push([]);
+        while (depth > 0 && cols[depth].length < cols[depth - 1].length - 1) {
+            cols[depth].push('');
+        }
         cols[depth].push(prefix + node);
-        for (let i = 1; i < numLeafDesc[node]; i++) cols[depth].push('');
+        numRows = Math.max(numRows, cols[depth].length);
+    }, (node, depth) => {
+        while (cols[depth].length < numRows) cols[depth].push('');
     });
     showTableWithColumns(cols);
 }
@@ -101,5 +89,8 @@ exports.printTree = printTree;
 // ______________________________________________________________________
 // Example usage
 
-let t = {a: ['b', 'c'], b: ['d'], c: ['e'], d: ['f', 'g'], g: ['h']};
+let t = {
+    a: ['j', 'b', 'ccc'], b: ['d'], c: ['e'],
+    d: ['f', 'g'], e: ['i'], g: ['h']
+};
 printTree('a', t);
