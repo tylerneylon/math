@@ -357,18 +357,20 @@ function sortWithPartialInfo2(inputArr, inputCmp, ctx) {
 
         let minSoFarIdx = 0;
         let minSoFar    = roots[minSoFarIdx];
-        console.log(`Setting minSoFar = ${minSoFar}`);
+        console.log(`Setting minSoFar = ${minSoFar} mSFi = ${minSoFarIdx}`);
         console.log(`roots = ${roots.join(' ')}`);
 
         for (let i = 0; i < roots.length; i++) {
             let root = roots[i];
             if (root === minSoFar) continue;
+            console.log(`i = ${i} root = ${root}`);
             let c = cmp(minSoFar, root);
             console.log(`Found that ${minSoFar} ${c} ${root}`);
             if (c === '<') {
                 push(after, minSoFar, root);
                 before[root] = minSoFar;
                 roots.splice(i, 1);
+                if (i < minSoFarIdx) minSoFarIdx--;
                 i--;
                 printForest();
             } else if (c === '>') {
