@@ -36,6 +36,31 @@ function dedent() {
 function say(s) {
 }
 
+// This returns an array of strings that can be printed as the given table.
+// You should add a newline to the end of the rows when printing.
+function getRowsFromColumns(cols, colSep) {
+
+    if (colSep === undefined) colSep = ' ';
+
+    // Convert each cell to a string as needed.
+    cols = cols.map(col => col.map(x => x + ''));
+
+    let numRows = Math.max(...cols.map(x => x.length));
+    cols.forEach(col => {
+        while (col.length < numRows) col.push('');
+    });
+
+    // Find the maximum width in each column.
+    let widths = cols.map(col => Math.max(...col.map(x => x.length)));
+
+    let rows = [];
+    for (let i = 0; i < numRows; i++) {
+        rows.push(cols.map((col, j) => col[i].padEnd(widths[j])).join(colSep));
+    }
+    return rows;
+}
+
+// TODO: Either drop this or combine with getRowsFromColumsn().
 function showTableWithColumns(cols, topSep, midSep, printFn) {
 
     if (topSep === undefined) topSep = ' ';
@@ -77,13 +102,13 @@ function depthFirstTraverse(root, tree, fn1, fn2, depth, childNum) {
     fn2(root, depth, childNum);
 }
 
-// Print out a tree like this:
+// Get a tree like this as a list of strings (no newlines):
 // 1 - 2 -  3 -  4
 //            \  5
 //            \  6
 //       \  7 -  8
 //   \ 9 - 10 - 11
-function printTree(root, tree) {
+function getTree(root, tree) {
     let cols = [];
     let numRows = 0;
     depthFirstTraverse(root, tree, (node, depth, childNum) => {
@@ -100,12 +125,14 @@ function printTree(root, tree) {
         while (cols[depth].length < numRows) cols[depth].push('');
     });
     // TODO: Modify showTable..() to accept an `opts` value instead.
-    showTableWithColumns(cols, ' ', ' ', console.log);
+    // showTableWithColumns(cols, ' ', ' ', console.log);
+    return getRowsFromColumns(cols);
 }
 
-// XXX
-exports.depthFirstTraverse = depthFirstTraverse;
-exports.printTree = printTree;
+function printForest(roots, tree) {
+    let cols = roots.map(root => getTree(root, tree));
+    console.log(getRowsFromColumns(cols, '  |  ').join('\n'));
+}
 
 
 // ______________________________________________________________________
@@ -337,23 +364,15 @@ function sortWithPartialInfo2(inputArr, inputCmp, ctx) {
     //       and cmp() is a total order. Can we use an approach closer
     //       to mergesort to improve that case?
 
-
-    function printForest() {
-        console.log('Forest:');
-        roots.forEach(root => {
-            console.log('_'.repeat(30));
-            printTree(root, after);
-        });
-        console.log('_'.repeat(30));
-    }
-
-
     while (roots.length > 0) {
 
         console.log(`Start of loop: roots has length ${roots.length}`);
 
         // Print out the full forest.
-        printForest();
+        console.log('Forest:');
+        console.log('_'.repeat(30));
+        printForest(roots, after);
+        console.log('_'.repeat(30));
 
         let minSoFarIdx = 0;
         let minSoFar    = roots[minSoFarIdx];
