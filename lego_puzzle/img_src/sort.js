@@ -421,6 +421,59 @@ function sortWithPartialInfo2(inputArr, inputCmp, ctx) {
     return sorted.map(i => inputArr[i]);
 }
 
+// TODO: Rename appropriately.
+function sortV3(inputArr, inputCmp, opts) {
+
+    // Receive the pass-through arguments in `opts`.
+    if (opts === undefined) opts = {};
+    let arr    = opts.arr || inputArr.map((e, i) => i);
+    let cache  = opts.cache || {};
+    opts.arr   = arr;
+    opts.cache = cache;
+
+    // Define the cmp wrapper function that uses the cache.
+    function cmp(a, b) {
+        let key = a + ':' + b;
+        let val = cache[key];
+        if (val !== undefined) return val;
+
+        // let result = (a === b) ? '=' : inputCmp(inputArr[a], inputArr[b], ctx);
+ 
+        // XXX DEBUG1 (replace with the above line)
+        let result;
+        if (a === b) {
+            result = '=';
+        } else {
+            numCmpCalls++;
+            result = inputCmp(inputArr[a], inputArr[b], ctx);
+        }
+    
+        cache[key] = result;
+
+        let otherKey = b + ':' + a;
+        let otherResult = result;
+        if (result === '<') otherResult = '>';
+        if (result === '>') otherResult = '<';
+        cache[otherKey] = otherResult;
+
+        return result;
+    }
+
+    // Define the base case.
+    if (arr.length < 2) {
+        return arr;
+    }
+
+    // Implement the recursive case.
+    let optsWith = x => Object.assign(opts, x);
+    let k = Math.floor(arr.length / 2);
+    let side1 = sortV3(inputArr, inputCmp, optsWith({arr: arr.slice(0, k)}));
+    let side2 = sortV3(inputArr, inputCmp, optsWith({arr: arr.slice(k)}));
+
+    // TODO HERE
+
+}
+
 function sortWithPartialInfo3(inputArr, inputCmp, ctx) {
 
     // XXX Delete all DEBUG1 code blocks.
