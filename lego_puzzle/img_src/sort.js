@@ -428,7 +428,7 @@ function sortWithPartialInfo3(inputArr, inputCmp, ctx) {
     //     input is already sorted or close to sorted.
 
     // DEBUG1
-    console.log('Start sortWithPartialInfo3()');
+    if (logLevel >= 1) console.log('Start sortWithPartialInfo3()');
     let numCmpCalls = 0;
 
     // 1. Set up memoization for inputCmp().
@@ -487,13 +487,15 @@ function sortWithPartialInfo3(inputArr, inputCmp, ctx) {
 
     while (roots.length > 0) {
 
-        console.log(`Start of loop: roots has length ${roots.length}`);
+        if (logLevel >= 2) {
+            console.log(`Start of loop: roots has length ${roots.length}`);
 
-        // Print out the full forest.
-        console.log('Forest:');
-        console.log('_'.repeat(30));
-        printForest(roots, after);
-        console.log('_'.repeat(30));
+            // Print out the full forest.
+            console.log('Forest:');
+            console.log('_'.repeat(30));
+            printForest(roots, after);
+            console.log('_'.repeat(30));
+        }
 
         let minSoFarIdx = 0;
         let minSoFar    = roots[minSoFarIdx];
@@ -518,7 +520,7 @@ function sortWithPartialInfo3(inputArr, inputCmp, ctx) {
             }
         }
 
-        console.log(`Pushing ${minSoFar} onto sorted`);
+        if (logLevel >= 2) console.log(`Pushing ${minSoFar} onto sorted`);
         sorted.push(minSoFar);
         roots.splice(roots.indexOf(minSoFar), 1);
         after[minSoFar]?.forEach(newRoot => {
@@ -530,8 +532,10 @@ function sortWithPartialInfo3(inputArr, inputCmp, ctx) {
     // ______________________________________________________________________
 
     // DEBUG1
-    console.log(`numCmpCalls = ${numCmpCalls}`);
-    console.log('End sortWithPartialInfo3()');
+    if (logLevel >= 1) {
+        console.log(`numCmpCalls = ${numCmpCalls}`);
+        console.log('End sortWithPartialInfo3()');
+    }
 
     return sorted.map(i => inputArr[i]);
 }
@@ -561,7 +565,7 @@ function test1() {
     function cmp(x, y) {
         return (x < y) ? '<' : (x > y ? '>' : '=');
     }
-    let result = sortWithPartialInfo2(arr, cmp);
+    let result = sortWithPartialInfo3(arr, cmp);
     console.log('result:');
     console.log(result);
     check(result[0] === 0 && result[1] === 1);
@@ -573,7 +577,7 @@ function test2() {
     function cmp(x, y) {
         return (x < y) ? '<' : (x > y ? '>' : '=');
     }
-    let result = sortWithPartialInfo2(arr, cmp);
+    let result = sortWithPartialInfo3(arr, cmp);
     console.log('result:');
     console.log(result);
     check(result.every((x, i) => (x === i)));
@@ -594,7 +598,7 @@ function testWithWeirdCmp(arr) {
         if (x === 0 || y === 0) return usualCmp(x, y);
         return null;
     }
-    let result = sortWithPartialInfo2(arr, cmp);
+    let result = sortWithPartialInfo3(arr, cmp);
     console.log('result:');
     console.log(result);
 }
@@ -639,7 +643,7 @@ function test5() {
         }
         return null;
     }
-    let result = sortWithPartialInfo2(arr, cmp);
+    let result = sortWithPartialInfo3(arr, cmp);
     console.log('result:');
     console.log(result);
 }
