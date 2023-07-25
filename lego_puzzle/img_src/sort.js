@@ -300,7 +300,7 @@ function push(elt, prop, newItem) {
     elt[prop].push(newItem);
 }
 
-let logLevel = 1;
+let logLevel = 2;
 
 function sortWithPartialInfo2(inputArr, inputCmp, ctx) {
 
@@ -421,15 +421,37 @@ function sortWithPartialInfo2(inputArr, inputCmp, ctx) {
     return sorted.map(i => inputArr[i]);
 }
 
+function makeSet(arr) {
+    let set = {};
+    arr.forEach(elt => {set[elt] = true;});
+    return set;
+}
+
+// This is a function that returns a sorted version of inputArr based on the
+// partial comparison information from inputCmp().
+// The values in `opts` are only intended for internal use, but I'll describe
+// them here as well.
+// If opts.arr exists, that input is used alone instead of inputArr.
+// There is a global forest kept by using these values:
+//   opts.after   opts.before   opts.roots
 // TODO: Rename appropriately.
 function sortV3(inputArr, inputCmp, opts) {
 
-    // Receive the pass-through arguments in `opts`.
     if (opts === undefined) opts = {};
+    if (logLevel >= 1) console.log('Start sortWithPartialInfo3()');
+    let numCmpCalls = opts.numCmpCalls || 0; 
+
+    // Receive the pass-through arguments in `opts`.
     let arr    = opts.arr || inputArr.map((e, i) => i);
     let cache  = opts.cache || {};
-    opts.arr   = arr;
-    opts.cache = cache;
+    let after  = opts.after  || {};
+    let before = opts.before || {};
+    let roots  = opts.roots  || structuredClone(arr);
+    Object.assign(opts, {arr, cache, numCmpCalls, after, before, roots});
+
+    if (logLevel >= 2) {
+        console.log('Received arr:', arr);
+    }
 
     // Define the cmp wrapper function that uses the cache.
     function cmp(a, b) {
@@ -444,8 +466,8 @@ function sortV3(inputArr, inputCmp, opts) {
         if (a === b) {
             result = '=';
         } else {
-            numCmpCalls++;
-            result = inputCmp(inputArr[a], inputArr[b], ctx);
+            opts.numCmpCalls++;
+            result = inputCmp(inputArr[a], inputArr[b]);
         }
     
         cache[key] = result;
@@ -469,9 +491,64 @@ function sortV3(inputArr, inputCmp, opts) {
     let k = Math.floor(arr.length / 2);
     let side1 = sortV3(inputArr, inputCmp, optsWith({arr: arr.slice(0, k)}));
     let side2 = sortV3(inputArr, inputCmp, optsWith({arr: arr.slice(k)}));
+    let set1 = makeSet(side1);
+    let set2 = makeSet(side2);
 
-    // TODO HERE
+    let sorted = [];
 
+    while (roots.length > 0) {
+
+        if (logLevel >= 2) {
+            console.log(`Start of loop: roots has length ${roots.length}`);
+
+            // Print out the full forest.
+            console.log('Forest:');
+            console.log('_'.repeat(30));
+            printForest(roots, after);
+            console.log('_'.repeat(30));
+        }
+
+        let minSoFar    = (side1.length > 0) ? side1[0] : side2[0];
+        let minSoFarIdx = roots.indexOf(minSoFar);  // XXX slow point
+        let minSet      = (side1.length > 0) ? set1 : set2;
+
+        for (let i = 0; i < roots.length; i++) {
+            let root = roots[i];
+            if (root === minSoFar) continue;
+            if (root in minSet) continue;
+            let c = cmp(minSoFar, root);
+            if (c === '<') {
+                push(after, minSoFar, root);
+                before[root] = minSoFar;
+                roots.splice(i, 1);
+                if (i < minSoFarIdx) minSoFarIdx--;
+                i--;
+            } else if (c === '>') {
+                push(after, root, minSoFar);
+                before[minSoFar] = root;
+                roots.splice(minSoFarIdx, 1);
+                minSoFar = root;
+                minSoFarIdx = (i > minSoFarIdx) ? i - 1 : i;
+                minSet = (minSoFar in set1) ? set1 : set2;
+                i = -1;
+            }
+        }
+
+        if (logLevel >= 2) console.log(`Pushing ${minSoFar} onto sorted`);
+        sorted.push(minSoFar);
+        roots.splice(roots.indexOf(minSoFar), 1);
+        after[minSoFar]?.forEach(newRoot => {
+            roots.push(newRoot)
+        });
+    }
+
+    if (logLevel >= 1) {
+        console.log(`numCmpCalls = ${numCmpCalls}`);
+        console.log('End sortWithPartialInfo3()');
+    }
+
+    // XXX
+    return sorted;
 }
 
 function sortWithPartialInfo3(inputArr, inputCmp, ctx) {
@@ -618,7 +695,7 @@ function test1() {
     function cmp(x, y) {
         return (x < y) ? '<' : (x > y ? '>' : '=');
     }
-    let result = sortWithPartialInfo3(arr, cmp);
+    let result = sortV3(arr, cmp);
     console.log('result:');
     console.log(result);
     check(result[0] === 0 && result[1] === 1);
@@ -630,7 +707,7 @@ function test2() {
     function cmp(x, y) {
         return (x < y) ? '<' : (x > y ? '>' : '=');
     }
-    let result = sortWithPartialInfo3(arr, cmp);
+    let result = sortV3(arr, cmp);
     console.log('result:');
     console.log(result);
     check(result.every((x, i) => (x === i)));
@@ -651,7 +728,7 @@ function testWithWeirdCmp(arr) {
         if (x === 0 || y === 0) return usualCmp(x, y);
         return null;
     }
-    let result = sortWithPartialInfo3(arr, cmp);
+    let result = sortV3(arr, cmp);
     console.log('result:');
     console.log(result);
 }
@@ -696,7 +773,7 @@ function test5() {
         }
         return null;
     }
-    let result = sortWithPartialInfo3(arr, cmp);
+    let result = sortV3(arr, cmp);
     console.log('result:');
     console.log(result);
 }
@@ -707,8 +784,8 @@ function test5() {
 
 if (true) {
     // XXX
-    allTests = [test1, test2, test3, test4, test5];
-    // allTests = [test4];
+    // allTests = [test1, test2, test3, test4, test5];
+    allTests = [test1];
     allTests.forEach(testFn => {
         activeTest = testFn;
         console.log('\n' + '_'.repeat(80));
