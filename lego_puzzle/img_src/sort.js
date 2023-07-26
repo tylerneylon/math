@@ -300,7 +300,7 @@ function push(elt, prop, newItem) {
     elt[prop].push(newItem);
 }
 
-let logLevel = 2;
+let logLevel = 3;
 
 function sortWithPartialInfo2(inputArr, inputCmp, ctx) {
 
@@ -438,7 +438,7 @@ function makeSet(arr) {
 function sortV3(inputArr, inputCmp, opts) {
 
     if (opts === undefined) opts = {};
-    if (logLevel >= 1) console.log('Start sortWithPartialInfo3()');
+    if (logLevel >= 1) console.log('Start sortV3()');
     let numCmpCalls = opts.numCmpCalls || 0; 
 
     // Receive the pass-through arguments in `opts`.
@@ -483,14 +483,20 @@ function sortV3(inputArr, inputCmp, opts) {
 
     // Define the base case.
     if (arr.length < 2) {
+        if (logLevel >= 1) {
+            console.log(`numCmpCalls = ${numCmpCalls}`);
+            console.log('End sortV3()');
+        }
         return arr;
     }
 
     // Implement the recursive case.
     let optsWith = x => Object.assign(opts, x);
     let k = Math.floor(arr.length / 2);
-    let side1 = sortV3(inputArr, inputCmp, optsWith({arr: arr.slice(0, k)}));
-    let side2 = sortV3(inputArr, inputCmp, optsWith({arr: arr.slice(k)}));
+    sortV3(inputArr, inputCmp, optsWith({arr: arr.slice(0, k)}));
+    let side1 = opts.arr;
+    sortV3(inputArr, inputCmp, optsWith({arr: arr.slice(k)}));
+    let side2 = opts.arr;
     let set1 = makeSet(side1);
     let set2 = makeSet(side2);
 
@@ -508,15 +514,22 @@ function sortV3(inputArr, inputCmp, opts) {
             console.log('_'.repeat(30));
         }
 
-        let minSoFar    = (side1.length > 0) ? side1[0] : side2[0];
-        let minSoFarIdx = roots.indexOf(minSoFar);  // XXX slow point
-        let minSet      = (side1.length > 0) ? set1 : set2;
+        let minSoFarIdx = 0;
+        let minSoFar    = roots[minSoFarIdx];
+        let minSet      = (minSoFar in set1) ? set1 : set2;
+
+        if (logLevel >= 3) {
+            console.log(`Trying out minSoFar:${minSoFar}; idx:${minSoFarIdx}`);
+        }
 
         for (let i = 0; i < roots.length; i++) {
             let root = roots[i];
             if (root === minSoFar) continue;
             if (root in minSet) continue;
             let c = cmp(minSoFar, root);
+            if (logLevel >= 3) {
+                console.log(`Found that ${minSoFar} ${c} ${root}`);
+            }
             if (c === '<') {
                 push(after, minSoFar, root);
                 before[root] = minSoFar;
@@ -544,11 +557,10 @@ function sortV3(inputArr, inputCmp, opts) {
 
     if (logLevel >= 1) {
         console.log(`numCmpCalls = ${numCmpCalls}`);
-        console.log('End sortWithPartialInfo3()');
+        console.log('End sortV3()');
     }
 
-    // XXX
-    return sorted;
+    return sorted.map(i => inputArr[i]);
 }
 
 function sortWithPartialInfo3(inputArr, inputCmp, ctx) {
@@ -785,7 +797,7 @@ function test5() {
 if (true) {
     // XXX
     // allTests = [test1, test2, test3, test4, test5];
-    allTests = [test1];
+    allTests = [test2];
     allTests.forEach(testFn => {
         activeTest = testFn;
         console.log('\n' + '_'.repeat(80));
