@@ -23,17 +23,19 @@
 // Debug functions
 
 let spaceChar = ' ';  // Alternative: &nbsp; for html.
+let indentPrefix = '|' + spaceChar.repeat(3);
 let prefix = '';
 
 function indent() {
-    prefix = prefix + spaceChar.repeat(4);
+    prefix = prefix + indentPrefix;
 }
 
 function dedent() {
-    prefix = prefix.substr(4 * spaceChar.length);
+    prefix = prefix.substr(indentPrefix.length);
 }
 
 function say(s) {
+    console.log(prefix + s);
 }
 
 // This returns an array of strings that can be printed as the given table.
@@ -131,7 +133,7 @@ function getTree(root, tree) {
 
 function printForest(roots, tree) {
     let cols = roots.map(root => getTree(root, tree));
-    console.log(getRowsFromColumns(cols, '  |  ').join('\n'));
+    say(getRowsFromColumns(cols, '  |  ').join('\n'));
 }
 
 
@@ -438,7 +440,10 @@ function makeSet(arr) {
 function sortV3(inputArr, inputCmp, opts) {
 
     if (opts === undefined) opts = {};
-    if (logLevel >= 1) console.log('Start sortV3()');
+    if (logLevel >= 1) {
+        say('Start sortV3()');
+        indent();
+    }
     let numCmpCalls = opts.numCmpCalls || 0; 
 
     // Receive the pass-through arguments in `opts`.
@@ -450,7 +455,7 @@ function sortV3(inputArr, inputCmp, opts) {
     Object.assign(opts, {arr, cache, numCmpCalls, after, before, roots});
 
     if (logLevel >= 2) {
-        console.log('Received arr:', arr);
+        say('Received arr: ' + arr);
     }
 
     // Define the cmp wrapper function that uses the cache.
@@ -484,8 +489,9 @@ function sortV3(inputArr, inputCmp, opts) {
     // Define the base case.
     if (arr.length < 2) {
         if (logLevel >= 1) {
-            console.log(`numCmpCalls = ${numCmpCalls}`);
-            console.log('End sortV3()');
+            say(`numCmpCalls = ${numCmpCalls}`);
+            dedent();
+            say('End sortV3()');
         }
         return arr;
     }
@@ -505,13 +511,13 @@ function sortV3(inputArr, inputCmp, opts) {
     while (roots.length > 0) {
 
         if (logLevel >= 2) {
-            console.log(`Start of loop: roots has length ${roots.length}`);
+            say(`Start of loop: roots has length ${roots.length}`);
 
             // Print out the full forest.
-            console.log('Forest:');
-            console.log('_'.repeat(30));
+            say('Forest:');
+            say('_'.repeat(30));
             printForest(roots, after);
-            console.log('_'.repeat(30));
+            say('_'.repeat(30));
         }
 
         let minSoFarIdx = 0;
@@ -519,7 +525,7 @@ function sortV3(inputArr, inputCmp, opts) {
         let minSet      = (minSoFar in set1) ? set1 : set2;
 
         if (logLevel >= 3) {
-            console.log(`Trying out minSoFar:${minSoFar}; idx:${minSoFarIdx}`);
+            say(`Trying out minSoFar:${minSoFar}; idx:${minSoFarIdx}`);
         }
 
         for (let i = 0; i < roots.length; i++) {
@@ -528,7 +534,7 @@ function sortV3(inputArr, inputCmp, opts) {
             if (root in minSet) continue;
             let c = cmp(minSoFar, root);
             if (logLevel >= 3) {
-                console.log(`Found that ${minSoFar} ${c} ${root}`);
+                say(`Found that ${minSoFar} ${c} ${root}`);
             }
             if (c === '<') {
                 push(after, minSoFar, root);
@@ -547,7 +553,7 @@ function sortV3(inputArr, inputCmp, opts) {
             }
         }
 
-        if (logLevel >= 2) console.log(`Pushing ${minSoFar} onto sorted`);
+        if (logLevel >= 2) say(`Pushing ${minSoFar} onto sorted`);
         sorted.push(minSoFar);
         roots.splice(roots.indexOf(minSoFar), 1);
         after[minSoFar]?.forEach(newRoot => {
@@ -556,8 +562,9 @@ function sortV3(inputArr, inputCmp, opts) {
     }
 
     if (logLevel >= 1) {
-        console.log(`numCmpCalls = ${numCmpCalls}`);
-        console.log('End sortV3()');
+        say(`numCmpCalls = ${numCmpCalls}`);
+        dedent();
+        say('End sortV3()');
     }
 
     return sorted.map(i => inputArr[i]);
