@@ -520,6 +520,12 @@ function sortV3(inputArr, inputCmp, opts) {
             say('_'.repeat(30));
         }
 
+        // I _could_ choose minSoFar to be the start of side1 or of side2, but I
+        // don't think this is the best approach because there's no particular
+        // reason to believe this choice will be faster than any other root, and
+        // it's more work to keep side1 and side2 updated so we can keep up that
+        // approach.
+
         let minSoFarIdx = 0;
         let minSoFar    = roots[minSoFarIdx];
         let minSet      = (minSoFar in set1) ? set1 : set2;
