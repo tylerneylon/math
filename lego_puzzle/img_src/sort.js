@@ -34,14 +34,15 @@ function dedent() {
     prefix = prefix.substr(indentPrefix.length);
 }
 
-// XXX
-let sayNum = 1;
+let doUseNumPrefix = true;
+let numPrefix = 1;
 
 function say(arr) {
     if (!Array.isArray(arr)) arr = [arr];
     arr.forEach(str => {
-        console.log(`${sayNum}: ` + prefix + str);
-        sayNum++;
+        let nPre = doUseNumPrefix ? String(numPrefix).padStart(4) + ': ' : '';
+        console.log(nPre + prefix + str);
+        numPrefix++;
     });
 }
 
@@ -105,7 +106,7 @@ function showTableWithColumns(cols, topSep, midSep, printFn) {
 function depthFirstTraverse(root, tree, fn1, fn2, opts) {
     let {depth, childNum, nodeSet} = opts;
     if (depth === undefined) depth = 0;
-    console.log(`dFTraverse; depth:${depth}, childNum:${childNum}, nodeSet:${nodeSet}`);
+    // console.log(`dFTraverse; depth:${depth}, childNum:${childNum}, nodeSet:${nodeSet}`);
     fn1(root, depth, childNum);
     tree[root]?.forEach((node, i) => {
         if (nodeSet === undefined || !(node in nodeSet)) {
@@ -125,12 +126,12 @@ function getTree(root, tree, nodeSet) {
     let cols = [];
     let numRows = 0;
     // XXX and below within this fn
-    console.log('getTree()')
-    console.log('root:', root);
-    console.log('tree:', tree);
-    console.log('nodeSet:', nodeSet);
+    // console.log('getTree()')
+    // console.log('root:', root);
+    // console.log('tree:', tree);
+    //console.log('nodeSet:', nodeSet);
     depthFirstTraverse(root, tree, (node, depth, childNum) => {
-        console.log(`called: fn1(${node}, ${depth}, ${childNum})`);
+        // console.log(`called: fn1(${node}, ${depth}, ${childNum})`);
         let prefix = '\\ ';
         if (childNum === undefined) prefix = '';
         if (childNum === 0) prefix = '- ';
@@ -141,10 +142,10 @@ function getTree(root, tree, nodeSet) {
         cols[depth].push(prefix + node);
         numRows = Math.max(numRows, cols[depth].length);
     }, (node, depth) => {
-        console.log(`called: fn2(${node}, ${depth})`);
+        // console.log(`called: fn2(${node}, ${depth})`);
         while (cols[depth].length < numRows) cols[depth].push('');
     }, {nodeSet});
-    console.log('end of getTree()');
+    // console.log('end of getTree()');
     // TODO: Modify showTable..() to accept an `opts` value instead.
     // showTableWithColumns(cols, ' ', ' ', console.log);
     return getRowsFromColumns(cols);
