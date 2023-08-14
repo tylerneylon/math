@@ -34,8 +34,15 @@ function dedent() {
     prefix = prefix.substr(indentPrefix.length);
 }
 
-function say(s) {
-    console.log(prefix + s);
+// XXX
+let sayNum = 1;
+
+function say(arr) {
+    if (!Array.isArray(arr)) arr = [arr];
+    arr.forEach(str => {
+        console.log(`${sayNum}: ` + prefix + str);
+        sayNum++;
+    });
 }
 
 // This returns an array of strings that can be printed as the given table.
@@ -95,27 +102,35 @@ function showTableWithColumns(cols, topSep, midSep, printFn) {
 // For the root, `childNum` is undefined.
 // Otherwise, `childNum` is the index of this node as a child of its parent.
 // fn1() is called before its children, fn2() after.
-function depthFirstTraverse(root, tree, fn1, fn2, depth, childNum) {
+function depthFirstTraverse(root, tree, fn1, fn2, opts) {
+    let {depth, childNum, nodeSet} = opts;
     if (depth === undefined) depth = 0;
+    console.log(`dFTraverse; depth:${depth}, childNum:${childNum}, nodeSet:${nodeSet}`);
     fn1(root, depth, childNum);
     tree[root]?.forEach((node, i) => {
-        depthFirstTraverse(node, tree, fn1, fn2, depth + 1, i)
+        if (nodeSet === undefined || !(node in nodeSet)) {
+            depthFirstTraverse(node, tree, fn1, fn2,
+                {depth: depth + 1, childNum: i, nodeSet});
+        }
     });
     fn2(root, depth, childNum);
 }
-// TODO HERE: Figure out how I can restrict to a subset of nodes.
-//            Wish I had keyword args like Python right here.
 
 // Get a tree like this as a list of strings (no newlines):
-// 1 - 2 -  3 -  4
-//            \  5
-//            \  6
-//       \  7 -  8
-//   \ 9 - 10 - 11
+// 1 - 2 - 3
+//       \ 100 - 4
+//   \ 5
+//   \ 6 - 7   - 8
 function getTree(root, tree, nodeSet) {
     let cols = [];
     let numRows = 0;
+    // XXX and below within this fn
+    console.log('getTree()')
+    console.log('root:', root);
+    console.log('tree:', tree);
+    console.log('nodeSet:', nodeSet);
     depthFirstTraverse(root, tree, (node, depth, childNum) => {
+        console.log(`called: fn1(${node}, ${depth}, ${childNum})`);
         let prefix = '\\ ';
         if (childNum === undefined) prefix = '';
         if (childNum === 0) prefix = '- ';
@@ -126,9 +141,10 @@ function getTree(root, tree, nodeSet) {
         cols[depth].push(prefix + node);
         numRows = Math.max(numRows, cols[depth].length);
     }, (node, depth) => {
+        console.log(`called: fn2(${node}, ${depth})`);
         while (cols[depth].length < numRows) cols[depth].push('');
-    },
-    nodeSet);
+    }, {nodeSet});
+    console.log('end of getTree()');
     // TODO: Modify showTable..() to accept an `opts` value instead.
     // showTableWithColumns(cols, ' ', ' ', console.log);
     return getRowsFromColumns(cols);
@@ -136,7 +152,7 @@ function getTree(root, tree, nodeSet) {
 
 function printForest(roots, tree, nodeSet) {
     let cols = roots.map(root => getTree(root, tree, nodeSet));
-    say(getRowsFromColumns(cols, '  |  ').join('\n'));
+    say(getRowsFromColumns(cols, '  |  '));
 }
 
 
@@ -519,13 +535,20 @@ function sortV3(inputArr, inputCmp, opts) {
 
     while (arrRoots.length > 0) {
 
+        if (logLevel >= 3) {
+            say('roots forest:');
+            say('_'.repeat(30));
+            printForest(roots, after);
+            say('_'.repeat(30));
+        }
+
         if (logLevel >= 2) {
             say(`Start of loop: roots has length ${roots.length}`);
 
             // Print out the full forest.
             say('arrRoots Forest:');
             say('_'.repeat(30));
-            printForest(arrRoots, after);
+            printForest(arrRoots, after, arrSet);
             say('_'.repeat(30));
         }
 
@@ -572,10 +595,10 @@ function sortV3(inputArr, inputCmp, opts) {
 
         if (logLevel >= 2) say(`Pushing ${minSoFar} onto sorted`);
         sorted.push(minSoFar);
-        roots.splice(roots.indexOf(minSoFar), 1);  // XXX
+        // roots.splice(roots.indexOf(minSoFar), 1);  // XXX
         arrRoots.splice(arrRoots.indexOf(minSoFar), 1);  // XXX
         after[minSoFar]?.forEach(newRoot => {
-            roots.push(newRoot);
+            // roots.push(newRoot);
             if (newRoot in arrSet) arrRoots.push(newRoot);
         });
     }
