@@ -109,7 +109,7 @@ function depthFirstTraverse(root, tree, fn1, fn2, opts) {
     // console.log(`dFTraverse; depth:${depth}, childNum:${childNum}, nodeSet:${nodeSet}`);
     fn1(root, depth, childNum);
     tree[root]?.forEach((node, i) => {
-        if (nodeSet === undefined || !(node in nodeSet)) {
+        if (nodeSet === undefined || (node in nodeSet)) {
             depthFirstTraverse(node, tree, fn1, fn2,
                 {depth: depth + 1, childNum: i, nodeSet});
         }
@@ -544,7 +544,7 @@ function sortV3(inputArr, inputCmp, opts) {
         }
 
         if (logLevel >= 2) {
-            say(`Start of loop: roots has length ${roots.length}`);
+            say(`Start of loop: arrRoots has length ${arrRoots.length}`);
 
             // Print out the full forest.
             say('arrRoots Forest:');
