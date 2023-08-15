@@ -544,7 +544,10 @@ function sortV3(inputArr, inputCmp, opts) {
         }
 
         if (logLevel >= 2) {
-            say(`Start of loop: arrRoots has length ${arrRoots.length}`);
+            say(
+                `Start of loop: arrRoots has length ${arrRoots.length}: ` + 
+                `[${arrRoots.join(' ')}]`
+            );
 
             // Print out the full forest.
             say('arrRoots Forest:');
@@ -575,16 +578,25 @@ function sortV3(inputArr, inputCmp, opts) {
             if (logLevel >= 3) {
                 say(`Found that ${minSoFar} ${c} ${root}`);
             }
+
+            // XXX Move this definition.
+            function makeXBeforeY(x, y) {
+                push(after, x, y);
+                if (y in before) {
+                    let oldPeers = after[before[y]];
+                    oldPeers.splice(oldPeers.indexOf(y), 1);
+                }
+                before[y] = x;
+            }
+
             if (c === '<') {
-                push(after, minSoFar, root);
-                before[root] = minSoFar;
+                makeXBeforeY(minSoFar, root);
                 arrRoots.splice(i, 1);
                 roots.splice(roots.indexOf(root), 1);  // XXX speed this up
                 if (i < minSoFarIdx) minSoFarIdx--;
                 i--;
             } else if (c === '>') {
-                push(after, root, minSoFar);
-                before[minSoFar] = root;
+                makeXBeforeY(root, minSoFar);
                 arrRoots.splice(minSoFarIdx, 1);
                 roots.splice(roots.indexOf(minSoFar), 1);  // XXX speed this up
                 minSoFar = root;
@@ -847,7 +859,7 @@ function test5() {
 if (true) {
     // XXX
     // allTests = [test1, test2, test3, test4, test5];
-    allTests = [test2];
+    allTests = [test5];
     allTests.forEach(testFn => {
         activeTest = testFn;
         console.log('\n' + '_'.repeat(80));
