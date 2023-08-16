@@ -757,6 +757,13 @@ function check(bool) {
     }
 }
 
+function checkArraysAreSame(arr1, arr2) {
+    check(arr1.length === arr2.length);
+    for (let i = 0; i < arr1.length; i++) {
+        check(arr1[i] === arr2[i]);
+    }
+}
+
 // This is convenient to have around.
 function usualCmp(x, y) {
     if (x === y) return '=';
@@ -790,7 +797,7 @@ function test2() {
 
 // This is a general test function meant to be called multiple times
 // with different integer-valued arrays.
-function testWithWeirdCmp(arr) {
+function testWithWeirdCmp(arr, goalArr) {
     // This cmp() maintains the usual order against 0, but
     // otherwise: * pos vs neg is null; and
     //            * x vs y (same-sign) returns |x| vs |y|
@@ -805,6 +812,7 @@ function testWithWeirdCmp(arr) {
     let result = sortV3(arr, cmp);
     console.log('result:');
     console.log(result);
+    checkArraysAreSame(result, goalArr);
 }
 
 // The next two tests check performance on a partial comparison function with a
@@ -815,7 +823,8 @@ function test3() {
     let k = 1;
     let n = 2 * k + 1;
     let arr = Array.from({length: n}, (_, i) => i - k);
-    testWithWeirdCmp(arr);
+    let goalArr = [-1, 0, 1];
+    testWithWeirdCmp(arr, goalArr);
 }
 
 function test4() {
@@ -859,12 +868,14 @@ function test5() {
 if (true) {
     // XXX
     // allTests = [test1, test2, test3, test4, test5];
-    allTests = [test5];
+    allTests = [test3];
     allTests.forEach(testFn => {
         activeTest = testFn;
         console.log('\n' + '_'.repeat(80));
         console.log(`Running ${testFn.name}`);
         testFn();
+        // We only get this far if the test passed.
+        console.log('Passed!');
     });
     console.log('Done running all tests!');
 }
