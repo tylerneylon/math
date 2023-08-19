@@ -587,18 +587,24 @@ function sortV3(inputArr, inputCmp, opts) {
                     oldPeers.splice(oldPeers.indexOf(y), 1);
                 }
                 before[y] = x;
+                let rootIdx = roots.indexOf(y);
+                if (rootIdx !== -1) roots.splice(rootIdx, 1);
             }
 
             if (c === '<') {
+                // XXX
+                // say('A roots = ' + (roots.join(' ')));
+                // say(`Dropping the root ${root}`);
                 makeXBeforeY(minSoFar, root);
                 arrRoots.splice(i, 1);
-                roots.splice(roots.indexOf(root), 1);  // XXX speed this up
+                // roots.splice(roots.indexOf(root), 1);  // XXX speed this up
+                // say('B roots = ' + (roots.join(' ')));
                 if (i < minSoFarIdx) minSoFarIdx--;
                 i--;
             } else if (c === '>') {
                 makeXBeforeY(root, minSoFar);
                 arrRoots.splice(minSoFarIdx, 1);
-                roots.splice(roots.indexOf(minSoFar), 1);  // XXX speed this up
+                // roots.splice(roots.indexOf(minSoFar), 1);  // XXX speed this up
                 minSoFar = root;
                 minSoFarIdx = (i > minSoFarIdx) ? i - 1 : i;
                 minSet = (minSoFar in set1) ? set1 : set2;
@@ -831,7 +837,8 @@ function test4() {
     let k = 4;
     let n = 2 * k + 1;
     let arr = Array.from({length: n}, (_, i) => i - k);
-    testWithWeirdCmp(arr);
+    let goalArr = [-1, -2, -3, -4, 0, 1, 2, 3, 4];
+    testWithWeirdCmp(arr, goalArr);
 }
 
 // Try a case with two distince bottlenecks. Specifically:
@@ -859,6 +866,8 @@ function test5() {
     let result = sortV3(arr, cmp);
     console.log('result:');
     console.log(result);
+    let goalArr = [1, 2, 3, -1, 4, 5, 6, -2, 7, 8, 9];
+    checkArraysAreSame(result, goalArr);
 }
 
 
@@ -868,7 +877,7 @@ function test5() {
 if (true) {
     // XXX
     // allTests = [test1, test2, test3, test4, test5];
-    allTests = [test3];
+    allTests = [test5];
     allTests.forEach(testFn => {
         activeTest = testFn;
         console.log('\n' + '_'.repeat(80));
