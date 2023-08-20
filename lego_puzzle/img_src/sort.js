@@ -100,6 +100,9 @@ function showTableWithColumns(cols, topSep, midSep, printFn) {
     }
 }
 
+// TODO: Consider adding support for 'break' to be returned by fn1().
+//       In order to support that, I think I'd need to replace the .forEach().
+
 // Run fn1() and fn2() on each node of the given tree in depth-first order.
 // Each call is of the form fn(node, depth, childNum).
 // For the root, `childNum` is undefined.
@@ -331,7 +334,7 @@ function push(elt, prop, newItem) {
     elt[prop].push(newItem);
 }
 
-let logLevel = 3;
+let logLevel = 1;
 
 function sortWithPartialInfo2(inputArr, inputCmp, ctx) {
 
@@ -532,7 +535,6 @@ function sortV3(inputArr, inputCmp, opts) {
     let side1 = arr.slice(0, k);
     sortV3(inputArr, inputCmp, optsWith({arr: arr.slice(0, k)}));
     let side2 = arr.slice(k);
-    sortV3(inputArr, inputCmp, optsWith({arr: arr.slice(k)}));
     sortV3(inputArr, inputCmp, optsWith({arr: arr.slice(k)}));
     let set1 = makeSet(side1);
     let set2 = makeSet(side2);
