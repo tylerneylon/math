@@ -569,13 +569,16 @@ function sortV3(inputArr, inputCmp, opts) {
             say('_'.repeat(30));
         }
 
-        // I _could_ choose minSoFar to be the start of side1 or of side2, but I
-        // don't think this is the best approach because there's no particular
-        // reason to believe this choice will be faster than any other root, and
-        // it's more work to keep side1 and side2 updated so we can keep up that
-        // approach.
+        // Choose minSoFar from the side with more (unsorted) elements in it.
+        // This is a heuristic to help reduce the number of comparison calls.
 
-        let minSoFarIdx = 0;
+        let len1 = Object.keys(set1).length;
+        let len2 = Object.keys(set2).length;
+        let largerSet = (len1 > len2) ? set1 : set2;
+        let largerSideRootIndexes = Object.keys(arrRoots).filter(
+            x => arrRoots[x] in largerSet
+        );
+        let minSoFarIdx = largerSideRootIndexes[0] ?? 0;
         let minSoFar    = arrRoots[minSoFarIdx];
         let minSet      = (minSoFar in set1) ? set1 : set2;
 
@@ -638,7 +641,9 @@ function sortV3(inputArr, inputCmp, opts) {
                     let c = cmp(minSoFar, node);
                     if (c === '<') return 'skip';
                     if (c === '>') {
-                        say(`Found a sub-node (${inputArr[node]}) < minSoFar`);
+                        if (logLevel >= 2) {
+                            say(`Found a sub-node (${inputArr[node]}) < minSoFar`);
+                        }
                         makeXBeforeY(node, minSoFar);
                         arrRoots.splice(minSoFarIdx, 1);
                         minSoFar = root;
@@ -648,7 +653,7 @@ function sortV3(inputArr, inputCmp, opts) {
                         rootIsSmaller = true;
                     }
                 });
-                if (!rootIsSmaller) {
+                if (!rootIsSmaller && logLevel >= 2) {
                     say(`No sub-nodes (of ${inputArr[root]}) were smaller`);
                 }
             }
@@ -656,6 +661,7 @@ function sortV3(inputArr, inputCmp, opts) {
 
         if (logLevel >= 2) say(`Pushing ${inputArr[minSoFar]} onto sorted`);
         sorted.push(minSoFar);
+        delete minSet[minSoFar];
         // roots.splice(roots.indexOf(minSoFar), 1);  // XXX
         arrRoots.splice(arrRoots.indexOf(minSoFar), 1);  // XXX
         after[minSoFar]?.forEach(newRoot => {
