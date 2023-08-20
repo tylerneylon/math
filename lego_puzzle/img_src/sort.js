@@ -65,7 +65,9 @@ function getRowsFromColumns(cols, colSep) {
 
     let rows = [];
     for (let i = 0; i < numRows; i++) {
-        rows.push(cols.map((col, j) => col[i].padEnd(widths[j])).join(colSep));
+        rows.push(
+            cols.map((col, j) => col[i].padStart(widths[j])).join(colSep)
+        );
     }
     return rows;
 }
@@ -103,18 +105,20 @@ function showTableWithColumns(cols, topSep, midSep, printFn) {
 // For the root, `childNum` is undefined.
 // Otherwise, `childNum` is the index of this node as a child of its parent.
 // fn1() is called before its children, fn2() after.
+// If fn1(node) returns 'skip', then all the children of `node` are skipped.
 function depthFirstTraverse(root, tree, fn1, fn2, opts) {
-    let {depth, childNum, nodeSet} = opts;
+    let {depth, childNum, nodeSet} = opts || {};
     if (depth === undefined) depth = 0;
     // console.log(`dFTraverse; depth:${depth}, childNum:${childNum}, nodeSet:${nodeSet}`);
-    fn1(root, depth, childNum);
-    tree[root]?.forEach((node, i) => {
-        if (nodeSet === undefined || (node in nodeSet)) {
-            depthFirstTraverse(node, tree, fn1, fn2,
-                {depth: depth + 1, childNum: i, nodeSet});
-        }
-    });
-    fn2(root, depth, childNum);
+    if (fn1(root, depth, childNum) !== 'skip') {
+        tree[root]?.forEach((node, i) => {
+            if (nodeSet === undefined || (node in nodeSet)) {
+                depthFirstTraverse(node, tree, fn1, fn2,
+                    {depth: depth + 1, childNum: i, nodeSet});
+            }
+        });
+    }
+    if (fn2) fn2(root, depth, childNum);
 }
 
 // Get a tree like this as a list of strings (no newlines):
@@ -132,18 +136,23 @@ function getTree(root, tree, nodeSet) {
     //console.log('nodeSet:', nodeSet);
     depthFirstTraverse(root, tree, (node, depth, childNum) => {
         // console.log(`called: fn1(${node}, ${depth}, ${childNum})`);
-        let prefix = '\\ ';
-        if (childNum === undefined) prefix = '';
-        if (childNum === 0) prefix = '- ';
-        if (cols.length <= depth) cols.push([]);
-        while (depth > 0 && cols[depth].length < cols[depth - 1].length - 1) {
-            cols[depth].push('');
+        let d = 2 * depth;
+        while(cols.length <= d) cols.push([]);
+        while (d - 1 > 0 && cols[d - 1].length < cols[d - 2].length - 1) {
+            cols[d - 1].push('');
         }
-        cols[depth].push(prefix + node);
-        numRows = Math.max(numRows, cols[depth].length);
+        if (childNum === 0) cols[d - 1].push('-');
+        if (childNum > 0)   cols[d - 1].push('\\');
+        while (d > 0 && cols[d].length < cols[d - 1].length - 1)  {
+            cols[d].push('');
+        }
+        cols[d].push(tree.inputArr[node]);
+        numRows = Math.max(numRows, cols[d].length);
     }, (node, depth) => {
         // console.log(`called: fn2(${node}, ${depth})`);
-        while (cols[depth].length < numRows) cols[depth].push('');
+        for (let i = 2 * depth - 1; i <= 2 * depth; i++) {
+            while (i > 0 && cols[i].length < numRows) cols[i].push('');
+        }
     }, {nodeSet});
     // console.log('end of getTree()');
     // TODO: Modify showTable..() to accept an `opts` value instead.
@@ -460,22 +469,23 @@ function makeSet(arr) {
 function sortV3(inputArr, inputCmp, opts) {
 
     if (opts === undefined) opts = {};
-    if (logLevel >= 1) {
-        say('Start sortV3()');
-        indent();
-    }
-    let numCmpCalls = opts.numCmpCalls || 0; 
 
     // Receive the pass-through arguments in `opts`.
     let arr    = opts.arr || inputArr.map((e, i) => i);
     let cache  = opts.cache || {};
-    let after  = opts.after  || {};
+    let after  = opts.after  || {inputArr};
     let before = opts.before || {};
     let roots  = opts.roots  || structuredClone(arr);
-    Object.assign(opts, {arr, cache, numCmpCalls, after, before, roots});
+    let numCmpCalls = opts.numCmpCalls || 0; 
+    Object.assign(opts, {arr, cache, after, before, roots, numCmpCalls});
 
-    if (logLevel >= 2) {
-        say('Received arr: ' + arr);
+    function strOfArr(arr) {
+        return arr.map(x => inputArr[x]).join(' ');
+    }
+
+    if (logLevel >= 1) {
+        say('Start sortV3() with arr: ' + strOfArr(arr));
+        indent();
     }
 
     // Define the cmp wrapper function that uses the cache.
@@ -509,9 +519,9 @@ function sortV3(inputArr, inputCmp, opts) {
     // Define the base case.
     if (arr.length < 2) {
         if (logLevel >= 1) {
-            say(`numCmpCalls = ${numCmpCalls}`);
+            say(`numCmpCalls = ${opts.numCmpCalls}`);
             dedent();
-            say('End sortV3(); returning ' + arr.join(' '));
+            say('End sortV3(); returning ' + strOfArr(arr));
         }
         return arr;
     }
@@ -519,10 +529,11 @@ function sortV3(inputArr, inputCmp, opts) {
     // Implement the recursive case.
     let optsWith = x => Object.assign(opts, x);
     let k = Math.floor(arr.length / 2);
+    let side1 = arr.slice(0, k);
     sortV3(inputArr, inputCmp, optsWith({arr: arr.slice(0, k)}));
-    let side1 = opts.arr;
+    let side2 = arr.slice(k);
     sortV3(inputArr, inputCmp, optsWith({arr: arr.slice(k)}));
-    let side2 = opts.arr;
+    sortV3(inputArr, inputCmp, optsWith({arr: arr.slice(k)}));
     let set1 = makeSet(side1);
     let set2 = makeSet(side2);
     let arrSet = makeSet(arr);  // TODO: Needed?
@@ -546,7 +557,7 @@ function sortV3(inputArr, inputCmp, opts) {
         if (logLevel >= 2) {
             say(
                 `Start of loop: arrRoots has length ${arrRoots.length}: ` + 
-                `[${arrRoots.join(' ')}]`
+                `[${arrRoots.map(x => inputArr[x]).join(' ')}]`
             );
 
             // Print out the full forest.
@@ -567,16 +578,23 @@ function sortV3(inputArr, inputCmp, opts) {
         let minSet      = (minSoFar in set1) ? set1 : set2;
 
         if (logLevel >= 3) {
-            say(`Trying out minSoFar:${minSoFar}; idx:${minSoFarIdx}`);
+            say(`Trying out minSoFar:${inputArr[minSoFar]}; idx:${minSoFarIdx}`);
         }
 
         for (let i = 0; i < arrRoots.length; i++) {
             let root = arrRoots[i];
             if (root === minSoFar) continue;
-            if (root in minSet) continue;
+            if (root in minSet) {
+                if (logLevel >= 3) {
+                    say(`Skipping cmp w ${inputArr[root]} since it is in the minSet: ` +
+                        strOfArr(Object.keys(minSet))
+                    );
+                }
+                continue;
+            }
             let c = cmp(minSoFar, root);
             if (logLevel >= 3) {
-                say(`Found that ${minSoFar} ${c} ${root}`);
+                say(`Found that ${inputArr[minSoFar]} ${c} ${inputArr[root]}`);
             }
 
             // XXX Move this definition.
@@ -609,10 +627,32 @@ function sortV3(inputArr, inputCmp, opts) {
                 minSoFarIdx = (i > minSoFarIdx) ? i - 1 : i;
                 minSet = (minSoFar in set1) ? set1 : set2;
                 i = -1;
+            } else {
+                console.assert(c === null);
+                // Walk the tree in case x < minSoFar for some x in the tree.
+                let rootIsSmaller = false;
+                depthFirstTraverse(root, after, (node) => {
+                    if (rootIsSmaller) return 'skip';
+                    let c = cmp(minSoFar, node);
+                    if (c === '<') return 'skip';
+                    if (c === '>') {
+                        say(`Found a sub-node (${inputArr[node]}) < minSoFar`);
+                        makeXBeforeY(node, minSoFar);
+                        arrRoots.splice(minSoFarIdx, 1);
+                        minSoFar = root;
+                        minSoFarIdx = (i > minSoFarIdx) ? i - 1 : 1;
+                        minSet = (minSoFar in set1) ? set1 : set2;
+                        i = -1;
+                        rootIsSmaller = true;
+                    }
+                });
+                if (!rootIsSmaller) {
+                    say(`No sub-nodes (of ${inputArr[root]}) were smaller`);
+                }
             }
         }
 
-        if (logLevel >= 2) say(`Pushing ${minSoFar} onto sorted`);
+        if (logLevel >= 2) say(`Pushing ${inputArr[minSoFar]} onto sorted`);
         sorted.push(minSoFar);
         // roots.splice(roots.indexOf(minSoFar), 1);  // XXX
         arrRoots.splice(arrRoots.indexOf(minSoFar), 1);  // XXX
@@ -623,9 +663,9 @@ function sortV3(inputArr, inputCmp, opts) {
     }
 
     if (logLevel >= 1) {
-        say(`numCmpCalls = ${numCmpCalls}`);
+        say(`numCmpCalls = ${opts.numCmpCalls}`);
         dedent();
-        say('End sortV3(); returning ' + sorted.join(' '));
+        say('End sortV3(); returning ' + strOfArr(sorted));
     }
 
     return sorted.map(i => inputArr[i]);
