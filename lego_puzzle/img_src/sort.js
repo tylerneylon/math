@@ -334,7 +334,7 @@ function push(elt, prop, newItem) {
     elt[prop].push(newItem);
 }
 
-let logLevel = 1;
+let logLevel = 3;
 
 function sortWithPartialInfo2(inputArr, inputCmp, ctx) {
 
@@ -818,6 +818,32 @@ function checkArraysAreSame(arr1, arr2) {
     }
 }
 
+function checkArrayRespectsKnownOrders(arr, knownOrders) {
+    knownOrders.forEach(order => {
+        for (let i = 0; i < order.length - 1; i++) {
+            let elt1 = order[i];
+            let elt2 = order[i + 1];
+            let i1   = arr.indexOf(elt1);
+            let i2   = arr.indexOf(elt2);
+            check(i1 >= 0 && i2 >= 0 && i1 < i2);
+        }
+    });
+}
+
+// TODO: needed?
+function checkArrayIsInAcceptableArrays(arr, acceptables) {
+    let didFindMatch = false;
+    acceptables.forEach(goalArr => {
+        if (goalArr.filter((elt, i) => elt === arr[i]).length === arr.length) {
+            didFindMatch = true;
+        }
+    });
+    if (!didFindMatch) {
+        console.log(`${activeTest.name} failed`);
+        process.exit(1);
+    }
+}
+
 // This is convenient to have around.
 function usualCmp(x, y) {
     if (x === y) return '=';
@@ -918,6 +944,26 @@ function test5() {
     checkArraysAreSame(result, goalArr);
 }
 
+// This case has two components.
+// Numbers are in the usual order, but negatives and positives always have
+// null comparisons, and I'll exclude 0.
+function test6() {
+    let arr = [-4, -3, -2, -1, 1, 2, 3, 4];
+    function cmp(x, y) {
+        if (Math.sign(x) !== Math.sign(y)) return null;
+        if (x < y) return '<';
+        if (x > y) return '>';
+        return '=';
+    }
+    let result = sortV3(arr, cmp);
+    console.log('result:');
+    console.log(result);
+    checkArrayRespectsKnownOrders(
+        result,
+        [[-4, -3, -2, -1], [1, 2, 3, 4]]
+    );
+}
+
 
 // ______________________________________________________________________
 // Run the tests
@@ -925,7 +971,7 @@ function test5() {
 if (true) {
     // XXX
     // allTests = [test1, test2, test3, test4, test5];
-    allTests = [test5];
+    allTests = [test6];
     allTests.forEach(testFn => {
         activeTest = testFn;
         console.log('\n' + '_'.repeat(80));
