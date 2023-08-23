@@ -334,7 +334,7 @@ function push(elt, prop, newItem) {
     elt[prop].push(newItem);
 }
 
-let logLevel = 3;
+let logLevel = 0;
 
 function sortWithPartialInfo2(inputArr, inputCmp, ctx) {
 
@@ -964,14 +964,39 @@ function test6() {
     );
 }
 
+// The purpose of this test is to work with a connected but ambiguous order.
+// This order is 1 - 2 - 3 - (4 - 5 - 6) (7 - 8 - 9),
+// where 3 is < everthing to the right of it, but the chains
+// (4 - 5 - 6) and (7 - 8 - 9) are independent.
+function test7() {
+    let arr = Array.from({length: 9}, (_, i) => i + 1);
+    function cmp(x, y) {
+        let xBlock = Math.floor((x - 1) / 3);
+        let yBlock = Math.floor((y - 1) / 3);
+        if (xBlock === yBlock || xBlock === 0 || yBlock === 0) {
+            if (x < y) return '<';
+            if (x > y) return '>';
+            return '=';
+        }
+        return null;
+    }
+    let result = sortV3(arr, cmp);
+    console.log('result:');
+    console.log(result);
+    checkArrayRespectsKnownOrders(
+        result,
+        [[1, 2, 3], [3, 4, 5, 6], [3, 7, 8, 9]]
+    );
+}
+
 
 // ______________________________________________________________________
 // Run the tests
 
 if (true) {
     // XXX
-    // allTests = [test1, test2, test3, test4, test5];
-    allTests = [test6];
+    allTests = [test1, test2, test3, test4, test5, test6, test7];
+    // allTests = [test7];
     allTests.forEach(testFn => {
         activeTest = testFn;
         console.log('\n' + '_'.repeat(80));
