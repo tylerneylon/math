@@ -90,6 +90,7 @@ function depthFirstTraverse(root, tree, fn1, fn2, opts) {
     if (reply === 'break') return reply;
     if (reply !== 'skip' && tree[root] !== undefined) {
         for (const [i, node] of tree[root].entries()) {
+            if (nodeSet && !(node in nodeSet)) continue;
             reply = depthFirstTraverse(node, tree, fn1, fn2,
                 {depth: depth + 1, childNum: i, nodeSet});
             if (reply === 'break') return reply;
