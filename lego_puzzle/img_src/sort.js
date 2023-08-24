@@ -72,54 +72,28 @@ function getRowsFromColumns(cols, colSep) {
     return rows;
 }
 
-// TODO: Either drop this or combine with getRowsFromColumsn().
-function showTableWithColumns(cols, topSep, midSep, printFn) {
-
-    if (topSep === undefined) topSep = ' ';
-    if (midSep === undefined) midSep = ' ';
-    if (printFn === undefined) printFn = say;
-
-    // Convert each cell to a string as needed.
-    cols = cols.map(col => col.map(x => x + ''));
-
-    let numRows = Math.max(...cols.map(x => x.length));
-    cols.forEach(col => {
-        while (col.length < numRows) col.push('');
-    });
-
-    // Find the maximum width in each column.
-    let widths = cols.map(col => Math.max(...col.map(x => x.length)));
-    // say('widths: ' + widths.join(', ')); // XXX
-
-    let nonTopSep = ''.padEnd(topSep.length);
-    // say(`nonTopSet="${nonTopSep}"`);  // XXX
-    for (let i = 0; i < numRows; i++) {
-        let sep = (i === 0) ? topSep : nonTopSep;
-        let msg = cols.map((col, j) => col[i].padEnd(widths[j])).join(sep);
-        printFn(msg.replaceAll(' ', midSep));
-    }
-}
-
 // TODO: Consider adding support for 'break' to be returned by fn1().
 //       In order to support that, I think I'd need to replace the .forEach().
 
 // Run fn1() and fn2() on each node of the given tree in depth-first order.
 // Each call is of the form fn(node, depth, childNum).
-// For the root, `childNum` is undefined.
+// For the root, `childNum` is undefined; it's not a child.
 // Otherwise, `childNum` is the index of this node as a child of its parent.
 // fn1() is called before its children, fn2() after.
 // If fn1(node) returns 'skip', then all the children of `node` are skipped.
+// If fn1(node) returns 'break', neither fn1() nor fn2() is called again.
 function depthFirstTraverse(root, tree, fn1, fn2, opts) {
     let {depth, childNum, nodeSet} = opts || {};
     if (depth === undefined) depth = 0;
     // console.log(`dFTraverse; depth:${depth}, childNum:${childNum}, nodeSet:${nodeSet}`);
-    if (fn1(root, depth, childNum) !== 'skip') {
-        tree[root]?.forEach((node, i) => {
-            if (nodeSet === undefined || (node in nodeSet)) {
-                depthFirstTraverse(node, tree, fn1, fn2,
-                    {depth: depth + 1, childNum: i, nodeSet});
-            }
-        });
+    let reply = fn1(root, depth, childNum);
+    if (reply === 'break') return reply;
+    if (reply !== 'skip' && tree[root] !== undefined) {
+        for (const [i, node] of tree[root].entries()) {
+            reply = depthFirstTraverse(node, tree, fn1, fn2,
+                {depth: depth + 1, childNum: i, nodeSet});
+            if (reply === 'break') return reply;
+        }
     }
     if (fn2) fn2(root, depth, childNum);
 }
@@ -172,288 +146,12 @@ function printForest(roots, tree, nodeSet) {
 // ______________________________________________________________________
 // Main function
 
-// This will sort the values in `inputArr` according to the comparison data
-// provided by calls to `inputCmp()`, which is expected to return the values '='
-// (a string), '<', '>', or null; where a null indicates that the comparison
-// value is undetermined; undetermined pairs either have an order based on the
-// transitive closure of other pairs, or - if not - they may go in any order.
-// This function attempts to reduce the number of calls to inputCmp() in several
-// ways:
-//  * It memorizes each return value of inputCmp() that it sees.
-//  * It assumes that if a < b then also b > a (otherwise what is happening?).
-//  * It builds a tree to infer transitive comparisons, and tries to maximize
-//    the use of that tree.
-function sortWithPartialInfo1(inputArr, inputCmp, ctx) {
-
-    // XXX Delete all DEBUG1 code blocks.
-    //     DEBUG1 = I'm attempting to reduce the number of cmp() calls when the
-    //     input is already sorted or close to sorted.
-
-    // DEBUG1
-    console.log('Start sortWithPartialInfo1()');
-    let numCmpCalls = 0;
-
-    // 1. Set up memoization for inputCmp().
-
-    // This serves to both memorize results as well as to allow us to treat the
-    // input as an array of integers, although inputArr may have any types.
-    const cache = {};
-    function cmp(a, b) {
-        let key = a + ':' + b;
-        let val = cache[key];
-        if (val !== undefined) return val;
-
-        // let result = (a === b) ? '=' : inputCmp(inputArr[a], inputArr[b], ctx);
- 
-        // XXX DEBUG1 (replace with the above line)
-        let result;
-        if (a === b) {
-            result = '=';
-        } else {
-            numCmpCalls++;
-            result = inputCmp(inputArr[a], inputArr[b], ctx);
-        }
-    
-        cache[key] = result;
-
-        let otherKey = b + ':' + a;
-        let otherResult = result;
-        if (result === '<') otherResult = '>';
-        if (result === '>') otherResult = '<';
-        cache[otherKey] = otherResult;
-
-        return result;
-    }
-
-    // 2. Sort `arr`, using the memoized comparison function cmp().
-
-    let arr     = inputArr.map((e, i) => i);
-    let sorted  = [];
-    let min     = arr[arr.length - 1];
-    let cmpTree = {[min]: []}
-
-    say('<p><hr>Beginning to sort<br>');
-    say(`Candidate min = ${inputArr[min]}`);
-
-    let getName = x => inputArr[x];
-    function printCmpTree(min, cmpTree) {
-        let y = min;
-        let cols = [[getName(y)]];
-        while (y !== undefined) {
-            if (y in cmpTree) {
-                cols.push(cmpTree[y].map(getName));
-                y = cmpTree[y][0];
-            } else {
-                break;
-            }
-        }
-        say('cmpTree:');
-        showTableWithColumns(cols.slice(0, cols.length - 1), ' < ');
-    }
-
-    while (arr.length > 0) {
-
-        let xIdx = arr.length;
-        while (true) {
-
-            xIdx--;
-            if (xIdx === -1) {
-                let n = inputArr[min];
-                say(`<span class="framed">Adding item ${n}</span>`);
-                sorted.push(min);
-                arr.splice(arr.indexOf(min), 1);
-                for (let i = 1; i < cmpTree[min].length; i++) {
-                    delete cmpTree[cmpTree[min][i]];
-                }
-                min = cmpTree[min][0];
-                // If the order is not fully determined, cmpTree could be empty
-                // yet we may still have elements left in arr.
-                if (min === undefined && arr.length > 0) {
-                    min = arr[arr.length - 1];
-                    cmpTree[min] = [];
-                }
-                if (min !== undefined) {
-                    let n = inputArr[min];  // XXX
-                    say(`Candidate min = ${n}`);
-                    printCmpTree(min, cmpTree);
-                }
-                break;
-            }
-
-            let x = arr[xIdx];
-            let n = inputArr[x];  // XXX
-            if (x in cmpTree) {
-                let minName = inputArr[min];
-                say(`Keeping the min (${minName}) < ${n} as n is in the cmpTree`);
-                continue;
-            }
-            indent();
-            let c = cmp(x, min);
-            dedent();
-            if (c === '>') {
-                say(`Keeping the min < ${n} as indicated by cmp`);
-                cmpTree[min].push(x);
-                cmpTree[x] = [];
-            } 
-            if (c === '<') {
-                // say(`It looks like ${n} is smaller`);
-                say(`New candidate min = ${n}`);
-                cmpTree[x] = [min];
-                min  = x;
-                xIdx = arr.length;
-                printCmpTree(min, cmpTree);
-            }
-        }
-    }
-
-    // DEBUG1
-    // Find the chains in `arr`.
-    let chainLens = [];
-    let thisChain = 1;
-    sorted.forEach((elt, i) => {
-        if (i === sorted.length - 1) return;
-        if (cmp(elt, sorted[i + 1]) === '<') {
-            thisChain++;
-        } else {
-            chainLens.push(thisChain);
-            thisChain = 1;
-        }
-    });
-    console.log('Chain lengths in sorted:');
-    console.log(chainLens.join(', '));
-
-    // DEBUG1
-    console.log(`numCmpCalls = ${numCmpCalls}`);
-    console.log('End sortWithPartialInfo()');
-
-    return sorted.map(i => inputArr[i]);
-}
-
 function push(elt, prop, newItem) {
     if (!elt.hasOwnProperty(prop)) elt[prop] = [];
     elt[prop].push(newItem);
 }
 
 let logLevel = 0;
-
-function sortWithPartialInfo2(inputArr, inputCmp, ctx) {
-
-    // XXX Delete all DEBUG1 code blocks.
-    //     DEBUG1 = I'm attempting to reduce the number of cmp() calls when the
-    //     input is already sorted or close to sorted.
-
-    // DEBUG1
-    if (logLevel >= 1) console.log('Start sortWithPartialInfo2()');
-    let numCmpCalls = 0;
-
-    // 1. Set up memoization for inputCmp().
-
-    // This serves to both memorize results as well as to allow us to treat the
-    // input as an array of integers, although inputArr may have any types.
-    const cache = {};
-    function cmp(a, b) {
-        let key = a + ':' + b;
-        let val = cache[key];
-        if (val !== undefined) return val;
-
-        // let result = (a === b) ? '=' : inputCmp(inputArr[a], inputArr[b], ctx);
- 
-        // XXX DEBUG1 (replace with the above line)
-        let result;
-        if (a === b) {
-            result = '=';
-        } else {
-            numCmpCalls++;
-            result = inputCmp(inputArr[a], inputArr[b], ctx);
-        }
-    
-        cache[key] = result;
-
-        let otherKey = b + ':' + a;
-        let otherResult = result;
-        if (result === '<') otherResult = '>';
-        if (result === '>') otherResult = '<';
-        cache[otherKey] = otherResult;
-
-        return result;
-    }
-
-    // 2. Sort `arr`, using the memoized comparison function cmp().
-
-    let arr     = inputArr.map((e, i) => i);
-    let sorted  = [];
-
-    // ______________________________________________________________________
-    // Start of the main stuff.
-
-    // We'll build a forest to track known comparisons.
-    //  * after[item]  = <array of items larger than `item`>
-    //  * before[item] = <single most-recent item less than `item`>
-    // I'll use a sentinel object 'enoch' (the string) which
-    // is less than everything; its purpose is to point to the
-    // roots of all trees in the forest.
-    let after  = {enoch: arr}
-    let before = {};
-    let roots  = after.enoch;
-
-    // TODO: Performance is not good when the list is pre-sorted
-    //       and cmp() is a total order. Can we use an approach closer
-    //       to mergesort to improve that case?
-
-    while (roots.length > 0) {
-
-        if (logLevel >= 2) {
-            console.log(`Start of loop: roots has length ${roots.length}`);
-
-            // Print out the full forest.
-            console.log('Forest:');
-            console.log('_'.repeat(30));
-            printForest(roots, after);
-            console.log('_'.repeat(30));
-        }
-
-        let minSoFarIdx = 0;
-        let minSoFar    = roots[minSoFarIdx];
-
-        for (let i = 0; i < roots.length; i++) {
-            let root = roots[i];
-            if (root === minSoFar) continue;
-            let c = cmp(minSoFar, root);
-            if (c === '<') {
-                push(after, minSoFar, root);
-                before[root] = minSoFar;
-                roots.splice(i, 1);
-                if (i < minSoFarIdx) minSoFarIdx--;
-                i--;
-            } else if (c === '>') {
-                push(after, root, minSoFar);
-                before[minSoFar] = root;
-                roots.splice(minSoFarIdx, 1);
-                minSoFar = root;
-                minSoFarIdx = (i > minSoFarIdx) ? i - 1 : i;
-                i = -1;
-            }
-        }
-
-        if (logLevel >= 2) console.log(`Pushing ${minSoFar} onto sorted`);
-        sorted.push(minSoFar);
-        roots.splice(roots.indexOf(minSoFar), 1);
-        after[minSoFar]?.forEach(newRoot => {
-            roots.push(newRoot)
-        });
-    }
-
-    // End of the main stuff.
-    // ______________________________________________________________________
-
-    // DEBUG1
-    if (logLevel >= 1) {
-        console.log(`numCmpCalls = ${numCmpCalls}`);
-        console.log('End sortWithPartialInfo2()');
-    }
-
-    return sorted.map(i => inputArr[i]);
-}
 
 function makeSet(arr) {
     let set = {};
@@ -651,6 +349,7 @@ function sortV3(inputArr, inputCmp, opts) {
                         minSet = (minSoFar in set1) ? set1 : set2;
                         i = -1;
                         rootIsSmaller = true;
+                        return 'break';
                     }
                 });
                 if (!rootIsSmaller && logLevel >= 2) {
