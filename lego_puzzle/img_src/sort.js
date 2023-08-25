@@ -145,7 +145,7 @@ function printForest(roots, tree, nodeSet) {
 
 
 // ______________________________________________________________________
-// Main function
+// Utility functions used by sortV3()
 
 function push(elt, prop, newItem) {
     if (!elt.hasOwnProperty(prop)) elt[prop] = [];
@@ -160,6 +160,10 @@ function makeSet(arr) {
     return set;
 }
 
+
+// ______________________________________________________________________
+// Main function
+
 // This is a function that returns a sorted version of inputArr based on the
 // partial comparison information from inputCmp().
 // The values in `opts` are only intended for internal use, but I'll describe
@@ -173,21 +177,30 @@ function sortV3(inputArr, inputCmp, opts) {
     if (opts === undefined) opts = {};
 
     // Receive the pass-through arguments in `opts`.
-    let arr    = opts.arr || inputArr.map((e, i) => i);
-    let cache  = opts.cache || {};
+    let arr    = opts.arr    || inputArr.map((e, i) => i);
+    let cache  = opts.cache  || {};
     let after  = opts.after  || {inputArr};
     let before = opts.before || {};
     let roots  = opts.roots  || structuredClone(arr);
     let numCmpCalls = opts.numCmpCalls || 0; 
     Object.assign(opts, {arr, cache, after, before, roots, numCmpCalls});
 
-    function strOfArr(arr) {
-        return arr.map(x => inputArr[x]).join(' ');
-    }
-
     if (logLevel >= 1) {
         say('Start sortV3() with arr: ' + strOfArr(arr));
         indent();
+    }
+
+    // Define internal functions that use the above variables.
+
+    function makeXBeforeY(x, y) {
+        push(after, x, y);
+        if (y in before) {
+            let oldPeers = after[before[y]];
+            oldPeers.splice(oldPeers.indexOf(y), 1);
+        }
+        before[y] = x;
+        let rootIdx = roots.indexOf(y);
+        if (rootIdx !== -1) roots.splice(rootIdx, 1);
     }
 
     // Define the cmp wrapper function that uses the cache.
@@ -218,6 +231,10 @@ function sortV3(inputArr, inputCmp, opts) {
         return result;
     }
 
+    function strOfArr(arr) {
+        return arr.map(x => inputArr[x]).join(' ');
+    }
+
     // Define the base case.
     if (arr.length < 2) {
         if (logLevel >= 1) {
@@ -231,20 +248,16 @@ function sortV3(inputArr, inputCmp, opts) {
     // Implement the recursive case.
     let optsWith = x => Object.assign(opts, x);
     let k = Math.floor(arr.length / 2);
-    let side1 = arr.slice(0, k);
+    let set1 = makeSet(arr.slice(0, k));
+    let set2 = makeSet(arr.slice(k));
     sortV3(inputArr, inputCmp, optsWith({arr: arr.slice(0, k)}));
-    let side2 = arr.slice(k);
     sortV3(inputArr, inputCmp, optsWith({arr: arr.slice(k)}));
-    let set1 = makeSet(side1);
-    let set2 = makeSet(side2);
-    let arrSet = makeSet(arr);  // TODO: Needed?
+    let arrSet = makeSet(arr);
 
     let sorted = [];
     let arrRoots = roots.filter(root => root in arrSet);
 
-    if (logLevel >= 3) {
-        say('arrRoots = ' + arrRoots.join(' '));
-    }
+    if (logLevel >= 3) say('arrRoots = ' + arrRoots.join(' '));
 
     while (arrRoots.length > 0) {
 
@@ -282,7 +295,7 @@ function sortV3(inputArr, inputCmp, opts) {
         let minSet      = (minSoFar in set1) ? set1 : set2;
 
         if (logLevel >= 3) {
-            say(`Trying out minSoFar:${inputArr[minSoFar]}; idx:${minSoFarIdx}`);
+            say(`Trying minSoFar:${inputArr[minSoFar]}; idx:${minSoFarIdx}`);
         }
 
         for (let i = 0; i < arrRoots.length; i++) {
@@ -290,7 +303,7 @@ function sortV3(inputArr, inputCmp, opts) {
             if (root === minSoFar) continue;
             if (root in minSet) {
                 if (logLevel >= 3) {
-                    say(`Skipping cmp w ${inputArr[root]} since it is in the minSet: ` +
+                    say(`Skipping cmp w ${inputArr[root]}; it's in minSet: ` +
                         strOfArr(Object.keys(minSet))
                     );
                 }
@@ -301,32 +314,14 @@ function sortV3(inputArr, inputCmp, opts) {
                 say(`Found that ${inputArr[minSoFar]} ${c} ${inputArr[root]}`);
             }
 
-            // XXX Move this definition.
-            function makeXBeforeY(x, y) {
-                push(after, x, y);
-                if (y in before) {
-                    let oldPeers = after[before[y]];
-                    oldPeers.splice(oldPeers.indexOf(y), 1);
-                }
-                before[y] = x;
-                let rootIdx = roots.indexOf(y);
-                if (rootIdx !== -1) roots.splice(rootIdx, 1);
-            }
-
             if (c === '<') {
-                // XXX
-                // say('A roots = ' + (roots.join(' ')));
-                // say(`Dropping the root ${root}`);
                 makeXBeforeY(minSoFar, root);
                 arrRoots.splice(i, 1);
-                // roots.splice(roots.indexOf(root), 1);  // XXX speed this up
-                // say('B roots = ' + (roots.join(' ')));
                 if (i < minSoFarIdx) minSoFarIdx--;
                 i--;
             } else if (c === '>') {
                 makeXBeforeY(root, minSoFar);
                 arrRoots.splice(minSoFarIdx, 1);
-                // roots.splice(roots.indexOf(minSoFar), 1);  // XXX speed this up
                 minSoFar = root;
                 minSoFarIdx = (i > minSoFarIdx) ? i - 1 : i;
                 minSet = (minSoFar in set1) ? set1 : set2;
@@ -341,7 +336,7 @@ function sortV3(inputArr, inputCmp, opts) {
                     if (c === '<') return 'skip';
                     if (c === '>') {
                         if (logLevel >= 2) {
-                            say(`Found a sub-node (${inputArr[node]}) < minSoFar`);
+                            say(`Found subnode (${inputArr[node]}) < minSoFar`);
                         }
                         makeXBeforeY(node, minSoFar);
                         arrRoots.splice(minSoFarIdx, 1);
@@ -362,10 +357,8 @@ function sortV3(inputArr, inputCmp, opts) {
         if (logLevel >= 2) say(`Pushing ${inputArr[minSoFar]} onto sorted`);
         sorted.push(minSoFar);
         delete minSet[minSoFar];
-        // roots.splice(roots.indexOf(minSoFar), 1);  // XXX
         arrRoots.splice(arrRoots.indexOf(minSoFar), 1);  // XXX
         after[minSoFar]?.forEach(newRoot => {
-            // roots.push(newRoot);
             if (newRoot in arrSet) arrRoots.push(newRoot);
         });
     }
