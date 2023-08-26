@@ -341,7 +341,7 @@ function sortV3(inputArr, inputCmp, opts) {
                         makeXBeforeY(node, minSoFar);
                         arrRoots.splice(minSoFarIdx, 1);
                         minSoFar = root;
-                        minSoFarIdx = (i > minSoFarIdx) ? i - 1 : 1;
+                        minSoFarIdx = (i > minSoFarIdx) ? i - 1 : i;
                         minSet = (minSoFar in set1) ? set1 : set2;
                         i = -1;
                         rootIsSmaller = true;
@@ -357,7 +357,7 @@ function sortV3(inputArr, inputCmp, opts) {
         if (logLevel >= 2) say(`Pushing ${inputArr[minSoFar]} onto sorted`);
         sorted.push(minSoFar);
         delete minSet[minSoFar];
-        arrRoots.splice(arrRoots.indexOf(minSoFar), 1);  // XXX
+        arrRoots.splice(minSoFarIdx, 1);
         after[minSoFar]?.forEach(newRoot => {
             if (newRoot in arrSet) arrRoots.push(newRoot);
         });
