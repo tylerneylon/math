@@ -195,10 +195,10 @@ function sortV3(inputArr, inputCmp, opts) {
     function makeXBeforeY(x, y) {
         push(after, x, y);
         if (y in before) {
-            let oldPeers = after[before[y]];
-            oldPeers.splice(oldPeers.indexOf(y), 1);
+            let oldPeers = after[before[y][0]];
+            oldPeers.splice(before[y][1], 1);
         }
-        before[y] = x;
+        before[y] = [x, after[x].length - 1];
         let rootIdx = roots.indexOf(y);
         if (rootIdx !== -1) roots.splice(rootIdx, 1);
     }
