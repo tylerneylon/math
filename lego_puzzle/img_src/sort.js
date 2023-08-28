@@ -152,7 +152,7 @@ function push(elt, prop, newItem) {
     elt[prop].push(newItem);
 }
 
-let logLevel = 0;
+let logLevel = 3;
 
 function makeSet(arr) {
     let set = {};
@@ -177,13 +177,14 @@ function sortV3(inputArr, inputCmp, opts) {
     if (opts === undefined) opts = {};
 
     // Receive the pass-through arguments in `opts`.
-    let arr    = opts.arr    || inputArr.map((e, i) => i);
-    let cache  = opts.cache  || {};
-    let after  = opts.after  || {inputArr};
-    let before = opts.before || {};
-    let roots  = opts.roots  || structuredClone(arr);
+    let arr     = opts.arr    || inputArr.map((e, i) => i);
+    let cache   = opts.cache  || {};
+    let after   = opts.after  || {inputArr};
+    let before  = opts.before || {};
+    let roots   = opts.roots  || makeSet(arr);  // The set of roots.
     let numCmpCalls = opts.numCmpCalls || 0; 
-    Object.assign(opts, {arr, cache, after, before, roots, numCmpCalls});
+    const optsWith = x => Object.assign(opts, x);
+    optsWith({arr, cache, after, before, roots, numCmpCalls});
 
     if (logLevel >= 1) {
         say('Start sortV3() with arr: ' + strOfArr(arr));
@@ -192,6 +193,21 @@ function sortV3(inputArr, inputCmp, opts) {
 
     // Define internal functions that use the above variables.
 
+    // TODO NEXT:
+    // * Switch `after` over to use sets instead of arrays.
+    //   That will require rejiggering depthFirstTraversal to work with sets.
+    //   It will also simplify `before`.
+    // * The reason the current `before` structure doesn't work is that
+    //   we can remove elements from an `after` array and the downstream
+    //   `before` pointers won't be updated, and in fact cannot be efficiently
+    //   updated. We effectively want sets in `after`.
+    // * I suggest making a removeFromSet() function which only calls delete if
+    //   the element is in it.
+    // * I also suggest creating a convenience function elts() that can be
+    //   called on either an array or an object, and returns an array in either
+    //   case. This can help the update to depthFirstTraverse().
+    // * Longer term, maybe this entire thing can be a callable class.
+
     function makeXBeforeY(x, y) {
         push(after, x, y);
         if (y in before) {
@@ -199,8 +215,7 @@ function sortV3(inputArr, inputCmp, opts) {
             oldPeers.splice(before[y][1], 1);
         }
         before[y] = [x, after[x].length - 1];
-        let rootIdx = roots.indexOf(y);
-        if (rootIdx !== -1) roots.splice(rootIdx, 1);
+        if (y in roots) delete roots[y];
     }
 
     // Define the cmp wrapper function that uses the cache.
@@ -246,7 +261,6 @@ function sortV3(inputArr, inputCmp, opts) {
     }
 
     // Implement the recursive case.
-    let optsWith = x => Object.assign(opts, x);
     let k = Math.floor(arr.length / 2);
     let set1 = makeSet(arr.slice(0, k));
     let set2 = makeSet(arr.slice(k));
@@ -255,7 +269,7 @@ function sortV3(inputArr, inputCmp, opts) {
     let arrSet = makeSet(arr);
 
     let sorted = [];
-    let arrRoots = roots.filter(root => root in arrSet);
+    let arrRoots = Object.keys(roots).filter(root => root in arrSet);
 
     if (logLevel >= 3) say('arrRoots = ' + arrRoots.join(' '));
 
@@ -264,7 +278,7 @@ function sortV3(inputArr, inputCmp, opts) {
         if (logLevel >= 3) {
             say('roots forest:');
             say('_'.repeat(30));
-            printForest(roots, after);
+            printForest(Object.keys(roots), after);
             say('_'.repeat(30));
         }
 
@@ -570,7 +584,7 @@ function test7() {
 if (true) {
     // XXX
     allTests = [test1, test2, test3, test4, test5, test6, test7];
-    // allTests = [test7];
+    // allTests = [test1];
     allTests.forEach(testFn => {
         activeTest = testFn;
         console.log('\n' + '_'.repeat(80));
