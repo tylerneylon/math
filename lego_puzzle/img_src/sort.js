@@ -72,8 +72,11 @@ function getRowsFromColumns(cols, colSep) {
     return rows;
 }
 
-// TODO: Consider adding support for 'break' to be returned by fn1().
-//       In order to support that, I think I'd need to replace the .forEach().
+// This is a helper function for depth-first traversal.
+function entries(arrOrObj) {
+    const arr = Array.isArray(arrOrObj) ? arrOrObj : Object.keys(arrOrObj);
+    return arr.entries();
+}
 
 // Run fn1() and fn2() on each node of the given tree in depth-first order.
 // Each call is of the form fn(node, depth, childNum).
@@ -82,14 +85,18 @@ function getRowsFromColumns(cols, colSep) {
 // fn1() is called before its children, fn2() after.
 // If fn1(node) returns 'skip', then all the children of `node` are skipped.
 // If fn1(node) returns 'break', neither fn1() nor fn2() is called again.
+// The format of `tree` is either:
+// (a) tree[node] = array of child nodes; or
+// (b) tree[node] = object whose keys are child nodes.
+// In the latter case, an arbitrary order is chosen for keys in order to give
+// them `childNum` values.
 function depthFirstTraverse(root, tree, fn1, fn2, opts) {
     let {depth, childNum, nodeSet} = opts || {};
     if (depth === undefined) depth = 0;
-    // console.log(`dFTraverse; depth:${depth}, childNum:${childNum}, nodeSet:${nodeSet}`);
     let reply = fn1(root, depth, childNum);
     if (reply === 'break') return reply;
     if (reply !== 'skip' && tree[root] !== undefined) {
-        for (const [i, node] of tree[root].entries()) {
+        for (const [i, node] of entries(tree[root])) {
             if (nodeSet && !(node in nodeSet)) continue;
             reply = depthFirstTraverse(node, tree, fn1, fn2,
                 {depth: depth + 1, childNum: i, nodeSet});
@@ -152,7 +159,16 @@ function push(elt, prop, newItem) {
     elt[prop].push(newItem);
 }
 
-let logLevel = 3;
+function addToSet(elt, prop, newItem) {
+    if (!(prop in elt)) elt[prop] = {};
+    elt[prop][newItem] = true;
+}
+
+function removeFromSet(set, item) {
+    if (item in set) delete set[item];
+}
+
+let logLevel = 0;
 
 function makeSet(arr) {
     let set = {};
@@ -209,13 +225,10 @@ function sortV3(inputArr, inputCmp, opts) {
     // * Longer term, maybe this entire thing can be a callable class.
 
     function makeXBeforeY(x, y) {
-        push(after, x, y);
-        if (y in before) {
-            let oldPeers = after[before[y][0]];
-            oldPeers.splice(before[y][1], 1);
-        }
-        before[y] = [x, after[x].length - 1];
-        if (y in roots) delete roots[y];
+        addToSet(after, x, y);
+        if (y in before) removeFromSet(after[before[y]], y);
+        before[y] = x;
+        removeFromSet(roots, y);
     }
 
     // Define the cmp wrapper function that uses the cache.
@@ -372,9 +385,9 @@ function sortV3(inputArr, inputCmp, opts) {
         sorted.push(minSoFar);
         delete minSet[minSoFar];
         arrRoots.splice(minSoFarIdx, 1);
-        after[minSoFar]?.forEach(newRoot => {
+        for (const newRoot in after[minSoFar]) {
             if (newRoot in arrSet) arrRoots.push(newRoot);
-        });
+        }
     }
 
     if (logLevel >= 1) {
