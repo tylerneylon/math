@@ -180,6 +180,219 @@ function makeSet(arr) {
 // ______________________________________________________________________
 // Main function
 
+
+class Sorter extends Function {
+    constructor() {
+        super()    
+        return new Proxy(this, {
+            apply: (target, thisArg, args) => target._call(...args)
+        })
+    }
+
+    // Define the cmp wrapper function that uses the cache.
+    cmp(a, b) {
+        let key = a + ':' + b;
+        let val = this.cache[key];
+        if (val !== undefined) return val;
+
+        // let result = (a === b) ? '=' : inputCmp(inputArr[a], inputArr[b], ctx);
+ 
+        // XXX DEBUG1 (replace with the above line)
+        let result;
+        if (a === b) {
+            result = '=';
+        } else {
+            this.numCmpCalls++;
+            result = this.inputCmp(this.inputArr[a], this.inputArr[b]);
+        }
+    
+        this.cache[key] = result;
+
+        let otherKey = b + ':' + a;
+        let otherResult = result;
+        if (result === '<') otherResult = '>';
+        if (result === '>') otherResult = '<';
+        this.cache[otherKey] = otherResult;
+
+        return result;
+    }
+    
+    _call(inputArr, inputCmp, opts) {
+
+        this.inputArr = inputArr;
+        this.inputCmp = inputCmp;
+
+        if (opts === undefined) opts = {};
+
+        // Receive the pass-through arguments in `opts`.
+        let arr     = opts.arr    || inputArr.map((e, i) => i);
+        this.cache  = opts.cache  || {};
+        let after   = opts.after  || {inputArr};
+        let before  = opts.before || {};
+        let roots   = opts.roots  || makeSet(arr);  // The set of roots.
+        this.numCmpCalls = opts.numCmpCalls || 0; 
+        const optsWith = x => Object.assign(opts, x);
+        optsWith({arr, cache: this.cache, after,
+            before, roots, numCmpCalls: this.numCmpCalls});
+
+        if (logLevel >= 1) {
+            say('Start sortV3() with arr: ' + strOfArr(arr));
+            indent();
+        }
+
+        // Define internal functions that use the above variables.
+
+        function makeXBeforeY(x, y) {
+            addToSet(after, x, y);
+            if (y in before) removeFromSet(after[before[y]], y);
+            before[y] = x;
+            removeFromSet(roots, y);
+        }
+
+        function strOfArr(arr) {
+            return arr.map(x => inputArr[x]).join(' ');
+        }
+
+        // Define the base case.
+        if (arr.length < 2) {
+            if (logLevel >= 1) {
+                say(`numCmpCalls = ${this.numCmpCalls}`);
+                dedent();
+                say('End sortV3(); returning ' + strOfArr(arr));
+            }
+            return arr;
+        }
+
+        // Implement the recursive case.
+        let k = Math.floor(arr.length / 2);
+        let set1 = makeSet(arr.slice(0, k));
+        let set2 = makeSet(arr.slice(k));
+        sortV3(inputArr, inputCmp, optsWith({arr: arr.slice(0, k)}));
+        sortV3(inputArr, inputCmp, optsWith({arr: arr.slice(k)}));
+        let arrSet = makeSet(arr);
+
+        let sorted = [];
+        let arrRoots = Object.keys(roots).filter(root => root in arrSet);
+
+        if (logLevel >= 3) say('arrRoots = ' + arrRoots.join(' '));
+
+        while (arrRoots.length > 0) {
+
+            if (logLevel >= 3) {
+                say('roots forest:');
+                say('_'.repeat(30));
+                printForest(Object.keys(roots), after);
+                say('_'.repeat(30));
+            }
+
+            if (logLevel >= 2) {
+                say(
+                    `Start of loop: arrRoots has length ${arrRoots.length}: ` + 
+                    `[${arrRoots.map(x => inputArr[x]).join(' ')}]`
+                );
+
+                // Print out the full forest.
+                say('arrRoots Forest:');
+                say('_'.repeat(30));
+                printForest(arrRoots, after, arrSet);
+                say('_'.repeat(30));
+            }
+
+            // Choose minSoFar from the side with more (unsorted) elements in it.
+            // This is a heuristic to help reduce the number of comparison calls.
+
+            let len1 = Object.keys(set1).length;
+            let len2 = Object.keys(set2).length;
+            let largerSet = (len1 > len2) ? set1 : set2;
+            let largerSideRootIndexes = Object.keys(arrRoots).filter(
+                x => arrRoots[x] in largerSet
+            );
+            let minSoFarIdx = largerSideRootIndexes[0] ?? 0;
+            let minSoFar    = arrRoots[minSoFarIdx];
+            let minSet      = (minSoFar in set1) ? set1 : set2;
+
+            if (logLevel >= 3) {
+                say(`Trying minSoFar:${inputArr[minSoFar]}; idx:${minSoFarIdx}`);
+            }
+
+            for (let i = 0; i < arrRoots.length; i++) {
+                let root = arrRoots[i];
+                if (root === minSoFar) continue;
+                if (root in minSet) {
+                    if (logLevel >= 3) {
+                        say(`Skipping cmp w ${inputArr[root]}; it's in minSet: ` +
+                            strOfArr(Object.keys(minSet))
+                        );
+                    }
+                    continue;
+                }
+                let c = this.cmp(minSoFar, root);
+                if (logLevel >= 3) {
+                    say(`Found that ${inputArr[minSoFar]} ${c} ${inputArr[root]}`);
+                }
+
+                if (c === '<') {
+                    makeXBeforeY(minSoFar, root);
+                    arrRoots.splice(i, 1);
+                    if (i < minSoFarIdx) minSoFarIdx--;
+                    i--;
+                } else if (c === '>') {
+                    makeXBeforeY(root, minSoFar);
+                    arrRoots.splice(minSoFarIdx, 1);
+                    minSoFar = root;
+                    minSoFarIdx = (i > minSoFarIdx) ? i - 1 : i;
+                    minSet = (minSoFar in set1) ? set1 : set2;
+                    i = -1;
+                } else {
+                    console.assert(c === null);
+                    // Walk the tree in case x < minSoFar for some x in the tree.
+                    let rootIsSmaller = false;
+                    depthFirstTraverse(root, after, (node) => {
+                        if (rootIsSmaller) return 'skip';
+                        let c = this.cmp(minSoFar, node);
+                        if (c === '<') return 'skip';
+                        if (c === '>') {
+                            if (logLevel >= 2) {
+                                say(`Found subnode (${inputArr[node]}) < minSoFar`);
+                            }
+                            makeXBeforeY(node, minSoFar);
+                            arrRoots.splice(minSoFarIdx, 1);
+                            minSoFar = root;
+                            minSoFarIdx = (i > minSoFarIdx) ? i - 1 : i;
+                            minSet = (minSoFar in set1) ? set1 : set2;
+                            i = -1;
+                            rootIsSmaller = true;
+                            return 'break';
+                        }
+                    });
+                    if (!rootIsSmaller && logLevel >= 2) {
+                        say(`No sub-nodes (of ${inputArr[root]}) were smaller`);
+                    }
+                }
+            }
+
+            if (logLevel >= 2) say(`Pushing ${inputArr[minSoFar]} onto sorted`);
+            sorted.push(minSoFar);
+            delete minSet[minSoFar];
+            arrRoots.splice(minSoFarIdx, 1);
+            for (const newRoot in after[minSoFar]) {
+                if (newRoot in arrSet) arrRoots.push(newRoot);
+            }
+        }
+
+        if (logLevel >= 1) {
+            say(`numCmpCalls = ${this.numCmpCalls}`);
+            dedent();
+            say('End sortV3(); returning ' + strOfArr(sorted));
+        }
+
+        return sorted.map(i => inputArr[i]);
+    }
+}
+
+const sort = new Sorter();
+
+
 // This is a function that returns a sorted version of inputArr based on the
 // partial comparison information from inputCmp().
 // The values in `opts` are only intended for internal use, but I'll describe
@@ -208,21 +421,6 @@ function sortV3(inputArr, inputCmp, opts) {
     }
 
     // Define internal functions that use the above variables.
-
-    // TODO NEXT:
-    // * Switch `after` over to use sets instead of arrays.
-    //   That will require rejiggering depthFirstTraversal to work with sets.
-    //   It will also simplify `before`.
-    // * The reason the current `before` structure doesn't work is that
-    //   we can remove elements from an `after` array and the downstream
-    //   `before` pointers won't be updated, and in fact cannot be efficiently
-    //   updated. We effectively want sets in `after`.
-    // * I suggest making a removeFromSet() function which only calls delete if
-    //   the element is in it.
-    // * I also suggest creating a convenience function elts() that can be
-    //   called on either an array or an object, and returns an array in either
-    //   case. This can help the update to depthFirstTraverse().
-    // * Longer term, maybe this entire thing can be a callable class.
 
     function makeXBeforeY(x, y) {
         addToSet(after, x, y);
@@ -594,7 +792,7 @@ function test7() {
 // ______________________________________________________________________
 // Run the tests
 
-if (true) {
+if (false) {
     // XXX
     allTests = [test1, test2, test3, test4, test5, test6, test7];
     // allTests = [test1];
@@ -608,3 +806,11 @@ if (true) {
     });
     console.log('Done running all tests!');
 }
+
+let arr = [1, 0, 3, 6, 5, 2, 4];
+function cmp(x, y) {
+    return (x < y) ? '<' : (x > y ? '>' : '=');
+}
+let result = sort(arr, cmp);
+console.log('result:');
+console.log(result);
