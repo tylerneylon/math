@@ -192,27 +192,17 @@ class Sorter extends Function {
     // Define the cmp wrapper function that uses the cache.
     cmp(a, b) {
         let key = a + ':' + b;
-        let val = this.cache[key];
-        if (val !== undefined) return val;
+        if (key in this.cache) return this.cache[key];
 
-        // let result = (a === b) ? '=' : inputCmp(inputArr[a], inputArr[b], ctx);
- 
-        // XXX DEBUG1 (replace with the above line)
-        let result;
-        if (a === b) {
-            result = '=';
-        } else {
+        let result = '=';
+        if (a !== b) {
             this.numCmpCalls++;
             result = this.inputCmp(this.inputArr[a], this.inputArr[b]);
         }
-    
         this.cache[key] = result;
 
-        let otherKey = b + ':' + a;
-        let otherResult = result;
-        if (result === '<') otherResult = '>';
-        if (result === '>') otherResult = '<';
-        this.cache[otherKey] = otherResult;
+        let symResult = {'>': '<', '<': '>', '=': '='}[result];
+        this.cache[b + ':' + a] = symResult;
 
         return result;
     }
