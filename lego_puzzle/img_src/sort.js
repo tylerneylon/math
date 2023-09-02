@@ -152,7 +152,7 @@ function printForest(roots, tree, nodeSet) {
 
 
 // ______________________________________________________________________
-// Utility functions used by sortV3()
+// Utility functions used by sort()
 
 function push(elt, prop, newItem) {
     if (!elt.hasOwnProperty(prop)) elt[prop] = [];
@@ -645,7 +645,7 @@ function test1() {
     function cmp(x, y) {
         return (x < y) ? '<' : (x > y ? '>' : '=');
     }
-    let result = sortV3(arr, cmp);
+    let result = sort(arr, cmp);
     console.log('result:');
     console.log(result);
     check(result[0] === 0 && result[1] === 1);
@@ -657,7 +657,7 @@ function test2() {
     function cmp(x, y) {
         return (x < y) ? '<' : (x > y ? '>' : '=');
     }
-    let result = sortV3(arr, cmp);
+    let result = sort(arr, cmp);
     console.log('result:');
     console.log(result);
     check(result.every((x, i) => (x === i)));
@@ -678,7 +678,7 @@ function testWithWeirdCmp(arr, goalArr) {
         if (x === 0 || y === 0) return usualCmp(x, y);
         return null;
     }
-    let result = sortV3(arr, cmp);
+    let result = sort(arr, cmp);
     console.log('result:');
     console.log(result);
     checkArraysAreSame(result, goalArr);
@@ -726,7 +726,7 @@ function test5() {
         }
         return null;
     }
-    let result = sortV3(arr, cmp);
+    let result = sort(arr, cmp);
     console.log('result:');
     console.log(result);
     let goalArr = [1, 2, 3, -1, 4, 5, 6, -2, 7, 8, 9];
@@ -744,7 +744,7 @@ function test6() {
         if (x > y) return '>';
         return '=';
     }
-    let result = sortV3(arr, cmp);
+    let result = sort(arr, cmp);
     console.log('result:');
     console.log(result);
     checkArrayRespectsKnownOrders(
@@ -769,7 +769,7 @@ function test7() {
         }
         return null;
     }
-    let result = sortV3(arr, cmp);
+    let result = sort(arr, cmp);
     console.log('result:');
     console.log(result);
     checkArrayRespectsKnownOrders(
@@ -782,7 +782,7 @@ function test7() {
 // ______________________________________________________________________
 // Run the tests
 
-if (false) {
+if (true) {
     // XXX
     allTests = [test1, test2, test3, test4, test5, test6, test7];
     // allTests = [test1];
@@ -797,10 +797,12 @@ if (false) {
     console.log('Done running all tests!');
 }
 
-let arr = [1, 0, 3, 6, 5, 2, 4];
-function cmp(x, y) {
-    return (x < y) ? '<' : (x > y ? '>' : '=');
+if (false) {
+    let arr = [1, 0, 3, 6, 5, 2, 4];
+    function cmp(x, y) {
+        return (x < y) ? '<' : (x > y ? '>' : '=');
+    }
+    let result = sort(arr, cmp);
+    console.log('result:');
+    console.log(result);
 }
-let result = sort(arr, cmp);
-console.log('result:');
-console.log(result);
