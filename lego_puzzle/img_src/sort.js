@@ -168,7 +168,7 @@ function removeFromSet(set, item) {
     if (item in set) delete set[item];
 }
 
-let logLevel = 0;
+let logLevel = 3;
 
 function makeSet(arr) {
     let set = {};
@@ -206,6 +206,17 @@ class Sorter extends Function {
 
         return result;
     }
+
+    strOfArr(arr) {
+        return arr.map(x => this.inputArr[x]).join(' ');
+    }
+
+    makeXBeforeY(x, y) {
+        addToSet(this.after, x, y);
+        if (y in this.before) removeFromSet(this.after[this.before[y]], y);
+        this.before[y] = x;
+        removeFromSet(this.roots, y);
+    }
     
     _call(inputArr, inputCmp, opts) {
 
@@ -217,30 +228,19 @@ class Sorter extends Function {
         // Receive the pass-through arguments in `opts`.
         let arr     = opts.arr    || inputArr.map((e, i) => i);
         this.cache  = opts.cache  || {};
-        let after   = opts.after  || {inputArr};
-        let before  = opts.before || {};
-        let roots   = opts.roots  || makeSet(arr);  // The set of roots.
+        this.after  = opts.after  || {inputArr};
+        this.before = opts.before || {};
+        this.roots  = opts.roots  || makeSet(arr);  // The set of roots.
         this.numCmpCalls = opts.numCmpCalls || 0; 
+        this.inputArr = inputArr;
         const optsWith = x => Object.assign(opts, x);
-        optsWith({arr, cache: this.cache, after,
-            before, roots, numCmpCalls: this.numCmpCalls});
+        optsWith({arr, cache: this.cache, after: this.after,
+            before: this.before, roots: this.roots,
+            numCmpCalls: this.numCmpCalls});
 
         if (logLevel >= 1) {
-            say('Start sortV3() with arr: ' + strOfArr(arr));
+            say('Start sortV3() with arr: ' + this.strOfArr(arr));
             indent();
-        }
-
-        // Define internal functions that use the above variables.
-
-        function makeXBeforeY(x, y) {
-            addToSet(after, x, y);
-            if (y in before) removeFromSet(after[before[y]], y);
-            before[y] = x;
-            removeFromSet(roots, y);
-        }
-
-        function strOfArr(arr) {
-            return arr.map(x => inputArr[x]).join(' ');
         }
 
         // Define the base case.
@@ -248,7 +248,7 @@ class Sorter extends Function {
             if (logLevel >= 1) {
                 say(`numCmpCalls = ${this.numCmpCalls}`);
                 dedent();
-                say('End sortV3(); returning ' + strOfArr(arr));
+                say('End sort(); returning ' + this.strOfArr(arr));
             }
             return arr;
         }
@@ -262,7 +262,7 @@ class Sorter extends Function {
         let arrSet = makeSet(arr);
 
         let sorted = [];
-        let arrRoots = Object.keys(roots).filter(root => root in arrSet);
+        let arrRoots = Object.keys(this.roots).filter(root => root in arrSet);
 
         if (logLevel >= 3) say('arrRoots = ' + arrRoots.join(' '));
 
@@ -271,7 +271,7 @@ class Sorter extends Function {
             if (logLevel >= 3) {
                 say('roots forest:');
                 say('_'.repeat(30));
-                printForest(Object.keys(roots), after);
+                printForest(Object.keys(this.roots), this.after);
                 say('_'.repeat(30));
             }
 
@@ -284,7 +284,7 @@ class Sorter extends Function {
                 // Print out the full forest.
                 say('arrRoots Forest:');
                 say('_'.repeat(30));
-                printForest(arrRoots, after, arrSet);
+                printForest(arrRoots, this.after, arrSet);
                 say('_'.repeat(30));
             }
 
@@ -311,7 +311,7 @@ class Sorter extends Function {
                 if (root in minSet) {
                     if (logLevel >= 3) {
                         say(`Skipping cmp w ${inputArr[root]}; it's in minSet: ` +
-                            strOfArr(Object.keys(minSet))
+                            this.strOfArr(Object.keys(minSet))
                         );
                     }
                     continue;
@@ -322,12 +322,12 @@ class Sorter extends Function {
                 }
 
                 if (c === '<') {
-                    makeXBeforeY(minSoFar, root);
+                    this.makeXBeforeY(minSoFar, root);
                     arrRoots.splice(i, 1);
                     if (i < minSoFarIdx) minSoFarIdx--;
                     i--;
                 } else if (c === '>') {
-                    makeXBeforeY(root, minSoFar);
+                    this.makeXBeforeY(root, minSoFar);
                     arrRoots.splice(minSoFarIdx, 1);
                     minSoFar = root;
                     minSoFarIdx = (i > minSoFarIdx) ? i - 1 : i;
@@ -337,7 +337,7 @@ class Sorter extends Function {
                     console.assert(c === null);
                     // Walk the tree in case x < minSoFar for some x in the tree.
                     let rootIsSmaller = false;
-                    depthFirstTraverse(root, after, (node) => {
+                    depthFirstTraverse(root, this.after, (node) => {
                         if (rootIsSmaller) return 'skip';
                         let c = this.cmp(minSoFar, node);
                         if (c === '<') return 'skip';
@@ -345,7 +345,7 @@ class Sorter extends Function {
                             if (logLevel >= 2) {
                                 say(`Found subnode (${inputArr[node]}) < minSoFar`);
                             }
-                            makeXBeforeY(node, minSoFar);
+                            this.makeXBeforeY(node, minSoFar);
                             arrRoots.splice(minSoFarIdx, 1);
                             minSoFar = root;
                             minSoFarIdx = (i > minSoFarIdx) ? i - 1 : i;
@@ -365,7 +365,7 @@ class Sorter extends Function {
             sorted.push(minSoFar);
             delete minSet[minSoFar];
             arrRoots.splice(minSoFarIdx, 1);
-            for (const newRoot in after[minSoFar]) {
+            for (const newRoot in this.after[minSoFar]) {
                 if (newRoot in arrSet) arrRoots.push(newRoot);
             }
         }
@@ -373,7 +373,7 @@ class Sorter extends Function {
         if (logLevel >= 1) {
             say(`numCmpCalls = ${this.numCmpCalls}`);
             dedent();
-            say('End sortV3(); returning ' + strOfArr(sorted));
+            say('End sortV3(); returning ' + this.strOfArr(sorted));
         }
 
         return sorted.map(i => inputArr[i]);
