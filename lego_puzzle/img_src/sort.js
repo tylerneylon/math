@@ -168,7 +168,7 @@ function removeFromSet(set, item) {
     if (item in set) delete set[item];
 }
 
-let logLevel = 3;
+let logLevel = 1;
 
 function makeSet(arr) {
     let set = {};
@@ -217,6 +217,13 @@ class Sorter extends Function {
         this.before[y] = x;
         removeFromSet(this.roots, y);
     }
+
+    // TODO as of 466.2023
+    // * I see numCmpCalls can go down. Fix that.
+    // * Try to clean up the core sort function a lot more.
+    //   I want it to feel somewhat readable. One thing I can do is
+    //   make all debug portions short function calls and pull out
+    //   special debug methods.
     
     _call(inputArr, inputCmp, opts) {
 
@@ -231,15 +238,15 @@ class Sorter extends Function {
         this.after  = opts.after  || {inputArr};
         this.before = opts.before || {};
         this.roots  = opts.roots  || makeSet(arr);  // The set of roots.
-        this.numCmpCalls = opts.numCmpCalls || 0; 
         this.inputArr = inputArr;
         const optsWith = x => Object.assign(opts, x);
         optsWith({arr, cache: this.cache, after: this.after,
             before: this.before, roots: this.roots,
             numCmpCalls: this.numCmpCalls});
+        if (this.numCmpCalls === undefined) this.numCmpCalls = 0;
 
         if (logLevel >= 1) {
-            say('Start sortV3() with arr: ' + this.strOfArr(arr));
+            say('Start sort() with arr: ' + this.strOfArr(arr));
             indent();
         }
 
@@ -257,8 +264,8 @@ class Sorter extends Function {
         let k = Math.floor(arr.length / 2);
         let set1 = makeSet(arr.slice(0, k));
         let set2 = makeSet(arr.slice(k));
-        sortV3(inputArr, inputCmp, optsWith({arr: arr.slice(0, k)}));
-        sortV3(inputArr, inputCmp, optsWith({arr: arr.slice(k)}));
+        sort(inputArr, inputCmp, optsWith({arr: arr.slice(0, k)}));
+        sort(inputArr, inputCmp, optsWith({arr: arr.slice(k)}));
         let arrSet = makeSet(arr);
 
         let sorted = [];
