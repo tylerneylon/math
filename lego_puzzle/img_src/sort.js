@@ -219,32 +219,27 @@ class Sorter extends Function {
     }
 
     // TODO as of 500.2023
-    // * Try to completely replace `opts` with object properties of Sorter.
     // * Reduce the line count of debug messages in the main sort body.
     // * Now that cmp call counting is fixed, consider re-counting the
     //   earlier values used by sortV2. This would probably involve
     //   checking out an earlier code version and editing that, then
     //   losing it or pushing it as a kind of non-main parallel.
 
-    _call(inputArr, inputCmp, opts) {
+    _call(inputArr, inputCmp, arr) {
 
         this.inputArr = inputArr;
         this.inputCmp = inputCmp;
 
-        if (opts === undefined) opts = {};
-
-        // Receive the pass-through arguments in `opts`.
-        let arr     = opts.arr    || inputArr.map((e, i) => i);
-        this.cache  = opts.cache  || {};
-        this.after  = opts.after  || {inputArr};
-        this.before = opts.before || {};
-        this.roots  = opts.roots  || makeSet(arr);  // The set of roots.
-        this.inputArr = inputArr;
-        const optsWith = x => Object.assign(opts, x);
-        optsWith({arr, cache: this.cache, after: this.after,
-            before: this.before, roots: this.roots,
-            numCmpCalls: this.numCmpCalls});
-        if (this.numCmpCalls === undefined) this.numCmpCalls = 0;
+        if (arr === undefined) {
+            // This is an initial call; we must initialize some values.
+            arr         = inputArr.map((e, i) => i);
+            this.cache  = {};
+            this.after  = {inputArr};
+            this.before = {};
+            this.roots  = makeSet(arr);  // The set of roots.
+            this.inputArr = inputArr;
+            this.numCmpCalls = 0;
+        }
 
         if (logLevel >= 1) {
             say('Start sort() with arr: ' + this.strOfArr(arr));
@@ -265,8 +260,8 @@ class Sorter extends Function {
         let k = Math.floor(arr.length / 2);
         let set1 = makeSet(arr.slice(0, k));
         let set2 = makeSet(arr.slice(k));
-        sort(inputArr, inputCmp, optsWith({arr: arr.slice(0, k)}));
-        sort(inputArr, inputCmp, optsWith({arr: arr.slice(k)}));
+        sort(inputArr, inputCmp, arr.slice(0, k));
+        sort(inputArr, inputCmp, arr.slice(k));
         let arrSet = makeSet(arr);
 
         let sorted = [];
