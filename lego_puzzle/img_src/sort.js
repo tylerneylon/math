@@ -218,13 +218,14 @@ class Sorter extends Function {
         removeFromSet(this.roots, y);
     }
 
-    // TODO as of 466.2023
-    // * I see numCmpCalls can go down. Fix that.
-    // * Try to clean up the core sort function a lot more.
-    //   I want it to feel somewhat readable. One thing I can do is
-    //   make all debug portions short function calls and pull out
-    //   special debug methods.
-    
+    // TODO as of 500.2023
+    // * Try to completely replace `opts` with object properties of Sorter.
+    // * Reduce the line count of debug messages in the main sort body.
+    // * Now that cmp call counting is fixed, consider re-counting the
+    //   earlier values used by sortV2. This would probably involve
+    //   checking out an earlier code version and editing that, then
+    //   losing it or pushing it as a kind of non-main parallel.
+
     _call(inputArr, inputCmp, opts) {
 
         this.inputArr = inputArr;
