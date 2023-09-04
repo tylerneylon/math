@@ -168,7 +168,7 @@ function removeFromSet(set, item) {
     if (item in set) delete set[item];
 }
 
-let logLevel = 0;
+let logLevel = 3;
 
 function makeSet(arr) {
     let set = {};
@@ -225,6 +225,53 @@ class Sorter extends Function {
     //   checking out an earlier code version and editing that, then
     //   losing it or pushing it as a kind of non-main parallel.
 
+    dbgStart(arr) {
+        if (logLevel < 1) return;
+        say('Start sort() with arr: ' + this.strOfArr(arr));
+        indent();
+    }
+
+    dbgEnd(sorted) {
+        if (logLevel < 1) return;
+        say(`numCmpCalls = ${this.numCmpCalls}`);
+        dedent();
+        say('End sort(); returning ' + this.strOfArr(sorted));
+    }
+
+    dbgEndByBaseCase(arr) {
+        if (logLevel < 1) return;
+        say(`numCmpCalls = ${this.numCmpCalls}`);
+        dedent();
+        say('End sort(); returning ' + this.strOfArr(arr));
+    }
+
+    dbgStartOfLoop(arrRoots, arrSet) {
+        if (logLevel >= 3) {
+            say('roots forest:');
+            say('_'.repeat(30));
+            printForest(Object.keys(this.roots), this.after);
+            say('_'.repeat(30));
+        }
+
+        if (logLevel >= 2) {
+            say(
+                `Start of loop: arrRoots has length ${arrRoots.length}: ` + 
+                `[${arrRoots.map(x => this.inputArr[x]).join(' ')}]`
+            );
+
+            // Print out the full forest.
+            say('arrRoots Forest:');
+            say('_'.repeat(30));
+            printForest(arrRoots, this.after, arrSet);
+            say('_'.repeat(30));
+        }
+    }
+
+    dbgReportMinSoFar(minSoFar, minSoFarIdx) {
+        if (logLevel < 3) return
+        say(`Trying minSoFar:${this.inputArr[minSoFar]}; idx:${minSoFarIdx}`);
+    }
+
     _call(inputArr, inputCmp, arr) {
 
         this.inputArr = inputArr;
@@ -241,18 +288,11 @@ class Sorter extends Function {
             this.numCmpCalls = 0;
         }
 
-        if (logLevel >= 1) {
-            say('Start sort() with arr: ' + this.strOfArr(arr));
-            indent();
-        }
+        this.dbgStart(arr);
 
         // Define the base case.
         if (arr.length < 2) {
-            if (logLevel >= 1) {
-                say(`numCmpCalls = ${this.numCmpCalls}`);
-                dedent();
-                say('End sort(); returning ' + this.strOfArr(arr));
-            }
+            this.dbgEndByBaseCase(arr);
             return arr;
         }
 
@@ -271,25 +311,7 @@ class Sorter extends Function {
 
         while (arrRoots.length > 0) {
 
-            if (logLevel >= 3) {
-                say('roots forest:');
-                say('_'.repeat(30));
-                printForest(Object.keys(this.roots), this.after);
-                say('_'.repeat(30));
-            }
-
-            if (logLevel >= 2) {
-                say(
-                    `Start of loop: arrRoots has length ${arrRoots.length}: ` + 
-                    `[${arrRoots.map(x => inputArr[x]).join(' ')}]`
-                );
-
-                // Print out the full forest.
-                say('arrRoots Forest:');
-                say('_'.repeat(30));
-                printForest(arrRoots, this.after, arrSet);
-                say('_'.repeat(30));
-            }
+            this.dbgStartOfLoop(arrRoots, arrSet);
 
             // Choose minSoFar from the side with more (unsorted) elements in it.
             // This is a heuristic to help reduce the number of comparison calls.
@@ -304,9 +326,7 @@ class Sorter extends Function {
             let minSoFar    = arrRoots[minSoFarIdx];
             let minSet      = (minSoFar in set1) ? set1 : set2;
 
-            if (logLevel >= 3) {
-                say(`Trying minSoFar:${inputArr[minSoFar]}; idx:${minSoFarIdx}`);
-            }
+            this.dbgReportMinSoFar(minSoFar, minSoFarIdx);
 
             for (let i = 0; i < arrRoots.length; i++) {
                 let root = arrRoots[i];
@@ -373,11 +393,7 @@ class Sorter extends Function {
             }
         }
 
-        if (logLevel >= 1) {
-            say(`numCmpCalls = ${this.numCmpCalls}`);
-            dedent();
-            say('End sortV3(); returning ' + this.strOfArr(sorted));
-        }
+        this.dbgEnd(sorted);
 
         return sorted.map(i => inputArr[i]);
     }
