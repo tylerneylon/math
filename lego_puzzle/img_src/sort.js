@@ -272,6 +272,30 @@ class Sorter extends Function {
         say(`Trying minSoFar:${this.inputArr[minSoFar]}; idx:${minSoFarIdx}`);
     }
 
+    dbgSkippingNode(root, minSet) {
+        if (logLevel < 3) return;
+        say(`Skipping cmp w ${this.inputArr[root]}; it's in minSet: ` +
+            this.strOfArr(Object.keys(minSet))
+        );
+    }
+
+    dbgFoundCmp(minSoFar, c, root) {
+        if (logLevel < 3) return;
+        let lhs = this.inputArr[minSoFar];
+        let rhs = this.inputArr[root];
+        say(`Found that ${lhs} ${c} ${rhs}`);
+    }
+
+    dbgSubnodeLess(node) {
+        if (logLevel < 2) return;
+        say(`Found subnode (${this.inputArr[node]}) < minSoFar`);
+    }
+
+    dbgMinimalRoot(root) {
+        if (logLevel < 2) return;
+        say(`No sub-nodes (of ${this.inputArr[root]}) were smaller`);
+    }
+
     _call(inputArr, inputCmp, arr) {
 
         this.inputArr = inputArr;
@@ -332,17 +356,11 @@ class Sorter extends Function {
                 let root = arrRoots[i];
                 if (root === minSoFar) continue;
                 if (root in minSet) {
-                    if (logLevel >= 3) {
-                        say(`Skipping cmp w ${inputArr[root]}; it's in minSet: ` +
-                            this.strOfArr(Object.keys(minSet))
-                        );
-                    }
+                    this.dbgSkippingNode(root, minSet);
                     continue;
                 }
                 let c = this.cmp(minSoFar, root);
-                if (logLevel >= 3) {
-                    say(`Found that ${inputArr[minSoFar]} ${c} ${inputArr[root]}`);
-                }
+                this.dbgFoundCmp(minSoFar, c, root);
 
                 if (c === '<') {
                     this.makeXBeforeY(minSoFar, root);
@@ -365,9 +383,7 @@ class Sorter extends Function {
                         let c = this.cmp(minSoFar, node);
                         if (c === '<') return 'skip';
                         if (c === '>') {
-                            if (logLevel >= 2) {
-                                say(`Found subnode (${inputArr[node]}) < minSoFar`);
-                            }
+                            this.dbgSubnodeLess(node);
                             this.makeXBeforeY(node, minSoFar);
                             arrRoots.splice(minSoFarIdx, 1);
                             minSoFar = root;
@@ -378,9 +394,7 @@ class Sorter extends Function {
                             return 'break';
                         }
                     });
-                    if (!rootIsSmaller && logLevel >= 2) {
-                        say(`No sub-nodes (of ${inputArr[root]}) were smaller`);
-                    }
+                    if (!rootIsSmaller) this.dbgMinimalRoot(root);
                 }
             }
 
