@@ -218,12 +218,13 @@ class Sorter extends Function {
         removeFromSet(this.roots, y);
     }
 
-    // TODO as of 500.2023
-    // * Reduce the line count of debug messages in the main sort body.
-    // * Now that cmp call counting is fixed, consider re-counting the
-    //   earlier values used by sortV2. This would probably involve
-    //   checking out an earlier code version and editing that, then
-    //   losing it or pushing it as a kind of non-main parallel.
+    // TODO as of 501.2023
+    // * Think about how this algorithm is working. Could it be better?
+    //   Do I have a clear argument for why a merge approach is better?
+    //   I'm not 100% sure that it is.
+    //   Could I, for example, compare each root (intelligently) to every other
+    //   tree in the forest as I go? Maybe that's simpler and as fast.
+    //   I want to simplify the code if possible, basically.
 
     dbgStart(arr) {
         if (logLevel < 1) return;
