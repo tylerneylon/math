@@ -176,6 +176,29 @@ function makeSet(arr) {
     return set;
 }
 
+function setSize(obj) {
+    return Object.keys(obj).length;
+}
+
+function intersect(...sets) {
+    return sets.reduce((isect, thisSet) => {
+        const result = {};
+        for (let key in isect) {
+            if (thisSet[key]) result[key] = true;
+        }
+        return result;
+    }, sets[0]);
+}
+
+function pickInSet(s) {
+    if (setSize(s) === 0) return null;
+    return Object.keys(s)[0];
+}
+
+function pickInSets(...sets) {
+    return pickInSet(intersect(...sets));
+}
+
 
 // ______________________________________________________________________
 // Main function
@@ -219,12 +242,18 @@ class Sorter extends Function {
     }
 
     // TODO as of 501.2023
-    // * Think about how this algorithm is working. Could it be better?
-    //   Do I have a clear argument for why a merge approach is better?
-    //   I'm not 100% sure that it is.
-    //   Could I, for example, compare each root (intelligently) to every other
-    //   tree in the forest as I go? Maybe that's simpler and as fast.
-    //   I want to simplify the code if possible, basically.
+    // * High-level, I'm trying to make the algorithm simpler and more
+    //   elegant.
+    // * I'm in the process of replacing arrRoots with arrRootSet.
+    //   After that's working, I can go back to the simpler name arrRoots for
+    //   the set.
+    // * I suspect that all the checks in the main loop can be simplified in the
+    //   sense that the check-a-subtree case may actually be able to cover all
+    //   possible cases.
+    // * I can clean up the code by clearly sectioning things up by the set
+    //   interface and the abstract debug interface.
+    // * It may be worthwhile to create a set class. I just learned there is
+    //   already a Set type. I can look into using that instead.
 
     dbgStart(arr) {
         if (logLevel < 1) return;
@@ -329,32 +358,33 @@ class Sorter extends Function {
         sort(inputArr, inputCmp, arr.slice(k));
         let arrSet = makeSet(arr);
 
+        // TODO
+        // * Try to drop arrRoots in favor of arrRootSet.
+
         let sorted = [];
         let arrRoots = Object.keys(this.roots).filter(root => root in arrSet);
+        let arrRootSet = makeSet(
+            Object.keys(this.roots).filter(root => root in arrSet)
+        );
 
         if (logLevel >= 3) say('arrRoots = ' + arrRoots.join(' '));
 
-        while (arrRoots.length > 0) {
+        while (setSize(arrRootSet) > 0) {
 
             this.dbgStartOfLoop(arrRoots, arrSet);
 
             // Choose minSoFar from the side with more (unsorted) elements in it.
             // This is a heuristic to help reduce the number of comparison calls.
 
-            let len1 = Object.keys(set1).length;
-            let len2 = Object.keys(set2).length;
-            let largerSet = (len1 > len2) ? set1 : set2;
-            let largerSideRootIndexes = Object.keys(arrRoots).filter(
-                x => arrRoots[x] in largerSet
-            );
-            let minSoFarIdx = largerSideRootIndexes[0] ?? 0;
-            let minSoFar    = arrRoots[minSoFarIdx];
-            let minSet      = (minSoFar in set1) ? set1 : set2;
+            let largerSet = (setSize(set1) > setSize(set2)) ? set1 : set2;
+            let minSoFar  = pickInSets(arrRootSet, largerSet);
+            if (minSoFar === null) minSoFar = pickInSets(arrRootSet);
+            let minSet = (minSoFar in set1) ? set1 : set2;
+            let comparedRoots = makeSet([]);
 
             this.dbgReportMinSoFar(minSoFar, minSoFarIdx);
 
-            for (let i = 0; i < arrRoots.length; i++) {
-                let root = arrRoots[i];
+            for (let root in arrRootSet) {
                 if (root === minSoFar) continue;
                 if (root in minSet) {
                     this.dbgSkippingNode(root, minSet);
@@ -365,16 +395,12 @@ class Sorter extends Function {
 
                 if (c === '<') {
                     this.makeXBeforeY(minSoFar, root);
-                    arrRoots.splice(i, 1);
-                    if (i < minSoFarIdx) minSoFarIdx--;
-                    i--;
+                    removeFromSet(arrRootSet, root);
                 } else if (c === '>') {
                     this.makeXBeforeY(root, minSoFar);
-                    arrRoots.splice(minSoFarIdx, 1);
+                    removeFromSet(arrRootSet, minSoFar);
                     minSoFar = root;
-                    minSoFarIdx = (i > minSoFarIdx) ? i - 1 : i;
                     minSet = (minSoFar in set1) ? set1 : set2;
-                    i = -1;
                 } else {
                     console.assert(c === null);
                     // Walk the tree in case x < minSoFar for some x in the tree.
@@ -386,11 +412,9 @@ class Sorter extends Function {
                         if (c === '>') {
                             this.dbgSubnodeLess(node);
                             this.makeXBeforeY(node, minSoFar);
-                            arrRoots.splice(minSoFarIdx, 1);
+                            removeFromSet(arrRootSet, minSoFar);
                             minSoFar = root;
-                            minSoFarIdx = (i > minSoFarIdx) ? i - 1 : i;
                             minSet = (minSoFar in set1) ? set1 : set2;
-                            i = -1;
                             rootIsSmaller = true;
                             return 'break';
                         }
@@ -611,7 +635,7 @@ function test7() {
 // ______________________________________________________________________
 // Run the tests
 
-if (true) {
+if (false) {
     // XXX
     allTests = [test1, test2, test3, test4, test5, test6, test7];
     // allTests = [test1];
