@@ -279,7 +279,7 @@ class Sorter extends Function {
         say('End sort(); returning ' + this.strOfArr(arr));
     }
 
-    dbgStartOfLoop(arrRootSet, arrSet) {
+    dbgStartOfLoop(arrRoots, arrSet) {
         if (logLevel >= 3) {
             say('roots forest:');
             say('_'.repeat(30));
@@ -288,16 +288,16 @@ class Sorter extends Function {
         }
 
         if (logLevel >= 2) {
-            let roots = arrOfSet(arrRootSet).map(x => this.inputArr[x]);
+            let roots = arrOfSet(arrRoots).map(x => this.inputArr[x]);
             say(
-                `Start of loop: arrRoots has length ${setSize(arrRootSet)}: ` + 
+                `Start of loop: arrRoots has length ${setSize(arrRoots)}: ` +
                 `[${roots.join(' ')}]`
             );
 
             // Print out the full forest.
             say('arrRoots Forest:');
             say('_'.repeat(30));
-            printForest(arrOfSet(arrRootSet), this.after, arrSet);
+            printForest(arrOfSet(arrRoots), this.after, arrSet);
             say('_'.repeat(30));
         }
     }
@@ -363,32 +363,29 @@ class Sorter extends Function {
         sort(inputArr, inputCmp, arr.slice(k));
         let arrSet = makeSet(arr);
 
-        // TODO
-        // * Try to drop arrRoots in favor of arrRootSet.
-
         let sorted = [];
-        let arrRootSet = makeSet(
+        let arrRoots = makeSet(
             arrOfSet(this.roots).filter(root => root in arrSet)
         );
 
-        if (logLevel >= 3) say('arrRoots = ' + arrOfSet(arrRootSet).join(' '));
+        if (logLevel >= 3) say('arrRoots = ' + arrOfSet(arrRoots).join(' '));
 
-        while (setSize(arrRootSet) > 0) {
+        while (setSize(arrRoots) > 0) {
 
-            this.dbgStartOfLoop(arrRootSet, arrSet);
+            this.dbgStartOfLoop(arrRoots, arrSet);
 
             // Choose minSoFar from the side with more (unsorted) elements in it.
             // This is a heuristic to help reduce the number of comparison calls.
 
             let largerSet = (setSize(set1) > setSize(set2)) ? set1 : set2;
-            let minSoFar  = pickInSets(arrRootSet, largerSet);
-            if (minSoFar === null) minSoFar = pickInSets(arrRootSet);
+            let minSoFar  = pickInSets(arrRoots, largerSet);
+            if (minSoFar === null) minSoFar = pickInSets(arrRoots);
             let minSet = (minSoFar in set1) ? set1 : set2;
             let comparedRoots = makeSet([]);
 
             this.dbgReportMinSoFar(minSoFar);
 
-            for (let root in arrRootSet) {
+            for (let root in arrRoots) {
                 if (root === minSoFar) continue;
                 if (root in minSet) {
                     this.dbgSkippingNode(root, minSet);
@@ -399,10 +396,10 @@ class Sorter extends Function {
 
                 if (c === '<') {
                     this.makeXBeforeY(minSoFar, root);
-                    removeFromSet(arrRootSet, root);
+                    removeFromSet(arrRoots, root);
                 } else if (c === '>') {
                     this.makeXBeforeY(root, minSoFar);
-                    removeFromSet(arrRootSet, minSoFar);
+                    removeFromSet(arrRoots, minSoFar);
                     minSoFar = root;
                     minSet = (minSoFar in set1) ? set1 : set2;
                 } else {
@@ -416,7 +413,7 @@ class Sorter extends Function {
                         if (c === '>') {
                             this.dbgSubnodeLess(node);
                             this.makeXBeforeY(node, minSoFar);
-                            removeFromSet(arrRootSet, minSoFar);
+                            removeFromSet(arrRoots, minSoFar);
                             minSoFar = root;
                             minSet = (minSoFar in set1) ? set1 : set2;
                             rootIsSmaller = true;
@@ -430,9 +427,9 @@ class Sorter extends Function {
             if (logLevel >= 2) say(`Pushing ${inputArr[minSoFar]} onto sorted`);
             sorted.push(minSoFar);
             delete minSet[minSoFar];
-            removeFromSet(arrRootSet, minSoFar);
+            removeFromSet(arrRoots, minSoFar);
             for (const newRoot in this.after[minSoFar]) {
-                if (newRoot in arrSet) arrRootSet[newRoot] = true;
+                if (newRoot in arrSet) arrRoots[newRoot] = true;
             }
         }
 
