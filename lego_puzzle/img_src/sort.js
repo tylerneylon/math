@@ -199,6 +199,10 @@ function pickInSets(...sets) {
     return pickInSet(intersect(...sets));
 }
 
+function arrOfSet(s) {
+    return Object.keys(s);
+}
+
 
 // ______________________________________________________________________
 // Main function
@@ -275,7 +279,7 @@ class Sorter extends Function {
         say('End sort(); returning ' + this.strOfArr(arr));
     }
 
-    dbgStartOfLoop(arrRoots, arrSet) {
+    dbgStartOfLoop(arrRootSet, arrSet) {
         if (logLevel >= 3) {
             say('roots forest:');
             say('_'.repeat(30));
@@ -284,22 +288,23 @@ class Sorter extends Function {
         }
 
         if (logLevel >= 2) {
+            let roots = arrOfSet(arrRootSet).map(x => this.inputArr[x]);
             say(
-                `Start of loop: arrRoots has length ${arrRoots.length}: ` + 
-                `[${arrRoots.map(x => this.inputArr[x]).join(' ')}]`
+                `Start of loop: arrRoots has length ${setSize(arrRootSet)}: ` + 
+                `[${roots.join(' ')}]`
             );
 
             // Print out the full forest.
             say('arrRoots Forest:');
             say('_'.repeat(30));
-            printForest(arrRoots, this.after, arrSet);
+            printForest(arrOfSet(arrRootSet), this.after, arrSet);
             say('_'.repeat(30));
         }
     }
 
-    dbgReportMinSoFar(minSoFar, minSoFarIdx) {
+    dbgReportMinSoFar(minSoFar) {
         if (logLevel < 3) return
-        say(`Trying minSoFar:${this.inputArr[minSoFar]}; idx:${minSoFarIdx}`);
+        say(`Trying minSoFar:${this.inputArr[minSoFar]}`);
     }
 
     dbgSkippingNode(root, minSet) {
@@ -362,16 +367,15 @@ class Sorter extends Function {
         // * Try to drop arrRoots in favor of arrRootSet.
 
         let sorted = [];
-        let arrRoots = Object.keys(this.roots).filter(root => root in arrSet);
         let arrRootSet = makeSet(
-            Object.keys(this.roots).filter(root => root in arrSet)
+            arrOfSet(this.roots).filter(root => root in arrSet)
         );
 
-        if (logLevel >= 3) say('arrRoots = ' + arrRoots.join(' '));
+        if (logLevel >= 3) say('arrRoots = ' + arrOfSet(arrRootSet).join(' '));
 
         while (setSize(arrRootSet) > 0) {
 
-            this.dbgStartOfLoop(arrRoots, arrSet);
+            this.dbgStartOfLoop(arrRootSet, arrSet);
 
             // Choose minSoFar from the side with more (unsorted) elements in it.
             // This is a heuristic to help reduce the number of comparison calls.
@@ -382,7 +386,7 @@ class Sorter extends Function {
             let minSet = (minSoFar in set1) ? set1 : set2;
             let comparedRoots = makeSet([]);
 
-            this.dbgReportMinSoFar(minSoFar, minSoFarIdx);
+            this.dbgReportMinSoFar(minSoFar);
 
             for (let root in arrRootSet) {
                 if (root === minSoFar) continue;
@@ -426,9 +430,9 @@ class Sorter extends Function {
             if (logLevel >= 2) say(`Pushing ${inputArr[minSoFar]} onto sorted`);
             sorted.push(minSoFar);
             delete minSet[minSoFar];
-            arrRoots.splice(minSoFarIdx, 1);
+            removeFromSet(arrRootSet, minSoFar);
             for (const newRoot in this.after[minSoFar]) {
-                if (newRoot in arrSet) arrRoots.push(newRoot);
+                if (newRoot in arrSet) arrRootSet[newRoot] = true;
             }
         }
 
@@ -635,7 +639,7 @@ function test7() {
 // ______________________________________________________________________
 // Run the tests
 
-if (false) {
+if (true) {
     // XXX
     allTests = [test1, test2, test3, test4, test5, test6, test7];
     // allTests = [test1];
