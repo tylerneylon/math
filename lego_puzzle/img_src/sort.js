@@ -246,14 +246,6 @@ class Sorter extends Function {
     }
 
     // TODO as of 501.2023
-    // * High-level, I'm trying to make the algorithm simpler and more
-    //   elegant.
-    // * I'm in the process of replacing arrRoots with arrRootSet.
-    //   After that's working, I can go back to the simpler name arrRoots for
-    //   the set.
-    // * I suspect that all the checks in the main loop can be simplified in the
-    //   sense that the check-a-subtree case may actually be able to cover all
-    //   possible cases.
     // * I can clean up the code by clearly sectioning things up by the set
     //   interface and the abstract debug interface.
     // * It may be worthwhile to create a set class. I just learned there is
