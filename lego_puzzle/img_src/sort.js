@@ -374,8 +374,8 @@ class Sorter extends Function {
 
             this.dbgStartOfLoop(arrRoots, arrSet);
 
-            // Choose minSoFar from the side with more (unsorted) elements in it.
-            // This is a heuristic to help reduce the number of comparison calls.
+            // Choose minSoFar from the side with more unsorted elements in it.
+            // This heuristic aims to reduce the number of comparison calls.
 
             let largerSet = (setSize(set1) > setSize(set2)) ? set1 : set2;
             let minSoFar  = pickInSets(arrRoots, largerSet);
