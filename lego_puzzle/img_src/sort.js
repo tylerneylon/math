@@ -381,7 +381,6 @@ class Sorter extends Function {
             let minSoFar  = pickInSets(arrRoots, largerSet);
             if (minSoFar === null) minSoFar = pickInSets(arrRoots);
             let minSet = (minSoFar in set1) ? set1 : set2;
-            let comparedRoots = makeSet([]);
 
             this.dbgReportMinSoFar(minSoFar);
 
@@ -391,37 +390,25 @@ class Sorter extends Function {
                     this.dbgSkippingNode(root, minSet);
                     continue;
                 }
-                let c = this.cmp(minSoFar, root);
-                this.dbgFoundCmp(minSoFar, c, root);
-
-                if (c === '<') {
-                    this.makeXBeforeY(minSoFar, root);
-                    removeFromSet(arrRoots, root);
-                } else if (c === '>') {
-                    this.makeXBeforeY(root, minSoFar);
-                    removeFromSet(arrRoots, minSoFar);
-                    minSoFar = root;
-                    minSet = (minSoFar in set1) ? set1 : set2;
-                } else {
-                    console.assert(c === null);
-                    // Walk the tree in case x < minSoFar for some x in the tree.
-                    let rootIsSmaller = false;
-                    depthFirstTraverse(root, this.after, (node) => {
-                        if (rootIsSmaller) return 'skip';
-                        let c = this.cmp(minSoFar, node);
-                        if (c === '<') return 'skip';
-                        if (c === '>') {
-                            this.dbgSubnodeLess(node);
-                            this.makeXBeforeY(node, minSoFar);
-                            removeFromSet(arrRoots, minSoFar);
-                            minSoFar = root;
-                            minSet = (minSoFar in set1) ? set1 : set2;
-                            rootIsSmaller = true;
-                            return 'break';
+                depthFirstTraverse(root, this.after, (node) => {
+                    let c = this.cmp(minSoFar, node);
+                    this.dbgFoundCmp(minSoFar, c, node);
+                    if (c === '<') {
+                        if (node === root) {
+                            this.makeXBeforeY(minSoFar, root);
+                            removeFromSet(arrRoots, root);
                         }
-                    });
-                    if (!rootIsSmaller) this.dbgMinimalRoot(root);
-                }
+                        return 'skip';
+                    }
+                    if (c === '>') {
+                        this.dbgSubnodeLess(node);
+                        this.makeXBeforeY(node, minSoFar);
+                        removeFromSet(arrRoots, minSoFar);
+                        minSoFar = root;
+                        minSet = (minSoFar in set1) ? set1 : set2;
+                        return 'break';
+                    }
+                });
             }
 
             if (logLevel >= 2) say(`Pushing ${inputArr[minSoFar]} onto sorted`);
