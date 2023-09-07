@@ -2,7 +2,11 @@
  *
  * Sorting with partial information.
  *
- * This file contains a function which can sort a given array by
+ * This file defines a singleton class called Sorter, with a global callable
+ * instance named `sort()`; I'll document as if this were a regular function
+ * since you can (and are expected to) treat it like one.
+ *
+ * The sort() function sorts a given array by
  * using a provided comparison function. What's different about this
  * case is that the comparison function can return (in addition to
  * '<' or '>') the null value, indicating that the order of the
@@ -20,7 +24,7 @@
 
 
 // ______________________________________________________________________
-// Debug functions
+// Printing functions
 
 let spaceChar = ' ';  // Alternative: &nbsp; for html.
 let indentPrefix = '|' + spaceChar.repeat(3);
@@ -72,6 +76,10 @@ function getRowsFromColumns(cols, colSep) {
     return rows;
 }
 
+
+// ______________________________________________________________________
+// Tree traversal and printing functions
+
 // This is a helper function for depth-first traversal.
 function entries(arrOrObj) {
     const arr = Array.isArray(arrOrObj) ? arrOrObj : Object.keys(arrOrObj);
@@ -114,13 +122,7 @@ function depthFirstTraverse(root, tree, fn1, fn2, opts) {
 function getTree(root, tree, nodeSet) {
     let cols = [];
     let numRows = 0;
-    // XXX and below within this fn
-    // console.log('getTree()')
-    // console.log('root:', root);
-    // console.log('tree:', tree);
-    //console.log('nodeSet:', nodeSet);
     depthFirstTraverse(root, tree, (node, depth, childNum) => {
-        // console.log(`called: fn1(${node}, ${depth}, ${childNum})`);
         let d = 2 * depth;
         while(cols.length <= d) cols.push([]);
         while (d - 1 > 0 && cols[d - 1].length < cols[d - 2].length - 1) {
@@ -134,14 +136,10 @@ function getTree(root, tree, nodeSet) {
         cols[d].push(tree.inputArr[node]);
         numRows = Math.max(numRows, cols[d].length);
     }, (node, depth) => {
-        // console.log(`called: fn2(${node}, ${depth})`);
         for (let i = 2 * depth - 1; i <= 2 * depth; i++) {
             while (i > 0 && cols[i].length < numRows) cols[i].push('');
         }
     }, {nodeSet});
-    // console.log('end of getTree()');
-    // TODO: Modify showTable..() to accept an `opts` value instead.
-    // showTableWithColumns(cols, ' ', ' ', console.log);
     return getRowsFromColumns(cols);
 }
 
@@ -152,23 +150,25 @@ function printForest(roots, tree, nodeSet) {
 
 
 // ______________________________________________________________________
-// Utility functions used by sort()
+// Helper functions for layered data
 
 function push(elt, prop, newItem) {
     if (!elt.hasOwnProperty(prop)) elt[prop] = [];
     elt[prop].push(newItem);
 }
 
-function addToSet(elt, prop, newItem) {
+function pushToSet(elt, prop, newItem) {
     if (!(prop in elt)) elt[prop] = {};
     elt[prop][newItem] = true;
 }
 
+
+// ______________________________________________________________________
+// Functions for objects as sets
+
 function removeFromSet(set, item) {
     if (item in set) delete set[item];
 }
-
-let logLevel = 3;
 
 function makeSet(arr) {
     let set = {};
@@ -205,8 +205,9 @@ function arrOfSet(s) {
 
 
 // ______________________________________________________________________
-// Main function
+// Define the Sorter class and sort() function
 
+let logLevel = 3;
 
 class Sorter extends Function {
     constructor() {
@@ -239,7 +240,7 @@ class Sorter extends Function {
     }
 
     makeXBeforeY(x, y) {
-        addToSet(this.after, x, y);
+        pushToSet(this.after, x, y);
         if (y in this.before) removeFromSet(this.after[this.before[y]], y);
         this.before[y] = x;
         removeFromSet(this.roots, y);
@@ -422,7 +423,7 @@ const sort = new Sorter();
 
 
 // ______________________________________________________________________
-// Tests definitions
+// Helper functions for tests
 
 let activeTest = null;
 
@@ -452,19 +453,9 @@ function checkArrayRespectsKnownOrders(arr, knownOrders) {
     });
 }
 
-// TODO: needed?
-function checkArrayIsInAcceptableArrays(arr, acceptables) {
-    let didFindMatch = false;
-    acceptables.forEach(goalArr => {
-        if (goalArr.filter((elt, i) => elt === arr[i]).length === arr.length) {
-            didFindMatch = true;
-        }
-    });
-    if (!didFindMatch) {
-        console.log(`${activeTest.name} failed`);
-        process.exit(1);
-    }
-}
+
+// ______________________________________________________________________
+// Tests definitions
 
 // This is convenient to have around.
 function usualCmp(x, y) {
