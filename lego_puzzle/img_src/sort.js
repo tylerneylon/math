@@ -345,7 +345,7 @@ class Sorter extends Function {
         // Define the base case.
         if (arr.length < 2) {
             this.dbgEndByBaseCase(arr);
-            return arr;
+            return {sorted: arr, inputArr: inputArr, before: this.before};
         }
 
         // Implement the recursive case.
@@ -415,7 +415,11 @@ class Sorter extends Function {
 
         this.dbgEnd(sorted);
 
-        return sorted.map(i => inputArr[i]);
+        return {
+            sorted: sorted.map(i => inputArr[i]),
+            inputArr: this.inputArr,
+            before: this.before
+        }
     }
 }
 
@@ -469,7 +473,7 @@ function test1() {
     function cmp(x, y) {
         return (x < y) ? '<' : (x > y ? '>' : '=');
     }
-    let result = sort(arr, cmp);
+    let result = sort(arr, cmp)['sorted'];
     console.log('result:');
     console.log(result);
     check(result[0] === 0 && result[1] === 1);
@@ -481,7 +485,7 @@ function test2() {
     function cmp(x, y) {
         return (x < y) ? '<' : (x > y ? '>' : '=');
     }
-    let result = sort(arr, cmp);
+    let result = sort(arr, cmp)['sorted'];
     console.log('result:');
     console.log(result);
     check(result.every((x, i) => (x === i)));
@@ -502,7 +506,7 @@ function testWithWeirdCmp(arr, goalArr) {
         if (x === 0 || y === 0) return usualCmp(x, y);
         return null;
     }
-    let result = sort(arr, cmp);
+    let result = sort(arr, cmp)['sorted'];
     console.log('result:');
     console.log(result);
     checkArraysAreSame(result, goalArr);
@@ -550,7 +554,7 @@ function test5() {
         }
         return null;
     }
-    let result = sort(arr, cmp);
+    let result = sort(arr, cmp)['sorted'];
     console.log('result:');
     console.log(result);
     let goalArr = [1, 2, 3, -1, 4, 5, 6, -2, 7, 8, 9];
@@ -568,7 +572,7 @@ function test6() {
         if (x > y) return '>';
         return '=';
     }
-    let result = sort(arr, cmp);
+    let result = sort(arr, cmp)['sorted'];
     console.log('result:');
     console.log(result);
     checkArrayRespectsKnownOrders(
@@ -593,7 +597,7 @@ function test7() {
         }
         return null;
     }
-    let result = sort(arr, cmp);
+    let result = sort(arr, cmp)['sorted'];
     console.log('result:');
     console.log(result);
     checkArrayRespectsKnownOrders(
@@ -626,7 +630,7 @@ if (false) {
     function cmp(x, y) {
         return (x < y) ? '<' : (x > y ? '>' : '=');
     }
-    let result = sort(arr, cmp);
+    let result = sort(arr, cmp)['sorted'];
     console.log('result:');
     console.log(result);
 }
