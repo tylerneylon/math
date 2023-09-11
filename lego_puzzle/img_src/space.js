@@ -1088,6 +1088,7 @@ function orderElts(xys) {
 // Debug messaging.
 
 let commentElt  = document.getElementById('comment');
+commentElt = null;  // XXX
 let prefix = '';
 let commentParts = [];
 
@@ -1684,7 +1685,7 @@ let numTimesLeft = 3;  // DEBUG1
 export function updatePoints() {
 
     // DEBUG1
-    if (numTimesLeft <= 0) return;
+    if (false && numTimesLeft <= 0) return;
     numTimesLeft--;
 
     console.assert(artist !== null);
