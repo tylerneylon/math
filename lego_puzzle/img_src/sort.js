@@ -225,7 +225,9 @@ class Sorter extends Function {
         let result = '=';
         if (a !== b) {
             this.numCmpCalls++;
-            result = this.inputCmp(this.inputArr[a], this.inputArr[b]);
+            result = this.inputCmp(
+                this.inputArr[a], this.inputArr[b], this.cmpCtx
+            );
         }
         this.cache[key] = result;
 
@@ -324,7 +326,7 @@ class Sorter extends Function {
         say(`No sub-nodes (of ${this.inputArr[root]}) were smaller`);
     }
 
-    _call(inputArr, inputCmp, arr) {
+    _call(inputArr, inputCmp, cmpCtx, arr) {
 
         this.inputArr = inputArr;
         this.inputCmp = inputCmp;
@@ -332,6 +334,7 @@ class Sorter extends Function {
         if (arr === undefined) {
             // This is an initial call; we must initialize some values.
             arr         = inputArr.map((e, i) => i);
+            this.cmpCtx = cmpCtx;
             this.cache  = {};
             this.after  = {inputArr};
             this.before = {};
@@ -352,8 +355,8 @@ class Sorter extends Function {
         let k = Math.floor(arr.length / 2);
         let set1 = makeSet(arr.slice(0, k));
         let set2 = makeSet(arr.slice(k));
-        sort(inputArr, inputCmp, arr.slice(0, k));
-        sort(inputArr, inputCmp, arr.slice(k));
+        sort(inputArr, inputCmp, cmpCtx, arr.slice(0, k));
+        sort(inputArr, inputCmp, cmpCtx, arr.slice(k));
         let arrSet = makeSet(arr);
 
         let sorted = [];
