@@ -610,27 +610,30 @@ function test7() {
 // ______________________________________________________________________
 // Run the tests
 
-if (true) {
-    // XXX
-    allTests = [test1, test2, test3, test4, test5, test6, test7];
-    // allTests = [test1];
-    allTests.forEach(testFn => {
-        activeTest = testFn;
-        console.log('\n' + '_'.repeat(80));
-        console.log(`Running ${testFn.name}`);
-        testFn();
-        // We only get this far if the test passed.
-        console.log('Passed!');
-    });
-    console.log('Done running all tests!');
+if (typeof require !== 'undefined' && require.main === module) {
+    if (true) {
+        // XXX
+        let allTests = [test1, test2, test3, test4, test5, test6, test7];
+        // allTests = [test1];
+        allTests.forEach(testFn => {
+            activeTest = testFn;
+            console.log('\n' + '_'.repeat(80));
+            console.log(`Running ${testFn.name}`);
+            testFn();
+            // We only get this far if the test passed.
+            console.log('Passed!');
+        });
+        console.log('Done running all tests!');
+    }
+
+    if (false) {
+        let arr = [1, 0, 3, 6, 5, 2, 4];
+        function cmp(x, y) {
+            return (x < y) ? '<' : (x > y ? '>' : '=');
+        }
+        let result = sort(arr, cmp)['sorted'];
+        console.log('result:');
+        console.log(result);
+    }
 }
 
-if (false) {
-    let arr = [1, 0, 3, 6, 5, 2, 4];
-    function cmp(x, y) {
-        return (x < y) ? '<' : (x > y ? '>' : '=');
-    }
-    let result = sort(arr, cmp)['sorted'];
-    console.log('result:');
-    console.log(result);
-}

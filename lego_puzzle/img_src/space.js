@@ -16,6 +16,7 @@
 // Imports
 
 import * as matrix from './matrix.js';
+import * as sort   from './sort.js';
 import * as util   from './util.js';
 import * as vector from './vector.js';
 
