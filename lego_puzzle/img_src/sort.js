@@ -613,7 +613,7 @@ function test7() {
 // ______________________________________________________________________
 // Run the tests
 
-if (typeof require !== 'undefined' && require.main === module) {
+if (typeof process !== undefined) {
     if (true) {
         // XXX
         let allTests = [test1, test2, test3, test4, test5, test6, test7];
