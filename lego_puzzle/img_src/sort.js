@@ -426,7 +426,7 @@ class Sorter extends Function {
     }
 }
 
-const sort = new Sorter();
+export const sort = new Sorter();
 
 
 // ______________________________________________________________________

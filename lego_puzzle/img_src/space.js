@@ -984,7 +984,8 @@ function orderElts2(pts, normalXYs) {
 
     let shapes = ctx.prevBackToFront ?? [...ctx.faces, ...ctx.lines];
     // let shapes = [...ctx.faces, ...ctx.lines];
-    let backToFront = sortWithPartialInfo(shapes, compareShapes, pts);
+    let backToFront = sort.sort(shapes, compareShapes, pts)['sorted'];
+    // let backToFront = sortWithPartialInfo(shapes, compareShapes, pts);
     ctx.prevBackToFront = backToFront;
 
     say('<p><hr>Here is the ordering of shapes I got, back-to-front:');
@@ -1686,7 +1687,7 @@ let numTimesLeft = 3;  // DEBUG1
 export function updatePoints() {
 
     // DEBUG1
-    if (false && numTimesLeft <= 0) return;
+    if (true && numTimesLeft <= 0) return;
     numTimesLeft--;
 
     console.assert(artist !== null);
