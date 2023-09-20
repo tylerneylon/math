@@ -634,7 +634,7 @@ function test8() {
 // ______________________________________________________________________
 // Run the tests
 
-if (typeof process !== undefined) {
+if (typeof window === 'undefined') {
     if (true) {
         let allTests = [
             test1, test2, test3, test4, test5,
