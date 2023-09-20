@@ -609,15 +609,37 @@ function test7() {
     );
 }
 
+// The purpose of this test is to help reveal a possible bug when we have a kind
+// of anti-tree in the cmp(). What I mean is that many elements are known to be
+// less than a single central one, but are otherwise not comparable.
+function test8() {
+    let arr = Array.from({length: 5}, (_, i) => i + 1);
+    // Everything will be < 1, but otherwise all cmp() returns are null.
+    function cmp(x, y) {
+        if (x === y) return '=';
+        if (x === 4) return '>';
+        if (y === 4) return '<';
+        return null;
+    }
+    let result = sort(arr, cmp)['sorted'];
+    console.log('result:');
+    console.log(result);
+    checkArrayRespectsKnownOrders(
+        result,
+        [[1, 4], [2, 4], [3, 4], [5, 4]]
+    );
+}
+
 
 // ______________________________________________________________________
 // Run the tests
 
 if (typeof process !== undefined) {
     if (true) {
-        // XXX
-        let allTests = [test1, test2, test3, test4, test5, test6, test7];
-        // allTests = [test1];
+        let allTests = [
+            test1, test2, test3, test4, test5,
+            test6, test7, test8];
+        allTests = [test8];  // XXX
         allTests.forEach(testFn => {
             activeTest = testFn;
             console.log('\n' + '_'.repeat(80));
