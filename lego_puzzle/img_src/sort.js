@@ -243,8 +243,9 @@ class Sorter extends Function {
 
     makeXBeforeY(x, y) {
         pushToSet(this.after, x, y);
-        if (y in this.before) removeFromSet(this.after[this.before[y]], y);
-        this.before[y] = x;
+        // if (y in this.before) removeFromSet(this.after[this.before[y]], y);
+        // this.before[y] = x;
+        pushToSet(this.before, y, x);
         removeFromSet(this.roots, y);
     }
 
@@ -357,18 +358,19 @@ class Sorter extends Function {
         let set2 = makeSet(arr.slice(k));
         sort(inputArr, inputCmp, cmpCtx, arr.slice(0, k));
         sort(inputArr, inputCmp, cmpCtx, arr.slice(k));
-        let arrSet = makeSet(arr);
+        let subsetToSort = makeSet(arr);
 
         let sorted = [];
         let arrRoots = makeSet(
-            arrOfSet(this.roots).filter(root => root in arrSet)
+            arrOfSet(this.roots).filter(root => root in subsetToSort)
         );
 
         if (logLevel >= 3) say('arrRoots = ' + arrOfSet(arrRoots).join(' '));
 
         while (setSize(arrRoots) > 0) {
 
-            this.dbgStartOfLoop(arrRoots, arrSet);
+            // XXX TODO: Calling makeSet() every time is inefficient.
+            this.dbgStartOfLoop(arrRoots, makeSet(arr));
 
             // Choose minSoFar from the side with more unsorted elements in it.
             // This heuristic aims to reduce the number of comparison calls.
@@ -411,8 +413,10 @@ class Sorter extends Function {
             sorted.push(minSoFar);
             delete minSet[minSoFar];
             removeFromSet(arrRoots, minSoFar);
+            removeFromSet(subsetToSort, minSoFar);
             for (const newRoot in this.after[minSoFar]) {
-                if (newRoot in arrSet) arrRoots[newRoot] = true;
+                if (!(newRoot in subsetToSort)) continue;
+                arrRoots[newRoot] = true;
             }
         }
 
@@ -639,7 +643,7 @@ if (typeof window === 'undefined') {
         let allTests = [
             test1, test2, test3, test4, test5,
             test6, test7, test8];
-        allTests = [test8];  // XXX
+        // allTests = [test8];  // XXX
         allTests.forEach(testFn => {
             activeTest = testFn;
             console.log('\n' + '_'.repeat(80));
