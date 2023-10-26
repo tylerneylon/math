@@ -358,6 +358,16 @@ class Sorter extends Function {
         }
     }
 
+    // Confirm that minSoFar is indeed minimal among all subtrees checked so
+    // far. This is slow and should be turned off unless you're debugging.
+    checkMinSoFarInvariant(minSoFar, rootsChecked) {
+        for (let root in rootsChecked) {
+            depthFirstTraverse(root, this.after, (node) => {
+                console.assert(this.cmp(minSoFar, node) !== '>');
+            });
+        }
+    }
+
     _call(inputArr, inputCmp, cmpCtx, arr) {
 
         this.inputArr = inputArr;
@@ -414,7 +424,12 @@ class Sorter extends Function {
 
             this.dbgReportMinSoFar(minSoFar);
 
+            let rootsChecked = {};
             for (let root in arrRoots) {
+
+                this.checkMinSoFarInvariant(minSoFar, rootsChecked);
+                rootsChecked[root] = true;
+
                 if (root === minSoFar) continue;
                 if (root in minSet) {
                     this.dbgSkippingNode(root, minSet);
