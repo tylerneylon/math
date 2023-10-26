@@ -327,6 +327,37 @@ class Sorter extends Function {
         say(`No sub-nodes (of ${this.inputArr[root]}) were smaller`);
     }
 
+    // Turn this off for greater speed. Turn on to help debug.
+    // This can dramatically slow down the algorithm.
+    confirmInvariants(set1, set2) {
+
+        // Confirm that the roots are exactly those nodes with no incoming
+        // edges.
+        for (let i = 0; i < this.inputArr.length; i++) {
+            let isRoot = (!(i in this.before) ||
+                          setSize(this.before[i]) === 0);
+            console.assert((i in this.roots) === isRoot);
+        }
+
+        // Confirm that all roots are minimal within their set (set1/set2).
+        for (let root in this.roots) {
+            let set = (root in set1) ? set1 : set2;
+            for (let other in set) {
+                console.assert(this.cmp(root, other) !== '>');
+            }
+        }
+
+        // Confirm that before and after are consistent.
+        for (let i = 0; i < this.inputArr.length; i++) {
+            for (let j in (this.before[i] || {})) {
+                console.assert(i in this.after[j]);
+            }
+            for (let j in (this.after[i] || {})) {
+                console.assert(i in this.before[j]);
+            }
+        }
+    }
+
     _call(inputArr, inputCmp, cmpCtx, arr) {
 
         this.inputArr = inputArr;
@@ -371,6 +402,7 @@ class Sorter extends Function {
 
             // XXX TODO: Calling makeSet() every time is inefficient.
             this.dbgStartOfLoop(arrRoots, makeSet(arr));
+            this.confirmInvariants(set1, set2);
 
             // Choose minSoFar from the side with more unsorted elements in it.
             // This heuristic aims to reduce the number of comparison calls.
