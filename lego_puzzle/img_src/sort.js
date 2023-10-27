@@ -24,6 +24,13 @@
 
 
 // ______________________________________________________________________
+// Control debugging behavior.
+
+let logLevel = 3;
+let dMode = false;
+
+
+// ______________________________________________________________________
 // Printing functions
 
 let spaceChar = ' ';  // Alternative: &nbsp; for html.
@@ -206,8 +213,6 @@ function arrOfSet(s) {
 
 // ______________________________________________________________________
 // Define the Sorter class and sort() function
-
-let logLevel = 3;
 
 class Sorter extends Function {
     constructor() {
@@ -392,11 +397,11 @@ class Sorter extends Function {
             this.numCmpCalls = 0;
         }
 
-        this.dbgStart(subsetArr);
+        if (dMode) this.dbgStart(subsetArr);
 
         // Define the base case.
         if (subsetArr.length < 2) {
-            this.dbgEndByBaseCase(subsetArr);
+            if (dMode) this.dbgEndByBaseCase(subsetArr);
             return {sorted: subsetArr, inputArr: inputArr, before: this.before};
         }
 
@@ -413,15 +418,16 @@ class Sorter extends Function {
             arrOfSet(this.roots).filter(root => root in subsetToSort)
         );
 
-        if (logLevel >= 3) {
+        if (logLevel >= 3 && dMode) {
             say('subsetRootsToSort = ' + arrOfSet(subsetRootsToSort).join(' '));
         }
 
         while (setSize(subsetRootsToSort) > 0) {
 
-            // XXX TODO: Calling makeSet() every time is inefficient.
-            this.dbgStartOfLoop(subsetRootsToSort, makeSet(subsetArr));
-            this.confirmInvariants(subsetRootsToSort, set1, set2);
+            if (dMode) {
+                this.dbgStartOfLoop(subsetRootsToSort, makeSet(subsetArr));
+                this.confirmInvariants(subsetRootsToSort, set1, set2);
+            }
 
             // Choose minSoFar from the side with more unsorted elements in it.
             // This heuristic aims to reduce the number of comparison calls.
@@ -431,22 +437,26 @@ class Sorter extends Function {
             if (minSoFar === null) minSoFar = pickInSets(subsetRootsToSort);
             let minSet = (minSoFar in set1) ? set1 : set2;
 
-            this.dbgReportMinSoFar(minSoFar);
+            if (dMode) this.dbgReportMinSoFar(minSoFar);
 
             let rootsChecked = {};
             for (let root in subsetRootsToSort) {
 
-                this.checkMinSoFarInvariant(minSoFar, rootsChecked, set1, set2);
+                if (dMode) {
+                    this.checkMinSoFarInvariant(
+                        minSoFar, rootsChecked, set1, set2
+                    );
+                }
                 rootsChecked[root] = true;
 
                 if (root === minSoFar) continue;
                 if (root in minSet) {
-                    this.dbgSkippingNode(root, minSet);
+                    if (dMode) this.dbgSkippingNode(root, minSet);
                     continue;
                 }
                 depthFirstTraverse(root, this.after, (node) => {
                     let c = this.cmp(minSoFar, node);
-                    this.dbgFoundCmp(minSoFar, c, node);
+                    if (dMode) this.dbgFoundCmp(minSoFar, c, node);
                     if (c === '<') {
                         if (node === root) {
                             this.makeXBeforeY(minSoFar, root);
@@ -455,7 +465,7 @@ class Sorter extends Function {
                         return 'skip';
                     }
                     if (c === '>') {
-                        this.dbgSubnodeLess(node);
+                        if (dMode) this.dbgSubnodeLess(node);
                         this.makeXBeforeY(node, minSoFar);
                         removeFromSet(subsetRootsToSort, minSoFar);
                         minSoFar = root;
@@ -465,7 +475,9 @@ class Sorter extends Function {
                 });
             }
 
-            if (logLevel >= 2) say(`Pushing ${inputArr[minSoFar]} onto sorted`);
+            if (logLevel >= 2 && dMode) {
+                say(`Pushing ${inputArr[minSoFar]} onto sorted`);
+            }
             sorted.push(minSoFar);
             delete minSet[minSoFar];
             removeFromSet(subsetRootsToSort, minSoFar);
@@ -481,7 +493,7 @@ class Sorter extends Function {
             }
         }
 
-        this.dbgEnd(sorted);
+        if (dMode) this.dbgEnd(sorted);
 
         return {
             sorted: sorted.map(i => inputArr[i]),
@@ -712,11 +724,12 @@ function assert(condition, msg) {
 
 if (typeof window === 'undefined') {
 
+    dMode = true;
+
     if (true) {
         let allTests = [
             test1, test2, test3, test4, test5,
             test6, test7, test8];
-        // allTests = [test8];  // XXX
         allTests.forEach(testFn => {
             activeTest = testFn;
             console.log('\n' + '_'.repeat(80));
