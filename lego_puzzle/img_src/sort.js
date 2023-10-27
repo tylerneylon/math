@@ -275,7 +275,7 @@ class Sorter extends Function {
         say('End sort(); returning ' + this.strOfArr(arr));
     }
 
-    dbgStartOfLoop(arrRoots, arrSet) {
+    dbgStartOfLoop(subsetRootsToSort, arrSet) {
         if (logLevel >= 3) {
             say('roots forest:');
             say('_'.repeat(30));
@@ -284,16 +284,16 @@ class Sorter extends Function {
         }
 
         if (logLevel >= 2) {
-            let roots = arrOfSet(arrRoots).map(x => this.inputArr[x]);
+            let roots = arrOfSet(subsetRootsToSort).map(x => this.inputArr[x]);
             say(
-                `Start of loop: arrRoots has length ${setSize(arrRoots)}: ` +
-                `[${roots.join(' ')}]`
+                `Start of loop: subsetRootsToSort has length ` +
+                `${setSize(subsetRootsToSort)}: [${roots.join(' ')}]`
             );
 
             // Print out the full forest.
-            say('arrRoots Forest:');
+            say('subsetRootsToSort Forest:');
             say('_'.repeat(30));
-            printForest(arrOfSet(arrRoots), this.after, arrSet);
+            printForest(arrOfSet(subsetRootsToSort), this.after, arrSet);
             say('_'.repeat(30));
         }
     }
@@ -329,105 +329,114 @@ class Sorter extends Function {
 
     // Turn this off for greater speed. Turn on to help debug.
     // This can dramatically slow down the algorithm.
-    confirmInvariants(set1, set2) {
+    confirmInvariants(subsetRootsToSort, set1, set2) {
 
         // Confirm that the roots are exactly those nodes with no incoming
         // edges.
         for (let i = 0; i < this.inputArr.length; i++) {
             let isRoot = (!(i in this.before) ||
                           setSize(this.before[i]) === 0);
-            console.assert((i in this.roots) === isRoot);
+            assert((i in this.roots) === isRoot);
         }
 
         // Confirm that all roots are minimal within their set (set1/set2).
-        for (let root in this.roots) {
+        for (let root in subsetRootsToSort) {
             let set = (root in set1) ? set1 : set2;
             for (let other in set) {
-                console.assert(this.cmp(root, other) !== '>');
+                let c = this.cmp(root, other);
+                assert(
+                    c !== '>',
+                    `cmp(root (${root}), other (${other}, same set)) = ${c}`
+                );
             }
         }
 
         // Confirm that before and after are consistent.
         for (let i = 0; i < this.inputArr.length; i++) {
             for (let j in (this.before[i] || {})) {
-                console.assert(i in this.after[j]);
+                assert(i in this.after[j]);
             }
             for (let j in (this.after[i] || {})) {
-                console.assert(i in this.before[j]);
+                assert(i in this.before[j]);
             }
         }
     }
 
     // Confirm that minSoFar is indeed minimal among all subtrees checked so
     // far. This is slow and should be turned off unless you're debugging.
-    checkMinSoFarInvariant(minSoFar, rootsChecked) {
+    checkMinSoFarInvariant(minSoFar, rootsChecked, set1, set2) {
+
+        assert(minSoFar in set1 || minSoFar in set2);
+
         for (let root in rootsChecked) {
             depthFirstTraverse(root, this.after, (node) => {
-                console.assert(this.cmp(minSoFar, node) !== '>');
+                assert(this.cmp(minSoFar, node) !== '>');
             });
         }
     }
 
-    _call(inputArr, inputCmp, cmpCtx, arr) {
+    _call(inputArr, inputCmp, cmpCtx, subsetArr) {
 
         this.inputArr = inputArr;
         this.inputCmp = inputCmp;
 
-        if (arr === undefined) {
+        if (subsetArr === undefined) {
             // This is an initial call; we must initialize some values.
-            arr         = inputArr.map((e, i) => i);
+            subsetArr   = inputArr.map((e, i) => i);
             this.cmpCtx = cmpCtx;
             this.cache  = {};
             this.after  = {inputArr};
             this.before = {};
-            this.roots  = makeSet(arr);  // The set of roots.
+            this.roots  = makeSet(subsetArr);  // The set of roots.
             this.inputArr = inputArr;
             this.numCmpCalls = 0;
         }
 
-        this.dbgStart(arr);
+        this.dbgStart(subsetArr);
 
         // Define the base case.
-        if (arr.length < 2) {
-            this.dbgEndByBaseCase(arr);
-            return {sorted: arr, inputArr: inputArr, before: this.before};
+        if (subsetArr.length < 2) {
+            this.dbgEndByBaseCase(subsetArr);
+            return {sorted: subsetArr, inputArr: inputArr, before: this.before};
         }
 
         // Implement the recursive case.
-        let k = Math.floor(arr.length / 2);
-        let set1 = makeSet(arr.slice(0, k));
-        let set2 = makeSet(arr.slice(k));
-        sort(inputArr, inputCmp, cmpCtx, arr.slice(0, k));
-        sort(inputArr, inputCmp, cmpCtx, arr.slice(k));
-        let subsetToSort = makeSet(arr);
+        let k = Math.floor(subsetArr.length / 2);
+        let set1 = makeSet(subsetArr.slice(0, k));
+        let set2 = makeSet(subsetArr.slice(k));
+        sort(inputArr, inputCmp, cmpCtx, subsetArr.slice(0, k));
+        sort(inputArr, inputCmp, cmpCtx, subsetArr.slice(k));
+        let subsetToSort = makeSet(subsetArr);
 
         let sorted = [];
-        let arrRoots = makeSet(
+        let subsetRootsToSort = makeSet(
             arrOfSet(this.roots).filter(root => root in subsetToSort)
         );
 
-        if (logLevel >= 3) say('arrRoots = ' + arrOfSet(arrRoots).join(' '));
+        if (logLevel >= 3) {
+            say('subsetRootsToSort = ' + arrOfSet(subsetRootsToSort).join(' '));
+        }
 
-        while (setSize(arrRoots) > 0) {
+        while (setSize(subsetRootsToSort) > 0) {
 
             // XXX TODO: Calling makeSet() every time is inefficient.
-            this.dbgStartOfLoop(arrRoots, makeSet(arr));
-            this.confirmInvariants(set1, set2);
+            this.dbgStartOfLoop(subsetRootsToSort, makeSet(subsetArr));
+            this.confirmInvariants(subsetRootsToSort, set1, set2);
 
             // Choose minSoFar from the side with more unsorted elements in it.
             // This heuristic aims to reduce the number of comparison calls.
 
             let largerSet = (setSize(set1) > setSize(set2)) ? set1 : set2;
-            let minSoFar  = pickInSets(arrRoots, largerSet);
-            if (minSoFar === null) minSoFar = pickInSets(arrRoots);
+            let minSoFar  = pickInSets(subsetRootsToSort, largerSet);
+            if (minSoFar === null) minSoFar = pickInSets(subsetRootsToSort);
             let minSet = (minSoFar in set1) ? set1 : set2;
 
             this.dbgReportMinSoFar(minSoFar);
 
             let rootsChecked = {};
-            for (let root in arrRoots) {
+            for (let root in subsetRootsToSort) {
 
-                this.checkMinSoFarInvariant(minSoFar, rootsChecked);
+                this.checkMinSoFarInvariant(minSoFar, rootsChecked, set1, set2);
                 rootsChecked[root] = true;
 
                 if (root === minSoFar) continue;
@@ -441,14 +450,14 @@ class Sorter extends Function {
                     if (c === '<') {
                         if (node === root) {
                             this.makeXBeforeY(minSoFar, root);
-                            removeFromSet(arrRoots, root);
+                            removeFromSet(subsetRootsToSort, root);
                         }
                         return 'skip';
                     }
                     if (c === '>') {
                         this.dbgSubnodeLess(node);
                         this.makeXBeforeY(node, minSoFar);
-                        removeFromSet(arrRoots, minSoFar);
+                        removeFromSet(subsetRootsToSort, minSoFar);
                         minSoFar = root;
                         minSet = (minSoFar in set1) ? set1 : set2;
                         return 'break';
@@ -459,11 +468,16 @@ class Sorter extends Function {
             if (logLevel >= 2) say(`Pushing ${inputArr[minSoFar]} onto sorted`);
             sorted.push(minSoFar);
             delete minSet[minSoFar];
-            removeFromSet(arrRoots, minSoFar);
+            removeFromSet(subsetRootsToSort, minSoFar);
             removeFromSet(subsetToSort, minSoFar);
-            for (const newRoot in this.after[minSoFar]) {
-                if (!(newRoot in subsetToSort)) continue;
-                arrRoots[newRoot] = true;
+            for (const node in this.after[minSoFar]) {
+                // Promote children to roots if they're in subsetToSort and all
+                // of their immediate parents are not.
+                if (!(node in subsetToSort)) continue;
+                if (!arrOfSet(this.before[node]).some(
+                        parent => (parent in subsetToSort))) {
+                    subsetRootsToSort[node] = true;
+                }
             }
         }
 
@@ -685,7 +699,19 @@ function test8() {
 // ______________________________________________________________________
 // Run the tests
 
+function assert(condition, msg) {
+    if (!condition) {
+        if (msg) console.log('Error:', msg);
+        die;  // This purposefully causes an error to stop execution.
+
+        // This file is designed to run as both a library in a browser as well
+        // as a unit test from node. Hacky? Yes. But it works and in my opinion
+        // is simpler than alternatives.
+    }
+}
+
 if (typeof window === 'undefined') {
+
     if (true) {
         let allTests = [
             test1, test2, test3, test4, test5,
