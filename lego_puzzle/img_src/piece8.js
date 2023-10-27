@@ -242,7 +242,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // However, I could skip some of them in order to help me debug
     // z-order sorting.
 
-    space.addObject(obj4);  // yellow
+    // space.addObject(obj4);  // yellow
     /*
     space.addObject(obj5);  // magenta
     space.addObject(obj6);  // green
@@ -271,7 +271,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             matrix.rotateAroundX(Math.PI * 0.5)
         ));
         space.ctx.rotationsPerSec = 0.2;
-        space.ctx.rotationsPerSec = 0.1;  // XXX DEBUG1
+        space.ctx.rotationsPerSec = 0.65;  // XXX DEBUG1
         space.makeDraggable();
         space.animate();
     }

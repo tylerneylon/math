@@ -1682,7 +1682,7 @@ export function animate() {
     window.requestAnimationFrame(setupFrame);
 }
 
-let numTimesLeft = 3;  // DEBUG1
+let numTimesLeft = 6;  // DEBUG1
 
 export function updatePoints() {
 
