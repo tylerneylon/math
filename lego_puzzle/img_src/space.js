@@ -1686,6 +1686,11 @@ let numTimesLeft = 6;  // DEBUG1
 
 export function updatePoints() {
 
+    // DEBUG2
+    sort.dbgCtx.logLevel = 3;
+    sort.dbgCtx.debugMode = true;
+    sort.dbgCtx.getName = getShapeName;
+
     // DEBUG1
     if (true && numTimesLeft <= 0) return;
     numTimesLeft--;

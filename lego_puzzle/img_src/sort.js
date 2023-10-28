@@ -26,8 +26,8 @@
 // ______________________________________________________________________
 // Control debugging behavior.
 
-let logLevel = 3;
 let dMode = false;
+let logLevel = null;  // THis will be updated from dbgCtx per sort call.
 
 
 // ______________________________________________________________________
@@ -243,7 +243,7 @@ class Sorter extends Function {
     }
 
     strOfArr(arr) {
-        return arr.map(x => this.inputArr[x]).join(' ');
+        return arr.map(x => this.label(x)).join(' ');
     }
 
     makeXBeforeY(x, y) {
@@ -261,6 +261,11 @@ class Sorter extends Function {
     //   already a Set type. I can look into using that instead.
 
     dbgStart(arr) {
+        let getName = dbgCtx.getName ?? (x => x);
+
+        // This returns a string|stringifiable label for the input at index x.
+        this.label = idx => getName(this.inputArr[idx]);
+
         if (logLevel < 1) return;
         say('Start sort() with arr: ' + this.strOfArr(arr));
         indent();
@@ -289,7 +294,7 @@ class Sorter extends Function {
         }
 
         if (logLevel >= 2) {
-            let roots = arrOfSet(subsetRootsToSort).map(x => this.inputArr[x]);
+            let roots = arrOfSet(subsetRootsToSort).map(x => this.label(x));
             say(
                 `Start of loop: subsetRootsToSort has length ` +
                 `${setSize(subsetRootsToSort)}: [${roots.join(' ')}]`
@@ -305,31 +310,31 @@ class Sorter extends Function {
 
     dbgReportMinSoFar(minSoFar) {
         if (logLevel < 3) return
-        say(`Trying minSoFar:${this.inputArr[minSoFar]}`);
+        say(`Trying minSoFar:${this.label(minSoFar)}`);
     }
 
     dbgSkippingNode(root, minSet) {
         if (logLevel < 3) return;
-        say(`Skipping cmp w ${this.inputArr[root]}; it's in minSet: ` +
+        say(`Skipping cmp w ${this.label(root)}; it's in minSet: ` +
             this.strOfArr(Object.keys(minSet))
         );
     }
 
     dbgFoundCmp(minSoFar, c, root) {
         if (logLevel < 3) return;
-        let lhs = this.inputArr[minSoFar];
-        let rhs = this.inputArr[root];
+        let lhs = this.label(minSoFar);
+        let rhs = this.label(root);
         say(`Found that ${lhs} ${c} ${rhs}`);
     }
 
     dbgSubnodeLess(node) {
         if (logLevel < 2) return;
-        say(`Found subnode (${this.inputArr[node]}) < minSoFar`);
+        say(`Found subnode (${this.label(node)}) < minSoFar`);
     }
 
     dbgMinimalRoot(root) {
         if (logLevel < 2) return;
-        say(`No sub-nodes (of ${this.inputArr[root]}) were smaller`);
+        say(`No sub-nodes (of ${this.label(root)}) were smaller`);
     }
 
     // Turn this off for greater speed. Turn on to help debug.
@@ -349,9 +354,11 @@ class Sorter extends Function {
             let set = (root in set1) ? set1 : set2;
             for (let other in set) {
                 let c = this.cmp(root, other);
+                let rLabel = this.label(root);
+                let oLabel = this.label(other);
                 assert(
                     c !== '>',
-                    `cmp(root (${root}), other (${other}, same set)) = ${c}`
+                    `cmp(root (${rLabel}), other (${oLabel}, same set)) = ${c}`
                 );
             }
         }
@@ -381,6 +388,9 @@ class Sorter extends Function {
     }
 
     _call(inputArr, inputCmp, cmpCtx, subsetArr) {
+
+        logLevel = dbgCtx.logLevel;
+        dMode    = dbgCtx.debugMode;
 
         this.inputArr = inputArr;
         this.inputCmp = inputCmp;
@@ -504,6 +514,7 @@ class Sorter extends Function {
 }
 
 export const sort = new Sorter();
+export const dbgCtx = {logLevel: 2};
 
 
 // ______________________________________________________________________

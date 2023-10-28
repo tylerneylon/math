@@ -171,7 +171,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         face.style = {fill: '#a44'};
     }
 
-    let dbgMode = false;
+    let dbgMode = true;
     if (dbgMode) space.ctx.doDrawDots = true;
 
     let obj = [pts, lines, faces];
