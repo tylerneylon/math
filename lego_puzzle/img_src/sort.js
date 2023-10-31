@@ -26,7 +26,7 @@
 // ______________________________________________________________________
 // Control debugging behavior.
 
-let dMode = true;
+let dMode = false;
 let logLevel = null;  // This will be updated from dbgCtx per sort call.
 
 
