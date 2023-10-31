@@ -26,8 +26,8 @@
 // ______________________________________________________________________
 // Control debugging behavior.
 
-let dMode = false;
-let logLevel = null;  // THis will be updated from dbgCtx per sort call.
+let dMode = true;
+let logLevel = null;  // This will be updated from dbgCtx per sort call.
 
 
 // ______________________________________________________________________
@@ -389,8 +389,8 @@ class Sorter extends Function {
 
     _call(inputArr, inputCmp, cmpCtx, subsetArr) {
 
-        logLevel = dbgCtx.logLevel;
-        dMode    = dbgCtx.debugMode;
+        logLevel = logLevel || dbgCtx.logLevel;
+        dMode    = dMode || dbgCtx.debugMode;
 
         this.inputArr = inputArr;
         this.inputCmp = inputCmp;
@@ -736,6 +736,7 @@ function assert(condition, msg) {
 if (typeof window === 'undefined') {
 
     dMode = true;
+    logLevel = 3;
 
     if (true) {
         let allTests = [
