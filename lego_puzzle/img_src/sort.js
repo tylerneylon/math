@@ -140,7 +140,7 @@ function getTree(root, tree, nodeSet) {
         while (d > 0 && cols[d].length < cols[d - 1].length - 1)  {
             cols[d].push('');
         }
-        cols[d].push(tree.inputArr[node]);
+        cols[d].push(tree.getName(node));
         numRows = Math.max(numRows, cols[d].length);
     }, (node, depth) => {
         for (let i = 2 * depth - 1; i <= 2 * depth; i++) {
@@ -400,7 +400,10 @@ class Sorter extends Function {
             subsetArr   = inputArr.map((e, i) => i);
             this.cmpCtx = cmpCtx;
             this.cache  = {};
-            this.after  = {inputArr};
+            this.after  = {inputArr, getName: (x => inputArr[x])};
+            if (dbgCtx.getName) {
+                this.after.getName = (x => dbgCtx.getName(inputArr[x]));
+            }
             this.before = {};
             this.roots  = makeSet(subsetArr);  // The set of roots.
             this.inputArr = inputArr;

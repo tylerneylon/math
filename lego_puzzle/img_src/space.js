@@ -1143,7 +1143,7 @@ function showTableWithColumns(cols, topSep) {
 
 function getShapeName(s) {
     if (s.type === 'face') {
-        return 'face(' + s.join(',') + ')';
+        return 'f:' + s.join(',');
         // return `face(${s[0]}, ${s[1]}, ${s[2]}, ${s[3]})`;
     }
     if (s.type === 'line') {
