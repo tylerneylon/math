@@ -271,6 +271,12 @@ class Sorter extends Function {
         indent();
     }
 
+    dbgPushing(newItem) {
+        if (logLevel < 2) return;
+        let getName = dbgCtx.getName ?? (x => x);
+        say(`Pushing ${getName(this.inputArr[newItem])} onto sorted`);
+    }
+
     dbgEnd(sorted) {
         if (logLevel < 1) return;
         say(`numCmpCalls = ${this.numCmpCalls}`);
@@ -488,9 +494,7 @@ class Sorter extends Function {
                 });
             }
 
-            if (logLevel >= 2 && dMode) {
-                say(`Pushing ${inputArr[minSoFar]} onto sorted`);
-            }
+            if (dMode) this.dbgPushing(minSoFar);
             sorted.push(minSoFar);
             delete minSet[minSoFar];
             removeFromSet(subsetRootsToSort, minSoFar);
