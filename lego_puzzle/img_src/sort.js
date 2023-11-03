@@ -277,11 +277,14 @@ class Sorter extends Function {
         say(`Pushing ${getName(this.inputArr[newItem])} onto sorted`);
     }
 
-    dbgEnd(sorted) {
+    dbgEnd(sorted, arrSet) {
         if (logLevel < 1) return;
         say(`numCmpCalls = ${this.numCmpCalls}`);
         dedent();
         say('End sort(); returning ' + this.strOfArr(sorted));
+        if (logLevel < 3) return;
+        say('Just-sorted forest:');
+        printForest(Object.keys(this.roots), this.after, arrSet);
     }
 
     dbgEndByBaseCase(arr) {
@@ -469,18 +472,16 @@ class Sorter extends Function {
                 rootsChecked[root] = true;
 
                 if (root === minSoFar) continue;
-                if (root in minSet) {
-                    if (dMode) this.dbgSkippingNode(root, minSet);
-                    continue;
-                }
                 depthFirstTraverse(root, this.after, (node) => {
+                    if (node in minSet) {
+                        if (dMode) this.dbgSkippingNode(node, minSet);
+                        return;
+                    }
                     let c = this.cmp(minSoFar, node);
                     if (dMode) this.dbgFoundCmp(minSoFar, c, node);
                     if (c === '<') {
-                        if (node === root) {
-                            this.makeXBeforeY(minSoFar, root);
-                            removeFromSet(subsetRootsToSort, root);
-                        }
+                        this.makeXBeforeY(minSoFar, node);
+                        removeFromSet(subsetRootsToSort, node);
                         return 'skip';
                     }
                     if (c === '>') {
@@ -510,7 +511,7 @@ class Sorter extends Function {
             }
         }
 
-        if (dMode) this.dbgEnd(sorted);
+        if (dMode) this.dbgEnd(sorted, makeSet(subsetArr));
 
         return {
             sorted: sorted.map(i => inputArr[i]),
