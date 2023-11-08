@@ -175,6 +175,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     if (dbgMode) space.ctx.doDrawDots = true;
 
     let obj = [pts, lines, faces];
+    // obj = [pts, lines.slice(0, 21), []];  // DEBUG2
 
     // Add a small degree of fading for the farther-back points and lines.
     // space.ctx.fadeRange = [8, 10];
@@ -271,7 +272,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             matrix.rotateAroundX(Math.PI * 0.5)
         ));
         space.ctx.rotationsPerSec = 0.2;
-        space.ctx.rotationsPerSec = 0.65;  // XXX DEBUG1
+        // space.ctx.rotationsPerSec = 0.65;  // XXX DEBUG1
         space.makeDraggable();
         space.animate();
     }

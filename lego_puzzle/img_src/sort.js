@@ -462,8 +462,9 @@ class Sorter extends Function {
             if (dMode) this.dbgReportMinSoFar(minSoFar);
 
             let rootsChecked = {};
-            for (let root in subsetRootsToSort) {
-
+            let subsetRootsToSortArr = Object.keys(subsetRootsToSort);
+            for (let i = 0; i < subsetRootsToSortArr.length; i++) {
+                let root = subsetRootsToSortArr[i];
                 if (dMode) {
                     this.checkMinSoFarInvariant(
                         minSoFar, rootsChecked, set1, set2
@@ -473,10 +474,12 @@ class Sorter extends Function {
 
                 if (root === minSoFar) continue;
                 depthFirstTraverse(root, this.after, (node) => {
+                    /*
                     if (node in minSet) {
                         if (dMode) this.dbgSkippingNode(node, minSet);
                         return;
                     }
+                    */
                     let c = this.cmp(minSoFar, node);
                     if (dMode) this.dbgFoundCmp(minSoFar, c, node);
                     if (c === '<') {
@@ -490,6 +493,8 @@ class Sorter extends Function {
                         removeFromSet(subsetRootsToSort, minSoFar);
                         minSoFar = root;
                         minSet = (minSoFar in set1) ? set1 : set2;
+                        i = -1;
+                        rootsChecked = {};
                         return 'break';
                     }
                 });

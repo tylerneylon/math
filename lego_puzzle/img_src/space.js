@@ -1682,14 +1682,16 @@ export function animate() {
     window.requestAnimationFrame(setupFrame);
 }
 
-let numTimesLeft = 6;  // DEBUG1
+let numTimesLeft = 600;  // DEBUG1
 
 export function updatePoints() {
 
     // DEBUG2
-    sort.dbgCtx.logLevel = 3;
-    sort.dbgCtx.debugMode = true;
-    sort.dbgCtx.getName = getShapeName;
+    sort.dbgCtx.logLevel = 0;
+    if (numTimesLeft < 5) {
+        sort.dbgCtx.debugMode = false;
+        sort.dbgCtx.getName = getShapeName;
+    }
 
     // DEBUG1
     if (true && numTimesLeft <= 0) return;
