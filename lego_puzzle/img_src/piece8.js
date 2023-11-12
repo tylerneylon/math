@@ -243,13 +243,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // However, I could skip some of them in order to help me debug
     // z-order sorting.
 
-    // space.addObject(obj4);  // yellow
-    /*
+    space.addObject(obj4);  // yellow
     space.addObject(obj5);  // magenta
     space.addObject(obj6);  // green
     space.addObject(obj7);  // blue
     space.addObject(obj8);  // cyan
-    */
 
     if (dbgMode) {
         let offset = 15;

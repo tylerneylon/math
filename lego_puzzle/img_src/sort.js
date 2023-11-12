@@ -106,15 +106,18 @@ function entries(arrOrObj) {
 // In the latter case, an arbitrary order is chosen for keys in order to give
 // them `childNum` values.
 function depthFirstTraverse(root, tree, fn1, fn2, opts) {
-    let {depth, childNum, nodeSet} = opts || {};
+    let {depth, childNum, nodeSet, seen} = opts || {};
     if (depth === undefined) depth = 0;
+    if (seen === undefined) seen = {};
+    if (root in seen) return;
+    seen[root] = true;
     let reply = fn1(root, depth, childNum);
     if (reply === 'break') return reply;
     if (reply !== 'skip' && tree[root] !== undefined) {
         for (const [i, node] of entries(tree[root])) {
             if (nodeSet && !(node in nodeSet)) continue;
             reply = depthFirstTraverse(node, tree, fn1, fn2,
-                {depth: depth + 1, childNum: i, nodeSet});
+                {depth: depth + 1, childNum: i, nodeSet, seen});
             if (reply === 'break') return reply;
         }
     }
