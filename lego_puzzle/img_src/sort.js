@@ -114,10 +114,11 @@ function depthFirstTraverse(root, tree, fn1, fn2, opts) {
     let reply = fn1(root, depth, childNum);
     if (reply === 'break') return reply;
     if (reply !== 'skip' && tree[root] !== undefined) {
-        for (const [i, node] of entries(tree[root])) {
+        let i = 0;
+        for (const node in tree[root]) {
             if (nodeSet && !(node in nodeSet)) continue;
             reply = depthFirstTraverse(node, tree, fn1, fn2,
-                {depth: depth + 1, childNum: i, nodeSet, seen});
+                {depth: depth + 1, childNum: i++, nodeSet, seen});
             if (reply === 'break') return reply;
         }
     }
