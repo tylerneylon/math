@@ -106,20 +106,9 @@ function entries(arrOrObj) {
 // In the latter case, an arbitrary order is chosen for keys in order to give
 // them `childNum` values.
 function depthFirstTraverse(root, tree, fn1, fn2, opts) {
-    let {depth, childNum, nodeSet, seen, desc, noDbg} = opts || {};
-    let isBaseCall = false;
-    if (depth === undefined) { depth = 0; isBaseCall = true; }  // XXX
-    /*
-    if (isBaseCall && !noDbg) {
-        say(`***** depthFirstTraverse called w root ${tree.getName(root)}`);
-        printForest([root], tree);
-    }
-    */
+    let {depth, childNum, nodeSet, seen} = opts || {};
+    if (depth === undefined) depth = 0;
     if (seen === undefined) seen = {};
-    // `desc` is the set of descendants of root's parent.
-    if (desc === undefined) desc = {};
-    let myDesc = {};  // These are the descendants of `root`.
-    desc[root] = true;
     if (root in seen) return;
     seen[root] = true;
     let reply = fn1(root, depth, childNum);
@@ -127,30 +116,13 @@ function depthFirstTraverse(root, tree, fn1, fn2, opts) {
     if (reply !== 'skip' && tree[root] !== undefined) {
         let i = 0;
         for (const node in tree[root]) {
-            // Check for opportunistic transitive reduction: case 1, where we've
-            // already seen a long path from root to node.
-            if (node in myDesc) {
-                tree.drop(root, node);
-                continue;
-            }
-            myDesc[node] = true;
             if (nodeSet && !(node in nodeSet)) continue;
             reply = depthFirstTraverse(node, tree, fn1, fn2,
-                {depth: depth + 1, childNum: i++, nodeSet, seen,
-                    desc: myDesc});
-            if (reply === 'break') {
-                unionXintoY(myDesc, desc);
-                return reply;
-            }
+                {depth: depth + 1, childNum: i++, nodeSet, seen});
+            if (reply === 'break') return reply;
         }
     }
     if (fn2) fn2(root, depth, childNum);
-    unionXintoY(myDesc, desc);
-    /*
-    if (isBaseCall && !noDbg) {
-        say('***** desc: ' + Object.keys(desc).map(tree.getName).join(' '));
-    }
-    */
 }
 
 // Get a tree like this as a list of strings (no newlines):
@@ -178,7 +150,7 @@ function getTree(root, tree, nodeSet) {
         for (let i = 2 * depth - 1; i <= 2 * depth; i++) {
             while (i > 0 && cols[i].length < numRows) cols[i].push('');
         }
-    }, {noDbg: true, nodeSet});
+    }, {nodeSet});
     return getRowsFromColumns(cols);
 }
 
@@ -453,11 +425,7 @@ class Sorter extends Function {
             subsetArr   = inputArr.map((e, i) => i);
             this.cmpCtx = cmpCtx;
             this.cache  = {};
-            this.after  = {
-                inputArr,
-                getName: (x => inputArr[x]),
-                drop: this.removeXYedge.bind(this)
-            };
+            this.after  = {inputArr, getName: (x => inputArr[x])};
             if (dbgCtx.getName) {
                 this.after.getName = (x => dbgCtx.getName(inputArr[x]));
             }
