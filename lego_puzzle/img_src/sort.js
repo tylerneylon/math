@@ -201,6 +201,10 @@ function intersect(...sets) {
     }, sets[0]);
 }
 
+function unionXintoY(x, y) {
+    for (let elt in x) y[elt] = true;
+}
+
 function pickInSet(s) {
     if (setSize(s) === 0) return null;
     return Object.keys(s)[0];
@@ -256,6 +260,14 @@ class Sorter extends Function {
         // this.before[y] = x;
         pushToSet(this.before, y, x);
         removeFromSet(this.roots, y);
+    }
+
+    // This is only called during opportunistic transitive reduction from depth
+    // traversal; as a result, we don't need to check that y becomes a root
+    // because it will always have another path leading to it.
+    removeXYedge(x, y) {
+        removeFromSet(this.after[x], y);
+        removeFromSet(this.before[y], x);
     }
 
     // TODO as of 501.2023
