@@ -254,30 +254,6 @@ class Sorter extends Function {
         return arr.map(x => this.label(x)).join(' ');
     }
 
-    // This ensures that x can reach y in the dag, and also performs incremental
-    // transitive reduction on the graph.
-    addXYandReduce(x, y) {
-        this.makeXBeforeY(x, y);
-        return;
-        let xDesc = this.descendants[x] || {};
-        if (y in xDesc) return;
-        this.makeXBeforeY(x, y);
-        let yDesc = structuredClone(this.descendants[y] || {});
-        yDesc[y] = true;
-        depthFirstTraverse(x, this.before, (node) => {
-            if (node !== x) {
-                for (const kid in intersect(this.after[node], yDesc)) {
-                    // The edge node -> kid has become redundant.
-                    // We must "take care" of the edge.
-                    this.removeXYedge(node, kid);
-                }
-            }
-            unionXintoY(yDesc, this.descendants[node] ??= {});
-        });
-    }
-
-    // This "blindly" adds the edge x -> y, meaning that it does not care at all
-    // about transitive reduction.
     makeXBeforeY(x, y) {
         pushToSet(this.after, x, y);
         // if (y in this.before) removeFromSet(this.after[this.before[y]], y);
@@ -457,7 +433,6 @@ class Sorter extends Function {
             this.roots  = makeSet(subsetArr);  // The set of roots.
             this.inputArr = inputArr;
             this.numCmpCalls = 0;
-            this.descendants = {};  // Maps each node to the set of its desc'ts.
         }
 
         if (dMode) this.dbgStart(subsetArr);
@@ -524,13 +499,13 @@ class Sorter extends Function {
                     let c = this.cmp(minSoFar, node);
                     if (dMode) this.dbgFoundCmp(minSoFar, c, node);
                     if (c === '<') {
-                        this.addXYandReduce(minSoFar, node);
+                        this.makeXBeforeY(minSoFar, node);
                         removeFromSet(subsetRootsToSort, node);
                         return 'skip';
                     }
                     if (c === '>') {
                         if (dMode) this.dbgSubnodeLess(node);
-                        this.addXYandReduce(node, minSoFar);
+                        this.makeXBeforeY(node, minSoFar);
                         removeFromSet(subsetRootsToSort, minSoFar);
                         minSoFar = root;
                         minSet = (minSoFar in set1) ? set1 : set2;
