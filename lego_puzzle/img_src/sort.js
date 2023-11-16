@@ -134,6 +134,42 @@ function depthFirstTraverse(root, tree, fn1, fn2, opts) {
     if (fn2) fn2(root, depth, childNum, path);
 }
 
+// This receives a dag (directed acyclic graph) and removes all edges x->y such
+// that x-->y, meaning x can be reached by a longer path.
+function transitiveReduce(roots, after, before) {
+
+    // XXX Count the number of edges.
+    let numEdgesBefore = 0;
+    for (let childSet of after) {
+        numEdgesBefore += Object.keys(childSet).length;
+    }
+    console.log(`At first there are ${numEdgesBefore} edges in the dag.`);
+    let numEdgesRemoved = 0;
+
+    for (let root of roots) {
+        depthFirstTraverse(root, after, (node, depth, childNum, path) => {
+            let elders = intersect(before[node], makeSet(path.slice(0, -2)));
+            for (let elder in elders) {
+                // XXX TODO: Can I safely change these during traversal, or
+                // should I simply mark them and remove them after?
+                removeFromSet(after[elder], node);
+                removeFromSet(before[node], elder);
+                numEdgesRemoved++;
+            }
+        });
+    }
+
+    // XXX Count the number of edges.
+    console.log(`I removed ${numEdgesRemoved} edges.`);
+    let numEdgesAfter = 0;
+    for (let childSet of after) {
+        numEdgesAfter += Object.keys(childSet).length;
+    }
+    console.log(`Afterwards, there are ${numEdgesAfter} edges.`);
+    let perc = numEdgesRemoved / numEdgesBefore * 100;
+    console.log(`I removed ${perc}% of the edges.`);
+}
+
 // Get a tree like this as a list of strings (no newlines):
 // 1 - 2 - 3
 //       \ 100 - 4
