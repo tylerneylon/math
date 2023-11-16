@@ -94,7 +94,7 @@ function entries(arrOrObj) {
 }
 
 // Run fn1() and fn2() on each node of the given tree in depth-first order.
-// Each call is of the form fn(node, depth, childNum).
+// Each call is of the form fn(node, depth, childNum, path).
 // For the root, `childNum` is undefined; it's not a child.
 // Otherwise, `childNum` is the index of this node as a child of its parent.
 // fn1() is called before its children, fn2() after.
@@ -105,24 +105,33 @@ function entries(arrOrObj) {
 // (b) tree[node] = object whose keys are child nodes.
 // In the latter case, an arbitrary order is chosen for keys in order to give
 // them `childNum` values.
+// ------
+// By default, each downstream node will be visited once, unless it is skipped
+// by a callback return value of 'break' or 'skip'. However, if opts.allPaths is
+// set to `true`, then nodes will be visited once per incoming edge that is
+// reachable from `root`, which may be more than once in total.
 function depthFirstTraverse(root, tree, fn1, fn2, opts) {
-    let {depth, childNum, nodeSet, seen} = opts || {};
+    let {depth, childNum, nodeSet, seen, path, allPaths} = opts || {};
     if (depth === undefined) depth = 0;
     if (seen === undefined) seen = {};
-    if (root in seen) return;
+    if (path === undefined) path = [root];
+    if (allPaths !== true && root in seen) return;
+    // if (root in seen) return;
     seen[root] = true;
-    let reply = fn1(root, depth, childNum);
+    let reply = fn1(root, depth, childNum, path);
     if (reply === 'break') return reply;
     if (reply !== 'skip' && tree[root] !== undefined) {
         let i = 0;
         for (const node in tree[root]) {
             if (nodeSet && !(node in nodeSet)) continue;
-            reply = depthFirstTraverse(node, tree, fn1, fn2,
-                {depth: depth + 1, childNum: i++, nodeSet, seen});
+            path.push(node);
+            reply = depthFirstTraverse(node, tree, fn1, fn2, {depth: depth + 1,
+                childNum: i++, nodeSet, seen, path, allPaths});
+            path.pop();
             if (reply === 'break') return reply;
         }
     }
-    if (fn2) fn2(root, depth, childNum);
+    if (fn2) fn2(root, depth, childNum, path);
 }
 
 // Get a tree like this as a list of strings (no newlines):
