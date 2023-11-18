@@ -140,6 +140,7 @@ function transitiveReduce(roots, after, before) {
 
     // XXX Count the number of edges.
     let numEdgesBefore = 0;
+    console.log('after', after); // XXX
     for (let childSet of after) {
         numEdgesBefore += Object.keys(childSet).length;
     }
@@ -178,6 +179,7 @@ function transitiveReduce(roots, after, before) {
 function getTree(root, tree, nodeSet) {
     let cols = [];
     let numRows = 0;
+    let getName = tree.getName ?? (x => x);
     depthFirstTraverse(root, tree, (node, depth, childNum) => {
         let d = 2 * depth;
         while(cols.length <= d) cols.push([]);
@@ -189,13 +191,13 @@ function getTree(root, tree, nodeSet) {
         while (d > 0 && cols[d].length < cols[d - 1].length - 1)  {
             cols[d].push('');
         }
-        cols[d].push(tree.getName(node));
+        cols[d].push(getName(node));
         numRows = Math.max(numRows, cols[d].length);
     }, (node, depth) => {
         for (let i = 2 * depth - 1; i <= 2 * depth; i++) {
             while (i > 0 && cols[i].length < numRows) cols[i].push('');
         }
-    }, {nodeSet});
+    }, {nodeSet, allPaths: true});
     return getRowsFromColumns(cols);
 }
 
@@ -792,6 +794,36 @@ function test8() {
     );
 }
 
+// Helper functions to make dags.
+// These accept and return objects of the form {roots, after, before}.
+// The nodes are the integers 1 through n.
+
+function makeEmptyDag(numNodes) {
+    let roots = makeSet([...Array(numNodes).keys()].map(x => x + 1));
+    return {roots, after: {}, before: {}};
+}
+
+function addEdge(dag, from, to) {
+    pushToSet(dag.after, from, to);
+    pushToSet(dag.before, to, from);
+    removeFromSet(dag.roots, to);
+}
+
+// This is a test of transitiveReduce().
+// This is a simple case with 1 -> 2 -> 3 and 1 -> 3.
+// We want only edge 1 -> 3 to be pruned.
+function trTest1() {
+    let dag = makeEmptyDag(3);
+    addEdge(dag, 1, 2);
+    addEdge(dag, 1, 3);
+    addEdge(dag, 2, 3);
+    let {roots, after, before} = dag;
+    roots = arrOfSet(roots);
+    printForest(roots, dag.after);
+    transitiveReduce(roots, after, before);
+    printForest(roots, dag.after);
+}
+
 
 // ______________________________________________________________________
 // Run the tests
@@ -812,7 +844,17 @@ if (typeof window === 'undefined') {
     dMode = true;
     logLevel = 3;
 
-    if (true) {
+    // This is `false` by default, running all unit tests.
+    // Set this to true to focus on a single test in the immediately following
+    // focus block.
+    let focusMode = true;
+
+    // A place to focus on a single unit test at a time.
+    if (focusMode) {
+        trTest1();
+    }
+
+    if (!focusMode) {
         let allTests = [
             test1, test2, test3, test4, test5,
             test6, test7, test8];
