@@ -141,7 +141,7 @@ function transitiveReduce(roots, after, before) {
     // XXX Count the number of edges.
     let numEdgesBefore = 0;
     console.log('after', after); // XXX
-    for (let childSet of after) {
+    for (let childSet of Object.values(after)) {
         numEdgesBefore += Object.keys(childSet).length;
     }
     console.log(`At first there are ${numEdgesBefore} edges in the dag.`);
@@ -161,14 +161,14 @@ function transitiveReduce(roots, after, before) {
     }
 
     // XXX Count the number of edges.
-    console.log(`I removed ${numEdgesRemoved} edges.`);
+    console.log(`I removed ${numEdgesRemoved} edge(s).`);
     let numEdgesAfter = 0;
-    for (let childSet of after) {
+    for (let childSet of Object.values(after)) {
         numEdgesAfter += Object.keys(childSet).length;
     }
     console.log(`Afterwards, there are ${numEdgesAfter} edges.`);
     let perc = numEdgesRemoved / numEdgesBefore * 100;
-    console.log(`I removed ${perc}% of the edges.`);
+    console.log(`I removed ${perc.toFixed(1)}% of the edges.`);
 }
 
 // Get a tree like this as a list of strings (no newlines):
@@ -598,9 +598,10 @@ export const dbgCtx = {logLevel: 2};
 
 let activeTest = null;
 
-function check(bool) {
+function check(bool, msg) {
     if (!bool) {
         console.log(`${activeTest.name} failed`);
+        if (msg) console.log(msg);
         process.exit(1);
     }
 }
@@ -809,19 +810,50 @@ function addEdge(dag, from, to) {
     removeFromSet(dag.roots, to);
 }
 
+function checkSetsAreEqual(set1, set2, msg) {
+    msg = msg || '';
+    msg = `${msg} set1=${arrOfSet(set1)} set2=${arrOfSet(set2)}`;
+    let arr1 = arrOfSet(set1);
+    let arr2 = arrOfSet(set2);
+    check(arr1.length === arr2.length, msg);
+    for (let item of arr1) check(item in set2, msg);
+}
+
+function checkDagsMatch(dag1, dag2) {
+    checkSetsAreEqual(dag1.roots, dag2.roots, 'root set equality');
+    checkSetsAreEqual(dag1.after, dag2.after, 'after src set equality');
+    checkSetsAreEqual(dag1.before, dag2.before, 'before src set equality');
+    for (let key in dag1.after) {
+        checkSetsAreEqual(dag1.after[key], dag2.after[key], `after[${key}] eq`);
+    }
+    for (let key in dag1.before) {
+        let msg = `before[${key}] equality`;
+        checkSetsAreEqual(dag1.before[key], dag2.before[key], msg);
+    }
+}
+
 // This is a test of transitiveReduce().
 // This is a simple case with 1 -> 2 -> 3 and 1 -> 3.
 // We want only edge 1 -> 3 to be pruned.
 function trTest1() {
+
     let dag = makeEmptyDag(3);
     addEdge(dag, 1, 2);
     addEdge(dag, 1, 3);
     addEdge(dag, 2, 3);
+
     let {roots, after, before} = dag;
     roots = arrOfSet(roots);
     printForest(roots, dag.after);
     transitiveReduce(roots, after, before);
     printForest(roots, dag.after);
+
+    // Build the target dag.
+    let targetDag = makeEmptyDag(3);
+    addEdge(targetDag, 1, 2);
+    addEdge(targetDag, 2, 3);
+
+    checkDagsMatch(dag, targetDag);
 }
 
 
@@ -851,7 +883,9 @@ if (typeof window === 'undefined') {
 
     // A place to focus on a single unit test at a time.
     if (focusMode) {
-        trTest1();
+        activeTest = trTest1;
+        activeTest();
+        console.log('Passed!');
     }
 
     if (!focusMode) {
