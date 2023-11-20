@@ -106,6 +106,11 @@ function entries(arrOrObj) {
 // In the latter case, an arbitrary order is chosen for keys in order to give
 // them `childNum` values.
 // ------
+// This function can operate on dags, not just on trees. It is safe to add or
+// delete edges during traversal. Deleting edges results in deterministic
+// behavior (no choices to be made). However, edges added during traversal may
+// or may not be visited within the traversal itself; it's unspecified behavior.
+// ------
 // By default, each downstream node will be visited once, unless it is skipped
 // by a callback return value of 'break' or 'skip'. However, if opts.allPaths is
 // set to `true`, then nodes will be visited once per incoming edge that is
@@ -839,6 +844,7 @@ function checkDagsMatch(dag1, dag2) {
 // This is a test of transitiveReduce().
 // This is a simple case with 1 -> 2 -> 3 and 1 -> 3.
 // We want only edge 1 -> 3 to be pruned.
+// Use printForest(roots, dag.after) before/after the t.r. call to help debug.
 function trTest1() {
 
     let dag = makeEmptyDag(3);
@@ -848,9 +854,7 @@ function trTest1() {
 
     let {roots, after, before} = dag;
     roots = arrOfSet(roots);
-    printForest(roots, dag.after);
     transitiveReduce(roots, after, before);
-    printForest(roots, dag.after);
 
     // Build the target dag.
     let targetDag = makeEmptyDag(3);
@@ -866,8 +870,14 @@ function makeDagFromEdges(numNodes, edges) {
     return dag;
 }
 
-
 // This is a test of transitiveReduce().
+// This begins on this dag:
+// 1 - 2 - 4 - 5 - 6
+//           \ 6
+//   \ 3 - 4
+//   \ 4
+// The edges 1->4 and 4->6 should be removed.
+// Use printForest(roots, dag.after) before/after the t.r. call to help debug.
 function trTest2() {
 
     let edges = [
@@ -877,12 +887,35 @@ function trTest2() {
 
     let {roots, after, before} = dag;
     roots = arrOfSet(roots);
-    printForest(roots, dag.after);
     transitiveReduce(roots, after, before);
-    printForest(roots, dag.after);
 
     edges = [
         [1, 2], [1, 3], [2, 4], [3, 4], [4, 5], [5, 6]
+    ];
+    let targetDag = makeDagFromEdges(6, edges);
+
+    checkDagsMatch(dag, targetDag);
+}
+
+// This is a test of transitiveReduce().
+// This begins on this dag:
+// 1 - 2 - 3  |  4 - 5 - 6
+//   \ 3      |    \ 6
+// The edges 1->4 and 4->6 should be removed.
+// Use printForest(roots, dag.after) before/after the t.r. call to help debug.
+function trTest3() {
+
+    let edges = [
+        [1, 2], [2, 3], [1, 3], [4, 5], [5, 6], [4, 6]
+    ];
+    let dag = makeDagFromEdges(6, edges);
+
+    let {roots, after, before} = dag;
+    roots = arrOfSet(roots);
+    transitiveReduce(roots, after, before);
+
+    edges = [
+        [1, 2], [2, 3], [4, 5], [5, 6]
     ];
     let targetDag = makeDagFromEdges(6, edges);
 
@@ -916,7 +949,7 @@ if (typeof window === 'undefined') {
 
     // A place to focus on a single unit test at a time.
     if (focusMode) {
-        activeTest = trTest2;
+        activeTest = trTest3;
         activeTest();
         console.log('Passed!');
     }
@@ -924,7 +957,9 @@ if (typeof window === 'undefined') {
     if (!focusMode) {
         let allTests = [
             test1, test2, test3, test4, test5,
-            test6, test7, test8];
+            test6, test7, test8,
+            trTest1, trTest2, trTest3
+        ];
         allTests.forEach(testFn => {
             activeTest = testFn;
             console.log('\n' + '_'.repeat(80));
