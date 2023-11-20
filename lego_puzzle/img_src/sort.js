@@ -476,6 +476,8 @@ class Sorter extends Function {
         this.inputArr = inputArr;
         this.inputCmp = inputCmp;
 
+        let topLevelCall = (subsetArr === undefined);
+
         if (subsetArr === undefined) {
             // This is an initial call; we must initialize some values.
             subsetArr   = inputArr.map((e, i) => i);
@@ -586,6 +588,11 @@ class Sorter extends Function {
                     subsetRootsToSort[node] = true;
                 }
             }
+        }
+
+        // XXX DEBUG3 I'm checking to see how much this may help / not help.
+        if (topLevelCall) {
+            transitiveReduce(arrOfSet(this.roots), this.after, this.before);
         }
 
         if (dMode) this.dbgEnd(sorted, makeSet(subsetArr));
