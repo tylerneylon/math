@@ -110,23 +110,28 @@ function entries(arrOrObj) {
 // by a callback return value of 'break' or 'skip'. However, if opts.allPaths is
 // set to `true`, then nodes will be visited once per incoming edge that is
 // reachable from `root`, which may be more than once in total.
+// ------
+// The `toPrint` option, which is off by default, enables a mode in which nodes
+// are visited once per incoming path, but only recursively traversed the first
+// time. This mode each edge is visited once, and is useful for printing.
 function depthFirstTraverse(root, tree, fn1, fn2, opts) {
-    let {depth, childNum, nodeSet, seen, path, allPaths} = opts || {};
+    let {depth, childNum, nodeSet, seen, path, allPaths, toPrint} = opts || {};
     if (depth === undefined) depth = 0;
     if (seen === undefined) seen = {};
     if (path === undefined) path = [root];
-    if (allPaths !== true && root in seen) return;
+    if (allPaths !== true && toPrint !== true && root in seen) return;
+    let visitRootOnly = (toPrint && root in seen);
     // if (root in seen) return;
     seen[root] = true;
     let reply = fn1(root, depth, childNum, path);
     if (reply === 'break') return reply;
-    if (reply !== 'skip' && tree[root] !== undefined) {
+    if (reply !== 'skip' && tree[root] !== undefined && !visitRootOnly) {
         let i = 0;
         for (const node in tree[root]) {
             if (nodeSet && !(node in nodeSet)) continue;
             path.push(node);
             reply = depthFirstTraverse(node, tree, fn1, fn2, {depth: depth + 1,
-                childNum: i++, nodeSet, seen, path, allPaths});
+                childNum: i++, nodeSet, seen, path, allPaths, toPrint});
             path.pop();
             if (reply === 'break') return reply;
         }
@@ -197,7 +202,7 @@ function getTree(root, tree, nodeSet) {
         for (let i = 2 * depth - 1; i <= 2 * depth; i++) {
             while (i > 0 && cols[i].length < numRows) cols[i].push('');
         }
-    }, {nodeSet, allPaths: true});
+    }, {nodeSet, toPrint: true});
     return getRowsFromColumns(cols);
 }
 
@@ -856,6 +861,35 @@ function trTest1() {
     checkDagsMatch(dag, targetDag);
 }
 
+function makeDagFromEdges(numNodes, edges) {
+    let dag = makeEmptyDag(numNodes);
+    for (let edge of edges) addEdge(dag, edge[0], edge[1]);
+    return dag;
+}
+
+
+// This is a test of transitiveReduce().
+function trTest2() {
+
+    let edges = [
+        [1, 2], [1, 3], [1, 4], [2, 4], [3, 4], [4, 5], [4, 6], [5, 6]
+    ];
+    let dag = makeDagFromEdges(6, edges);
+
+    let {roots, after, before} = dag;
+    roots = arrOfSet(roots);
+    printForest(roots, dag.after);
+    transitiveReduce(roots, after, before);
+    printForest(roots, dag.after);
+
+    edges = [
+        [1, 2], [1, 3], [2, 4], [3, 4], [4, 5], [5, 6]
+    ];
+    let targetDag = makeDagFromEdges(6, edges);
+
+    checkDagsMatch(dag, targetDag);
+}
+
 
 // ______________________________________________________________________
 // Run the tests
@@ -879,11 +913,11 @@ if (typeof window === 'undefined') {
     // This is `false` by default, running all unit tests.
     // Set this to true to focus on a single test in the immediately following
     // focus block.
-    let focusMode = true;
+    let focusMode = false;
 
     // A place to focus on a single unit test at a time.
     if (focusMode) {
-        activeTest = trTest1;
+        activeTest = trTest2;
         activeTest();
         console.log('Passed!');
     }
