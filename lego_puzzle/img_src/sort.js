@@ -121,7 +121,6 @@ function depthFirstTraverse(root, tree, fn1, fn2, opts) {
     if (path === undefined) path = [root];
     if (allPaths !== true && toPrint !== true && root in seen) return;
     let visitRootOnly = (toPrint && root in seen);
-    // if (root in seen) return;
     seen[root] = true;
     let reply = fn1(root, depth, childNum, path);
     if (reply === 'break') return reply;
