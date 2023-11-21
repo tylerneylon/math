@@ -144,40 +144,22 @@ function depthFirstTraverse(root, tree, fn1, fn2, opts) {
 }
 
 // This receives a dag (directed acyclic graph) and removes all edges x->y such
-// that x-->y, meaning x can be reached by a longer path.
+// that x~>y, meaning x can be reached by a longer path.
 function transitiveReduce(roots, after, before) {
-
-    // XXX Count the number of edges.
-    let numEdgesBefore = 0;
-    console.log('after', after); // XXX
-    for (let childSet of Object.values(after)) {
-        numEdgesBefore += Object.keys(childSet).length;
-    }
-    console.log(`At first there are ${numEdgesBefore} edges in the dag.`);
-    let numEdgesRemoved = 0;
-
     for (let root of roots) {
         depthFirstTraverse(root, after, (node, depth, childNum, path) => {
             let elders = intersect(before[node], makeSet(path.slice(0, -2)));
             for (let elder in elders) {
-                // XXX TODO: Can I safely change these during traversal, or
-                // should I simply mark them and remove them after?
+                // These can be safely removed during traversal. This is because
+                // the depth traversal iterates using a for .. in loop over the
+                // children of each node, which the ecmascript spec guarantees
+                // will work with mid-loop deletions. Reference:
+                // https://262.ecma-international.org/5.1/#sec-12.6.4
                 removeFromSet(after[elder], node);
                 removeFromSet(before[node], elder);
-                numEdgesRemoved++;
             }
         });
     }
-
-    // XXX Count the number of edges.
-    console.log(`I removed ${numEdgesRemoved} edge(s).`);
-    let numEdgesAfter = 0;
-    for (let childSet of Object.values(after)) {
-        numEdgesAfter += Object.keys(childSet).length;
-    }
-    console.log(`Afterwards, there are ${numEdgesAfter} edges.`);
-    let perc = numEdgesRemoved / numEdgesBefore * 100;
-    console.log(`I removed ${perc.toFixed(1)}% of the edges.`);
 }
 
 // Get a tree like this as a list of strings (no newlines):
@@ -310,6 +292,30 @@ class Sorter extends Function {
         return arr.map(x => this.label(x)).join(' ');
     }
 
+    // This ensures that x can reach y in the dag, and also performs incremental
+    // transitive reduction on the graph.
+    addXYandReduce(x, y) {
+        this.makeXBeforeY(x, y);
+        return;
+        let xDesc = this.descendants[x] || {};
+        if (y in xDesc) return;
+        this.makeXBeforeY(x, y);
+        let yDesc = structuredClone(this.descendants[y] || {});
+        yDesc[y] = true;
+        depthFirstTraverse(x, this.before, (node) => {
+            if (node !== x) {
+                for (const kid in intersect(this.after[node], yDesc)) {
+                    // The edge node -> kid has become redundant.
+                    // We must "take care" of the edge.
+                    this.removeXYedge(node, kid);
+                }
+            }
+            unionXintoY(yDesc, this.descendants[node] ??= {});
+        });
+    }
+
+    // This "blindly" adds the edge x -> y, meaning that it does not care at all
+    // about transitive reduction.
     makeXBeforeY(x, y) {
         pushToSet(this.after, x, y);
         // if (y in this.before) removeFromSet(this.after[this.before[y]], y);
@@ -491,6 +497,8 @@ class Sorter extends Function {
             this.roots  = makeSet(subsetArr);  // The set of roots.
             this.inputArr = inputArr;
             this.numCmpCalls = 0;
+            // Uncomment the next line to support the addXYandReduce() function.
+            // this.descendants = {};  // Maps nodes to their desc'nt set.
         }
 
         if (dMode) this.dbgStart(subsetArr);
