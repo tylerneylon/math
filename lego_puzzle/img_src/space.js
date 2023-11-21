@@ -982,11 +982,12 @@ function orderElts2(pts, normalXYs) {
     // Make lines depend on their incident faces.
     for (let line of ctx.lines) line.deps = [...line.faces];
 
-    let shapes = ctx.prevBackToFront ?? [...ctx.faces, ...ctx.lines];
-    // let shapes = [...ctx.faces, ...ctx.lines];
-    let backToFront = sort.sort(shapes, compareShapes, pts)['sorted'];
+    let shapes = ctx.prevBackToFront?.['sorted'];
+    if (!shapes) shapes = [...ctx.faces, ...ctx.lines];
+    let backToFront = sort.sort(shapes, compareShapes, pts);
     // let backToFront = sortWithPartialInfo(shapes, compareShapes, pts);
     ctx.prevBackToFront = backToFront;
+    backToFront = backToFront['sorted'];
 
     say('<p><hr>Here is the ordering of shapes I got, back-to-front:');
     for (let s of backToFront) say(getShapeName(s));

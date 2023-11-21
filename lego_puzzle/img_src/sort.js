@@ -608,7 +608,9 @@ class Sorter extends Function {
         return {
             sorted: sorted.map(i => inputArr[i]),
             inputArr: this.inputArr,
-            before: this.before
+            after:    this.after,
+            before:   this.before,
+            rootSet:  this.roots
         }
     }
 }
