@@ -142,6 +142,11 @@ function depthFirstTraverse(root, tree, fn1, fn2, opts) {
     }
     if (fn2) fn2(root, depth, childNum, path);
 }
+// TODO:
+// 1. It would be nice to rename `toPrint` to something more generic.
+// 2. I suspect the handling of `path` can be slightly more elegant; there's no
+//    need to include `node` in the path to `node` as well. (I think those two
+//    ideas go together into once nice change; not verified).
 
 // This receives a dag (directed acyclic graph) and removes all edges x->y such
 // that x~>y, meaning x can be reached by a longer path.
@@ -474,7 +479,7 @@ class Sorter extends Function {
         }
     }
 
-    _call(inputArr, inputCmp, cmpCtx, subsetArr) {
+    _call(inputArr, inputCmp, cmpCtx, opts/* subsetArr */) {
 
         logLevel = logLevel || dbgCtx.logLevel;
         dMode    = dMode || dbgCtx.debugMode;
@@ -482,9 +487,13 @@ class Sorter extends Function {
         this.inputArr = inputArr;
         this.inputCmp = inputCmp;
 
-        let topLevelCall = (subsetArr === undefined);
+        let topLevelCall = (!opts || !opts.subsetArr);
+        let subsetArr;
+        let doRecursiveMode = true;
 
-        if (subsetArr === undefined) {
+        if (!topLevelCall) {
+            subsetArr = opts.subsetArr;
+        } else {
             // This is an initial call; we must initialize some values.
             subsetArr   = inputArr.map((e, i) => i);
             this.cmpCtx = cmpCtx;
@@ -499,6 +508,49 @@ class Sorter extends Function {
             this.numCmpCalls = 0;
             // Uncomment the next line to support the addXYandReduce() function.
             // this.descendants = {};  // Maps nodes to their desc'nt set.
+
+            // Pre-emptively call cmp() on graph edges if we're given a dag.
+            if (opts && opts.rootSet) {
+
+                doRecursiveMode = false;
+
+                // Compute a reverse index for opts.sortedIdx.
+                let idx = {};
+                for (let [k, v] of Object.entries(opts.sortedIdx)) {
+                    idx[v] = k;
+                }
+
+                // console.log('start');  // XXX
+                let numPredicted = 0;
+                let numOpposite = 0;
+                let numMissed = 0;
+                for (let root of arrOfSet(opts.rootSet)) {
+                    depthFirstTraverse(root, opts.after,
+                            (node, _, __, path) => {
+                        if (node === root) return;
+                        // XXX
+                        check(path[path.length - 1] === node);
+                        let x = idx[path[path.length - 2]];
+                        let y = idx[node];
+                        let c = this.cmp(x, y);
+                        if (c === '<') {
+                            this.makeXBeforeY(x, y);
+                            numPredicted++;
+                        }
+                        if (c === '>') {
+                            this.makeXBeforeY(y, x);
+                            numOpposite++;
+                        }
+                        if (c !== '<' && c !== '>') {
+                            numMissed++;
+                        }
+                    }, undefined, {toPrint: true});
+                }
+                // console.log('Predicted:', numPredicted);
+                // console.log('Opposite: ', numOpposite);
+                // console.log('Missed:   ', numMissed);
+                // console.log('done');  // XXX
+            }
         }
 
         if (dMode) this.dbgStart(subsetArr);
@@ -513,8 +565,10 @@ class Sorter extends Function {
         let k = Math.floor(subsetArr.length / 2);
         let set1 = makeSet(subsetArr.slice(0, k));
         let set2 = makeSet(subsetArr.slice(k));
-        sort(inputArr, inputCmp, cmpCtx, subsetArr.slice(0, k));
-        sort(inputArr, inputCmp, cmpCtx, subsetArr.slice(k));
+        if (doRecursiveMode) {
+            sort(inputArr, inputCmp, cmpCtx, {subsetArr: subsetArr.slice(0, k)});
+            sort(inputArr, inputCmp, cmpCtx, {subsetArr: subsetArr.slice(k)});
+        }
         let subsetToSort = makeSet(subsetArr);
 
         let sorted = [];
@@ -599,18 +653,25 @@ class Sorter extends Function {
         }
 
         // XXX DEBUG3 I'm checking to see how much this may help / not help.
+        // TODO: Move this to happen at the start, rather than at the end. My
+        // reasoning is that, if this is a one-off sort call, then there's no
+        // value in applying a transitive reduction. So what we want is either
+        // to have a one-off sort that skips reduction, or to perform reduction
+        // only between subsequent calls.
         if (topLevelCall) {
             transitiveReduce(arrOfSet(this.roots), this.after, this.before);
+            // console.log('Did transitively reduce');  // DEBUG4
         }
 
         if (dMode) this.dbgEnd(sorted, makeSet(subsetArr));
 
         return {
-            sorted: sorted.map(i => inputArr[i]),
-            inputArr: this.inputArr,
-            after:    this.after,
-            before:   this.before,
-            rootSet:  this.roots
+            sorted:    sorted.map(i => inputArr[i]),
+            sortedIdx: sorted,
+            inputArr:  this.inputArr,
+            after:     this.after,
+            before:    this.before,
+            rootSet:   this.roots
         }
     }
 }

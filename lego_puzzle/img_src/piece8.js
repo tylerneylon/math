@@ -271,6 +271,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         ));
         space.ctx.rotationsPerSec = 0.2;
         // space.ctx.rotationsPerSec = 0.65;  // XXX DEBUG1
+        space.ctx.rotationsPerSec = 0.01;  // XXX DEBUG4
         space.makeDraggable();
         space.animate();
     }

@@ -984,7 +984,14 @@ function orderElts2(pts, normalXYs) {
 
     let shapes = ctx.prevBackToFront?.['sorted'];
     if (!shapes) shapes = [...ctx.faces, ...ctx.lines];
-    let backToFront = sort.sort(shapes, compareShapes, pts);
+    let opts = undefined;
+    if (ctx.prevBackToFront) {
+        opts = {};
+        opts.rootSet   = ctx.prevBackToFront.rootSet;
+        opts.after     = ctx.prevBackToFront.after;
+        opts.sortedIdx = ctx.prevBackToFront.sortedIdx;
+    }
+    let backToFront = sort.sort(shapes, compareShapes, pts, opts);
     // let backToFront = sortWithPartialInfo(shapes, compareShapes, pts);
     ctx.prevBackToFront = backToFront;
     backToFront = backToFront['sorted'];
