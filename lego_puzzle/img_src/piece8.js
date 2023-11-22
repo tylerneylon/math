@@ -171,7 +171,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         face.style = {fill: '#a44'};
     }
 
-    let dbgMode = true;
+    let dbgMode = false;
     if (dbgMode) space.ctx.doDrawDots = true;
 
     let obj = [pts, lines, faces];
@@ -252,7 +252,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     if (dbgMode) {
         let offset = 15;
         let n = obj[0].length;
-        space.addLabels([...Array(n).keys()], offset);
+        // space.addLabels([...Array(n).keys()], offset);
     }
 
     space.setTransform(matrix.mult(
