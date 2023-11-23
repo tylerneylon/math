@@ -1069,13 +1069,16 @@ function cycleTest2() {
     check(result === undefined, 'there are no cycles in this graph');
 }
 
+// Test the graph:  1 - 2 - 3 - 4 - 1
 function cycleTest3() {
-    let edges = [[1, 2], [2, 3], [3, 1]];
+    let edges = [[1, 2], [2, 3], [3, 4], [4, 1]];
     let graph = makeGraphFromEdges(3, edges);
     let result = findGraphCycle(graph.after);
-    checkArraysAreSame(result, [1, 2, 3].map(x => `${x}`));
+    checkArraysAreSame(result, [1, 2, 3, 4].map(x => `${x}`));
 }
 
+// Test this graph:
+// 1 - 2 - 3 - 7 - 6 - 2  |  4 - 5 - 6
 function cycleTest4() {
     let edges = [
         [1, 2], [2, 3], [4, 5], [5, 6],
@@ -1086,6 +1089,11 @@ function cycleTest4() {
     checkArraysAreSame(result, [2, 3, 7, 6].map(x => `${x}`));
 }
 
+// Test this slightly complicated graph:
+//  1 - 2 - 4  |  3 - 4  |  5 - 6 -  7 -  8
+//             |         |             \  9 - 11 - 6
+//             |         |        \  8
+//             |         |        \ 10 - 11
 function cycleTest5() {
     let edges = [
         [1, 2], [2, 4], [3, 4],
@@ -1099,6 +1107,7 @@ function cycleTest5() {
     checkArraysAreSame(result, [6, 7, 9, 11].map(x => `${x}`));
 }
 
+// Test the simple graph 1 <-> 2
 function cycleTest6() {
     let edges = [[1, 2], [2, 1]];
     let graph = makeGraphFromEdges(2, edges);
@@ -1106,6 +1115,7 @@ function cycleTest6() {
     checkArraysAreSame(result, [1, 2].map(x => `${x}`));
 }
 
+// Test the simple case of a node connected to itself.
 function cycleTest7() {
     let edges = [[1, 1]];
     let graph = makeGraphFromEdges(1, edges);
@@ -1140,7 +1150,7 @@ if (typeof window === 'undefined') {
 
     // A place to focus on a single unit test at a time.
     if (focusMode) {
-        activeTest = cycleTest7;
+        activeTest = cycleTest5;
         activeTest();
         console.log('Passed!');
     }
