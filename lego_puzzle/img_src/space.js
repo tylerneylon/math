@@ -991,10 +991,15 @@ function orderElts2(pts, normalXYs) {
         opts.after     = ctx.prevBackToFront.after;
         opts.sortedIdx = ctx.prevBackToFront.sortedIdx;
     }
+
+    // DEBUG5
+    console.log(`shapes has length ${shapes.length}`);
+
     let backToFront = sort.sort(shapes, compareShapes, pts, opts);
     // let backToFront = sortWithPartialInfo(shapes, compareShapes, pts);
     ctx.prevBackToFront = backToFront;
     backToFront = backToFront['sorted'];
+    console.log(`[[1]] shapes has length ${backToFront.length}`);  // DEBUG5
 
     say('<p><hr>Here is the ordering of shapes I got, back-to-front:');
     for (let s of backToFront) say(getShapeName(s));

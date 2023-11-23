@@ -148,6 +148,22 @@ function depthFirstTraverse(root, tree, fn1, fn2, opts) {
 //    need to include `node` in the path to `node` as well. (I think those two
 //    ideas go together into once nice change; not verified).
 
+function findGraphCycle(after) {
+    let nodesToExplore = makeSet(Object.keys(after));
+    let seen = {};  // Start as the empty set.
+    while (setSize(nodesToExplore) > 0) {
+        let root = pickInSet(nodesToExplore);
+        depthFirstTraverse(root, after, (node, _, __, path) => {
+            let i = path.indexOf(root);
+            if (0 <= i && i < path.length - 1) {
+                return path.slice(i);
+            }
+            seen[root] = true;
+            removeFromSet(nodesToExplore, node);
+        }, undefined, {seen});
+    }
+}
+
 // This receives a dag (directed acyclic graph) and removes all edges x->y such
 // that x~>y, meaning x can be reached by a longer path.
 function transitiveReduce(roots, after, before) {
@@ -665,6 +681,12 @@ class Sorter extends Function {
 
         if (dMode) this.dbgEnd(sorted, makeSet(subsetArr));
 
+        // DEBUG5
+        console.log(`sorted has length ${sorted.length}`);
+        if (sorted.length < subsetArr.length) {
+            debugger;
+        }
+
         return {
             sorted:    sorted.map(i => inputArr[i]),
             sortedIdx: sorted,
@@ -710,6 +732,15 @@ function checkArrayRespectsKnownOrders(arr, knownOrders) {
             check(i1 >= 0 && i2 >= 0 && i1 < i2);
         }
     });
+}
+
+function checkSetsAreEqual(set1, set2, msg) {
+    msg = msg || '';
+    msg = `${msg} set1=${arrOfSet(set1)} set2=${arrOfSet(set2)}`;
+    let arr1 = arrOfSet(set1);
+    let arr2 = arrOfSet(set2);
+    check(arr1.length === arr2.length, msg);
+    for (let item of arr1) check(item in set2, msg);
 }
 
 
@@ -882,42 +913,50 @@ function test8() {
     );
 }
 
-// Helper functions to make dags.
+
+// ______________________________________________________________________
+// Helper functions to make graphs
+
 // These accept and return objects of the form {roots, after, before}.
 // The nodes are the integers 1 through n.
 
-function makeEmptyDag(numNodes) {
+function makeEmptyGraph(numNodes) {
     let roots = makeSet([...Array(numNodes).keys()].map(x => x + 1));
     return {roots, after: {}, before: {}};
 }
 
-function addEdge(dag, from, to) {
-    pushToSet(dag.after, from, to);
-    pushToSet(dag.before, to, from);
-    removeFromSet(dag.roots, to);
+function addEdge(graph, from, to) {
+    pushToSet(graph.after, from, to);
+    pushToSet(graph.before, to, from);
+    removeFromSet(graph.roots, to);
 }
 
-function checkSetsAreEqual(set1, set2, msg) {
-    msg = msg || '';
-    msg = `${msg} set1=${arrOfSet(set1)} set2=${arrOfSet(set2)}`;
-    let arr1 = arrOfSet(set1);
-    let arr2 = arrOfSet(set2);
-    check(arr1.length === arr2.length, msg);
-    for (let item of arr1) check(item in set2, msg);
-}
-
-function checkDagsMatch(dag1, dag2) {
-    checkSetsAreEqual(dag1.roots, dag2.roots, 'root set equality');
-    checkSetsAreEqual(dag1.after, dag2.after, 'after src set equality');
-    checkSetsAreEqual(dag1.before, dag2.before, 'before src set equality');
-    for (let key in dag1.after) {
-        checkSetsAreEqual(dag1.after[key], dag2.after[key], `after[${key}] eq`);
+function checkGraphsMatch(graph1, graph2) {
+    checkSetsAreEqual(graph1.roots, graph2.roots, 'root set equality');
+    checkSetsAreEqual(graph1.after, graph2.after, 'after src set equality');
+    checkSetsAreEqual(graph1.before, graph2.before, 'before src set equality');
+    for (let key in graph1.after) {
+        checkSetsAreEqual(
+            graph1.after[key],
+            graph2.after[key],
+            `after[${key}] equality`
+        );
     }
-    for (let key in dag1.before) {
+    for (let key in graph1.before) {
         let msg = `before[${key}] equality`;
-        checkSetsAreEqual(dag1.before[key], dag2.before[key], msg);
+        checkSetsAreEqual(graph1.before[key], graph2.before[key], msg);
     }
 }
+
+function makeGraphFromEdges(numNodes, edges) {
+    let dag = makeEmptyGraph(numNodes);
+    for (let edge of edges) addEdge(dag, edge[0], edge[1]);
+    return dag;
+}
+
+
+// ______________________________________________________________________
+// Tests for transitive reduction
 
 // This is a test of transitiveReduce().
 // This is a simple case with 1 -> 2 -> 3 and 1 -> 3.
@@ -925,7 +964,7 @@ function checkDagsMatch(dag1, dag2) {
 // Use printForest(roots, dag.after) before/after the t.r. call to help debug.
 function trTest1() {
 
-    let dag = makeEmptyDag(3);
+    let dag = makeEmptyGraph(3);
     addEdge(dag, 1, 2);
     addEdge(dag, 1, 3);
     addEdge(dag, 2, 3);
@@ -935,17 +974,11 @@ function trTest1() {
     transitiveReduce(roots, after, before);
 
     // Build the target dag.
-    let targetDag = makeEmptyDag(3);
+    let targetDag = makeEmptyGraph(3);
     addEdge(targetDag, 1, 2);
     addEdge(targetDag, 2, 3);
 
-    checkDagsMatch(dag, targetDag);
-}
-
-function makeDagFromEdges(numNodes, edges) {
-    let dag = makeEmptyDag(numNodes);
-    for (let edge of edges) addEdge(dag, edge[0], edge[1]);
-    return dag;
+    checkGraphsMatch(dag, targetDag);
 }
 
 // This is a test of transitiveReduce().
@@ -961,7 +994,7 @@ function trTest2() {
     let edges = [
         [1, 2], [1, 3], [1, 4], [2, 4], [3, 4], [4, 5], [4, 6], [5, 6]
     ];
-    let dag = makeDagFromEdges(6, edges);
+    let dag = makeGraphFromEdges(6, edges);
 
     let {roots, after, before} = dag;
     roots = arrOfSet(roots);
@@ -970,9 +1003,9 @@ function trTest2() {
     edges = [
         [1, 2], [1, 3], [2, 4], [3, 4], [4, 5], [5, 6]
     ];
-    let targetDag = makeDagFromEdges(6, edges);
+    let targetDag = makeGraphFromEdges(6, edges);
 
-    checkDagsMatch(dag, targetDag);
+    checkGraphsMatch(dag, targetDag);
 }
 
 // This is a test of transitiveReduce().
@@ -986,7 +1019,7 @@ function trTest3() {
     let edges = [
         [1, 2], [2, 3], [1, 3], [4, 5], [5, 6], [4, 6]
     ];
-    let dag = makeDagFromEdges(6, edges);
+    let dag = makeGraphFromEdges(6, edges);
 
     let {roots, after, before} = dag;
     roots = arrOfSet(roots);
@@ -995,9 +1028,16 @@ function trTest3() {
     edges = [
         [1, 2], [2, 3], [4, 5], [5, 6]
     ];
-    let targetDag = makeDagFromEdges(6, edges);
+    let targetDag = makeGraphFromEdges(6, edges);
 
-    checkDagsMatch(dag, targetDag);
+    checkGraphsMatch(dag, targetDag);
+}
+
+
+// ______________________________________________________________________
+// Tests for findGraphCycle()
+
+function cycleTest1() {
 }
 
 
