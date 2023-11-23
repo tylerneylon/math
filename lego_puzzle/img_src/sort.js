@@ -148,20 +148,30 @@ function depthFirstTraverse(root, tree, fn1, fn2, opts) {
 //    need to include `node` in the path to `node` as well. (I think those two
 //    ideas go together into once nice change; not verified).
 
+// This expectds a single object that represents all the edges in a directed
+// graph. Each key (property) is viewed as a node, and the values are viewed as
+// the set of destination nodes from the key. This returns undefined if there
+// are no cycles; otherwise it returns an array of nodes that form a cycle. Each
+// node in this array is connected to the next, and the last is connected to the
+// first. I believe this algorithm is efficient in terms of order of magnitude,
+// although I have not tried to prove that.
 function findGraphCycle(after) {
     let nodesToExplore = makeSet(Object.keys(after));
     let seen = {};  // Start as the empty set.
-    while (setSize(nodesToExplore) > 0) {
+    let returnValue = undefined;
+    while (returnValue === undefined && setSize(nodesToExplore) > 0) {
         let root = pickInSet(nodesToExplore);
         depthFirstTraverse(root, after, (node, _, __, path) => {
-            let i = path.indexOf(root);
+            let i = path.indexOf(node);
             if (0 <= i && i < path.length - 1) {
-                return path.slice(i);
+                returnValue = path.slice(i, path.length - 1);
+                return 'break';
             }
             seen[root] = true;
             removeFromSet(nodesToExplore, node);
-        }, undefined, {seen});
+        }, undefined, {seen, toPrint: true});
     }
+    return returnValue;
 }
 
 // This receives a dag (directed acyclic graph) and removes all edges x->y such
@@ -715,10 +725,16 @@ function check(bool, msg) {
     }
 }
 
-function checkArraysAreSame(arr1, arr2) {
-    check(arr1.length === arr2.length);
+function checkArraysAreSame(arr1, arr2, msg) {
+    check(
+        arr1.length === arr2.length,
+        `different array lengths: ${arr1.length} vs ${arr2.length}`
+    );
     for (let i = 0; i < arr1.length; i++) {
-        check(arr1[i] === arr2[i]);
+        check(
+            arr1[i] === arr2[i],
+            `different array values: ${arr1} vs ${arr2}`
+        );
     }
 }
 
@@ -1037,7 +1053,64 @@ function trTest3() {
 // ______________________________________________________________________
 // Tests for findGraphCycle()
 
+// Test the simple cycle: 1 - 2 - 3 - 1
 function cycleTest1() {
+    let edges = [[1, 2], [2, 3], [3, 1]];
+    let graph = makeGraphFromEdges(3, edges);
+    let result = findGraphCycle(graph.after);
+    checkArraysAreSame(result, [1, 2, 3].map(x => `${x}`));
+}
+
+// Test a graph with no cycles.
+function cycleTest2() {
+    let edges = [[1, 2], [2, 3], [1, 3]];
+    let graph = makeGraphFromEdges(3, edges);
+    let result = findGraphCycle(graph.after);
+    check(result === undefined, 'there are no cycles in this graph');
+}
+
+function cycleTest3() {
+    let edges = [[1, 2], [2, 3], [3, 1]];
+    let graph = makeGraphFromEdges(3, edges);
+    let result = findGraphCycle(graph.after);
+    checkArraysAreSame(result, [1, 2, 3].map(x => `${x}`));
+}
+
+function cycleTest4() {
+    let edges = [
+        [1, 2], [2, 3], [4, 5], [5, 6],
+        [3, 7], [7, 6], [6, 2]
+    ];
+    let graph = makeGraphFromEdges(7, edges);
+    let result = findGraphCycle(graph.after);
+    checkArraysAreSame(result, [2, 3, 7, 6].map(x => `${x}`));
+}
+
+function cycleTest5() {
+    let edges = [
+        [1, 2], [2, 4], [3, 4],
+        [5, 6], [6, 7], [6, 8], [6, 10], [7, 8], [7, 9],
+        [9, 11], [10, 11], [11, 6]
+    ];
+    let graph = makeGraphFromEdges(11, edges);
+    let result = findGraphCycle(graph.after);
+    // Note that other cycles are also valid. This just happens to be the one
+    // that the current implementation returns first.
+    checkArraysAreSame(result, [6, 7, 9, 11].map(x => `${x}`));
+}
+
+function cycleTest6() {
+    let edges = [[1, 2], [2, 1]];
+    let graph = makeGraphFromEdges(2, edges);
+    let result = findGraphCycle(graph.after);
+    checkArraysAreSame(result, [1, 2].map(x => `${x}`));
+}
+
+function cycleTest7() {
+    let edges = [[1, 1]];
+    let graph = makeGraphFromEdges(1, edges);
+    let result = findGraphCycle(graph.after);
+    checkArraysAreSame(result, [1].map(x => `${x}`));
 }
 
 
@@ -1067,7 +1140,7 @@ if (typeof window === 'undefined') {
 
     // A place to focus on a single unit test at a time.
     if (focusMode) {
-        activeTest = trTest3;
+        activeTest = cycleTest7;
         activeTest();
         console.log('Passed!');
     }
@@ -1076,7 +1149,9 @@ if (typeof window === 'undefined') {
         let allTests = [
             test1, test2, test3, test4, test5,
             test6, test7, test8,
-            trTest1, trTest2, trTest3
+            trTest1, trTest2, trTest3,
+            cycleTest1, cycleTest2, cycleTest3, cycleTest4,
+            cycleTest5, cycleTest6, cycleTest7
         ];
         allTests.forEach(testFn => {
             activeTest = testFn;
