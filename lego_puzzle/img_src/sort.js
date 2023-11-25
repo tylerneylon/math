@@ -386,6 +386,11 @@ class Sorter extends Function {
         say(`Pushing ${getName(this.inputArr[newItem])} onto sorted`);
     }
 
+    dbgCycleCheck() {
+        let cycle = findGraphCycle(this.after);
+        if (cycle) say('Cycle found: ' + this.strOfArr(cycle));
+    }
+
     dbgEnd(sorted, arrSet) {
         if (logLevel < 1) return;
         say(`numCmpCalls = ${this.numCmpCalls}`);
@@ -476,7 +481,7 @@ class Sorter extends Function {
                 let oLabel = this.label(other);
                 assert(
                     c !== '>',
-                    `cmp(root (${rLabel}), other (${oLabel}, same set)) = ${c}`
+                    `cmp(root (${rLabel}), other (${oLabel}, same set)) is ${c}`
                 );
             }
         }
@@ -624,7 +629,9 @@ class Sorter extends Function {
 
             if (dMode) {
                 this.dbgStartOfLoop(subsetRootsToSort, makeSet(subsetArr));
-                this.confirmInvariants(subsetRootsToSort, set1, set2);
+                if (doRecursiveMode) {
+                    this.confirmInvariants(subsetRootsToSort, set1, set2);
+                }
             }
 
             let doAnotherCheck = false;
@@ -698,23 +705,20 @@ class Sorter extends Function {
             // console.log('Did transitively reduce');  // DEBUG4
         }
 
-        if (dMode) this.dbgEnd(sorted, makeSet(subsetArr));
+        if (dMode) this.dbgCycleCheck();
 
-        // DEBUG5
-        if (topLevelCall) {
-            let maybeCycle = findGraphCycle(this.after);
-            console.log('maybeCycle:', maybeCycle);
-            if (maybeCycle) {
-                maybeCycle.forEach(x => console.log(this.after.getName(x)));
-                debugger;
+        if (sorted.length < subsetArr.length) {
+            console.warn('WARNING: It looks like a cycle was present ' +
+                         'in the order sent to sort().');
+            // This is not great, but we'll just arbitrarily add in elements
+            // until sorted contains the full input list.
+            // This is not efficient but also should not normally happen at all.
+            for (let item of subsetArr) {
+                if (sorted.indexOf(item) === -1) sorted.push(item);
             }
         }
 
-        // DEBUG5
-        console.log(`sorted has length ${sorted.length}`);
-        if (sorted.length < subsetArr.length) {
-            debugger;
-        }
+        if (dMode) this.dbgEnd(sorted, makeSet(subsetArr));
 
         return {
             sorted:    sorted.map(i => inputArr[i]),

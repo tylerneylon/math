@@ -209,7 +209,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let obj4 = clone3DObject(obj);
     rotate3DObjectAroundXAxis(obj4, -Math.PI / 2);
     rotate3DObjectAroundZAxis(obj4,  Math.PI / 2);
-    translate3DObject(obj4, [1 + 1 * gap, 1 + 1 * gap, 0]);  // XXX the 50x
+    translate3DObject(obj4, [1 + 1 * gap, 1 + 1 * gap, 0]);  // XXX the 50x DEBUG5
     style3DObject(obj4, {fill: '#880'});
 
     let obj5 = clone3DObject(obj);
