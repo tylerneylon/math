@@ -500,7 +500,10 @@ class Sorter extends Function {
 
         for (let root in rootsChecked) {
             depthFirstTraverse(root, this.after, (node) => {
-                assert(this.cmp(minSoFar, node) !== '>');
+                assert(
+                    this.cmp(minSoFar, node) !== '>',
+                    `got minSoFar(${minSoFar}) > checked root ${node}`
+                );
             });
         }
     }
@@ -606,6 +609,17 @@ class Sorter extends Function {
             say('subsetRootsToSort = ' + arrOfSet(subsetRootsToSort).join(' '));
         }
 
+        // Choose minSoFar from the side with more unsorted elements in it.
+        // This heuristic aims to reduce the number of comparison calls.
+
+        let largerSet = (setSize(set1) > setSize(set2)) ? set1 : set2;
+        let minSoFar  = pickInSets(subsetRootsToSort, largerSet);
+        if (minSoFar === null) minSoFar = pickInSets(subsetRootsToSort);
+        let minSet = (minSoFar in set1) ? set1 : set2;
+        let rootsChecked = {};
+
+        if (dMode) this.dbgReportMinSoFar(minSoFar);
+
         while (setSize(subsetRootsToSort) > 0) {
 
             if (dMode) {
@@ -613,27 +627,14 @@ class Sorter extends Function {
                 this.confirmInvariants(subsetRootsToSort, set1, set2);
             }
 
-            // Choose minSoFar from the side with more unsorted elements in it.
-            // This heuristic aims to reduce the number of comparison calls.
-
-            let largerSet = (setSize(set1) > setSize(set2)) ? set1 : set2;
-            let minSoFar  = pickInSets(subsetRootsToSort, largerSet);
-            if (minSoFar === null) minSoFar = pickInSets(subsetRootsToSort);
-            let minSet = (minSoFar in set1) ? set1 : set2;
-
-            if (dMode) this.dbgReportMinSoFar(minSoFar);
-
-            let rootsChecked = {};
-            let subsetRootsToSortArr = Object.keys(subsetRootsToSort);
-            for (let i = 0; i < subsetRootsToSortArr.length; i++) {
-                let root = subsetRootsToSortArr[i];
+            let doAnotherCheck = false;
+            for (let root in subsetRootsToSort) {
                 if (dMode) {
                     this.checkMinSoFarInvariant(
                         minSoFar, rootsChecked, set1, set2
                     );
+                    rootsChecked[root] = true;
                 }
-                rootsChecked[root] = true;
-
                 if (root === minSoFar) continue;
                 depthFirstTraverse(root, this.after, (node) => {
                     /*
@@ -644,37 +645,45 @@ class Sorter extends Function {
                     */
                     let c = this.cmp(minSoFar, node);
                     if (dMode) this.dbgFoundCmp(minSoFar, c, node);
-                    if (c === '<') {
+                    if (c === '<') {  // minSoFar < node
                         this.makeXBeforeY(minSoFar, node);
                         removeFromSet(subsetRootsToSort, node);
                         return 'skip';
                     }
-                    if (c === '>') {
+                    if (c === '>') {  // minSoFar > node
                         if (dMode) this.dbgSubnodeLess(node);
                         this.makeXBeforeY(node, minSoFar);
                         removeFromSet(subsetRootsToSort, minSoFar);
                         minSoFar = root;
                         minSet = (minSoFar in set1) ? set1 : set2;
-                        i = -1;
-                        rootsChecked = {};
+                        if (dMode) rootsChecked = {};
+                        doAnotherCheck = true;
                         return 'break';
                     }
                 });
+                if (doAnotherCheck) break;
             }
 
-            if (dMode) this.dbgPushing(minSoFar);
-            sorted.push(minSoFar);
-            delete minSet[minSoFar];
-            removeFromSet(subsetRootsToSort, minSoFar);
-            removeFromSet(subsetToSort, minSoFar);
-            for (const node in this.after[minSoFar]) {
-                // Promote children to roots if they're in subsetToSort and all
-                // of their immediate parents are not.
-                if (!(node in subsetToSort)) continue;
-                if (!arrOfSet(this.before[node]).some(
-                        parent => (parent in subsetToSort))) {
-                    subsetRootsToSort[node] = true;
+            if (!doAnotherCheck) {
+                if (dMode) this.dbgPushing(minSoFar);
+                sorted.push(minSoFar);
+                delete minSet[minSoFar];
+                removeFromSet(subsetRootsToSort, minSoFar);
+                removeFromSet(subsetToSort, minSoFar);
+                for (const node in this.after[minSoFar]) {
+                    // Promote children to roots if they're in subsetToSort and all
+                    // of their immediate parents are not.
+                    if (!(node in subsetToSort)) continue;
+                    if (!arrOfSet(this.before[node]).some(
+                            parent => (parent in subsetToSort))) {
+                        subsetRootsToSort[node] = true;
+                    }
                 }
+                largerSet = (setSize(set1) > setSize(set2)) ? set1 : set2;
+                minSoFar  = pickInSets(subsetRootsToSort, largerSet);
+                if (minSoFar === null) minSoFar = pickInSets(subsetRootsToSort);
+                minSet = (minSoFar in set1) ? set1 : set2;
+                if (dMode) rootsChecked = {};
             }
         }
 
