@@ -940,11 +940,8 @@ function compareLines(s1, s2, pts, options) {
         s2.d / vector.dot(viewPlaneRay, s2.b)
     );
 
-    // DEBUG5 XXX
-    // reason += ` line1Ray.z=${line1Ray[2].toFixed(3)}`;
-    // reason += ` line2Ray.z=${line2Ray[2].toFixed(3)}`;
-    reason += ` line1Ray.z=${line1Ray[2]}`;
-    reason += ` line2Ray.z=${line2Ray[2]}`;
+    reason += ` line1Ray.z=${line1Ray[2].toFixed(5)}`;
+    reason += ` line2Ray.z=${line2Ray[2].toFixed(5)}`;
 
     // TODO: Think about what a good value for the tolerance is here.
     let delta = line2Ray[2] - line1Ray[2];
@@ -1051,24 +1048,12 @@ function orderElts2(pts, normalXYs) {
     let shapes = ctx.prevBackToFront?.['sorted'];
     if (!shapes) shapes = [...ctx.faces, ...ctx.lines];
     let opts = undefined;
-    if (ctx.prevBackToFront) {
-        opts = {};
-        opts.rootSet   = ctx.prevBackToFront.rootSet;
-        opts.after     = ctx.prevBackToFront.after;
-        opts.sortedIdx = ctx.prevBackToFront.sortedIdx;
-
-        // DEBUG5
-        opts.after.ctx = ctx;
-    }
-
-    // DEBUG5
-    console.log(`shapes has length ${shapes.length}`);
+    if (ctx.prevBackToFront) opts = ctx.prevBackToFront;
 
     let backToFront = sort.sort(shapes, compareShapes, pts, opts);
     // let backToFront = sortWithPartialInfo(shapes, compareShapes, pts);
     ctx.prevBackToFront = backToFront;
     backToFront = backToFront['sorted'];
-    console.log(`[[1]] shapes has length ${backToFront.length}`);  // DEBUG5
 
     say('<p><hr>Here is the ordering of shapes I got, back-to-front:');
     for (let s of backToFront) say(getShapeName(s));

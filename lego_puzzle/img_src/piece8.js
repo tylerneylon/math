@@ -171,7 +171,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         face.style = {fill: '#a44'};
     }
 
-    let dbgMode = true;
+    let dbgMode = false;
     if (dbgMode) space.ctx.doDrawDots = true;
 
     let obj = [pts, lines, faces];
@@ -209,7 +209,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let obj4 = clone3DObject(obj);
     rotate3DObjectAroundXAxis(obj4, -Math.PI / 2);
     rotate3DObjectAroundZAxis(obj4,  Math.PI / 2);
-    translate3DObject(obj4, [1 + 1 * gap, 1 + 1 * gap, 0]);  // XXX the 50x DEBUG5
+    translate3DObject(obj4, [1 + gap, 1 + gap, 0]);
     style3DObject(obj4, {fill: '#880'});
 
     let obj5 = clone3DObject(obj);
@@ -271,7 +271,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         ));
         space.ctx.rotationsPerSec = 0.2;
         // space.ctx.rotationsPerSec = 0.65;  // XXX DEBUG1
-        space.ctx.rotationsPerSec = 0.3;  // XXX DEBUG5
+        // space.ctx.rotationsPerSec = 0.3;  // XXX DEBUG5
         space.makeDraggable();
         space.animate();
     }
