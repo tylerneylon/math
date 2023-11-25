@@ -1261,6 +1261,17 @@ function solveLinEqn(a, b, c, d, e, f) {
     if (isTiny(a) && !isTiny(e - b * y)) return null;  // There's no solution.
     let x = (isTiny(a) ? 0 : (e - b * y) / a);
 
+    // This isn't crazy slow but this code is in a critical path.
+    let addSlowDebugCheck = false;
+    if (addSlowDebugCheck) {
+        let delta1 = a * x + b * y - e;
+        let delta2 = c * x + d * y - f;
+        let eps = 1e-8;
+        if (Math.abs(delta1) > eps || Math.abs(delta2) > eps) {
+            debugger;
+        }
+    }
+
     return (col_swap_needed ? [y, x] : [x, y]);
 }
 
