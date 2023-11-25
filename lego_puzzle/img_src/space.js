@@ -1236,7 +1236,7 @@ function getShapeName(s) {
     }
 }
 
-function isTiny(x) { return Math.abs(x) < 0.00001; }
+function isTiny(x) { return Math.abs(x) < 1e-7; }
 
 // This solves the 2x2 system of equations for x and y:
 // ( a b )( x ) = ( e )
