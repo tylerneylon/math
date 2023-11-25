@@ -171,7 +171,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         face.style = {fill: '#a44'};
     }
 
-    let dbgMode = false;
+    let dbgMode = true;
     if (dbgMode) space.ctx.doDrawDots = true;
 
     let obj = [pts, lines, faces];
@@ -209,7 +209,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let obj4 = clone3DObject(obj);
     rotate3DObjectAroundXAxis(obj4, -Math.PI / 2);
     rotate3DObjectAroundZAxis(obj4,  Math.PI / 2);
-    translate3DObject(obj4, [1 + gap, 1 + gap, 0]);
+    translate3DObject(obj4, [1 + 1 * gap, 1 + 1 * gap, 0]);  // XXX the 50x
     style3DObject(obj4, {fill: '#880'});
 
     let obj5 = clone3DObject(obj);
@@ -245,14 +245,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     space.addObject(obj4);  // yellow
     space.addObject(obj5);  // magenta
-    space.addObject(obj6);  // green
-    space.addObject(obj7);  // blue
-    space.addObject(obj8);  // cyan
+    // space.addObject(obj6);  // green
+    // space.addObject(obj7);  // blue
+    // space.addObject(obj8);  // cyan
 
     if (dbgMode) {
         let offset = 15;
-        let n = obj[0].length;
-        // space.addLabels([...Array(n).keys()], offset);
+        let n = obj[0].length * 3;
+        space.addLabels([...Array(n).keys()], offset);
     }
 
     space.setTransform(matrix.mult(
@@ -271,7 +271,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         ));
         space.ctx.rotationsPerSec = 0.2;
         // space.ctx.rotationsPerSec = 0.65;  // XXX DEBUG1
-        space.ctx.rotationsPerSec = 0.9;  // XXX DEBUG5
+        space.ctx.rotationsPerSec = 0.3;  // XXX DEBUG5
         space.makeDraggable();
         space.animate();
     }

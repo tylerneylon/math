@@ -4,13 +4,73 @@
  *
  */
 
-
 // TODO
 //  * Refactor so that there is less code redundancy across
 //    initial dot/line placement and setting a new transform.
 //  * Ensure initial render is consistent with follow-ups.
 //  * Factor out all z-order-focused functions into a new zorder.js file.
 //    (In general, aim to reduce the size and complexity of this file.)
+
+// ======================================================================
+// Notes on z-ordering and data formats
+//
+// 1. Call graph for z-ordering
+//
+//    The top-level callback per frame is setupFrame().
+//
+//    setupFrame() -> setTransform() [z-orders]; then artist.render()
+//    setTransform() -> updatePoints()
+//    updatePoints() -> getXYArray(), then orderElts()
+//    orderElts2() -> sort.sort()
+//
+// 1. Points
+//
+//    The pre-transformed static position of points is stored in ctx.pts.
+//    ctx.pts is a 4xn matrix, so each entry in it is an n-long array.
+//    The 4th coordinate is always 1 to facilitate translation within a
+//    single matrix multiply. For each frame, ctx.pts is pre-multiplied
+//    by ctx.transform, which is updated each frame based on the current
+//    rotation and/or the user dragging the scene.
+//
+//    This multiplication is handled by getXYArray(), called from within
+//    updatePoints(). The result is an array of point arrays with this
+//    format:
+//
+//    pt[0..2]     = The transformed point coords, no perspective.
+//    pt.x0,y0,z0  = The transformed point coords, no perspective.
+//    pt.w         = pt.z / ctx.zoom; the perspective factor.
+//    pt.x,y,z     = Pts both transformed and with perspective.
+//                   (x,y have been divided by w; z is the same as z0)
+//    pt.isVisible = true iff (z >= eyeZ); eyeZ is an internal global.
+//
+// 2. Lines
+//
+//    For each frame, each line has these properties:
+//
+//    line.x,y   = line start in the view plane (w perspective)
+//    line.dx,dy = line delta in the view plane (w perspective)
+//    line.a,b,c = each is a 3d vector so that the extended line L is:
+//        
+//        L = {p: <p,a>=0 and <p,b> = d} (in pre-perspective coords)
+//    
+//    Intuitively:
+//    a points up from the plane of L + the origin
+//    b points from the origin toward L
+//    c points parallel to the line
+//    line.d is the distance of the line from the origin
+//
+// 3. Notes
+//
+//    Think of the view plane as being along the z-axis at distance
+//    ctx.zoom away from the origin; we're looking toward positive z.
+//
+//    The view rectangle is [-1,1]x[-1,1] within this plane.
+//
+//    Side note that I have no idea how I managed to get this file to
+//    where it is before I actually wrote any of this down.
+//    
+// ======================================================================
+
 
 // ______________________________________________________________________
 // Imports
@@ -833,7 +893,10 @@ function compareLines(s1, s2, pts, options) {
         function c(sh, i1, i2) {
             let v1 = -vector.dot(pts[sh], vector.sub(pts[i1], pts[sh]));
             let v2 = -vector.dot(pts[sh], vector.sub(pts[i2], pts[sh]));
-            return ret((v1 > v2) ? '>' : '<', ': single shared vertex');
+            // XXX
+            let msg = ` v1=${v1} v2=${v2}; cmp will match v1 vs v2 here`;
+            if (isTiny(v1 - v2)) return ret(undefined, ': they appear close');
+            return ret((v1 > v2) ? '>' : '<', ': single shared vertex' + msg);
         }
 
         // TODO: Just delete the string 'ret' from each line; keep parens.
@@ -877,12 +940,15 @@ function compareLines(s1, s2, pts, options) {
         s2.d / vector.dot(viewPlaneRay, s2.b)
     );
 
-    reason += ` line1Ray.z=${line1Ray[2].toFixed(3)}`;
-    reason += ` line2Ray.z=${line2Ray[2].toFixed(3)}`;
+    // DEBUG5 XXX
+    // reason += ` line1Ray.z=${line1Ray[2].toFixed(3)}`;
+    // reason += ` line2Ray.z=${line2Ray[2].toFixed(3)}`;
+    reason += ` line1Ray.z=${line1Ray[2]}`;
+    reason += ` line2Ray.z=${line2Ray[2]}`;
 
     // TODO: Think about what a good value for the tolerance is here.
     let delta = line2Ray[2] - line1Ray[2];
-    if (Math.abs(delta) < 0.00001) return ret(null, ': overlap pt is the same');
+    if (Math.abs(delta) < 0.0001) return ret(null, ': overlap pt is the same');
 
     return (line1Ray[2] < line2Ray[2]) ? ret('>', reason) : ret('<', reason);
 }
@@ -990,6 +1056,9 @@ function orderElts2(pts, normalXYs) {
         opts.rootSet   = ctx.prevBackToFront.rootSet;
         opts.after     = ctx.prevBackToFront.after;
         opts.sortedIdx = ctx.prevBackToFront.sortedIdx;
+
+        // DEBUG5
+        opts.after.ctx = ctx;
     }
 
     // DEBUG5
@@ -1106,6 +1175,7 @@ let commentElt  = document.getElementById('comment');
 commentElt = null;  // XXX
 let prefix = '';
 let commentParts = [];
+let spaceChar = ' ';  // An alternative is '&nbsp;'.
 
 function startComments() {
     commentParts = [];
@@ -1117,7 +1187,7 @@ function showComments() {
 }
 
 function indent() {
-    prefix = prefix + '&nbsp;'.repeat(4);
+    prefix = prefix + spaceChar.repeat(4);
 }
 
 function dedent() {
@@ -1132,6 +1202,8 @@ function say(s) {
     let spanEnd   = '';
     if (prefix) [spanStart, spanEnd] = ['<span class="gray">', '</span>'];
     commentParts.push(prefix + spanStart + s + spanEnd + '<br/>\n');
+
+    if (ctx.beLoud) console.log(prefix + s);
 }
 
 function showTableWithColumns(cols, topSep) {
@@ -1187,7 +1259,7 @@ function solveLinEqn(a, b, c, d, e, f) {
     if (isTiny(denom) && !isTiny(numer)) return null;  // There's no solution.
     let y = (isTiny(denom) ? 0 : numer / denom);
     if (isTiny(a) && !isTiny(e - b * y)) return null;  // There's no solution.
-    let x = (isTiny(e - b * y) ? 0 : (e - b * y) / a);
+    let x = (isTiny(a) ? 0 : (e - b * y) / a);
 
     return (col_swap_needed ? [y, x] : [x, y]);
 }
@@ -1695,7 +1767,7 @@ export function animate() {
     window.requestAnimationFrame(setupFrame);
 }
 
-let numTimesLeft = 600;  // DEBUG1
+let numTimesLeft = 600000;  // DEBUG1
 
 export function updatePoints() {
 

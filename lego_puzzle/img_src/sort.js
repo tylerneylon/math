@@ -692,6 +692,16 @@ class Sorter extends Function {
         if (dMode) this.dbgEnd(sorted, makeSet(subsetArr));
 
         // DEBUG5
+        if (topLevelCall) {
+            let maybeCycle = findGraphCycle(this.after);
+            console.log('maybeCycle:', maybeCycle);
+            if (maybeCycle) {
+                maybeCycle.forEach(x => console.log(this.after.getName(x)));
+                debugger;
+            }
+        }
+
+        // DEBUG5
         console.log(`sorted has length ${sorted.length}`);
         if (sorted.length < subsetArr.length) {
             debugger;
