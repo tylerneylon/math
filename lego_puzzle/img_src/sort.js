@@ -619,6 +619,7 @@ class Sorter extends Function {
 
         let largerSet = (setSize(set1) > setSize(set2)) ? set1 : set2;
         let minSoFar  = pickInSets(subsetRootsToSort, largerSet);
+        if (!doRecursiveMode) minSoFar = pickInSets(subsetRootsToSort);
         if (minSoFar === null) minSoFar = pickInSets(subsetRootsToSort);
         let minSet = (minSoFar in set1) ? set1 : set2;
         let rootsChecked = {};
@@ -688,7 +689,9 @@ class Sorter extends Function {
                 }
                 largerSet = (setSize(set1) > setSize(set2)) ? set1 : set2;
                 minSoFar  = pickInSets(subsetRootsToSort, largerSet);
-                if (minSoFar === null) minSoFar = pickInSets(subsetRootsToSort);
+                if (minSoFar === null || !doRecursiveMode) {
+                    minSoFar = pickInSets(subsetRootsToSort);
+                }
                 minSet = (minSoFar in set1) ? set1 : set2;
                 if (dMode) rootsChecked = {};
             }

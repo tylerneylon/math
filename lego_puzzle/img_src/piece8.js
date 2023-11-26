@@ -245,13 +245,13 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     space.addObject(obj4);  // yellow
     space.addObject(obj5);  // magenta
-    // space.addObject(obj6);  // green
-    // space.addObject(obj7);  // blue
-    // space.addObject(obj8);  // cyan
+    space.addObject(obj6);  // green
+    space.addObject(obj7);  // blue
+    space.addObject(obj8);  // cyan
 
     if (dbgMode) {
         let offset = 15;
-        let n = obj[0].length * 3;
+        let n = obj[0].length * 2;
         space.addLabels([...Array(n).keys()], offset);
     }
 
