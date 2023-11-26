@@ -83,6 +83,23 @@ function style3DObject(obj, faceStyle) {
     obj[2].forEach(face => Object.assign(face, {style: faceStyle}));
 }
 
+function printObjectExtents(obj) {
+    let pts = obj[0];
+    let mins = [ Infinity,  Infinity,  Infinity];
+    let maxs = [-Infinity, -Infinity, -Infinity];
+    for (let pt of pts) {
+        for (let i = 0; i < 3; i++) {
+            mins[i] = Math.min(mins[i], pt[i]);
+            maxs[i] = Math.max(maxs[i], pt[i]);
+        }
+    }
+    console.log(
+        `The xyz extents are:` +
+        ` [${mins[0]}, ${maxs[0]}]` +
+        ` [${mins[1]}, ${maxs[1]}]` +
+        ` [${mins[2]}, ${maxs[2]}]`
+    );
+}
 
 
 // ______________________________________________________________________
@@ -121,10 +138,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
                 // Push the z faces.
                 // These are faces perpendicular to the z axis.
-                for (let xx = x; xx >= x - 1; xx--) {
-                    for (let yy = y; yy >= y - 1; yy--) {
-                        if (-xx < 2 && xx < 1 && -yy < 2 && yy < 1) {
-                            util.push(faceMap, `z:${xx}:${yy}:${z}`, idx);
+                if (z === 0) {
+                    for (let xx = x; xx >= x - 1; xx--) {
+                        for (let yy = y; yy >= y - 1; yy--) {
+                            if (-xx < 2 && xx < 1 && -yy < 2 && yy < 1) {
+                                util.push(faceMap, `z:${xx}:${yy}:${z}`, idx);
+                            }
                         }
                     }
                 }
@@ -194,49 +213,83 @@ window.addEventListener('DOMContentLoaded', (event) => {
     //       So I want to fix object handling so that the origin does not need
     //       to be interior to the object before adding it.
 
+    // The first box, `obj`, is in z=[-1, 0].
+    // xyz = [-1, 1] [-1, 1] [-1 0]
     translate3DObject(obj, [0, 0, -1.0]);
+    console.log('obj (red):');
+    printObjectExtents(obj);
+
+    // The gap strategy here is that:
+    //  * An extent min of -1 is really at -1.
+    //  * An extent min of  0 is really at  eps.
+    //  * An extent min of  1 is really at  2 * eps.
 
     let gap = 0.001;
 
+    // Unused.
+    // This box is in z=[eps, 1 + eps].
     let obj2 = clone3DObject(obj);
     translate3DObject(obj2, [0, 0, 1 + gap]);
     style3DObject(obj2, {fill: '#4a4'});
+    console.log('obj2:');
+    printObjectExtents(obj2);
 
+    // Unused.
     let obj3 = clone3DObject(obj);
     translate3DObject(obj3, [0, 0, 2 + 2 * gap]);
     style3DObject(obj3, {fill: '#44a'});
+    console.log('obj3:');
+    printObjectExtents(obj3);
 
+    // This box is in x=[1 + 2 eps, 2 + 2 eps].
+    // xyz = [1, 2] [0, 2] [-1, 1]
     let obj4 = clone3DObject(obj);
     rotate3DObjectAroundXAxis(obj4, -Math.PI / 2);
     rotate3DObjectAroundZAxis(obj4,  Math.PI / 2);
-    translate3DObject(obj4, [1 + gap, 1 + gap, 0]);
+    translate3DObject(obj4, [1 + 2 * gap, 1 + gap, 0]);
     style3DObject(obj4, {fill: '#880'});
+    console.log('obj4:');
+    printObjectExtents(obj4);
 
+    // This box is in y=[1 + eps, 2 + eps].
+    // xyz = [-1, 1] [1, 2] [-1, 1]
     let obj5 = clone3DObject(obj);
     rotate3DObjectAroundXAxis(obj5, Math.PI / 2);
     rotate3DObjectAroundYAxis(obj5, -Math.PI / 2);
-    translate3DObject(obj5, [0, 1 + gap, 0]);
+    translate3DObject(obj5, [0, 1 + 2 * gap, 0]);
     style3DObject(obj5, {fill: '#808'});
+    console.log('obj5:');
+    printObjectExtents(obj5);
 
+    // This box is in y=[-1 - eps, -eps].
+    // xyz = [0, 2] [-1, 0] [0, 2]
     let obj6 = clone3DObject(obj);
-    rotate3DObjectAroundXAxis(obj6, Math.PI / 2);
-    rotate3DObjectAroundYAxis(obj6, -Math.PI / 2);
-    translate3DObject(obj6, [1 + gap, -1 - gap, 1 + gap]);
+    rotate3DObjectAroundXAxis(obj6, -Math.PI / 2);
+    translate3DObject(obj6, [1 + gap, 0, 1 + gap]);
     style3DObject(obj6, {fill: '#4a4'});
+    console.log('obj6 (green):');
+    printObjectExtents(obj6);
 
+    // This box is in x=[-1 - eps, -eps].
+    // xyz = [-1, 0] [-1, 1] [0, 2]
     let obj7 = clone3DObject(obj);
-    rotate3DObjectAroundXAxis(obj7, -Math.PI / 2);
-    rotate3DObjectAroundZAxis(obj7,  Math.PI / 2);
-    translate3DObject(obj7, [-1 - gap, 0, 1 + gap]);
+    rotate3DObjectAroundXAxis(obj7, Math.PI / 2);
+    rotate3DObjectAroundZAxis(obj7, Math.PI / 2);
+    translate3DObject(obj7, [0, 0, 1 + gap]);
     style3DObject(obj7, {fill: '#44a'});
+    console.log('obj7 (blue):');
+    printObjectExtents(obj7);
 
     let obj8 = clone3DObject(obj);
-    translate3DObject(obj8, [1 + gap, 1 + gap, 2 + 2 * gap]);
+    rotate3DObjectAroundXAxis(obj8, Math.PI);
+    translate3DObject(obj8, [1 + gap, 1 + gap, 1 + 2 * gap]);
     style3DObject(obj8, {fill: '#088'});
+    console.log('obj8 (cyan):');
+    printObjectExtents(obj8);
 
     space.addObject(obj);   // red
-    // space.addObject(obj2);  // green
-    // space.addObject(obj3);  // blue
+    // space.addObject(obj2);  // green, leave out
+    // space.addObject(obj3);  // blue, leave out
 
     // XXX
     // In the code block below, the full image includes all the objects.

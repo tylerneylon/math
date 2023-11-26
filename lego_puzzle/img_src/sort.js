@@ -711,6 +711,7 @@ class Sorter extends Function {
         if (dMode) this.dbgCycleCheck();
 
         if (sorted.length < subsetArr.length) {
+            throw new Error('cycle found');  // TODO XXX clean up
             console.warn('WARNING: It looks like a cycle was present ' +
                          'in the order sent to sort().');
             // This is not great, but we'll just arbitrarily add in elements
