@@ -1763,7 +1763,7 @@ export function animate() {
     window.requestAnimationFrame(setupFrame);
 }
 
-let numTimesLeft = 600000;  // DEBUG1
+let numTimesLeft = 3000;  // DEBUG1
 
 export function updatePoints() {
 

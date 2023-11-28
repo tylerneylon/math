@@ -20,15 +20,15 @@ import * as util   from './util.js';
 let zDist = 8;
 
 let thickStyle = {
-    stroke: '#444',
+    stroke: '#555',  // '#444',
     fill:   'transparent',
-    'stroke-width': 3
+    'stroke-width': 1.5
 };
 
 let thinStyle = {
-    stroke: '#444',
+    stroke: '#555',  // '#444',
     fill:   'transparent',
-    'stroke-width': 1
+    'stroke-width': 0.5
 };
 
 

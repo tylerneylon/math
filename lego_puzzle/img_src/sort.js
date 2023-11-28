@@ -122,8 +122,8 @@ function entries(arrOrObj) {
 function depthFirstTraverse(root, tree, fn1, fn2, opts) {
     let {depth, childNum, nodeSet, seen, path, allPaths, toPrint} = opts || {};
     if (depth === undefined) depth = 0;
-    if (seen === undefined) seen = {};
-    if (path === undefined) path = [root];
+    if (seen  === undefined) seen  = {};
+    if (path  === undefined) path  = [root];
     if (allPaths !== true && toPrint !== true && root in seen) return;
     let visitRootOnly = (toPrint && root in seen);
     seen[root] = true;
@@ -636,6 +636,7 @@ class Sorter extends Function {
             }
 
             let doAnotherCheck = false;
+            let seen = {};
             for (let root in subsetRootsToSort) {
                 if (dMode) {
                     this.checkMinSoFarInvariant(
@@ -668,13 +669,13 @@ class Sorter extends Function {
                         doAnotherCheck = true;
                         return 'break';
                     }
-                });
+                }, null, {seen});
                 if (doAnotherCheck) break;
             }
 
             if (!doAnotherCheck) {
                 if (dMode) this.dbgPushing(minSoFar);
-                sorted.push(minSoFar);
+                sorted.push(Number(minSoFar));
                 delete minSet[minSoFar];
                 removeFromSet(subsetRootsToSort, minSoFar);
                 removeFromSet(subsetToSort, minSoFar);
@@ -705,19 +706,18 @@ class Sorter extends Function {
         // only between subsequent calls.
         if (topLevelCall) {
             transitiveReduce(arrOfSet(this.roots), this.after, this.before);
-            // console.log('Did transitively reduce');  // DEBUG4
         }
 
         if (dMode) this.dbgCycleCheck();
 
         if (sorted.length < subsetArr.length) {
-            throw new Error('cycle found');  // TODO XXX clean up
             console.warn('WARNING: It looks like a cycle was present ' +
                          'in the order sent to sort().');
             // This is not great, but we'll just arbitrarily add in elements
             // until sorted contains the full input list.
             // This is not efficient but also should not normally happen at all.
             for (let item of subsetArr) {
+                item = Number(item);
                 if (sorted.indexOf(item) === -1) sorted.push(item);
             }
         }
@@ -1099,7 +1099,7 @@ function cycleTest2() {
 // Test the graph:  1 - 2 - 3 - 4 - 1
 function cycleTest3() {
     let edges = [[1, 2], [2, 3], [3, 4], [4, 1]];
-    let graph = makeGraphFromEdges(3, edges);
+    let graph = makeGraphFromEdges(4, edges);
     let result = findGraphCycle(graph.after);
     checkArraysAreSame(result, [1, 2, 3, 4].map(x => `${x}`));
 }
@@ -1152,6 +1152,44 @@ function cycleTest7() {
 
 
 // ______________________________________________________________________
+// Tests for depth traversal
+
+// TODO: Keep or drop these. Not yet integrated below; and no checks.
+
+function depthTraverseTest1() {
+    let edges = [[1, 2], [2, 3], [3, 1]];
+    let graph = makeGraphFromEdges(3, edges);
+    depthFirstTraverse(1, graph.after, (node) => {
+        console.log(`visited node ${node}`);
+    });
+}
+
+function depthTraverseTest2() {
+    let edges = [[1, 2], [2, 3], [3, 4], [4, 1]];
+    let graph = makeGraphFromEdges(4, edges);
+    depthFirstTraverse(1, graph.after, (node) => {
+        console.log(`visited node ${node}`);
+    });
+}
+
+//  1 - 2 - 4  |  3 - 4  |  5 - 6 -  7 -  8
+//             |         |             \  9 - 11 - 6
+//             |         |        \  8
+//             |         |        \ 10 - 11
+function depthTraverseTest3() {
+    let edges = [
+        [1, 2], [2, 4], [3, 4],
+        [5, 6], [6, 7], [6, 8], [6, 10], [7, 8], [7, 9],
+        [9, 11], [10, 11], [11, 6]
+    ];
+    let graph = makeGraphFromEdges(11, edges);
+    depthFirstTraverse(5, graph.after, (node) => {
+        console.log(`visited node ${node}`);
+    });
+}
+
+
+// ______________________________________________________________________
 // Run the tests
 
 function assert(condition, msg) {
@@ -1177,7 +1215,7 @@ if (typeof window === 'undefined') {
 
     // A place to focus on a single unit test at a time.
     if (focusMode) {
-        activeTest = cycleTest5;
+        activeTest = depthTraverseTest3;
         activeTest();
         console.log('Passed!');
     }
