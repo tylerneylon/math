@@ -138,14 +138,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
                 // Push the z faces.
                 // These are faces perpendicular to the z axis.
-                if (z === 0) {
-                    for (let xx = x; xx >= x - 1; xx--) {
-                        for (let yy = y; yy >= y - 1; yy--) {
-                            if (-xx < 2 && xx < 1 && -yy < 2 && yy < 1) {
-                                util.push(faceMap, `z:${xx}:${yy}:${z}`, idx);
-                            }
-                        }
-                    }
+                // (There's only one z face.)
+                if (z === 0 && x !== 0 && y !== 0) {
+                    util.push(faceMap, `z:_:_:_`, idx);
                 }
                 // Push the x faces.
                 if (x !== 0) {
@@ -296,11 +291,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // However, I could skip some of them in order to help me debug
     // z-order sorting.
 
-    space.addObject(obj4);  // yellow
-    space.addObject(obj5);  // magenta
-    space.addObject(obj6);  // green
-    space.addObject(obj7);  // blue
-    space.addObject(obj8);  // cyan
+    // space.addObject(obj4);  // yellow
+    // space.addObject(obj5);  // magenta
+    // space.addObject(obj6);  // green
+    // space.addObject(obj7);  // blue
+    // space.addObject(obj8);  // cyan
 
     if (dbgMode) {
         let offset = 15;

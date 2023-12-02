@@ -781,6 +781,7 @@ function compareLineAndFace(s1, s2, pts) {
 // and returns '<' when the point is behind the face; '>' when the point is in
 // front of the face; and null when the point and face do not overlap in the
 // view plane.
+// See p242 of O'Rourke for more info on this approach.
 function comparePointAndFace(ptI, face, pts) {
 
     function ret(v, reason) {
@@ -806,7 +807,7 @@ function comparePointAndFace(ptI, face, pts) {
         if ( (p1.y > q.y && p0.y <= q.y) ||
              (p0.y > q.y && p1.y <= q.y) ) {
 
-            // TODO: Handle the case that p0.y == p1.y.
+            // Note: The case p0.y == p1.y is omitted by the above condition.
             let x = ( (p1.x - q.x) * (p0.y - q.y) -
                       (p0.x - q.x) * (p1.y - q.y) ) /
                     (p0.y - p1.y);
@@ -1156,7 +1157,10 @@ function orderElts(xys) {
 // ______________________________________________________________________
 // Debug messaging.
 
-let commentElt  = document.getElementById('comment');
+let commentElt = null
+if (typeof document !== 'undefined') {
+    document.getElementById('comment');
+}
 commentElt = null;  // XXX
 let prefix = '';
 let commentParts = [];
@@ -1934,4 +1938,22 @@ export function reset() {
     outlineGroup = null;
     edgeGroup    = null;
 }
+
+
+// ______________________________________________________________________
+// Tests
+//
+// Run these via `node space.js` from the command-line.
+// These are skipped when you either use this file in a browser, or
+// when you import it from another file.
+
+function runTests() {
+    console.log('Pretend I\'m running some space.js unit tests now ...');
+}
+
+if (typeof window === 'undefined') {
+    let runFile  = process.argv[1].split('/').slice(-1)[0];
+    let thisFile = import.meta.url.split('/').slice(-1)[0];
+    if (runFile === thisFile) runTests();
+}    
 

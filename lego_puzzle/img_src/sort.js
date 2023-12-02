@@ -1203,8 +1203,7 @@ function assert(condition, msg) {
     }
 }
 
-if (typeof window === 'undefined') {
-
+function runTests() {
     dMode = true;
     logLevel = 3;
 
@@ -1249,4 +1248,10 @@ if (typeof window === 'undefined') {
         console.log(result);
     }
 }
+
+if (typeof window === 'undefined') {
+    let runFile  = process.argv[1].split('/').slice(-1)[0];
+    let thisFile = import.meta.url.split('/').slice(-1)[0];
+    if (runFile === thisFile) runTests();
+}    
 
