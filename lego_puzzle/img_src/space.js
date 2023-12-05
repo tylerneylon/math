@@ -755,6 +755,7 @@ function compareLineAndFace(s1, s2, pts) {
     console.assert(face.type === 'face' && line.type === 'line');
 
     // The line is in front ">" of the face when the line is an edge of it.
+    // This includes lines coincident with the face but not an edge.
     if (line.from in face.ptSet && line.to in face.ptSet) return ret('>');
 
     // Check if either line endpoint both (a) is not shared with the face and
@@ -1342,9 +1343,15 @@ function addAnyNewNormals(objCenter) {
         ctx.faceCenters.push(center);
 
         // Find the normal direction.
-        let a = vector.sub(P[face[1]], P[face[0]]);  // a = p1 - p0.
-        let b = vector.sub(P[face[2]], P[face[0]]);  // b = p2 - p0.
-        let n = vector.unit(vector.cross(a, b));     // n = unit(a x b).
+        let a  = vector.sub(P[face[1]], P[face[0]]);  // a = p1 - p0.
+        let b  = vector.sub(P[face[2]], P[face[0]]);  // b = p2 - p0.
+        let n  = vector.unit(vector.cross(a, b));     // n = unit(a x b).
+        face.n = n;
+        face.c = vector.dot(P[face[0]].slice(0, 3), face.n);  // c = <n, p0>.
+
+        // Save a basis; this is useful for pt-on-face checks.
+        face.a = vector.unit(a.slice(0, 3));          // a = unit(a).
+        face.b = vector.unit(vector.cross(a, n));     // b = unit(a x n).
 
         // Choose the sign of n so that it points away from the origin.
         // This assumes the overall shape is convex, and that the origin is on
@@ -1598,14 +1605,52 @@ export function addFaces(faces) {
     objCenter = vector.scale(objCenter, 1 / Object.keys(allPts).length);
     addAnyNewNormals(objCenter);
     // XXX TODO: Also call this from addLines().
-    ensureFaceEdgesAreIndexed();
+    ensureFaceEdgesAreIndexed(P);
+}
+
+// This expects `pt` to be a 3d point, and face to have face.n (a normal unit
+// vector) and face.c set up so that the face has `f in face` iff <f,n> = c.
+// This will also use face.a and face.b, so that face.{a,b,n} forms an
+// orthonormal basis.
+function projectToFacePlane(pt, face) {
+    console.assert(pt.length === 3);
+    return [vector.dot(pt, face.a), vector.dot(pt, face.b)];
+}
+
+// This takes as input a 2d point `pt` and an array of other 2d points `poly`,
+// then returns a new point `q` which is the point closest to pt that is inside
+// (or on the boundary of) the given polygon.
+function projectPointIntoPoly(pt, poly) {
+}
+
+function ptIsOnFace(ptIdx, face, pts) {
+
+    // Find the 2d projections onto the plane of the face.
+    let pt2d = projectToFacePlane(pts[ptIdx], face);
+    let poly2d = face.map(p => projectToFacePlane(p, face));
+    
+    // Get the projection of the point into the 2d face.
+    pt2d = projectPointIntoPoly(pt2d, poly2d);
+ 
+    // Calculate where that point is in 3d, and find the distance.
+    let pt3d = vector.add(
+        vector.scale(face.a, pt2d[0]),
+        vector.scale(face.b, pt2d[1]),
+        vector.scale(face.n, face.c)
+    );
+    let dist = vector.len(vector.sub(pt3d, pts[ptIdx]));
+
+    // XXX
+    console.log(`dist = ${dist}`);
+
+    return (dist < 1e-6);
 }
 
 // XXX TODO Comment and move this function.
 // This ensures that each line has line.faces = [faceIdx*] for any faces which
 // have the given line as an edge; and that, similarly, each face has
 // face.edges = [lineIdx*] for each line that is part of its border.
-function ensureFaceEdgesAreIndexed() {
+function ensureFaceEdgesAreIndexed(pts) {
     // This will recompute all connections every time it's called.
     // I'm doing this for now because, in order to implement an incremental
     // version, I would need to track in pass in what is new, which may be just
@@ -1615,18 +1660,20 @@ function ensureFaceEdgesAreIndexed() {
     for (let [lineIdx, line] of ctx.lines.entries()) {
         line.faces = [];
         for (let [faceIdx, face] of ctx.faces.entries()) {
+            if (ptIsOnFace(line.from, face, pts) &&
+                    ptIsOnFace(line.to, face, pts)) {
+                face.edges.push(lineIdx);
+                line.faces.push(faceIdx);
+                face.ptSet[line.from] = true;
+                face.ptSet[line.to  ] = true;
+                continue;
+            }
             let n = face.length;
             for (let i = 0; i < n; i++) {
                 if (
                     (face[i] === line.from && face[(i + 1) % n] == line.to) ||
                     (face[i] === line.to   && face[(i + 1) % n] == line.from)
                 ) {
-
-                    console.log('\n');
-                    console.log('Found a connection.');
-                    console.log('Line:', line.from, line.to);
-                    console.log('Face:', face.join(', '));
-
                     face.edges.push(lineIdx);
                     line.faces.push(faceIdx);
                 }
