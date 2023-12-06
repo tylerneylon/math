@@ -1608,6 +1608,30 @@ export function addFaces(faces) {
     ensureFaceEdgesAreIndexed(P);
 }
 
+// TODO: Organize pure geometry functions in one place.
+
+// This expects 2d points. It expects points to be {x, y} objects.
+// See p242 of O'Rourke for more info on this approach.
+function checkIfPointIsInPoly(pt, poly) {
+    // Check if a ray from pt -> (infty, 0) crosses each edge.
+    let numCross = 0;
+    for (let j0 = 0; j0 < poly.length; j0++) {
+        let j1 = (j0 + 1) % poly.length;
+        let p0 = poly[j0], p1 = poly[j1];
+
+        // First check if the edge crosses the line y=pt.y.
+        if ( (p1.y > pt.y && p0.y <= pt.y) ||
+             (p0.y > pt.y && p1.y <= pt.y) ) {
+            // The case p0.y == p1.y is omitted by the above condition.
+            let x = ( (p1.x - pt.x) * (p0.y - pt.y) -
+                      (p0.x - pt.x) * (p1.y - pt.y) ) /
+                    (p0.y - p1.y);
+            if (x > 0) numCross++;
+        }
+    }
+    return numCross % 2 === 1;
+}
+
 // This expects `pt` to be a 3d point, and face to have face.n (a normal unit
 // vector) and face.c set up so that the face has `f in face` iff <f,n> = c.
 // This will also use face.a and face.b, so that face.{a,b,n} forms an
@@ -1621,6 +1645,8 @@ function projectToFacePlane(pt, face) {
 // then returns a new point `q` which is the point closest to pt that is inside
 // (or on the boundary of) the given polygon.
 function projectPointIntoPoly(pt, poly) {
+    // XXX TODO: Pull this functionality out of comparePointAndFace().
+    //           Just the part to see if a point is inside a poly, all in 2d.
 }
 
 function ptIsOnFace(ptIdx, face, pts) {
@@ -1988,14 +2014,73 @@ export function reset() {
 
 
 // ______________________________________________________________________
-// Tests
+// Test helper functions
+
+let activeTest = null;
+
+function check(bool, msg) {
+    if (!bool) {
+        console.log(`${activeTest.name} failed`);
+        if (msg) console.log(msg);
+        process.exit(1);
+    }
+}
+
+
+// ______________________________________________________________________
+// Unit tests
+
+function testCheckIfPointIsInPoly() {
+    // As of 663.2023, this function does not handle all edge cases exactly
+    // correctly. The way I'm using it for z-ordering, this should not matter.
+    // However, if I later rely on the function for correct edge behavior, I'll
+    // want to add more tests to review them.
+    let testData = [
+        [[0, 0], [[1, 1], [1, -1], [-1, -1], [-1, 1]], true],
+        [[2, 0], [[1, 1], [1, -1], [-1, -1], [-1, 1]], false],
+        [[0.9999, 0], [[1, 1], [1, -1], [-1, -1], [-1, 1]], true],
+        [[1.0001, 0], [[1, 1], [1, -1], [-1, -1], [-1, 1]], false],
+        [[0, 0], [[1, 1], [-1, 1], [-1, -1], [1, -1]], true],
+        [[0, 0.5], [[1, 1], [1, -1], [-1, -1], [-1, 1], [0, 0]], false],
+        [[-0.9, 0.5], [[1, 1], [1, -1], [-1, -1], [-1, 1], [0, 0]], true],
+        [[0, 0], [[3, 3], [3, -2], [2, 1], [1, -1], [0, 1], [-2, 0]], false],
+        [[1, 1], [[3, 3], [3, -2], [2, 1], [1, -1], [0, 1], [-2, 0]], true],
+    ];
+    let objOfPt = (arr => ({x: arr[0], y: arr[1]}));
+
+    for (let [i, datum] of Object.entries(testData)) {
+        let pt = objOfPt(datum[0]);
+        let poly = datum[1].map(objOfPt);
+        let correctAns = datum[2];
+        let fnAns = checkIfPointIsInPoly(pt, poly);
+        check(
+            fnAns === correctAns,
+            `test case ${i}: correct=${correctAns} returnValue=${fnAns}`
+        );
+    }
+}
+
+
+// ______________________________________________________________________
+// Test-running code
 //
 // Run these via `node space.js` from the command-line.
 // These are skipped when you either use this file in a browser, or
 // when you import it from another file.
 
 function runTests() {
-    console.log('Pretend I\'m running some space.js unit tests now ...');
+    let allTests = [
+        testCheckIfPointIsInPoly
+    ];
+    allTests.forEach(testFn => {
+        activeTest = testFn;
+        console.log('\n' + '_'.repeat(80));
+        console.log(`Running ${testFn.name}`);
+        testFn();
+        // We only get this far if the test passed.
+        console.log('Passed!');
+    });
+    console.log('Done running all tests!');
 }
 
 if (typeof window === 'undefined') {
