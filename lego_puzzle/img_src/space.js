@@ -1591,7 +1591,7 @@ export function addFaces(faces) {
 
 // TODO: Organize pure geometry functions in one place.
 
-// This expects 2d points. It expects points to be {x, y} objects.
+// This expects 2d points. It expects points to be length-2 arrays.
 // See p242 of O'Rourke for more info on this approach.
 function checkIfPointIsInPoly(pt, poly) {
     // Check if a ray from pt -> (infty, 0) crosses each edge.
