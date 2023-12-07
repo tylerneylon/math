@@ -1622,20 +1622,18 @@ function projectToFacePlane(pt, face) {
     return [vector.dot(pt, face.a), vector.dot(pt, face.b)];
 }
 
-// This expects points to be in the format {x, y}.
+// This expects points to be in the format [x, y].
 // This returns [nearPt, dist].
 function findClosestPointOnLine(pt, line1, line2) {
-    let toPtVec = vector.sub([pt.x, pt.y], [line1.x, line1.y]);
-    let lineLen = vector.len( [line2.x - line1.x, line2.y - line1.y]);
-    let lineDir = vector.unit([line2.x - line1.x, line2.y - line1.y]);
+    let toPtVec = vector.sub(pt, line1);
+    let lineLen = vector.len( vector.sub(line2, line1));
+    let lineDir = vector.unit(vector.sub(line2, line1));
     let t       = vector.dot(toPtVec, lineDir);
     let q;
-    if (t < 0) q = [line1.x, line1.y];
-    if (t > lineLen) q = [line2.x, line2.y];
-    if (0 <= t && t <= lineLen) {
-        q = vector.add([line1.x, line1.y], vector.scale(lineDir, t));
-    }
-    return [{x: q[0], y: q[1]}, vector.len(vector.sub([pt.x, pt.y], q))];
+    if (t < 0)       q = line1;
+    if (t > lineLen) q = line2;
+    if (0 <= t && t <= lineLen) q = vector.add(line1, vector.scale(lineDir, t));
+    return [q, vector.len(vector.sub(pt, q))];
 }
 
 // This takes as input a 2d point `pt` and an array of other 2d points `poly`,
@@ -2086,21 +2084,19 @@ function testFindClosestPointOnLine() {
         [[2, 0], [0, 3], [2, 0], [2, 0]],
         [[0, 3], [0, 3], [2, 0], [0, 3]],
     ];
-    let getXY = (arr => ({x: arr[0], y: arr[1]}));
 
     for (let [i, datum] of Object.entries(testData)) {
         let correctAns = datum[3];
-        let fnAns = findClosestPointOnLine(...datum.slice(0, 3).map(getXY));
-        // TODO Also test the distance value.
-        let dist = fnAns[1];
-        fnAns = [fnAns[0].x, fnAns[0].y];
+        let fnAns = findClosestPointOnLine(...datum.slice(0, 3));
+        let fnPt   = fnAns[0];
+        let fnDist = fnAns[1];
         let correctDist = vector.len(vector.sub(datum[0], datum[3]));
         check(
-            Math.abs(dist - correctDist) < 1e-7,
-            `test case ${i}: retVal dist ${dist} correct dist ${correctDist}`
+            Math.abs(fnDist - correctDist) < 1e-7,
+            `test case ${i}: retVal dist ${fnDist} correct dist ${correctDist}`
         );
         checkArraysAreSame(
-            fnAns, correctAns,
+            fnPt, correctAns,
             `test case ${i}: return value vs correct:`,
             1e-7
         );
