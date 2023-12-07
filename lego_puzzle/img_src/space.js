@@ -796,28 +796,8 @@ function comparePointAndFace(ptI, face, pts) {
     if (ptI in face.ptSet) return ret(null);
 
     let q = pts[ptI];
-
-    // Check if a ray from pt -> (infty, 0) crosses each edge.
-    let numCross = 0;
-    for (let j0 = 0; j0 < face.length; j0++) {
-        let j1 = (j0 + 1) % face.length;
-        let k0 = face[j0], k1 = face[j1];
-        let p0 = pts[k0],  p1 = pts[k1];
-
-        // First check if the edge crosses the line y=q.y.
-        if ( (p1.y > q.y && p0.y <= q.y) ||
-             (p0.y > q.y && p1.y <= q.y) ) {
-
-            // Note: The case p0.y == p1.y is omitted by the above condition.
-            let x = ( (p1.x - q.x) * (p0.y - q.y) -
-                      (p0.x - q.x) * (p1.y - q.y) ) /
-                    (p0.y - p1.y);
-
-            if (x > 0) numCross++;
-        }
-    }
-
-    if (numCross % 2 === 1) {
+    let ptInPoly = checkIfPointIsInPoly(q, face.map(i => pts[i]));
+    if (ptInPoly) {
         let reason = `: Point ${ptI} is an overlap`;
         let ptZ = q.z;
         reason += ` with z=${ptZ.toFixed(2)}`;
@@ -1641,10 +1621,31 @@ function projectToFacePlane(pt, face) {
     return [vector.dot(pt, face.a), vector.dot(pt, face.b)];
 }
 
+// This expects points to be in the format {x, y}.
+// This returns [nearPt, dist].
+function findClosestPointOnLine(pt, line1, line2) {
+    let toPtVec = vector.sub([pt.x, pt.y], [line1.x, line1.y]);
+    let lineLen = vector.len( [line2.x - line1.x, line2.y - line1.y]);
+    let lineDir = vector.unit([line2.x - line1.x, line2.y - line1.y]);
+    let t       = vector.dot(toPtVec, lineDir);
+    let q;
+    if (t < 0) q = [line1.x, line1.y];
+    if (t > lineLen) q = [line2.x, line2.y];
+    if (0 <= t && t <= lineLen) {
+        q = vector.add([line1.x, line1.y], vector.scale(lineDir, t));
+    }
+    return [{x: q[0], y: q[1]}, vector.len(vector.sub([pt.x, pt.y], q))];
+}
+
 // This takes as input a 2d point `pt` and an array of other 2d points `poly`,
 // then returns a new point `q` which is the point closest to pt that is inside
 // (or on the boundary of) the given polygon.
 function projectPointIntoPoly(pt, poly) {
+    if (checkIfPointIsInPoly(pt, poly)) {
+        return {x: pt.x, y: pt.y};
+    }
+
+
     // XXX TODO: Pull this functionality out of comparePointAndFace().
     //           Just the part to see if a point is inside a poly, all in 2d.
 }
@@ -1686,6 +1687,8 @@ function ensureFaceEdgesAreIndexed(pts) {
     for (let [lineIdx, line] of ctx.lines.entries()) {
         line.faces = [];
         for (let [faceIdx, face] of ctx.faces.entries()) {
+            // XXX
+            /*
             if (ptIsOnFace(line.from, face, pts) &&
                     ptIsOnFace(line.to, face, pts)) {
                 face.edges.push(lineIdx);
@@ -1694,6 +1697,7 @@ function ensureFaceEdgesAreIndexed(pts) {
                 face.ptSet[line.to  ] = true;
                 continue;
             }
+            */
             let n = face.length;
             for (let i = 0; i < n; i++) {
                 if (
@@ -2026,6 +2030,20 @@ function check(bool, msg) {
     }
 }
 
+function checkArraysAreSame(arr1, arr2, msg, tol) {
+    let prefix = msg ? msg + ' ' : '';
+    check(
+        arr1.length === arr2.length,
+        `different array lengths: ${arr1.length} vs ${arr2.length}`
+    );
+    for (let i = 0; i < arr1.length; i++) {
+        check(
+            tol ? Math.abs(arr1[i] - arr2[i]) < tol : arr1[i] === arr2[i],
+            prefix + `different array values: ${arr1} vs ${arr2} `
+        );
+    }
+}
+
 
 // ______________________________________________________________________
 // Unit tests
@@ -2060,6 +2078,37 @@ function testCheckIfPointIsInPoly() {
     }
 }
 
+function testFindClosestPointOnLine() {
+    let testData = [
+        [[ 4,  2], [-1, 1], [3, 1], [ 3, 1]],
+        [[ 0,  3], [-1, 1], [3, 1], [ 0, 1]],
+        [[-3, -1], [-1, 1], [3, 1], [-1, 1]],
+        [[2, 3], [0, 3], [2, 0], [8 / 13, 27 / 13]],
+        [[0, 6], [0, 3], [2, 0], [0, 3]],
+        [[2, 0], [0, 3], [2, 0], [2, 0]],
+        [[0, 3], [0, 3], [2, 0], [0, 3]],
+    ];
+    let getXY = (arr => ({x: arr[0], y: arr[1]}));
+
+    for (let [i, datum] of Object.entries(testData)) {
+        let correctAns = datum[3];
+        let fnAns = findClosestPointOnLine(...datum.slice(0, 3).map(getXY));
+        // TODO Also test the distance value.
+        let dist = fnAns[1];
+        fnAns = [fnAns[0].x, fnAns[0].y];
+        let correctDist = vector.len(vector.sub(datum[0], datum[3]));
+        check(
+            Math.abs(dist - correctDist) < 1e-7,
+            `test case ${i}: retVal dist ${dist} correct dist ${correctDist}`
+        );
+        checkArraysAreSame(
+            fnAns, correctAns,
+            `test case ${i}: return value vs correct:`,
+            1e-7
+        );
+    }
+}
+
 
 // ______________________________________________________________________
 // Test-running code
@@ -2070,7 +2119,7 @@ function testCheckIfPointIsInPoly() {
 
 function runTests() {
     let allTests = [
-        testCheckIfPointIsInPoly
+        testCheckIfPointIsInPoly, testFindClosestPointOnLine
     ];
     allTests.forEach(testFn => {
         activeTest = testFn;
