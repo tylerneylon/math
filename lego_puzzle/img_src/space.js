@@ -796,7 +796,8 @@ function comparePointAndFace(ptI, face, pts) {
     if (ptI in face.ptSet) return ret(null);
 
     let q = pts[ptI];
-    let ptInPoly = checkIfPointIsInPoly(q, face.map(i => pts[i]));
+    let arrPt = p => [p.x, p.y];
+    let ptInPoly = checkIfPointIsInPoly(arrPt(q), face.map(i => arrPt(pts[i])));
     if (ptInPoly) {
         let reason = `: Point ${ptI} is an overlap`;
         let ptZ = q.z;
@@ -1599,13 +1600,13 @@ function checkIfPointIsInPoly(pt, poly) {
         let j1 = (j0 + 1) % poly.length;
         let p0 = poly[j0], p1 = poly[j1];
 
-        // First check if the edge crosses the line y=pt.y.
-        if ( (p1.y > pt.y && p0.y <= pt.y) ||
-             (p0.y > pt.y && p1.y <= pt.y) ) {
-            // The case p0.y == p1.y is omitted by the above condition.
-            let x = ( (p1.x - pt.x) * (p0.y - pt.y) -
-                      (p0.x - pt.x) * (p1.y - pt.y) ) /
-                    (p0.y - p1.y);
+        // First check if the edge crosses the line y=pt[1].
+        if ( (p1[1] > pt[1] && p0[1] <= pt[1]) ||
+             (p0[1] > pt[1] && p1[1] <= pt[1]) ) {
+            // The case p0[1] == p1[1] is omitted by the above condition.
+            let x = ( (p1[0] - pt[0]) * (p0[1] - pt[1]) -
+                      (p0[0] - pt[0]) * (p1[1] - pt[1]) ) /
+                    (p0[1] - p1[1]);
             if (x > 0) numCross++;
         }
     }
@@ -2064,13 +2065,10 @@ function testCheckIfPointIsInPoly() {
         [[0, 0], [[3, 3], [3, -2], [2, 1], [1, -1], [0, 1], [-2, 0]], false],
         [[1, 1], [[3, 3], [3, -2], [2, 1], [1, -1], [0, 1], [-2, 0]], true],
     ];
-    let objOfPt = (arr => ({x: arr[0], y: arr[1]}));
 
     for (let [i, datum] of Object.entries(testData)) {
-        let pt = objOfPt(datum[0]);
-        let poly = datum[1].map(objOfPt);
         let correctAns = datum[2];
-        let fnAns = checkIfPointIsInPoly(pt, poly);
+        let fnAns = checkIfPointIsInPoly(datum[0], datum[1]);
         check(
             fnAns === correctAns,
             `test case ${i}: correct=${correctAns} returnValue=${fnAns}`
