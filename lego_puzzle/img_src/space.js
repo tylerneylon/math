@@ -1298,6 +1298,24 @@ function addAnyNewDots() {
     }
 }
 
+// This expects `face` to be an array of indexes into pts, and pts to be an
+// array of 3d points. (If there are more than 3 dimensions, the extra
+// dimensions are ignored.) This returns the new basis as [a, b, n]; `n` is the
+// normal direction for the face; it also sets face.{a,b,n}.
+function findFaceBasis(face, pts) {
+    let a  = vector.sub(pts[face[1]], pts[face[0]]);  // a = p1 - p0.
+    let b  = vector.sub(pts[face[2]], pts[face[0]]);  // b = p2 - p0.
+    let n  = vector.unit(vector.cross(a, b));         // n = unit(a x b).
+    face.n = n;
+    face.c = vector.dot(pts[face[0]].slice(0, 3), face.n);  // c = <n, p0>.
+
+    // Save a basis; this is useful for pt-on-face checks.
+    face.a = vector.unit(a.slice(0, 3));          // a = unit(a).
+    face.b = vector.unit(vector.cross(a, n));     // b = unit(a x n).
+
+    return [a, b, n];
+}
+
 function addAnyNewNormals(objCenter) {
     for (let i = ctx.normals[0].length; i < ctx.faces.length; i++) {
 
@@ -1323,16 +1341,8 @@ function addAnyNewNormals(objCenter) {
         center = center.map(x => x / face.length);
         ctx.faceCenters.push(center);
 
-        // Find the normal direction.
-        let a  = vector.sub(P[face[1]], P[face[0]]);  // a = p1 - p0.
-        let b  = vector.sub(P[face[2]], P[face[0]]);  // b = p2 - p0.
-        let n  = vector.unit(vector.cross(a, b));     // n = unit(a x b).
-        face.n = n;
-        face.c = vector.dot(P[face[0]].slice(0, 3), face.n);  // c = <n, p0>.
-
-        // Save a basis; this is useful for pt-on-face checks.
-        face.a = vector.unit(a.slice(0, 3));          // a = unit(a).
-        face.b = vector.unit(vector.cross(a, n));     // b = unit(a x n).
+        // Find the normal direction, and a local basis for this face.
+        let [a, b, n] = findFaceBasis(face, P);
 
         // Choose the sign of n so that it points away from the origin.
         // This assumes the overall shape is convex, and that the origin is on
@@ -1660,11 +1670,17 @@ function projectPointIntoPoly(pt, poly) {
     return minPt;
 }
 
+// This expects pts to be an array of 3d point arrays;
+// ptIdx to be an index into this, and `face` to be an array of
+// indexes into this. Based on those 3d coordinates, this will determine
+// if the given point is, within a small tolerance, both on the plane of the
+// polygon as well as within the boundaries of the polygon in that plane.
+// (What makes this implementation difficult is allowing for some tolerance.)
 function ptIsOnFace(ptIdx, face, pts) {
 
     // Find the 2d projections onto the plane of the face.
     let pt2d = projectToFacePlane(pts[ptIdx], face);
-    let poly2d = face.map(p => projectToFacePlane(p, face));
+    let poly2d = face.map(i => projectToFacePlane(pts[i], face));
     
     // Get the projection of the point into the 2d face.
     pt2d = projectPointIntoPoly(pt2d, poly2d);
@@ -1676,9 +1692,6 @@ function ptIsOnFace(ptIdx, face, pts) {
         vector.scale(face.n, face.c)
     );
     let dist = vector.len(vector.sub(pt3d, pts[ptIdx]));
-
-    // XXX
-    console.log(`dist = ${dist}`);
 
     return (dist < 1e-6);
 }
@@ -2143,6 +2156,45 @@ function testProjectPointIntoPoly() {
     }
 }
 
+function testPtIsOnFace() {
+
+    let xySquare = [[0, 0, 0], [2, 0, 0], [2, 2, 0], [0, 2, 0]];
+    let xzTriangle = [[0, 0, 0], [2, 0, 0], [0, 0, 3]];
+    let eps = 1e-8;
+    let delta = 0.001;  // This is too large a gap to count.
+
+    let testData = [
+        // These are tests of a square in the x,y plane.
+        [[1,         1, 0],     xySquare, true ],
+        [[2,         2, 0],     xySquare, true ],
+        [[2 + eps,   2, 0],     xySquare, true ],
+        [[2 + delta, 2, 0],     xySquare, false],
+        [[2,         2, delta], xySquare, false],
+        [[3,        -1, 0],     xySquare, false],
+        [[0,        -3, 0],     xySquare, false],
+
+        // These are tests of a triangle in the x, z plane.
+        [[1, 0, 1], xzTriangle, true],
+        [[1, delta, 1], xzTriangle, false],
+        [[0.615, eps, 2.077], xzTriangle, true],
+        [[0.615, 1e-5, 2.077], xzTriangle, false],
+        [[0.615, 0, 2.0775], xzTriangle, true],
+    ];
+
+    for (let [i, datum] of Object.entries(testData)) {
+        let correctAns = datum[2];
+        let pts = datum[1].concat([datum[0]]);
+        let ptIdx = pts.length - 1;
+        let polyIdx = [...Array(datum[1].length).keys()];  // 0 .. n-1.
+        findFaceBasis(polyIdx, pts);
+        let fnAns = ptIsOnFace(ptIdx, polyIdx, pts);
+        check(
+            fnAns === correctAns,
+            `test case ${i}: correct=${correctAns} returnValue=${fnAns}`
+        );
+    }
+}
+
 
 // ______________________________________________________________________
 // Test-running code
@@ -2154,7 +2206,7 @@ function testProjectPointIntoPoly() {
 function runTests() {
     let allTests = [
         testCheckIfPointIsInPoly, testFindClosestPointOnLine,
-        testProjectPointIntoPoly
+        testProjectPointIntoPoly, testPtIsOnFace
     ];
     allTests.forEach(testFn => {
         activeTest = testFn;
