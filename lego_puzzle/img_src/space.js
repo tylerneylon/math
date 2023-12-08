@@ -1676,7 +1676,7 @@ function projectPointIntoPoly(pt, poly) {
 // if the given point is, within a small tolerance, both on the plane of the
 // polygon as well as within the boundaries of the polygon in that plane.
 // (What makes this implementation difficult is allowing for some tolerance.)
-function ptIsOnFace(ptIdx, face, pts) {
+function isPtOnFace(ptIdx, face, pts) {
 
     // Find the 2d projections onto the plane of the face.
     let pt2d = projectToFacePlane(pts[ptIdx], face);
@@ -1712,8 +1712,8 @@ function ensureFaceEdgesAreIndexed(pts) {
         for (let [faceIdx, face] of ctx.faces.entries()) {
             // XXX
             /*
-            if (ptIsOnFace(line.from, face, pts) &&
-                    ptIsOnFace(line.to, face, pts)) {
+            if (isPtOnFace(line.from, face, pts) &&
+                    isPtOnFace(line.to, face, pts)) {
                 face.edges.push(lineIdx);
                 line.faces.push(faceIdx);
                 face.ptSet[line.from] = true;
@@ -2156,7 +2156,7 @@ function testProjectPointIntoPoly() {
     }
 }
 
-function testPtIsOnFace() {
+function testIsPtOnFace() {
 
     let xySquare = [[0, 0, 0], [2, 0, 0], [2, 2, 0], [0, 2, 0]];
     let xzTriangle = [[0, 0, 0], [2, 0, 0], [0, 0, 3]];
@@ -2187,7 +2187,7 @@ function testPtIsOnFace() {
         let ptIdx = pts.length - 1;
         let polyIdx = [...Array(datum[1].length).keys()];  // 0 .. n-1.
         findFaceBasis(polyIdx, pts);
-        let fnAns = ptIsOnFace(ptIdx, polyIdx, pts);
+        let fnAns = isPtOnFace(ptIdx, polyIdx, pts);
         check(
             fnAns === correctAns,
             `test case ${i}: correct=${correctAns} returnValue=${fnAns}`
@@ -2206,7 +2206,7 @@ function testPtIsOnFace() {
 function runTests() {
     let allTests = [
         testCheckIfPointIsInPoly, testFindClosestPointOnLine,
-        testProjectPointIntoPoly, testPtIsOnFace
+        testProjectPointIntoPoly, testIsPtOnFace
     ];
     allTests.forEach(testFn => {
         activeTest = testFn;
