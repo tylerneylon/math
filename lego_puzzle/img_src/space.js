@@ -1641,12 +1641,23 @@ function findClosestPointOnLine(pt, line1, line2) {
 // (or on the boundary of) the given polygon.
 function projectPointIntoPoly(pt, poly) {
     if (checkIfPointIsInPoly(pt, poly)) {
-        return {x: pt.x, y: pt.y};
+        return [pt[0], pt[1]];  // Provide a deep copy of the point.
     }
 
-
-    // XXX TODO: Pull this functionality out of comparePointAndFace().
-    //           Just the part to see if a point is inside a poly, all in 2d.
+    // If we get here, pt is not inside poly, so we'll find the closest point on
+    // one of the edges and return that.
+    let minDist = Infinity;
+    let minPt   = null;
+    for (let i = 0; i < poly.length; i++) {
+        let j = (i + 1) % poly.length;
+        let [q, d] = findClosestPointOnLine(pt, poly[i], poly[j]);
+        if (d < minDist) {
+            minPt = q;
+            minDist = d;
+        }
+    }
+    console.assert(minDist !== Infinity);
+    return minPt;
 }
 
 function ptIsOnFace(ptIdx, face, pts) {
@@ -2103,6 +2114,35 @@ function testFindClosestPointOnLine() {
     }
 }
 
+function testProjectPointIntoPoly() {
+    let testData = [
+        // These are tests of points near a square.
+        [[1,  1], [[0, 0], [2, 0], [2, 2], [0, 2]], [1, 1]],
+        [[2,  2], [[0, 0], [2, 0], [2, 2], [0, 2]], [2, 2]],
+        [[3,  1], [[0, 0], [2, 0], [2, 2], [0, 2]], [2, 1]],
+        [[3, -1], [[0, 0], [2, 0], [2, 2], [0, 2]], [2, 0]],
+        [[0, -3], [[0, 0], [2, 0], [2, 2], [0, 2]], [0, 0]],
+
+        // These are tests near a triangle.
+        [[1, 1], [[0, 0], [2, 0], [0, 3]], [1, 1]],
+        [[2, 3], [[0, 0], [2, 0], [0, 3]], [8 / 13, 27 / 13]],
+        [[4, 0], [[0, 0], [2, 0], [0, 3]], [2, 0]],
+
+        // This is a test of a concave polygon.
+        [[1.2, 2.2], [[0, 0], [4, 0], [4, 3], [2, 1], [0, 3]], [1, 2]],
+    ];
+
+    for (let [i, datum] of Object.entries(testData)) {
+        let correctPt = datum[2];
+        let fnPt = projectPointIntoPoly(datum[0], datum[1]);
+        checkArraysAreSame(
+            fnPt, correctPt,
+            `test case ${i}: correct=${correctPt} returnValue=${fnPt}`,
+            1e-7
+        );
+    }
+}
+
 
 // ______________________________________________________________________
 // Test-running code
@@ -2113,7 +2153,8 @@ function testFindClosestPointOnLine() {
 
 function runTests() {
     let allTests = [
-        testCheckIfPointIsInPoly, testFindClosestPointOnLine
+        testCheckIfPointIsInPoly, testFindClosestPointOnLine,
+        testProjectPointIntoPoly
     ];
     allTests.forEach(testFn => {
         activeTest = testFn;
