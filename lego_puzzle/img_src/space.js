@@ -2148,6 +2148,7 @@ function testIsPtOnFace() {
 
     let xySquare = [[0, 0, 0], [2, 0, 0], [2, 2, 0], [0, 2, 0]];
     let xzTriangle = [[0, 0, 0], [2, 0, 0], [0, 0, 3]];
+    let xyTriangle = [[0, 0, 1], [2, 0, 1], [0, 2, 1]];
     let eps = 1e-8;
     let delta = 0.001;  // This is too large a gap to count.
 
@@ -2167,6 +2168,9 @@ function testIsPtOnFace() {
         [[0.615, eps, 2.077], xzTriangle, true],
         [[0.615, 1e-5, 2.077], xzTriangle, false],
         [[0.615, 0, 2.0775], xzTriangle, true],
+
+        // Test against a bug fix.
+        [[1, 1, 1], xyTriangle, true],
     ];
 
     for (let [i, datum] of Object.entries(testData)) {
