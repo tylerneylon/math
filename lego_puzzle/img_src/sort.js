@@ -719,9 +719,14 @@ class Sorter extends Function {
             for (let item of subsetArr) {
                 item = Number(item);
                 if (sorted.indexOf(item) >= 0) continue;
+                // Note that if `item` is not yet in `sorted`, it means the
+                // subtree under `item` must also not be present up to a
+                // "wrap-around" point, by which I mean a point that may have
+                // been considered a root before the cycle entered the graph.
                 depthFirstTraverse(item, this.after, (node) => {
                     node = Number(node);
-                    if (sorted.indexOf(node) === -1) sorted.push(node);
+                    if (sorted.indexOf(node) >= 0) return 'skip';
+                    sorted.push(node);
                 });
 
             }
