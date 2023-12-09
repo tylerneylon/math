@@ -9,8 +9,12 @@
 // ______________________________________________________________________
 // Public functions
 
-export function add(a, b) {
+function plus(a, b) {
     return a.map((x, i) => x + b[i]);
+}
+
+export function add(...args) {
+    return args.reduce(plus);
 }
 
 export function sub(a, b) {

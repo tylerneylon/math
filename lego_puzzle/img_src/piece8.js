@@ -185,7 +185,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         face.style = {fill: '#a44'};
     }
 
-    let dbgMode = false;
+    let dbgMode = true;
     if (dbgMode) space.ctx.doDrawDots = true;
 
     let obj = [pts, lines, faces];
@@ -299,7 +299,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     if (dbgMode) {
         let offset = 15;
-        let n = obj[0].length * 2;
+        let n = space.ctx.pts[0].length;
         space.addLabels([...Array(n).keys()], offset);
     }
 
