@@ -1628,8 +1628,7 @@ function checkIfPointIsInPoly(pt, poly) {
 // This will also use face.a and face.b, so that face.{a,b,n} forms an
 // orthonormal basis.
 function projectToFacePlane(pt, face) {
-    console.assert(pt.length === 3);
-    return [vector.dot(pt, face.a), vector.dot(pt, face.b)];
+    return [vector.dot(face.a, pt), vector.dot(face.b, pt)];
 }
 
 // This expects points to be in the format [x, y].
@@ -1710,26 +1709,15 @@ function ensureFaceEdgesAreIndexed(pts) {
     for (let [lineIdx, line] of ctx.lines.entries()) {
         line.faces = [];
         for (let [faceIdx, face] of ctx.faces.entries()) {
-            // XXX
-            /*
+            // This check is not insanely fast (nor insanely slow), but it's
+            // better that we do this only once at geometry setup, rather than
+            // once per frame.
             if (isPtOnFace(line.from, face, pts) &&
                     isPtOnFace(line.to, face, pts)) {
                 face.edges.push(lineIdx);
                 line.faces.push(faceIdx);
                 face.ptSet[line.from] = true;
                 face.ptSet[line.to  ] = true;
-                continue;
-            }
-            */
-            let n = face.length;
-            for (let i = 0; i < n; i++) {
-                if (
-                    (face[i] === line.from && face[(i + 1) % n] == line.to) ||
-                    (face[i] === line.to   && face[(i + 1) % n] == line.from)
-                ) {
-                    face.edges.push(lineIdx);
-                    line.faces.push(faceIdx);
-                }
             }
         }
     }

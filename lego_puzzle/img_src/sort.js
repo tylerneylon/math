@@ -713,12 +713,17 @@ class Sorter extends Function {
         if (sorted.length < subsetArr.length) {
             console.warn('WARNING: It looks like a cycle was present ' +
                          'in the order sent to sort().');
-            // This is not great, but we'll just arbitrarily add in elements
-            // until sorted contains the full input list.
-            // This is not efficient but also should not normally happen at all.
+            // We'll add in remaining items, attempting to preserve some of the
+            // order that we've found, though it's literally impossible to
+            // preserve all of it.
             for (let item of subsetArr) {
                 item = Number(item);
-                if (sorted.indexOf(item) === -1) sorted.push(item);
+                if (sorted.indexOf(item) >= 0) continue;
+                depthFirstTraverse(item, this.after, (node) => {
+                    node = Number(node);
+                    if (sorted.indexOf(node) === -1) sorted.push(node);
+                });
+
             }
         }
 
