@@ -868,6 +868,11 @@ function compareLines(s1, s2, pts, options) {
     // border-border checks when seeing if one face overlaps another.
     if (options === undefined || options.doSharedVertexCheck) {
 
+        // XXX TODO: Re-incorporate this comparison somewhere else.
+        // I think I may call this the "cylinder model" of lines since it treats
+        // them as having some kind of solidity.
+        if (false) {
+
         // This compares line 1 from sh ("shared") to i1 against line 2 from sh
         // to i2. If the ray from the eye (origin) to sh is more aligned with
         // either, then that closer line is > than the other.
@@ -887,6 +892,8 @@ function compareLines(s1, s2, pts, options) {
         if (s1.from === s2.to  ) return c(s1.from, s1.to, s2.from);
         if (s1.to   === s2.from) return c(s1.to, s1.from, s2.to);
         if (s1.to   === s2.to  ) return c(s1.to, s1.from, s2.from);
+
+        }
     }
 
     // 2. Determine if there is a point overlap in the view plane.
@@ -1861,9 +1868,9 @@ export function updatePoints() {
 
     // DEBUG2
     sort.dbgCtx.logLevel = 0;
+    sort.dbgCtx.getName = getShapeName;
     if (numTimesLeft < 5) {
         sort.dbgCtx.debugMode = false;
-        sort.dbgCtx.getName = getShapeName;
     }
 
     // DEBUG1

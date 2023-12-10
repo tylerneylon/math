@@ -370,11 +370,6 @@ class Sorter extends Function {
     //   already a Set type. I can look into using that instead.
 
     dbgStart(arr) {
-        let getName = dbgCtx.getName ?? (x => x);
-
-        // This returns a string|stringifiable label for the input at index x.
-        this.label = idx => getName(this.inputArr[idx]);
-
         if (logLevel < 1) return;
         say('Start sort() with arr: ' + this.strOfArr(arr));
         indent();
@@ -587,6 +582,9 @@ class Sorter extends Function {
             }
         }
 
+        let getName = dbgCtx.getName ?? (x => x);
+        // This returns a string|stringifiable label for the input at index x.
+        this.label = idx => getName(this.inputArr[idx]);
         if (dMode) this.dbgStart(subsetArr);
 
         // Define the base case.
@@ -719,6 +717,10 @@ class Sorter extends Function {
             for (let item of subsetArr) {
                 item = Number(item);
                 if (sorted.indexOf(item) >= 0) continue;
+
+                // Turn this on if you'd like to debug a cycle.
+                if (false) this.dbgCycleCheck();
+
                 // Note that if `item` is not yet in `sorted`, it means the
                 // subtree under `item` must also not be present up to a
                 // "wrap-around" point, by which I mean a point that may have
