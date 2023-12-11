@@ -851,6 +851,59 @@ function compareFaces(s1, s2, pts) {
     return null;
 }
 
+// This function uses each array in ctx.pts[i].deps, which are indexes into
+// ctx.lines, to help determine which lines should be drawn before `line` (which
+// means they are < line in the secondary ordering) based on the cylinder model
+// of lines. The values in ctx.pts[i].deps are set in orderElts2().
+// This returns an array of line objects (from ctx.lines), sorted with the
+// back-most line first. This order may easily contradict the order given by
+// compareShapes(), in which case the compareShapes() order should take
+// precedence.
+function getSolidLineElders(line, pts) {
+    let linePairs = [];  // Each element will be a [z, line] pair.
+    for (let ptIdx of [line.from, line.to]) {
+
+        console.log(`Outer loop: Looking at deps of ptIdx=${ptIdx}`);
+        console.log('deps:');
+        console.log(ctx.pts[ptIdx].deps);
+
+        for (let lineIdx of ctx.pts[ptIdx].deps) {
+
+            console.log(`Considering adjacent lineIdx ${lineIdx}`);
+
+            // line.idx was set for us in addLines().
+            console.log(`My idx is ${line.idx}; other idx is ${lineIdx}`);
+            if (lineIdx === line.idx) { console.log('same'); continue; }
+            let line2 = ctx.lines[lineIdx];
+            let myI, zI;  // Point indexes.
+            if (line.from === line2.from) [myI, zI] = [line.to  , line2.to  ];
+            if (line.from === line2.to  ) [myI, zI] = [line.to  , line2.from];
+            if (line.to   === line2.from) [myI, zI] = [line.from, line2.to  ];
+            if (line.to   === line2.to  ) [myI, zI] = [line.from, line2.from];
+
+            console.log(`my-size pt idx is ${myI}; other pt idx is ${zI}`);
+
+            // Skip line2 if it's in-front or in-plane with `line`.
+            if (pts[myI].z >= pts[zI].z) continue;
+
+            // XXX
+            console.log(`Pushing [${pts[zI].z}, ${lineIdx}]` + '*'.repeat(60));
+
+            linePairs.push([pts[zI].z, lineIdx]);
+        }
+    }
+    linePairs.sort((a, b) => {
+        if (a[0] < b[0]) return 1;
+        if (a[0] > b[0]) return -1;
+        return 0;
+    });
+
+    console.log('After sorting by z, my array is:');
+    console.log(linePairs);
+
+    return linePairs.map(x => x[1]);
+}
+
 function compareLines(s1, s2, pts, options) {
 
     // 1. If the lines share one vertex, order based on the z value of the
@@ -2052,7 +2105,7 @@ function checkArraysAreSame(arr1, arr2, msg, tol) {
     let prefix = msg ? msg + ' ' : '';
     check(
         arr1.length === arr2.length,
-        `different array lengths: ${arr1.length} vs ${arr2.length}`
+        prefix + `different array lengths: ${arr1.length} vs ${arr2.length}`
     );
     for (let i = 0; i < arr1.length; i++) {
         check(
@@ -2194,6 +2247,52 @@ function testIsPtOnFace() {
     }
 }
 
+function testGetSolidLineElders() {
+
+    let lineSet1 = [
+        {from: 0, to: 1}, {from: 1, to: 2}, {from: 2, to: 3},
+        {from: 1, to: 4}, {from: 1, to: 5}
+    ];
+    let ptSet1 = [
+        {z: -1}, {z: 0}, {z: 1}, {z: 1}, {z: 0}, {z: 0.5}
+    ];
+
+    let testData = [
+        {
+            lines: [{from: 0, to: 1}, {from: 1, to: 2}, {from: 2, to: 3}],
+            pts: [{z: 0}, {z: 1}, {z: 2}, {z: 3}],
+            lineIdx: 1,
+            correct: [2]  // elder lines (behind lineIdx)
+        },
+        {lines: lineSet1, pts: ptSet1, lineIdx: 3, correct: [1, 4]},
+        {lines: lineSet1, pts: ptSet1, lineIdx: 1, correct: [2]},
+        {lines: lineSet1, pts: ptSet1, lineIdx: 0, correct: [1, 4, 3]},
+    ]
+
+    for (let [i, datum] of Object.entries(testData)) {
+
+        console.log('\n\n' + '_'.repeat(80));
+        console.log(`Starting test case ${i}`);
+
+        // Set up the input.
+        ctx.lines = structuredClone(datum.lines);
+        ctx.pts   = structuredClone(datum.pts);
+        ctx.lines.forEach((line, idx) => {
+            util.push(ctx.pts[line.from], 'deps', idx);
+            util.push(ctx.pts[line.to  ], 'deps', idx);
+        });
+        console.log('='.repeat(100));
+        ctx.pts.forEach((pt, i) => console.log(`pt ${i} deps:`, pt.deps));
+        console.log('='.repeat(100));
+        ctx.lines[datum.lineIdx].idx = datum.lineIdx;
+        let fnAns = getSolidLineElders(ctx.lines[datum.lineIdx], datum.pts);
+        checkArraysAreSame(
+            datum.correct, fnAns,
+            `test case ${i}: correct vs fnAns`
+        );
+    }
+}
+
 
 // ______________________________________________________________________
 // Test-running code
@@ -2205,7 +2304,7 @@ function testIsPtOnFace() {
 function runTests() {
     let allTests = [
         testCheckIfPointIsInPoly, testFindClosestPointOnLine,
-        testProjectPointIntoPoly, testIsPtOnFace
+        testProjectPointIntoPoly, testIsPtOnFace, testGetSolidLineElders
     ];
     allTests.forEach(testFn => {
         activeTest = testFn;
