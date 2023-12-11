@@ -862,18 +862,10 @@ function compareFaces(s1, s2, pts) {
 function getSolidLineElders(line, pts) {
     let linePairs = [];  // Each element will be a [z, line] pair.
     for (let ptIdx of [line.from, line.to]) {
-
-        console.log(`Outer loop: Looking at deps of ptIdx=${ptIdx}`);
-        console.log('deps:');
-        console.log(ctx.pts[ptIdx].deps);
-
         for (let lineIdx of ctx.pts[ptIdx].deps) {
 
-            console.log(`Considering adjacent lineIdx ${lineIdx}`);
-
             // line.idx was set for us in addLines().
-            console.log(`My idx is ${line.idx}; other idx is ${lineIdx}`);
-            if (lineIdx === line.idx) { console.log('same'); continue; }
+            if (lineIdx === line.idx) continue;
             let line2 = ctx.lines[lineIdx];
             let myI, zI;  // Point indexes.
             if (line.from === line2.from) [myI, zI] = [line.to  , line2.to  ];
@@ -881,13 +873,8 @@ function getSolidLineElders(line, pts) {
             if (line.to   === line2.from) [myI, zI] = [line.from, line2.to  ];
             if (line.to   === line2.to  ) [myI, zI] = [line.from, line2.from];
 
-            console.log(`my-size pt idx is ${myI}; other pt idx is ${zI}`);
-
             // Skip line2 if it's in-front or in-plane with `line`.
             if (pts[myI].z >= pts[zI].z) continue;
-
-            // XXX
-            console.log(`Pushing [${pts[zI].z}, ${lineIdx}]` + '*'.repeat(60));
 
             linePairs.push([pts[zI].z, lineIdx]);
         }
@@ -897,9 +884,6 @@ function getSolidLineElders(line, pts) {
         if (a[0] > b[0]) return -1;
         return 0;
     });
-
-    console.log('After sorting by z, my array is:');
-    console.log(linePairs);
 
     return linePairs.map(x => x[1]);
 }
@@ -2271,20 +2255,17 @@ function testGetSolidLineElders() {
 
     for (let [i, datum] of Object.entries(testData)) {
 
-        console.log('\n\n' + '_'.repeat(80));
-        console.log(`Starting test case ${i}`);
-
-        // Set up the input.
+        // Set up the input. Don't edit the original lines/pts since that may
+        // result in redundant data (eg `deps`) when test data is re-used.
         ctx.lines = structuredClone(datum.lines);
         ctx.pts   = structuredClone(datum.pts);
         ctx.lines.forEach((line, idx) => {
             util.push(ctx.pts[line.from], 'deps', idx);
             util.push(ctx.pts[line.to  ], 'deps', idx);
         });
-        console.log('='.repeat(100));
-        ctx.pts.forEach((pt, i) => console.log(`pt ${i} deps:`, pt.deps));
-        console.log('='.repeat(100));
         ctx.lines[datum.lineIdx].idx = datum.lineIdx;
+
+        // Run the test.
         let fnAns = getSolidLineElders(ctx.lines[datum.lineIdx], datum.pts);
         checkArraysAreSame(
             datum.correct, fnAns,
