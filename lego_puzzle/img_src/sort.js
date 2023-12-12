@@ -752,6 +752,64 @@ export const dbgCtx = {logLevel: 2};
 
 
 // ______________________________________________________________________
+// Define the resort() function. As in re-sort.
+
+// This function receives the dag that is returned by sort(), and can
+// re-sort the elements in order to respect what it can from the getElders()
+// function. The new ordering is returned as an array of the nodes in the
+// given graph. The new ordering is guaranteed to respect the original ordering
+// captured by the cmp() function given to the sort() function (yes, even though
+// it is not passed in here).
+export function resort(rootSet, after, before, getElders) {
+
+    // Copy rootSet so we can modify it safely.
+    rootSet = structuredClone(rootSet);
+
+    // Find descendant and elder sets for each node.
+    let descendants = {};  // This will map nodes to node sets.
+    let elders      = {};  // This will map nodes to node sets.
+    for (let root in rootSet) {
+        depthFirstTraverse(root, after, (node, _, __, path) => {
+            for (let prevNode of path) {
+                pushToSet(descendants, prevNode, node);
+                pushToSet(elders,      node,     prevNode);
+            }
+        }, null, {allPaths: true});
+        // ^^ We want allPaths to be true to have the guarantee that, after we
+        //    see a node x, we also see all descendants of that node.
+    }
+
+    let sorted = [];
+    let sortedSet = {};
+    let pending = {};  // This will map a trigger node to a pending root.
+    while(setSize(rootSet) > 0) {
+        let root = pickInSet(rootSet);
+        removeFromSet(rootSet, root);
+        let didDeferRoot = false;
+        for (let x of getElders(root)) {
+            if (x in descendants[root]) continue;
+            if (setSize(intersect(elders[x], rootSet)) === 0) continue;
+            // Move `root` from rootSet to `pending`.
+            trigger[x] = root;
+            didDeferRoot = true;
+            break;
+        }
+        if (didDeferRoot) continue;
+        sorted.push(root);
+        sortedSet[root] = true;
+        for (let kid of after[root]) {
+            if (before[kid].every(x => (x in sortedSet))) {
+                rootSet[kid] = true;
+            }
+        }
+        if (root in pending) rootSet[pending[root]] = true;
+    }
+
+    return sorted;
+}
+
+
+// ______________________________________________________________________
 // Helper functions for tests
 
 let activeTest = null;
