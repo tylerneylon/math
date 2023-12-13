@@ -797,8 +797,8 @@ export function resort(rootSet, after, before, getElders) {
         if (didDeferRoot) continue;
         sorted.push(root);
         sortedSet[root] = true;
-        for (let kid of after[root]) {
-            if (before[kid].every(x => (x in sortedSet))) {
+        for (let kid in after[root]) {
+            if (arrOfSet(before[kid]).every(x => (x in sortedSet))) {
                 rootSet[kid] = true;
             }
         }
@@ -1061,7 +1061,8 @@ function checkGraphsMatch(graph1, graph2) {
     }
 }
 
-function makeGraphFromEdges(numNodes, edges) {
+function makeGraphFromEdges(edges) {
+    let numNodes = Math.max(...edges.reduce((x, y) => x.concat(y)));
     let dag = makeEmptyGraph(numNodes);
     for (let edge of edges) addEdge(dag, edge[0], edge[1]);
     return dag;
@@ -1107,7 +1108,7 @@ function trTest2() {
     let edges = [
         [1, 2], [1, 3], [1, 4], [2, 4], [3, 4], [4, 5], [4, 6], [5, 6]
     ];
-    let dag = makeGraphFromEdges(6, edges);
+    let dag = makeGraphFromEdges(edges);
 
     let {roots, after, before} = dag;
     roots = arrOfSet(roots);
@@ -1116,7 +1117,7 @@ function trTest2() {
     edges = [
         [1, 2], [1, 3], [2, 4], [3, 4], [4, 5], [5, 6]
     ];
-    let targetDag = makeGraphFromEdges(6, edges);
+    let targetDag = makeGraphFromEdges(edges);
 
     checkGraphsMatch(dag, targetDag);
 }
@@ -1132,7 +1133,7 @@ function trTest3() {
     let edges = [
         [1, 2], [2, 3], [1, 3], [4, 5], [5, 6], [4, 6]
     ];
-    let dag = makeGraphFromEdges(6, edges);
+    let dag = makeGraphFromEdges(edges);
 
     let {roots, after, before} = dag;
     roots = arrOfSet(roots);
@@ -1141,7 +1142,7 @@ function trTest3() {
     edges = [
         [1, 2], [2, 3], [4, 5], [5, 6]
     ];
-    let targetDag = makeGraphFromEdges(6, edges);
+    let targetDag = makeGraphFromEdges(edges);
 
     checkGraphsMatch(dag, targetDag);
 }
@@ -1153,7 +1154,7 @@ function trTest3() {
 // Test the simple cycle: 1 - 2 - 3 - 1
 function cycleTest1() {
     let edges = [[1, 2], [2, 3], [3, 1]];
-    let graph = makeGraphFromEdges(3, edges);
+    let graph = makeGraphFromEdges(edges);
     let result = findGraphCycle(graph.after);
     checkArraysAreSame(result, [1, 2, 3].map(x => `${x}`));
 }
@@ -1161,7 +1162,7 @@ function cycleTest1() {
 // Test a graph with no cycles.
 function cycleTest2() {
     let edges = [[1, 2], [2, 3], [1, 3]];
-    let graph = makeGraphFromEdges(3, edges);
+    let graph = makeGraphFromEdges(edges);
     let result = findGraphCycle(graph.after);
     check(result === undefined, 'there are no cycles in this graph');
 }
@@ -1169,7 +1170,7 @@ function cycleTest2() {
 // Test the graph:  1 - 2 - 3 - 4 - 1
 function cycleTest3() {
     let edges = [[1, 2], [2, 3], [3, 4], [4, 1]];
-    let graph = makeGraphFromEdges(4, edges);
+    let graph = makeGraphFromEdges(edges);
     let result = findGraphCycle(graph.after);
     checkArraysAreSame(result, [1, 2, 3, 4].map(x => `${x}`));
 }
@@ -1181,7 +1182,7 @@ function cycleTest4() {
         [1, 2], [2, 3], [4, 5], [5, 6],
         [3, 7], [7, 6], [6, 2]
     ];
-    let graph = makeGraphFromEdges(7, edges);
+    let graph = makeGraphFromEdges(edges);
     let result = findGraphCycle(graph.after);
     checkArraysAreSame(result, [2, 3, 7, 6].map(x => `${x}`));
 }
@@ -1197,7 +1198,7 @@ function cycleTest5() {
         [5, 6], [6, 7], [6, 8], [6, 10], [7, 8], [7, 9],
         [9, 11], [10, 11], [11, 6]
     ];
-    let graph = makeGraphFromEdges(11, edges);
+    let graph = makeGraphFromEdges(edges);
     let result = findGraphCycle(graph.after);
     // Note that other cycles are also valid. This just happens to be the one
     // that the current implementation returns first.
@@ -1207,7 +1208,7 @@ function cycleTest5() {
 // Test the simple graph 1 <-> 2
 function cycleTest6() {
     let edges = [[1, 2], [2, 1]];
-    let graph = makeGraphFromEdges(2, edges);
+    let graph = makeGraphFromEdges(edges);
     let result = findGraphCycle(graph.after);
     checkArraysAreSame(result, [1, 2].map(x => `${x}`));
 }
@@ -1215,7 +1216,7 @@ function cycleTest6() {
 // Test the simple case of a node connected to itself.
 function cycleTest7() {
     let edges = [[1, 1]];
-    let graph = makeGraphFromEdges(1, edges);
+    let graph = makeGraphFromEdges(edges);
     let result = findGraphCycle(graph.after);
     checkArraysAreSame(result, [1].map(x => `${x}`));
 }
@@ -1228,7 +1229,7 @@ function cycleTest7() {
 
 function depthTraverseTest1() {
     let edges = [[1, 2], [2, 3], [3, 1]];
-    let graph = makeGraphFromEdges(3, edges);
+    let graph = makeGraphFromEdges(edges);
     depthFirstTraverse(1, graph.after, (node) => {
         console.log(`visited node ${node}`);
     });
@@ -1236,7 +1237,7 @@ function depthTraverseTest1() {
 
 function depthTraverseTest2() {
     let edges = [[1, 2], [2, 3], [3, 4], [4, 1]];
-    let graph = makeGraphFromEdges(4, edges);
+    let graph = makeGraphFromEdges(edges);
     depthFirstTraverse(1, graph.after, (node) => {
         console.log(`visited node ${node}`);
     });
@@ -1252,10 +1253,53 @@ function depthTraverseTest3() {
         [5, 6], [6, 7], [6, 8], [6, 10], [7, 8], [7, 9],
         [9, 11], [10, 11], [11, 6]
     ];
-    let graph = makeGraphFromEdges(11, edges);
+    let graph = makeGraphFromEdges(edges);
     depthFirstTraverse(5, graph.after, (node) => {
         console.log(`visited node ${node}`);
     });
+}
+
+
+// ______________________________________________________________________
+// Tests for resort().
+
+function testResort() {
+
+    let edges1 = [[1, 2], [1, 3]];
+    let edges2 = [[1, 2], [3, 5], [4, 5], [5, 6], [5, 7], [7, 8]];
+
+    let testData = [
+        {edges: edges1, elders: {3: [2]}, checkFor: [[2, 3]]},
+        {edges: edges1, elders: {3: [1, 2]}, checkFor: [[2, 3]]},
+        {edges: edges1, elders: {3: [2, 1]}, checkFor: [[2, 3]]},
+    ];
+
+    for (let [i, datum] of Object.entries(testData)) {
+        let dag = makeGraphFromEdges(datum.edges);
+        let numItems = Math.max(...datum.edges.reduce((x, y) => x.concat(y)));
+        let getElders = x => { return datum.elders[x] ?? []; }
+        let result = resort(dag.roots, dag.after, dag.before, getElders);
+
+        // Confirm that the result is the right length, with distinct items.
+        check(result.length === numItems);
+        check(setSize(makeSet(result)) === numItems);
+
+        // Confirm that the previous edge pairs are still present.
+        datum.edges.forEach(edge => {
+            check(
+                result.indexOf(edge[0]) < result.indexOf(edge[1]),
+                `test case ${i}: checking primary edges still present`
+            );
+        });
+
+        // Confirm that new edges are respected.
+        datum.checkFor.forEach(edge => {
+            check(
+                result.indexOf(edge[0]) < result.indexOf(edge[1]),
+                `test case ${i}: checking new secondary edges are present`
+            );
+        });
+    }
 }
 
 
@@ -1280,11 +1324,11 @@ function runTests() {
     // This is `false` by default, running all unit tests.
     // Set this to true to focus on a single test in the immediately following
     // focus block.
-    let focusMode = false;
+    let focusMode = true;
 
     // A place to focus on a single unit test at a time.
     if (focusMode) {
-        activeTest = depthTraverseTest3;
+        activeTest = testResort;
         activeTest();
         console.log('Passed!');
     }
@@ -1295,7 +1339,8 @@ function runTests() {
             test6, test7, test8,
             trTest1, trTest2, trTest3,
             cycleTest1, cycleTest2, cycleTest3, cycleTest4,
-            cycleTest5, cycleTest6, cycleTest7
+            cycleTest5, cycleTest6, cycleTest7,
+            testResort
         ];
         allTests.forEach(testFn => {
             activeTest = testFn;
