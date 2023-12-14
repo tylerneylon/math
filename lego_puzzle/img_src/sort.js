@@ -790,7 +790,7 @@ export function resort(rootSet, after, before, getElders) {
             if (x in descendants[root]) continue;
             if (setSize(intersect(elders[x], rootSet)) === 0) continue;
             // Move `root` from rootSet to `pending`.
-            trigger[x] = root;
+            pending[x] = root;
             didDeferRoot = true;
             break;
         }
@@ -1272,6 +1272,24 @@ function testResort() {
         {edges: edges1, elders: {3: [2]}, checkFor: [[2, 3]]},
         {edges: edges1, elders: {3: [1, 2]}, checkFor: [[2, 3]]},
         {edges: edges1, elders: {3: [2, 1]}, checkFor: [[2, 3]]},
+
+        // We don't need checkFor values here because the primary edges suffice.
+        {edges: edges2, elders: {1: [2], 4: [3, 5]}, checkFor: []},
+        {edges: edges2,
+            elders: {3: [2], 4: [3], 7: [6]},
+            checkFor: [[2, 3], [3, 4], [6, 7]]
+        },
+        {edges: edges2, elders: {1: [8]}, checkFor: [[8, 1]]},
+        {edges: edges2,
+            elders: {1: [6], 6: [8], 3: [4]},
+            checkFor: [[4, 3], [8, 6], [6, 1]]
+        },
+
+        // This is the same as the previous test, but with conflicts in elders.
+        {edges: edges2,
+            elders: {1: [2, 6, 3], 6: [4, 8, 2], 3: [5, 8, 2, 4]},
+            checkFor: [[4, 3], [8, 6], [6, 1]]
+        },
     ];
 
     for (let [i, datum] of Object.entries(testData)) {
@@ -1279,6 +1297,8 @@ function testResort() {
         let numItems = Math.max(...datum.edges.reduce((x, y) => x.concat(y)));
         let getElders = x => { return datum.elders[x] ?? []; }
         let result = resort(dag.roots, dag.after, dag.before, getElders);
+        // Cast the result elements back to numbers.
+        result = result.map(Number);
 
         // Confirm that the result is the right length, with distinct items.
         check(result.length === numItems);
@@ -1318,13 +1338,13 @@ function assert(condition, msg) {
 }
 
 function runTests() {
-    dMode = true;
-    logLevel = 3;
+    dMode = false;
+    logLevel = 0;
 
     // This is `false` by default, running all unit tests.
     // Set this to true to focus on a single test in the immediately following
     // focus block.
-    let focusMode = true;
+    let focusMode = false;
 
     // A place to focus on a single unit test at a time.
     if (focusMode) {
