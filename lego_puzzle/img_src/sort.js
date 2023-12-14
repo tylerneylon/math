@@ -873,8 +873,6 @@ function test1() {
         return (x < y) ? '<' : (x > y ? '>' : '=');
     }
     let result = sort(arr, cmp)['sorted'];
-    console.log('result:');
-    console.log(result);
     check(result[0] === 0 && result[1] === 1);
 }
 
@@ -885,8 +883,6 @@ function test2() {
         return (x < y) ? '<' : (x > y ? '>' : '=');
     }
     let result = sort(arr, cmp)['sorted'];
-    console.log('result:');
-    console.log(result);
     check(result.every((x, i) => (x === i)));
 }
 
@@ -906,8 +902,6 @@ function testWithWeirdCmp(arr, goalArr) {
         return null;
     }
     let result = sort(arr, cmp)['sorted'];
-    console.log('result:');
-    console.log(result);
     checkArraysAreSame(result, goalArr);
 }
 
@@ -954,8 +948,6 @@ function test5() {
         return null;
     }
     let result = sort(arr, cmp)['sorted'];
-    console.log('result:');
-    console.log(result);
     let goalArr = [1, 2, 3, -1, 4, 5, 6, -2, 7, 8, 9];
     checkArraysAreSame(result, goalArr);
 }
@@ -972,8 +964,6 @@ function test6() {
         return '=';
     }
     let result = sort(arr, cmp)['sorted'];
-    console.log('result:');
-    console.log(result);
     checkArrayRespectsKnownOrders(
         result,
         [[-4, -3, -2, -1], [1, 2, 3, 4]]
@@ -997,8 +987,6 @@ function test7() {
         return null;
     }
     let result = sort(arr, cmp)['sorted'];
-    console.log('result:');
-    console.log(result);
     checkArrayRespectsKnownOrders(
         result,
         [[1, 2, 3], [3, 4, 5, 6], [3, 7, 8, 9]]
@@ -1018,8 +1006,6 @@ function test8() {
         return null;
     }
     let result = sort(arr, cmp)['sorted'];
-    console.log('result:');
-    console.log(result);
     checkArrayRespectsKnownOrders(
         result,
         [[1, 4], [2, 4], [3, 4], [5, 4]]
@@ -1364,7 +1350,7 @@ function runTests() {
         ];
         allTests.forEach(testFn => {
             activeTest = testFn;
-            console.log('\n' + '_'.repeat(80));
+            console.log('_'.repeat(80));
             console.log(`Running ${testFn.name}`);
             testFn();
             // We only get this far if the test passed.
