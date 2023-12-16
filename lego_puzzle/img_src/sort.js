@@ -760,10 +760,11 @@ export const dbgCtx = {logLevel: 2};
 // given graph. The new ordering is guaranteed to respect the original ordering
 // captured by the cmp() function given to the sort() function (yes, even though
 // it is not passed in here).
-export function resort(rootSet, after, before, getElders) {
+export function resort(dag, getElders) {
 
     // Copy rootSet so we can modify it safely.
-    rootSet = structuredClone(rootSet);
+    let rootSet = structuredClone(dag.rootSet);
+    let {after, before} = dag;
 
     // Find descendant and elder sets for each node.
     let descendants = {};  // This will map nodes to node sets.
@@ -1021,7 +1022,8 @@ function test8() {
 
 function makeEmptyGraph(numNodes) {
     let roots = makeSet([...Array(numNodes).keys()].map(x => x + 1));
-    return {roots, after: {}, before: {}};
+    let rootSet = roots;  // These are intentionally synonyms.
+    return {roots, rootSet: roots, after: {}, before: {}};
 }
 
 function addEdge(graph, from, to) {
@@ -1282,7 +1284,7 @@ function testResort() {
         let dag = makeGraphFromEdges(datum.edges);
         let numItems = Math.max(...datum.edges.reduce((x, y) => x.concat(y)));
         let getElders = x => { return datum.elders[x] ?? []; }
-        let result = resort(dag.roots, dag.after, dag.before, getElders);
+        let result = resort(dag, getElders);
         // Cast the result elements back to numbers.
         result = result.map(Number);
 

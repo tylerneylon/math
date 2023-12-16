@@ -1078,7 +1078,24 @@ function orderElts2(pts, normalXYs) {
     if (ctx.prevBackToFront) opts = ctx.prevBackToFront;
 
     let backToFront = sort.sort(shapes, compareShapes, pts, opts);
-    // let backToFront = sortWithPartialInfo(shapes, compareShapes, pts);
+
+    // XXX TODO Working here.
+    let doModelAsSolidLines = true;  // TODO Move this into ctx; default false.
+    if (doModelAsSolidLines) {
+        backToFront.sorted.forEach((shape, i) => {
+            if (shape.type === 'line') shape.shapeIdx = i;
+        });
+        // The input here is a shape index (possibly as a string); we want the
+        // output to be an ordered list of other shape indexes.
+        getElders = x => {
+            let elderIdx = getSolidLineElders(shapes[x], pts);
+            return elderIdx.map(idx => ctx.lines[idx].shapeIdx);
+        };
+        let resorted = sort.resort(backToFront, getElders);
+        // TODO: I'll need to update `sortedIdx` if I do this.
+        backToFront.sorted = resorted.map(i => shapes[i]);
+    }
+
     ctx.prevBackToFront = backToFront;
     backToFront = backToFront['sorted'];
 
