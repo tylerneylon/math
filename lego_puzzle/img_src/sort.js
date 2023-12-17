@@ -791,7 +791,7 @@ export function resort(dag, getElders) {
             if (x in descendants[root]) continue;
             if (setSize(intersect(elders[x], rootSet)) === 0) continue;
             // Move `root` from rootSet to `pending`.
-            pending[x] = root;
+            pushToSet(pending, x, root);  // TODO Rename from `x`.
             didDeferRoot = true;
             break;
         }
@@ -803,7 +803,9 @@ export function resort(dag, getElders) {
                 rootSet[kid] = true;
             }
         }
-        if (root in pending) rootSet[pending[root]] = true;
+        if (root in pending) {
+            for (let item in pending[root]) rootSet[item] = true;
+        }
     }
 
     return sorted;
@@ -1255,6 +1257,7 @@ function testResort() {
 
     let edges1 = [[1, 2], [1, 3]];
     let edges2 = [[1, 2], [3, 5], [4, 5], [5, 6], [5, 7], [7, 8]];
+    let edges3 = [[1, 4], [2, 4], [3, 4]];
 
     let testData = [
         {edges: edges1, elders: {3: [2]}, checkFor: [[2, 3]]},
@@ -1278,6 +1281,9 @@ function testResort() {
             elders: {1: [2, 6, 3], 6: [4, 8, 2], 3: [5, 8, 2, 4]},
             checkFor: [[4, 3], [8, 6], [6, 1]]
         },
+
+        // This tests that we can handle multiple nodes depending on one.
+        {edges: edges3, elders: {1: [3], 2: [3]}, checkFor: [[3, 1], [3, 2]]},
     ];
 
     for (let [i, datum] of Object.entries(testData)) {
@@ -1289,7 +1295,11 @@ function testResort() {
         result = result.map(Number);
 
         // Confirm that the result is the right length, with distinct items.
-        check(result.length === numItems);
+        check(
+            result.length === numItems,
+            `test case ${i}: num sorted items, got=${result.length}, ` +
+            `correct=${numItems}`
+        );
         check(setSize(makeSet(result)) === numItems);
 
         // Confirm that the previous edge pairs are still present.
