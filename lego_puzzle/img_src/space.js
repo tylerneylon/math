@@ -854,7 +854,7 @@ function compareFaces(s1, s2, pts) {
 // This function uses each array in ctx.pts[i].deps, which are indexes into
 // ctx.lines, to help determine which lines should be drawn before `line` (which
 // means they are < line in the secondary ordering) based on the cylinder model
-// of lines. The values in ctx.pts[i].deps are set in orderElts2().
+// of lines. The values in pts[i].deps are set in orderElts2().
 // This returns an array of line objects (from ctx.lines), sorted with the
 // back-most line first. This order may easily contradict the order given by
 // compareShapes(), in which case the compareShapes() order should take
@@ -862,7 +862,7 @@ function compareFaces(s1, s2, pts) {
 function getSolidLineElders(line, pts) {
     let linePairs = [];  // Each element will be a [z, line] pair.
     for (let ptIdx of [line.from, line.to]) {
-        for (let lineIdx of ctx.pts[ptIdx].deps) {
+        for (let lineIdx of pts[ptIdx].deps) {
 
             // line.idx was set for us in addLines().
             if (lineIdx === line.idx) continue;
@@ -1087,13 +1087,25 @@ function orderElts2(pts, normalXYs) {
         });
         // The input here is a shape index (possibly as a string); we want the
         // output to be an ordered list of other shape indexes.
-        getElders = x => {
+        let getElders = x => {
+            if (shapes[x].type !== 'line') return [];
             let elderIdx = getSolidLineElders(shapes[x], pts);
             return elderIdx.map(idx => ctx.lines[idx].shapeIdx);
         };
-        let resorted = sort.resort(backToFront, getElders);
-        // TODO: I'll need to update `sortedIdx` if I do this.
-        backToFront.sorted = resorted.map(i => shapes[i]);
+
+        // XXX
+        console.log('Before resort, sorted/idx is:');
+        console.log(backToFront.sorted);
+        console.log(backToFront.sortedIdx);
+
+        let resortedIdx = sort.resort(backToFront, getElders);
+        backToFront.sortedIdx = resortedIdx.map(Number);  // TODO Needed?
+        backToFront.sorted    = resortedIdx.map(i => shapes[i]);
+
+        // XXX
+        console.log('After resort, sorted/idx is:');
+        console.log(backToFront.sorted);
+        console.log(backToFront.sortedIdx);
     }
 
     ctx.prevBackToFront = backToFront;
