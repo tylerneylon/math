@@ -1093,19 +1093,9 @@ function orderElts2(pts, normalXYs) {
             return elderIdx.map(idx => ctx.lines[idx].shapeIdx);
         };
 
-        // XXX
-        console.log('Before resort, sorted/idx is:');
-        console.log(backToFront.sorted);
-        console.log(backToFront.sortedIdx);
-
         let resortedIdx = sort.resort(backToFront, getElders);
         backToFront.sortedIdx = resortedIdx.map(Number);  // TODO Needed?
         backToFront.sorted    = resortedIdx.map(i => shapes[i]);
-
-        // XXX
-        console.log('After resort, sorted/idx is:');
-        console.log(backToFront.sorted);
-        console.log(backToFront.sortedIdx);
     }
 
     ctx.prevBackToFront = backToFront;
