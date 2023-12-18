@@ -766,6 +766,17 @@ export function resort(dag, getElders) {
     let rootSet = structuredClone(dag.rootSet);
     let {after, before} = dag;
 
+    let unsortedSet = {};
+    if (logLevel > 0) {
+        for (let root in dag.rootSet) {
+            depthFirstTraverse(root, after, (node) => {
+                unsortedSet[node] = true;
+            });
+        }
+        console.log('Starting with:');
+        printForest(arrOfSet(dag.rootSet), dag.after, unsortedSet);
+    }
+
     // Find descendant and elder sets for each node.
     let descendants = {};  // This will map nodes to node sets.
     let elders      = {};  // This will map nodes to node sets.
@@ -783,19 +794,24 @@ export function resort(dag, getElders) {
     let sorted = [];
     let sortedSet = {};
     let pending = {};  // This will map a trigger node to a pending root.
+    let pendingRootCount = {};  // This is a reference counter.
     while(setSize(rootSet) > 0) {
         let root = pickInSet(rootSet);
         removeFromSet(rootSet, root);
         let didDeferRoot = false;
         for (let x of getElders(root)) {
             if (x in descendants[root]) continue;
-            if (setSize(intersect(elders[x], rootSet)) === 0) continue;
+            if (x in sortedSet) continue;
+            if (setSize(intersect(elders[x], pendingRootCount)) !== 0) continue;
             // Move `root` from rootSet to `pending`.
             pushToSet(pending, x, root);  // TODO Rename from `x`.
+            if (logLevel > 0) console.log(`Made ${root} depend on ${x}`);
+            pendingRootCount[root] = (pendingRootCount[root] ?? 0) + 1;
             didDeferRoot = true;
             break;
         }
         if (didDeferRoot) continue;
+        if (logLevel > 0) console.log(`Adding ${root} to sorted`);
         sorted.push(root);
         sortedSet[root] = true;
         for (let kid in after[root]) {
@@ -803,8 +819,17 @@ export function resort(dag, getElders) {
                 rootSet[kid] = true;
             }
         }
+        if (logLevel > 0) removeFromSet(unsortedSet, root);
         if (root in pending) {
-            for (let item in pending[root]) rootSet[item] = true;
+            for (let item in pending[root]) {
+                rootSet[item] = true;
+                pendingRootCount[item]--;
+                if (pendingRootCount[item] === 0) delete pendingRootCount[item];
+            }
+        }
+        if (logLevel > 0) {
+            console.log(`After sorting ${root}:`);
+            printForest(arrOfSet(rootSet), after, unsortedSet);
         }
     }
 
@@ -1260,39 +1285,67 @@ function testResort() {
     let edges3 = [[1, 4], [2, 4], [3, 4]];
 
     let testData = [
-        {edges: edges1, elders: {3: [2]}, checkFor: [[2, 3]]},
-        {edges: edges1, elders: {3: [1, 2]}, checkFor: [[2, 3]]},
-        {edges: edges1, elders: {3: [2, 1]}, checkFor: [[2, 3]]},
+        {edges: edges1, elders: {3: [2]}, checkFor: [[2, 3]]},     // case 0
+        {edges: edges1, elders: {3: [1, 2]}, checkFor: [[2, 3]]},  // case 1
+        {edges: edges1, elders: {3: [2, 1]}, checkFor: [[2, 3]]},  // case 2
 
+        // case 3
         // We don't need checkFor values here because the primary edges suffice.
         {edges: edges2, elders: {1: [2], 4: [3, 5]}, checkFor: []},
+
+        // case 4
         {edges: edges2,
             elders: {3: [2], 4: [3], 7: [6]},
             checkFor: [[2, 3], [3, 4], [6, 7]]
         },
+
+        // case 5
         {edges: edges2, elders: {1: [8]}, checkFor: [[8, 1]]},
+
+        // case 6
         {edges: edges2,
             elders: {1: [6], 6: [8], 3: [4]},
             checkFor: [[4, 3], [8, 6], [6, 1]]
         },
 
+        // case 7
         // This is the same as the previous test, but with conflicts in elders.
         {edges: edges2,
             elders: {1: [2, 6, 3], 6: [4, 8, 2], 3: [5, 8, 2, 4]},
             checkFor: [[4, 3], [8, 6], [6, 1]]
         },
 
+        // case 8
         // This tests that we can handle multiple nodes depending on one.
         {edges: edges3, elders: {1: [3], 2: [3]}, checkFor: [[3, 1], [3, 2]]},
+
+        // case 9
+        // This tests a case of elder contradiction that can trip up a bad
+        // implementation. Specifically, edge [1, 2] is correctly put in
+        // pending, but then it may be tempting to also add node 3 to pending
+        // with 2 as a trigger, but this would result in a cycle (assuming we
+        // respect all edges, which of course is the design).
+        {
+            edges: [[1, 2], [3, 5], [4, 2]],
+            elders: {1: [3], 3: [2]},
+            checkFor: [[3, 1]]
+        },
     ];
 
+    // Set logLevel to any value > 0 to turn on debug logging for these tests.
+    // logLevel = 1;
+
     for (let [i, datum] of Object.entries(testData)) {
+        if (logLevel > 0) {
+            console.log('_'.repeat(100) + `\nStarting test case ${i}.`);
+        }
         let dag = makeGraphFromEdges(datum.edges);
         let numItems = Math.max(...datum.edges.reduce((x, y) => x.concat(y)));
         let getElders = x => { return datum.elders[x] ?? []; }
         let result = resort(dag, getElders);
         // Cast the result elements back to numbers.
         result = result.map(Number);
+        if (logLevel > 0) console.log('result:', result);
 
         // Confirm that the result is the right length, with distinct items.
         check(
@@ -1338,6 +1391,7 @@ function assert(condition, msg) {
 function runTests() {
     dMode = false;
     logLevel = 0;
+    dbgCtx.logLevel = logLevel;
 
     // This is `false` by default, running all unit tests.
     // Set this to true to focus on a single test in the immediately following
