@@ -1776,6 +1776,9 @@ function isPtOnFace(ptIdx, face, pts) {
 // have the given line as an edge; and that, similarly, each face has
 // face.edges = [lineIdx*] for each line that is part of its border.
 function ensureFaceEdgesAreIndexed(pts) {
+
+    if (pts === undefined) pts = matrix.transpose(ctx.pts);
+
     // This will recompute all connections every time it's called.
     // I'm doing this for now because, in order to implement an incremental
     // version, I would need to track in pass in what is new, which may be just
