@@ -123,6 +123,21 @@ ctx.doDrawFaces = true;
 ctx.doShadeFaces = true;
 ctx.doDrawBackFaces = false;
 
+// When this flag is `true`, some extra time is spent on z-ordering that
+// attempts to order lines as if they were solid cylinders, instead of as
+// infinitely thin lines. There are some cases which are logically impossible to
+// render correctly (in a solid-shape-based model) because of cycles in the
+// dependency, even when the shapes are non-intersecting (this is because, when
+// the lines are treated as solid cylinders, this introduces new shape
+// intersections). The correctness guarantee is that, under the assumption that
+// the shapes in a scene are non-intersecting, the shapes will be rendered
+// in the correct order when lines are seen as infinitely thin. If there are no
+// cycles under the solid-lines model, then a correct rendering is also
+// guaranteed. If there are cycles, this aims for best-effort z-ordering,
+// prioritizing the correct order in the thin-lines model over the nice-to-have
+// ordering between solid-lines.
+ctx.doModelAsSolidLines = true;
+
 // TODO: Consider supporting this flag.
 // For now, we always do this.
 // ctx.doConnectFaceEdges = true;
@@ -1079,9 +1094,7 @@ function orderElts2(pts, normalXYs) {
 
     let backToFront = sort.sort(shapes, compareShapes, pts, opts);
 
-    // XXX TODO Working here.
-    let doModelAsSolidLines = true;  // TODO Move this into ctx; default false.
-    if (doModelAsSolidLines) {
+    if (ctx.doModelAsSolidLines) {
         backToFront.sorted.forEach((shape, i) => {
             if (shape.type === 'line') shape.shapeIdx = i;
         });
@@ -2277,10 +2290,12 @@ function testGetSolidLineElders() {
         // Set up the input. Don't edit the original lines/pts since that may
         // result in redundant data (eg `deps`) when test data is re-used.
         ctx.lines = structuredClone(datum.lines);
-        ctx.pts   = structuredClone(datum.pts);
+
+        // Make this part safe to run more than once.
+        datum.pts.forEach(x => { x.deps = []; });
         ctx.lines.forEach((line, idx) => {
-            util.push(ctx.pts[line.from], 'deps', idx);
-            util.push(ctx.pts[line.to  ], 'deps', idx);
+            datum.pts[line.from].deps.push(idx);
+            datum.pts[line.to  ].deps.push(idx);
         });
         ctx.lines[datum.lineIdx].idx = datum.lineIdx;
 

@@ -117,6 +117,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let artist = init.setup();
     space.setArtist(artist);
     space.ctx.doDrawDots = false;
+    space.ctx.doModelAsSolidLines = false;
     // space.ctx.doDrawNormalLines = true;  // XXX
     // space.ctx.doDrawFaces = false;  // XXX
 
