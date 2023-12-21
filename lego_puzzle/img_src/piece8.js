@@ -143,21 +143,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 if (z === 0 && x !== 0 && y !== 0) {
                     util.push(faceMap, `z:_:_:_`, idx);
                 }
-                // Push the x faces.
-                if (x !== 0) {
-                    for (let yy = y; yy >= y - 1; yy--) {
-                        if (-1 <= yy && yy <= 0) {
-                          util.push(faceMap, `x:${x}:${yy}:`, idx);
-                        }
-                    }
-                }
-                // Push the y faces.
-                if (y !== 0) {
-                    for (let xx = x; xx >= x - 1; xx--) {
-                        if (-1 <= xx && xx <= 0) {
-                          util.push(faceMap, `y:${xx}:${y}:`, idx);
-                        }
-                    }
+
+                // Push the x and y faces.
+                if (x !== 0 && y !== 0) {
+                    util.push(faceMap, `x:${x}`, idx);
+                    util.push(faceMap, `y:${y}`, idx);
                 }
 
                 let s = (y === 0 ? thinStyle : thickStyle);
@@ -186,7 +176,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
         face.style = {fill: '#a44'};
     }
 
-    let dbgMode = true;
+    // Use this to turn labels and dots on/off.
+    let dbgMode = false;
     if (dbgMode) space.ctx.doDrawDots = true;
 
     let obj = [pts, lines, faces];
