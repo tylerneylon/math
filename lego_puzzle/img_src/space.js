@@ -122,6 +122,7 @@ ctx.lines = [];  // This will contain {from, to, elt} objects.
 ctx.doDrawFaces = true;
 ctx.doShadeFaces = true;
 ctx.doDrawBackFaces = false;
+ctx.doDrawBackEdges = false;
 
 // When this flag is `true`, some extra time is spent on z-ordering that
 // attempts to order lines as if they were solid cylinders, instead of as
@@ -992,6 +993,14 @@ function compareLines(s1, s2, pts, options) {
     return (line1Ray[2] < line2Ray[2]) ? ret('>', reason) : ret('<', reason);
 }
 
+// This returns a unique integer for any given face or line.
+// The motivating usage of this function is to canonically order
+// hidden shapes.
+function getShapeKey(s) {
+    if (s.type === 'face') return s.idx * 2;
+    console.assert(s.type === 'line');
+    return s.idx * 2 + 1;
+}
 
 // This compares the shapes s1 and s2; it returns:
 //   '<'  if s1 is behind s2,
@@ -1020,7 +1029,10 @@ function compareShapes(s1, s2, pts, options) {
     // Both hidden: Lower face index comes first.
     // Only one hidden: The hidden face comes first.
     if (s1.isHidden && s2.isHidden) {
-        return ret(s1.idx < s2.idx ? '<' : '>', 'both shapes are hidden');
+        return ret(
+            getShapeKey(s1) < getShapeKey(s2) ? '<' : '>',
+            'both shapes are hidden'
+        );
     }
     if (s1.isHidden) return ret('<', 'first shape is hidden');
     if (s2.isHidden) return ret('>', 'second shape is hidden');
@@ -1990,6 +2002,7 @@ export function updatePoints() {
             line.elt.setAttribute('stroke', color);
         }
         artist.moveLine(line.elt, from, to);
+        line.isHidden = true;
     }
 
     // At the same time that face polygons are updated, we also (a) determine
@@ -2010,7 +2023,9 @@ export function updatePoints() {
             [lineXYs[2 * i].x, lineXYs[2 * i].y, lineXYs[2 * i].z]
         ) > 0;
         if (ctx.doDrawBackFaces) face.isHidden = false;
-        for (let line of face.lines) line.isForeground = !face.isHidden;
+        if (!face.isHidden) {
+            for (let lineIdx of face.edges) ctx.lines[lineIdx].isHidden = false;
+        }
         let polygon = ctx.facePolygons[i];
         polygon.setAttribute('display', face.isHidden ? 'none' : 'hi');
 
@@ -2035,11 +2050,18 @@ export function updatePoints() {
             getShadedFaceColor(face.baseColor, towardLight)
         );
 
+        // You can use this to help see otherwise-hidden lines during debugging.
+        if (false) polygon.setAttribute('fill', '#ccc2');
+
         if (!face.isHidden) {
             for (let j of face) xys[j].isForeground = true;
         }
     }
-    
+    for (let line of ctx.lines) {
+        let displayValue = line.isHidden ? 'none': 'hi';
+        line.elt.setAttribute('display', displayValue);
+    }
+
     // XXX
     orderElts2(xys, normalXYs);
 
