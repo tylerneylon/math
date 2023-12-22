@@ -1016,6 +1016,15 @@ function compareShapes(s1, s2, pts, options) {
         return v;
     }
 
+    // If either shape is hidden, we don't look at its geometry.
+    // Both hidden: Lower face index comes first.
+    // Only one hidden: The hidden face comes first.
+    if (s1.isHidden && s2.isHidden) {
+        return ret(s1.idx < s2.idx ? '<' : '>', 'both shapes are hidden');
+    }
+    if (s1.isHidden) return ret('<', 'first shape is hidden');
+    if (s2.isHidden) return ret('>', 'second shape is hidden');
+
     // Return null quickly if the bounding boxes don't overlap.
 
     updateBoundsForShape(s1, pts);
@@ -1996,14 +2005,14 @@ export function updatePoints() {
         let faceXYs = [];
         for (let j = 0; j < face.length; j++) faceXYs.push(xys[face[j]]);
         artist.movePolygon(ctx.facePolygons[i], faceXYs);
-        let isHidden = vector.dot(
+        face.isHidden = vector.dot(
             [normalXYs[i].x, normalXYs[i].y, normalXYs[i].z],
             [lineXYs[2 * i].x, lineXYs[2 * i].y, lineXYs[2 * i].z]
         ) > 0;
-        if (ctx.doDrawBackFaces) isHidden = false;
-        for (let line of face.lines) line.isForeground = !isHidden;
+        if (ctx.doDrawBackFaces) face.isHidden = false;
+        for (let line of face.lines) line.isForeground = !face.isHidden;
         let polygon = ctx.facePolygons[i];
-        polygon.setAttribute('display', isHidden ? 'none' : 'hi');
+        polygon.setAttribute('display', face.isHidden ? 'none' : 'hi');
 
         // Adjust alpha and color a bit for a little more 3d effect.
         let towardLight = vector.dot(
@@ -2021,9 +2030,12 @@ export function updatePoints() {
         // color. See if I can re-use how I do this in another place (if I do)
         // for code consistency.
         // polygon.setAttribute('fill', `rgba(${ell}, ${ell}, ${ell}, ${alpha})`);
-        polygon.setAttribute('fill', getShadedFaceColor(face.baseColor, towardLight));
+        polygon.setAttribute(
+            'fill',
+            getShadedFaceColor(face.baseColor, towardLight)
+        );
 
-        if (!isHidden) {
+        if (!face.isHidden) {
             for (let j of face) xys[j].isForeground = true;
         }
     }
