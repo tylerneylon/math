@@ -223,7 +223,7 @@ function getTree(root, tree, nodeSet) {
     return getRowsFromColumns(cols);
 }
 
-function printForest(roots, tree, nodeSet) {
+export function printForest(roots, tree, nodeSet) {
     let cols = roots.map(root => getTree(root, tree, nodeSet));
     say(getRowsFromColumns(cols, '  |  '));
 }
@@ -510,7 +510,7 @@ class Sorter extends Function {
 
     _call(inputArr, inputCmp, cmpCtx, opts/* subsetArr */) {
 
-        logLevel = logLevel || dbgCtx.logLevel;
+        logLevel = dbgCtx.logLevel || logLevel;
         dMode    = dMode || dbgCtx.debugMode;
 
         this.inputArr = inputArr;
@@ -748,7 +748,7 @@ class Sorter extends Function {
 }
 
 export const sort = new Sorter();
-export const dbgCtx = {logLevel: 2};
+export const dbgCtx = {logLevel: 0};
 
 
 // ______________________________________________________________________

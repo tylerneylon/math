@@ -87,6 +87,7 @@ import * as vector from './vector.js';
 export let ctx = {};
 
 let lastTs = null;  // This is the last-seen timestamp; it's used to animate.
+let numFramesDone = 0;  // This is useful for debugging.
 
 let mousedownTs = null;
 let xDrag = 0, yDrag = 0;
@@ -1113,6 +1114,12 @@ function orderElts2(pts, normalXYs) {
     let opts = undefined;
     if (ctx.prevBackToFront) opts = ctx.prevBackToFront;
 
+    // XXX
+    if (numFramesDone >= 250 && false) {
+        sort.dbgCtx.logLevel = 2;
+        sort.dbgCtx.debugMode = true;
+    }
+
     let backToFront = sort.sort(shapes, compareShapes, pts, opts);
 
     if (ctx.doModelAsSolidLines) {
@@ -1130,6 +1137,14 @@ function orderElts2(pts, normalXYs) {
         let resortedIdx = sort.resort(backToFront, getElders);
         backToFront.sortedIdx = resortedIdx.map(Number);  // TODO Needed?
         backToFront.sorted    = resortedIdx.map(i => shapes[i]);
+    }
+
+    // XXX
+    if (numFramesDone === 250 && false) {
+        sort.printForest(Object.keys(backToFront.rootSet), backToFront.after);
+        sort.dbgCtx.logLevel = 3;
+        sort.dbgCtx.debugMode = true;
+        // debugger;
     }
 
     ctx.prevBackToFront = backToFront;
@@ -1296,10 +1311,12 @@ function showTableWithColumns(cols, topSep) {
 
 function getShapeName(s) {
     if (s.type === 'face') {
+        if (s.isHidden) return `h:${s.idx}`;
         return 'f:' + s.join(',');
         // return `face(${s[0]}, ${s[1]}, ${s[2]}, ${s[3]})`;
     }
     if (s.type === 'line') {
+        if (s.isHidden) return `h:${s.idx}`;
         return `${s.from}--${s.to}`;
     }
 }
@@ -1531,6 +1548,8 @@ function setupFrame(ts) {
     }
     setTransform(matrix.mult(ctx.transMat, ctx.rotateMat));
     artist.render();
+
+    numFramesDone++;
 }
 
 function moveElt(elt, dx, dy) {

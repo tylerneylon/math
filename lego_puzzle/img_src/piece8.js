@@ -79,6 +79,13 @@ function rotate3DObjectAroundZAxis(obj, angle) {
     }
 }
 
+// This modifies the object in-place.
+function flipObjectAcrossYAxis(obj) {
+    for (let [i, pt] of obj[0].entries()) {
+        obj[0][i] = [pt[0], -pt[1], pt[2]];
+    }
+}
+
 function style3DObject(obj, faceStyle) {
     obj[2].forEach(face => Object.assign(face, {style: faceStyle}));
 }
@@ -137,7 +144,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 let pt = [x, y, z];
                 pts.push(pt);
 
-                // Push the z faces.
+                // Push the z face.
                 // These are faces perpendicular to the z axis.
                 // (There's only one z face.)
                 if (z === 0 && x !== 0 && y !== 0) {
@@ -146,9 +153,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
                 // Push the x and y faces.
                 if (x !== 0 && y !== 0) {
-                    util.push(faceMap, `x:${x}`, idx);
-                    util.push(faceMap, `y:${y}`, idx);
+                    if (x === -1) util.push(faceMap, `x:${x}`, idx);
+                    if (y < 1) util.push(faceMap, `y:${y}`, idx);
                 }
+                if (x === 1 && y < 1) util.push(faceMap, `x:${x}`, idx);
 
                 let s = (y === 0 ? thinStyle : thickStyle);
                 if (x < 1) xSt.push(idx);
@@ -231,6 +239,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // This box is in x=[1 + 2 eps, 2 + 2 eps].
     // xyz = [1, 2] [0, 2] [-1, 1]
     let obj4 = clone3DObject(obj);
+    rotate3DObjectAroundZAxis(obj4, -Math.PI);
     rotate3DObjectAroundXAxis(obj4, -Math.PI / 2);
     rotate3DObjectAroundZAxis(obj4,  Math.PI / 2);
     translate3DObject(obj4, [1 + 2 * gap, 1 + gap, 0]);
@@ -241,6 +250,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // This box is in y=[1 + eps, 2 + eps].
     // xyz = [-1, 1] [1, 2] [-1, 1]
     let obj5 = clone3DObject(obj);
+    flipObjectAcrossYAxis(obj5);
+    rotate3DObjectAroundZAxis(obj5, Math.PI);
     rotate3DObjectAroundXAxis(obj5, Math.PI / 2);
     rotate3DObjectAroundYAxis(obj5, -Math.PI / 2);
     translate3DObject(obj5, [0, 1 + 2 * gap, 0]);
@@ -251,6 +262,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // This box is in y=[-1 - eps, -eps].
     // xyz = [0, 2] [-1, 0] [0, 2]
     let obj6 = clone3DObject(obj);
+    rotate3DObjectAroundZAxis(obj6, Math.PI / 2);
     rotate3DObjectAroundXAxis(obj6, -Math.PI / 2);
     translate3DObject(obj6, [1 + gap, 0, 1 + gap]);
     style3DObject(obj6, {fill: '#4a4'});
@@ -260,6 +272,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // This box is in x=[-1 - eps, -eps].
     // xyz = [-1, 0] [-1, 1] [0, 2]
     let obj7 = clone3DObject(obj);
+    flipObjectAcrossYAxis(obj7);
     rotate3DObjectAroundXAxis(obj7, Math.PI / 2);
     rotate3DObjectAroundZAxis(obj7, Math.PI / 2);
     translate3DObject(obj7, [0, 0, 1 + gap]);
@@ -268,6 +281,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     printObjectExtents(obj7);
 
     let obj8 = clone3DObject(obj);
+    flipObjectAcrossYAxis(obj8);
+    rotate3DObjectAroundZAxis(obj8, Math.PI);
     rotate3DObjectAroundXAxis(obj8, Math.PI);
     translate3DObject(obj8, [1 + gap, 1 + gap, 1 + 2 * gap]);
     style3DObject(obj8, {fill: '#088'});
@@ -286,8 +301,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     space.addObject(obj4);  // yellow
     space.addObject(obj5);  // magenta
     space.addObject(obj6);  // green
-    // space.addObject(obj7);  // blue
-    // space.addObject(obj8);  // cyan
+    space.addObject(obj7);  // blue
+    space.addObject(obj8);  // cyan
 
     if (dbgMode) {
         let offset = 15;
