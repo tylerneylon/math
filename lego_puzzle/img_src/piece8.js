@@ -132,6 +132,35 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let pts = [];
     let lines = [];
 
+    // This will map point strings to arrays of line indexes.
+    // We'll unravel this in the x,y,z loops below.
+    let lineData = {
+        "-1,-1,0": [1, 2, 9],
+        "-1,-1,1": [6, 9, 13],
+        "-1,0,0" : [5, 8],
+        "-1,0,1" : [8],
+        "-1,1,0" : [0, 1, 7],
+        "-1,1,1" : [6, 7],
+        "0,-1,0" : [4, 14],
+        "0,-1,1" : [14],
+        "0,0,0"  : [],
+        "0,0,1"  : [],
+        "0,1,0"  : [4],
+        "0,1,1"  : [],
+        "1,-1,0" : [2, 15, 12],
+        "1,-1,1" : [11, 12, 13],
+        "1,0,0"  : [3, 5, 10, 15],
+        "1,0,1"  : [10, 11],
+        "1,1,0"  : [0, 3],
+        "1,1,1"  : []
+    }
+    // The indexes here correspond to the indexes in the values of lineData.
+    let n = thinStyle, k = thickStyle;
+    let lStyles = [
+        k, k, k, k, n, n, k, k, n, k, k, k, k, k, n, k
+    ];
+    let lineMap = {};  // This will map from line index to line object.
+
     let idx = 0;
     let bottom = [];
     let faceMap = {};
@@ -143,6 +172,15 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
                 let pt = [x, y, z];
                 pts.push(pt);
+
+                lineData[`${x},${y},${z}`].forEach(lineIdx => {
+                    if (lineIdx in lineMap) {
+                        lineMap[lineIdx].to = idx;
+                    } else {
+                        lineMap[lineIdx] = {from: idx};
+                    }
+                });
+
 
                 // Push the z face.
                 // These are faces perpendicular to the z axis.
@@ -158,22 +196,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 }
                 if (x === 1 && y < 1) util.push(faceMap, `x:${x}`, idx);
 
-                let s = (y === 0 ? thinStyle : thickStyle);
-                if (x < 1) xSt.push(idx);
-                if (x > -1) lines.push({from: xSt.shift(), to: idx, style: s});
-
-                s = (x === 0 ? thinStyle : thickStyle);
-                // s = thickStyle;
-                if (y < 1) ySt.push(idx);
-                if (y > -1) lines.push({from: ySt.shift(), to: idx, style: s});
-
-                s = (x * y !== 0 ? thickStyle : thinStyle);
-                if (z === 0) zSt.push(idx);
-                if (z !== 0) lines.push({from: zSt.shift(), to: idx, style: s});
-
                 idx++;
             }
         }
+    }
+
+    for (let i = 0; i < Object.keys(lineMap).length; i++) {
+        lines.push(lineMap[i]);
+        lines[i].style = lStyles[i];
     }
 
     // XXX
