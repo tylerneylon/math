@@ -17,7 +17,8 @@ import * as util   from './util.js';
 // ______________________________________________________________________
 // Globals
 
-let zDist = 8;
+let zDist = 10;
+let zoom  = 3.0;
 
 let thickStyle = {
     stroke: '#555',  // '#444',
@@ -224,7 +225,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // Add a small degree of fading for the farther-back points and lines.
     // space.ctx.fadeRange = [8, 10];
 
-    space.ctx.zoom = 2;
+    space.ctx.zoom = zoom;
 
     // TODO2:Don't mess with input values, but rather copy them into space.js.
     //       The immediate reason is that I can't clone objects that include svg
@@ -355,7 +356,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     ));
 
     if (true) {
-        space.setZDist(6);
+        space.setZDist(zDist);
         space.setAngleMat(matrix.mult(
             matrix.rotateAroundX(Math.PI * 0.29),
             matrix.rotateAroundY(Math.PI * 0.2),
