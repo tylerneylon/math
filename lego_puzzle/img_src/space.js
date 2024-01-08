@@ -2013,6 +2013,7 @@ export function updatePoints() {
         }
     }
 
+    let isAllLines = (ctx.faces.length === 0);
     for (let line of ctx.lines) {
         let [from, to] = [xys[line.from], xys[line.to]];
         if (ctx.fadeRange) {
@@ -2021,7 +2022,8 @@ export function updatePoints() {
             line.elt.setAttribute('stroke', color);
         }
         artist.moveLine(line.elt, from, to);
-        line.isHidden = true;
+        // I'm spelling out the boolean setup to show the thinking behind it.
+        line.isHidden = (isAllLines ? false : true);
     }
 
     // At the same time that face polygons are updated, we also (a) determine
