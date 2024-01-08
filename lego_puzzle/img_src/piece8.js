@@ -319,20 +319,27 @@ window.addEventListener('DOMContentLoaded', (event) => {
     console.log('obj8 (cyan):');
     printObjectExtents(obj8);
 
-    space.addObject(obj);   // red
-    // space.addObject(obj2);  // green, leave out
-    // space.addObject(obj3);  // blue, leave out
+    // I'm using this to provide a centralized place for a universal
+    // translation.
+    function addObj(o) {
+        translate3DObject(o, [-0.5, -0.5, -0.5]);
+        space.addObject(o);
+    }
+
+    addObj(obj);   // red
+    // addObj(obj2);  // green, leave out
+    // addObj(obj3);  // blue, leave out
 
     // XXX
     // In the code block below, the full image includes all the objects.
     // However, I could skip some of them in order to help me debug
     // z-order sorting.
 
-    space.addObject(obj4);  // yellow
-    space.addObject(obj5);  // magenta
-    space.addObject(obj6);  // green
-    space.addObject(obj7);  // blue
-    space.addObject(obj8);  // cyan
+    addObj(obj4);  // yellow
+    addObj(obj5);  // magenta
+    addObj(obj6);  // green
+    addObj(obj7);  // blue
+    addObj(obj8);  // cyan
 
     if (dbgMode) {
         let offset = 15;
