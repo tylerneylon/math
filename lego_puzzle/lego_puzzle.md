@@ -82,6 +82,11 @@ Here's the solution:
 
 ![](img/soln_steps.svg){width=90%}
 
+<svg width="10" height="10" version="1.1"
+     style="background-color:#fff"
+     id="solution" xmlns="http://www.w3.org/2000/svg">
+</svg>
+
 
 
 

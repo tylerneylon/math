@@ -55,4 +55,5 @@ if __name__ == '__main__':
     shotglass.add_static_paths(glob('*.html'))
     shotglass.add_static_paths(glob('*.js'))
     shotglass.add_static_paths(glob('*.json'))
+    shotglass.add_static_paths(glob('img/*'))
     shotglass.run_server()
