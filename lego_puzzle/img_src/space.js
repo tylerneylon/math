@@ -1253,10 +1253,8 @@ function showTableWithColumns(cols, topSep) {
 
     // Find the maximum width in each column.
     let widths = cols.map(col => Math.max(...col.map(x => x.length)));
-    // say('widths: ' + widths.join(', ')); // XXX
 
     let nonTopSep = ''.padStart(topSep.length);
-    // say(`nonTopSet="${nonTopSep}"`);  // XXX
     for (let i = 0; i < numRows; i++) {
         let sep = (i === 0) ? topSep : nonTopSep;
         let msg = cols.map((col, j) => col[i].padStart(widths[j])).join(sep);
