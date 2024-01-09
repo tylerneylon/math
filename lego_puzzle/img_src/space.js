@@ -1927,7 +1927,9 @@ export function animate() {
     window.requestAnimationFrame(setupFrame);
 }
 
-let numTimesLeft = 3000;  // DEBUG1
+// Set this to a non-negative number in order to freeze movement after a certain
+// number of frames have been rendered. This is for debugging.
+let numTimesLeft = -1;
 
 export function updatePoints() {
 
@@ -1938,8 +1940,7 @@ export function updatePoints() {
         sort.dbgCtx.debugMode = false;
     }
 
-    // DEBUG1
-    if (true && numTimesLeft <= 0) return;
+    if (numTimesLeft === 0) return;
     numTimesLeft--;
 
     console.assert(artist !== null);
