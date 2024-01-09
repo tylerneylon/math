@@ -785,9 +785,7 @@ function compareLineAndFace(s1, s2, pts) {
 
     // Check if the line overlaps any border line of the face.
     for (let border of face.borders) {
-        let c = compareShapes(
-            line, border, pts, {doSharedVertexCheck: false}
-        );
+        let c = compareShapes(line, border, pts);
         if (c) return ret(c);
     }
 
@@ -858,9 +856,7 @@ function compareFaces(s1, s2, pts) {
 
     for (let border1 of s1.borders) {
         for (let border2 of s2.borders) {
-            let c = compareShapes(
-                border1, border2, pts, {doSharedVertexCheck: false}
-            );
+            let c = compareShapes(border1, border2, pts);
             if (c) return c;
         }
     }
@@ -905,7 +901,7 @@ function getSolidLineElders(line, pts) {
     return linePairs.map(x => x[1]);
 }
 
-function compareLines(s1, s2, pts, options) {
+function compareLines(s1, s2, pts) {
 
     // 1. If the lines share one vertex, order based on the z value of the
     //    non-shared vertex.
@@ -916,38 +912,6 @@ function compareLines(s1, s2, pts, options) {
         let n2 = getShapeName(s2);
         say(`compareLines: ${n1} ${n2} is returning ${x}` + reason);
         return x;
-    }
-
-    // Right now the shared-vertex check is optional, and turned off for
-    // border-border checks when seeing if one face overlaps another.
-    if (options === undefined || options.doSharedVertexCheck) {
-
-        // XXX TODO: Re-incorporate this comparison somewhere else.
-        // I think I may call this the "cylinder model" of lines since it treats
-        // them as having some kind of solidity.
-        if (false) {
-
-        // This compares line 1 from sh ("shared") to i1 against line 2 from sh
-        // to i2. If the ray from the eye (origin) to sh is more aligned with
-        // either, then that closer line is > than the other.
-        // TODO: Define this at an outer scope so that it need not be redefined
-        // inside this (compareLines()) fn.
-        function c(sh, i1, i2) {
-            let v1 = -vector.dot(pts[sh], vector.sub(pts[i1], pts[sh]));
-            let v2 = -vector.dot(pts[sh], vector.sub(pts[i2], pts[sh]));
-            // XXX
-            let msg = ` v1=${v1} v2=${v2}; cmp will match v1 vs v2 here`;
-            if (isTiny(v1 - v2)) return ret(undefined, ': they appear close');
-            return ret((v1 > v2) ? '>' : '<', ': single shared vertex' + msg);
-        }
-
-        // TODO: Just delete the string 'ret' from each line; keep parens.
-        if (s1.from === s2.from) return c(s1.from, s1.to, s2.to);
-        if (s1.from === s2.to  ) return c(s1.from, s1.to, s2.from);
-        if (s1.to   === s2.from) return c(s1.to, s1.from, s2.to);
-        if (s1.to   === s2.to  ) return c(s1.to, s1.from, s2.from);
-
-        }
     }
 
     // 2. Determine if there is a point overlap in the view plane.
@@ -1008,12 +972,7 @@ function getShapeKey(s) {
 //   '>'  if s1 is in front of s2, and
 //   null if the shapes do not overlap.
 // It's expected that s1 and s2 are both either lines or faces.
-// The `options` object may contain {doSharedVertexCheck: false}; the default
-// value for this option is `true`. This option only applies to line-line
-// comparisons, in which case lines may be optionally considered to overlap even
-// when they only share an endpoint (this makes sense when the lines are
-// rendered as wide, and are not of the same color).
-function compareShapes(s1, s2, pts, options) {
+function compareShapes(s1, s2, pts) {
 
     let myCall = getShapeName(s1) + ' ' + getShapeName(s2);
     myCall     = 'compareShapes: ' + myCall;
@@ -1056,13 +1015,9 @@ function compareShapes(s1, s2, pts, options) {
         indent();
         return ret(compareFaces(s1, s2, pts));
     } else if (s1.type === 'line' && s2.type === 'line') {
-        let optsStr = '';
-        if (options && options.doSharedVertexCheck === false) {
-            optsStr = 'noSharedVertexCheck';
-        }
-        say(myCall + ` delegating to compareLines(${optsStr})`);
+        say(myCall + ` delegating to compareLines()`);
         indent();
-        return ret(compareLines(s1, s2, pts, options));
+        return ret(compareLines(s1, s2, pts));
     } else {
         say(myCall + ' delegating to compareLineAndFace()');
         indent();
