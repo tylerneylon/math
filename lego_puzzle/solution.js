@@ -33,18 +33,18 @@ let thinStyle = {
 };
 
 let colors = [
+    '#9F7F26',  // dark yellow
+    '#EE833E',  // orange-y
+    '#5B9093',  // pale blue
+    '#7070B0',  // purple-ish blue
+    '#894B83',  // light purple
+    '#DFB742',  // muted yellow
     // '#FFAF36',
-    // '#f00',
-    // '#f00',
-    // '#f00',
-    // '#f00',
-    // '#f00',
-    '#FFAF36',
-    '#FF832E',
-    '#4BB3B6',
-    '#6A78AD',
-    '#894B83',
-    '#DFB742'
+    // '#FF832E',
+    // '#4BB3B6',
+    // '#6A78AD',
+    // '#894B83',
+    // '#DFB742'
 ];
 
 
