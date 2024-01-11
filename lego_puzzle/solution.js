@@ -32,6 +32,21 @@ let thinStyle = {
     'stroke-width': 0.5
 };
 
+let colors = [
+    // '#FFAF36',
+    // '#f00',
+    // '#f00',
+    // '#f00',
+    // '#f00',
+    // '#f00',
+    '#FFAF36',
+    '#FF832E',
+    '#4BB3B6',
+    '#6A78AD',
+    '#894B83',
+    '#DFB742'
+];
+
 
 // ______________________________________________________________________
 // 3D-Object Handling Functions
@@ -212,7 +227,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     let faces = Object.values(faceMap);
     for (let face of faces) {
-        face.style = {fill: '#a44'};
+        face.style = {fill: colors[0]};
     }
 
     // Use this to turn labels and dots on/off.
@@ -274,7 +289,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     rotate3DObjectAroundXAxis(obj4, -Math.PI / 2);
     rotate3DObjectAroundZAxis(obj4,  Math.PI / 2);
     translate3DObject(obj4, [1 + 2 * gap, 1 + gap, 0]);
-    style3DObject(obj4, {fill: '#880'});
+    style3DObject(obj4, {fill: colors[1]});
     console.log('obj4:');
     printObjectExtents(obj4);
 
@@ -286,7 +301,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     rotate3DObjectAroundXAxis(obj5, Math.PI / 2);
     rotate3DObjectAroundYAxis(obj5, -Math.PI / 2);
     translate3DObject(obj5, [0, 1 + 2 * gap, 0]);
-    style3DObject(obj5, {fill: '#808'});
+    style3DObject(obj5, {fill: colors[2]});
     console.log('obj5:');
     printObjectExtents(obj5);
 
@@ -296,7 +311,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     rotate3DObjectAroundZAxis(obj6, Math.PI / 2);
     rotate3DObjectAroundXAxis(obj6, -Math.PI / 2);
     translate3DObject(obj6, [1 + gap, 0, 1 + gap]);
-    style3DObject(obj6, {fill: '#4a4'});
+    style3DObject(obj6, {fill: colors[3]});
     console.log('obj6 (green):');
     printObjectExtents(obj6);
 
@@ -307,7 +322,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     rotate3DObjectAroundXAxis(obj7, Math.PI / 2);
     rotate3DObjectAroundZAxis(obj7, Math.PI / 2);
     translate3DObject(obj7, [0, 0, 1 + gap]);
-    style3DObject(obj7, {fill: '#44a'});
+    style3DObject(obj7, {fill: colors[4]});
     console.log('obj7 (blue):');
     printObjectExtents(obj7);
 
@@ -316,7 +331,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     rotate3DObjectAroundZAxis(obj8, Math.PI);
     rotate3DObjectAroundXAxis(obj8, Math.PI);
     translate3DObject(obj8, [1 + gap, 1 + gap, 1 + 2 * gap]);
-    style3DObject(obj8, {fill: '#088'});
+    style3DObject(obj8, {fill: colors[5]});
     console.log('obj8 (cyan):');
     printObjectExtents(obj8);
 
