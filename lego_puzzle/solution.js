@@ -33,12 +33,12 @@ let thinStyle = {
 };
 
 let colors = [
-    '#971',  // dark yellow
-    '#E73',  // orange-y
-    '#577',  // pale blue
-    '#558',  // purple-ish blue
-    '#746',  // light purple
-    '#DA3',  // muted yellow
+    '#860',     // dark yellow
+    '#D62',     // orange-y
+    '#258',     // pale blue
+    '#439',     // purple-ish blue
+    '#682068',  // light purple
+    '#C92',     // muted yellow
     // '#FFAF36',
     // '#FF832E',
     // '#4BB3B6',
