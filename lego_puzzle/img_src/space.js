@@ -485,6 +485,10 @@ function getFadeColor(stdBaseColor, z, retObj) {
 // towardLight is expected to be the cosine similarity between the face's normal
 // direction and the direction of the light.
 function getShadedFaceColor(baseColor, towardLight) {
+
+    // let p = 0.5; 
+    // towardLight = p * 0.5 + (1 - p) * towardLight;
+
     let colorArr = util.getStdColor(baseColor);
     let scale = 1;
     if (ctx.doShadeFaces) {

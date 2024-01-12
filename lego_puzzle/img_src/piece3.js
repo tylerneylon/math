@@ -31,6 +31,15 @@ let thinStyle = {
     'stroke-width': 1
 };
 
+let colors = [
+    '#682068',  // light purple
+    '#F62',     // orange-y
+    '#258',     // pale blue
+    '#B60',     // dark yellow
+    '#B81',     // muted yellow
+    '#439',     // purple-ish blue
+];
+
 
 // ______________________________________________________________________
 // 3D-Object Handling Functions
@@ -168,7 +177,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     let faces = Object.values(faceMap);
     for (let face of faces) {
-        face.style = {fill: '#a44'};
+        face.style = {fill: colors[0]};
     }
 
     let dbgMode = false;
@@ -199,23 +208,23 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     let obj2 = clone3DObject(obj);
     translate3DObject(obj2, [0, 0, 1 + gap]);
-    style3DObject(obj2, {fill: '#4a4'});
+    style3DObject(obj2, {fill: colors[1]});
 
     let obj3 = clone3DObject(obj);
     translate3DObject(obj3, [0, 0, 2 + 2 * gap]);
-    style3DObject(obj3, {fill: '#44a'});
+    style3DObject(obj3, {fill: colors[2]});
 
     let obj4 = clone3DObject(obj);
     rotate3DObjectAroundXAxis(obj4, -Math.PI / 2);
     rotate3DObjectAroundZAxis(obj4,  Math.PI / 2);
     translate3DObject(obj4, [-2 - gap, 0, 0]);
-    style3DObject(obj4, {fill: '#880'});
+    style3DObject(obj4, {fill: colors[3]});
 
     let obj5 = clone3DObject(obj);
     rotate3DObjectAroundXAxis(obj5, Math.PI / 2);
     rotate3DObjectAroundYAxis(obj5, -Math.PI / 2);
     translate3DObject(obj5, [0, -2 - gap, 0]);
-    style3DObject(obj5, {fill: '#808'});
+    style3DObject(obj5, {fill: colors[4]});
 
     space.addObject(obj);
     space.addObject(obj2);

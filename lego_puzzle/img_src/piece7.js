@@ -31,6 +31,15 @@ let thinStyle = {
     'stroke-width': 1
 };
 
+let colors = [
+    '#B60',     // dark yellow
+    '#F62',     // orange-y
+    '#258',     // pale blue
+    '#439',     // purple-ish blue
+    '#682068',  // light purple
+    '#B81',     // muted yellow
+];
+
 
 // ______________________________________________________________________
 // 3D-Object Handling Functions
@@ -168,7 +177,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     let faces = Object.values(faceMap);
     for (let face of faces) {
-        face.style = {fill: '#a44'};
+        face.style = {fill: colors[0]};
     }
 
     let dbgMode = false;
@@ -209,29 +218,29 @@ window.addEventListener('DOMContentLoaded', (event) => {
     rotate3DObjectAroundXAxis(obj4, -Math.PI / 2);
     rotate3DObjectAroundZAxis(obj4,  Math.PI / 2);
     translate3DObject(obj4, [1 + gap, 1 + gap, 0]);
-    style3DObject(obj4, {fill: '#880'});
+    style3DObject(obj4, {fill: colors[1]});
 
     let obj5 = clone3DObject(obj);
     rotate3DObjectAroundXAxis(obj5, Math.PI / 2);
     rotate3DObjectAroundYAxis(obj5, -Math.PI / 2);
     translate3DObject(obj5, [0, 1 + gap, 0]);
-    style3DObject(obj5, {fill: '#808'});
+    style3DObject(obj5, {fill: colors[2]});
 
     let obj6 = clone3DObject(obj);
     rotate3DObjectAroundXAxis(obj6, Math.PI / 2);
     rotate3DObjectAroundYAxis(obj6, -Math.PI / 2);
     translate3DObject(obj6, [1 + gap, -1 - gap, 1 + gap]);
-    style3DObject(obj6, {fill: '#4a4'});
+    style3DObject(obj6, {fill: colors[3]});
 
     let obj7 = clone3DObject(obj);
     rotate3DObjectAroundXAxis(obj7, -Math.PI / 2);
     rotate3DObjectAroundZAxis(obj7,  Math.PI / 2);
     translate3DObject(obj7, [-1 - gap, 0, 1 + gap]);
-    style3DObject(obj7, {fill: '#44a'});
+    style3DObject(obj7, {fill: colors[4]});
 
     let obj8 = clone3DObject(obj);
     translate3DObject(obj8, [1 + gap, 1 + gap, 2 + 2 * gap]);
-    style3DObject(obj8, {fill: '#088'});
+    style3DObject(obj8, {fill: colors[5]});
 
     space.addObject(obj);   // red
     // space.addObject(obj2);  // green
