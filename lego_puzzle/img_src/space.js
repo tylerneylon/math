@@ -1978,6 +1978,8 @@ export function updatePoints() {
         artist.moveLine(line.elt, from, to);
         // I'm spelling out the boolean setup to show the thinking behind it.
         line.isHidden = (isAllLines ? false : true);
+        // Auto-show lines that are not attached to any faces.
+        if (line.faces.length === 0) line.isHidden = false;
     }
 
     // At the same time that face polygons are updated, we also (a) determine
@@ -2035,6 +2037,16 @@ export function updatePoints() {
     for (let line of ctx.lines) {
         let displayValue = line.isHidden ? 'none': 'hi';
         line.elt.setAttribute('display', displayValue);
+    }
+
+    // Turn this on to help debug missing lines.
+    if (false) {
+        let numLines = ctx.lines.length;
+        let numHiddenLines = ctx.lines
+            .map(line => (line.isHidden ? 1 : 0))
+            .reduce((a, b) => (a + b));
+        console.log(`Num lines = ${numLines}`);
+        console.log(`Num hidden lines = ${numHiddenLines}`);
     }
 
     // XXX
