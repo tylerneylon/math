@@ -34,8 +34,8 @@ let thinStyle = {
 let colors = [
     '#B60',     // dark yellow
     '#F62',     // orange-y
-    '#258',     // pale blue
     '#439',     // purple-ish blue
+    '#258',     // pale blue
     '#682068',  // light purple
     '#B81',     // muted yellow
 ];

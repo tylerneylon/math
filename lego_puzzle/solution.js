@@ -35,8 +35,8 @@ let thinStyle = {
 let colors = [
     '#B60',     // dark yellow
     '#F62',     // orange-y
-    '#258',     // pale blue
     '#439',     // purple-ish blue
+    '#258',     // pale blue
     '#682068',  // light purple
     '#B81',     // muted yellow
 ];
@@ -131,7 +131,7 @@ function prObj(obj) {
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    let artist = init.setup('solution');
+    let artist = init.setup(500, 500, 'solution');
     space.setArtist(artist);
     space.ctx.doDrawDots = false;
     space.ctx.doModelAsSolidLines = false;

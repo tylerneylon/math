@@ -46,11 +46,12 @@ fitting into the 27 cubie spaces of the larger $3\times 3\times 3$
 volume. But the initial configurations I tried failed to fit more than
 five boxes in the space allowed:
 
-![](img/img2.svg)
+![](img/img3.svg){width=40%}
 
 You might be able to solve this by simply thinking about it.
 But it's even more fun to play with a physical model.
-\newline Did you know that a $2\times 2$ Lego brick with 2
+
+Did you know that a $2\times 2$ Lego brick with 2
 tile-heights on top forms a perfect cube?
 
 ![](img/annotated_lego_cube.png)
@@ -80,7 +81,7 @@ accidentally see the solution. Try out the puzzle first!
 
 Here's the solution:
 
-![](img/soln_steps.svg){width=90%}
+![](img/solution_steps.svg){width=90%}
 
 <svg width="10" height="10" version="1.1"
      style="background-color:#fff"
