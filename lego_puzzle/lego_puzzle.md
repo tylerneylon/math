@@ -88,7 +88,13 @@ Here's the solution:
      id="solution" xmlns="http://www.w3.org/2000/svg">
 </svg>
 
+The simplest way to characterize it is to
+notice that we've left the central cubie unoccupied.
 
+As pointed out by Knuth, there's a nice observation
+that can help you find this solution.
+Define a "face cubie" as one that's adjacent to the center
+cubie. There are 6 of these:
 
 
 
