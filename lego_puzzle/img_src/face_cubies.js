@@ -44,6 +44,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     let artist = init.setup();
     space.setArtist(artist);
     space.ctx.doDrawDots = false;
+    space.ctx.doShadeFaces = false;
 
     // Set up the piece points and lines.
     let pts = [];
@@ -104,7 +105,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }
 
     let faces = Object.values(faceMap);
-    for (let face of faces) face.style = {fill: '#03a'};
+    for (let face of faces) face.style = {fill: '#07c'};
 
     // Add a small degree of fading for the farther-back points and lines.
     space.ctx.fadeRange = [10, 17];

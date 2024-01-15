@@ -93,6 +93,49 @@ href="https://tylerneylon.com/a/7date/">345.2023</a></div>
   <p>As pointed out by Knuth, there’s a nice observation that can help
   you find this solution. Define a “face cubie” as one that’s adjacent
   to the center cubie. There are 6 of these:</p>
+  <p><img src="img/face_cubies.svg" /></p>
+  <div class="box">
+  <p></p>
+  <p><strong>Observation 1</strong> <span
+  class="math inline">\(\quad\)</span> Every piece must occupy at least
+  one face cubie.</p>
+
+  </div>
+  <p>This can be confirmed by listing all piece placements within the
+  <span class="math inline">\(3\times 3\times 3\)</span> space.</p>
+  <p>An immediate consequence of this observation is that — since there
+  are 6 face cubies and 6 pieces — each piece must occupy
+  <em>exactly</em> 1 face cubie. This alone can give you the solution,
+  but things get even easier when you notice:</p>
+  <div class="box">
+  <p></p>
+  <p><strong>Observation 2</strong> <span
+  class="math inline">\(\quad\)</span></p>
+  <p>Any piece occupying the center cubie must also occupy 2 face
+  cubies.</p>
+
+  </div>
+  <p>The consequence of <em>this</em> is that we must leave the center
+  cubie vacant.</p>
+  <hr />
+  <p>If you’re curious about how algorithms can solve puzzles like this
+  one, I recommend reading Knuth’s §7.2.2.1, which is relatively recent
+  (in <em>The Art of Computer Programming</em>, volume 4B, published in
+  2022). He gives credit to Jan Slothouber and William Graatsma for
+  inventing this puzzle, as referenced in their apparently out-of-print
+  book <em>Cubics</em> from 1970 (pp. 108–109).</p>
+  <h1 data-number="3" id="notes-on-the-images"><span
+  class="header-section-number">3</span> Notes on the Images</h1>
+  <p>I wrote custom javascript tools to create the vector images in this
+  article. If I have time, I may one day clean up that code and release
+  it as a library. For now the code is quite messy, and can be found in
+  <a
+  href="https://github.com/tylerneylon/math/tree/master/lego_puzzle/img_src">this
+  directory hosted on github</a>.</p>
+  <p>I rendered the Lego images with <a
+  href="https://www.bricklink.com/v3/studio/download.page">Studio by
+  BrickLink</a>, which is awesome, and I’m grateful it’s free.</p>
+  <p>The dragon image (Here be Spoilers) was created with dall·e 2.</p>
     </div>
         <div style="margin-top:40px">
         <hr style="margin-bottom:5px">

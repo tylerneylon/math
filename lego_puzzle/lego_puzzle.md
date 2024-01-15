@@ -96,5 +96,57 @@ that can help you find this solution.
 Define a "face cubie" as one that's adjacent to the center
 cubie. There are 6 of these:
 
+![](img/face_cubies.svg)
 
+<div class="box"> \boxedstart
+
+**Observation 1** $\quad$
+Every piece must occupy at least one face cubie.
+
+\boxedend </div>
+
+This can be confirmed by listing all piece
+placements within the $3\times 3\times 3$ space.
+
+An immediate consequence of this observation is that ---
+since there are 6 face cubies and 6 pieces ---
+each piece must occupy *exactly* 1 face cubie.
+This alone can give you the solution, but things get
+even easier when you notice:
+
+<div class="box"> \boxedstart
+
+**Observation 2** $\quad$
+
+Any piece occupying the center cubie must also
+occupy 2 face cubies.
+
+\boxedend </div>
+
+The consequence of *this* is that we must leave
+the center cubie vacant.
+
+---
+
+If you're curious about how algorithms can solve
+puzzles like this one, I recommend reading Knuth's
+§7.2.2.1, which is relatively recent
+(in *The Art of Computer Programming*, volume 4B, published
+in 2022).
+He gives credit to Jan Slothouber and William Graatsma for
+inventing this puzzle, as referenced in their apparently out-of-print
+book *Cubics* from 1970 (pp. 108--109).
+
+# Notes on the Images
+
+I wrote custom javascript tools to create the vector images in this article. If
+I have time, I may one day clean up that code and release it as a library. For
+now the code is quite messy, and can be found in [this directory hosted on
+github](https://github.com/tylerneylon/math/tree/master/lego_puzzle/img_src).
+
+I rendered the Lego images with
+[Studio by BrickLink](https://www.bricklink.com/v3/studio/download.page), which
+is awesome, and I'm grateful it's free.
+
+The dragon image (Here be Spoilers) was created with dall·e 2.
 
