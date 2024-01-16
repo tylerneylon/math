@@ -92,8 +92,9 @@ href="https://tylerneylon.com/a/7date/">345.2023</a></div>
   the central cubie unoccupied.</p>
   <p>As pointed out by Knuth, there’s a nice observation that can help
   you find this solution. Define a “face cubie” as one that’s adjacent
-  to the center cubie. There are 6 of these:</p>
-  <p><img src="img/face_cubies.svg" /></p>
+  to the center cubie. There are 6 of these, positioned like the middle
+  squares of a Rubik’s cube:</p>
+  <p><img src="img/face_cubies.svg" style="width:35.0%" /></p>
   <div class="box">
   <p></p>
   <p><strong>Observation 1</strong> <span
@@ -116,7 +117,11 @@ href="https://tylerneylon.com/a/7date/">345.2023</a></div>
 
   </div>
   <p>The consequence of <em>this</em> is that we must leave the center
-  cubie vacant.</p>
+  cubie vacant. In other words, every piece must be against one face of
+  the <span class="math inline">\(3\times 3\times 3\)</span> cube — one
+  piece for each face. While this fact doesn’t completely specify the
+  solution, it makes the search space so small that you can now find the
+  answer easily.</p>
   <hr />
   <p>If you’re curious about how algorithms can solve puzzles like this
   one, I recommend reading Knuth’s §7.2.2.1, which is relatively recent

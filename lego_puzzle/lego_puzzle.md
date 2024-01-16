@@ -94,9 +94,10 @@ notice that we've left the central cubie unoccupied.
 As pointed out by Knuth, there's a nice observation
 that can help you find this solution.
 Define a "face cubie" as one that's adjacent to the center
-cubie. There are 6 of these:
+cubie. There are 6 of these, positioned like the
+middle squares of a Rubik's cube:
 
-![](img/face_cubies.svg)
+![](img/face_cubies.svg){width=35%}
 
 <div class="box"> \boxedstart
 
@@ -124,7 +125,12 @@ occupy 2 face cubies.
 \boxedend </div>
 
 The consequence of *this* is that we must leave
-the center cubie vacant.
+the center cubie vacant. In other words, every
+piece must be against one face of the
+$3\times 3\times 3$ cube --- one piece for each
+face. While this fact doesn't completely specify
+the solution, it makes the search space so small
+that you can now find the answer easily.
 
 ---
 
