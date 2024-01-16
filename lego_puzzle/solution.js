@@ -18,7 +18,8 @@ import * as util   from './util.js';
 // Globals
 
 let zDist = 10;
-let zoom  = 3.0;
+let zoom  = 3.7;
+let size  = 370;
 
 let thickStyle = {
     stroke: '#555',  // '#444',
@@ -131,7 +132,7 @@ function prObj(obj) {
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
-    let artist = init.setup(500, 500, 'solution');
+    let artist = init.setup(size, size, 'solution');
     space.setArtist(artist);
     space.ctx.doDrawDots = false;
     space.ctx.doModelAsSolidLines = false;

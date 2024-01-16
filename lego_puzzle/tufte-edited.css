@@ -290,7 +290,7 @@ a:link::-moz-selection { text-shadow: 0.03em 0 #b4d5fe, -0.03em 0 #b4d5fe, 0 0.0
 
 
 /* Note: If I want left-aligned images, remove the margin properties here. */
-img {
+img, svg {
     max-width: 100%;
     display: block;
     margin-left: auto;
