@@ -54,7 +54,7 @@ But it's even more fun to play with a physical model.
 Did you know that a $2\times 2$ Lego brick with 2
 tile-heights on top forms a perfect cube?
 
-![](img/annotated_lego_cube.png)
+![](img/annotated_lego_cube.png){width=50%}
 
 This allows us to construct the puzzle like so:
 
