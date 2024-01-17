@@ -83,12 +83,16 @@ Here's the solution:
 
 ![](img/solution_steps.svg){width=90%}
 
-<p>
+<div class="figure">
+<p class="caption-vcenter">
+Click to pause / unpause rotation.<br>
+Drag to rotate.
+</p>
 <svg width="10" height="10" version="1.1"
      style="background-color:#fff"
      id="solution" xmlns="http://www.w3.org/2000/svg">
 </svg>
-</p>
+</div>
 
 The simplest way to characterize it is to
 notice that we've left the central cubie unoccupied.

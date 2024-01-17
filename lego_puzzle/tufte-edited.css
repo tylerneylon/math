@@ -246,6 +246,7 @@ figure, div.figure { padding: 0;
                      font: inherit;
                      vertical-align: baseline;
                      max-width: 55%;
+                     position: relative;
                      -webkit-margin-start: 0;
                      -webkit-margin-end: 0; }
 
@@ -307,6 +308,19 @@ img, svg {
                                     line-height: 1.3;
                                     vertical-align: baseline;
                                     position: relative; }
+
+p.caption-vcenter {
+    clear: right;
+    margin-right: -60%;
+    width: 50%;
+    font-size: 1.1rem;
+    line-height: 1.3;
+    vertical-align: baseline;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+}
 
 .table-caption { float:right;
                  clear:right;
@@ -418,7 +432,7 @@ div.table-wrapper { overflow-x: auto;
 
 h1 .code, h2 .code, h3 .code { font-size: 0.80em; }
 
-.marginnote .code, .sidenote .code, p.caption .code { font-size: 1rem; }
+.marginnote .code, .sidenote .code, p.caption .code, p.caption-vcenter .code { font-size: 1rem; }
 
 pre.code { width: 52.5%;
            padding-left: 2.5%;
@@ -437,9 +451,10 @@ label.sidenote-number { display: inline; }
 label.margin-toggle:not(.sidenote-number) { display: none; }
 
 @media (max-width: 760px) { label.margin-toggle:not(.sidenote-number) { display: inline; }
-                            .sidenote, .marginnote, p.caption { display: none; }
+                            .sidenote, .marginnote, p.caption, p.caption-vcenter { display: none; }
                             .margin-toggle:checked + .sidenote,
                             .margin-toggle:checked + p.caption,
+                            .margin-toggle:checked + p.caption-vcenter,
                             .margin-toggle:checked + .marginnote { display: block;
                                                                    float: left;
                                                                    left: 1rem;
