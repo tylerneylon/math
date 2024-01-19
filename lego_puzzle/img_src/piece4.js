@@ -130,28 +130,14 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
                 // Push the top faces.
                 if (z === 1) {
-                    for (let xx = x; xx >= x - 1; xx--) {
-                        for (let yy = y; yy >= y - 1; yy--) {
-                            if (-xx < 2 && xx < 1 && -yy < 2 && yy < 1) {
-                                util.push(faceMap, `${xx}:${yy}:`, idx);
-                            }
-                        }
-                    }
+                    if (x * y !== 0) util.push(faceMap, '::1', idx);
                 }
                 // Push the side faces.
                 if (x === -1) {
-                    for (let yy = y; yy >= y - 1; yy--) {
-                        if (-1 <= yy && yy <= 0) {
-                          util.push(faceMap, `:${yy}:0`, idx);
-                        }
-                    }
+                    if (y !== 0) util.push(faceMap, '-1::', idx);
                 }
                 if (y === -1) {
-                    for (let xx = x; xx >= x - 1; xx--) {
-                        if (-1 <= xx && xx <= 0) {
-                          util.push(faceMap, `${xx}::0`, idx);
-                        }
-                    }
+                    if (x !== 0) util.push(faceMap, ':-1:', idx);
                 }
 
                 let s = (y === 0 ? thinStyle : thickStyle);
