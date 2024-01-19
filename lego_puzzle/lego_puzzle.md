@@ -85,8 +85,8 @@ Here's the solution:
 
 <div class="figure">
 <p class="caption-vcenter">
-Click to pause / unpause rotation.<br>
-Drag to rotate.
+`Click to pause / unpause rotation.<br>
+Drag to rotate.`{=html}
 </p>
 <svg width="10" height="10" version="1.1"
      style="background-color:#fff"
