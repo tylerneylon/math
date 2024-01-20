@@ -1,6 +1,6 @@
 % A Simple 3D Puzzle
 % Tyler Neylon
-% 345.2023
+% 25.2024
 
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
@@ -56,7 +56,7 @@ tile-heights on top forms a perfect cube?
 
 ![](img/annotated_lego_cube.png){width=50%}
 
-This allows us to construct the puzzle like so:
+You can build a model of the puzzle like this:
 
 ![](img/piece_steps2.png){width=90%}
 ![](img/puzzle_box_steps.png){width=90%}
@@ -67,7 +67,7 @@ Here's the hodgepodge model I built with my kids' Legos:
 
 I'll write a little about the math behind this puzzle below,
 but for now I'll give you a vertical break so you don't
-accidentally see the solution. Try out the puzzle first!
+accidentally see the solution. Try to solve it first!
 
 <p>&nbsp;
 \vspace{1in}
@@ -158,7 +158,7 @@ github](https://github.com/tylerneylon/math/tree/master/lego_puzzle/img_src).
 
 I rendered the Lego images with
 [Studio by BrickLink](https://www.bricklink.com/v3/studio/download.page), which
-is awesome, and I'm grateful it's free.
+is awesome. I'm grateful it's free.
 
-The dragon image (Here be Spoilers) was created with dall·e 2.
+The dragon image (*Here be Spoilers*) was created with dall·e 2.
 
