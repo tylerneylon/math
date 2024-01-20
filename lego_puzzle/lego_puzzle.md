@@ -82,7 +82,11 @@ accidentally see the solution. Try to solve it first!
 
 Here's the solution:
 
-![](img/solution_steps.svg){width=90%}
+\medskip
+
+![](img/solution_steps.svg){width=100%}
+
+\medskip
 
 <div class="figure">
 <p class="caption-vcenter">
@@ -104,7 +108,11 @@ Define a "face cubie" as one that's adjacent to the center
 cubie. There are 6 of these, positioned like the
 middle squares of a Rubik's cube:
 
+\medskip
+
 ![](img/face_cubies.svg){width=35%}
+
+\medskip
 
 <div class="box"> \boxedstart
 
