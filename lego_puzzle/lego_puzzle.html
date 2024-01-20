@@ -90,7 +90,7 @@ href="https://tylerneylon.com/a/7date/">25.2024</a></div>
   <p class="caption-vcenter">
   Click to pause / unpause rotation.<br> Drag to rotate.
   </p>
-  <svg width="10" height="10" version="1.1" style="background-color:#fff; touch-action: none" id="solution" xmlns="http://www.w3.org/2000/svg">
+  <svg width="10" height="10" version="1.1" style="background-color:#fff; touch-action:none; min-width:unset" id="solution" xmlns="http://www.w3.org/2000/svg">
   </svg>
   </div>
   <p>The simplest way to characterize it is to notice that we’ve left
@@ -159,5 +159,14 @@ href="https://tylerneylon.com/a/7date/">25.2024</a></div>
         margin-top:0;" frameborder="0" scrolling="no"></iframe>
     </div>
     <script type="module" src="solution.js"></script>
+    <!-- This can be useful for debugging mobile device resolutions.
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            let p = document.createElement('p');
+            p.textContent = 'innerWidth: ' + window.innerWidth;
+            document.body.insertBefore(p, document.body.firstChild);
+        });
+    </script>
+    -->
   </body>
 </html>

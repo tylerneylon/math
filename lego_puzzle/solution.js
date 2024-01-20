@@ -132,6 +132,10 @@ function prObj(obj) {
 
 window.addEventListener('DOMContentLoaded', (event) => {
 
+    if (window.innerWidth < 420) {
+        size = 0.75 * window.innerWidth;
+    }
+
     let artist = init.setup(size, size, 'solution');
     space.setArtist(artist);
     space.ctx.doDrawDots = false;
