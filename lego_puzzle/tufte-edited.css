@@ -293,6 +293,7 @@ a:link::-moz-selection { text-shadow: 0.03em 0 #b4d5fe, -0.03em 0 #b4d5fe, 0 0.0
 /* Note: If I want left-aligned images, remove the margin properties here. */
 img, svg {
     max-width: 100%;
+    min-width: 220px;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -555,3 +556,9 @@ code {
     pre code { font-size: 13px; }
 }
 
+/* Post-specific styles */
+
+.spoiler_img {
+    margin-top:    80px;
+    margin-bottom: 80px;
+}

@@ -72,7 +72,7 @@ accidentally see the solution. Try to solve it first!
 <p>&nbsp;
 \vspace*{\fill}
 
-![](img/here_be_spoilers.jpg){width=90%}
+![](img/here_be_spoilers.jpg){width=90%. .spoiler_img}
 
 \vspace*{\fill}
 <p>&nbsp;
