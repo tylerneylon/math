@@ -164,6 +164,10 @@ ctx.transform = matrix.eye(4);
 
 ctx.zoom = 1;
 
+// This is a multiplier for dragging speed on touch screens.
+// I think the rotation feels too slow if the multiplier is 1.
+ctx.touchSpeedFactor = 2;
+
 // When this is null, there is no fading when rendering.
 // When this is an array [a, b], with a < b, then points and lines
 // beyond distnace b are white, points closer than a are at full darkness (which
@@ -289,7 +293,6 @@ function prObj(obj) {
 
 function didDrag() {
     let motion = xDrag + yDrag;
-    console.log(`didDrag(): motion=${motion}.`);
     return motion > 5;
 }
 
@@ -1829,21 +1832,33 @@ export function setTransform(t) {
 
 export function makeDraggable() {
     console.assert(artist !== null);
-    artist.elt.addEventListener('mousedown', e => {
+
+    let downHandler = e => {
         logEvent(e);
+        let x, y;
+        if (e.type === 'mousedown') {
+            x = e.offsetX;
+            y = e.offsetY;
+        } else {
+            x = e.touches[0].clientX * ctx.touchSpeedFactor;
+            y = e.touches[0].clientY * ctx.touchSpeedFactor;
+        }
 
         mousedownTs = e.timeStamp;
         xDrag = 0;
         yDrag = 0;
 
-        ctx.mousePt = [e.offsetX, e.offsetY];
+        ctx.mousePt = [x, y];
         preClickMode = ctx.mode;
         ctx.mode = 'dragging';
         if (highlightedFaceElt) {
             toggleFaceLabels(highlightedFaceIndex, false);
         }
-    });
-    artist.elt.addEventListener('mouseup', e => {
+    };
+    artist.elt.addEventListener('mousedown', downHandler);
+    artist.elt.addEventListener('touchstart', downHandler);
+
+    let upHandler = e => {
         logEvent(e);
         if (highlightedFaceElt) {
             toggleFaceLabels(lastHighlightedFaceIndex, true);
@@ -1862,16 +1877,30 @@ export function makeDraggable() {
             paused:   'spinning'
         };
         ctx.mode = fromTo[preClickMode];
-    });
-    artist.elt.addEventListener('mousemove', e => {
+
+        e.preventDefault();
+    };
+    artist.elt.addEventListener('mouseup', upHandler);
+    artist.elt.addEventListener('touchend', upHandler);
+    
+    let moveHandler = e => {
         logEvent(e);
-        if ((e.buttons & 1) === 0) {
+        let x, y;
+        if (e.type === 'mousemove') {
+            x = e.offsetX;
+            y = e.offsetY;
+        } else {
+            x = e.touches[0].clientX * ctx.touchSpeedFactor;
+            y = e.touches[0].clientY * ctx.touchSpeedFactor;
+        }
+
+        if (e.buttons !== undefined && (e.buttons & 1) === 0) {
             if (ctx.mode === 'dragging') ctx.mode = 'paused';
             return;
         }
         ctx.mode = 'dragging';
-        let delta = vector.sub([e.offsetX, e.offsetY], ctx.mousePt);
-        ctx.mousePt = [e.offsetX, e.offsetY];
+        let delta = vector.sub([x, y], ctx.mousePt);
+        ctx.mousePt = [x, y];
         xDrag += Math.abs(delta[0]);
         yDrag += Math.abs(delta[1]);
 
@@ -1879,7 +1908,9 @@ export function makeDraggable() {
         let t = matrix.rotateAroundY(delta[0] / scale);
         t = matrix.mult(matrix.rotateAroundX(delta[1] / scale), t);
         ctx.rotateMat = matrix.mult(t, ctx.rotateMat);
-    });
+    };
+    artist.elt.addEventListener('mousemove', moveHandler);
+    artist.elt.addEventListener('touchmove', moveHandler);
 }
 
 // TODO Eventually support auto-setting ctx.fadeRange from this.

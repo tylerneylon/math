@@ -94,7 +94,7 @@ Here's the solution:
 Drag to rotate.`{=html}
 </p>
 <svg width="10" height="10" version="1.1"
-     style="background-color:#fff"
+     style="background-color:#fff; touch-action: none"
      id="solution" xmlns="http://www.w3.org/2000/svg">
 </svg>
 </div>
