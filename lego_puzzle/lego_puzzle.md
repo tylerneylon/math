@@ -36,7 +36,7 @@ Formats:
 Here's a fun puzzle: Take six boxes, each $1\times 2\times 2$ in size,
 and find a way to pack them into a $3\times 3\times 3$ cube.
 
-![](img/img1.svg)
+![](img/img1.svg){width=75%}
 
 I learned about this puzzle through Donald Knuth's
 *The Art of Computer Programming,* $\S 7.2.2.1$.
@@ -46,7 +46,7 @@ fitting into the 27 cubie spaces of the larger $3\times 3\times 3$
 volume. But the initial configurations I tried failed to fit more than
 five boxes in the space allowed:
 
-![](img/img3.svg){width=40%}
+![](img/img3.svg){.width40}
 
 You might be able to solve this by simply thinking about it.
 But it's even more fun to play with a physical model.
@@ -54,16 +54,16 @@ But it's even more fun to play with a physical model.
 Did you know that a $2\times 2$ Lego brick with 2
 tile-heights on top forms a perfect cube?
 
-![](img/annotated_lego_cube.png){width=50%}
+![](img/annotated_lego_cube.png){.width50}
 
 You can build a model of the puzzle like this:
 
-![](img/piece_steps2.png){width=90%}
-![](img/puzzle_box_steps.png){width=90%}
+![](img/piece_steps2.png){.width90}
+![](img/puzzle_box_steps.png){.width90}
 
 Here's the hodgepodge model I built with my kids' Legos:
 
-![](img/home_model.jpg)
+![](img/home_model.jpg){.width100}
 
 I'll write a little about the math behind this puzzle below,
 but for now I'll give you a vertical break so you don't

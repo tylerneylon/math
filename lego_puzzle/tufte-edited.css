@@ -298,6 +298,11 @@ img, svg {
     margin-right: auto;
 }
 
+.width40  { width:  40%; }
+.width50  { width:  50%; }
+.width90  { width:  90%; }
+.width100 { width: 100%; }
+
 .sidenote, .marginnote, p.caption { float: right;
                                     clear: right;
                                     margin-right: -60%;
