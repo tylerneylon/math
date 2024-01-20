@@ -70,10 +70,11 @@ but for now I'll give you a vertical break so you don't
 accidentally see the solution. Try to solve it first!
 
 <p>&nbsp;
-\vspace{1in}
+\vspace*{\fill}
 
 ![](img/here_be_spoilers.jpg){width=90%}
 
+\vspace*{\fill}
 <p>&nbsp;
 \newpage
 
