@@ -67,17 +67,26 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 s = (y === 0 || z === 3) ? thinStyle : blankStyle;
                 if (!yMod && !zMod) s = thickStyle;
                 if (x === 0) xSt.push(idx);
-                if (x === 3) lines.push({from: xSt.shift(), to: idx, style: s});
+                if (x === 3) {
+                    lines.push({from: xSt.shift(), to: idx, style: s});
+                    if (s === blankStyle) lines.pop();
+                }
 
                 s = (x === 0 || z === 3) ? thinStyle : blankStyle;
                 if (!xMod && !zMod) s = thickStyle;
                 if (y === 0) ySt.push(idx);
-                if (y === 3) lines.push({from: ySt.shift(), to: idx, style: s});
+                if (y === 3) {
+                    lines.push({from: ySt.shift(), to: idx, style: s});
+                    if (s === blankStyle) lines.pop();
+                }
 
                 s = (x === 0 || y === 0) ? thinStyle : blankStyle;
                 if (!xMod && !yMod) s = thickStyle;
                 if (z === 0) zSt.push(idx);
-                if (z === 3) lines.push({from: zSt.shift(), to: idx, style: s});
+                if (z === 3) {
+                    lines.push({from: zSt.shift(), to: idx, style: s});
+                    if (s === blankStyle) lines.pop();
+                }
 
                 idx++;
             }

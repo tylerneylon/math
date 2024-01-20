@@ -26,7 +26,7 @@ let thickStyle = {
 };
 
 let thinStyle = {
-    stroke: '#444',
+    stroke: '#777',
     fill:   'transparent',
     'stroke-width': 1
 };

@@ -71,6 +71,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 if (x === 0 && (z > 0 || y === 0)) xSt.push(idx);
                 if (x === 3 && (z > 0 || y === 0)) {
                     lines.push({from: xSt.shift(), to: idx, style: s});
+                    if (s === blankStyle) lines.pop();
                 }
 
                 s = (x === 0 || z === 3) ? thinStyle : blankStyle;
@@ -78,6 +79,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 if (y === 0 & (z > 0 || x === 0)) ySt.push(idx);
                 if (y === 3 & (z > 0 || x === 0)) {
                     lines.push({from: ySt.shift(), to: idx, style: s});
+                    if (s === blankStyle) lines.pop();
                 }
 
                 s = (x === 0 || y === 0) ? thinStyle : blankStyle;
@@ -85,6 +87,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 if (z === 0 && x * y === 0) zSt.push(idx);
                 if (z === 3 && x * y === 0) {
                     lines.push({from: zSt.shift(), to: idx, style: s});
+                    if (s === blankStyle) lines.pop();
                 }
 
                 // Update the faceMap.
