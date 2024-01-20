@@ -26,6 +26,7 @@ sed 's|includegraphics{img/ann|includegraphics[width=0.32\\textwidth]{img/ann|' 
 sed 's|includegraphics{img/pie|includegraphics[width=0.8\\textwidth]{img/pie|' |\
 sed 's|includegraphics{img/puz|includegraphics[width=0.8\\textwidth]{img/puz|' |\
 sed 's|includegraphics{img/hom|includegraphics[width=0.72\\textwidth]{img/hom|' |\
+sed 's|·|\\!·\\!|' |\
 sed 's|0.5\(.*home_model\)|0.7\1|' > ${TMP}
 
 # This command used to be second in the chain above.
