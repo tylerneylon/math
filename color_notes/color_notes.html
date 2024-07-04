@@ -54,8 +54,152 @@ href="https://tylerneylon.com/a/7date/">352.2024</a></div>
   engineer’s guide to color that is at once engaging, well-designed,
   educational, and a pleasure to read. For now I’m just aiming for
   educational.</p>
-  <h1 data-number="1" id="the-nature-of-human-vision"><span
-  class="header-section-number">1</span> The nature of human vision</h1>
+  <h1 data-number="1" id="questions-about-light-and-color-itself"><span
+  class="header-section-number">1</span> Questions about light and color
+  itself</h1>
+  <ul>
+  <li>What is color, physically?</li>
+  <li>How do blacklights work?</li>
+  <li>How does infrared light interact with heat?</li>
+  </ul>
+  <h1 data-number="2" id="the-nature-of-human-vision"><span
+  class="header-section-number">2</span> The nature of human vision</h1>
+  <h2 data-number="2.1"
+  id="how-do-we-know-human-color-vision-is-3-dimensional"><span
+  class="header-section-number">2.1</span> How do we know human color
+  vision is 3-dimensional?</h2>
+  <p>There are two main pieces of evidence that human color vision is
+  3-dimensional. One is a classic color-matching experiment, and the
+  other is based on human retinal anatomy — the fact that we have three
+  types of cones in our retinas.</p>
+  <h3 data-number="2.1.1" id="color-matching-experiments"><span
+  class="header-section-number">2.1.1</span> Color-matching
+  experiments</h3>
+  <p>Here’s the setup for the classic color-matching experiment: A human
+  sits staring at a wall in a dark room. They see a circle of colored
+  light. The light on the left side is a single pure wavelength — this
+  is called a <em>spectral color</em>. The light on the right hand side
+  is a weighted combination of three primary colors (colors of fixed,
+  known wavelengths).</p>
+  <p>The poor human is tasked with adjusting the intensities of the
+  three primaries in order to make the right-hand side match the color
+  of the left-hand side.</p>
+  <p>One thing to note is that, if humans were completely color-blind,
+  and only saw in black and white, then this experiment could succeed
+  with only a single primary color. In fact, you can do this experiment
+  with a single primary color in extremely low light, and indeed you can
+  match any color in that setting (TODO REFERENCE). The fact that this
+  experiment succeeds — that you can always find a perfect match — with
+  three primary colors is a huge piece of evidence that our color vision
+  is fundamentally 3-dimensional. I am a very skeptical person, so I
+  will point out that the traditional experiments did not perform a
+  systematic investigation of different intensities of the target color,
+  and I would prefer to see that kind of investigation before fully
+  agreeing that human color vision is three-dimensional.</p>
+  <p>I have slightly simplified my explanation of the color-matching
+  experiment above, and now I’ll come clean and try to provide the
+  detail I had left out. If the experiment above worked exactly as I
+  described, then for every wavelength (of the target color on the
+  left), you’d have three non-negative coefficients for the primary
+  colors on the right. Those coefficients would describe quantitatively
+  how the target color is capture by the primary colors.</p>
+  <p>However, there are some cases where a match is not possible in the
+  traditional way; but there’s an easy fix. Suppose your target color is
+  some kind of teal color, and you’re mixing green and blue on the
+  right, but the right side always looks a little more yellow-ish than
+  the right side. Well, if you add a little red to the <em>left</em>
+  side (which would move it toward yellow), then you can achieve a
+  match. This actually happens. But the matches are still always
+  possible. The result is that we allow for <em>negative</em>
+  coefficients in the color matching data.</p>
+  <p>You might naturally ask: Why can’t we just choose the right primary
+  colors so that we never need negative coefficients? And it turns out
+  that’s impossible, as I’ll explain below.<label for="sn0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn0" class="margin-toggle"/><span class="sidenote">As a spoiler that might not make
+  sense yet but will later: It turns out that the geometry of spectral
+  colors is a shape that is never the convex hull of three points. For
+  any three primary colors you choose, you can use non-negative
+  combinations of those colors to represent any color in the triangle
+  between them (inside their convex hull). But there will always be
+  spectral colors outside this triangle.</span>
+  But the experiment still shows that there’s always a linear dependency
+  between any wavelength and the primary colors of the experiment. If we
+  write the target color as a vector <span
+  class="math inline">\(T\)</span>, and the primary colors as <span
+  class="math inline">\(R, G, B\)</span>, then we can always find
+  coefficients (possibly negative) to satisfy this equation:</p>
+  <p><span class="math display">\[T = a R + b G + c B.\]</span></p>
+  <p>The argument goes: If we had obviously 4-dimensional color
+  perception, then there would be some target color <span
+  class="math inline">\(T\)</span> such that no values of <span
+  class="math inline">\(a,b,c\)</span> could match it, just as no
+  combination of red and green can match blue. By the way, I’ve chosen
+  the somewhat-awkward variables <span
+  class="math inline">\(a,b,c\)</span> (awkward since you might think
+  <span class="math inline">\(b\)</span> matches “blue,” but it doesn’t)
+  because this researcher named John Guild published pivotal color
+  vision data about such an experiment in 1931, which (along with other
+  work), led to the creation of the famous chromaticity diagram that
+  I’ll describe below.</p>
+  <p>I transcribed the original data from Guild’s 1931 paper — his Table
+  II — and re-plotted his RGB coefficients below <span class="citation"
+  data-cites="guild1931colorimetric">(Guild 1931)</span>.</p>
+  <figure>
+  <img src="img/color_matching_coeffs.png"
+  alt="John Guild’s original 1931 color-matching data. Each vertical line through this graph provides three values that add up to 1; the coefficients have been normalized (scaled together per x-value) to ensure this. As a reminder, low wavelengths (near 400nm) indicate blue shades, and high values (near 700nm) indicate red shades, with the full spectrum between. Related files: Mathematica code to make this image | Mathematica notebook | text data from Guild’s Table II." />
+  <figcaption aria-hidden="true">John Guild’s original 1931
+  color-matching data. Each vertical line through this graph provides
+  three values that add up to 1; the coefficients have been normalized
+  (scaled together per x-value) to ensure this. As a reminder, low
+  wavelengths (near 400nm) indicate blue shades, and high values (near
+  700nm) indicate red shades, with the full spectrum between. Related
+  files: <a
+  href="color_matching/plot_color_matching_coeffs.htm">Mathematica code
+  to make this image</a> | <a
+  href="color_matching/plot_color_matching_coeffs.nb">Mathematica
+  notebook</a> | <a
+  href="color_matching/guild_color_matching_data.math">text data from
+  Guild’s Table II</a>.</figcaption>
+  </figure>
+  <p>To arrive at this data, Guild worked with seven (yes, a small
+  number!) of test subjects (aka people), and averaged their numbers
+  together. One thing he found is that there is not much variance
+  between (non-color-blind) people. In the 1931 paper, he referred to
+  his primary colors as the “working primaries” to differentiate them
+  from nearby colors that were considered “standard” at the time. As far
+  as I can tell, Guild did not directly describe the wavelenghts of his
+  working primary colors, but did describe how to convert those to
+  standard primary colors. (TODO THINK ABOUT THIS MORE)</p>
+  <p>If you’re like me, you might be thinking that we’re close to seeing
+  cone sensitivities. But the transformation from this graph to cone
+  sensitivities is not simple because each cone has a non-linear
+  sensitivity to a entire range of wavelengths — more on that below.</p>
+  <p>In case you’re curious about the variance across different people,
+  here’s Guild’s original figure showing the same curve for all seven of
+  his subjects:</p>
+  <figure>
+  <img src="img/Guild_different_subjects.jpg"
+  alt="Guild’s original diagram showing the similar results from color-matching experiments across seven subjects. (Guild 1931)" />
+  <figcaption aria-hidden="true">Guild’s original diagram showing the
+  similar results from color-matching experiments across seven subjects.
+  <span class="citation" data-cites="guild1931colorimetric">(Guild
+  1931)</span></figcaption>
+  </figure>
+  <p>As you can see, the curves are fairly consistent, except perhaps
+  for the extremes of the middle-wavelength primary (green-ish primary,
+  top of figure) the bottom of the long-wavelength primary (red-ish
+  primary, bottom of figure). I also see more variation in the red/green
+  portions on the lower-left, as opposed to the high consistency in the
+  blue saturation (top-left) and in all primary coefficients on the
+  right of the figure.</p>
+  <h3 data-number="2.1.2" id="we-have-three-kinds-of-cones"><span
+  class="header-section-number">2.1.2</span> We have three kinds of
+  cones</h3>
+  <p>HERE</p>
+  <h1 data-number="3"
+  id="if-we-have-three-kinds-of-cones-and-also-rods-why-dont-we-have-4-dimensional-color-vision"><span
+  class="header-section-number">3</span> If we have three kinds of cones
+  and also rods, why don’t we have 4-dimensional color vision?</h1>
+  <p>AND HERE NEXT</p>
   <ul>
   <li>How do we know that color is a 3-dimensional thing?
   <ul>
@@ -70,8 +214,6 @@ href="https://tylerneylon.com/a/7date/">352.2024</a></div>
   is translated into signals in the brain?</li>
   </ul></li>
   <li>How do we know the actual cone sensitivies?</li>
-  <li>What do negative coefficients mean in color matching experiments,
-  and how can I think about those?</li>
   <li>Why do the ends of the rainbow meet up so nicely?
   <ul>
   <li>Related: Are all the colors we see based on physically real
@@ -79,20 +221,15 @@ href="https://tylerneylon.com/a/7date/">352.2024</a></div>
   </ul></li>
   <li>Why do we see the light spectrum that we do?</li>
   <li>Why is the chromaticity diagram the shape that it is?</li>
+  <li>Why do we always need to allow for negative coefficients in color
+  matching?</li>
   <li>Are there colors we could theoretically perceive, but can’t exist
   in reality?</li>
   <li>How can I model, with mathematical precision, the common types of
   color blindness?</li>
   </ul>
-  <h1 data-number="2" id="questions-about-light-and-color-itself"><span
-  class="header-section-number">2</span> Questions about light and color
-  itself</h1>
-  <ul>
-  <li>How do blacklights work?</li>
-  <li>How does infrared light interact with heat?</li>
-  </ul>
-  <h1 data-number="3" id="reproducing-colors"><span
-  class="header-section-number">3</span> Reproducing colors</h1>
+  <h1 data-number="4" id="reproducing-colors"><span
+  class="header-section-number">4</span> Reproducing colors</h1>
   <ul>
   <li>How do monitors and printers reproduce any color?</li>
   <li>Why can’t a monitor display all possible colors?</li>
@@ -104,6 +241,20 @@ href="https://tylerneylon.com/a/7date/">352.2024</a></div>
   HSV?</li>
   <li>What does the name sRGB indicate?</li>
   </ul>
+  <hr />
+  <h1 class="unnumbered" id="bibliography">Bibliography</h1>
+  <div id="refs" class="references csl-bib-body hanging-indent"
+  role="doc-bibliography">
+  <div id="ref-guild1931colorimetric" class="csl-entry"
+  role="doc-biblioentry">
+  Guild, John. 1931. <span>“The Colorimetric Properties of the
+  Spectrum.”</span> <em>Philosophical Transactions of the Royal Society
+  of London. Series A, Containing Papers of a Mathematical or Physical
+  Character</em> 230 (681-693): 149–87.
+  </div>
+  </div>
+  
+
     </div>
         <div style="margin-top:40px">
         <hr style="margin-bottom:5px">
