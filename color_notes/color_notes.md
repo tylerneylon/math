@@ -2,6 +2,8 @@
 % Tyler Neylon
 % 352.2024
 
+% Started: 352.2024
+
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\eqnset}[1]{\left.\mbox{$#1$}\;\;\right\rbrace\class{postbrace}{ }}
@@ -41,6 +43,29 @@ and a pleasure to read. For now I'm just aiming for educational.
 
 
 # Questions about light and color itself
+
+## What is color, physically?
+
+Every photon has a wavelength, traditionally denoted by $\lambda$ and measured
+in nm (nanometers) in the context of color. This wavelength corresponds
+inversely with the photon's frequency, traditionally denoted by $\nu$, and
+measured in hertz ($1/s$).
+
+For example, suppose we see light consisting entirely of photons with the
+wavelength $\lambda = 700$nm. This appears red to our eyes. The wavelength and
+frequency of a photon are related by the formula
+
+$$ c = \lambda \nu,$$
+
+where $c = 3\times 10^8 m/s$ is the speed of light.
+Equation XXX is sometimes called the *wave equation*, and is a result of the
+fact that the speed of light is a constant.
+
+TODO HERE: Figure out how to number equations and refer back to them. I forget
+how to do that in pandoc.
+
+
+## MY NOTES ON QUESTIONS FOR THIS SECTION
 
 * What is color, physically?
 * How do blacklights work?
